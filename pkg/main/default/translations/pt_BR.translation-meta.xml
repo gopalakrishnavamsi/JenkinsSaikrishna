@@ -694,6 +694,10 @@
 		<name>SignUpForFree</name>
 	</customLabels>
 	<customLabels>
+		<label>https://go.docusign.com/trial/partners/salesforce/</label>
+		<name>FreeTrialURL</name>
+	</customLabels>
+	<customLabels>
 		<label>Nenhum envelope foi enviado</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
@@ -2244,7 +2248,7 @@
 	<customLabels>
 		<label>DESCUBRA O DOCUSIGN CLM</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Geração de documento</label>
 		<name>DocumentGeneration</name>
@@ -2264,7 +2268,7 @@
 	<customLabels>
 		<label>Nós da DocuSign somos dedicados ao seu sucesso. Nós criamos uma página de Ajuda para responder perguntas comuns.</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Início</label>
 		<name>Home</name>
@@ -3126,6 +3130,10 @@
 		<name>GetTrainingURL</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/</label>
+		<name>SupportSiteURL</name>
+	</customLabels>
+	<customLabels>
 		<label>https://support.docusign.com/forum</label>
 		<name>VisitCommunityURL</name>
 	</customLabels>
@@ -3262,7 +3270,7 @@
 		<name>SetupGetHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Personalize a mensagem de e-mail padrão e defina lembretes e o número de dias para expiração.</label>
+		<label>Envie facilmente documentos para assinatura sem sair do Salesforce.</label>
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3278,7 +3286,7 @@
 		<name>TabUserManagementHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Personalize layouts e experiências com botões e componentes.</label>
+		<label>Personalize layouts e experiências com a adição de componentes.</label>
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3302,7 +3310,7 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Acompanhe os arquivos nos quais você está colaborando sem sair do Salesforce. Os Arquivos DocuSign mantêm seus documentos organizados e fáceis de encontrar.</label>
+		<label>Com o DocuSign Files, você acompanha os documentos em que está colaborando. Ele automaticamente mantém os documentos organizados e fáceis de serem encontrados no Salesforce.</label>
 		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
@@ -3430,9 +3438,9 @@
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>O designer de fluxo de trabalho é uma tela que permite projetar e atualizar seus fluxos de trabalho. Isso permite que você escale e automatize fluxos de trabalho para atender às suas necessidades específicas.</label>
+		<label>O designer de fluxo de trabalho é uma tela que possibilita projetar e atualizar seus fluxos de trabalho. Ele permite que você escale e automatize fluxos de trabalho para atender às suas necessidades específicas. Acesse o designer de fluxo de trabalho no DocuSign CLM.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Adicione os componentes do DocuSign CLM para o Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -3492,6 +3500,10 @@
 	<customLabels>
 		<label>Experimente</label>
 		<name>TryItOut</name>
+	</customLabels>
+	<customLabels>
+		<label>Atualizar versão de avaliação</label>
+		<name>UpgradeTrial</name>
 	</customLabels>
 	<customLabels>
 		<label>Comparar recursos</label>
@@ -3574,6 +3586,38 @@
 		<name>LearnAddComponentsLabel</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/br/guides/docusign-apps-launcher-esignature-user-guide</label>
+		<name>LearnEsignUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/br/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<name>LearnGenAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/br/guides/docusign-apps-launcher-gen-user-guide</label>
+		<name>LearnGenUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/br/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<name>LearnNegotiateUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>ComponentsDocuSignFilesVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/tzkv4qzey5</label>
+		<name>ComponentsEnvelopeStatusVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/br/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnAppsLauncherAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/br/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnComponentsLayoutsURL</name>
+	</customLabels>
+	<customLabels>
 		<label>Testar o DocuSign Gen</label>
 		<name>TryDocuSignGen</name>
 	</customLabels>
@@ -3634,7 +3678,7 @@
 		<name>NegotiateHelpGettingStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>Crie um modelo em Geração de documento</label>
+		<label>Use um modelo atual ou crie um novo em Geração de documento</label>
 		<name>NegotiateHelpText1</name>
 	</customLabels>
 	<customLabels>
@@ -3644,6 +3688,18 @@
 	<customLabels>
 		<label>Envie o documento para revisão externa, aprovação interna e assinatura</label>
 		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicione o componente Arquivos do DocuSign Files para organizar seus documentos</label>
+		<name>NegotiateHelpText4</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicione o componente Arquivos do DocuSign aos layouts</label>
+		<name>NegotiateHelpImageHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Com o DocuSign Files, você acompanha os documentos em que está colaborando. Ele automaticamente mantém os documentos organizados e fáceis de serem encontrados no Salesforce.</label>
+		<name>NegotiateHelpImageBody</name>
 	</customLabels>
 	<customLabels>
 		<label>Vá até Documentação</label>
@@ -3820,7 +3876,7 @@
 	<customLabels>
 		<label>Aplicar</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Painel</label>
 		<name>Dashboard</name>
@@ -4142,7 +4198,7 @@
 		<name>SetupDocGenTemplate</name>
 	</customLabels>
 	<customLabels>
-		<label>5. Copie o URL de configuração de geração de documento. Adicione um novo botão no layout de página de objeto do Salesforce.</label>
+		<label>5. Copie o URL da configuração de geração de documentos. Adicione um novo botão no layout de página de objeto do Salesforce.</label>
 		<name>ConfigureDocGenURL</name>
 	</customLabels>
 	<customLabels>
@@ -4212,7 +4268,7 @@
 	<customLabels>
 		<label>Gerenciador de objetos</label>
 		<name>CLObjectManager</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Acesse a Geração de documentos</label>
 		<name>GoToDocumentGeneration</name>
@@ -4264,6 +4320,22 @@
 	<customLabels>
 		<label>Editar objeto do Salesforce</label>
 		<name>EditSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Saiba como iniciar um fluxo de trabalho quando um documento é gerado</label>
+		<name>LearnHowToKickoffAWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>Os fluxos de trabalho proporcionam flexibilidade e controle nos processos da organização. Eles automatizam todos os processos, da geração ao encaminhamento e assinatura.</label>
+		<name>WorkflowStandardizeSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Aprenda a usar fluxos de trabalho para padronizar processos</label>
+		<name>LearnHowToStandardize</name>
+	</customLabels>
+	<customLabels>
+		<label>Após criar um fluxo de trabalho no CLM, é possível integrá-lo ao Salesforce. Por exemplo, a geração de um documento poderia iniciar o fluxo de trabalho de revisão.</label>
+		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>Configuração do DocuSign</label>

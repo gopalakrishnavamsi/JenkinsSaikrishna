@@ -694,6 +694,10 @@
 		<name>SignUpForFree</name>
 	</customLabels>
 	<customLabels>
+		<label>https://go.docusign.com/trial/partners/salesforce/</label>
+		<name>FreeTrialURL</name>
+	</customLabels>
+	<customLabels>
 		<label>Keine Umschläge gesendet</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
@@ -1994,7 +1998,7 @@
 		<name>AgreementsInternalApproval</name>
 	</customLabels>
 	<customLabels>
-		<label>Kontakte suchen ...</label>
+		<label>Kontakte durchsuchen ...</label>
 		<name>ExternalReviewSearchMessage</name>
 	</customLabels>
 	<customLabels>
@@ -2244,7 +2248,7 @@
 	<customLabels>
 		<label>DOCUSIGN CLM ERKUNDEN</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Dokumentenerstellung</label>
 		<name>DocumentGeneration</name>
@@ -2264,7 +2268,7 @@
 	<customLabels>
 		<label>Kundensupport wird bei uns großgeschrieben. Alles rund ums Thema finden Sie auf unserer Hilfeseite.</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Startseite</label>
 		<name>Home</name>
@@ -3126,6 +3130,10 @@
 		<name>GetTrainingURL</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/</label>
+		<name>SupportSiteURL</name>
+	</customLabels>
+	<customLabels>
 		<label>https://support.docusign.com/forum</label>
 		<name>VisitCommunityURL</name>
 	</customLabels>
@@ -3260,7 +3268,7 @@
 		<name>SetupGetHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Passen Sie E-Mail-Nachrichten an, richten Sie Erinnerungen ein und legen Sie Fristen für Umschläge fest.</label>
+		<label>Dokumente direkt in Salesforce zum Signieren senden.</label>
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3276,7 +3284,7 @@
 		<name>TabUserManagementHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Passen Sie Layouts und Umgebungen an, indem Sie Schaltflächen und Komponenten hinzufügen.</label>
+		<label>Passen Sie Layouts und Umgebungen an, indem Sie Komponenten hinzufügen.</label>
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3300,7 +3308,7 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Verfolgen Sie Dateien, an denen Sie mit anderen zusammenarbeiten, direkt in Salesforce. Mit DocuSign-Dateien sind Ihre Dokumente sortiert und einfach zu finden.</label>
+		<label>Mit der Komponente „DocuSign-Dateien“ behalten Sie Dokumente, an denen Sie mit anderen zusammenarbeiten, im Blick. Zudem werden Ihre Dokumente automatisch sortiert und sind in Salesforce leicht auffindbar.</label>
 		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
@@ -3376,11 +3384,11 @@
 		<name>CreateAndManageDocSummary2</name>
 	</customLabels>
 	<customLabels>
-		<label>Dokumente in DocuSign CLM erstellen</label>
+		<label>So erstellen Sie Dokumente in DocuSign CLM</label>
 		<name>LearnHowToGenDoc</name>
 	</customLabels>
 	<customLabels>
-		<label>Schaltfläche einer Salesforce-Objektseite hinzufügen</label>
+		<label>So fügen Sie Schaltflächen der Salesforce-Objektseite hinzu</label>
 		<name>LearnHowToAddAButton</name>
 	</customLabels>
 	<customLabels>
@@ -3408,7 +3416,7 @@
 		<name>OpenObjectManagerButton</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow-Designer in DocuSign CLM verwenden</label>
+		<label>So verwenden Sie Workflow-Designer in DocuSign CLM</label>
 		<name>LearnHowTo</name>
 	</customLabels>
 	<customLabels>
@@ -3422,15 +3430,15 @@
 	<customLabels>
 		<label>Workflow-Designer</label>
 		<name>WorkflowDesigner</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Wiederkehrende Aufgaben werden durch Workflows automatisiert, wodurch manuelle Fehler vermieden und Betriebskosten reduziert werden. Diese Funktion ist in DocuSign CLM verfügbar.</label>
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Der Workflow-Designer ist der Bereich, in dem Sie Workflows erstellen und anpassen. Workflows lassen sich skalieren und automatisieren sowie an konkrete Anforderungen anpassen.</label>
+		<label>Der Workflow-Designer ist der Bereich, in dem Sie Workflows erstellen und anpassen. Workflows lassen sich skalieren und automatisieren sowie an konkrete Anforderungen anpassen. Den Workflow-Designer finden Sie in DocuSign CLM.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>DocuSign-CLM-Komponenten zu Salesforce hinzufügen</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -3444,7 +3452,7 @@
 		<name>FolderPortalSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Layouts konfigurieren</label>
+		<label>So konfigurieren Sie Layouts</label>
 		<name>LearnHowToConfigureYourLayouts</name>
 	</customLabels>
 	<customLabels>
@@ -3490,6 +3498,10 @@
 	<customLabels>
 		<label>Jetzt ausprobieren</label>
 		<name>TryItOut</name>
+	</customLabels>
+	<customLabels>
+		<label>Probeaccount upgraden</label>
+		<name>UpgradeTrial</name>
 	</customLabels>
 	<customLabels>
 		<label>Funktionen vergleichen</label>
@@ -3544,7 +3556,7 @@
 		<name>ContactSalesLink</name>
 	</customLabels>
 	<customLabels>
-		<label>Alles rund um den DocuSign Apps Launcher</label>
+		<label>Alles rund um DocuSign Apps Launcher</label>
 		<name>LearnSectionHeader</name>
 	</customLabels>
 	<customLabels>
@@ -3556,7 +3568,7 @@
 		<name>LearnEsignLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>Professionelle und anpassbare Dokumente generieren</label>
+		<label>Professionelle Dokumente generieren</label>
 		<name>LearnGenLabel</name>
 	</customLabels>
 	<customLabels>
@@ -3570,6 +3582,38 @@
 	<customLabels>
 		<label>Komponenten zu Layouts hinzufügen</label>
 		<name>LearnAddComponentsLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-esignature-user-guide</label>
+		<name>LearnEsignUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<name>LearnGenAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<name>LearnGenUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<name>LearnNegotiateUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>ComponentsDocuSignFilesVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/tzkv4qzey5</label>
+		<name>ComponentsEnvelopeStatusVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnAppsLauncherAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnComponentsLayoutsURL</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign Gen ausprobieren</label>
@@ -3632,7 +3676,7 @@
 		<name>NegotiateHelpGettingStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>Vorlage mit der Dokumentenerstellung erstellen</label>
+		<label>Mit der Dokumentenerstellung bestehende Vorlage verwenden oder neue Vorlage erstellen</label>
 		<name>NegotiateHelpText1</name>
 	</customLabels>
 	<customLabels>
@@ -3642,6 +3686,18 @@
 	<customLabels>
 		<label>Dokument zur externen Prüfung, internen Genehmigung und zum Signieren senden</label>
 		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>Mit der Komponente „DocuSign-Dateien“ Dokumente verfolgen</label>
+		<name>NegotiateHelpText4</name>
+	</customLabels>
+	<customLabels>
+		<label>Komponente „DocuSign-Dateien“ zu Layouts hinzufügen</label>
+		<name>NegotiateHelpImageHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Mit der Komponente „DocuSign-Dateien“ behalten Sie Dokumente, an denen Sie mit anderen zusammenarbeiten, im Blick. Zudem werden Ihre Dokumente automatisch sortiert und sind in Salesforce leicht auffindbar.</label>
+		<name>NegotiateHelpImageBody</name>
 	</customLabels>
 	<customLabels>
 		<label>Zur Dokumentation wechseln</label>
@@ -3818,7 +3874,7 @@
 	<customLabels>
 		<label>Anwenden</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Dashboard</label>
 		<name>Dashboard</name>
@@ -4184,7 +4240,7 @@
 		<name>HomeComponents</name>
 	</customLabels>
 	<customLabels>
-		<label>Passen Sei Layouts an, indem Sie benutzerdefinierte Komponenten hinzufügen.</label>
+		<label>Passen Sie Layouts an, indem Sie benutzerdefinierte Komponenten hinzufügen.</label>
 		<name>HomeComponentSummary</name>
 	</customLabels>
 	<customLabels>
@@ -4196,11 +4252,11 @@
 		<name>HomeGetHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Layouts in Salesforce konfigurieren</label>
+		<label>So konfigurieren Sie Layouts in Salesforce</label>
 		<name>HomeConfigureLayout</name>
 	</customLabels>
 	<customLabels>
-		<label>Objektseite Schaltfläche hinzufügen</label>
+		<label>So fügen Sie Objektseiten Schaltflächen hinzu</label>
 		<name>HomeAddButton</name>
 	</customLabels>
 	<customLabels>
@@ -4210,7 +4266,7 @@
 	<customLabels>
 		<label>Objekt-Manager</label>
 		<name>CLObjectManager</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Zur Dokumentenerstellung wechseln</label>
 		<name>GoToDocumentGeneration</name>
@@ -4262,6 +4318,22 @@
 	<customLabels>
 		<label>Salesforce-Objekt bearbeiten</label>
 		<name>EditSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>So wird nach dem Generieren eines Dokuments ein Workflow ausgelöst</label>
+		<name>LearnHowToKickoffAWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>Durch Workflows lassen sich Organisationsprozesse flexibler gestalten und besser steuern. Alle Prozesse werden automatisiert – von der Erstellung bis zur Weiterleitung zum Signieren.</label>
+		<name>WorkflowStandardizeSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>So standardisieren Sie Prozesse mit Workflows</label>
+		<name>LearnHowToStandardize</name>
+	</customLabels>
+	<customLabels>
+		<label>Nachdem Sie einen Workflow in CLM erstellt haben, können Sie diesen in Salesforce integrieren. Das Erstellen eines Dokuments kann beispielsweise einen Workflow zum Prüfen eines Dokuments auslösen.</label>
+		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>

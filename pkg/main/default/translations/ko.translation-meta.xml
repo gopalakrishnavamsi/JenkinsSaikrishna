@@ -694,6 +694,10 @@
 		<name>SignUpForFree</name>
 	</customLabels>
 	<customLabels>
+		<label>https://go.docusign.com/trial/partners/salesforce/</label>
+		<name>FreeTrialURL</name>
+	</customLabels>
+	<customLabels>
 		<label>전송된 봉투가 없습니다</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
@@ -2244,7 +2248,7 @@
 	<customLabels>
 		<label>DOCUSIGN CLM 안내</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>문서 생성</label>
 		<name>DocumentGeneration</name>
@@ -2264,7 +2268,7 @@
 	<customLabels>
 		<label>DocuSign은 사용자의 성공을 위해 최선을 다합니다. 이를 위해 일반적인 질문에 답변을 제공하는 도움말 페이지를 만들었습니다.</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>자택</label>
 		<name>Home</name>
@@ -3126,6 +3130,10 @@
 		<name>GetTrainingURL</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/</label>
+		<name>SupportSiteURL</name>
+	</customLabels>
+	<customLabels>
 		<label>https://support.docusign.com/forum</label>
 		<name>VisitCommunityURL</name>
 	</customLabels>
@@ -3262,7 +3270,7 @@
 		<name>SetupGetHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>기본 이메일 메시지를 사용자 지정하고, 미리 알림 및 봉투 만기 날짜를 설정합니다.</label>
+		<label>Salesforce 내에서 서명을 위한 문서를 쉽게 전송할 수 있습니다.</label>
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3278,7 +3286,7 @@
 		<name>TabUserManagementHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>버튼과 구성 요소를 추가하여 레이아웃 및 환경을 사용자 지정합니다.</label>
+		<label>구성 요소를 추가하여 레이아웃 및 환경을 사용자 지정합니다.</label>
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3302,7 +3310,7 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforce를 떠나지 않고 협업하고 있는 파일을 계속 추적합니다. DocuSign 파일을 통해 문서를 잘 정리하고 쉽게 찾을 수 있습니다.</label>
+		<label>DocuSign 파일은 협업하고 있는 문서를 추적하는 데 도움이 됩니다. 이렇게 하면 자동으로 문서가 정리되고 Salesforce에서 쉽게 찾을 수 있습니다.</label>
 		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
@@ -3430,9 +3438,9 @@
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow Designer는 워크플로를 디자인하고 업데이트할 수 있는 캔버스입니다. 이를 통해 워크플로를 특정 필요 사항에 맞게 범주화하고 자동화할 수 있습니다.</label>
+		<label>Workflow Designer는 워크플로를 디자인하고 업데이트할 수 있는 캔버스입니다. 이를 통해 워크플로를 특정 필요 사항에 맞게 범주화하고 자동화할 수 있습니다. DocuSign CLM에서 워크플로 디자이너에 액세스할 수 있습니다.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>DocuSign CLM 구성 요소를 Salesforce에 추가</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -3492,6 +3500,10 @@
 	<customLabels>
 		<label>사용하기</label>
 		<name>TryItOut</name>
+	</customLabels>
+	<customLabels>
+		<label>업그레이드 평가판</label>
+		<name>UpgradeTrial</name>
 	</customLabels>
 	<customLabels>
 		<label>기능 비교</label>
@@ -3574,6 +3586,38 @@
 		<name>LearnAddComponentsLabel</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-esignature-user-guide</label>
+		<name>LearnEsignUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<name>LearnGenAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<name>LearnGenUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<name>LearnNegotiateUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>ComponentsDocuSignFilesVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/tzkv4qzey5</label>
+		<name>ComponentsEnvelopeStatusVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnAppsLauncherAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnComponentsLayoutsURL</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign Gen 사용해 보기 </label>
 		<name>TryDocuSignGen</name>
 	</customLabels>
@@ -3634,7 +3678,7 @@
 		<name>NegotiateHelpGettingStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>문서 생성에서 템플릿 만들기</label>
+		<label>문서 생성에서 기존 템플릿 사용 또는 새 템플릿 생성</label>
 		<name>NegotiateHelpText1</name>
 	</customLabels>
 	<customLabels>
@@ -3644,6 +3688,18 @@
 	<customLabels>
 		<label>외부 검토, 내부 승인 및 서명을 위해 문서를 보냅니다.</label>
 		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>문서를 추적하기 위해 DocuSign 파일 구성 요소 추가</label>
+		<name>NegotiateHelpText4</name>
+	</customLabels>
+	<customLabels>
+		<label>레이아웃에 DocuSign 파일 구성 요소 추가</label>
+		<name>NegotiateHelpImageHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 파일은 협업하고 있는 문서를 추적하는 데 도움이 됩니다. 이렇게 하면 자동으로 문서가 정리되고 Salesforce에서 쉽게 찾을 수 있습니다.</label>
+		<name>NegotiateHelpImageBody</name>
 	</customLabels>
 	<customLabels>
 		<label>문서로 이동</label>
@@ -3820,7 +3876,7 @@
 	<customLabels>
 		<label>적용</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>대시보드</label>
 		<name>Dashboard</name>
@@ -4142,7 +4198,7 @@
 		<name>SetupDocGenTemplate</name>
 	</customLabels>
 	<customLabels>
-		<label>5. 문서 생성 URL을 복사하십시오. Salesforce 개체 페이지 레이아웃에 새로운 버튼을 추가합니다.</label>
+		<label>5. 문서 생성 구성 URL을 복사하십시오. Salesforce 개체 페이지 레이아웃에 새로운 버튼을 추가합니다.</label>
 		<name>ConfigureDocGenURL</name>
 	</customLabels>
 	<customLabels>
@@ -4212,7 +4268,7 @@
 	<customLabels>
 		<label>개체 관리자</label>
 		<name>CLObjectManager</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>문서 생성으로 </label>
 		<name>GoToDocumentGeneration</name>
@@ -4264,6 +4320,22 @@
 	<customLabels>
 		<label>Salesforce 개체 편집</label>
 		<name>EditSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>문서 생성 시 워크플로를 시작하는 방법 알아보기</label>
+		<name>LearnHowToKickoffAWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>워크플로를 사용하면 조직의 프로세스를 유연하게 제어할 수 있습니다. 이는 생성 및 경로설정에서 서명까지 모든 프로세스를 자동화합니다.</label>
+		<name>WorkflowStandardizeSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>워크플로를 사용하여 프로세스를 표준화하는 방법 알아보기</label>
+		<name>LearnHowToStandardize</name>
+	</customLabels>
+	<customLabels>
+		<label>CLM에 워크플로를 생성하면 이를 Salesforce와 통합할 수 있습니다. 예를 들어, 문서를 생성하면 문서 검토 워크플로가 트리거될 수 있습니다.</label>
+		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 설정</label>

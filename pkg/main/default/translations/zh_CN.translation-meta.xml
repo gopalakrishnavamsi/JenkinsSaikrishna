@@ -694,6 +694,10 @@
 		<name>SignUpForFree</name>
 	</customLabels>
 	<customLabels>
+		<label>https://go.docusign.com/trial/partners/salesforce/</label>
+		<name>FreeTrialURL</name>
+	</customLabels>
+	<customLabels>
 		<label>未发送任何信封</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
@@ -2244,7 +2248,7 @@
 	<customLabels>
 		<label>探索 DocuSign CLM</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>生成文本</label>
 		<name>DocumentGeneration</name>
@@ -2264,7 +2268,7 @@
 	<customLabels>
 		<label>DocuSign 致力于为您的成功提供一臂之力。我们创建了“帮助”页面，为您解答常见问题。</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>家庭电话</label>
 		<name>Home</name>
@@ -3126,6 +3130,10 @@
 		<name>GetTrainingURL</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/</label>
+		<name>SupportSiteURL</name>
+	</customLabels>
+	<customLabels>
 		<label>https://support.docusign.com/forum</label>
 		<name>VisitCommunityURL</name>
 	</customLabels>
@@ -3262,7 +3270,7 @@
 		<name>SetupGetHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>自定义默认电子邮件消息，设置提醒和信封有效期。</label>
+		<label>从 Salesforce 发送文档获得签名，就是这么简单。</label>
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3278,7 +3286,7 @@
 		<name>TabUserManagementHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>通过添加按钮和组件自定义布局和体验。</label>
+		<label>通过添加自定义组件自定义布局和体验。</label>
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3302,7 +3310,7 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>无需离开 Salesforce 即可跟踪正在协作的文件。DocuSign 文件让您的文档井井有条，且易于查找。</label>
+		<label>DocuSign 文件可帮助您跟踪正在协作的文档。它自动让文档在 Salesforce 中变得井井有条，并易于查找。</label>
 		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
@@ -3430,9 +3438,9 @@
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>工作流设计器是一块画布，让您可以设计和更新工作流。该功能让您可以扩展并自动化工作流，以满足您的特定需求。</label>
+		<label>工作流设计器是一块画布，让您可以设计和更新工作流。该功能让您可以扩展并自动化工作流，以满足您的特定需求。您可以在 DocuSign CLM 中访问工作流设计器。</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>将 DocuSign CLM 组件添加到 Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -3492,6 +3500,10 @@
 	<customLabels>
 		<label>试试看</label>
 		<name>TryItOut</name>
+	</customLabels>
+	<customLabels>
+		<label>升级试用版</label>
+		<name>UpgradeTrial</name>
 	</customLabels>
 	<customLabels>
 		<label>比较功能</label>
@@ -3574,6 +3586,38 @@
 		<name>LearnAddComponentsLabel</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-esignature-user-guide</label>
+		<name>LearnEsignUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<name>LearnGenAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<name>LearnGenUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<name>LearnNegotiateUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>ComponentsDocuSignFilesVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/tzkv4qzey5</label>
+		<name>ComponentsEnvelopeStatusVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnAppsLauncherAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnComponentsLayoutsURL</name>
+	</customLabels>
+	<customLabels>
 		<label>试用 DocuSign Gen</label>
 		<name>TryDocuSignGen</name>
 	</customLabels>
@@ -3634,7 +3678,7 @@
 		<name>NegotiateHelpGettingStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>在“文档生成”中创建一个模板</label>
+		<label>在“文档生成”中创建或使用现有模板</label>
 		<name>NegotiateHelpText1</name>
 	</customLabels>
 	<customLabels>
@@ -3644,6 +3688,18 @@
 	<customLabels>
 		<label>发送文档申请外部审核、内部批名以及签名</label>
 		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>添加 DocuSign 文件组件以跟踪您的文档</label>
+		<name>NegotiateHelpText4</name>
+	</customLabels>
+	<customLabels>
+		<label>在布局中添加 DocuSign 文件组件</label>
+		<name>NegotiateHelpImageHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 文件可帮助您跟踪正在协作的文档。它自动让文档在 Salesforce 中变得井井有条，并易于查找。</label>
+		<name>NegotiateHelpImageBody</name>
 	</customLabels>
 	<customLabels>
 		<label>转到“文档”</label>
@@ -3820,7 +3876,7 @@
 	<customLabels>
 		<label>应用</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>儀表板</label>
 		<name>Dashboard</name>
@@ -4212,7 +4268,7 @@
 	<customLabels>
 		<label>对象管理器</label>
 		<name>CLObjectManager</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>转到生成文档</label>
 		<name>GoToDocumentGeneration</name>
@@ -4264,6 +4320,22 @@
 	<customLabels>
 		<label>编辑 Salesforce 对象</label>
 		<name>EditSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>了解如何在生成文档时启动工作流</label>
+		<name>LearnHowToKickoffAWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>使用工作流使您更加灵活，并可掌控您组织的流程。从生成、路由到签名，工作流让所有流程变得自动化。</label>
+		<name>WorkflowStandardizeSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>了解如何使用工作流实现标准化流程</label>
+		<name>LearnHowToStandardize</name>
+	</customLabels>
+	<customLabels>
+		<label>在 CLM 中创建工作流后，即可将其与 Salesforce 集成。例如，生成文档会触发文档审核工作流。</label>
+		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 设置</label>

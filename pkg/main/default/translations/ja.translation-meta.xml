@@ -694,6 +694,10 @@
 		<name>SignUpForFree</name>
 	</customLabels>
 	<customLabels>
+		<label>https://go.docusign.com/trial/partners/salesforce/</label>
+		<name>FreeTrialURL</name>
+	</customLabels>
+	<customLabels>
 		<label>エンベロープが送信されていません</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
@@ -1046,7 +1050,7 @@
 		<name>NewAgreementCreated</name>
 	</customLabels>
 	<customLabels>
-		<label>まず、インポートするファイルのソースを選択します。</label>
+		<label>インポートするファイルのソースを選択します。</label>
 		<name>ChooseFile</name>
 	</customLabels>
 	<customLabels>
@@ -1062,7 +1066,7 @@
 		<name>UploadFromPC</name>
 	</customLabels>
 	<customLabels>
-		<label>お使いのコンピュータからファイルをアップロードします。</label>
+		<label>コンピューターからファイルをアップロードします。</label>
 		<name>UploadFromComputer</name>
 	</customLabels>
 	<customLabels>
@@ -1323,7 +1327,7 @@
 		<name>ImportButtonLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>文書を送信してレビュー、承認、または署名を依頼する</label>
+		<label>文書を送信してレビュー、承認、または署名を依頼します</label>
 		<name>NoAgreements</name>
 	</customLabels>
 	<customLabels>
@@ -1935,11 +1939,11 @@
 		<name>InternalApprovalFailed</name>
 	</customLabels>
 	<customLabels>
-		<label>文書がレビューに送信されました</label>
+		<label>文書のレビュー依頼</label>
 		<name>ExternalReviewEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>この文章を早急にレビューしてください。</label>
+		<label>この文章の内容を早急にご確認ください。</label>
 		<name>ExternalReviewEmailBody</name>
 	</customLabels>
 	<customLabels>
@@ -2011,7 +2015,7 @@
 		<name>InternalApprovalEmailHelpMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>別の承認担当者を追加</label>
+		<label>承認担当者の追加</label>
 		<name>AddAnotherApprover</name>
 	</customLabels>
 	<customLabels>
@@ -2019,7 +2023,7 @@
 		<name>AddApprovers</name>
 	</customLabels>
 	<customLabels>
-		<label>承認順序の設定</label>
+		<label>承認の順序を設定する</label>
 		<name>SetApprovalOrder</name>
 	</customLabels>
 	<customLabels>
@@ -2031,11 +2035,11 @@
 		<name>SelectApprovers</name>
 	</customLabels>
 	<customLabels>
-		<label>承認を依頼する文書</label>
+		<label>文書の承認依頼</label>
 		<name>InternalApprovalEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>この文章を早急に承認してください。</label>
+		<label>この文章を早急にご承認ください。</label>
 		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<customLabels>
@@ -2056,7 +2060,7 @@
 	</customLabels>
 	<customLabels>
 		<name>ReviewAgreementHeaderTitleText</name>
-		<label>承認が必要な文書: {0}。</label>
+		<label>文書「{0}」をご承認ください。</label>
 	</customLabels>
 	<customLabels>
 		<name>ApprovalEmailButtonText</name>
@@ -2245,7 +2249,7 @@
 	<customLabels>
 		<label>DocuSign CLMについて</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>文書生成</label>
 		<name>DocumentGeneration</name>
@@ -2265,7 +2269,7 @@
 	<customLabels>
 		<label>DocuSignでは、お客様が製品を快適にご利用いただけることを最優先項目として考えています。製品に関する一般的な疑問に対する回答を提供しています。</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>ホーム</label>
 		<name>Home</name>
@@ -2527,7 +2531,7 @@
 		<name>InvalidPermissionSet_1</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign eSignatureなどのほかの電子署名製品を使用する場合、このパッケージの電子署名機能が無効になる場合があります。</label>
+		<label>DocuSign eSignature for Salesforceなどのほかの電子署名製品を使用する場合、このパッケージの電子署名機能が無効になる場合があります。</label>
 		<name>ESignatureEnabledHelp</name>
 	</customLabels>
 	<customLabels>
@@ -3127,6 +3131,10 @@
 		<name>GetTrainingURL</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/jp/</label>
+		<name>SupportSiteURL</name>
+	</customLabels>
+	<customLabels>
 		<label>https://support.docusign.com/forum</label>
 		<name>VisitCommunityURL</name>
 	</customLabels>
@@ -3261,7 +3269,7 @@
 		<name>SetupGetHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>デフォルトのメールメッセージをカスタマイズしたり、エンベロープの有効期限やリマインダーを設定したりします。</label>
+		<label>Salesforceを使用したままDocuSignの機能を使って簡単に文書を署名者に送信できます。</label>
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3277,7 +3285,7 @@
 		<name>TabUserManagementHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>ページレイアウトにボタンやコンポーネントを追加してユーザーエクスペリエンスをカスタマイズします。</label>
+		<label>ページレイアウトにコンポーネントを追加してユーザーエクスペリエンスをカスタマイズします。</label>
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3285,7 +3293,7 @@
 		<name>TabHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>DocuSign セットアップ</label>
+		<label>DocuSignセットアップ</label>
 		<name>SetupPageTitle</name>
 	</customLabels>
 	<customLabels>
@@ -3301,7 +3309,7 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>［DocuSignファイル］では、自分の文書をかんたんに管理できます。ここでは、Salesforceを離れることなくコラボレーション中のファイルの状態を確認できます。</label>
+		<label>［DocuSignファイル］では、コラボレーション中の文書のステータスを追跡できます。文書がSalesforce内で自動的に整理され、簡単に検索できるようになります。</label>
 		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
@@ -3429,9 +3437,9 @@
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>ワークフローを設計および更新するためのキャンバスとして、ワークフローデザイナーを使用します。必要に応じて、ワークフローを拡張して自動化できます。</label>
+		<label>ワークフローを設計および更新するためのキャンバスとして、ワークフローデザイナーを使用します。必要に応じて、ワークフローを拡張して自動化できます。ワークフローデザイナーには、DocuSign CLMからアクセスします。</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>SalesforceにDocuSign CLMコンポーネントを追加する</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -3491,6 +3499,10 @@
 	<customLabels>
 		<label>使ってみる</label>
 		<name>TryItOut</name>
+	</customLabels>
+	<customLabels>
+		<label>トライアルのアップグレード</label>
+		<name>UpgradeTrial</name>
 	</customLabels>
 	<customLabels>
 		<label>機能の比較</label>
@@ -3573,6 +3585,38 @@
 		<name>LearnAddComponentsLabel</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-esignature-user-guide</label>
+		<name>LearnEsignUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<name>LearnGenAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<name>LearnGenUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<name>LearnNegotiateUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>ComponentsDocuSignFilesVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/tzkv4qzey5</label>
+		<name>ComponentsEnvelopeStatusVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnAppsLauncherAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnComponentsLayoutsURL</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign Genを使ってみる</label>
 		<name>TryDocuSignGen</name>
 	</customLabels>
@@ -3629,11 +3673,11 @@
 		<name>NegotiateHelpHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>生成された文書をレビューや承認を行う担当者にそのまま送信できます。開始するには</label>
+		<label>生成された文書をレビューや承認を行う担当者にそのまま送信できます。以下の操作を行います。</label>
 		<name>NegotiateHelpGettingStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>文書生成機能を使用して文書を生成する</label>
+		<label>文書生成機能を使用してテンプレートを作成するか既存のものを使用します</label>
 		<name>NegotiateHelpText1</name>
 	</customLabels>
 	<customLabels>
@@ -3643,6 +3687,18 @@
 	<customLabels>
 		<label>文書を外部レビュー、内部承認、および署名者に送信する</label>
 		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>文書のステータスを追跡するには［DocuSignファイル］コンポーネントを追加します</label>
+		<name>NegotiateHelpText4</name>
+	</customLabels>
+	<customLabels>
+		<label>レイアウトに［DocuSignファイル］コンポーネントを追加する</label>
+		<name>NegotiateHelpImageHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>［DocuSignファイル］では、コラボレーション中の文書のステータスを追跡できます。文書がSalesforce内で自動的に整理され、簡単に検索できるようになります。</label>
+		<name>NegotiateHelpImageBody</name>
 	</customLabels>
 	<customLabels>
 		<label>文書に移動</label>
@@ -3673,7 +3729,7 @@
 		<name>ChooseObjectFirst</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforceオブジェクトを選択すると、そのオブジェクトに関連付けられたレイアウトが表示されます。［DocuSignで送信］ボタンを追加するレイアウトを選択します。1回の操作で追加できるオブジェクトおよびレイアウトは1つのみです。</label>
+		<label>Salesforceオブジェクトを選択すると、そのオブジェクトに関連付けられたレイアウトが表示されます。［DocuSignで送信］ボタンを追加するレイアウトを選択します。追加先のオブジェクトおよびレイアウトを選択してください。</label>
 		<name>ChooseObjectHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3819,7 +3875,7 @@
 	<customLabels>
 		<label>適用</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>ダッシュボード</label>
 		<name>Dashboard</name>
@@ -4211,7 +4267,7 @@
 	<customLabels>
 		<label>オブジェクトマネージャー</label>
 		<name>CLObjectManager</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>文書生成に移動</label>
 		<name>GoToDocumentGeneration</name>
@@ -4264,12 +4320,28 @@
 		<label>Salesforceオブジェクトの編集</label>
 		<name>EditSalesforceObject</name>
 	</customLabels>
+	<customLabels>
+		<label>文書生成時にワークフローを開始するには</label>
+		<name>LearnHowToKickoffAWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>ワークフローを使用すると、実行するプロセスを柔軟に制御できるようになります。文書生成から署名者への送信までのプロセスを自動化できます。</label>
+		<name>WorkflowStandardizeSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>ワークフローを使用してプロセスを標準化するには</label>
+		<name>LearnHowToStandardize</name>
+	</customLabels>
+	<customLabels>
+		<label>CLMでワークフローを作成して、それをSalesforceに統合します。たとえば、文書レビュー用のワークフローを作成して、文書生成時にそのワークフローが自動的に実行されるように設定できます。</label>
+		<name>KickoffWorkflowSummary</name>
+	</customLabels>
 	<customPageWebLinks>
-		<label>DocuSign セットアップ</label>
+		<label>DocuSignセットアップ</label>
 		<name>Setup</name>
 	</customPageWebLinks>
 	<customTabs>
-		<label>DocuSign セットアップ</label>
+		<label>DocuSignセットアップ</label>
 		<name>Setup</name>
 	</customTabs>
 </Translations>

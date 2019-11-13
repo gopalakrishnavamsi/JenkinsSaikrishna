@@ -694,6 +694,10 @@
 		<name>SignUpForFree</name>
 	</customLabels>
 	<customLabels>
+		<label>http://go.docusign.com/trial/partners/salesforce</label>
+		<name>FreeTrialURL</name>
+	</customLabels>
+	<customLabels>
 		<label>Er zijn geen enveloppen verzonden</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
@@ -2244,7 +2248,7 @@
 	<customLabels>
 		<label>ONTDEK DOCUSIGN CLM</label>
 		<name>DiscoverDocuSignCLM</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Document genereren</label>
 		<name>DocumentGeneration</name>
@@ -2264,7 +2268,7 @@
 	<customLabels>
 		<label>Bij DocuSign zijn we toegewijd aan uw succes. We hebben een Help-pagina gemaakt om antwoord te geven op veelgestelde vragen.</label>
 		<name>HelpInfoBody</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Home</label>
 		<name>Home</name>
@@ -3126,6 +3130,10 @@
 		<name>GetTrainingURL</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/</label>
+		<name>SupportSiteURL</name>
+	</customLabels>
+	<customLabels>
 		<label>https://support.docusign.com/nl/forum</label>
 		<name>VisitCommunityURL</name>
 	</customLabels>
@@ -3262,7 +3270,7 @@
 		<name>SetupGetHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Pas standaard e-mailberichten aan, stel herinneringen en envelopverloopdagen in.</label>
+		<label>Verstuur eenvoudig documenten om te laten ondertekenen binnen Salesforce.</label>
 		<name>TabESignatureHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3278,7 +3286,7 @@
 		<name>TabUserManagementHelpText</name>
 	</customLabels>
 	<customLabels>
-		<label>Pas lay-outs en ervaringen aan door knoppen en componenten toe te voegen.</label>
+		<label>Personaliseer lay-outs en ervaringen door componenten toe te voegen.</label>
 		<name>TabComponentsHelpText</name>
 	</customLabels>
 	<customLabels>
@@ -3302,7 +3310,7 @@
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
-		<label>Blijf op de hoogte van de bestanden waaraan u samenwerkt zonder Salesforce te verlaten. DocuSign Files houdt uw documenten overzichtelijk en ze zijn gemakkelijk terug te vinden.</label>
+		<label>DocuSign Files helpt u om de documenten waaraan u samenwerkt met anderen bij te houden. Het houdt uw documenten automatisch georganiseerd en u vindt ze gemakkelijk terug in Salesforce.</label>
 		<name>ComponentSectionDocuSignFiles</name>
 	</customLabels>
 	<customLabels>
@@ -3430,9 +3438,9 @@
 		<name>CreateAndManageSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>Workflow-ontwerper is een canvas waarmee u uw workflows kunt ontwerpen en bijwerken. Hiermee kunt u workflows schalen en automatiseren om aan uw specifieke behoeften te voldoen.</label>
+		<label>Workflow-ontwerper is een canvas waarmee u uw workflows kunt ontwerpen en bijwerken. Hiermee kunt u workflows schalen en automatiseren om aan uw specifieke behoeften te voldoen. U hebt toegang tot Workflow-ontwerper in DocuSign CLM.</label>
 		<name>WorkflowDesignerSummary</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Voeg DocuSign CLM-componenten toe aan Salesforce</label>
 		<name>AddComponentsByConfiguringYourLayouts</name>
@@ -3492,6 +3500,10 @@
 	<customLabels>
 		<label>Probeer het</label>
 		<name>TryItOut</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgrade Proberen</label>
+		<name>UpgradeTrial</name>
 	</customLabels>
 	<customLabels>
 		<label>Functies vergelijken</label>
@@ -3574,6 +3586,38 @@
 		<name>LearnAddComponentsLabel</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-esignature-user-guide</label>
+		<name>LearnEsignUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<name>LearnGenAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<name>LearnGenUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<name>LearnNegotiateUserURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>ComponentsDocuSignFilesVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/tzkv4qzey5</label>
+		<name>ComponentsEnvelopeStatusVideo</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnAppsLauncherAdminURL</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<name>LearnComponentsLayoutsURL</name>
+	</customLabels>
+	<customLabels>
 		<label>Probeer DocuSign Gen</label>
 		<name>TryDocuSignGen</name>
 	</customLabels>
@@ -3634,7 +3678,7 @@
 		<name>NegotiateHelpGettingStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>Maak een sjabloon in Document genereren</label>
+		<label>Een bestaand sjabloon maken of gebruiken in Document Generation</label>
 		<name>NegotiateHelpText1</name>
 	</customLabels>
 	<customLabels>
@@ -3644,6 +3688,18 @@
 	<customLabels>
 		<label>Verzend het document voor externe beoordeling, interne goedkeuring en ondertekening</label>
 		<name>NegotiateHelpText3</name>
+	</customLabels>
+	<customLabels>
+		<label>Het DocuSign Files-component om uw documenten bij te houden toevoegen</label>
+		<name>NegotiateHelpText4</name>
+	</customLabels>
+	<customLabels>
+		<label>Het DocuSign Files-component toevoegen aan uw Lay-outs</label>
+		<name>NegotiateHelpImageHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Files helpt u om de documenten waaraan u samenwerkt met anderen bij te houden. Het houdt uw documenten automatisch georganiseerd en u vindt ze gemakkelijk terug in Salesforce.</label>
+		<name>NegotiateHelpImageBody</name>
 	</customLabels>
 	<customLabels>
 		<label>Ga naar Documentatie</label>
@@ -3820,7 +3876,7 @@
 	<customLabels>
 		<label>Toepassen</label>
 		<name>Apply</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Dashboard</label>
 		<name>Dashboard</name>
@@ -4142,7 +4198,7 @@
 		<name>SetupDocGenTemplate</name>
 	</customLabels>
 	<customLabels>
-		<label>5. Kopieer de configuratie-URL van de documentgeneratie. Voeg een nieuwe knop toe aan uw Saledforce-objectpaginalay-out.</label>
+		<label>5. Kopieer de configuratie-URL van de documentgeneratie. Voeg een nieuwe knop toe aan uw Salesforce-objectpaginalay-out.</label>
 		<name>ConfigureDocGenURL</name>
 	</customLabels>
 	<customLabels>
@@ -4212,7 +4268,7 @@
 	<customLabels>
 		<label>Object Manager</label>
 		<name>CLObjectManager</name>
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Ga naar Document genereren</label>
 		<name>GoToDocumentGeneration</name>
@@ -4264,6 +4320,22 @@
 	<customLabels>
 		<label>Salesforce-object bewerken</label>
 		<name>EditSalesforceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Leren hoe u een workflow van start kunt laten gaan als een document wordt gegenereerd</label>
+		<name>LearnHowToKickoffAWorkflow</name>
+	</customLabels>
+	<customLabels>
+		<label>Het gebruiken van workflows geeft u extra flexibiliteit en controle over de processen van uw organisatie. Het automatiseert elk proces, van het genereren en routen tot het ondertekenen.</label>
+		<name>WorkflowStandardizeSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Leren hoe u workflows kunt gebruiken om uw processen te standaardiseren</label>
+		<name>LearnHowToStandardize</name>
+	</customLabels>
+	<customLabels>
+		<label>Als u eenmaal een workflow hebt gecreëerd in CLM, kunt u het integreren met Salesforce. Het genereren van een document kan bijvoorbeeld een beoordelingsworkflow van een document activeren.</label>
+		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-instellingen</label>
