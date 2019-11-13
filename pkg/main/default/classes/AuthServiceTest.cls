@@ -559,117 +559,66 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_AuthAPI_getInstanceClientId_failure() {
+	static void test_AuthAPI_createInstance_failure() {
 		ApplicationAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			try {
-				getAuthClient().getInstanceClientId(UUID.randomUUID().toString(), UUID.randomUUID(), 'test');
-				throw new AssertException('Expected AuthAPI.getInstanceClientId to fail');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.unauthorized, ex.error);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_AuthAPI_getInstanceClientId_success() {
-		ApplicationAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			String result = getAuthClient().getInstanceClientId(UUID.randomUUID().toString(), UUID.randomUUID(), 'test');
-			Test.stopTest();
-
-			System.assert(String.isNotBlank(result));
-		}
-	}
-
-	@IsTest
-	static void test_AuthAPI_getInstanceClientSecret_failure() {
-		ApplicationAPIMock.failure();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				getAuthClient().getInstanceClientSecret(UUID.randomUUID().toString(), 'test');
-				throw new AssertException('Expected AuthAPI.getInstanceClientSecret to fail');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.unauthorized, ex.error);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_AuthAPI_getInstanceClientSecret_success() {
-		ApplicationAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			String result = getAuthClient().getInstanceClientSecret(UUID.randomUUID().toString(), 'test');
-			Test.stopTest();
-
-			System.assert(String.isNotBlank(result));
-		}
-	}
-
-	@IsTest
-	static void test_AuthAPI_getInstancePrivateKey_failure() {
-		ApplicationAPIMock.failure();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				getAuthClient().getInstancePrivateKey(UUID.randomUUID().toString(), 'test');
-				throw new AssertException('Expected AuthAPI.getInstancePrivateKey to fail');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.unauthorized, ex.error);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_AuthAPI_getInstancePrivateKey_success() {
-		ApplicationAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			Blob result = getAuthClient().getInstancePrivateKey(UUID.randomUUID().toString(), 'test');
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-		}
-	}
-
-	@IsTest
-	static void test_AuthAPI_setInstanceRedirectUris_failure() {
-		ApplicationAPIMock.failure();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				getAuthClient().setInstanceRedirectUris(UUID.randomUUID().toString(), new List<Url>(), 'test');
-				throw new AssertException('Expected AuthAPI.setInstanceRedirectUris to fail');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.unauthorized, ex.error);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_AuthAPI_setInstanceRedirectUris_success() {
-		ApplicationAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
 			List<Url> redirectUris = new List<Url> {
 				new Url('https://redirect1.unit.test'),
 				new Url('https://redirect2.unit.test')
 			};
+			try {
+				getAuthClient().createInstance(UUID.randomUUID().toString(), UUID.randomUUID(), redirectUris, 'test');
+				throw new AssertException('Expected AuthAPI.createInstance to fail');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.unauthorized, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
 
+	@IsTest
+	static void test_AuthAPI_createInstance_success() {
+		ApplicationAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Credentials.InstanceProperties result;
 			Test.startTest();
-			List<Url> result = getAuthClient().setInstanceRedirectUris(UUID.randomUUID().toString(), redirectUris, 'test');
+			List<Url> redirectUris = new List<Url> {
+				new Url('https://redirect1.unit.test'),
+				new Url('https://redirect2.unit.test')
+			};
+			result = getAuthClient().createInstance(UUID.randomUUID().toString(), UUID.randomUUID(), redirectUris, 'test');
+			Test.stopTest();
+			System.assert(result != null);
+		}
+	}
+
+	@IsTest
+	static void test_getInstanceClientSecret() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			String result;
+			Test.startTest();
+			AuthService.APISecrets testSecrets = new AuthService.APISecrets();
+			testSecrets.id = '29b52f49-7b87-4979-883e-93291b52be90';
+			testSecrets.secret = 'ae23ee24-fd17-40f9-b282-680dce61f657';
+			testSecrets.type = 'shared';
+			List<AuthService.APISecrets> secretsList = new List<AuthService.APISecrets> { testSecrets };
+			result = AuthService.getInstanceClientSecret(secretsList);
+			Test.stopTest();
+			System.assert(String.isNotBlank(result));
+			System.assertEquals('ae23ee24-fd17-40f9-b282-680dce61f657', result);
+		}
+	}
+
+	@IsTest
+	static void test_getInstancePrivateKey() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			String testPrivateKey = '-----BEGIN RSA PRIVATE KEY-----MIIEogIBAAKCAQEApJsE+WFQ9rV7oB7mnTGJi7hXmktjK9zuzuMUfPjiUyeDQ8oI-----END RSA PRIVATE KEY-----';
+			Blob result = AuthService.getInstancePrivateKey(testPrivateKey);
 			Test.stopTest();
 
-			System.assertEquals(2, Collection.size(result));
-			System.assertEquals(redirectUris[0].toExternalForm(), result[0].toExternalForm());
-			System.assertEquals(redirectUris[1].toExternalForm(), result[1].toExternalForm());
+			System.assertNotEquals(null, result);
 		}
 	}
 
@@ -682,8 +631,8 @@ private class AuthServiceTest {
 				UUID.randomUUID().toString(),
 				UUID.randomUUID(),
 				new List<Url> {
-					new Url('https://redirect.test.docusign.net/'),
-					new Url('https://redirect.test.springcm.com/')
+					new Url('https://redirect1.unit.test'),
+					new Url('https://redirect2.unit.test')
 				},
 				'test');
 			Test.stopTest();
@@ -1732,6 +1681,7 @@ private class AuthServiceTest {
 	static void test_redeemCode_setup_success() {
 		DocuSignAPIMock.success();
 		MetadataAPIMock.success();
+
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			String state = TestUtils.generateState(true);
 

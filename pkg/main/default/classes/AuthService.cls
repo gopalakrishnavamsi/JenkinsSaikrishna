@@ -77,6 +77,54 @@ public with sharing class AuthService {
 	}
 
 	@TestVisible
+	private class APIInstanceProperties {
+		public List<APISecrets> secrets;
+		public String client_id;
+		public String private_key;
+
+		public Credentials.InstanceProperties toExternalForm() {
+			return new Credentials.InstanceProperties(this.client_id, getInstanceClientSecret(this.secrets), getInstancePrivateKey(this.private_key));
+		}
+	}
+
+	@TestVisible
+	private class APISecrets {
+		public String id;
+		public String secret;
+		public String type;
+	}
+
+	@TestVisible
+	private static String getInstanceClientSecret(
+		final List<APISecrets> secretsList) {
+		String result = null;
+		for (APISecrets secretObj : secretsList) {
+			// find first non-scrubbed secret
+			String value = secretObj.secret;
+			if (String.isNotBlank(value) && !value.startsWith('**********')) {
+				result = value;
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	@TestVisible
+	private static Blob getInstancePrivateKey(
+		final String privateKey) {
+		Blob result = null;
+		if (String.isNotBlank(privateKey)) {
+			result = EncodingUtil.base64Decode(privateKey
+				.remove('-----BEGIN RSA PRIVATE KEY-----')
+				.remove('\n')
+				.remove('-----END RSA PRIVATE KEY-----'));
+		}
+
+		return result;
+	}
+
+	@TestVisible
 	private class AuthAPI extends RestAPI {
 
 		private Url baseUrl;
@@ -183,104 +231,11 @@ public with sharing class AuthService {
 		}
 
 		@TestVisible
-		private String getInstanceClientId(
+		public Credentials.InstanceProperties createInstance(
 			final String rootClientId,
 			final UUID accountId,
-			final String accessToken) {
-
-			RestAPI.Response response = this.post(
-				this.baseUrl,
-				new List<Object> { 'v1', 'applications', rootClientId, 'instance' },
-				QueryString.empty,
-				new Map<String, String> {
-					'Authorization' => 'Bearer ' + accessToken,
-					'Content-Type' => 'application/json; charset=utf-8'
-				},
-				JSON.serialize(new Map<String, String> {
-					'account_id' => String.valueOf(accountId)
-				}),
-				AUTH_TIMEOUT);
-			if (response.hasError) {
-				this.log.error('Failed to get instance client ID: ' + response.error);
-				throw new APIException(response.error);
-			}
-			return (String)((Map<String, Object>)JSON.deserializeUntyped(response.body)).get('client_id');
-		}
-
-		@TestVisible
-		private String getInstanceClientSecret(
-			final String clientId,
-			final String accessToken) {
-
-			RestAPI.Response response = this.post(
-				this.baseUrl,
-				new List<Object> { 'v1', 'applications', clientId, 'secrets' },
-				QueryString.empty,
-				new Map<String, String> {
-					'Authorization' => 'Bearer ' + accessToken,
-					'Content-Type' => 'application/json; charset=utf-8'
-				},
-				'{}',
-				AUTH_TIMEOUT);
-			if (response.hasError) {
-				this.log.error('Failed to get instance client secret: ' + response.error);
-				throw new APIException(response.error);
-			}
-
-			List<Object> secrets = (List<Object>)((Map<String, Object>)JSON.deserializeUntyped(
-				response.body)).get('secrets');
-			String result = null;
-			for (Object secret : (secrets == null ? new List<Object>() : secrets)) {
-				// find first non-scrubbed secret
-				String value = (String)((Map<String, Object>)secret).get('secret');
-				if (String.isNotBlank(value) && !value.startsWith('**********')) {
-					result = value;
-					break;
-				}
-			}
-			return result;
-		}
-
-		@TestVisible
-		private Blob getInstancePrivateKey(
-			final String clientId,
-			final String accessToken) {
-
-			RestAPI.Response response = this.post(
-				this.baseUrl,
-				new List<Object> { 'v1', 'applications', clientId, 'keys' },
-				QueryString.empty,
-				new Map<String, String> {
-					'Authorization' => 'Bearer ' + accessToken,
-					'Content-Type' => 'application/json; charset=utf-8'
-				},
-				'{}',
-				AUTH_TIMEOUT);
-			if (response.hasError) {
-				this.log.error('Failed to get instance private key: ' + response.error);
-				throw new APIException(response.error);
-			}
-
-			Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
-			String pvkBase64 = (String)body.get('private_key');
-			Blob result = null;
-			if (String.isNotBlank(pvkBase64)) {
-				result = EncodingUtil.base64Decode(pvkBase64
-					.remove('-----BEGIN RSA PRIVATE KEY-----')
-					.remove('\n')
-					.remove('-----END RSA PRIVATE KEY-----'));
-			}
-			return result;
-		}
-
-		@TestVisible
-		private List<Url> setInstanceRedirectUris(
-			final String clientId,
 			final List<Url> redirectUris,
 			final String accessToken) {
-
-			List<Url> result = new List<Url>();
-			if (redirectUris == null) return result;
 
 			List<String> uris = new List<String>();
 			for (Url u : redirectUris) {
@@ -289,32 +244,24 @@ public with sharing class AuthService {
 
 			RestAPI.Response response = this.post(
 				this.baseUrl,
-				new List<Object> { 'v1', 'applications', clientId },
+				new List<Object> { 'v2', 'applications', rootClientId, 'instance' },
 				QueryString.empty,
 				new Map<String, String> {
 					'Authorization' => 'Bearer ' + accessToken,
 					'Content-Type' => 'application/json; charset=utf-8'
 				},
-				//updated the name of instance application to 'DocuSign' here so that it matches with the client application name of root IK
 				JSON.serialize(new Map<String, Object> {
-					'name' => 'DocuSign',
-					'redirect_uris' => uris,
-					'is_client_app' => true
+					'account_id' => String.valueOf(accountId),
+					'redirect_uris' => uris
 				}),
 				AUTH_TIMEOUT);
+
 			if (response.hasError) {
-				this.log.error('Failed to set instance redirect uris: ' + response.error);
+				this.log.error('Failed to set instance redirect uris and fetch the secret keys: ' + response.error);
 				throw new APIException(response.error);
 			}
 
-			Object rus = ((Map<String, Object>)JSON.deserializeUntyped(response.body)).get('redirect_uris');
-			if (rus != null && rus instanceof List<Object>) {
-				for (Object o : (List<Object>)rus) {
-					String ru = String.valueOf(o);
-					if (String.isNotBlank(ru)) result.add(new Url(ru));
-				}
-			}
-			return result;
+			return ((APIInstanceProperties)JSON.deserialize(response.body, APIInstanceProperties.class)).toExternalForm();
 		}
 
 		public Credentials.ClientCredentials getInstanceCredentials(
@@ -323,12 +270,11 @@ public with sharing class AuthService {
 			final List<Url> redirectUris,
 			final String accessToken) {
 
-			String clientId = this.getInstanceClientId(rootClientId, accountId, accessToken);
-			this.setInstanceRedirectUris(clientId, redirectUris, accessToken);
+			Credentials.InstanceProperties instanceProperties = this.createInstance(rootClientId, accountId, redirectUris, accessToken);
 			return new Credentials.ClientCredentials(
-				clientId,
-				this.getInstanceClientSecret(clientId, accessToken),
-				this.getInstancePrivateKey(clientId, accessToken));
+				instanceProperties.clientId,
+				instanceProperties.secret,
+				instanceProperties.privateKey);
 		}
 	}
 
@@ -969,7 +915,7 @@ public with sharing class AuthService {
 	@Future
 	private static void assignClmAdministratorPermissionSet(final Id userId) {
 		if (String.isBlank(userId)) return;
-		
+
 		Permissions.assignClmAdministratorPermissionSet(new Set<Id> { userId });
 	}
 
@@ -1015,7 +961,7 @@ public with sharing class AuthService {
 				// DFS-6068: Make sure setup user has CLM Administrator role; DFS-6296: Assign CLM admin perm set only if not already assigned
 				if (aps.isClmEnabled() && !Permissions.isClmAdministrator()) {
 					assignClmAdministratorPermissionSet(UserInfo.getUserId());
-				}	
+				}
 			} finally {
 				AccountProducts.save();
 			}
