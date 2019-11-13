@@ -345,6 +345,7 @@
           targetCmp.set('v.body', []);
           body.push(componentBody);
           targetCmp.set('v.body', body);
+          component.find('importAgreementsModal').destroy();
         }
       }
     );
