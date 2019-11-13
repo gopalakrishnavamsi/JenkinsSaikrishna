@@ -28,7 +28,8 @@
             },
             apiBaseDomain: result.apiUploadBaseUrl,
             language: $A.get('$Locale.langLocale') ? $A.get('$Locale.langLocale').toLowerCase() : undefined,
-            accountId: result.accountId.value
+            accountId: result.accountId.value,
+            allowedFileTypes: ['.pdf', '.docx']
           };
           var uploadWidget = new SpringCM.Widgets.Upload(options);
           uploadWidget.render('#upload-wrapper');
