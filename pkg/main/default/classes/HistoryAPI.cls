@@ -79,7 +79,7 @@ public with sharing class HistoryAPI extends ScmAPI {
 				'',
 				'');
 			List<AgreementHistoryItem.Actor> recipients = new List<AgreementHistoryItem.Actor>();
-			String previewUrl = NegotiateService.getAgreementPreviewLink(UserInfo.getUserId(), documentId.toString(), false);
+			String previewUrl = getAgreementPreviewLink(documentId.toString());
 
 			if (this.data != null) {
 				String baseURL = Salesforce.baseUrl.toExternalForm() + '/' ;
@@ -132,6 +132,15 @@ public with sharing class HistoryAPI extends ScmAPI {
 				recipients,
 				previewUrl,
 				this.data.comments);
+		}
+
+		@TestVisible
+		private String getAgreementPreviewLink(final String agreementId) {
+			UUID agreementUId = UUID.parse(agreementId);
+			PageReference agreementView = Page.AgreementPreview;
+			agreementView.getParameters().put('sourceId', EncodingUtil.urlEncode(UserInfo.getUserId(), StringUtils.ENCODING));
+			agreementView.getParameters().put('agreementId', EncodingUtil.urlEncode(agreementUId.value, StringUtils.ENCODING));
+			return agreementView.getUrl();
 		}
 
 		@TestVisible
