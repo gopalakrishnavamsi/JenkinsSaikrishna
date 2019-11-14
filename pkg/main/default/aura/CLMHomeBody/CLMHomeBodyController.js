@@ -1,13 +1,23 @@
 ({
 	onPrimaryButtonClick: function (component, event, helper) {
 		var buttonLabel = event.getParam('buttonLabel');
+		var title = event.getParam('cardTitle');
 		if (buttonLabel === $A.get('$Label.c.Manage')) {
-			helper.fireApplicationEvent(component, {
-				fromComponent: 'CLMHomeBody',
-				toComponent: 'CLMSetupLayout',
-				type: 'update',
-				tabIndex: '6',
-			}, 'CLMNavigationEvent');
+			if (title === $A.get('$Label.c.UserManagement')) {
+				helper.fireApplicationEvent(component, {
+					fromComponent: 'CLMHomeBody',
+					toComponent: 'CLMSetupLayout',
+					type: 'update',
+					tabIndex: '6',
+				}, 'CLMNavigationEvent');
+			} else { 
+				helper.fireApplicationEvent(component, {
+					fromComponent: 'CLMHomeBody',
+					toComponent: 'CLMSetupLayout',
+					type: 'update',
+					tabIndex: '7',
+				}, 'CLMNavigationEvent');
+			}
 		}
 		else if (buttonLabel === $A.get('$Label.c.HomeGetHelp')) {
 			helper.fireApplicationEvent(component, {

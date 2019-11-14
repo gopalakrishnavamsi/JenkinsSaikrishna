@@ -1,7 +1,7 @@
 ({
 	buttonClick: function (component, event, helper) {
 		var invokedBy = component.get('v.invokedBy');
-		if (invokedBy === 'DocGen-OpenObjectManager') {
+		if (invokedBy === 'DocGen-OpenObjectManager' || invokedBy === 'Components-OpenObjectManager') {
 			var action = component.get('c.getCurrentUserExperience');
 			action.setCallback(this, function (response) {
 				var state = response.getState();
