@@ -58,15 +58,15 @@
                                     <lightning:button variant="brand" label="{!$Label.c.TryItOut}" onclick="{!c.showGenTrialModal}"/>
                                 </aura:if>
                                 <aura:if isTrue="{!and(!empty(v.genProduct), v.genProduct.isTrial == true)}">
-                                    <ul class="slds-list_horizontal slds-m-left_x-large">
+                                    <ul>
                                         <li>
-                                            <lightning:icon size="x-small" iconName="utility:clock"></lightning:icon>
+                                            <lightning:icon size="x-small" iconName="utility:clock" class="slds-p-right--xx-small"></lightning:icon>
+                                            {!$Label.c.CurrentlyOnTrial}
                                         </li>
-                                        <li class="slds-m-left_xx-small slds-m-top_xxx-small">{!$Label.c.CurrentlyOnTrial}</li>
                                     </ul>
                                 </aura:if>
                                 <aura:if isTrue="{!and(!empty(v.genProduct), v.genProduct.isTrial == false, v.genProduct.status == 'active')}">
-                                    <ul class="slds-list_horizontal slds-m-left_x-large">
+                                    <ul>
                                         <li class="slds-m-left_xx-small slds-m-top_xxx-small">{!$Label.c.CurrentlyUsing}</li>
                                     </ul>
                                 </aura:if>
