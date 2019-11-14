@@ -1278,6 +1278,7 @@ private class RoleAPITest {
 			UUID u1Id = UUID.parse(u1.Username__c);
 			UUID u2Id = UUID.parse(u2.Username__c);
 			UUID u3Id = UUID.parse(u3.Username__c);
+			TestRoles r = new TestRoles();
 
 			Test.startTest();
 			Map<UUID, Account.User> result = RoleAPI.getUsersToUpdate(
@@ -1286,9 +1287,9 @@ private class RoleAPITest {
 					u1Id => new Account.User(u1.Id, u1.Email, u1.FirstName, u1.LastName, u1.CanManageAccount__c),
 					u3Id => new Account.User(u3.Id, u3.Email, u3.FirstName, u3.LastName, u3.CanManageAccount__c)
 				},
-				new Set<UUID> {
-					RoleAPI.ESIGNATURE_USER_ID,
-					RoleAPI.ESIGNATURE_ADMINISTRATOR_ID
+				new Map<UUID, Product.Role> {
+					r.dsUserId => r.roles.get(r.dsUserId),
+					r.dsAdminId => r.roles.get(r.dsAdminId)
 				});
 			Test.stopTest();
 
@@ -1308,6 +1309,7 @@ private class RoleAPITest {
 			UUID u1Id = UUID.parse(u1.Username__c);
 			UUID u2Id = UUID.parse(u2.Username__c);
 			UUID u3Id = UUID.parse(u3.Username__c);
+			TestRoles r = new TestRoles();
 
 			Test.startTest();
 			Map<UUID, Account.User> result = RoleAPI.getUsersToUpdate(
@@ -1316,8 +1318,39 @@ private class RoleAPITest {
 					u2Id => new Account.User(u2Id, u2.Id, u2.Email, u2.FirstName, u2.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u2.CanManageAccount__c, u2.Profile.Name, null, null),
 					u3Id => new Account.User(u3Id, u3.Id, u3.Email, u3.FirstName, u3.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u3.CanManageAccount__c, u3.Profile.Name, null, null)
 				},
-				new Set<UUID> {
-					RoleAPI.ESIGNATURE_USER_ID
+				new Map<UUID, Product.Role> {
+					r.dsUserId => r.roles.get(r.dsUserId)
+				});
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<UUID> { u3Id, u2Id }, result.keySet());
+			System.assertNotEquals(null, result.get(u2Id));
+			System.assertNotEquals(null, result.get(u3Id));
+		}
+	}
+
+	@IsTest
+	static void test_getUsersToUpdate_clmAdminuser() {
+		User u1 = UserMock.createClmAdministrator(false);
+		System.runAs(u1) {
+			User u2 = UserMock.createDocuSignAdministrator(false);
+			User u3 = UserMock.createClmViewer(false);
+			UUID u1Id = UUID.parse(u1.Username__c);
+			UUID u2Id = UUID.parse(u2.Username__c);
+			UUID u3Id = UUID.parse(u3.Username__c);
+			TestRoles r = new TestRoles();
+
+			Test.startTest();
+			Map<UUID, Account.User> result = RoleAPI.getUsersToUpdate(
+				new Map<UUID, Account.User> {
+					u1Id => new Account.User(u1Id, u1.Id, u1.Email, u1.FirstName, u1.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u1.CanManageAccount__c, u1.Profile.Name, null, null),
+					u2Id => new Account.User(u2Id, u2.Id, u2.Email, u2.FirstName, u2.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u2.CanManageAccount__c, u2.Profile.Name, null, null),
+					u3Id => new Account.User(u3Id, u3.Id, u3.Email, u3.FirstName, u3.LastName, Account.USER_STATUS_ACTIVE, Date.today(), u3.CanManageAccount__c, u3.Profile.Name, null, null)
+				},
+				new Map<UUID, Product.Role> {
+					r.dsUserId => r.roles.get(r.dsUserId),
+					r.clmAdminId => r.roles.get(r.clmAdminId)
 				});
 			Test.stopTest();
 

@@ -76,8 +76,8 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 		public Product.Role toExternalForm(final String role) {
 			if (String.isBlank(role)
-				|| String.isBlank(this.source_product_name)
-				|| String.isBlank(this.group_id)) {
+			    || String.isBlank(this.source_product_name)
+			    || String.isBlank(this.group_id)) {
 
 				LoggerService.getInstance().warn('Invalid group for role ' + role);
 				return null;
@@ -96,12 +96,12 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			final Map<String, String> groupRoles) {
 
 			if (groupRoles == null
-				|| String.isBlank(this.group_id)
-				|| !groupRoles.containsKey(this.group_id)) {
+			    || String.isBlank(this.group_id)
+			    || !groupRoles.containsKey(this.group_id)) {
 
 				// Only add groups to which we have a role mapped
 				LoggerService.getInstance().warn(String.format('No role mapped to product "{0}" group "{1}" ({2})',
-					new List<Object> { productName, this.group_name, this.group_id }));
+				        new List<Object> { productName, this.group_name, this.group_id }));
 				return null;
 			}
 
@@ -254,8 +254,8 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		Map<String, Object> newGroup = (Map<String, Object>)JSON.deserializeUntyped(response.body);
 		if (newGroup != null && newGroup.containsKey('group')) {
 			result = ((APIGroup)JSON.deserialize(
-				JSON.serialize(newGroup.get('group')),
-				APIGroup.class)).toExternalForm(role.role);
+					JSON.serialize(newGroup.get('group')),
+					APIGroup.class)).toExternalForm(role.role);
 		} else {
 			this.log.error('Unexpected response when creating account role:\n' + response.body);
 		}
@@ -276,8 +276,8 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		RestAPI.Response response = this.get(
 			new List<Object> { 'products', 'groups' },
 			new QueryString(new Map<String, String> {
-				'products' => String.join(filteredProducts, ',')
-			}),
+			'products' => String.join(filteredProducts, ',')
+		}),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get product roles: ' + response.error);
@@ -285,7 +285,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		}
 
 		return ((APIGroups)JSON.deserialize(response.body, APIGroups.class))
-			.toExternalForm(PRODUCT_GROUP_ROLE_MAP);
+		       .toExternalForm(PRODUCT_GROUP_ROLE_MAP);
 	}
 
 	private static Set<String> getRoleDifference(
@@ -303,11 +303,11 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 	}
 
 	/*
-		This method retrieves product roles from the MAGNUM API. Behind the scenes:
-		1. Read account groups.
-		2. Look for groups we care about.
-		3. If any group doesn't exist, read product groups.
-		4. Create each missing account group.
+	        This method retrieves product roles from the MAGNUM API. Behind the scenes:
+	        1. Read account groups.
+	        2. Look for groups we care about.
+	        3. If any group doesn't exist, read product groups.
+	        4. Create each missing account group.
 	 */
 	public Map<String, Map<UUID, Product.Role>> getRoles(final Set<String> products) {
 		return this.getRoles(products, RestAPI.defaultTimeout);
@@ -522,8 +522,8 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 						results.put(
 							UUID.tryParse(u.user_id),
 							u.error_details == null
-								? new APIError(APIErrorCode.FAILURE, Label.UnknownError)
-								: u.error_details.toExternalForm());
+							? new APIError(APIErrorCode.FAILURE, Label.UnknownError)
+							: u.error_details.toExternalForm());
 					}
 				}
 			}
@@ -565,7 +565,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		}
 
 		return ((APIRemoveUserResult)JSON.deserialize(response.body, APIRemoveUserResult.class))
-			.toExternalForm(userIds);
+		       .toExternalForm(userIds);
 	}
 
 	@TestVisible
@@ -625,7 +625,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 		Map<UUID, Product.Role> result = new Map<UUID, Product.Role>();
 		if (Collection.isNotEmpty(roles)) {
 			UUID dsAdminId = null, dsUserId = null, dsSenderId = null,
-				clmAdminId = null, clmUserId = null, clmViewerId = null;
+			     clmAdminId = null, clmUserId = null, clmViewerId = null;
 			for (UUID rId : roles.keySet()) {
 				Product.Role r = roles.get(rId);
 				if (r != null && r.product == Product.ESIGNATURE) {
@@ -671,8 +671,8 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 	private static Boolean isLesserPrivilegedRole(final Product.Role role) {
 		return role != null
-			&& (role.product == Product.ESIGNATURE || role.product == Product.CLM)
-			&& !role.isAdministrator;
+		       && (role.product == Product.ESIGNATURE || role.product == Product.CLM)
+		       && !role.isAdministrator;
 	}
 
 	@TestVisible
@@ -701,12 +701,20 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 
 	@TestVisible
 	private static Map<UUID, Account.User> getUsersToUpdate(
-		final Map<UUID, Account.User> users,
-		final Set<UUID> newRoleIds) {
+		final Map<UUID, Account.User> users,		
+		final Map<UUID, Product.Role> newRoles) {
 
 		Map<UUID, Account.User> result = new Map<UUID, Account.User>();
-		if (Collection.isNotEmpty(users) && Collection.isNotEmpty(newRoleIds)) {
+		Set<UUID> newRoleIds = newRoles.keySet();
+		if (Collection.isNotEmpty(users) && Collection.isNotEmpty(newRoleIds) && Collection.isNotEmpty(newRoles)) {
 			Id currentUserId = UserInfo.getUserId();
+			Boolean isClmAdministrator = false;
+			for(Product.Role r : newRoles.values()) {
+				if(r != null && r.product == Product.CLM && r.role == ClmProduct.ROLE_ADMINISTRATOR) {
+					isClmAdministrator = true;
+					break;
+				}
+			}
 			if (newRoleIds.contains(ESIGNATURE_ADMINISTRATOR_ID)) {
 				for (UUID uId : users.keySet()) {
 					Account.User u = users.get(uId);
@@ -715,7 +723,9 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			} else if (newRoleIds.contains(ESIGNATURE_USER_ID)) {
 				for (UUID uId : users.keySet()) {
 					Account.User u = users.get(uId);
-					if (u != null && u.sourceId != currentUserId) result.put(uId, u.withCanManageAccount(false));
+					if(u != null && u.sourceId != currentUserId) {
+						result.put(uId, u.withCanManageAccount(isClmAdministrator));						
+					}
 				}
 			} // else no change
 		}
@@ -768,8 +778,8 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			Map<UUID, Account.User> filteredUsers = filterCurrentUser(users);
 			Map<UUID, Product.Role> filteredRoles = filterLesserPrivilegedRoles(newRoles);
 			Map<UUID, Account.User> toUpdate = getUsersToUpdate(
-				filteredUsers == null ? new Map<UUID, Account.User>() : filteredUsers,
-				filteredRoles == null ? new Set<UUID>() : filteredRoles.keySet());
+				filteredUsers == null ? new Map<UUID, Account.User>() : filteredUsers,				
+				filteredRoles == null ? new Map<UUID, Product.Role>() : filteredRoles);
 			if (Collection.isNotEmpty(toUpdate)) {
 				Map<UUID, Account.User> updatedUsers = UserAPI.getInstance().updateUsers(toUpdate, timeout);
 				if (Collection.isNotEmpty(updatedUsers)) {

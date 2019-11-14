@@ -560,8 +560,8 @@ public with sharing class UserService {
 			Credentials.reset(
 				uIds,
 				productRoles != null
-					&& productRoles.containsKey(Product.ESIGNATURE)
-					&& productRoles.get(Product.ESIGNATURE).contains(ESignatureProduct.ROLE_ADMINISTRATOR));
+					&& ((productRoles.containsKey(Product.ESIGNATURE)
+					&& productRoles.get(Product.ESIGNATURE).contains(ESignatureProduct.ROLE_ADMINISTRATOR)) || (productRoles.containsKey(Product.CLM) && productRoles.get(Product.CLM).contains(ClmProduct.ROLE_ADMINISTRATOR))));
 
 			Map<String, String> adminRoles = getAdminRoles(productRoles);
 			return mergeRoles(users.values(), adminRoles, productRoles);
