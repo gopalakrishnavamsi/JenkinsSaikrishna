@@ -7353,7 +7353,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GenQuickGuide</shortDescription>
-		<value>Take a look at the &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;Quick Guide&lt;/a&gt;</value>
+		<value>Take a look at the &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;Quick Guide&lt;/a&gt;</value>
 	</labels>
 	<labels>
 		<fullName>TemplateConfigurationLabel</fullName>
