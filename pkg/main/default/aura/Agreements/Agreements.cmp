@@ -29,13 +29,13 @@
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:html tag="style">
         :root {
-            --uploadWidgitInitMessage: '{!$Label.c.SettingUpUploadWidget}';
-            --fetchingSalesforceFilesMessage: '{!$Label.c.FetchingSalesforceFiles}';
-            --fetchingDocuSignFilesMessage: '{!$Label.c.FetchingDocuSignFiles}';
-            --authorizingMessage: '{!$Label.c.Authorizing}';
-            --importingToDocuSignFilesMessage: '{!$Label.c.ImportingToDocuSignFiles}';
-            --sendForSignatureMessage: '{!$Label.c.SendForSignature}';
-        } 
+        --uploadWidgitInitMessage: '{!$Label.c.SettingUpUploadWidget}';
+        --fetchingSalesforceFilesMessage: '{!$Label.c.FetchingSalesforceFiles}';
+        --fetchingDocuSignFilesMessage: '{!$Label.c.FetchingDocuSignFiles}';
+        --authorizingMessage: '{!$Label.c.Authorizing}';
+        --importingToDocuSignFilesMessage: '{!$Label.c.ImportingToDocuSignFiles}';
+        --sendForSignatureMessage: '{!$Label.c.SendForSignature}';
+        }
     </aura:html>
 
     <div aura:id="importModal">
@@ -52,21 +52,16 @@
                                 <img class="slds-is-relative slds-icon slds-icon_small ds-agreementsIconBackground"
                                      src="{!$Resource.icon_DocuSignAgreements}"/>
                             </div>
+                            <!-- Component Title -->
                             <div class="slds-media__body">
-                                <!-- Loading Header -->
-                                <aura:if isTrue="{!v.loading}">
-                                    <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} ()</b></p>
-                                </aura:if>
-                                <!-- Header content goes here -->
-                                <aura:if isTrue="{!not(v.loading)}">
-                                    <aura:if isTrue="{!v.agreements.length == 0}">
-                                        <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements} (0)</b></p>
-                                        <aura:set attribute="else">
-                                            <p class="slds-text-heading_small"><b>{!$Label.c.DocuSignAgreements}
-                                                    ({!v.agreements.length})</b></p>
-                                        </aura:set>
-                                    </aura:if>
-                                </aura:if>
+                                <p class="slds-text-heading_small">
+                                    <b>
+                                        {!$Label.c.DocuSignAgreements}
+                                        <aura:if isTrue="{!and(not(v.loading), v.isAuthorized)}">
+                                            ({!v.agreements.length})
+                                        </aura:if>
+                                    </b>
+                                </p>
                             </div>
                         </div>
                     </div>
