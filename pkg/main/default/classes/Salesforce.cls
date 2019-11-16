@@ -282,4 +282,21 @@ public with sharing class Salesforce {
 		}
 		return result;
 	}
+
+	public static boolean isValidSObject(String sObjectName) {
+		return GLOBAL_DESCRIBE.containsKey(sObjectName);
+	}
+
+	public static SObjectType getParentSobjectType(sObjectType baseSObject, String referenceFieldName) {
+		SObjectType parentSObjectType ;
+		Map<String, Schema.SObjectField> parentFieldsMap = baseSObject.getDescribe().fields.getMap();
+		if (parentFieldsMap.containsKey(referenceFieldName)) {
+			Schema.DescribeFieldResult dfr1 = parentFieldsMap.get(referenceFieldName).getDescribe();
+			if (dfr1.getType() == Schema.DisplayType.Reference && dfr1.getReferenceTo() <> null) {
+				String parentSObjectName = String.valueOf(dfr1.getReferenceTo()).substringBetween('(', ')');
+				parentSObjectType = getSObjectType(parentSObjectName);
+			}
+		}
+		return parentSObjectType;
+	}
 }

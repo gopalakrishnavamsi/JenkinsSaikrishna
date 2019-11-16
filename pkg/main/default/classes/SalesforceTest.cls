@@ -242,4 +242,21 @@ private class SalesforceTest {
 		System.assert(Salesforce.isValidTarget(vfOrigin2()), 'Target not valid: ' + vfOrigin1());
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_isValidSObjectTest() {
+		Test.startTest();
+		System.assert(Salesforce.isValidSObject('Account'));
+		System.assert(!Salesforce.isValidSObject('Parent'));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getParentSobjectType() {
+		Test.startTest();
+		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getParentSobjectType(Schema.Account.getSObjectType(), 'ParentId'));
+		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getParentSobjectType(Schema.Account.getSObjectType(), 'MasterRecordId'));
+		System.assertEquals(Schema.Case.getSObjectType(), Salesforce.getParentSobjectType(Schema.Case.getSObjectType(), 'ParentId'));
+		Test.stopTest();
+	}
 }

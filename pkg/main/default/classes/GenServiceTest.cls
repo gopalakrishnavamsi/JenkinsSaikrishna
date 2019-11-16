@@ -925,7 +925,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_queryGenTemplatesForDisplay_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate');
 			insert testTemplate;
 			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
 			Test.startTest();
@@ -958,6 +958,23 @@ private class GenServiceTest {
 			Test.stopTest();
 			System.assertNotEquals(null, gentemplateUrl);
 			System.assert(gentemplateUrl.toExternalForm().startsWith(Site.getBaseUrl()), true);
+		}
+	}
+
+	@IsTest
+	static void test_getSelfLookup_success() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Schema.Account a = TestUtils.createAccount();
+			Schema.Account b = TestUtils.createAccount();
+			a.ParentId = b.Id;
+			update a;
+			Gen.Query q = new Gen.Query('Account', null, new List<String> { 'Parent.Name' }, null);
+			Test.startTest();
+			SObject result = GenService.getMergeData(a.Id, q);
+			Test.stopTest();
+			System.assertNotEquals(null, result);
+			System.assertEquals(a.Id, result.Id);
+			System.assertEquals(b.Id, (String)result.get('ParentId'));
 		}
 	}
 

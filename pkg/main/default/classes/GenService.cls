@@ -131,13 +131,17 @@ public with sharing class GenService {
 				'Id', 'Name', 'SourceObject__c', 'LastModifiedDate'
 			});
 			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
-			for (GenTemplate__c template : [SELECT Id, Name, SourceObject__c, LastModifiedDate 
-											FROM GenTemplate__c ORDER BY LastModifiedDate desc LIMIT 50000]) {
+			for (GenTemplate__c template : [
+				SELECT Id, Name, SourceObject__c, LastModifiedDate
+				FROM GenTemplate__c
+				ORDER BY LastModifiedDate desc
+				LIMIT 50000
+			]) {
 				templatesList.add(new Gen.GenTemplateDisplay(
-										template.Id, 
-										template.Name, 
-										template.SourceObject__c,
-										template.LastModifiedDate));										
+					template.Id,
+					template.Name,
+					template.SourceObject__c,
+					template.LastModifiedDate));
 			}
 			return templatesList;
 		}
@@ -326,7 +330,10 @@ public with sharing class GenService {
 			if (field.contains('.')) {
 				List<String> toks = field.split('\\.');
 				if (toks.size() > MergeField.MAX_DEPTH) throw new DocuSignException(Label.MaxObjectDepthExceeded);
-				type = Salesforce.getSObjectType(toks[0]);
+				String parentSobject = toks[0];
+				type = Salesforce.isValidSObject(parentSobject)
+					? Salesforce.getSObjectType(parentSobject)
+					: Salesforce.getParentSobjectType(baseType, getValidReferencePath(parentSobject));
 				fieldName = toks[1];
 			}
 
@@ -337,6 +344,11 @@ public with sharing class GenService {
 			}
 
 			return accessMap;
+		}
+
+		private String getValidReferencePath(String name) {
+			return name.endsWith('__r') ?
+				name.replace('__r', '__c') : name + 'Id';
 		}
 
 		private String buildChildQuery(
@@ -737,16 +749,16 @@ public with sharing class GenService {
 	public static Url getNewGenTemplateUrl() {
 		Permissions.verifyIsDocuSignAdministrator();
 		Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Name', 
-				Application.namespacePrefix + 'SourceObject__c', 
-				Application.namespacePrefix +'ObjectMappings__c', 
-				Application.namespacePrefix +'SignerMappings__c', 
-				Application.namespacePrefix +'UseAllTemplates__c',
-				Application.namespacePrefix +'UseCurrentRecord__c', 
-				Application.namespacePrefix +'HasPreviewedDocuments__c', 
-				Application.namespacePrefix +'StepsCompleted__c', 
-				Application.namespacePrefix +'IsSample__c'
-			});
+			'Name',
+			Application.namespacePrefix + 'SourceObject__c',
+			Application.namespacePrefix + 'ObjectMappings__c',
+			Application.namespacePrefix + 'SignerMappings__c',
+			Application.namespacePrefix + 'UseAllTemplates__c',
+			Application.namespacePrefix + 'UseCurrentRecord__c',
+			Application.namespacePrefix + 'HasPreviewedDocuments__c',
+			Application.namespacePrefix + 'StepsCompleted__c',
+			Application.namespacePrefix + 'IsSample__c'
+		});
 		PageReference genTemplatePage = Page.GenTemplate;
 		return new Url(Salesforce.baseUrl, genTemplatePage.getUrl());
 	}
