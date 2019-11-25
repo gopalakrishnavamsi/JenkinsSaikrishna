@@ -171,6 +171,9 @@
             if ($A.util.isEmpty(fields)) {
               fields.push('Id');
             }
+            if (!$A.util.isEmpty(fields)) {
+              (component.get('v.isMultiCurrency') && !fields.includes('CurrencyIsoCode')) ? fields.push('CurrencyIsoCode') : '';
+            }
             var inputParamter = {
               type: objMap.apiName,
               relationship: '',
