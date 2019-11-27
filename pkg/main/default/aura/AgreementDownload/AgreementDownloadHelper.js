@@ -15,7 +15,7 @@
             result.token,
             result.accountId.value,
             agreement.id.value,
-            agreement.name
+            stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension)
           );
           downloadWidget
             .then(function () {
