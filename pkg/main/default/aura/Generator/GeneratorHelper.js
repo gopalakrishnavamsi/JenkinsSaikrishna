@@ -170,9 +170,15 @@
                 children.push(childrenObject);
               }
             });
+
             if ($A.util.isEmpty(fields)) {
               fields.push('Id');
             }
+
+            if (component.get('v.isMultiCurrency') && !fields.includes('CurrencyIsoCode')) {
+              fields.push('CurrencyIsoCode');
+            }
+
             var inputParamter = {
               type: objMap.apiName,
               relationship: '',
