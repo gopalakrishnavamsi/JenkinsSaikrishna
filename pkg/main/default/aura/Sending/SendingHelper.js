@@ -492,25 +492,23 @@
     var self = this;
     var rs = [];
     var ri = 0;
-    if (!$A.util.isEmpty(recipients)) {
-      if (
-        !$A.util.isUndefinedOrNull(template) &&
-        !$A.util.isEmpty(template.recipients)
-      ) {
-        // Add or merge template recipients
-        template.recipients.forEach(function (tr) {
-          if (ri < recipients.length && !self.isValidRecipient(tr)) {
-            rs.push(self.mergeTemplateRecipient(tr, recipients[ri++]));
-          } else {
-            rs.push(tr);
-          }
-        });
-      }
+    if (
+      !$A.util.isUndefinedOrNull(template) &&
+      !$A.util.isEmpty(template.recipients)
+    ) {
+      // Add or merge template recipients
+      template.recipients.forEach(function (tr) {
+        if (!$A.util.isEmpty(recipients) && ri < recipients.length && !self.isValidRecipient(tr)) {
+          rs.push(self.mergeTemplateRecipient(tr, recipients[ri++]));
+        } else {
+          rs.push(tr);
+        }
+      });
+    }
 
-      // Add any leftover recipients
-      for (var i = ri; i < recipients.length; i++) {
-        rs.push(recipients[i]);
-      }
+    // Add any leftover recipients
+    for (var i = ri; i < recipients.length; i++) {
+      rs.push(recipients[i]);
     }
     return rs;
   },

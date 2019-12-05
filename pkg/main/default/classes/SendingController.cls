@@ -61,6 +61,7 @@ public with sharing class SendingController extends Controller {
 			EnvelopeSettings es = EnvelopeSettings.getInstance();
 			// TODO: Check account features for templates. Pull on demand.
 			List<Template> templates;
+			List<Document> documents;
 			try {
 				templates = TemplateAPI.getInstance().getTemplates();
 			} catch (APIException ex) {
@@ -76,11 +77,15 @@ public with sharing class SendingController extends Controller {
 			} finally {
 				Credentials.save();
 			}
+			documents = DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false);
+
+			List<Recipient> recipients = RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds);
+
 			return new DraftEnvelope(
 				EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),
-				templates,
-				DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false),
-				RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds),
+				templates == null ? new List<Template>() : templates,
+				documents == null ? new List<Document>() : documents,
+				recipients == null ? new List<Recipient>() : recipients,
 				es.defaultRoles,
 				es.allowRecipientLanguageSelection ? es.emailLocalizations : new List<Recipient.EmailSettings>());
 		} catch (Exception ex) {
@@ -91,7 +96,9 @@ public with sharing class SendingController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static List<Document> getLinkedDocuments(final Id sourceId) {
 		try {
-			return DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { sourceId }, false);
+			return DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> {
+				sourceId
+			}, false);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get linked documents');
 		}
@@ -102,7 +109,9 @@ public with sharing class SendingController extends Controller {
 		try {
 			Recipient result = null;
 			if (String.isNotBlank(sourceId)) {
-				List<Recipient> rs = RecipientService.getRecipients(sourceId.getSobjectType(), new Set<Id> { sourceId });
+				List<Recipient> rs = RecipientService.getRecipients(sourceId.getSobjectType(), new Set<Id> {
+					sourceId
+				});
 				if (Collection.isNotEmpty(rs)) {
 					result = rs[0];
 				}
