@@ -7,7 +7,7 @@
     <aura:attribute name="showModal" type="Boolean" default="{!false}"/>
     <aura:attribute name="agreementDetails" type="Agreement"/>
     <aura:attribute name="invalidFileName" type="Boolean" default="false"/>
-
+    <aura:attribute name="inputRequired" type="Boolean" default="true" access="private"/>
 
     <!-- Events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
@@ -31,17 +31,21 @@
                                      messageWhenValueMissing="{!$Label.c.RequiredField}"
                                      pattern="^(&#063;&#033;\s)[^\.\/\\&#060;&#062;&#063;&#058;&#124;&#034;&#042;]+"
                                      messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"
-                                     required="true"
+                                     required="{!v.inputRequired}"
                                      disabled="{!v.loading}" onchange="{!c.onNameChange}"/>
                 </div>
             </div>
         </div>
         <!-- modal footer buttons -->
         <aura:set attribute="footerButtons">
-            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelButtonClicked}"
-                              disabled="{!v.loading}"
-                              label="{!$Label.c.Cancel}">
-            </lightning:button>
+            <button aura:id="fileRenameCancelButton" 
+                class="slds-button slds-button_neutral"
+                onclick="{!c.cancelButtonClicked}"
+                disabled="{!v.loading}"
+                onmouseenter="{!c.cancelButtonMouseEnter}"
+                onmouseleave="{!c.cancelButtonMouseLeave}">
+                {!$Label.c.Cancel}
+            </button>
             <lightning:button aura:id="renameButton" disabled="{!if(empty(v.agreementDetails.name), true)
                                                                 +if(v.loading, true)
                                                                 +if(v.invalidFileName, true)}"

@@ -27,8 +27,7 @@
     "generatePassword": "sfdx force:user:password:generate -u dfsle-scratch-org",
     "openOrg":"sfdx force:org:open",
     "installPackage":"sfdx force:package:install",
-    "setup":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run installPackage -- --package 04t5A00000295yd && npm run generatePassword && npm run openOrg",    
-    "setupHQTest3":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run installPackage -- --package 04t5A00000295CU && npm run generatePassword && npm run openOrg",
+    "setup":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg",    
     "lint": "eslint ./;",
     "test": "mocha -r jsdom-global/register"
   },
