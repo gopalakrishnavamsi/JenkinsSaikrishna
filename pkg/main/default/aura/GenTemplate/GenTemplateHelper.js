@@ -160,6 +160,11 @@
     var helper = this;
     component.set('v.saving', true);
     var config = component.get('v.config');
+    var files = component.get('v.files');
+
+    config.generated = files;
+    component.set('v.config', config);
+
     if (config.isSample) {
       return;
     }

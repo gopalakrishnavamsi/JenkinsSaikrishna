@@ -37,7 +37,7 @@
                 <div class="slds-col">
                     <lightning:select label="{!$Label.c.FileFormat}" value="{!v.file.generatedFormat}">
                         <option value="Word">{!$Label.c.MicrosoftWord}</option>
-                        <option value="Pdf">{!$Label.c.Pdf}</option>
+                        <option value="PDF">{!$Label.c.Pdf}</option>
                     </lightning:select>
                 </div>
             </div>
