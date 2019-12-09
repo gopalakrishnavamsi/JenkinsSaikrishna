@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>GenTemplatesMigrated__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Setting this value to TRUE after migrating Gen Templates</description>
+    <externalId>false</externalId>
+    <label>AreGenTemplatesMigrated</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

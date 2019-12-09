@@ -3413,6 +3413,182 @@
 		<value>Example: California</value>
 	</labels>
 	<labels>
+		<fullName>MigrateTemplateButton</fullName>
+		<categories>Gen-Button Text</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrateTemplateButton</shortDescription>
+		<value>Migrate Templates</value>
+	</labels>
+	<labels>
+		<fullName>MigrateTemplateEmailBody</fullName>
+		<categories>Gen-Email Alert</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrateTemplateEmailBody</shortDescription>
+		<value>Your Template Configurations Are Now in DocuSign Apps Launcher&lt;br/&gt;&lt;br/&gt; Congratulations! You&#39;ve successfully migrated your template configurations to DocuSign Apps. To use custom buttons, you will have to recreate them in DocuSign Apps Launcher.</value>
+	</labels>
+	<labels>
+		<fullName>MigrateTemplateErrorText</fullName>
+		<categories>Gen-Error</categories>
+		<language>en_US</language>
+		<protected>ture</protected>
+		<shortDescription>MigrateTemplateErrorText</shortDescription>
+		<value>&lt;span class=&quot;slds-text-color_error&quot;&gt;We couldn&#39;t migrate {0} because of [{1}].&lt;/span &gt;</value>
+	</labels>
+	<labels>
+		<fullName>MigrateTemplateSubjectLine</fullName>
+		<categories>Gen-Email Alert</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrateTemplateSubjectLine</shortDescription>
+		<value>You&#39;ve Migrated Your Template Configurations</value>
+	</labels>
+	<labels>
+		<fullName>MigrateTemplatesSuccessMsg</fullName>
+		<categories>Gen-UI message</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrateTemplatesSuccessMsg</shortDescription>
+		<value>All template configurations migrated successfully.</value>
+	</labels>
+	<labels>
+		<fullName>MigrateUserButton</fullName>
+		<categories>Gen-Button Text</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrateUserButton</shortDescription>
+		<value>Migrate Users</value>
+	</labels>
+	<labels>
+		<fullName>MigrateUsersEmailBody</fullName>
+		<categories>Gen-Email Alert</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrateUsersEmailBody</shortDescription>
+		<value>Your Users Are Now in DocuSign Apps Launcher&lt;br/&gt;&lt;br/&gt; Congratulations! You&#39;ve successfully migrated your users to DocuSign Apps Launcher.</value>
+	</labels>
+	<labels>
+		<fullName>MigrateUsersSubjectLine</fullName>
+		<categories>Gen-Email Alert</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrateUsersSubjectLine</shortDescription>
+		<value>You&#39;ve Migrated Your Users</value>
+	</labels>
+	<labels>
+		<fullName>MigrateUsersSuccessMsg</fullName>
+		<categories>Gen-UI message</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrateUsersSuccessMsg</shortDescription>
+		<value>All users migrated successfully.</value>
+	</labels>
+	<labels>
+		<fullName>MigrationCompleteMsg</fullName>
+		<categories>Gen-UI message</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrationCompleteMsg</shortDescription>
+		<value>Your migration is complete. Uninstall DocuSign Gen for Salesforce to hide this message.</value>
+	</labels>
+	<labels>
+		<fullName>MigrationHelpTextforUninstall</fullName>
+		<categories>Gen-Section Body</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrationHelpTextforUninstall</shortDescription>
+		<value>You don&#39;t have anything to migrate from DocuSign Gen for Salesforce. Hide this message by uninstalling it.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</value>
+	</labels>
+	<labels>
+		<fullName>MigrationSection</fullName>
+		<categories>Gen-Section Header</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrationSection</shortDescription>
+		<value>MIGRATION</value>
+	</labels>
+	<labels>
+		<fullName>MigrationUsersHelpText</fullName>
+		<categories>Gen-Section Body</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>MigrationUsersHelpText</shortDescription>
+		<value>Save time by migrating your DocuSign Gen for Salesforce users to DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</value>
+	</labels>
+	<labels>
+		<fullName>NumberOfGenUsers</fullName>
+		<categories>Gen-UI message</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>NumberOfGenUsers</shortDescription>
+		<value>There are {0} users on DocuSign Gen For Salesforce</value>
+	</labels>
+	<labels>
+		<fullName>OnLoadMigrationText</fullName>
+		<categories>Gen-UI message</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OnLoadMigrationText</shortDescription>
+		<value>Your migration may take few minutes. Please come back later for confirmation</value>
+	</labels>
+	<labels>
+		<fullName>OnLoadTemplateText</fullName>
+		<categories>Gen-UI message</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OnLoadTemplateText</shortDescription>
+		<value>There are {0} template configurations on DocuSign Gen For Salesforce.</value>
+	</labels>
+	<labels>
+		<fullName>TabMigrationHeader</fullName>
+		<categories>Gen-Tab Text</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabMigrationHeader</shortDescription>
+		<value>Migrate Users and Templates from DocuSign Gen</value>
+	</labels>
+	<labels>
+		<fullName>TabMigrationHeaderUninstallText</fullName>
+		<categories>Gen-Section Header</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TabMigrationHeaderUninstallText</shortDescription>
+		<value>Uninstall DocuSign Gen for Salesforce</value>
+	</labels>
+	<labels>
+		<fullName>UserManagementTabBody</fullName>
+		<categories>Gen-Section Body</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UserManagementText</shortDescription>
+		<value>Save time by migrating your DocuSign Gen for Salesforce users to DocuSign Apps Launcher.</value>
+	</labels>
+	<labels>
+		<fullName>UserManagementTabHeader</fullName>
+		<categories>Gen-Section Header</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UserManagementTabHeader</shortDescription>
+		<value>Migrate Users from DocuSign Gen</value>
+	</labels>
+	<labels>
+		<fullName>DocumentGenerationTabText</fullName>
+		<categories>Gen-Section Header</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentGenerationTabText</shortDescription>
+		<value>Migrate Templates from DocuSign Gen</value>
+	</labels>
+	<labels>
+		<fullName>DocumentGenerationText</fullName>
+		<categories>Gen-Section Body</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentGenerationText</shortDescription>
+		<value>Save time by migrating your DocuSign Gen for Salesforce template configuration here. You can&#39;t migrate your custom buttons, so you&#39;ll have to recreate them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</value>
+	</labels>
+	<labels>
 		<fullName>AlwaysDisplayThisField</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -8344,5 +8520,15 @@
 		<protected>true</protected>
 		<shortDescription>CLM - KickoffWorkflowSummary</shortDescription>
 		<value>Once you create a workflow in CLM you can integrate it with Salesforce. For example, generating a document could trigger a document review workflow.</value>
+	</labels>
+	<labels>
+        <fullName>MigrationHelpText</fullName>
+        <categories>Gen-Section Body</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>MigrationHelpText</shortDescription>
+        <value>Save time by migrating your DocuSign Gen for Salesforce users and template
+configuration here. You can&#39;t migrate your custom buttons, so you&#39;ll have to recreate
+them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</value>
 	</labels>
 </CustomLabels>

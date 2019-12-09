@@ -66,6 +66,10 @@
                     <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
                         <c:SetupAccount login="{!v.login}"/>
                     </div>
+                    <!--GenMigration-->
+                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
+                        <c:GenMigration scope="All"/>
+                    </div>
                     <!-- Configuration details -->
                     <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
                         <div class="slds-box ds-white-background">

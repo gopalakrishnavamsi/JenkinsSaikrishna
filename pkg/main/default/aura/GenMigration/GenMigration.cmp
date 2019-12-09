@@ -1,0 +1,104 @@
+<aura:component controller="GenMigrationController">
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitialize}"/>
+
+    <!-- To control component behavior when called form other tabs in Docusign Setup Page -->
+    <aura:attribute name="scope" type="String" default="All"/>
+    <aura:attribute name="showBlock" type="Boolean" default="false"/>
+    <!-- Stores result when onInitialize Handler is executed-->
+    <aura:attribute name="getResult" type="String" default="" access="private"/>
+
+    <!--  To store UI messages -->
+    <aura:attribute name="tabMigrationHeader" type="String" default="{!$Label.c.TabMigrationHeader}" access="private"/>
+    <aura:attribute name="migrationHelpText" type="String" default="{!$Label.c.MigrationHelpText}" access="private"/>
+    <aura:attribute name="migrationUserStatusMessage" type="String" access="private"/>
+    <aura:attribute name="migrationTemplateStatusMessage" type="String" access="private"/>
+
+    <!-- Booleans to Show/hide Blocks -->
+    <aura:attribute name="isGenPackageUser" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isTemplatesMigrated" type="Boolean" access="private"/>
+    <aura:attribute name="isUsersMigrated" type="Boolean" access="private"/>
+    <aura:attribute name="hideMigrateUsers" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="hideMigrateTemplates" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="showPackageUnInstallText" type="Boolean" default="false" access="private"/>
+
+    <!--  Status Icons -->
+    <aura:attribute name="userStatusIcon" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="templateStatusIcon" type="Boolean" default="true" access="private"/>
+
+    <!-- Toast Attributes -->
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="mode" type="String"/>
+    <aura:attribute name="showToast" type="Boolean" default="false"/>
+
+    <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"/>
+
+    <!--showing Migration component only if logged in user has GenPackage access -->
+    <aura:if isTrue="{!v.isGenPackageUser}">
+
+        <div class="slds-box ds-white-background ">
+            <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-help-text">
+                <div class="slds-col">
+                    <div class="slds-media slds-media_large">
+                        <div class="slds-media__figure">
+                            <lightning:icon class="ds-icon-background" size="large"
+                                            iconName="standard:product_required"/>
+                        </div>
+                        <div class="slds-media__body">
+                            <p class="ds-migration-detail">{!v.tabMigrationHeader}</p>
+                            <lightning:formattedRichText value="{!v.migrationHelpText}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Hiding Migrate user block if migration is completed -->
+            <aura:if isTrue="{!v.hideMigrateUsers}">
+                <div class="slds-grid slds-grid_align-spread slds-p-around_medium ">
+                        <span class="ds-verticalAlign-migrateTemplate"> 
+                            <aura:if isTrue="{!v.isUsersMigrated}">
+                                <lightning:icon class="ds-icon-success-background" size="x-small"
+                                                iconName="{!v.userStatusIcon ? 'utility:routing_offline' : 'utility:success'}"/>
+                            </aura:if>
+                            <span class="ds-icon-error-background">
+                                <aura:if isTrue="{!v.isUsersMigrated == false}"> 
+                                    <lightning:icon size="x-small" iconName="utility:error"/>
+                                </aura:if>&nbsp;<lightning:formattedRichText value="{!v.migrationUserStatusMessage}"/>
+                            </span>
+                        </span>
+                    <div class="slds-float_right">
+                        <lightning:button label="{!$Label.c.MigrateUserButton}" disabled="{!v.isUsersMigrated}"
+                                          onclick="{!c.migrateUsersConfiguration}"/>
+                    </div>
+                </div>
+            </aura:if>
+            <!-- Hiding Migrate Template block if migration is completed -->
+            <aura:if isTrue="{!v.hideMigrateTemplates}">
+                <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-compress">
+                        <span class="ds-verticalAlign-migrateTemplate"> 
+                            <aura:if isTrue="{!v.isTemplatesMigrated}">
+                                <lightning:icon class="ds-icon-success-background" size="x-small"
+                                                iconName="{!v.templateStatusIcon ? 'utility:routing_offline' : 'utility:success'}"/>
+                            </aura:if>
+                            <span class="ds-icon-error-background">
+                                <aura:if isTrue="{!v.isTemplatesMigrated == false}">
+                                    <lightning:icon variant="error" size="x-small" iconName="utility:error"/>
+                                </aura:if>
+                            </span>&nbsp;<lightning:formattedRichText value="{!v.migrationTemplateStatusMessage}"/>
+                        </span>
+                    <div class="slds-float_right">
+                        <lightning:button disabled="{!v.isTemplatesMigrated}" label="{!$Label.c.MigrateTemplateButton}"
+                                          onclick="{!c.migrateTemplateConfiguration}"/>
+                    </div>
+                </div>
+            </aura:if>
+            <!-- Uninstall Text when migration is completed -->
+            <aura:if isTrue="{!v.showPackageUnInstallText}">
+                <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-bordertop">
+                        <span class="ds-verticalAlign-migrationcomplete">
+                            <lightning:icon size="x-small"
+                                            iconName="utility:info"/>&nbsp;{!$Label.c.MigrationCompleteMsg}
+                        </span>
+                </div>
+            </aura:if>
+        </div>
+    </aura:if>
+</aura:component>

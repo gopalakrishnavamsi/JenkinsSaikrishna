@@ -158,6 +158,94 @@
 		<name>CannotResolveRecipientSource_1</name>
 	</customLabels>
 	<customLabels>
+		<label>Migrate Templates</label>
+		<name>MigrateTemplateButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Your Template Configurations Are Now in DocuSign Apps Launcher&lt;br/&gt;&lt;br/&gt; Congratulations! You&#39;ve successfully migrated your template configurations to DocuSign Apps. To use custom buttons, you will have to recreate them in DocuSign Apps Launcher.</label>
+		<name>MigrateTemplateEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;span class=&quot;slds-text-color_error&quot;&gt;We couldn&#39;t migrate {0} because of [{1}].&lt;/span &gt;</label>
+		<name>MigrateTemplateErrorText</name>
+	</customLabels>
+	<customLabels>
+		<label>You&#39;ve Migrated Your Template Configurations</label>
+		<name>MigrateTemplateSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>All template configurations migrated successfully.</label>
+		<name>MigrateTemplatesSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Migrate Users</label>
+		<name>MigrateUserButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Your Users Are Now in DocuSign Apps Launcher&lt;br/&gt;&lt;br/&gt; Congratulations! You&#39;ve successfully migrated your users to DocuSign Apps Launcher.</label>
+		<name>MigrateUsersEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>You&#39;ve Migrated Your Users</label>
+		<name>MigrateUsersSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>All users migrated successfully.</label>
+		<name>MigrateUsersSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Your migration is complete. Uninstall DocuSign Gen for Salesforce to hide this message.</label>
+		<name>MigrationCompleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>You don&#39;t have anything to migrate from DocuSign Gen for Salesforce. Hide this message by uninstalling it.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</label>
+		<name>MigrationHelpTextforUninstall</name>
+	</customLabels>
+	<customLabels>
+		<label>MIGRATION</label>
+		<name>MigrationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>Save time by migrating your DocuSign Gen for Salesforce users to DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</label>
+		<name>MigrationUsersHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>There are {0} users on DocuSign Gen For Salesforce</label>
+		<name>NumberOfGenUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Your migration may take few minutes. Please come back later for confirmation</label>
+		<name>OnLoadMigrationText</name>
+	</customLabels>
+	<customLabels>
+		<label>There are {0} template configurations on DocuSign Gen For Salesforce.</label>
+		<name>OnLoadTemplateText</name>
+	</customLabels>
+	<customLabels>
+		<label>Migrate Users and Templates from DocuSign Gen</label>
+		<name>TabMigrationHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Uninstall DocuSign Gen for Salesforce</label>
+		<name>TabMigrationHeaderUninstallText</name>
+	</customLabels>
+	<customLabels>
+		<label>Save time by migrating your DocuSign Gen for Salesforce users to DocuSign Apps Launcher.</label>
+		<name>UserManagementTabBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Migrate Users from DocuSign Gen</label>
+		<name>UserManagementTabHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Migrate Templates from DocuSign Gen</label>
+		<name>DocumentGenerationTabText</name>
+	</customLabels>
+	<customLabels>
+		<label>Save time by migrating your DocuSign Gen for Salesforce template configuration here. You can&#39;t migrate your custom buttons, so you&#39;ll have to recreate them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</label>
+		<name>DocumentGenerationText</name>
+	</customLabels>
+	<customLabels>
 		<label>Update is unauthorized for {0} fields: {1}</label>
 		<name>CannotUpdateFields_2</name>
 	</customLabels>
@@ -4336,6 +4424,10 @@
 	<customLabels>
 		<label>Once you create a workflow in CLM you can integrate it with Salesforce. For example, generating a document could trigger a document review workflow.</label>
 		<name>KickoffWorkflowSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Save time by migrating your DocuSign Gen for Salesforce users and template configuration here. You can&#39;t migrate your custom buttons, so you&#39;ll have to recreate them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</label>
+		<name>MigrationHelpText</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

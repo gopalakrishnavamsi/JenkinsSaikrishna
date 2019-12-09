@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TemplateMigrationBatchStatus__c</fullName>
+    <description>To Store Template Migration Batch Status</description>
+    <externalId>false</externalId>
+    <label>TemplateMigrationBatchStatus</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

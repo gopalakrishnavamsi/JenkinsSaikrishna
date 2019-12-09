@@ -1,0 +1,58 @@
+.THIS .ds-icon-background svg {
+    fill: t(colorBackgroundWhite);
+}
+
+.THIS .ds-icon-success-background svg {
+    fill: t(colorBackgroundSuccessDark);
+}
+
+.THIS .ds-icon-error-background svg {
+    fill: t(colorBackgroundDestructive);
+}
+
+.THIS .ds-icon-background {
+    background-color: #e6d478;
+}
+
+.THIS .ds-icon-success-background {
+    background-color: t(colorBackgroundWhite);
+}
+
+.THIS .ds-compress {
+    padding-block-start: initial;
+}
+
+.THIS .ds-verticalAlign-migrationcomplete {
+    margin-left: -17px;
+    color: #080707;
+    font-size: 13px;
+}
+
+.THIS .ds-white-background {
+    background: rgb(255, 255, 255);
+}
+
+.THIS .ds-config-item-bordertop {
+    margin-left: 86px;
+    border-top: solid 0.5px rgb(243, 242, 242);
+}
+
+.THIS .ds-help-text {
+    width: 65%;
+}
+
+.THIS .ds-verticalAlign-migrateTemplate {
+    position: relative;
+    top: 8px;
+    margin-left: 69px;
+    width: 67%;
+    display: inline-block;
+    color: #080707;
+    font-size: 13px;
+}
+
+.THIS .ds-migration-detail {
+    color: t(colorTextActionLabelActive);
+    font-size: t(fontSize7);
+    font-weight: t(fontWeightBold);
+}

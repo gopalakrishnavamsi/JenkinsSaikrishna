@@ -1,8 +1,13 @@
 <aura:component>
     <!-- attributes -->
     <aura:attribute name="genProduct" type="Product"/>
+    <aura:attribute name="showMigrationBlock" type="Boolean" default="true"/>
 
     <div class="ds-documentGeneration-settings">
+        <!-- GenMigration -->
+        <div class="{!v.showMigrationBlock == false ? '' : 'slds-p-around_large'}">
+            <c:GenMigration showBlock="{!v.showMigrationBlock}" scope="DocumentGeneration"/>
+        </div>
         <aura:if isTrue="{!not(empty(v.genProduct))}">
             <!-- DocuSign Gen Templates section -->
             <c:DocumentGenerationDetails/>

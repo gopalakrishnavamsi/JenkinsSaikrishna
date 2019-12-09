@@ -1,4 +1,5 @@
 <aura:component description="Users" controller="SetupController">
+    <aura:attribute name="showMigrationBlock" type="Boolean" default="true"/>
     <aura:attribute name="context" type="String"/>
     <aura:attribute name="products" type="Product[]"/>
     <aura:attribute name="userTableLoading" type="Boolean" default="false"/>
@@ -54,6 +55,12 @@
 
     <!-- Section for managing users -->
     <div>
+        <!-- GenMigration -->
+        <aura:if isTrue="{!v.context == 'e_sign'}">
+            <div class="{!v.showMigrationBlock == false ? '' : 'slds-p-around_large'}">
+                <c:GenMigration showBlock="{!v.showMigrationBlock}" scope="User"/>
+            </div>
+        </aura:if>
         <div class="slds-p-around_large">
             <div class="slds-grid slds-grid_align-spread">
                 <div class="slds-col ds-users-componentHeader">
