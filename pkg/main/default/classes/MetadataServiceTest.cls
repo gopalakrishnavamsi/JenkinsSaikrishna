@@ -309,8 +309,8 @@ private class MetadataServiceTest {
 			Test.stopTest();
 
 			System.assertEquals(new List<String> { rs1.name }, result1);
-			System.assertEquals(new List<String>(), result2);
-			System.assertEquals(new List<String> { rs2.name, rs3.name }, result3);
+			System.assertEquals(new List<String> { rs1.name }, result2);
+			System.assertEquals(new List<String> { rs2.name, rs3.name, rs1.name }, result3);
 		}
 	}
 

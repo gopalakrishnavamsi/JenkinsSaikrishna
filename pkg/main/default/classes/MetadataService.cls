@@ -255,40 +255,61 @@ public with sharing class MetadataService {
 		return result;
 	}
 
-	private static List<MetadataAPI.RemoteSiteSetting> filterNewSites(final List<RemoteSite> remoteSites) {
+	private static Map<String, List<MetadataAPI.RemoteSiteSetting>> filterSites(final List<RemoteSite> remoteSites) {
 		if (Collection.isEmpty(remoteSites)) throw new DocuSignException(Label.UndefinedArgument);
 
-		Map<String, MetadataAPI.RemoteSiteSetting> result = new Map<String, MetadataAPI.RemoteSiteSetting>();
+		Map<String, List<MetadataAPI.RemoteSiteSetting>> resultsMap = new Map<String, List<MetadataAPI.RemoteSiteSetting>>();
+		Map<String, MetadataAPI.RemoteSiteSetting> remoteSitesMapForCreate = new Map<String, MetadataAPI.RemoteSiteSetting>();
+		Map<String, MetadataAPI.RemoteSiteSetting> remoteSitesMapForUpdate = new Map<String, MetadataAPI.RemoteSiteSetting>();
 		List<String> names = new List<String>();
+
+		//Add all the remote sites passed as input to the create and update maps
 		for (RemoteSite rs : remoteSites) {
-			result.put(rs.fullName, convert(rs));
+			remoteSitesMapForCreate.put(rs.fullName, convert(rs));
+			remoteSitesMapForUpdate.put(rs.fullName, convert(rs));
 			names.add(rs.fullName);
 		}
 
+		//Filter the create map by removing all existing remote sites
+		//This will ensure that the create map contains remote site settings which are to be created new
 		for (MetadataAPI.Metadata md : MetadataAPI.getInstance().readMetadata('RemoteSiteSetting', names)) {
-			result.remove(((MetadataAPI.RemoteSiteSetting)md).fullName);
+			remoteSitesMapForCreate.remove(((MetadataAPI.RemoteSiteSetting)md).fullName);
 		}
 
-		return result.values();
+		//Filter the update map by removing all remote sites that are to be created
+		//This will ensure that the update map contains remote site settings which are to be updated
+		for (String keyName : remoteSitesMapForCreate.keySet()) {
+			remoteSitesMapForUpdate.remove(keyName);
+		}
+
+		//Add the remote sites to be updated as well as created to the resultsMaps
+		resultsMap.put('Create', remoteSitesMapForCreate.values());
+		resultsMap.put('Update', remoteSitesMapForUpdate.values());
+
+		return resultsMap;
 	}
 
+
 	/**
-	 * Adds one or more Remote Sites to this Salesforce organization. Existing sites are ignored.
+	 * Adds / updates one or more Remote Sites to this Salesforce organization.
 	 *
-	 * @param remoteSites The Remote Sites to create.
+	 * @param remoteSites The Remote Sites to created / updated.
 	 *
-	 * @return The API names of the newly-created Remote Sites without namespaces.
+	 * @return The API names of the newly-created / updated Remote Sites without namespaces.
 	 */
 	public static List<String> createRemoteSites(final List<RemoteSite> remoteSites) {
 		if (Collection.isEmpty(remoteSites)) throw new DocuSignException(Label.UndefinedArgument);
 
 		List<String> result = new List<String>();
-		List<MetadataAPI.RemoteSiteSetting> rss = filterNewSites(remoteSites);
-		if (Collection.isNotEmpty(rss)) {
-			List<MetadataAPI.SaveResult> results = MetadataAPI.getInstance().createMetadata(rss);
-			result = validateResults(results);
+		Map<String, List<MetadataAPI.RemoteSiteSetting>> rssMap = filterSites(remoteSites);
+		if (Collection.isNotEmpty(rssMap.get('Create'))) {
+			List<MetadataAPI.SaveResult> createResults = MetadataAPI.getInstance().createMetadata(rssMap.get('Create'));
+			result.addAll(validateResults(createResults));
 		}
-
+		if (Collection.isNotEmpty(rssMap.get('Update'))) {
+			List<MetadataAPI.SaveResult> updateResults = MetadataAPI.getInstance().updateMetadata(rssMap.get('Update'));
+			result.addAll(validateResults(updateResults));
+		}
 		return result;
 	}
 
