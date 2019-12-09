@@ -219,6 +219,7 @@ private class HistoryAPITest {
 			System.assertEquals('tgreen+1@springcm.com', result.get(0).actor.email);
 			System.assertNotEquals(null, result.get(0).comments);
 			System.assertNotEquals(null, result.get(0).previewUrl);
+			System.assertEquals('Approved', result.get(0).result);
 		}
 	}
 
@@ -241,6 +242,33 @@ private class HistoryAPITest {
 			System.assertEquals('dimitri.blaiddyd@example.com', result.get(0).actor.email);
 			System.assertNotEquals(null, result.get(0).comments);
 			System.assertNotEquals(null, result.get(0).previewUrl);
+			System.assertEquals('Rejected', result.get(0).result);
+		}
+	}
+
+	// An individual agreement approval activity
+	@IsTest
+	static void test_getHistoryItems_success8() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignNegotiator()) {
+
+			Test.startTest();
+			List<AgreementHistoryItem> result = HistoryAPI.getInstance().getHistoryItems(ScmAPIMock.DOCUMENT_ID_8);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, result.size());
+			System.assertEquals(AgreementHistoryItem.CompletedHumanActivity, result.get(0).historyItemType);
+			System.assertEquals(UserInfo.getUserEmail(), result.get(0).currentUserEmail);
+			System.assertEquals('Estelle Bright', result.get(0).actor.fullName);
+			System.assertEquals('estelle.bright@liberl.com', result.get(0).actor.email);
+			System.assertNotEquals(null, result.get(0).comments);
+			System.assertNotEquals(null, result.get(0).previewUrl);
+			System.assertEquals(1, result.get(0).recipients.size());
+			System.assertEquals('Joshua Bright', result.get(0).recipients.get(0).fullName);
+			System.assertEquals('joshua.bright@liberl.com', result.get(0).recipients.get(0).email);
+			System.assertEquals('Approved', result.get(0).result);
 		}
 	}
 

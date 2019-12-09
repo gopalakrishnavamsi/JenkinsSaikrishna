@@ -16,6 +16,7 @@ public class AgreementHistoryItem {
 	public static final String ApprovalCheckout = 'ApprovalCheckout';
 	public static final String WorkflowApproved = 'WorkflowApproved';
 	public static final String WorkflowRejected = 'WorkflowRejected';
+	public static final String CompletedHumanActivity = 'CompletedHumanActivity';
 	public static final String ApprovalCanceledByUser = 'ApprovalCanceledByUser';
 	public static final String DocumentCheckIn = 'DocumentCheckIn';
 	public static final String ExternalReviewExpirationNew = 'ExternalReviewExpirationNew';
@@ -81,6 +82,9 @@ public class AgreementHistoryItem {
 	@AuraEnabled
 	public String comments;
 
+	@AuraEnabled
+	public String result;
+
 	public AgreementHistoryItem(
 		final String historyItemType,
 		final String currentUserEmail,
@@ -94,7 +98,8 @@ public class AgreementHistoryItem {
 		final AgreementHistoryItem.Actor actor,
 		final List<AgreementHistoryItem.Actor> recipients,
 		final String previewUrl,
-		final String comments
+		final String comments,
+		final String result
 	) {
 		this.historyItemType = historyItemType;
 		this.currentUserEmail = currentUserEmail;
@@ -109,6 +114,7 @@ public class AgreementHistoryItem {
 		this.recipients = recipients;
 		this.previewUrl = previewUrl;
 		this.comments = comments;
+		this.result = result;
 	}
 
 }
