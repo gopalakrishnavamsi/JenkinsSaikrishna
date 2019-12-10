@@ -6796,6 +6796,14 @@
 		<value>DocuSign CLM lets you generate documents in one click. To set this up, you'll have to add a button with a document generation configuration URL to your Salesforce page layout.</value>
 	</labels>
 	<labels>
+		<fullName>CurrentDate</fullName>
+		<categories>Field Label</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CurrentDate</shortDescription>
+		<value>Current Date</value>
+	</labels>
+	<labels>
 		<fullName>LearnHowToGenDoc</fullName>
 		<categories>CLM, Post Install</categories>
 		<language>en_US</language>

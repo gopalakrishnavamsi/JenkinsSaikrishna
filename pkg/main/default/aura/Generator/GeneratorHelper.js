@@ -153,8 +153,10 @@
 
             currentFieldMappings.forEach(function (object) {
               if (!object.isChildRelation) {
+                if(object.apiName !== 'CurrentDate' ) {
                 fields.push(object.apiName);
-              } else {
+              }
+            } else {
                 var childrenFields = [];
                 object.childFieldMappings.forEach(function (obj) {
                   childrenFields.push(obj.apiName);
@@ -352,6 +354,9 @@
           if (!$A.util.isEmpty(address.country)) {
             fieldVal += ' ' + address.country;
           }
+        }
+        if(apiName === 'CurrentDate') {
+          fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
         }
         //ignore object fields that aren't type Address
         if (typeof fieldVal !== 'object') {

@@ -2818,6 +2818,10 @@
 		<name>CreatedBy</name>
 	</customLabels>
 	<customLabels>
+		<label>Current Date</label>
+		<name>CurrentDate</name>
+	</customLabels>
+	<customLabels>
 		<label>01</label>
 		<name>ZeroOne</name>
 	</customLabels>
