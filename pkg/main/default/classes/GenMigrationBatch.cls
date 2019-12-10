@@ -112,7 +112,7 @@ public class GenMigrationBatch implements Database.Batchable<sObject>, Database.
 			} else if (user.Status__c != userStatusAsActive) {
 				user.Status__c = String.valueof(user.get(GenMigrationApplication.namespacePrefix + 'Docusign_Status__c'));
 			}
-			user.dfsle__Username__c = String.valueof(user.get(GenMigrationApplication.namespacePrefix + 'Docusign_User_Id__c'));
+			user.Username__c = String.valueof(user.get(GenMigrationApplication.namespacePrefix + 'Docusign_User_Id__c'));
 		}
 		if (Collection.isNotEmpty(updateGenFields)) {
 			update updateGenFields;
@@ -134,9 +134,9 @@ public class GenMigrationBatch implements Database.Batchable<sObject>, Database.
 			GenMigrationSettings__c genSetting = GenMigrationSettings__c.getOrgDefaults();
 			// if error,keeping Batch response in custom setting,trimming response to save in text field
 			if (objectName == TEMPLATE_OBJECT_NAME) {
-				genSetting.dfsle__TemplateMigrationBatchStatus__c = 'Failed ' + errors[0].getMessage().subString(0, errors[0].getMessage().length() > 200 ? 200 : errors[0].getMessage().length());
+				genSetting.TemplateMigrationBatchStatus__c = 'Failed ' + errors[0].getMessage().subString(0, errors[0].getMessage().length() > 200 ? 200 : errors[0].getMessage().length());
 			} else if (objectName == USER_OBJECT_NAME) {
-				genSetting.dfsle__UserMigrationBatchStatus__c = 'Failed ' + errors[0].getMessage().subString(0, errors[0].getMessage().length() > 200 ? 200 : errors[0].getMessage().length());
+				genSetting.UserMigrationBatchStatus__c = 'Failed ' + errors[0].getMessage().subString(0, errors[0].getMessage().length() > 200 ? 200 : errors[0].getMessage().length());
 			}
 			upsert genSetting;
 		}
