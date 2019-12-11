@@ -1235,6 +1235,8 @@ public with sharing class AuthService {
 				settings.IsPlatformAuthorized__c = true;
 				update settings;
 				//call the springCM API to set the security on root level folder in future context
+				//this needs to happen in order to ensure that DocuSign Apps Launcher users other than the Setup User
+				//have appropriate access to SpringCM work items
 				setRootLevelFolderSecurity();
 			}
 			return result;
@@ -1245,6 +1247,10 @@ public with sharing class AuthService {
 
 	@Future(Callout=true)
 	public static void setRootLevelFolderSecurity() {
-		NegotiateService.setRootLevelFolderSecurity();
+		//Check if Negotiate is enabled on the account.
+		//If Negotiate is not enabled then do not make this API call.
+		if (AccountProducts.getInstance().isNegotiateEnabled()) {
+			NegotiateService.setRootLevelFolderSecurity();
+		}
 	}
 }
