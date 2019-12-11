@@ -257,6 +257,7 @@ private class SalesforceTest {
 		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getParentSobjectType(Schema.Account.getSObjectType(), 'ParentId'));
 		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getParentSobjectType(Schema.Account.getSObjectType(), 'MasterRecordId'));
 		System.assertEquals(Schema.Case.getSObjectType(), Salesforce.getParentSobjectType(Schema.Case.getSObjectType(), 'ParentId'));
+		System.assertEquals(Schema.User.getSObjectType(), Salesforce.getParentSobjectType(Schema.Case.getSObjectType(), 'OwnerID'));
 		Test.stopTest();
 	}
 }

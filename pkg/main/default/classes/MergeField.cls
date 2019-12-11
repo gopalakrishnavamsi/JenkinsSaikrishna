@@ -2,8 +2,9 @@ public class MergeField implements Comparable {
 
 	public static final Integer MAX_DEPTH = 4; // TODO: Move max depth to config
 	private static final String TYPE_CHILD_RELATIONSHIP = 'CHILD_RELATIONSHIP';
+	// removing OwnerId to show on UI
 	private static final List<String> BLACKLIST = new List<String> {
-		'OwnerId', 'CreatedById', 'LastModifiedById'
+		'CreatedById', 'LastModifiedById'
 	};
 
 	transient public DescribeFieldResult field { get; private set; }
@@ -39,10 +40,11 @@ public class MergeField implements Comparable {
 	}
 
 	public static Boolean isValid(final DescribeFieldResult field) {
+	//bypass isNamePointing() check on OwnerId field
 		if (field == null
 			|| BLACKLIST.contains(field.getName())
 			|| !field.isAccessible()
-			|| field.isNamePointing()) {
+			|| (field.isNamePointing() && field.getName() != 'OwnerId')) {
 
 			return false;
 		}

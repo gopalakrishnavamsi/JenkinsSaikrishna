@@ -292,8 +292,9 @@ public with sharing class Salesforce {
 		Map<String, Schema.SObjectField> parentFieldsMap = baseSObject.getDescribe().fields.getMap();
 		if (parentFieldsMap.containsKey(referenceFieldName)) {
 			Schema.DescribeFieldResult dfr1 = parentFieldsMap.get(referenceFieldName).getDescribe();
+			// removing 'Group,' if getReferenceTo() returns Owner as polymorphic field
 			if (dfr1.getType() == Schema.DisplayType.Reference && dfr1.getReferenceTo() <> null) {
-				String parentSObjectName = String.valueOf(dfr1.getReferenceTo()).substringBetween('(', ')');
+				String parentSObjectName = String.valueOf(dfr1.getReferenceTo()).remove('Group,').substringBetween('(', ')');
 				parentSObjectType = getSObjectType(parentSObjectName);
 			}
 		}
