@@ -134,7 +134,7 @@
     }
 
     component.set('v.isGenerating', true);
-
+    var isMultiCurrency = component.get('v.isMultiCurrency');
     var config = component.get('v.config');
     var xmlRoot = document.implementation.createDocument('', '', null);
     var templateConfig = xmlRoot.createElement('Template_Config');
@@ -149,17 +149,23 @@
             var action = component.get('c.getMergeData');
             var currentFieldMappings = objMap.fieldMappings;
             var fields = [];
+            var addCurrencyFields = [];
             var children = [];
 
             currentFieldMappings.forEach(function (object) {
               if (!object.isChildRelation) {
-                if(object.apiName !== 'CurrentDate' ) {
-                fields.push(object.apiName);
-              }
-            } else {
+                if (object.apiName !== 'CurrentDate') {
+                  fields.push(object.apiName);
+                }
+                if (isMultiCurrency && object.dataType === 'CURRENCY') {
+                  addCurrencyFields.push(object.apiName);
+                }
+              } else {
                 var childrenFields = [];
+                var isCurrencyFieldExists = false;
                 object.childFieldMappings.forEach(function (obj) {
                   childrenFields.push(obj.apiName);
+                  isCurrencyFieldExists = isMultiCurrency && obj.dataType === 'CURRENCY';
                 });
                 var childrenObject = {
                   type: object.apiName,
@@ -167,18 +173,16 @@
                   fields: childrenFields,
                   children: []
                 };
+                if (isCurrencyFieldExists && !childrenFields.includes('CurrencyIsoCode')) {
+                  childrenFields.push('CurrencyIsoCode');
+                }
                 children.push(childrenObject);
               }
             });
-
             if ($A.util.isEmpty(fields)) {
               fields.push('Id');
             }
-
-            if (component.get('v.isMultiCurrency') && !fields.includes('CurrencyIsoCode')) {
-              fields.push('CurrencyIsoCode');
-            }
-
+            helper.setCurrencyIsoCode(addCurrencyFields, fields);
             var inputParamter = {
               type: objMap.apiName,
               relationship: '',
@@ -235,6 +239,19 @@
           component.set('v.isGenerating', false);
         })
       );
+  },
+
+  setCurrencyIsoCode: function (addCurrencyFields, fields) {
+    if (!$A.util.isEmpty(addCurrencyFields) && !$A.util.isEmpty(fields)) {
+      addCurrencyFields.forEach(function (obj) {
+        var parentObj = obj.substring(0, obj.indexOf('.'));
+        if (obj.includes('.') && !fields.includes(parentObj + '.CurrencyIsoCode')) {
+          fields.push(parentObj + '.CurrencyIsoCode');
+        } else if (!fields.includes('CurrencyIsoCode')) {
+          fields.push('CurrencyIsoCode');
+        }
+      });
+    }
   },
 
   generateXML: function (xmlRoot, recordData, objMap, isChild, component) {
@@ -325,14 +342,22 @@
         } else if (dataType === 'CURRENCY') {
           var currencyFormat = fieldMap.currencyFormat;
           var isMultiCurrency = component.get('v.isMultiCurrency');
-
+          var currencyCode = locale.currencyCode;
+          if (isMultiCurrency) {
+            if (apiName.indexOf('.') !== -1) {
+              var parentObject = recordData[apiName.split('.')[0]];
+              if (!$A.util.isEmpty(parentObject) && parentObject['CurrencyIsoCode']) {
+                currencyCode = parentObject['CurrencyIsoCode'];
+              }
+            } else {
+              currencyCode = recordData['CurrencyIsoCode'];
+            }
+          }
           fieldVal = fieldVal.toLocaleString(locale.userLocaleCountry, {
             style: 'currency',
             currencyDisplay:
               currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
-            currency: isMultiCurrency
-              ? recordData['CurrencyIsoCode']
-              : locale.currencyCode,
+            currency: currencyCode,
             minimumFractionDigits: 0,
             maximumFractionDigits:
               currencyFormat.indexOf('NoDecimals') !== -1 ? 0 : 2
@@ -361,7 +386,7 @@
             fieldVal += ' ' + address.country;
           }
         }
-        if(apiName === 'CurrentDate') {
+        if (apiName === 'CurrentDate') {
           fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
         }
         //ignore object fields that aren't type Address
