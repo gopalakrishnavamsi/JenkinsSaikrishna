@@ -29,13 +29,12 @@
   getLayouts: function (component, event, helper) {
     var config = component.get('v.config');
     var getLayoutsAction = component.get('c.getLayouts');
-    component.set('v.fetchingLayout', true);
+
     getLayoutsAction.setParams({
       sObjectType: config.objectMappings[0].apiName
     });
 
     getLayoutsAction.setCallback(this, $A.getCallback(function (response) {
-      component.set('v.fetchingLayout', false);
       if (response.getState() === 'SUCCESS') {
         var layouts = response.getReturnValue();
         if (!$A.util.isEmpty(layouts)) {
