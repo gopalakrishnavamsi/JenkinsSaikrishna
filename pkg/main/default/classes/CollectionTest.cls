@@ -207,4 +207,18 @@ private class CollectionTest {
 		System.assertEquals(1, Collection.indexOf(new List<Integer> { 1, 2, 3 }, 2));
 
 	}
+
+	@IsTest
+	static void test_chunk() {
+		System.assertEquals(new List<List<String>>(), Collection.chunk(null, 2));
+		System.assertEquals(new List<List<String>>(), Collection.chunk(new List<String>(), 2));
+		List<String> l = new List<String> { '0', '1', '2', '3', '4', '5', '6', '7', '8' };
+		List<List<String>> lc = Collection.chunk(l, 2);
+		System.assertEquals(lc.size(), 5);
+		System.assertEquals(new List<String> { '0', '1' }, lc[0]);
+		System.assertEquals(new List<String> { '2', '3' }, lc[1]);
+		System.assertEquals(new List<String> { '4', '5' }, lc[2]);
+		System.assertEquals(new List<String> { '6', '7' }, lc[3]);
+		System.assertEquals(new List<String> { '8' }, lc[4]);
+	}
 }

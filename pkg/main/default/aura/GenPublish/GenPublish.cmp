@@ -10,6 +10,7 @@
     <aura:attribute name="genActionAPIName" type="String" access="private"/>
     <aura:attribute name="genButtonLabel" type="String"/>
     <aura:attribute name="invalidButtonName" type="Boolean" default="false"/>
+    <aura:attribute name="fetchingLayout" type="Boolean" default="false" access="private"/>
 
     <!-- required scripts -->
     <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}"/>
@@ -22,14 +23,14 @@
     <aura:method name="validate" action="{!c.validate}"/>
 
     <!-- Publishing Spinner -->
-    <div class="{!'ds-path__spinner_container' + if(not(v.creatingButtons), ' slds-hide')}">
+    <div class="{!if(or(v.creatingButtons,v.fetchingLayout),'ds-path__spinner_container','slds-hide')}">
         <div class="ds-image-spinner slds-spinner_container slds-is-fixed">
             <div role="status" class="slds-spinner slds-spinner_large">
                 <span class="slds-assistive-text">{!$Label.c.Loading}</span>
                 <img src="{!$Resource.loading}" alt="Loading"/>
             </div>
         </div>
-        <div class="ds-path__spinner-text slds-is-fixed slds-text-color_weak">{!$Label.c.Publishing}</div>
+        <div class="{!if(or(v.creatingButtons),'ds-path__spinner-text slds-is-fixed slds-text-color_weak','slds-hide')}">{!$Label.c.Publishing}</div>
     </div>
     <!-- /Publishing Spinner -->
 
@@ -61,9 +62,6 @@
                                  checked="{!layout.hasGenAction}"
                                  class="ds-checkbox_no-label ds-checkbox_large"/>
             </div>
-            <div class="slds-media__content">
-                <p class="slds-m-top_xxx-small">{!layout.name}</p>
-            </div>
         </label>
         <!-- /Page Layout -->
     </aura:iteration>
@@ -71,6 +69,6 @@
     <aura:if isTrue="{!not(v.config.Sample__c)}">
         <lightning:button label="{!$Label.c.Publish}" class="slds-m-top_xx-small"
                           onclick="{!c.publish}"
-                          disabled="{!(v.invalidButtonName || not(v.isDirty) || empty(v.genButtonLabel) || v.creatingButtons)}"/>
+                          disabled="{!(v.invalidButtonName || not(v.isDirty) || empty(v.genButtonLabel) || v.creatingButtons || v.fetchingLayout)}"/>
     </aura:if>
 </aura:component>

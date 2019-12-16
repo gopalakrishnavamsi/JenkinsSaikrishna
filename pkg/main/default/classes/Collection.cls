@@ -215,4 +215,22 @@ public class Collection {
 	public static Integer indexOf(final List<Object> l, final Object o) {
 		return isEmpty(l) ? -1 : l.indexOf(o);
 	}
+
+	public static List<List<String>> chunk(final List<String> l, final Integer s) {
+		List<List<String>> result = new List<List<String>>();
+		List<String> tempList = new List<String>();
+		if (l <> null && l.size() > 0) {
+			for (Integer i = 0; i < l.size(); i++) {
+				tempList.add(l[i]);
+				if (tempList.size() >= s) {
+					result.add(tempList);
+					tempList = new List<String>();
+				}
+			}
+			if (tempList.size() > 0) {
+				result.add(tempList);
+			}
+		}
+		return result;
+	}
 }

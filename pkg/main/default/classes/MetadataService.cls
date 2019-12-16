@@ -10,6 +10,7 @@ public with sharing class MetadataService {
 	public static final String REMOTE_SITE_API = 'API';
 	public static final String REMOTE_SITE_MERGE = 'Merge';
 	public static final String REMOTE_SITE_AUTH = 'Auth';
+	public static final Integer METADATA_API_LAYOUT_LIMIT = 10;
 
 	private static final Map<SObjectType, MetadataAPI.WebLink> SEND_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
@@ -289,7 +290,6 @@ public with sharing class MetadataService {
 		return resultsMap;
 	}
 
-
 	/**
 	 * Adds / updates one or more Remote Sites to this Salesforce organization.
 	 *
@@ -415,15 +415,17 @@ public with sharing class MetadataService {
 
 		List<Layout> result = new List<Layout>();
 		if (type == null || client == null || Collection.isEmpty(fullNames)) return result;
-
-		List<MetadataAPI.Layout> layouts = (List<MetadataAPI.Layout>)client.readMetadata(
-			'Layout',
-			new List<String>(fullNames.keySet()));
-		for (MetadataAPI.Layout layout : (layouts == null ? new List<MetadataAPI.Layout>() : layouts)) {
-			result.add(convert(
-				type,
-				fullNames.get(layout.fullName),
-				layout));
+		List<List<String>> layoutNamesChunk = Collection.chunk(new List<String>(fullNames.keyset()), METADATA_API_LAYOUT_LIMIT);
+		for (List<String> layoutNames : layoutNamesChunk) {
+			List<MetadataAPI.Layout> layouts = (List<MetadataAPI.Layout>)client.readMetadata(
+				'Layout',
+				layoutNames);
+			for (MetadataAPI.Layout layout : (layouts == null ? new List<MetadataAPI.Layout>() : layouts)) {
+				result.add(convert(
+					type,
+					fullNames.get(layout.fullName),
+					layout));
+			}
 		}
 		result.sort();
 		return result;
@@ -772,15 +774,17 @@ public with sharing class MetadataService {
 				getGenAction(type, parameters);
 			}
 		}
-
-		List<MetadataAPI.Layout> toUpdate = new List<MetadataAPI.Layout>();
-		Map<String, MetadataAPI.Layout> mdLayouts = readLayouts(new List<String>(ls.keySet()));
-		for (String fullName : mdLayouts.keySet()) {
-			toUpdate.add(mergeLayout(type, ls.get(fullName), mdLayouts.get(fullName), parameters));
+		if (ls <> null && ls.keySet().size() > 0) {
+			List<List<String>> layoutNamesChunk = Collection.chunk(new List<String>(ls.keySet()), METADATA_API_LAYOUT_LIMIT);
+			for (List<String> layoutNames : layoutNamesChunk) {
+				Map<String, MetadataAPI.Layout> mdLayouts = readLayouts(layoutNames);
+				List<MetadataAPI.Layout> toUpdate = new List<MetadataAPI.Layout>();
+				for (String fullName : layoutNames) {
+					toUpdate.add(mergeLayout(type, ls.get(fullName), mdLayouts.get(fullName), parameters));
+				}
+				validateResults(MetadataAPI.getInstance().updateMetadata(toUpdate));
+			}
 		}
-
-		validateResults(MetadataAPI.getInstance().updateMetadata(toUpdate));
-
 		return layouts;
 	}
 }
