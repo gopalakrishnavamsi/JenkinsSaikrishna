@@ -370,7 +370,7 @@
     }, {
       sortable: false, label: $A.get('$Label.c.TabNegotiation'), type: 'text', fieldName: 'negotiationRole'
     }, {
-      sortable: true, label: $A.get('$Label.c.AddedDate'), type: 'date', fieldName: 'provisioned'
+      sortable: true, label: $A.get('$Label.c.AddedDate'), type: 'date-local', fieldName: 'provisioned'
     }, {
       type: 'action', typeAttributes: {
         rowActions: actions
@@ -396,7 +396,7 @@
     }, {
       sortable: false, label: $A.get('$Label.c.CLMRole'), type: 'text', fieldName: 'clmRole'
     }, {
-      sortable: true, label: $A.get('$Label.c.AddedDate'), type: 'date', fieldName: 'provisioned'
+      sortable: true, label: $A.get('$Label.c.AddedDate'), type: 'date-local', fieldName: 'provisioned'
     }, {
       type: 'action', typeAttributes: {
         rowActions: actions
