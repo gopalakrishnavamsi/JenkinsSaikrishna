@@ -2,18 +2,17 @@
 <CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<label>HQTEST1</label>
 	<protected>true</protected>
-	<!-- TODO: Update with DS HQTEST1 values -->
 	<values>
 		<field>AccountBaseUrl__c</field>
 		<value xsi:type="xsd:string">https://account-hqtest1.dev.docusign.net/</value>
 	</values>
 	<values>
 		<field>ClientId__c</field>
-		<value xsi:type="xsd:string">f595e05d-0b85-4d31-8eaf-c969c19520c2</value>
+		<value xsi:type="xsd:string">5cf0bc0b-e4eb-4d18-93eb-bea97833a24e</value>
 	</values>
 	<values>
 		<field>ClientSecret__c</field>
-		<value xsi:type="xsd:string">ea2e00a0-a0a9-47df-851f-60cb43284c03</value>
+		<value xsi:type="xsd:string">83387e49-67aa-4757-a717-10d7c16de06c</value>
 	</values>
 	<values>
 		<field>IsVisible__c</field>

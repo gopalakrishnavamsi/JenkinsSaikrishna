@@ -261,31 +261,6 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_getRootCredentials_QA() {
-		Test.startTest();
-		AuthService.RootCredentials result = AuthService.getRootCredentials(DocuSign.Environment.QA, null);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result);
-		System.assertEquals(DocuSign.Environment.QA, result.environment);
-		System.assertNotEquals(null, result.accountBaseUrl);
-		System.assertNotEquals(null, result.provisioningBaseUrl);
-		AuthService.RootCredentials ccs = AuthService.convert(
-			DocuSign.Environment.QA,
-		[
-			SELECT AccountBaseUrl__c, ProvisioningBaseUrl__c, ClientId__c, ClientSecret__c
-			FROM Environment__mdt
-			WHERE DeveloperName = 'QA'
-			LIMIT 1
-		],
-			null);
-		System.assertEquals(ccs.accountBaseUrl.toExternalForm(), result.accountBaseUrl.toExternalForm());
-		System.assertEquals(ccs.provisioningBaseUrl.toExternalForm(), result.provisioningBaseUrl.toExternalForm());
-		System.assertEquals(ccs.clientId, result.clientId);
-		System.assertEquals(ccs.clientSecret, result.clientSecret);
-	}
-
-	@IsTest
 	static void test_getRootCredentials_HQTEST0() {
 		Test.startTest();
 		AuthService.RootCredentials result = AuthService.getRootCredentials(DocuSign.Environment.HQTEST0, null);
