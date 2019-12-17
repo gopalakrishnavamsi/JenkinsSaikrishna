@@ -378,6 +378,14 @@
 		<name>DocuSignTemplate</name>
 	</customLabels>
 	<customLabels>
+		<label>Include percentage giyph (%)</label>
+		<name>percentCheckboxonPreview</name>
+	</customLabels>
+	<customLabels>
+		<label>Percentage Format Preview (inherited from Salesforce)</label>
+		<name>percentageFormatPreviewText</name>
+	</customLabels>
+	<customLabels>
 		<label>Done</label>
 		<name>Done</name>
 	</customLabels>

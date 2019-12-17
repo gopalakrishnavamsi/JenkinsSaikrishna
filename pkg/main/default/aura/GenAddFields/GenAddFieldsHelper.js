@@ -44,6 +44,17 @@
       );
     }
   },
+  
+  formatPercent: function (component, percentFormat) {
+    var defaultValue = 123456789000;
+    if (percentFormat === false) {
+      component.set('v.formattedPercent',$A.localizationService.formatNumber(defaultValue));
+    } else {
+      component.set(
+        'v.formattedPercent',
+       $A.localizationService.formatNumber(defaultValue,$A.get('$Locale').numberFormat )+' %');
+    }
+  },
 
   formatCurrency: function (component, currencyFormat) {
     var number = 123456.78;

@@ -385,9 +385,16 @@
           if (!$A.util.isEmpty(address.country)) {
             fieldVal += ' ' + address.country;
           }
+        } 
+        else if (dataType === 'PERCENT') {
+            var percentSymbol = fieldMap.percentFormat === true ? '%' : '' ;
+            fieldVal = $A.localizationService.formatNumber(fieldVal, locale.numberFormat)+ percentSymbol;
+        }
+        else if (dataType === 'DOUBLE') {
+            fieldVal = $A.localizationService.formatNumber(fieldVal, locale.numberFormat);
         }
         if (apiName === 'CurrentDate') {
-          fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
+            fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
         }
         //ignore object fields that aren't type Address
         if (typeof fieldVal !== 'object') {

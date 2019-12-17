@@ -7532,6 +7532,22 @@
 		<value>Not familiar with Document Generation templates?</value>
 	</labels>
 	<labels>
+		<fullName>percentCheckboxonPreview</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>percentCheckboxonPreview</shortDescription>
+		<value>Include percentage giyph (%)</value>
+	</labels>
+	<labels>
+		<fullName>percentageFormatPreviewText</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>percentageFormatPreviewText</shortDescription>
+		<value>Percentage Format Preview (inherited from Salesforce)</value>
+	</labels>
+	<labels>
 		<fullName>GenQuickGuide</fullName>
 		<categories>SetupWizard</categories>
 		<language>en_US</language>

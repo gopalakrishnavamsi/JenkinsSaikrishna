@@ -5,6 +5,7 @@
     <aura:attribute name="mergeFieldDisplayOptions" type="Object[]" access="private"/>
 
     <aura:attribute name="formattedDate" type="String" access="private"/>
+    <aura:attribute name="formattedPercent" type="String" access="private"/>
     <aura:attribute name="formattedCurrency" type="String" access="private"/>
 
     <aura:handler name="init" value="{!this}" action="{!c.init}"/>
@@ -110,6 +111,20 @@
                             <div class="slds-input">{!v.formattedDate}</div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.clonedFieldMapping.dataType == 'PERCENT'}">
+            <div class="slds-form-element__label">{!$Label.c.percentageFormatPreviewText}</div>
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_2-of-4">
+                    <div class="slds-input  ds-readonly">
+                        {!v.formattedPercent}
+                    </div>
+                </div>
+                <div class="slds-col slds-align_absolute-center">
+                    <lightning:input aura:id="percent" type="checkbox" label="{!$Label.c.percentCheckboxonPreview}" 
+                                     checked="{!v.clonedFieldMapping.percentFormat}" onchange="{!c.formatPercent}"/>
                 </div>
             </div>
         </aura:if>

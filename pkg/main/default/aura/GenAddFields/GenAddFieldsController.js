@@ -44,6 +44,10 @@
       helper.formatCurrency(component, fieldMapping.currencyFormat);
     }
 
+    if (fieldMapping.dataType === 'PERCENT') {
+      helper.formatPercent(component, fieldMapping.percentFormat);
+    }
+    
     component.set('v.optionModalParams', optionModalParams);
     component.set('v.clonedFieldMapping', clonedFieldMapping);
     component.find('merge-token-options').show();
@@ -74,7 +78,11 @@
     var currencyFormat = event.getSource().get('v.value');
     helper.formatCurrency(component, currencyFormat);
   },
-
+  
+  formatPercent: function (component, event, helper) {  
+    helper.formatPercent(component, component.find('percent').get('v.checked'));
+  },
+  
   convertToBoolean: function (component, event) {
     //html always returns the value as a string so we're going to convert it back to boolean
     var conditionalValue = event.getSource().get('v.value');

@@ -123,7 +123,8 @@
       isConditional: false,
       isChildRelation: false,
       dateFormat: 'default',
-      currencyFormat: 'symbol'
+      currencyFormat: 'symbol',
+      percentFormat: false
     });
 
     component.set('v.objMapping', objMapping);
