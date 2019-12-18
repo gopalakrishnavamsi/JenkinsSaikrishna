@@ -4268,6 +4268,13 @@
 		<value>Download</value>
 	</labels>
 	<labels>
+		<fullName>DownloadWithRedlines</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DownloadWithRedlines</shortDescription>
+		<value>Download with Redlines</value>
+	</labels>
+	<labels>
 		<fullName>AgreementsShareLink</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

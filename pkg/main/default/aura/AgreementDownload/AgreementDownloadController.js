@@ -1,5 +1,5 @@
 ({
   onInit: function(component, event, helper) {
-    helper.downloadAgreement(component, event, helper);
+    helper.fireDownloadEvent(component, event, helper);
   }
 });

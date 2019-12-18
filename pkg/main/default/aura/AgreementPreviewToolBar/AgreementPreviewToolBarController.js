@@ -75,7 +75,20 @@
     try {
       var actions = component.get('v.agreementActionManager');
       var agreement = component.get('v.agreement');
-      actions.download(agreement, component);
+      var downloadWithRedlines = false;
+      actions.download(agreement, component, downloadWithRedlines);
+    } catch (err) {
+      var uiHelper = component.get('v.uiHelper');
+      uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
+    }
+  },
+
+  downloadWithRedlines: function (component) {
+    try {
+      var actions = component.get('v.agreementActionManager');
+      var agreement = component.get('v.agreement');
+      var downloadWithRedlines = true;
+      actions.download(agreement, component, downloadWithRedlines);
     } catch (err) {
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);

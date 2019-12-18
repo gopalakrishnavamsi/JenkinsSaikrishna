@@ -78,6 +78,13 @@
                 <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}"
                                     onactive="{!c.showDownloadModal}"/>
 
+                <aura:if isTrue="{!v.agreementDetails.versions.length > 0}">
+                    <lightning:menuItem label="{!$Label.c.DownloadWithRedlines}"
+                                        value="{!$Label.c.DownloadWithRedlines}"
+                                        disabled="{!or(v.agreementDetails.extension != 'docx', v.agreementDetails.versions[0].extension != 'docx')}"
+                                        onactive="{!c.showDownloadWithRedlinesModal}"/>
+                </aura:if>
+
                 <lightning:menuItem label="{!$Label.c.AddToSalesforce}" value="{!$Label.c.AddToSalesforce}"
                                     onactive="{!c.showAddToSalesforceModal}"/>
 

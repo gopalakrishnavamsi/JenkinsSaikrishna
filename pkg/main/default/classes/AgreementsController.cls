@@ -147,6 +147,15 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
+	public static UUID compareAgreementsTaskId(final String originalDocumentHref, final String compareVersionHref) {
+		try {
+			return NegotiateService.compareAgreements(originalDocumentHref, compareVersionHref);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to initiate compare Agreements');
+		}
+	}
+
+	@AuraEnabled
 	public static String redirectToAgreementPreview(final Id sourceId, final String agreementId) {
 		try {
 			String result = NegotiateService.getAgreementPreviewLink(sourceId, agreementId, false);

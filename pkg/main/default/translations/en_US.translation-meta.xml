@@ -2082,6 +2082,10 @@
 		<name>Download</name>
 	</customLabels>
 	<customLabels>
+		<label>Download with Redlines</label>
+		<name>DownloadWithRedlines</name>
+	</customLabels>
+	<customLabels>
 		<label>Share Link</label>
 		<name>AgreementsShareLink</name>
 	</customLabels>

@@ -600,6 +600,18 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
+	static void test_compareAgreementsTaskId_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignNegotiator(true)) {
+			Test.startTest();
+			UUID result = AgreementsController.compareAgreementsTaskId(ScmAPIMock.ORIGINAL_DOCUMENT_HREF, ScmAPIMock.COMPARE_VERSION_HREF);
+			Test.stopTest();
+
+			System.assert(UUID.isNotEmpty(result));
+		}
+	}
+
+	@IsTest
 	static void test_compareAgreements_nonDocuSignNegotiateUser() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();

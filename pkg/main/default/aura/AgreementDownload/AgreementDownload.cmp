@@ -1,5 +1,6 @@
 <aura:component description="AgreementDownload" controller="AgreementsController">
     <aura:attribute name="agreementDetails" type="Agreement"/>
+    <aura:attribute name="downloadWithRedlines" type="Boolean" default="false"/>
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <ltng:require styles="{!$Resource.scmwidgetscss}" scripts="{!$Resource.scmwidgetsjs}"/>

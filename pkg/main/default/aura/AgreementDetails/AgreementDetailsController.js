@@ -28,7 +28,13 @@
   },
 
   showDownloadModal: function (component, event, helper) {
-    helper.createDownloadComponent(component);
+    var downloadWithRedlines = false;
+    helper.createDownloadComponent(component, downloadWithRedlines);
+  },
+
+  showDownloadWithRedlinesModal: function (component, event, helper) {
+    var downloadWithRedlines = true;
+    helper.createDownloadComponent(component, downloadWithRedlines);
   },
 
   showRenameModal: function (component, event, helper) {

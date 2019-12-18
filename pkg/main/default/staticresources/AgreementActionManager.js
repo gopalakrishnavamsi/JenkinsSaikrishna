@@ -231,7 +231,7 @@ AgreementActionManager.prototype.share = function(agreementDetails, sourceId, co
   });
 };
 
-AgreementActionManager.prototype.download = function(agreementDetails, component) {
+AgreementActionManager.prototype.download = function(agreementDetails, component, downloadWithRedlines) {
   if (this.activeScope) this.activeScope.destroy();
   var self = this;
   generateComponent(
@@ -240,7 +240,8 @@ AgreementActionManager.prototype.download = function(agreementDetails, component
     this.getComponentName(AgreementComponents.Download),
     {
       showModal: true,
-      agreementDetails: agreementDetails
+      agreementDetails: agreementDetails,
+      downloadWithRedlines: downloadWithRedlines
     }
   )
   .then(function(modalComponent) {

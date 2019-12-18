@@ -30,6 +30,12 @@
                                       menuAlignment="right">
                     <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}"
                                         onactive="{!c.download}"/>
+                    <aura:if isTrue="{!v.agreement.versions.length > 0}">
+                        <lightning:menuItem label="{!$Label.c.DownloadWithRedlines}"
+                                            value="{!$Label.c.DownloadWithRedlines}"
+                                            disabled="{!or(v.agreement.extension != 'docx', v.agreement.versions[0].extension != 'docx')}"
+                                            onactive="{!c.downloadWithRedlines}"/>
+                    </aura:if>
                     <lightning:menuItem label="{!$Label.c.AddToSalesforce}" value="{!$Label.c.AddToSalesforce}"
                                         onactive="{!c.addToSalesforce}"/>
                     <lightning:menuItem label="{!$Label.c.UploadNewVersion}"
