@@ -357,13 +357,18 @@ public with sharing class MetadataService {
 		return result;
 	}
 
-	private static String getActionLabel(final SObjectType type, final String apiName) {
-		if (type == null || String.isBlank(apiName)) return null;
-		String result;
-		MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)Collection.head(MetadataAPI.getInstance().readMetadata(
-			'WebLink', new List<String> { getActionFullName(type, apiName) }));
-		if (webLink != null && String.isNotBlank(webLink.masterLabel)) {
-			result = webLink.masterLabel;
+	private static Map<String, String> getApiFullNameToLabel(final List<String> apiFullNames) {
+		Map<String, String> result = new Map<String, String> ();
+		if (Collection.isNotEmpty(apiFullNames)) {
+			for (List<String> apiFullNamesChunk : Collection.chunk(apiFullNames, METADATA_API_LAYOUT_LIMIT)) {
+				List<MetadataAPI.Metadata> webLinksMetaData = MetadataAPI.getInstance().readMetadata('WebLink', apiFullNamesChunk);
+				for (Integer i = 0; i < webLinksMetaData.size(); i++) {
+					MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)webLinksMetaData[i];
+					if (webLink != null && String.isNotBlank(webLink.masterLabel)) {
+						result.put(apiFullNamesChunk[i], WebLink.masterLabel);
+					}
+				}
+			}
 		}
 		return result;
 	}
@@ -378,34 +383,73 @@ public with sharing class MetadataService {
 		}
 	}
 
-	private static List<Layout.Action> getActions(final MetadataAPI.Layout mdLayout, final SObjectType type) {
-		List<Layout.Action> result = new List<Layout.Action>();
-		if (mdLayout != null
-			&& Collection.isNotEmpty(mdLayout.customButtons)) {
+	private static Map<String, List<Layout.Action>> prepareLayoutNameToActions(final Map<String, MetadataAPI.FileProperties> layoutFullNames, final List<MetadataAPI.Layout> mdLayouts, final SObjectType type) {
+		Map<String, List<Layout.Action>> layoutNameToLayoutActions = new Map<String, List<Layout.Action>>();
+		Map<String, Map<String, String>> layoutNameToActionApiNameAndFullNameMap = new Map<String, Map<String, String>>();
+		List<String> apiFullNames = new List<String>();
+		Map<String, String> actionApiNameToFullName = new Map<String, String>();
+		Map<String, String> actionApiFullNameToLabel = new Map<String, String>();
+		if (Collection.isNotEmpty(mdLayouts)) {
+			for (MetadataAPI.Layout mdLayout : mdLayouts) {
+				actionApiNameToFullName = new Map<String, String>();
+				if (mdLayout.fullName <> null && layoutFullNames.containsKey(mdLayout.fullName)) {
+					MetadataAPI.FileProperties fpName = layoutFullNames.get(mdLayout.fullName);
+					if (fpName <> null && fpName.fullName <> null) {
+						String layoutName = getLayoutName(fpName.fullName);
+						if (layoutName <> null && mdLayout.customButtons <> null && Collection.isNotEmpty(mdLayout.customButtons)) {
+							for (String apiName : mdLayout.customButtons) {
+								actionApiNameToFullName.put(apiName, getActionFullName(type, apiName));
+								apiFullNames.add(getActionFullName(type, apiName));
+							}
+							if (Collection.isNotEmpty(actionApiNameToFullName.keySet())) {
+								layoutNameToActionApiNameAndFullNameMap.put(layoutName, actionApiNameToFullName);
+							}
+						}
+					}
+				}
+			}
 
-			for (String apiName : mdLayout.customButtons) {
-				result.add(new Layout.Action(
-					getActionType(apiName),
-					apiName,
-					getActionLabel(type, apiName)));
+			if (Collection.isNotEmpty(apiFullNames)) {
+				//Callout : get buttons label in chunk of 10
+				actionApiFullNameToLabel = getApiFullNameToLabel(apiFullNames);
+			}
+
+			for (String layoutName : layoutNameToActionApiNameAndFullNameMap.keySet()) {
+				List<Layout.Action> layoutActions = new List<Layout.Action>();
+				Map<String, String> apiNameToFullName = layoutNameToActionApiNameAndFullNameMap.get(layoutName);
+				for (String apiName : apiNameToFullName.keySet()) {
+					String apiFullName = apiNameToFullName.get(apiName);
+					if (apiFullName <> null && actionApiFullNameToLabel.containsKey(apiFullName)) {
+						layoutActions.add(new Layout.Action(
+							getActionType(apiName),
+							apiName,
+							actionApiFullNameToLabel.get(apiFullName)
+						));
+					}
+				}
+				if (Collection.isNotEmpty(layoutActions)) {
+					layoutNameToLayoutActions.put(layoutName, layoutActions);
+				}
 			}
 		}
-		return result;
+		return layoutNameToLayoutActions;
 	}
 
 	private static Layout convert(
 		final SObjectType type,
 		final MetadataAPI.FileProperties props,
-		final MetadataAPI.Layout layout) {
+		final MetadataAPI.Layout layout,
+		final string layoutName,
+		final List<Layout.Action> layoutActions) {
 
-		if (type == null || props == null || layout == null) return null;
+		if (type == null || props == null || layout == null || layoutName == null) return null;
 
 		return new Layout(
 			type,
 			props.id,
 			props.namespacePrefix,
-			getLayoutName(props.fullName),
-			getActions(layout, type));
+			layoutName,
+			layoutActions);
 	}
 
 	private static List<Layout> readLayouts(
@@ -416,16 +460,23 @@ public with sharing class MetadataService {
 		List<Layout> result = new List<Layout>();
 		if (type == null || client == null || Collection.isEmpty(fullNames)) return result;
 		List<List<String>> layoutNamesChunk = Collection.chunk(new List<String>(fullNames.keyset()), METADATA_API_LAYOUT_LIMIT);
+		List<MetadataAPI.Layout> layouts = new List<MetadataAPI.Layout>();
+		Map<String, List<layout.Action>> layoutNameToActions = new Map<String, List<layout.Action>>();
 		for (List<String> layoutNames : layoutNamesChunk) {
-			List<MetadataAPI.Layout> layouts = (List<MetadataAPI.Layout>)client.readMetadata(
+			layouts.addAll((List<MetadataAPI.Layout>)client.readMetadata(
 				'Layout',
-				layoutNames);
-			for (MetadataAPI.Layout layout : (layouts == null ? new List<MetadataAPI.Layout>() : layouts)) {
-				result.add(convert(
-					type,
-					fullNames.get(layout.fullName),
-					layout));
-			}
+				layoutNames));
+		}
+		layoutNameToActions = prepareLayoutNameToActions(fullNames, layouts, type);
+		for (MetadataAPI.Layout layout : (layouts == null ? new List<MetadataAPI.Layout>() : layouts)) {
+			MetadataAPI.FileProperties fpFullNameName = fullNames.get(layout.fullName);
+			String layoutName = getLayoutName(fpFullNameName.FullName);
+			result.add(convert(
+				type,
+				fpFullNameName,
+				layout,
+				layoutName,
+				layoutNameToActions.containsKey(layoutName) ? layoutNameToActions.get(layoutName) : null));
 		}
 		result.sort();
 		return result;
