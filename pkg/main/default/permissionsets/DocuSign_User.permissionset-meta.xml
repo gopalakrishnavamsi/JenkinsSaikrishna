@@ -739,10 +739,10 @@
     </pageAccesses>
     <tabSettings>
         <tab>EnvelopeStatus__c</tab>
-        <visibility>Available</visibility>
+        <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>
         <tab>Envelope__c</tab>
-        <visibility>Available</visibility>
+        <visibility>Visible</visibility>
     </tabSettings>
 </PermissionSet>

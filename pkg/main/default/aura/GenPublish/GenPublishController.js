@@ -3,6 +3,10 @@
     helper.init(component, event, helper);
   },
 
+  onUserEventsReady: function (component, event, helper) {
+    helper.startPublish(component, event.getParam('userEvents'));
+  },
+
   makeDirty: function (component, event, helper) {
     component.set('v.isDirty', helper.isDirty(component.get('v.layouts'), component));
   },

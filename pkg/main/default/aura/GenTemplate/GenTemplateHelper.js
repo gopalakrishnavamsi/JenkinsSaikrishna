@@ -1,4 +1,10 @@
 ({
+  CREATE_TEMPLATE: 'Create Gen Template',
+
+  _getUserEvents: function (component) {
+    return component.find('ds-user-events');
+  },
+
   editName: function (component) {
     component.set('v.editName', true);
 
@@ -91,6 +97,7 @@
       ];
       component.set('v.steps', steps);
       var templateId = component.get('v.templateId');
+      var isCreating = $A.util.isEmpty(templateId);
       var getConfigAction = helper.getConfiguration(component);
       getConfigAction.then(
         $A.getCallback(function (results) {
@@ -107,13 +114,15 @@
           component.set('v.commonObjects', results.commonObjects);
           var labelByApiName = {};
           results.allObjects.forEach(function (object) {
-            var objectKey = object.name;
-            var objectName = object.label;
-            labelByApiName[objectKey] = objectName;
+            labelByApiName[object.name] = object.label;
           });
           component.set('v.labelByApiName', labelByApiName);
 
-          if ($A.util.isEmpty(templateId)) {
+          if (isCreating) {
+            helper._getUserEvents(component).success(helper.CREATE_TEMPLATE, {
+              'Product': 'Gen',
+              'Template Type': 'Word'
+            });
             component.set('v.templateId', results.template.id);
           }
           if (results.template.stepsCompleted >= steps.length) {
@@ -160,9 +169,7 @@
     var helper = this;
     component.set('v.saving', true);
     var config = component.get('v.config');
-    var files = component.get('v.files');
-
-    config.generated = files;
+    config.generated = component.get('v.files');
     component.set('v.config', config);
 
     if (config.isSample) {

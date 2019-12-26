@@ -19,8 +19,14 @@
     <aura:registerEvent name="showToast" type="c:strike_evt"/>
     <aura:registerEvent name="publishedButtons" type="c:strike_evt"/>
 
+    <!-- Handlers -->
+    <aura:handler name="userEventsReadyEvent" event="c:UserEventsReady" action="{!c.onUserEventsReady}"/>
+
     <!-- Methods -->
     <aura:method name="validate" action="{!c.validate}"/>
+
+    <!-- TODO: Use uiHelper to fire events to be handled by RootContainer. -->
+    <c:UserEvents aura:id="ds-user-events"/>
 
     <!-- Publishing Spinner -->
     <div class="{!if(or(v.creatingButtons,v.fetchingLayout),'ds-path__spinner_container','slds-hide')}">

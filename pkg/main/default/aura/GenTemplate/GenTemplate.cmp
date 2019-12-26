@@ -32,6 +32,9 @@
     <aura:handler name="showToast" event="c:strike_evt" action="{!c.showToast}"/>
     <aura:handler name="publishedButtons" event="c:strike_evt" action="{!c.publishedButtons}"/>
 
+    <!-- TODO: Use RootContainer to avoid code duplication -->
+    <c:UserEvents aura:id="ds-user-events"/>
+
     <aura:if isTrue="{!not(empty(v.errMsg))}">
         <div class="slds-m-around_large slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_error"
              role="alert">

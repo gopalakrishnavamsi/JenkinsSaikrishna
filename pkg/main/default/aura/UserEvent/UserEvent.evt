@@ -1,0 +1,8 @@
+<aura:event type="COMPONENT" description="UserEvent">
+    <aura:attribute name="action" type="String" access="public" default="track"
+                    description="Enumeration: addProperties, time, track"/>
+    <aura:attribute name="name" type="String" access="public"/>
+    <aura:attribute name="properties" type="Object" access="public"/>
+    <aura:attribute name="status" type="String" access="public" default="success"/>
+    <aura:attribute name="error" type="String" access="public"/>
+</aura:event>

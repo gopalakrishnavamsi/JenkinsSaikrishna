@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="UserEventsReady">
+    <aura:attribute name="userEvents" type="Object" required="true"/>
+</aura:event>

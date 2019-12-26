@@ -1,29 +1,70 @@
 ({
+  PREVIEW_DOCUMENT: 'Preview Gen Document',
+  GENERATE_DOCUMENT: 'Generate Gen Document',
+
+  _getUserEvents: function (component) {
+    return component.find('ds-user-events');
+  },
+
+  _getEvent: function (component) {
+    return component.get('v.isPreview') ? this.PREVIEW_DOCUMENT : this.GENERATE_DOCUMENT;
+  },
+
+  startGeneration: function (component) {
+    var ue = this._getUserEvents(component);
+    ue.time(this._getEvent(component));
+    ue.addProperties({
+      'Product': 'Gen'
+    });
+  },
+
+  endGenerationSuccess: function (component) {
+    this._getUserEvents(component).success(this._getEvent(component), {});
+  },
+
+  endGenerationError: function (component, error) {
+    this._getUserEvents(component).error(this._getEvent(component), {}, error);
+  },
+
   checkMultiCurrency: function (component) {
     var action = component.get('c.checkMultiCurrency');
     action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var isMultiCurrency = response.getReturnValue();
         component.set('v.isMultiCurrency', isMultiCurrency);
+        this._getUserEvents(component).addProperties({
+          'Multi-Currency': isMultiCurrency
+        });
       } else {
+        var errMsg = stringUtils.getErrorMessage(response);
         component.set('v.errType', 'error');
-        component.set('v.errMsg', stringUtils.getErrorMessage(response));
+        component.set('v.errMsg', errMsg);
+        this.endGenerationError(component, errMsg);
       }
     });
     $A.enqueueAction(action);
   },
 
   setupData: function (component) {
+    this.startGeneration(component);
     var config = component.get('v.config');
     var isPreview = component.get('v.isPreview');
     var templateFiles = component.get('v.templateFiles');
     var lookupObjs = [];
     var helper = this;
+    var numFiles = $A.util.isEmpty(templateFiles) ? 0 : templateFiles.length;
+    this._getUserEvents(component).addProperties({
+      'Template Type': 'Word',
+      'Source Object': config ? config.sourceObject : null,
+      'Template Files': numFiles
+    });
 
     //there are no template files
-    if ($A.util.isUndefinedOrNull(templateFiles) || templateFiles.length === 0) {
-      component.set('v.errMsg', $A.get('$Label.c.NoDocForTemplateMsg'));
+    if (numFiles === 0) {
+      var errMsg = $A.get('$Label.c.NoDocForTemplateMsg');
+      component.set('v.errMsg', errMsg);
       component.set('v.errType', 'warning');
+      this.endGenerationError(component, errMsg);
     } else {
       templateFiles.forEach(function (file) {
         helper.addDocumentProperties(file, true);
@@ -237,6 +278,7 @@
           component.set('v.errMsg', error);
           component.set('v.errType', 'error');
           component.set('v.isGenerating', false);
+          this.endGenerationError(component, error);
         })
       );
   },
@@ -385,16 +427,14 @@
           if (!$A.util.isEmpty(address.country)) {
             fieldVal += ' ' + address.country;
           }
-        } 
-        else if (dataType === 'PERCENT') {
-            var percentSymbol = fieldMap.percentFormat === true ? '%' : '' ;
-            fieldVal = $A.localizationService.formatNumber(fieldVal, locale.numberFormat)+ percentSymbol;
-        }
-        else if (dataType === 'DOUBLE') {
-            fieldVal = $A.localizationService.formatNumber(fieldVal, locale.numberFormat);
+        } else if (dataType === 'PERCENT') {
+          var percentSymbol = fieldMap.percentFormat === true ? '%' : '';
+          fieldVal = $A.localizationService.formatNumber(fieldVal, locale.numberFormat) + percentSymbol;
+        } else if (dataType === 'DOUBLE') {
+          fieldVal = $A.localizationService.formatNumber(fieldVal, locale.numberFormat);
         }
         if (apiName === 'CurrentDate') {
-            fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
+          fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
         }
         //ignore object fields that aren't type Address
         if (typeof fieldVal !== 'object') {
@@ -444,6 +484,7 @@
           if (object.status === $A.get('$Label.c.Failure')) {
             var failedJobDetail = {message: object.message, cv: object.file};
             failedJobs.push(failedJobDetail);
+            helper.endGenerationError(component, object.message);
           } else {
             jobIds.push(object.id.value);
             cvTitleByJobId[object.id.value] = object.file.title;
@@ -469,6 +510,7 @@
         component.set('v.errMsg', errorMessage);
         component.set('v.errType', 'error');
         component.set('v.isGenerating', false);
+        helper.endGenerationError(component, errorMessage);
       }
     });
 
@@ -504,11 +546,13 @@
         results.forEach(function (object) {
           if (object.status === 'Success') {
             finishedJobs.push({cv: object.file, jobId: object.id.value});
+            helper.endGenerationSuccess(component);
           } else if (object.status === 'Failure') {
             failedJobs.push({
               jobId: object.id.value,
               message: object.message
             });
+            helper.endGenerationError(component, object.message);
           }
         });
 
@@ -578,6 +622,7 @@
         component.set('v.isGenerating', false);
         component.set('v.bannerState', 'error');
         component.set('v.bannerMsg', errorMessage);
+        helper.endGenerationError(component, errorMessage);
       }
     });
 

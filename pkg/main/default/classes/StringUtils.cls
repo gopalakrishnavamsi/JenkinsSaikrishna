@@ -211,4 +211,18 @@ public class StringUtils {
 	public static String formatDatetime(final Datetime dt) {
 		return dt == null ? null : dt.formatGmt('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\'');
 	}
+
+	/**
+	 * Hashes a string using SHA256 and returns it in hexadecimal form.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return The hashed string in hexadecimal form.
+	 */
+	public static String hash(final String s) {
+		return EncodingUtil.convertToHex(
+			Crypto.generateDigest(
+				'SHA256',
+				Blob.valueOf(String.isBlank(s) ? '' : s)));
+	}
 }

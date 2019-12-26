@@ -12,7 +12,7 @@ public with sharing class Application {
 	private static final String CLASS_NAMESPACE_PREFIX = 'dfsle.';
 	private static final Boolean IS_MANAGED_PACKAGE;
 	private static final Version PACKAGE_VERSION;
-	private static final String APPLICATION_NAME;
+	private static final String APPLICATION_NAME = 'DocuSign Apps Launcher';
 	private static final String USER_AGENT;
 	private static final Set<String> APPLICATION_OBJECTS = new Set<String> {
 		'envelopeconfiguration__c', 'customparametermap__c', 'customrecipient__c',
@@ -40,7 +40,6 @@ public with sharing class Application {
 		// Don't call System.requestVersion outside managed package. It will throw an un-catchable ProcedureException.
 		// Don't use versions < 1. They make SFDC unhappy.
 		PACKAGE_VERSION = IS_MANAGED_PACKAGE ? System.requestVersion() : new Version(1, 0, 0);
-		APPLICATION_NAME = 'DFS-LE ' + PACKAGE_VERSION;
 		USER_AGENT = String.format('DFS-LE/{0} ({1}) SFDC-Callout/{2}', new List<String> {
 			String.valueOf(PACKAGE_VERSION), UserInfo.getOrganizationId(), String.valueOf(Salesforce.API_VERSION)
 		});

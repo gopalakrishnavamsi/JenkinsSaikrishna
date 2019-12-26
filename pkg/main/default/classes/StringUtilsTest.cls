@@ -203,4 +203,13 @@ private class StringUtilsTest {
 		System.assertEquals(dt.formatGmt('yyyy-MM-dd\'T\'HH:mm:ss.SSS\'Z\''), StringUtils.formatDatetime(dt));
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_hash() {
+		Test.startTest();
+		System.assert(String.isNotBlank(StringUtils.hash(null)));
+		System.assert(String.isNotBlank(StringUtils.hash('')));
+		System.assert(String.isNotBlank(StringUtils.hash('test')));
+		Test.stopTest();
+	}
 }

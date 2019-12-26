@@ -1,6 +1,7 @@
 <aura:component controller="GenController">
 
-    <ltng:require scripts="{!join(',',$Resource.stringUtils,$Resource.navUtils)}"/>
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
+
     <aura:attribute name="config" type="Object"/>
     <aura:attribute name="cvTitleByJobId" type="Object"/>
     <aura:attribute name="lookupObjs" type="Object[]"/>
@@ -39,6 +40,7 @@
     <aura:attribute name="products" type="Product[]" access="private"/>
 
     <aura:registerEvent name="generatedDocs" type="c:strike_evt"/>
+
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.navigateToSource}"/>
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.handleToastEvent}"/>
@@ -47,6 +49,9 @@
 
     <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"
              visualforce="true"/>
+
+    <!-- TODO: Use RootContainer to avoid code duplication -->
+    <c:UserEvents aura:id="ds-user-events"/>
 
     <div aura:id="internalApprovalModal">
     </div>

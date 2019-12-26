@@ -1,0 +1,32 @@
+<aura:component description="UserEvents" controller="UserEventsController">
+    <ltng:require scripts="{!join(',', $Resource.userEvents, $Resource.uiHelper)}" afterScriptsLoaded="{!c.onScriptsLoaded}"/>
+
+    <aura:attribute name="Status" type="Object" access="public" />
+
+    <aura:attribute name="userEvents" type="Object" access="private"/>
+    <aura:attribute name="uiHelper" type="Object" access="private"/>
+
+    <aura:registerEvent name="userEventsReadyEvent" type="c:UserEventsReady"/>
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+
+    <aura:method name="addProperties" action="{!c.addProperties}" access="public">
+        <aura:attribute name="properties" type="Object" required="true"/>
+    </aura:method>
+    <aura:method name="time" action="{!c.time}" access="public">
+        <aura:attribute name="name" type="String" required="true"/>
+    </aura:method>
+    <aura:method name="success" action="{!c.success}" access="public">
+        <aura:attribute name="name" type="String" required="true"/>
+        <aura:attribute name="properties" type="Object"/>
+    </aura:method>
+    <aura:method name="error" action="{!c.error}" access="public">
+        <aura:attribute name="name" type="String" required="true"/>
+        <aura:attribute name="properties" type="Object"/>
+        <aura:attribute name="error" type="String" required="true"/>
+    </aura:method>
+    <aura:method name="cancel" action="{!c.cancel}" access="public">
+        <aura:attribute name="name" type="String" required="true"/>
+        <aura:attribute name="properties" type="Object"/>
+    </aura:method>
+</aura:component>

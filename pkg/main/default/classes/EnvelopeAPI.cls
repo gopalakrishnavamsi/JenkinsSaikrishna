@@ -907,7 +907,8 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		final List<EnvelopeAPI.ListCustomField> listCustomFields = new List<EnvelopeAPI.ListCustomField>();
 		final List<EnvelopeAPI.TextCustomField> textCustomFields = new List<EnvelopeAPI.TextCustomField> {
 			new EnvelopeAPI.TextCustomField('Company', UserInfo.getOrganizationName(), false, false),
-			new EnvelopeAPI.TextCustomField('DSXPartnerApplication', Application.Name, false, false),
+			new EnvelopeAPI.TextCustomField('DSXPartnerApplication', Application.name + ' '
+				+ String.valueOf(Application.version), false, false),
 			new EnvelopeAPI.TextCustomField('PlatformName', 'Salesforce', false, false),
 			new EnvelopeAPI.TextCustomField('AppName', 'DocuSignForSalesforce', false, false)
 		};

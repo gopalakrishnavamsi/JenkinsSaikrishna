@@ -21,7 +21,7 @@ private class ApplicationTest {
 
 	@IsTest
 	static void test_name() {
-		System.assertEquals('DFS-LE ' + (Application.isManaged ? System.requestVersion() : new Version(1, 0, 0)), Application.name);
+		System.assertEquals('DocuSign Apps Launcher', Application.name);
 	}
 
 	@IsTest

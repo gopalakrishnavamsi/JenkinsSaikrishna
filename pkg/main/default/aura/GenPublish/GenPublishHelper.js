@@ -1,4 +1,10 @@
 ({
+  PUBLISH_BUTTON: 'Publish Gen Button',
+
+  _getUserEvents: function (component) {
+    return component.find('ds-user-events');
+  },
+
   init: function (component, event, helper) {
     helper.getGenActionName(component)
       .then($A.getCallback(function (genActionName) {
@@ -8,7 +14,18 @@
       }))
       .catch(function (error) {
         helper.showToast(component, error, 'error');
+        helper._getUserEvents(component).error(helper.PUBLISH_BUTTON, {}, error);
       });
+  },
+
+  startPublish: function (component, userEvents) {
+    userEvents.time(this.PUBLISH_BUTTON);
+    var config = component.get('v.config');
+    userEvents.addProperties({
+      'Product': 'Gen',
+      'Template Type': 'Word',
+      'Source Object': config ? config.sourceObject : null
+    });
   },
 
   getGenActionName: function (component) {
@@ -43,7 +60,9 @@
           component.set('v.isDirty', false);
         }
       } else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        var errMsg = stringUtils.getErrorMessage(response);
+        helper.showToast(component, errMsg, 'error');
+        helper._getUserEvents(component).error(helper.PUBLISH_BUTTON, {}, errMsg);
       }
     }));
     $A.enqueueAction(getLayoutsAction);
@@ -141,11 +160,7 @@
         }
       }
 
-      if (originalLabel !== currentLabel && layout.hasGenAction) {
-        return true;
-      } else {
-        return false;
-      }
+      return !!(originalLabel !== currentLabel && layout.hasGenAction);
     } else {
       return false;
     }
@@ -188,6 +203,9 @@
       genButtonLabel: buttonLabel,
       genTemplateId: config.id
     };
+    var evtProps = {
+      'Layouts': selectedLayouts ? selectedLayouts.length : 0
+    };
 
     action.setParams({
       sObjectType: config.objectMappings[0].apiName,
@@ -200,8 +218,11 @@
         component.getEvent('publishedButtons').fire();
         helper.getLayouts(component, event, helper);
         helper.showToast(component, $A.get('$Label.c.SuccessfullyModifiedLayouts'), 'success');
+        helper._getUserEvents(component).success(helper.PUBLISH_BUTTON, evtProps);
       } else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+        var errMsg = stringUtils.getErrorMessage(response);
+        helper.showToast(component, errMsg, 'error');
+        helper._getUserEvents(component).error(helper.PUBLISH_BUTTON, evtProps, errMsg);
       }
       component.set('v.creatingButtons', false);
     });

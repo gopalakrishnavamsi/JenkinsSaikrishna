@@ -17,7 +17,8 @@ module.exports = {
     navUtils: "readonly",
     SpringCM: "readonly",
     Promise: "readonly",
-    AgreementActionManager: "readonly"
+    AgreementActionManager: "readonly",
+    UserEvents: "readonly"
   },
   rules: {
     "no-shadow": "error",

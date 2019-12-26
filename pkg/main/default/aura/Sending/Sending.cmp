@@ -2,8 +2,7 @@
                 extends="c:RootContainer"
                 implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
 
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
-    <ltng:require scripts="{!$Resource.navUtils}"/>
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
 
     <aura:attribute name="filesSelected" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="selectedFileTitles" type="String" access="private"/>
@@ -27,6 +26,7 @@
     <aura:attribute name="products" type="Product[]" access="private"/>
     <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isESignatureTrialExpired" type="Boolean" default="false" access="private"/>
+
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:handler name="uploadEvent" event="c:FileEvent" action="{!c.onUploadComplete}"/>
     <aura:handler name="change" value="{!v.activeStep}" action="{!c.handleActiveStepChange}"/>

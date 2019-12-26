@@ -46,14 +46,6 @@
     return message;
   },
 
-  _cloneAction: function (component, action) {
-    var result = null;
-    if (component && component.isValid() && action) {
-      result = component.get('c.' + action.getName());
-    }
-    return result;
-  },
-
   _invokeAction: function (action, params, onSuccess, onError, onComplete) {
     if (action) {
       if (params) action.setParams(params);
@@ -88,5 +80,80 @@
 
       this._invokeAction(action, params, onSuccess, setError, setComplete);
     }
+  },
+
+  _getUserEvents: function (component) {
+    if (!component || !component.isValid()) return null;
+    return component.find('ds-user-events') || component.getSuper().find('ds-user-events');
+  },
+
+  addEventProperties: function (component, properties) {
+    var userEvents = this._getUserEvents(component);
+    if ($A.util.isUndefinedOrNull(userEvents)) {
+      $A.log('Invalid user events');
+      return;
+    }
+
+    userEvents.addProperties(properties || {});
+  },
+
+  timeEvent: function (component, eventName) {
+    if ($A.util.isUndefinedOrNull(eventName)) {
+      $A.log('Invalid event name');
+      return;
+    }
+
+    var userEvents = this._getUserEvents(component);
+    if ($A.util.isUndefinedOrNull(userEvents)) {
+      $A.log('Invalid user events');
+      return;
+    }
+
+    userEvents.time(eventName);
+  },
+
+  trackSuccess: function (component, eventName, properties) {
+    if ($A.util.isUndefinedOrNull(eventName)) {
+      $A.log('Invalid event name');
+      return;
+    }
+
+    var userEvents = this._getUserEvents(component);
+    if ($A.util.isUndefinedOrNull(userEvents)) {
+      $A.log('Invalid user events');
+      return;
+    }
+
+    userEvents.success(eventName, properties || {});
+  },
+
+  trackError: function (component, eventName, properties, error) {
+    if ($A.util.isUndefinedOrNull(eventName)) {
+      $A.log('Invalid event name');
+      return;
+    }
+
+    var userEvents = this._getUserEvents(component);
+    if ($A.util.isUndefinedOrNull(userEvents)) {
+      $A.log('Invalid user events');
+      return;
+    }
+
+    userEvents.error(eventName, properties || {}, error || '');
+  },
+
+  trackCancel: function (component, eventName, properties) {
+    if ($A.util.isUndefinedOrNull(eventName)) {
+      $A.log('Invalid event name');
+      return;
+    }
+
+    var userEvents = this._getUserEvents(component);
+    if ($A.util.isUndefinedOrNull(userEvents)) {
+      $A.log('Invalid user events');
+      return;
+    }
+
+    userEvents.cancel(eventName, properties || {});
   }
 });

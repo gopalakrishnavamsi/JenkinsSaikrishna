@@ -61,8 +61,8 @@
     component.set('v.recipients', recipients);
   },
 
-  cancel: function (component) {
-    navUtils.navigateToSObject(component.get('v.recordId'));
+  cancel: function (component, event, helper) {
+    helper.cancelSend(component);
   },
 
   goBack: function (component) {

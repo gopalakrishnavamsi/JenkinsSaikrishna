@@ -1,5 +1,11 @@
 ({
+  SEND_FOR_SIGNATURE: 'Send for Signature',
+
   createEnvelope: function (component, sourceId) {
+    this.timeEvent(component, this.SEND_FOR_SIGNATURE);
+    this.addEventProperties(component, {
+      'Product': 'eSignature'
+    });
     var self = this;
     if (component.get('v.isESignatureEnabled')) {
       var selectedDocumentIds = decodeURIComponent(component.get('v.files')).split(',');
@@ -71,8 +77,12 @@
           component.set('v.emailLocalizations', result.emailLocalizations);
           component.set(
             'v.isEmailLocalizationEnabled',
-            !$A.util.isEmpty(result.emailLocalizations)
-          );
+            !$A.util.isEmpty(result.emailLocalizations));
+          self.addEventProperties(component, {
+            'Source Object': $A.util.isUndefinedOrNull(result.envelope.source)
+            || $A.util.isEmpty(result.envelope.source.typeName)
+              ? 'Unknown' : result.envelope.source.typeName
+          });
           if (updated) {
             component.set('v.disableNext', false);
             self.handleFilesChange(component);
@@ -358,6 +368,12 @@
   tagEnvelope: function (component, envelope) {
     this.setLoading(component, true);
     var self = this;
+    var eventParams = {
+      'Using Template': !$A.util.isUndefinedOrNull(component.get('v.template')),
+      'Documents': envelope.documents.length,
+      'Recipients': envelope.recipients.length
+    };
+    var error = '';
     var sendEnvelope = component.get('c.sendEnvelope');
     sendEnvelope.setParams({
       // HACK: Stringify-ing JSON to work around @AuraEnabled method limitations.
@@ -371,14 +387,19 @@
         });
         getTaggerUrl.setCallback(self, function (response2) {
           if (response1.getState() === 'SUCCESS') {
+            self.trackSuccess(component, self.SEND_FOR_SIGNATURE, eventParams);
             navUtils.navigateToUrl(response2.getReturnValue());
           } else {
-            self.showToast(component, self.getErrorMessage(response2), 'error');
+            error = self.getErrorMessage(response2);
+            self.trackError(component, self.SEND_FOR_SIGNATURE, eventParams, error);
+            self.showToast(component, error, 'error');
           }
         });
         $A.enqueueAction(getTaggerUrl);
       } else {
-        self.showToast(component, self.getErrorMessage(response1), 'error');
+        error = self.getErrorMessage(response1);
+        self.trackError(component, self.SEND_FOR_SIGNATURE, eventParams, error);
+        self.showToast(component, error, 'error');
       }
     });
     $A.enqueueAction(sendEnvelope);
@@ -544,5 +565,10 @@
         }
       }
     );
+  },
+
+  cancelSend: function (component) {
+    this.trackCancel(component, this.SEND_FOR_SIGNATURE);
+    navUtils.navigateToSObject(component.get('v.recordId'));
   }
 });
