@@ -227,6 +227,8 @@ public class Gen {
 		@AuraEnabled
 		public String dateFormat { get; private set; }
 		@AuraEnabled
+		public Boolean percentFormat { get; private set; }
+		@AuraEnabled
 		public String currencyFormat { get; private set; }
 		@AuraEnabled
 		public Boolean isChildRelation { get; private set; }
@@ -252,6 +254,7 @@ public class Gen {
 			this.dataType = dataType;
 			this.isConditional = isConditional;
 			this.dateFormat = dateFormat;
+			this.percentFormat = percentFormat;
 			this.currencyFormat = currencyFormat;
 			this.isChildRelation = isChildRelation;
 			this.label = label;
