@@ -139,9 +139,10 @@
       ));
   },
 
-  showToast: function (component, message, mode) {
+  showToast: function (component, message, mode, payload) {
     component.set('v.message', message);
     component.set('v.mode', mode);
+    component.set('v.toastPayload', payload);
     component.set('v.showToast', true);
     if (mode === 'success') {
       window.setTimeout($A.getCallback(function () {

@@ -10,7 +10,7 @@
   handleToastEvent: function (component, event, helper) {
     var params = event.getParams();
     if (params && params.show === true) {
-      helper.showToast(component, params.message, params.mode);
+      helper.showToast(component, params.message, params.mode, params.toastPayload);
       if (params.mode === 'success') {
         setTimeout($A.getCallback(function () {
           helper.hideToast(component);

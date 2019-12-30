@@ -87,7 +87,7 @@ private class SetupControllerTest {
 				SetupController.beginOAuth(null, null, null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidTarget, ex.getMessage());
+				System.assertEquals(AuthService.DomainErrorPayload, ex.getMessage());
 			}
 			try {
 				SetupController.beginOAuth(TestUtils.getOrigin(), '', null);
@@ -831,7 +831,7 @@ private class SetupControllerTest {
 	@IsTest
 	static void test_getGenTemplates_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate');
 			insert testTemplate;
 			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
 			Test.startTest();

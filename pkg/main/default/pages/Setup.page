@@ -46,12 +46,23 @@
         window.open(url, '_blank');
       };
 
-      function showError(component, message) {
+      function showError(component, payload) {
         var evt = component.getEvent('toastEvent');
-        evt.setParams({
-          show: true, message: message, mode: 'error'
-        });
-        evt.fire();
+        var parameters = {
+          show: true,
+          mode: 'error'
+        };
+        try {
+          var data = JSON.parse(payload);
+          parameters.toastPayload = data;
+          parameters.message = data.message;
+        } catch (err) {
+          parameters.toastPayload = {};
+          parameters.message = payload;
+        } finally {
+          evt.setParams(parameters);
+          evt.fire();
+        }
       }
 
       function beginOAuth(component, environment, otherUrl) {

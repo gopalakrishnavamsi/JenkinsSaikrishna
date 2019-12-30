@@ -1,4 +1,5 @@
 public with sharing class AuthService {
+	public static final String DomainErrorPayload = String.valueOf(JSON.serialize(new Map<String, String> { 'message' => Label.InvalidTarget, 'footerText' => Label.MyDomainHelpMessage }));
 
 	@TestVisible
 	private class APIUser {
@@ -633,7 +634,7 @@ public with sharing class AuthService {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
-		if (!Salesforce.isValidTarget(target)) throw new DocuSignException(Label.InvalidTarget);
+		if (!Salesforce.isValidTarget(target)) throw new DocuSignException(DomainErrorPayload);
 		if (!DocuSign.isValidEnvironment(environment, otherUrl)) throw new DocuSignException(Label.InvalidEnvironment);
 
 		// 1) Retrieve root client credentials.
@@ -670,7 +671,7 @@ public with sharing class AuthService {
 	public static Url getLoginUrl(final String target) {
 		Permissions.verifyIsDocuSignUser();
 
-		if (!Salesforce.isValidTarget(target)) throw new DocuSignException(Label.InvalidTarget);
+		if (!Salesforce.isValidTarget(target)) throw new DocuSignException(DomainErrorPayload);
 
 		Credentials c = Credentials.getInstance();
 		PageReference pg = new PageReference(new Url(c.environment.accountBaseUrl, '/oauth/auth').toExternalForm());

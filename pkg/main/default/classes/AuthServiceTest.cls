@@ -820,19 +820,19 @@ private class AuthServiceTest {
 				AuthService.getLoginUrl(null, DocuSign.Environment.Production, null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidTarget, ex.getMessage());
+				System.assertEquals(AuthService.DomainErrorPayload, ex.getMessage());
 			}
 			try {
 				AuthService.getLoginUrl('  ', DocuSign.Environment.Production, null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidTarget, ex.getMessage());
+				System.assertEquals(AuthService.DomainErrorPayload, ex.getMessage());
 			}
 			try {
 				AuthService.getLoginUrl('http://example.com', DocuSign.Environment.Production, null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidTarget, ex.getMessage());
+				System.assertEquals(AuthService.DomainErrorPayload, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -922,19 +922,19 @@ private class AuthServiceTest {
 				AuthService.getLoginUrl(null);
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidTarget, ex.getMessage());
+				System.assertEquals(AuthService.DomainErrorPayload, ex.getMessage());
 			}
 			try {
 				AuthService.getLoginUrl('   ');
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidTarget, ex.getMessage());
+				System.assertEquals(AuthService.DomainErrorPayload, ex.getMessage());
 			}
 			try {
 				AuthService.getLoginUrl('http://salesforce.com');
 				throw new AssertException('Expected getLoginUrl to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidTarget, ex.getMessage());
+				System.assertEquals(AuthService.DomainErrorPayload, ex.getMessage());
 			}
 			Test.stopTest();
 		}

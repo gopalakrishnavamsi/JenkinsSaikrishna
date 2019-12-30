@@ -4488,8 +4488,15 @@
 		<fullName>InvalidTarget</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Invalid Salesforce event target</shortDescription>
-		<value>Invalid Salesforce event target.</value>
+		<shortDescription>Invalid target. Set up custom domain</shortDescription>
+		<value>You need to set up a custom domain before logging in to DocuSign.</value>
+	</labels>
+	<labels>
+		<fullName>MyDomainHelpMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>My Domain Help Message with Link</shortDescription>
+		<value>Go to "My Domain Settings" in Salesforce to do that. &lt;a href=&quot;https://developer.salesforce.com/docs/atlas.en-us.externalidentityImplGuide.meta/externalidentityImplGuide/external_identity_set_up_my_domain.htm&quot; target=&quot;_blank&quot;&gt;Learn more&lt;/a&gt;</value>
 	</labels>
 	<labels>
 		<fullName>AuthorizeDocuSignInstructions</fullName>
@@ -6348,7 +6355,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>DisablePopUp</shortDescription>
-		<value>Disable your browser's pop-up blocker before logging in.</value>
+		<value>Disable your browser's pop-up blocker before logging in. Make sure that you have a custom domain set up.</value>
 	</labels>
 	<labels>
 		<fullName>LoginToDocuSign</fullName>

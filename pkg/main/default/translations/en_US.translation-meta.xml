@@ -2142,8 +2142,12 @@
 		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Invalid Salesforce event target.</label>
+		<label>You need to set up a custom domain before logging in to DocuSign.</label>
 		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
+		<name>MyDomainHelpMessage</name>
+		<label>Go to "My Domain Settings" in Salesforce to do that. &lt;a href=&quot;https://developer.salesforce.com/docs/atlas.en-us.externalidentityImplGuide.meta/externalidentityImplGuide/external_identity_set_up_my_domain.htm&quot; target=&quot;_blank&quot;&gt;Learn more&lt;/a&gt;</label>
 	</customLabels>
 	<customLabels>
 		<label>Before you can use DocuSign, you must grant consent for this application to make requests on your behalf.&lt;br/&gt;&lt;br/&gt;Click the &quot;Authorize&quot; button to continue.</label>
@@ -3254,7 +3258,7 @@
 		<name>agreementHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Disable your browser's pop-up blocker before logging in.</label>
+		<label>Disable your browser's pop-up blocker before logging in. Make sure that you have a custom domain set up.</label>
 		<name>DisablePopUp</name>
 	</customLabels>
 	<customLabels>

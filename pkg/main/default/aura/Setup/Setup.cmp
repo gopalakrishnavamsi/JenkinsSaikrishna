@@ -13,6 +13,7 @@
     <aura:attribute name="message" type="String"/>
     <aura:attribute name="mode" type="String"/>
     <aura:attribute name="showToast" type="Boolean" default="false"/>
+    <aura:attribute name="toastPayload" type="Map" default="{}"/>
 
     <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitialize}"/>
 
@@ -21,7 +22,11 @@
     <aura:handler name="reloadEvent" event="c:ReloadEvent" action="{!c.reloadSetup}"/>
 
     <div aura:id="setupContent" id="ds-setup"></div>
-    <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"
-             visualforce="true"/>
+    <c:Toast aura:id="toast"
+             message="{!v.message}"
+             mode="{!v.mode}"
+             showToast="{!v.showToast}"
+             visualforce="true"
+             toastPayload="{!v.toastPayload}"/>
 
 </aura:component>
