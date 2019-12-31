@@ -21,6 +21,8 @@ public class MergeField implements Comparable {
 	public Boolean isUpdateable { get; private set; }
 	@AuraEnabled
 	public Boolean hasRelationship { get; private set; }
+	@AuraEnabled
+	public Integer getScale { get; private set; }
 
 	private MergeField(
 		final DescribeFieldResult field,
@@ -28,6 +30,7 @@ public class MergeField implements Comparable {
 		final String type,
 		final String label,
 		final String relatesTo,
+		final Integer getScale,
 		final Boolean isUpdateable) {
 
 		this.field = field;
@@ -37,6 +40,7 @@ public class MergeField implements Comparable {
 		this.relatesTo = relatesTo;
 		this.isUpdateable = isUpdateable;
 		this.hasRelationship = String.isNotBlank(relatesTo);
+		this.getScale = getScale;
 	}
 
 	public static Boolean isValid(final DescribeFieldResult field) {
@@ -74,7 +78,8 @@ public class MergeField implements Comparable {
 			getType(field),
 			field.getLabel(),
 			String.valueOf(Collection.head(field.getReferenceTo())),
-			field.isUpdateable());
+			field.isUpdateable()),
+			field.getScale());
 	}
 
 	public static MergeField forChildRelationship(final ChildRelationship childRelationship) {
@@ -87,7 +92,8 @@ public class MergeField implements Comparable {
 			TYPE_CHILD_RELATIONSHIP,
 			typeDesc.getLabelPlural(),
 			typeDesc.getName(),
-			false);
+			false,
+			childRelationship.getField().getDescribe().getScale());
 	}
 
 	public Integer compareTo(final Object compareTo) {
