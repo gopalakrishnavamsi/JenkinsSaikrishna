@@ -1,5 +1,5 @@
 ({
-  init: function(component, event, helper) {
+  init: function (component, event, helper) {
     var fieldMapping = component.get('v.fieldMapping');
     var isChild = component.get('v.isChild');
     component.set('v.previousFieldMappingName', fieldMapping.apiName);
@@ -14,7 +14,7 @@
     }
   },
 
-  selectedButtonMenuItem: function(component, event, helper) {
+  selectedButtonMenuItem: function (component, event, helper) {
     var action = event.getParam('value');
     var isChild = component.get('v.isChild');
 
@@ -50,12 +50,12 @@
     }
   },
 
-  processFieldSelection: function(component, event, helper) {
+  processFieldSelection: function (component, event, helper) {
     var allFieldMappings = component.get('v.allFieldMappings');
     var allFieldsByApiName = component.get('v.allFieldsByApiName');
     var fieldMapping = component.get('v.fieldMapping');
     var fieldData = allFieldsByApiName[fieldMapping.apiName];
-    var dupeFieldMappings = allFieldMappings.filter(function(objFieldMapping) {
+    var dupeFieldMappings = allFieldMappings.filter(function (objFieldMapping) {
       return fieldMapping.apiName === objFieldMapping.apiName;
     });
 
@@ -87,7 +87,7 @@
         apiName: fieldData.name,
         dataType: fieldData.type,
         isChildRelation: false,
-        label: fieldData.label,        
+        label: fieldData.label,
         getDecimalPlaces: fieldData.getScale
       };
     }
@@ -103,13 +103,13 @@
     component.set('v.fieldMapping', fieldMapping);
   },
 
-  addChildField: function(component, event, helper) {
+  addChildField: function (component, event, helper) {
     var fieldMapping = component.get('v.fieldMapping');
     fieldMapping.childFieldMappings.push(helper.getChildFieldStub());
     component.set('v.fieldMapping', fieldMapping);
   },
 
-  copyToken: function(component, event, helper) {
+  copyToken: function (component, event, helper) {
     var tokenInput = component.find('token-input');
     tokenInput.getElement().select();
     document.execCommand('copy');
@@ -120,7 +120,7 @@
     );
   },
 
-  setToken: function(component, event, helper) {
+  setToken: function (component, event, helper) {
     helper.setTokenValue(component);
   }
 });

@@ -421,9 +421,9 @@
           }
         } else if (dataType === 'PERCENT') {
           var percentSymbol = fieldMap.percentFormat === true ? '%' : '';
-          fieldVal = helper.formatNumber(fieldVal,fieldMap.getDecimalPlaces) + percentSymbol;
+          fieldVal = helper.formatNumber(fieldVal, fieldMap.getDecimalPlaces) + percentSymbol;
         } else if (dataType === 'DOUBLE') {
-          fieldVal = helper.formatNumber(fieldVal,fieldMap.getDecimalPlaces);
+          fieldVal = helper.formatNumber(fieldVal, fieldMap.getDecimalPlaces);
         }
         if (apiName === 'CurrentDate') {
           fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
@@ -440,33 +440,34 @@
     return objRoot;
   },
 
-    setCurrencyFormat: function (getValue, getFieldData, getCurrencyCode) { 
+  setCurrencyFormat: function (getValue, getFieldData, getCurrencyCode) {
     var helper = this;
-    var sampleCurrency = 0; 
+    var sampleCurrency = 0;
     var currencyFormat = getFieldData.currencyFormat;
-    if(currencyFormat.indexOf('NoDecimals') !== -1) {
-        getValue = $A.localizationService.formatNumber(Math.round(getValue));
+    if (currencyFormat.indexOf('NoDecimals') !== -1) {
+      getValue = $A.localizationService.formatNumber(Math.round(getValue));
     } else {
-        getValue = helper.formatNumber(getValue, getFieldData.getDecimalPlaces );
+      getValue = helper.formatNumber(getValue, getFieldData.getDecimalPlaces);
     }
     // Using toLocalString() to get the currency symbol
-    var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {style:'currency', currency: getCurrencyCode,
-                                                                                                currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
-                                                                                                minimumFractionDigits: 0,
-                                                                                                maximumFractionDigits: 0
-                                                                                               });
-   return getCurrencySymbol.replace('0', getValue);
-},
+    var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {
+      style: 'currency', currency: getCurrencyCode,
+      currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+    return getCurrencySymbol.replace('0', getValue);
+  },
 
-  formatNumber:function (getNumberVal, decimalScale) {
+  formatNumber: function (getNumberVal, decimalScale) {
     var helper = this;
-    var getIntegerVal = getNumberVal.toString();                                                           
-    var getTrailingZeros = (decimalScale > 0) ?  $A.get('$Locale').decimal + parseFloat(getNumberVal).toFixed(decimalScale).split('.')[1] : '';
-    if(getIntegerVal.indexOf('.') !== -1)
-        getIntegerVal = getIntegerVal.split('.')[0];       
-    return $A.localizationService.formatNumber( getIntegerVal , $A.get('$Locale').numberFormat) + getTrailingZeros ; 
-},
-  
+    var getIntegerVal = getNumberVal.toString();
+    var getTrailingZeros = (decimalScale > 0) ? $A.get('$Locale').decimal + parseFloat(getNumberVal).toFixed(decimalScale).split('.')[1] : '';
+    if (getIntegerVal.indexOf('.') !== -1)
+      getIntegerVal = getIntegerVal.split('.')[0];
+    return $A.localizationService.formatNumber(getIntegerVal, $A.get('$Locale').numberFormat) + getTrailingZeros;
+  },
+
   generateDocuments: function (component, startingRecordId, xmlRoot) {
     var config = component.get('v.config');
     var isPreview = component.get('v.isPreview');
@@ -501,7 +502,7 @@
 
         results.forEach(function (object) {
           if (object.status === $A.get('$Label.c.Failure')) {
-            var failedJobDetail = {message: object.message, cv: object.file};
+            var failedJobDetail = { message: object.message, cv: object.file };
             failedJobs.push(failedJobDetail);
             helper.endGenerationError(component, object.message);
           } else {
@@ -564,7 +565,7 @@
 
         results.forEach(function (object) {
           if (object.status === 'Success') {
-            finishedJobs.push({cv: object.file, jobId: object.id.value});
+            finishedJobs.push({ cv: object.file, jobId: object.id.value });
             helper.endGenerationSuccess(component);
           } else if (object.status === 'Failure') {
             failedJobs.push({
