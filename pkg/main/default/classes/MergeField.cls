@@ -30,8 +30,8 @@ public class MergeField implements Comparable {
 		final String type,
 		final String label,
 		final String relatesTo,
-		final Integer getScale,
-		final Boolean isUpdateable) {
+		final Boolean isUpdateable,
+		final Integer getScale) {
 
 		this.field = field;
 		this.name = name;
@@ -78,7 +78,7 @@ public class MergeField implements Comparable {
 			getType(field),
 			field.getLabel(),
 			String.valueOf(Collection.head(field.getReferenceTo())),
-			field.isUpdateable()),
+			field.isUpdateable(),
 			field.getScale());
 	}
 
