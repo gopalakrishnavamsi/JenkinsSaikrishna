@@ -124,7 +124,8 @@
       isChildRelation: false,
       dateFormat: 'default',
       currencyFormat: 'symbol',
-      percentFormat: false
+      percentFormat: false,
+      getDecimalPlaces: 0
     });
 
     component.set('v.objMapping', objMapping);
