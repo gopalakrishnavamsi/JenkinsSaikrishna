@@ -395,15 +395,7 @@
               currencyCode = recordData['CurrencyIsoCode'];
             }
           }
-          fieldVal = fieldVal.toLocaleString(locale.userLocaleCountry, {
-            style: 'currency',
-            currencyDisplay:
-              currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
-            currency: currencyCode,
-            minimumFractionDigits: 0,
-            maximumFractionDigits:
-              currencyFormat.indexOf('NoDecimals') !== -1 ? 0 : 2
-          });
+          fieldVal = helper.setCurrencyFormat(fieldVal, fieldMap, currencyCode);
         } else if (dataType === 'ADDRESS') {
           var address = fieldVal;
           fieldVal = '';
@@ -429,9 +421,9 @@
           }
         } else if (dataType === 'PERCENT') {
           var percentSymbol = fieldMap.percentFormat === true ? '%' : '';
-          fieldVal = $A.localizationService.formatNumber(fieldVal, locale.numberFormat) + percentSymbol;
+          fieldVal = helper.formatNumber(fieldVal,fieldMap.getDecimalPlaces) + percentSymbol;
         } else if (dataType === 'DOUBLE') {
-          fieldVal = $A.localizationService.formatNumber(fieldVal, locale.numberFormat);
+          fieldVal = helper.formatNumber(fieldVal,fieldMap.getDecimalPlaces);
         }
         if (apiName === 'CurrentDate') {
           fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
@@ -448,6 +440,33 @@
     return objRoot;
   },
 
+    setCurrencyFormat: function (getValue, getFieldData, getCurrencyCode) { 
+    var helper = this;
+    var sampleCurrency = 0; 
+    var currencyFormat = getFieldData.currencyFormat;
+    if(currencyFormat.indexOf('NoDecimals') !== -1) {
+        getValue = $A.localizationService.formatNumber(Math.round(getValue));
+    } else {
+        getValue = helper.formatNumber(getValue, getFieldData.getDecimalPlaces );
+    }
+    // Using toLocalString() to get the currency symbol
+    var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {style:'currency', currency: getCurrencyCode,
+                                                                                                currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
+                                                                                                minimumFractionDigits: 0,
+                                                                                                maximumFractionDigits: 0
+                                                                                               });
+   return getCurrencySymbol.replace('0', getValue);
+},
+
+  formatNumber:function (getNumberVal, decimalScale) {
+    var helper = this;
+    var getIntegerVal = getNumberVal.toString();                                                           
+    var getTrailingZeros = (decimalScale > 0) ?  $A.get('$Locale').decimal + parseFloat(getNumberVal).toFixed(decimalScale).split('.')[1] : '';
+    if(getIntegerVal.indexOf('.') !== -1)
+        getIntegerVal = getIntegerVal.split('.')[0];       
+    return $A.localizationService.formatNumber( getIntegerVal , $A.get('$Locale').numberFormat) + getTrailingZeros ; 
+},
+  
   generateDocuments: function (component, startingRecordId, xmlRoot) {
     var config = component.get('v.config');
     var isPreview = component.get('v.isPreview');
