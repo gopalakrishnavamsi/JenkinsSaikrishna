@@ -59,16 +59,17 @@
   formatCurrency: function (component, currencyFormat) {
     var number = 123456.78;
     var locale = $A.get('$Locale');
-
-    var formattedCurrency = number.toLocaleString(locale.userLocaleCountry, {
-      style: 'currency',
-      currencyDisplay:
-        currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
-      currency: locale.currencyCode,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: currencyFormat.indexOf('NoDecimals') !== -1 ? 0 : 2
-    });
-
-    component.set('v.formattedCurrency', formattedCurrency);
+    var sampleCurrency = 0;
+    if(currencyFormat.indexOf('NoDecimals') !== -1) {
+        number = Math.round(number);
+    } 
+    number =  $A.localizationService.formatNumber(number) ;
+    var getCurrencySymbol = sampleCurrency.toLocaleString(locale.userLocaleCountry, {style:'currency', currency: locale.currencyCode,
+                                                                                     currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
+                                                                                     minimumFractionDigits: 0,
+                                                                                     maximumFractionDigits: 0
+                                                                                    });
+    
+    component.set('v.formattedCurrency', getCurrencySymbol.replace('0', number));
   }
 });
