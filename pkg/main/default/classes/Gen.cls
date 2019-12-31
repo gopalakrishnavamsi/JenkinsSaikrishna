@@ -336,11 +336,11 @@ public class Gen {
 			final String name,
 			final String sourceObject,
 			final Datetime lastModifiedDate) {
-				
+
 			this.id = id;
 			this.name = name;
 			this.sourceObject = sourceObject;
 			this.lastModifiedDate = lastModifiedDate;
 		}
-	}	
+	}
 }

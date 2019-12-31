@@ -44,7 +44,7 @@ public class MergeField implements Comparable {
 	}
 
 	public static Boolean isValid(final DescribeFieldResult field) {
-	//bypass isNamePointing() check on OwnerId field
+		//bypass isNamePointing() check on OwnerId field
 		if (field == null
 			|| BLACKLIST.contains(field.getName())
 			|| !field.isAccessible()

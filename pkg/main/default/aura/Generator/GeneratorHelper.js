@@ -382,7 +382,6 @@
             dateTimeFormat
           );
         } else if (dataType === 'CURRENCY') {
-          var currencyFormat = fieldMap.currencyFormat;
           var isMultiCurrency = component.get('v.isMultiCurrency');
           var currencyCode = locale.currencyCode;
           if (isMultiCurrency) {
@@ -460,7 +459,6 @@
   },
 
   formatNumber: function (getNumberVal, decimalScale) {
-    var helper = this;
     var getIntegerVal = getNumberVal.toString();
     var getTrailingZeros = (decimalScale > 0) ? $A.get('$Locale').decimal + parseFloat(getNumberVal).toFixed(decimalScale).split('.')[1] : '';
     if (getIntegerVal.indexOf('.') !== -1)
@@ -502,7 +500,7 @@
 
         results.forEach(function (object) {
           if (object.status === $A.get('$Label.c.Failure')) {
-            var failedJobDetail = { message: object.message, cv: object.file };
+            var failedJobDetail = {message: object.message, cv: object.file};
             failedJobs.push(failedJobDetail);
             helper.endGenerationError(component, object.message);
           } else {
@@ -565,7 +563,7 @@
 
         results.forEach(function (object) {
           if (object.status === 'Success') {
-            finishedJobs.push({ cv: object.file, jobId: object.id.value });
+            finishedJobs.push({cv: object.file, jobId: object.id.value});
             helper.endGenerationSuccess(component);
           } else if (object.status === 'Failure') {
             failedJobs.push({

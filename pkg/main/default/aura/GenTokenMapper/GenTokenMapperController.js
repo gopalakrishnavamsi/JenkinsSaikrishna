@@ -23,7 +23,10 @@
             name: 'CurrentDate'
           }], label: ''
         });
-        allFields.push({ fields: [], label: objMapping.label });
+        allFields.push({
+          fields: [],
+          label: objMapping.label
+        });
         var allFieldsByApiName = {};
 
         returnValue.forEach(function (object) {
@@ -59,7 +62,7 @@
           if (!labelExists) {
             var fields = [];
             fields.push(object);
-            var allFieldsInstance = { fields: fields, label: relationShipName };
+            var allFieldsInstance = {fields: fields, label: relationShipName};
             allFields.push(allFieldsInstance);
           }
         });
