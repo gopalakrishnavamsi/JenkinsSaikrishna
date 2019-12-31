@@ -79,14 +79,16 @@
       newFieldMapping = {
         apiName: fieldData.relatesTo,
         isChildRelation: true,
-        label: fieldData.name
+        label: fieldData.name,
+        getDecimalPlaces: fieldData.getScale
       };
     } else {
       newFieldMapping = {
         apiName: fieldData.name,
         dataType: fieldData.type,
         isChildRelation: false,
-        label: fieldData.label
+        label: fieldData.label,        
+        getDecimalPlaces: fieldData.getScale
       };
     }
 
