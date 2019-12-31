@@ -183,6 +183,8 @@ public class Gen {
 		@AuraEnabled
 		public Boolean percentFormat { get; private set; }
 		@AuraEnabled
+		public Integer getDecimalPlaces { get; private set; }
+		@AuraEnabled
 		public String currencyFormat { get; private set; }
 		@AuraEnabled
 		public String label { get; private set; }
@@ -199,6 +201,7 @@ public class Gen {
 			final Boolean isChildRelation,
 			final String dateFormat,
 			final Boolean percentFormat,
+			final Integer getDecimalPlaces,
 			final String currencyFormat,
 			final String label,
 			final String matchType,
@@ -210,6 +213,7 @@ public class Gen {
 			this.isChildRelation = isChildRelation;
 			this.dateFormat = dateFormat;
 			this.percentFormat = percentFormat;
+			this.getDecimalPlaces = getDecimalPlaces;
 			this.currencyFormat = currencyFormat;
 			this.label = label;
 			this.matchType = matchType;
@@ -229,6 +233,8 @@ public class Gen {
 		@AuraEnabled
 		public Boolean percentFormat { get; private set; }
 		@AuraEnabled
+		public Integer getDecimalPlaces { get; private set; }
+		@AuraEnabled
 		public String currencyFormat { get; private set; }
 		@AuraEnabled
 		public Boolean isChildRelation { get; private set; }
@@ -245,6 +251,7 @@ public class Gen {
 			final Boolean isConditional,
 			final String dateFormat,
 			final Boolean percentFormat,
+			final Integer getDecimalPlaces,
 			final String currencyFormat,
 			final Boolean isChildRelation,
 			final String label,
@@ -255,6 +262,7 @@ public class Gen {
 			this.isConditional = isConditional;
 			this.dateFormat = dateFormat;
 			this.percentFormat = percentFormat;
+			this.currencyFormat = currencyFormat;
 			this.currencyFormat = currencyFormat;
 			this.isChildRelation = isChildRelation;
 			this.label = label;
