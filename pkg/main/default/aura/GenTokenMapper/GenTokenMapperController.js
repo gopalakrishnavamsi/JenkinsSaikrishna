@@ -18,8 +18,10 @@
         var allFields = [];
         // adding Current Date to list
         allFields.push({
-          fields: [{ label:$A.get('$Label.c.CurrentDate'), name:'CurrentDate' }],
-          label: ''
+          fields: [{ 
+            label:$A.get('$Label.c.CurrentDate'), 
+            name:'CurrentDate' 
+          }], label: ''
          });
         allFields.push({
           fields: [],
@@ -60,7 +62,9 @@
           if (!labelExists) {
             var fields = [];
             fields.push(object);
-            var allFieldsInstance = {fields: fields, label: relationShipName};
+            var allFieldsInstance = {
+              fields: fields, 
+              label: relationShipName};
             allFields.push(allFieldsInstance);
           }
         });
