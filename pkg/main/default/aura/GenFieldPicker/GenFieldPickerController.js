@@ -80,7 +80,7 @@
         apiName: fieldData.relatesTo,
         isChildRelation: true,
         label: fieldData.name,
-        getDecimalPlaces: fieldData.getScale
+        decimalPlaces: fieldData.scale
       };
     } else {
       newFieldMapping = {
@@ -88,7 +88,7 @@
         dataType: fieldData.type,
         isChildRelation: false,
         label: fieldData.label,
-        getDecimalPlaces: fieldData.getScale
+        decimalPlaces: fieldData.scale
       };
     }
 
