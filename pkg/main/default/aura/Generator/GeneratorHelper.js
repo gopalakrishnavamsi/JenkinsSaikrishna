@@ -420,9 +420,9 @@
           }
         } else if (dataType === 'PERCENT') {
           var percentSymbol = fieldMap.percentFormat === true ? '%' : '';
-          fieldVal = helper.formatNumber(fieldVal, fieldMap.getDecimalPlaces) + percentSymbol;
+          fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces) + percentSymbol;
         } else if (dataType === 'DOUBLE') {
-          fieldVal = helper.formatNumber(fieldVal, fieldMap.getDecimalPlaces);
+          fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces);
         }
         if (apiName === 'CurrentDate') {
           fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
@@ -446,7 +446,7 @@
     if (currencyFormat.indexOf('NoDecimals') !== -1) {
       getValue = $A.localizationService.formatNumber(Math.round(getValue));
     } else {
-      getValue = helper.formatNumber(getValue, getFieldData.getDecimalPlaces);
+      getValue = helper.formatNumber(getValue, getFieldData.decimalPlaces);
     }
     // Using toLocalString() to get the currency symbol
     var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {
