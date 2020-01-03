@@ -64,7 +64,8 @@
             fields.push(object);
             var allFieldsInstance = {
               fields: fields, 
-              label: relationShipName};
+              label: relationShipName
+            };
             allFields.push(allFieldsInstance);
           }
         });
