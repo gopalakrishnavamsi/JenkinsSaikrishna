@@ -131,7 +131,7 @@
       dateFormat: 'default',
       currencyFormat: 'symbol',
       percentFormat: false,
-      getDecimalPlaces: 0
+      decimalPlaces: 0
     });
 
     component.set('v.objMapping', objMapping);
