@@ -79,7 +79,7 @@ public class MergeField implements Comparable {
 			field.getLabel(),
 			String.valueOf(Collection.head(field.getReferenceTo())),
 			field.isUpdateable(),
-			field.scale());
+			field.getScale());
 	}
 
 	public static MergeField forChildRelationship(final ChildRelationship childRelationship) {
@@ -93,7 +93,7 @@ public class MergeField implements Comparable {
 			typeDesc.getLabelPlural(),
 			typeDesc.getName(),
 			false,
-			childRelationship.getField().getDescribe().scale());
+			childRelationship.getField().getDescribe().getScale());
 	}
 
 	public Integer compareTo(final Object compareTo) {
