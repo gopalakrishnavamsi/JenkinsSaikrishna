@@ -383,6 +383,7 @@
           );
         } else if (dataType === 'CURRENCY') {
           var currencyCode = locale.currencyCode;
+          var isMultiCurrency = component.get('v.isMultiCurrency');
           if (isMultiCurrency) {
             if (apiName.indexOf('.') !== -1) {
               var parentObject = recordData[apiName.split('.')[0]];
