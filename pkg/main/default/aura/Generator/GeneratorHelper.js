@@ -459,7 +459,6 @@
   },
 
   formatNumber: function (getNumberVal, decimalScale) {
-    var helper = this;
     var getIntegerVal = getNumberVal.toString();
     var getTrailingZeros = (decimalScale > 0) ? $A.get('$Locale').decimal + parseFloat(getNumberVal).toFixed(decimalScale).split('.')[1] : '';
     if (getIntegerVal.indexOf('.') !== -1)
