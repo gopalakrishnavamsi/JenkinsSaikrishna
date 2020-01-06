@@ -419,7 +419,7 @@
             fieldVal += ' ' + address.country;
           }
         } else if (dataType === 'PERCENT') {
-          var percentSymbol = fieldMap.percentFormat === true ? '%' : '';
+          var percentSymbol = fieldMap.percentFormat === true ? ' %' : '';
           fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces) + percentSymbol;
         } else if (dataType === 'DOUBLE') {
           fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces);
