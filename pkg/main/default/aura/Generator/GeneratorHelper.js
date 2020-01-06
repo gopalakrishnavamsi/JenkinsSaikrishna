@@ -471,6 +471,7 @@
     var isPreview = component.get('v.isPreview');
     var serializer = new XMLSerializer();
     var xmlString = serializer.serializeToString(xmlRoot); //serializeToString escapes xml for us
+    var helper = this;
     var templateFiles = component.get('v.templateFiles');
     var selectedTemplateFiles = [];
 
