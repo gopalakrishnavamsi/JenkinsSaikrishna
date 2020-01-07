@@ -111,24 +111,6 @@ public with sharing class NegotiateService {
 		if (historyItems == null || historyItems.isEmpty()) {
 			return AgreementStatus.SYSTEM_ERROR;
 		}
-		if (historyItems.get(0).historyItemType == AgreementHistoryItem.WorkflowApproved) {
-
-			List<AgreementHistoryItem> tempHistoryItems = new List<AgreementHistoryItem>();
-			Long numberOfApprovers = 0;
-			for (AgreementHistoryItem historyItem : historyItems) {
-				if (historyItem.historyItemType != null && historyItem.historyItemType == AgreementHistoryItem.ApprovalCheckout) {
-					numberOfApprovers = historyItem.recipients.size();
-					break;
-				} else if (historyItem.historyItemType != null && historyItem.historyItemType == AgreementHistoryItem.WorkflowApproved) {
-					tempHistoryItems.add(historyItem);
-				}
-			}
-			if (numberOfApprovers == tempHistoryItems.size()) {
-				return AgreementStatus.APPROVED;
-			} else {
-				return AgreementStatus.PENDING_APPROVAL;
-			}
-		}
 		return statusActionMapping(historyItems.get(0).historyItemType);
 	}
 
@@ -159,7 +141,8 @@ public with sharing class NegotiateService {
 			return AgreementStatus.SYSTEM_ERROR;
 		}
 
-		else if (historyItemType.equals(AgreementHistoryItem.ApprovalCheckout)) {
+		else if (historyItemType.equals(AgreementHistoryItem.ApprovalCheckout) ||
+			historyItemType.equals(AgreementHistoryItem.CompletedHumanActivity)) {
 			return AgreementStatus.PENDING_APPROVAL;
 		}
 

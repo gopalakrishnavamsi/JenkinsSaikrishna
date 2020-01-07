@@ -514,16 +514,21 @@
 
   isCurrentUserRecipientForApproval: function (component, agreement) {
     var returnValue = false;
-
     if (agreement.status.toLowerCase() === 'pending approval' &&
-      !$A.util.isEmpty(agreement.historyItems) &&
-      !$A.util.isEmpty(agreement.historyItems[0].recipients)) {
+      !$A.util.isEmpty(agreement.historyItems)) {
 
-      agreement.historyItems[0].recipients.forEach(function (recipient) {
-        if (component.get('v.currentUserEmail') === recipient.email) {
-          returnValue = true;
-        }
+      var approvalCheckoutHistoryItem = agreement.historyItems.find(function (item) {
+        return item.historyItemType === 'ApprovalCheckout';
       });
+
+      if (!$A.util.isEmpty(approvalCheckoutHistoryItem) &&
+        Array.isArray(approvalCheckoutHistoryItem.recipients)) {
+        approvalCheckoutHistoryItem.recipients.forEach(function (recipient) {
+          if (component.get('v.currentUserEmail') === recipient.email) {
+            returnValue = true;
+          }
+        });
+      }
     }
     return returnValue;
   },
