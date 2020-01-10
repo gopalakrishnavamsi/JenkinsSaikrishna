@@ -299,6 +299,7 @@
   generateXML: function (xmlRoot, recordData, objMap, isChild, component) {
     var helper = this;
     var objRoot = xmlRoot.createElement(objMap.label.replace(/\s/g, '_'));
+    var unformattedDataTypes = ['DATE', 'DATETIME', 'TIME', 'DOUBLE', 'PERCENT', 'CURRENCY'];
     var fieldMappings = isChild
       ? objMap.childFieldMappings
       : objMap.fieldMappings;
@@ -350,7 +351,8 @@
 
         //Spring requested any date or datetime be put in in an unformatted state
         //for further processing on their side.
-        if (dataType === 'DATE' || dataType === 'DATETIME') {
+        // for dataTypes: date, datetime, time, currency, percent, number
+        if (unformattedDataTypes.includes(dataType)) {
           var dateNode = xmlRoot.createElement(apiName + 'Unformatted');
           var dateContent = xmlRoot.createTextNode(fieldVal);
           dateNode.appendChild(dateContent);
