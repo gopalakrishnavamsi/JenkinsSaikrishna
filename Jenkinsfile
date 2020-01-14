@@ -36,6 +36,9 @@ salesforcePipeline(
   installTasks: installTasks,
   postBuildTests: defaultPostBuildTests,
   salesforceArgs: defaultSalesforceArgs,
-  doSonarQube: false
+  doSonarQube: false,
+  slack: [
+    channel: 'eng-pipe-dfs-all'
+  ]
 )
 
