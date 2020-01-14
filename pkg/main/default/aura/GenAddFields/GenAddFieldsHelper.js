@@ -64,6 +64,10 @@
       number = Math.round(number);
     }
     number = $A.localizationService.formatNumber(number);
+    
+    if (currencyFormat.indexOf('noSymbolNoCode') !== -1) {
+      component.set('v.formattedCurrency',  number);
+    } else {      
     var getCurrencySymbol = sampleCurrency.toLocaleString(locale.userLocaleCountry, {
       style: 'currency', currency: locale.currencyCode,
       currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
@@ -72,5 +76,6 @@
     });
 
     component.set('v.formattedCurrency', getCurrencySymbol.replace('0', number));
+     }
   }
 });

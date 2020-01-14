@@ -137,6 +137,7 @@
                         <option value="symbolNoDecimals">{!$Label.c.DisplaySymbolNoDecimals}</option>
                         <option value="code">{!$Label.c.DisplayAsISO}</option>
                         <option value="codeNoDecimals">{!$Label.c.DisplayAsISONoDecimals}</option>
+                        <option value="noSymbolNoCode">{!$Label.c.DisplayNoSymbolNoISO}</option>
                     </lightning:select>
                 </div>
                 <div class="slds-col slds-size_1-of-2">

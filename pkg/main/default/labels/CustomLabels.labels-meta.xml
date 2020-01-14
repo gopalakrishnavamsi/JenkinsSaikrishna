@@ -17,6 +17,14 @@
 		<value>Access Code</value>
 	</labels>
 	<labels>
+		<fullName>DisplayNoSymbolNoISO</fullName>
+		<categories>Gen,CurrencyPreview</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DisplayNoSymbolNoISO</shortDescription>
+		<value>Display without symbol and ISO code</value>
+	</labels>
+	<labels>
 		<fullName>Account</fullName>
 		<categories>Setup,Accounts</categories>
 		<language>en_US</language>

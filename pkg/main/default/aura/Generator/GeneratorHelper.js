@@ -450,14 +450,16 @@
     } else {
       getValue = helper.formatNumber(getValue, getFieldData.decimalPlaces);
     }
-    // Using toLocalString() to get the currency symbol
-    var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {
-      style: 'currency', currency: getCurrencyCode,
-      currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    });
-    return getCurrencySymbol.replace('0', getValue);
+    if (currencyFormat.indexOf('noSymbolNoCode') !== -1) return getValue;
+      // Using toLocalString() to get the currency symbol
+      var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {
+        style: 'currency', currency: getCurrencyCode,
+        currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      });
+      return getCurrencySymbol.replace('0', getValue);
+    
   },
 
   formatNumber: function (getNumberVal, decimalScale) {

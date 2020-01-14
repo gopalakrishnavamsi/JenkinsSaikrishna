@@ -38,6 +38,10 @@
 		<name>AddTemplate</name>
 	</customLabels>
 	<customLabels>
+		<label>Display without symbol and ISO code</label>
+		<name>DisplayNoSymbolNoISO</name>
+	</customLabels>
+	<customLabels>
 		<label>Add Users</label>
 		<name>AddUser</name>
 	</customLabels>
