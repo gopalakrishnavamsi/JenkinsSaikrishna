@@ -1,7 +1,8 @@
 /**
  * Created by Vineet.Puranik on 4/27/2019.
  */
-.THIS {
+.THIS .contain-scroll {
+    overscroll-behavior: contain;
 }
 
 

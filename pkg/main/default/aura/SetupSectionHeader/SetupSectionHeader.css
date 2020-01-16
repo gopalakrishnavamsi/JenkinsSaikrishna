@@ -1,6 +1,7 @@
 .THIS {
     background: rgb(243, 242, 242);
     border-radius: 4px;
+    overflow: auto;
 }
 
 .THIS .ds-sectionHeader {

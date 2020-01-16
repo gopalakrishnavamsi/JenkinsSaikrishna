@@ -8,7 +8,7 @@
 }
 
 .THIS .ds-gen-noTemplates-section {
-    padding-top: 127px;
+    padding-top: 18px;
 }
 
 .THIS .ds-gen-noTemplates-section-header, .THIS .ds-gen-setup-componentHeader {
@@ -24,5 +24,6 @@
 
 .THIS .ds-gen-templates-setup-spinner {
     position: relative;
-    top: 200px;
+    top: 120px;
+    align-items: center;
 }

@@ -3,7 +3,7 @@
     <aura:attribute name="genProduct" type="Product"/>
     <aura:attribute name="showMigrationBlock" type="Boolean" default="true"/>
 
-    <div class="ds-documentGeneration-settings">
+    <div>
         <!-- GenMigration -->
         <div class="{!v.showMigrationBlock == false ? '' : 'slds-p-around_large'}">
             <c:GenMigration showBlock="{!v.showMigrationBlock}" scope="DocumentGeneration"/>

@@ -6,5 +6,6 @@
 
 .THIS .ds-layouts-spinner {
     position: relative;
-    top: 150px;
+    top: 100px;
+    align-items: center;
 }

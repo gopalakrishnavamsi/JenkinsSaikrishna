@@ -61,66 +61,64 @@
                 <c:GenMigration showBlock="{!v.showMigrationBlock}" scope="User"/>
             </div>
         </aura:if>
-        <div class="slds-p-around_large">
-            <div class="slds-grid slds-grid_align-spread">
-                <div class="slds-col ds-users-componentHeader">
-                    <aura:if isTrue="{!v.context == 'e_sign'}">
-                        {!$Label.c.DocuSignUsers}
-                    </aura:if>
-                    <aura:if isTrue="{!v.context == 'clm'}">
-                        {!$Label.c.DocuSignCLMUsers}
-                    </aura:if>
-                </div>
-                <!-- Add users button -->
-                <div class="slds-col slds-no-flex">
-                    <div class="slds-button-group">
-                        <lightning:button label="{!$Label.c.AddUser}"
-                                          disabled="{!if(v.userTableLoading, true, false)}"
-                                          onclick="{!c.showAddUsersModal}"/>
-
-                        <lightning:buttonMenu class="slds-button_last" menuAlignment="right"
-                                              disabled="{!if(v.userTableLoading, true, false)}">
-                            <lightning:menuItem label="{!$Label.c.EditPermissions}"
-                                                disabled="{!if(empty(v.selectedRows), true, false)}"
-                                                onactive="{!c.editPermissionsMultipleUsers}"/>
-                            <lightning:menuItem label="{!$Label.c.RemoveAndClose}"
-                                                disabled="{!if(empty(v.selectedRows), true, false)}"
-                                                onactive="{!c.removeAndCloseMultipleUsers}"/>
-                        </lightning:buttonMenu>
-
-                    </div>
-                </div>
-            </div>
-            <div class="slds-clearfix slds-m-top_x-small">
-                <div class="slds-size_2-of-8 slds-float_right">
-                    <lightning:input type="search" placeholder="{!$Label.c.InternalApprovalSearchActorMessage}"
-                                     value="{!v.userSearchTerm}" onchange="{!c.handleUsersChange}"
-                                     variant="label-hidden" disabled="{!if(v.userTableLoading, true, false)}"/>
-                </div>
-            </div>
-        </div>
-
         <aura:if isTrue="{!v.userTableLoading}">
             <div class="ds-users-spinner-container">
                 <c:BlueSpinner/>
             </div>
-
             <aura:set attribute="else">
-                <aura:if isTrue="{!not(empty(v.dataRows))}">
-                    <lightning:datatable
-                            columns="{!v.dataColumns}"
-                            data="{!v.dataRows}"
-                            keyField="id"
-                            onrowselection="{!c.handleRowSelection}"
-                            onrowaction="{!c.handleRowAction}"
-                            sortedBy="{!v.userSortParams.sortedBy}"
-                            sortedDirection="{!v.userSortParams.sortedDirection}"
-                            onsort="{!c.sortUserTable}"/>
+                <div class="slds-p-around_large">
+                    <div class="slds-grid slds-grid_align-spread">
+                        <div class="slds-col ds-users-componentHeader">
+                            <aura:if isTrue="{!v.context == 'e_sign'}">
+                                {!$Label.c.DocuSignUsers}
+                            </aura:if>
+                            <aura:if isTrue="{!v.context == 'clm'}">
+                                {!$Label.c.DocuSignCLMUsers}
+                            </aura:if>
+                        </div>
+                        <!-- Add users button -->
+                        <div class="slds-col slds-no-flex">
+                            <div class="slds-button-group">
+                                <lightning:button label="{!$Label.c.AddUser}"
+                                                  disabled="{!if(v.userTableLoading, true, false)}"
+                                                  onclick="{!c.showAddUsersModal}"/>
 
-                    <aura:set attribute="else">
-                        <p class="slds-text-color_weak slds-text-align_center slds-m-top_medium">{!$Label.c.NoSearchResults}</p>
-                    </aura:set>
-                </aura:if>
+                                <lightning:buttonMenu class="slds-button_last" menuAlignment="right"
+                                                      disabled="{!if(v.userTableLoading, true, false)}">
+                                    <lightning:menuItem label="{!$Label.c.EditPermissions}"
+                                                        disabled="{!if(empty(v.selectedRows), true, false)}"
+                                                        onactive="{!c.editPermissionsMultipleUsers}"/>
+                                    <lightning:menuItem label="{!$Label.c.RemoveAndClose}"
+                                                        disabled="{!if(empty(v.selectedRows), true, false)}"
+                                                        onactive="{!c.removeAndCloseMultipleUsers}"/>
+                                </lightning:buttonMenu>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-clearfix slds-m-top_x-small">
+                        <div class="slds-size_2-of-8 slds-float_right">
+                            <lightning:input type="search" placeholder="{!$Label.c.InternalApprovalSearchActorMessage}"
+                                             value="{!v.userSearchTerm}" onchange="{!c.handleUsersChange}"
+                                             variant="label-hidden" disabled="{!if(v.userTableLoading, true, false)}"/>
+                        </div>
+                    </div>
+                    <aura:if isTrue="{!not(empty(v.dataRows))}">
+                        <lightning:datatable
+                                columns="{!v.dataColumns}"
+                                data="{!v.dataRows}"
+                                keyField="id"
+                                onrowselection="{!c.handleRowSelection}"
+                                onrowaction="{!c.handleRowAction}"
+                                sortedBy="{!v.userSortParams.sortedBy}"
+                                sortedDirection="{!v.userSortParams.sortedDirection}"
+                                onsort="{!c.sortUserTable}"/>
+
+                        <aura:set attribute="else">
+                            <p class="slds-text-color_weak slds-text-align_center slds-m-top_medium">{!$Label.c.NoSearchResults}</p>
+                        </aura:set>
+                    </aura:if>
+                </div>
             </aura:set>
         </aura:if>
 

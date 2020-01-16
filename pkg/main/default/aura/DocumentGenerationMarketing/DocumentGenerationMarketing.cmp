@@ -35,7 +35,7 @@
 
         <!-- Start of Gen Marketing Features section-->
         <div class="ds-marketing-features-section">
-            <div class="slds-p-left_x-large slds-m-left_x-large slds-p-right_x-large slds-m-right_x-large slds-p-top_xx-large slds-m-bottom_xx-large">
+            <div class="slds-p-left_x-large slds-m-left_x-large slds-p-right_x-large slds-m-right_x-large slds-p-top_xx-large slds-p-bottom_xx-large">
                 <!-- Feature Headers -->
                 <div class="slds-grid slds-grid_align-spread ds-marketing-features-section-header-row">
                     <div class="slds-col slds-size_2-of-4 ds-marketing-features-border-right">

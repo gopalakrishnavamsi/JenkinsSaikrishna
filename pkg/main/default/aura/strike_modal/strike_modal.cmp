@@ -51,7 +51,7 @@ License: BSD 3-Clause License
                     <h2 id="{!'header-' + v.modalHeaderId}"
                         class="{!'slds-text-heading--medium' + if(v.showHeader == false, ' slds-hide', '') + if(v.successHeader, ' success_header_font_color', '')}">{!v.title}</h2>
                 </div>
-                <div class="slds-modal__content slds-p-around--medium">
+                <div class="slds-modal__content slds-p-around--medium contain-scroll">
                     {!v.body}
                 </div>
                 <aura:if isTrue="{!v.showFooter}">

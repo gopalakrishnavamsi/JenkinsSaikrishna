@@ -18,6 +18,7 @@
     <!--register handlers -->
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <aura:handler name="logoutEvent" event="c:ReloadEvent" action="{!c.triggerLogout}"/>
+    <aura:handler name="change" value="{!v.selectedItem}" action="{!c.onSectionChange}"/>
 
     <div class="slds-grid">
         <aura:if isTrue="{!v.isAuthorized}">
@@ -33,7 +34,7 @@
             <div class="ds-admin-sidebarSection">
                 <!-- Navigation items start here -->
                 <lightning:verticalNavigation selectedItem="{!v.selectedItem}" onselect="{!c.handleSelect}"
-                                              class="ds-admin-sidebar">
+                                              class="ds-admin-sidebar slds-scrollable_y">
                     <aura:iteration items="{!v.navigationData }" var="section">
                         <lightning:verticalNavigationSection label="{!section.label}">
                             <aura:iteration items="{!section.items }" var="item">
@@ -59,207 +60,247 @@
             </div>
 
             <!-- center section -->
-            <div class="{!'ds-home-centerSpaceSection slds-m-around_small' + if(v.selectedItem == 'tab_home', ' ds-home-centerSpace', ' ds-setupSection-heading')}">
+            <div class="ds-home-centerSpaceSection slds-template_default">
                 <!-- Home section starts here -->
                 <aura:if isTrue="{!v.selectedItem == 'tab_home'}">
-                    <!-- Account Details -->
-                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
-                        <c:SetupAccount login="{!v.login}"/>
-                    </div>
-                    <!--GenMigration-->
-                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
-                        <c:GenMigration scope="All"/>
-                    </div>
-                    <!-- Configuration details -->
-                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
-                        <div class="slds-box ds-white-background">
-                            <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
-                                <div class="slds-col slds-p-bottom_medium">
-                                    <div class="slds-media slds-media_large">
-                                        <div class="slds-media__figure">
-                                            <lightning:icon iconName="standard:email_chatter" size="large"/>
-                                        </div>
-                                        <div class="slds-media__body">
-                                            <p class="ds-configuration-detail">{!$Label.c.TabESignature}</p>
-                                            <p>{!$Label.c.TabESignatureHelpText}</p>
-                                        </div>
-                                    </div>
+                    <div class="ds-scrollable-container">
+                        <div class="ds-home-section ds-flex">
+                            <div>
+                                <!-- Account Details -->
+                                <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large ds-account-details">
+                                    <c:SetupAccount login="{!v.login}"/>
                                 </div>
-                                <div class="slds-col slds-p-bottom_medium">
-                                    <lightning:button label="{!$Label.c.SetupConfigure}"
-                                                      onclick="{!c.navigateToEsignatureTab}"></lightning:button>
+                                <!--GenMigration-->
+                                <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
+                                    <c:GenMigration scope="All"/>
                                 </div>
-                            </div>
-                            <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
-                                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
-                                    <div class="slds-media slds-media_large">
-                                        <div class="slds-media__figure">
-                                            <lightning:icon iconName="standard:contract" size="large"/>
+                                <!-- Configuration details -->
+                                <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_large">
+                                    <div class="slds-box ds-white-background">
+                                        <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
+                                            <div class="slds-col slds-p-bottom_medium">
+                                                <div class="slds-media slds-media_large">
+                                                    <div class="slds-media__figure">
+                                                        <lightning:icon iconName="standard:email_chatter" size="large"/>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <p class="ds-configuration-detail">{!$Label.c.TabESignature}</p>
+                                                        <p>{!$Label.c.TabESignatureHelpText}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-bottom_medium">
+                                                <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                                  onclick="{!c.navigateToEsignatureTab}"></lightning:button>
+                                            </div>
                                         </div>
-                                        <div class="slds-media__body">
-                                            <p class="ds-configuration-detail">{!$Label.c.TabDocumentGeneration} <span
-                                                        class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">{!$Label.c.GenBadgeText}</span>
-                                            </p>
-                                            <p>{!$Label.c.TabDocumentGenerationHelpText}</p>
+                                        <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
+                                            <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
+                                                <div class="slds-media slds-media_large">
+                                                    <div class="slds-media__figure">
+                                                        <lightning:icon iconName="standard:contract" size="large"/>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <p class="ds-configuration-detail">{!$Label.c.TabDocumentGeneration}
+                                                            <span
+                                                                    class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">{!$Label.c.GenBadgeText}</span>
+                                                        </p>
+                                                        <p>{!$Label.c.TabDocumentGenerationHelpText}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
+                                                <aura:if isTrue="{!empty(v.genProduct)}">
+                                                    <lightning:button label="{!$Label.c.UnlockFeatures}"
+                                                                      iconName="utility:lock"
+                                                                      iconPosition="right"
+                                                                      onclick="{!c.navigateToDocumentGenerationTab}"></lightning:button>
+                                                    <aura:set attribute="else">
+                                                        <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                                          onclick="{!c.navigateToDocumentGenerationTab}"></lightning:button>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                    <aura:if isTrue="{!empty(v.genProduct)}">
-                                        <lightning:button label="{!$Label.c.UnlockFeatures}" iconName="utility:lock"
-                                                          iconPosition="right"
-                                                          onclick="{!c.navigateToDocumentGenerationTab}"></lightning:button>
-                                        <aura:set attribute="else">
-                                            <lightning:button label="{!$Label.c.SetupConfigure}"
-                                                              onclick="{!c.navigateToDocumentGenerationTab}"></lightning:button>
-                                        </aura:set>
-                                    </aura:if>
-                                </div>
-                            </div>
-                            <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
-                                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
-                                    <div class="slds-media slds-media_large">
-                                        <div class="slds-media__figure">
-                                            <lightning:icon iconName="standard:approval" size="large"
-                                                            class="ds-negotiation-icon-background"/>
+                                        <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
+                                            <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
+                                                <div class="slds-media slds-media_large">
+                                                    <div class="slds-media__figure">
+                                                        <lightning:icon iconName="standard:approval" size="large"
+                                                                        class="ds-negotiation-icon-background"/>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <p class="ds-configuration-detail">{!$Label.c.TabNegotiation}
+                                                            <span
+                                                                    class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">{!$Label.c.NegotiateBadgeText}</span>
+                                                        </p>
+                                                        <p>{!$Label.c.TabNegotiationHelpText}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
+                                                <aura:if isTrue="{!empty(v.negotiateProduct)}">
+                                                    <lightning:button label="{!$Label.c.UnlockFeatures}"
+                                                                      iconName="utility:lock"
+                                                                      iconPosition="right"
+                                                                      onclick="{!c.navigateToNegotiationTab}"></lightning:button>
+                                                    <aura:set attribute="else">
+                                                        <lightning:button label="{!$Label.c.SetupConfigure}"
+                                                                          onclick="{!c.navigateToNegotiationTab}"></lightning:button>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
                                         </div>
-                                        <div class="slds-media__body">
-                                            <p class="ds-configuration-detail">{!$Label.c.TabNegotiation}<span
-                                                        class="slds-badge slds-badge_lightest slds-m-left_x-small ds-badge-position">{!$Label.c.NegotiateBadgeText}</span>
-                                            </p>
-                                            <p>{!$Label.c.TabNegotiationHelpText}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                    <aura:if isTrue="{!empty(v.negotiateProduct)}">
-                                        <lightning:button label="{!$Label.c.UnlockFeatures}" iconName="utility:lock"
-                                                          iconPosition="right"
-                                                          onclick="{!c.navigateToNegotiationTab}"></lightning:button>
-                                        <aura:set attribute="else">
-                                            <lightning:button label="{!$Label.c.SetupConfigure}"
-                                                              onclick="{!c.navigateToNegotiationTab}"></lightning:button>
-                                        </aura:set>
-                                    </aura:if>
-                                </div>
-                            </div>
 
-                            <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
-                                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
-                                    <div class="slds-media slds-media_large">
-                                        <div class="slds-media__figure">
-                                            <lightning:icon iconName="standard:avatar" size="large" class="ds-userManagement-icon-background" />
+                                        <div class="slds-grid slds-grid_align-spread slds-p-around_medium ds-config-item-border">
+                                            <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
+                                                <div class="slds-media slds-media_large">
+                                                    <div class="slds-media__figure">
+                                                        <lightning:icon iconName="standard:avatar" size="large"
+                                                                        class="ds-userManagement-icon-background"/>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <p class="ds-configuration-detail">{!$Label.c.TabUserManagement}</p>
+                                                        <p>{!$Label.c.TabUserManagementHelpText}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-bottom_medium">
+                                                <lightning:button label="{!$Label.c.Manage}"
+                                                                  onclick="{!c.navigateToUserManagementTab}"></lightning:button>
+                                            </div>
                                         </div>
-                                        <div class="slds-media__body">
-                                            <p class="ds-configuration-detail">{!$Label.c.TabUserManagement}</p>
-                                            <p>{!$Label.c.TabUserManagementHelpText}</p>
+                                        <div class="slds-grid slds-grid_align-spread slds-p-around_medium">
+                                            <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
+                                                <div class="slds-media slds-media_large">
+                                                    <div class="slds-media__figure">
+                                                        <lightning:icon iconName="standard:canvas" size="large"
+                                                                        class="ds-components-icon-background"/>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <p class="ds-configuration-detail">{!$Label.c.TabComponents}</p>
+                                                        <p>{!$Label.c.TabComponentsHelpText}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
+                                                <lightning:button label="{!$Label.c.Manage}"
+                                                                  onclick="{!c.navigateToComponentsTab}"></lightning:button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="slds-col slds-p-bottom_medium">
-                                    <lightning:button label="{!$Label.c.Manage}" onclick="{!c.navigateToUserManagementTab}"></lightning:button>
-                                </div>
-                            </div>
-                            <div class="slds-grid slds-grid_align-spread slds-p-around_medium">
-                                <div class="slds-col slds-p-top_medium slds-p-bottom_medium">
-                                    <div class="slds-media slds-media_large">
-                                        <div class="slds-media__figure">
-                                            <lightning:icon iconName="standard:canvas" size="large" class="ds-components-icon-background" />
-                                        </div>
-                                        <div class="slds-media__body">
-                                            <p class="ds-configuration-detail">{!$Label.c.TabComponents}</p>
-                                            <p>{!$Label.c.TabComponentsHelpText}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="slds-col slds-p-bottom_medium slds-p-top_medium">
-                                    <lightning:button label="{!$Label.c.Manage}" onclick="{!c.navigateToComponentsTab}"></lightning:button>
+
+                                <!-- Help guide details -->
+                                <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_x-large slds-m-bottom_x-large ds-home-help">
+                                    <c:SetupLearnAboutProducts selectedItem="{!v.selectedItem}"/>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Help guide details -->
-                    <div class="slds-m-left_x-large slds-p-left_x-large slds-p-right_x-large slds-m-right_x-large slds-m-top_xx-large">
-                        <c:SetupLearnAboutProducts selectedItem="{!v.selectedItem}"/>
-                    </div>
-                    
-                    <div class="slds-p-top_large slds-p-bottom_large">
                     </div>
                 </aura:if>
                 <!-- Home section ends here -->
 
                 <!-- eSignature section starts here-->
                 <aura:if isTrue="{!v.selectedItem == 'tab_eSignature'}">
-                    <c:SetupSectionHeader sectionCategory="{!$Label.c.ConfigurationSection}" 
-                                          sectionHeader="{!$Label.c.TabESignature}" 
-                                          headerIconName="standard:email_chatter"/>
-                    <div class="ds-esignature-section slds-m-top_small">
-                        <c:SetupEsignature />
-                    </div>   
+                    <div class="ds-scrollable-container">
+                        <div class="ds-flex-header">
+                            <c:SetupSectionHeader
+                                    sectionCategory="{!$Label.c.ConfigurationSection}"
+                                    sectionHeader="{!$Label.c.TabESignature}"
+                                    headerIconName="standard:email_chatter"/>
+                        </div>
+                        <div class="ds-esignature-section invisible-scrollbar slds-m-top_small ds-flex">
+                            <c:SetupEsignature/>
+                        </div>
+                    </div>
                 </aura:if>
                 <!-- eSignature ends here-->
 
                 <!-- document generation section starts here -->
                 <aura:if isTrue="{!v.selectedItem == 'tab_documentGeneration'}">
-                    <c:SetupSectionHeader sectionCategory="{!$Label.c.ConfigurationSection}"
-                                          sectionHeader="{!$Label.c.TabDocumentGeneration}"
-                                          headerIconName="standard:contract"
-                                          showTrialBar="{!if(and(not(v.genProduct == null), v.genProduct.isTrial), true, false)}"
-                                          trialDaysLeft="{!if(and(not(v.genProduct == null), v.genProduct.isTrial), v.genProduct.daysUntilExpires , 0)}"
-                                          trialProductName="{!if(and(not(v.negotiateProduct == null), v.negotiateProduct.isTrial), $Label.c.NegotiateBadgeText, $Label.c.GenBadgeText)}"/>
-
-                    <div class="ds-documentGeneration-section slds-m-top_small">
-                        <c:SetupDocumentGeneration genProduct="{!v.genProduct}"/>
+                    <div class="ds-scrollable-container">
+                        <div class="ds-flex-header">
+                            <c:SetupSectionHeader
+                                    sectionCategory="{!$Label.c.ConfigurationSection}"
+                                    sectionHeader="{!$Label.c.TabDocumentGeneration}"
+                                    headerIconName="standard:contract"
+                                    showTrialBar="{!and(not(empty(v.genProduct)), v.genProduct.isTrial)}"
+                                    trialDaysLeft="{!if(and(not(empty(v.genProduct)), v.genProduct.isTrial), v.genProduct.daysUntilExpires, 0)}"
+                                    trialProductName="{!if(and(not(empty(v.negotiateProduct)), v.negotiateProduct.isTrial), $Label.c.NegotiateBadgeText, $Label.c.GenBadgeText)}"/>
+                        </div>
+                        <div class="ds-documentGeneration-section invisible-scrollbar slds-m-top_small ds-flex">
+                            <c:SetupDocumentGeneration genProduct="{!v.genProduct}"/>
+                        </div>
                     </div>
                 </aura:if>
                 <!-- document generation section ends here-->
 
                 <!-- negotiation section starts here -->
                 <aura:if isTrue="{!v.selectedItem == 'tab_negotiation'}">
-                    <c:SetupSectionHeader sectionCategory="{!$Label.c.ConfigurationSection}"
-                                          sectionHeader="{!$Label.c.TabNegotiation}"
-                                          headerIconName="standard:approval"
-                                          showTrialBar="{!if(and(not(v.negotiateProduct == null), v.negotiateProduct.isTrial), true, false)}"
-                                          trialDaysLeft="{!if(and(not(v.negotiateProduct == null), v.negotiateProduct.isTrial), v.negotiateProduct.daysUntilExpires , 0)}"
-                                          trialProductName="{!$Label.c.NegotiateBadgeText}"/>
-
-                    <div class="ds-negotiation-section slds-m-top_small">
-                        <c:SetupNegotiation genProduct="{!v.genProduct}" negotiateProduct="{!v.negotiateProduct}"/>
+                    <div class="ds-scrollable-container">
+                        <div class="ds-flex-header">
+                            <c:SetupSectionHeader
+                                    sectionCategory="{!$Label.c.ConfigurationSection}"
+                                    sectionHeader="{!$Label.c.TabNegotiation}"
+                                    headerIconName="standard:approval"
+                                    showTrialBar="{!and(not(empty(v.negotiateProduct)), v.negotiateProduct.isTrial)}"
+                                    trialDaysLeft="{!if(and(not(empty(v.negotiateProduct)), v.negotiateProduct.isTrial), v.negotiateProduct.daysUntilExpires, 0)}"
+                                    trialProductName="{!$Label.c.NegotiateBadgeText}"/>
+                        </div>
+                        <div class="ds-negotiation-section invisible-scrollbar slds-m-top_small ds-flex">
+                            <c:SetupNegotiation genProduct="{!v.genProduct}"
+                                                negotiateProduct="{!v.negotiateProduct}"/>
+                        </div>
                     </div>
                 </aura:if>
                 <!-- negotiation section ends here-->
 
                 <!-- user management section starts here -->
                 <aura:if isTrue="{!v.selectedItem == 'tab_userManagement'}">
-                    <c:SetupSectionHeader sectionCategory="{!$Label.c.AdministrationSection}"
-                                          sectionHeader="{!$Label.c.TabUserManagement}"
-                                          headerIconName="standard:avatar"/>
                     <!-- Section for managing users -->
-                    <div class="ds-userManagement-section slds-m-top_small">
-                        <c:SetupUsers products="{!v.products}" context='e_sign'/>
+                    <div class="ds-scrollable-container">
+                        <div class="ds-flex-header">
+                            <c:SetupSectionHeader
+                                    sectionCategory="{!$Label.c.AdministrationSection}"
+                                    sectionHeader="{!$Label.c.TabUserManagement}"
+                                    headerIconName="standard:avatar"/>
+                        </div>
+                        <div class="ds-userManagement-section invisible-scrollbar slds-m-top_small ds-flex">
+                            <c:SetupUsers products="{!v.products}" context='e_sign'/>
+                        </div>
                     </div>
                 </aura:if>
                 <!-- user management section ends here -->
 
                 <!-- components section starts here -->
                 <aura:if isTrue="{!v.selectedItem == 'tab_components'}">
-                    <c:SetupSectionHeader sectionCategory="{!$Label.c.AdministrationSection}" 
-                                          sectionHeader="{!$Label.c.TabComponents}"
-                                          headerIconName="standard:canvas"/>  
-                    <div class="ds-components-section slds-m-top_small">
-                        <c:SetupComponents/>
+                    <div class="ds-scrollable-container">
+                        <div class="ds-flex-header">
+                            <c:SetupSectionHeader
+                                    sectionCategory="{!$Label.c.AdministrationSection}"
+                                    sectionHeader="{!$Label.c.TabComponents}"
+                                    headerIconName="standard:canvas"/>
+                        </div>
+                        <div class="ds-components-section invisible-scrollbar slds-m-top_small ds-flex">
+                            <c:SetupComponents/>
+                        </div>
                     </div>
                 </aura:if>
                 <!-- components section ends here -->
 
                 <!-- help section starts here -->
                 <aura:if isTrue="{!v.selectedItem == 'tab_help'}">
-                    <c:SetupSectionHeader sectionCategory="{!$Label.c.AdministrationSection}" 
-                                          sectionHeader="{!$Label.c.TabHelp}"
-                                          headerIconName="standard:sossession"/>
-                    <div class="ds-help-section slds-m-top_small">
-                        <c:SetupHelp/>
+                    <div class="ds-scrollable-container">
+                        <div class="ds-flex-header">
+                            <c:SetupSectionHeader
+                                    sectionCategory="{!$Label.c.AdministrationSection}"
+                                    sectionHeader="{!$Label.c.TabHelp}"
+                                    headerIconName="standard:sossession"/>
+                        </div>
+                        <div class="ds-help-section invisible-scrollbar slds-m-top_small ds-flex">
+                            <c:SetupHelp/>
+                        </div>
                     </div>
                 </aura:if>
                 <!-- help section ends here -->

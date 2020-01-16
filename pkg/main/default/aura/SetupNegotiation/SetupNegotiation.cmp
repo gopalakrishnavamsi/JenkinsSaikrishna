@@ -3,7 +3,7 @@
     <aura:attribute name="negotiateProduct" type="Product"/>
     <aura:attribute name="genProduct" type="Product"/>
 
-    <div class="ds-negotiation-settings">
+    <div>
         <aura:if isTrue="{!not(empty(v.negotiateProduct))}">
             <!-- Negotiation configuration section -->
             <c:NegotiateHelp/>

@@ -30,7 +30,7 @@
                     <div class="slds-grid slds-grid_vertical-align-center slds-m-left_small slds-m-top_small">
                         <div class="slds-col slds-m-right_small ds-trialMessage">{!v.trialMessage}</div>
                         <div class="slds-col slds-p-around_xx-small slds-m-right_small ds-trialDaysLeft">{!v.trialDaysLeft}</div>
-                        <div class="slds-col">
+                        <div class="slds-col slds-m-right_small">
                             <a href="{!$Label.c.ContactSalesLink}" target="_blank">
                                 <lightning:button label="{!$Label.c.ContactSales}" variant="brand"/>
                             </a>

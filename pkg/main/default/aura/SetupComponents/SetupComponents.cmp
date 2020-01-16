@@ -1,54 +1,52 @@
 <aura:component>
-    <div class="ds-components-section">
-        <div class="slds-p-around_large">
-            <ul>
-                <li class="ds-components-section-header">{!$Label.c.ComponentSectionHeader}</li>
-                <li class="slds-m-top_xx-large">
-                    <div class="slds-grid slds-grid_align-spread ds-components-help-section">
-                        <div class="slds-col">
-                            <div class="slds-media slds-media_large">
-                                <div class="slds-media__figure ds-components-image-box">
-                                    <a href="{!$Label.c.ComponentsDocuSignFilesVideo}" target="_blank">
-                                        <img src="{!$Resource.DocuSignFilesComponent}"/>
-                                    </a>
-                                </div>
-                                <div class="slds-media__body ds-components-image-helpTextbox">
-                                    <div class="ds-components-header">{!$Label.c.DocuSignAgreements}</div>
-                                    <div class="slds-m-top_medium ds-components-image-text">{!$Label.c.ComponentSectionDocuSignFiles}</div>
-                                </div>
+    <div class="slds-p-around_large">
+        <ul>
+            <li class="ds-components-section-header">{!$Label.c.ComponentSectionHeader}</li>
+            <li class="slds-m-top_xx-large">
+                <div class="slds-grid slds-grid_align-spread ds-components-help-section">
+                    <div class="slds-col">
+                        <div class="slds-media slds-media_large">
+                            <div class="slds-media__figure ds-components-image-box">
+                                <a href="{!$Label.c.ComponentsDocuSignFilesVideo}" target="_blank">
+                                    <img src="{!$Resource.DocuSignFilesComponent}"/>
+                                </a>
+                            </div>
+                            <div class="slds-media__body ds-components-image-helpTextbox">
+                                <div class="ds-components-header">{!$Label.c.DocuSignAgreements}</div>
+                                <div class="slds-m-top_medium ds-components-image-text">{!$Label.c.ComponentSectionDocuSignFiles}</div>
                             </div>
                         </div>
-                        <div class="slds-col slds-p-bottom_medium">
-                            <a href="{!$Label.c.LearnNegotiateUserURL}" target="_blank">
-                                <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
-                            </a>
-                        </div>
                     </div>
-                </li>
-                <li class="slds-m-top_xx-large ds-components-item-border"/>
-                <li class="slds-m-top_xx-large">
-                    <div class="slds-grid slds-grid_align-spread ds-components-help-section">
-                        <div class="slds-col">
-                            <div class="slds-media slds-media_large">
-                                <div class="slds-media__figure ds-components-image-box">
-                                    <a href="{!$Label.c.ComponentsEnvelopeStatusVideo}" target="_blank">
-                                        <img src="{!$Resource.EnvelopeStatusComponent}"/>
-                                    </a>
-                                </div>
-                                <div class="slds-media__body ds-components-image-helpTextbox">
-                                    <div class="ds-components-header">{!$Label.c.EsignatureEnvelopeStatus}</div>
-                                    <div class="slds-m-top_medium ds-components-image-text">{!$Label.c.ComponentSectionEnvelopeStatus}</div>
-                                </div>
+                    <div class="slds-col slds-p-bottom_medium">
+                        <a href="{!$Label.c.LearnNegotiateUserURL}" target="_blank">
+                            <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <li class="slds-m-top_xx-large ds-components-item-border"/>
+            <li class="slds-m-top_xx-large">
+                <div class="slds-grid slds-grid_align-spread ds-components-help-section">
+                    <div class="slds-col">
+                        <div class="slds-media slds-media_large">
+                            <div class="slds-media__figure ds-components-image-box">
+                                <a href="{!$Label.c.ComponentsEnvelopeStatusVideo}" target="_blank">
+                                    <img src="{!$Resource.EnvelopeStatusComponent}"/>
+                                </a>
+                            </div>
+                            <div class="slds-media__body ds-components-image-helpTextbox">
+                                <div class="ds-components-header">{!$Label.c.EsignatureEnvelopeStatus}</div>
+                                <div class="slds-m-top_medium ds-components-image-text">{!$Label.c.ComponentSectionEnvelopeStatus}</div>
                             </div>
                         </div>
-                        <div class="slds-col slds-p-bottom_medium">
-                            <a href="{!$Label.c.LearnEsignUserURL}" target="_blank">
-                                <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
-                            </a>
-                        </div>
                     </div>
-                </li>
-            </ul>
-        </div>
+                    <div class="slds-col slds-p-bottom_medium">
+                        <a href="{!$Label.c.LearnEsignUserURL}" target="_blank">
+                            <lightning:button label="{!$Label.c.GoToDocumentation}"></lightning:button>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
 </aura:component>

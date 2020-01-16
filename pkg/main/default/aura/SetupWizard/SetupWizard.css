@@ -1,5 +1,6 @@
 .THIS {
     display: flex;
+    height: 100vh;
 }
 
 .THIS .ds-getStarted {
@@ -35,11 +36,7 @@
     flex-grow: 1;
 }
 
-.THIS .ds-home-centerSpace {
-    background: rgb(249, 249, 250);
-    border-radius: 4px;
-}
-
+.THIS .ds-home-section,
 .THIS .ds-userManagement-section, 
 .THIS .ds-documentGeneration-section, 
 .THIS .ds-negotiation-section, 
@@ -48,11 +45,13 @@
 .THIS .ds-help-section {
     background: rgb(255, 255, 255);
     border-radius: 4px;
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-.THIS .ds-setupSection-heading {
-    border-radius: 4px;
-    flex-grow: 1;
+.THIS .invisible-scrollbar::-webkit-scrollbar {
+    display: none;
 }
 
 .THIS .ds-configuration-detail {
@@ -78,10 +77,49 @@
 }
 
 .THIS .ds-white-background {
-    background: rgb(255, 255, 255);;
+    background: rgb(255, 255, 255);
+    min-width: 700px;
 }
 
 .THIS .ds-badge-position, .THIS .slds-icon-utility-lock, .THIS .slds-button__icon {
     position: relative;
     top: -2px;
+}
+
+.THIS .slds-template_default {
+    padding: 0.75rem;
+    overflow: hidden;
+}
+
+.THIS .ds-home-help {
+    min-width: 700px;
+}
+
+.THIS .ds-account-details {
+    min-width: 760px;
+}
+
+.THIS .ds-scrollable-container {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+/* Chrome Only */
+@media all and (-webkit-min-device-pixel-ratio:0) and (min-resolution: .001dpcm) {
+    .THIS .ds-scrollable-container {
+        z-index: 1;
+    }
+}
+
+.THIS .ds-flex {
+    flex: 1 0 auto;
+}
+
+.THIS .ds-flex-header {
+    flex: 0 0 auto;
 }

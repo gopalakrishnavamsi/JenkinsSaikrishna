@@ -6,7 +6,8 @@
 
 .THIS .ds-users-spinner-container, .THIS .ds-edit-users-spinner-container {
     position: relative;
-    top: 100px;
+    top: 120px;
+    align-items: center;
 }
 
 .THIS .ds-add-users-spinner-container {

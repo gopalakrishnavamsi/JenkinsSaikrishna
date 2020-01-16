@@ -1,5 +1,4 @@
 <aura:component>
-    <div class="ds-help-section">
         <div class="slds-p-around_large">
             <ul>
                 <li class="ds-help-section-header">{!$Label.c.HelpGuides}</li>
@@ -133,5 +132,4 @@
                 </li>
             </ul>
         </div>
-    </div>
 </aura:component>

@@ -36,6 +36,10 @@
 
   triggerLogout: function (component) {
     component.destroy();
+  },
+
+  onSectionChange: function () {
+    window.scrollTo(0, 0);
   }
 
 });
