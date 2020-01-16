@@ -179,13 +179,9 @@ public class Gen {
 		@AuraEnabled
 		public Boolean isChildRelation { get; private set; }
 		@AuraEnabled
-		public String dateFormat { get; private set; }
-		@AuraEnabled
-		public Boolean percentFormat { get; private set; }
+		public String format { get; private set; }
 		@AuraEnabled
 		public Integer decimalPlaces { get; private set; }
-		@AuraEnabled
-		public String currencyFormat { get; private set; }
 		@AuraEnabled
 		public String label { get; private set; }
 		@AuraEnabled
@@ -199,10 +195,8 @@ public class Gen {
 			final List<Gen.ChildFieldMappings> childFieldMappings,
 			final Boolean isConditional,
 			final Boolean isChildRelation,
-			final String dateFormat,
-			final Boolean percentFormat,
+			final String format,
 			final Integer decimalPlaces,
-			final String currencyFormat,
 			final String label,
 			final String matchType,
 			final String conditionalValue) {
@@ -211,10 +205,8 @@ public class Gen {
 			this.childFieldMappings = childFieldMappings == null ? new List<Gen.ChildFieldMappings>() : childFieldMappings;
 			this.isConditional = isConditional;
 			this.isChildRelation = isChildRelation;
-			this.dateFormat = dateFormat;
-			this.percentFormat = percentFormat;
 			this.decimalPlaces = decimalPlaces;
-			this.currencyFormat = currencyFormat;
+			this.format = format;
 			this.label = label;
 			this.matchType = matchType;
 			this.conditionalValue = conditionalValue;
@@ -229,13 +221,9 @@ public class Gen {
 		@AuraEnabled
 		public Boolean isConditional { get; private set; }
 		@AuraEnabled
-		public String dateFormat { get; private set; }
-		@AuraEnabled
-		public Boolean percentFormat { get; private set; }
+		public String format { get; private set; }
 		@AuraEnabled
 		public Integer decimalPlaces { get; private set; }
-		@AuraEnabled
-		public String currencyFormat { get; private set; }
 		@AuraEnabled
 		public Boolean isChildRelation { get; private set; }
 		@AuraEnabled
@@ -249,10 +237,8 @@ public class Gen {
 			final String apiName,
 			final String dataType,
 			final Boolean isConditional,
-			final String dateFormat,
-			final Boolean percentFormat,
+			final String format,
 			final Integer decimalPlaces,
-			final String currencyFormat,
 			final Boolean isChildRelation,
 			final String label,
 			final String matchType,
@@ -260,9 +246,7 @@ public class Gen {
 			this.apiName = apiName;
 			this.dataType = dataType;
 			this.isConditional = isConditional;
-			this.dateFormat = dateFormat;
-			this.percentFormat = percentFormat;
-			this.currencyFormat = currencyFormat;
+			this.format = format;
 			this.decimalPlaces = decimalPlaces;
 			this.isChildRelation = isChildRelation;
 			this.label = label;

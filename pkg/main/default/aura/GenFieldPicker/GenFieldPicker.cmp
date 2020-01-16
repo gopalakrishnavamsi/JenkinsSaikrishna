@@ -50,7 +50,7 @@
                     <option disabled="{!true}" value="">{!$Label.c.SelectAnOption}</option>
                     <aura:if isTrue="{!v.allFields.length gt 0}">
                         <aura:iteration items="{!v.allFields}" var="fieldGroup">
-                            <!--Printing Current Date without label --> 
+                            <!--Printing Current Date without label -->
                             <aura:if isTrue="{!empty(fieldGroup.label)}">
                                 <aura:iteration items="{!fieldGroup.fields}" var="field">
                                     <option value="{!field.name}">{!field.label}</option>

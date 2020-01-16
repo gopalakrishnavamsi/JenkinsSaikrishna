@@ -244,3 +244,26 @@
 .THIS .ds-modal-content-spacing {
     border-bottom: 1px solid rgb(217, 219, 221);
 }
+
+.THIS .ds-slds-has-error input:focus {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid t(colorBackgroundDestructive);
+}
+
+.THIS .ds-slds-has-error input {
+    border: 1px solid t(colorBackgroundDestructive);
+}
+
+.THIS .ds-format-field__arrow {
+    flex: none;
+    text-align: center;
+}
+
+.THIS .ds-icon-background svg {
+    fill: t(colorBackgroundDestructive);
+}
+
+.THIS .ds-text-error {
+    color: t(colorBackgroundDestructive);
+}

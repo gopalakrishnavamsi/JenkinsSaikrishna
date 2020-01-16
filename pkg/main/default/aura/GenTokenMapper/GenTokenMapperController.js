@@ -130,9 +130,6 @@
       childFieldMappings: [],
       isConditional: false,
       isChildRelation: false,
-      dateFormat: 'default',
-      currencyFormat: 'symbol',
-      percentFormat: false,
       decimalPlaces: 0
     });
 

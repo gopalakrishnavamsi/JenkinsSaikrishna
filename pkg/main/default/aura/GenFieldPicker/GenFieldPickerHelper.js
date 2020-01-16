@@ -119,9 +119,7 @@
     return {
       apiName: '',
       dataType: '',
-      isConditional: false,
-      dateFormat: 'default',
-      currencyFormat: 'symbol'
+      isConditional: false
     };
   },
 

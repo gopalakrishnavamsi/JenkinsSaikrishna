@@ -83,11 +83,22 @@
         decimalPlaces: fieldData.scale
       };
     } else {
+      var format;
+      if (fieldData.type === 'DATE' || fieldData.type === 'TIME') {
+        format = 'default';
+      } else if (fieldData.type === 'CURRENCY') {
+        format = 'symbol';
+      } else if (fieldData.type === 'DATETIME') {
+        format = 'default|default';
+      } else if (fieldData.type === 'PERCENT') {
+        format = false;
+      }
       newFieldMapping = {
         apiName: fieldData.name,
         dataType: fieldData.type,
         isChildRelation: false,
         label: fieldData.label,
+        format: format,
         decimalPlaces: fieldData.scale
       };
     }

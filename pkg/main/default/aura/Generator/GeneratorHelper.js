@@ -309,6 +309,8 @@
       var apiName = fieldMap.apiName;
       var fieldNode = null;
       var dateFormat = null;
+      var timeFormat = null;
+
 
       if (fieldMap.isChildRelation) {
         fieldNode = xmlRoot.createElement(fieldMap.label + '_Container');
@@ -362,27 +364,32 @@
         if ($A.util.isEmpty(fieldVal)) {
           fieldVal = '';
         } else if (dataType === 'DATE') {
-          dateFormat = fieldMap.dateFormat;
+          dateFormat = fieldMap.format;
 
           if (dateFormat === 'default') {
             dateFormat = locale.dateFormat;
           }
 
           fieldVal = $A.localizationService.formatDate(fieldVal, dateFormat);
-        } else if (dataType === 'DATETIME') {
-          dateFormat = fieldMap.dateFormat;
-
-          if (dateFormat === 'default') {
-            dateFormat = locale.dateFormat;
+        } else if (dataType === 'TIME') {
+          timeFormat = fieldMap.format;
+          if (timeFormat === 'default') {
+            timeFormat = locale.timeFormat;
           }
 
+          var date = new Date(fieldVal);
+          fieldVal = ($A.localizationService.formatDateTimeUTC(date, 'YYYY-MM-DD,' + timeFormat)).split(',')[1];
+        } else if (dataType === 'DATETIME') {
+          var formats = fieldMap.format.split('|');
+          if (formats[0] === 'default') formats[0] = locale.dateFormat;
+          if (formats[1] === 'default') formats[1] = locale.timeFormat;
+          //ADDING TIMEZONE OFFSET
+          $A.localizationService.UTCToWallTime(new Date(fieldVal), $A.get('$Locale.timezone'), function (offSetDateTime) {
+            fieldVal = offSetDateTime;
+          });
           // FIXME: No hardcoded time format.
-          var dateTimeFormat = dateFormat + ' h:mm a';
-
-          fieldVal = $A.localizationService.formatDateTime(
-            fieldVal,
-            dateTimeFormat
-          );
+          fieldVal = $A.localizationService.formatDateTimeUTC(
+            fieldVal, formats[0] + ' ' + formats[1]);
         } else if (dataType === 'CURRENCY') {
           var isMultiCurrency = component.get('v.isMultiCurrency');
           var currencyCode = locale.currencyCode;
@@ -421,7 +428,7 @@
             fieldVal += ' ' + address.country;
           }
         } else if (dataType === 'PERCENT') {
-          var percentSymbol = fieldMap.percentFormat === true ? ' %' : '';
+          var percentSymbol = (fieldMap.format === true || fieldMap.format === 'true') ? '%' : '';
           fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces) + percentSymbol;
         } else if (dataType === 'DOUBLE') {
           fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces);
@@ -444,22 +451,21 @@
   setCurrencyFormat: function (getValue, getFieldData, getCurrencyCode) {
     var helper = this;
     var sampleCurrency = 0;
-    var currencyFormat = getFieldData.currencyFormat;
+    var currencyFormat = getFieldData.format;
     if (currencyFormat.indexOf('NoDecimals') !== -1) {
       getValue = $A.localizationService.formatNumber(Math.round(getValue));
     } else {
       getValue = helper.formatNumber(getValue, getFieldData.decimalPlaces);
     }
     if (currencyFormat.indexOf('noSymbolNoCode') !== -1) return getValue;
-      // Using toLocalString() to get the currency symbol
-      var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {
-        style: 'currency', currency: getCurrencyCode,
-        currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      });
-      return getCurrencySymbol.replace('0', getValue);
-    
+    // Using toLocalString() to get the currency symbol
+    var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {
+      style: 'currency', currency: getCurrencyCode,
+      currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+    return getCurrencySymbol.replace('0', getValue);
   },
 
   formatNumber: function (getNumberVal, decimalScale) {
