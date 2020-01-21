@@ -7791,7 +7791,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>percentCheckboxonPreview</shortDescription>
-		<value>Include percentage giyph (%)</value>
+		<value>Include percentage symbol (%)</value>
 	</labels>
 	<labels>
 		<fullName>percentageFormatPreviewText</fullName>

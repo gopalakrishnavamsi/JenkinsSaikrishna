@@ -72,7 +72,7 @@
     } else {
       component.set(
         'v.formattedPercent',
-        $A.localizationService.formatNumber(defaultValue, $A.get('$Locale').numberFormat) + ' %');
+        $A.localizationService.formatNumber(defaultValue, $A.get('$Locale').numberFormat) + '%');
     }
   },
 
