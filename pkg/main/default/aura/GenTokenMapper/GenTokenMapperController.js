@@ -20,7 +20,8 @@
         allFields.push({
           fields: [{
             label: $A.get('$Label.c.CurrentDate'),
-            name: 'CurrentDate'
+            name: 'CurrentDate',
+            type: 'DATE'
           }],
           label: ''
         });

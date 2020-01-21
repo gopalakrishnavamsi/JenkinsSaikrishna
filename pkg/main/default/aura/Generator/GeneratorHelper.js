@@ -360,7 +360,10 @@
           dateNode.appendChild(dateContent);
           objRoot.appendChild(dateNode);
         }
-
+        
+        if (apiName === 'CurrentDate') {
+          fieldVal = new Date();
+        }
         if ($A.util.isEmpty(fieldVal)) {
           fieldVal = '';
         } else if (dataType === 'DATE') {
@@ -432,9 +435,6 @@
           fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces) + percentSymbol;
         } else if (dataType === 'DOUBLE') {
           fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces);
-        }
-        if (apiName === 'CurrentDate') {
-          fieldVal = $A.localizationService.formatDate(new Date(), locale.dateformat);
         }
         //ignore object fields that aren't type Address
         if (typeof fieldVal !== 'object') {
