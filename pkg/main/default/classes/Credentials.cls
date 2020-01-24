@@ -225,7 +225,14 @@ public with sharing class Credentials {
 	}
 
 	@TestVisible
-	private static Credentials getInstance(final Id userId, final Boolean validate) {
+	private static Credentials getInstance(
+		final Id userId,
+		final Boolean validate) {
+
+		// Throw an exception if a substitute user is getting API credentials for another user and this is not enabled
+		// by DocuSign via FMA.
+		Permissions.verifyNotImpersonating();
+
 		Credentials result = null;
 		if (userId == UserInfo.getUserId()) { // 99% case user needs stored DS creds for API calls
 			if (self == null) {

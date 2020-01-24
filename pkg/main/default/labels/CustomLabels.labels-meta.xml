@@ -8816,4 +8816,11 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Invalid redirect URL</shortDescription>
 		<value>Invalid redirect URL.</value>
 	</labels>
+	<labels>
+		<fullName>UnauthorizedImpersonation</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized impersonation</shortDescription>
+		<value>Impersonated users are not authorized to perform this action.</value>
+	</labels>
 </CustomLabels>

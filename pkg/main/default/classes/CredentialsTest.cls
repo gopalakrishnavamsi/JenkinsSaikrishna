@@ -2,6 +2,21 @@
 private class CredentialsTest {
 
 	@IsTest
+	static void test_getInstance_unauthorized() {
+		Permissions.isImpersonating = true;
+
+		Test.startTest();
+		try {
+			Credentials.getInstance();
+			throw new AssertException('Expected failure');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(UnauthorizedException.AccessRequirement.OriginalUser, ex.requirement);
+			System.assertEquals(Label.UnauthorizedImpersonation, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_getInstance_default() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			UserMock.createAccountConfiguration(UUID.randomUUID());

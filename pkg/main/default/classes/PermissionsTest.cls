@@ -2184,4 +2184,46 @@ private class PermissionsTest {
 		System.assert(!Permissions.isRoleSuperseded(Product.CLM, ClmProduct.ROLE_USER, ClmProduct.ROLE_VIEWER));
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_isImpersonating() {
+		Test.startTest();
+		Permissions.isImpersonating = true;
+		System.assertEquals(true, Permissions.isImpersonating());
+		Permissions.isImpersonating = false;
+		System.assertEquals(false, Permissions.isImpersonating());
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_isImpersonationAllowed() {
+		Boolean expected;
+		try {
+			expected = FeatureManagement.checkPackageBooleanValue('AllowImpersonation');
+		} catch (Exception ex) {
+			expected = false;
+		}
+
+		Test.startTest();
+		System.assertEquals(expected, Permissions.isImpersonationAllowed());
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_verifyNotImpersonating() {
+		Permissions.isImpersonating = true;
+
+		Test.startTest();
+		Permissions.allowImpersonation = true;
+		Permissions.verifyNotImpersonating();
+		Permissions.allowImpersonation = false;
+		try {
+			Permissions.verifyNotImpersonating();
+			throw new AssertException('Expected failure');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.UnauthorizedImpersonation, ex.getMessage());
+		}
+
+		Test.stopTest();
+	}
 }

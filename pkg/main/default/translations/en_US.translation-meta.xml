@@ -4573,6 +4573,10 @@
 		<label>Invalid redirect URL.</label>
 		<name>InvalidRedirectUrl</name>
 	</customLabels>
+	<customLabels>
+		<label>Impersonated users are not authorized to perform this action.</label>
+		<name>UnauthorizedImpersonation</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

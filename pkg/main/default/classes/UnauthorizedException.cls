@@ -28,6 +28,7 @@ global class UnauthorizedException extends Exception {
 	 *     <li><code>SalesforceAdministrator</code>: Must be a Salesforce administrator.</li>
 	 *     <li><code>EnvelopeOwner</code>: Must be the envelope owner.</li>
 	 *     <li><code>ConfigureAccount</code>: DocuSign account is not configured in Salesforce.</li>
+	 *     <li><code>OriginalUser</code>: Cannot impersonate user.
 	 * </ul>
 	 */
 	global enum AccessRequirement {
@@ -43,7 +44,8 @@ global class UnauthorizedException extends Exception {
 		SalesforceAdministrator,
 		EnvelopeOwner,
 		ConfigureAccount,
-		SecurityPermission
+		SecurityPermission,
+		OriginalUser
 	}
 
 	/**
@@ -211,14 +213,25 @@ global class UnauthorizedException extends Exception {
 	}
 
 	/**
- 	* Factory method to construct an exception when Salesforce object or Field has missing security permission
- 	*
- 	* @return The new exception.
- 	*/
+ 	 * Factory method to construct an exception when Salesforce object or field has missing security permission.
+ 	 *
+ 	 * @return The new exception.
+ 	 */
 	public static UnauthorizedException missingSecurityPermission(final String message) {
 		final UnauthorizedException ex = new UnauthorizedException(message);
 		ex.requirement = AccessRequirement.SecurityPermission;
 		return ex;
 	}
 
+	/**
+	 * Factory method to construct an exception when the current user is a substitute user.
+	 *
+	 * @return The new exception.
+	 */
+	public static UnauthorizedException impersonation() {
+		UnauthorizedException ex = new UnauthorizedException(Label.UnauthorizedImpersonation);
+		ex.userId = UserInfo.getUserId();
+		ex.requirement = AccessRequirement.OriginalUser;
+		return ex;
+	}
 }

@@ -168,4 +168,16 @@ private class UnauthorizedExceptionTest {
 			'Unit', 'Test2 (NotFound)'
 		}), ex4.getMessage());
 	}
+
+	@IsTest
+	static void test_impersonation() {
+		Test.startTest();
+		UnauthorizedException result = UnauthorizedException.impersonation();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(Label.UnauthorizedImpersonation, result.getMessage());
+		System.assertEquals(UserInfo.getUserId(), result.userId);
+		System.assertEquals(UnauthorizedException.AccessRequirement.OriginalUser, result.requirement);
+	}
 }

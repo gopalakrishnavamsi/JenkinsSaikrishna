@@ -18,6 +18,10 @@ public with sharing class Permissions {
 	private static Id dsClmAdministratorPermissionSetId = null;
 	private static Id dsClmUserPermissionSetId = null;
 	private static Id dsClmViewerPermissionSetId = null;
+	@TestVisible
+	private static Boolean allowImpersonation = null;
+	@TestVisible
+	private static Boolean isImpersonating = null;
 
 	// Permission set names
 	@TestVisible
@@ -1448,5 +1452,51 @@ public with sharing class Permissions {
 
 	public static Map<Id, Map<String, String>> getUserRoles(final Set<Id> userIds) {
 		return DB.queryUserRoles(userIds);
+	}
+
+	public static Boolean isImpersonating() {
+		if (Test.isRunningTest()) {
+			// Auth.SessionManagement.getCurrentSession() fails in unit tests in some cases
+			isImpersonating = isImpersonating == null ? false : isImpersonating;
+		} else if (isImpersonating == null) {
+			Map<String, String> session = Auth.SessionManagement.getCurrentSession();
+			isImpersonating = session.get('SessionType') == 'SubstituteUser';
+			if (!isImpersonating) { // Fallback to parent session
+				String parentSessionId = session.get('ParentId');
+				if (String.isNotBlank(parentSessionId)) {
+					AuthSession parentSession = (AuthSession)Collection.head([
+						SELECT SessionType
+						FROM AuthSession
+						WHERE Id = :parentSessionId
+						LIMIT 1
+					]);
+					isImpersonating = parentSession != null && parentSession.SessionType == 'SubstituteUser';
+				}
+			}
+		}
+		return isImpersonating;
+	}
+
+	public static Boolean isImpersonationAllowed() {
+		if (allowImpersonation == null) {
+			try {
+				allowImpersonation = FeatureManagement.checkPackageBooleanValue('AllowImpersonation');
+			} catch (Exception ex) {
+				LoggerService.getInstance().exception(ex,
+					'FMA AllowImpersonation value not found. Defaulting to false');
+				allowImpersonation = false;
+			}
+		}
+		return allowImpersonation;
+	}
+
+	// Example:
+	// User A grants login access to User B. User B logs into Salesforce as User A and tries to perform a DocuSign API
+	// action such as createEnvelope. If the impersonation FMA setting is false, an UnauthorizedException is thrown here
+	// and User B is prohibited from taking any action that requires API access.
+	public static void verifyNotImpersonating() {
+		if (isImpersonating() && !isImpersonationAllowed()) {
+			throw UnauthorizedException.impersonation();
+		}
 	}
 }
