@@ -15,9 +15,30 @@ public class LoginInformation {
 	 * consent.
 	 */
 	public static final String STATUS_FAILURE = 'Failure';
+	/**
+	 * No login.
+	 */
+	public static final String TYPE_NONE = 'NONE';
+	/**
+	 * Initial admin or setup user login.
+	 */
+	public static final String TYPE_SETUP = 'SETUP';
+	/**
+	 * End user-initiated login.
+	 */
+	public static final String TYPE_USER = 'USER';
+	/**
+	 * Developer-initiated login.
+	 */
+	public static final String TYPE_DEVELOPER = 'DEVELOPER';
 
 	/**
-	 * The Salesforce OAuth event target.
+	 * The login type.
+	 */
+	@AuraEnabled
+	public String type { get; private set; }
+	/**
+	 * The Salesforce OAuth event target or redirect URL.
 	 */
 	@AuraEnabled
 	public String target { get; private set; }
@@ -57,10 +78,12 @@ public class LoginInformation {
 	public Boolean isPlatformAuthorized { get; private set; }
 
 	public LoginInformation(
+		final String type,
 		final String status,
 		final String message,
 		final String target) {
 
+		this.type = type;
 		this.status = status;
 		this.message = message;
 		this.target = target;
@@ -73,6 +96,7 @@ public class LoginInformation {
 		final Boolean isPlatformAuthorized,
 		final List<LoginInformation.Account> accounts) {
 
+		this.type = TYPE_NONE;
 		this.id = id;
 		this.name = name;
 		this.email = email;

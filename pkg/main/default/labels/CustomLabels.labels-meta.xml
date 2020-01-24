@@ -8809,4 +8809,11 @@
 configuration here. You can&#39;t migrate your custom buttons, so you&#39;ll have to recreate
 them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</value>
 	</labels>
+	<labels>
+		<fullName>InvalidRedirectUrl</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid redirect URL</shortDescription>
+		<value>Invalid redirect URL.</value>
+	</labels>
 </CustomLabels>

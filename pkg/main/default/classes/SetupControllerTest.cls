@@ -87,7 +87,7 @@ private class SetupControllerTest {
 				SetupController.beginOAuth(null, null, null);
 				throw new AssertException('Expected beginOAuth to fail');
 			} catch (DocuSignException ex) {
-				System.assertEquals(AuthService.DomainErrorPayload, ex.getMessage());
+				System.assertEquals(AuthService.DOMAIN_ERROR_PAYLOAD, ex.getMessage());
 			}
 			try {
 				SetupController.beginOAuth(TestUtils.getOrigin(), '', null);

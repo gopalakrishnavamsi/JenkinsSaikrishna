@@ -72,7 +72,7 @@ public with sharing class AuthController {
 	@AuraEnabled
 	public static String beginOAuth(final String target) {
 		try {
-			return AuthService.getLoginUrl(target).toExternalForm().replace('+', '%20');
+			return AuthService.getLoginUrl(LoginInformation.TYPE_USER, target).toExternalForm().replace('+', '%20');
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to initiate user OAuth flow.');
 		}

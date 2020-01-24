@@ -1,5 +1,11 @@
-public with sharing class AuthService {
-	public static final String DomainErrorPayload = String.valueOf(JSON.serialize(new Map<String, String> { 'message' => Label.InvalidTarget, 'footerText' => Label.MyDomainHelpMessage }));
+global with sharing class AuthService {
+
+	@TestVisible
+	private static final String DOMAIN_ERROR_PAYLOAD = JSON.serialize(
+		new Map<String, String> {
+			'message' => Label.InvalidTarget,
+			'footerText' => Label.MyDomainHelpMessage
+		});
 
 	@TestVisible
 	private class APIUser {
@@ -590,28 +596,46 @@ public with sharing class AuthService {
 	}
 
 	@TestVisible
+	private static Boolean isValidType(final String type) {
+		return type == LoginInformation.TYPE_USER
+			|| type == LoginInformation.TYPE_DEVELOPER
+			|| type == LoginInformation.TYPE_SETUP;
+	}
+
+	@TestVisible
+	private static Boolean isValidTarget(
+		final String type,
+		final String target) {
+
+		return String.isNotBlank(target)
+			&& (type == LoginInformation.TYPE_DEVELOPER ? target.startsWith('/') : Salesforce.isValidTarget(target));
+	}
+
+	@TestVisible
 	private class State {
+
+		public String type { get; private set; }
 		public String target { get; private set; }
 		public DocuSign.Environment environment { get; private set; }
 		public Url baseUrl { get; private set; }
-		public Boolean setup { get; private set; }
 		public Boolean isValid {
 			get {
-				return Salesforce.isValidTarget(target)
-					&& DocuSign.isValidEnvironment(environment, baseUrl);
+				return isValidType(this.type)
+					&& isValidTarget(this.type, this.target)
+					&& DocuSign.isValidEnvironment(this.environment, this.baseUrl);
 			}
 		}
 
 		public State(
+			final String type,
 			final String target,
 			final DocuSign.Environment environment,
-			final Url baseUrl,
-			final Boolean setup) {
+			final Url baseUrl) {
 
+			this.type = type;
 			this.target = target;
 			this.environment = environment;
 			this.baseUrl = baseUrl;
-			this.setup = setup;
 		}
 	}
 
@@ -634,7 +658,7 @@ public with sharing class AuthService {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
-		if (!Salesforce.isValidTarget(target)) throw new DocuSignException(DomainErrorPayload);
+		if (!Salesforce.isValidTarget(target)) throw new DocuSignException(DOMAIN_ERROR_PAYLOAD);
 		if (!DocuSign.isValidEnvironment(environment, otherUrl)) throw new DocuSignException(Label.InvalidEnvironment);
 
 		// 1) Retrieve root client credentials.
@@ -648,7 +672,11 @@ public with sharing class AuthService {
 			'client_id' => rc.clientId,
 			'redirect_uri' => 'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
 				+ '/apex/' + Application.namespacePrefix + 'completeoauth',
-			'state' => encodeState(generateNonce(), new State(target, rc.environment, rc.accountBaseUrl, true))
+			'state' => encodeState(generateNonce(), new State(
+				LoginInformation.TYPE_SETUP,
+				target,
+				rc.environment,
+				rc.accountBaseUrl))
 		});
 		return new Url(pg.getUrl());
 	}
@@ -664,14 +692,25 @@ public with sharing class AuthService {
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
-	 * @param target Salesforce location where OAuth events will be handled.
+	 * @param type The login type requested: <code>USER</code> or <code>DEVELOPER</code>.
+	 * @param target Salesforce location where OAuth events will be handled. If <code>type</code> is
+	 * <code>DEVELOPER</code>, this must be a local path to a Salesforce page.
 	 *
 	 * @return The DocuSign login URL. The user should be redirected here to complete authorization.
 	 */
-	public static Url getLoginUrl(final String target) {
+	public static Url getLoginUrl(
+		final String type,
+		final String target) {
+
 		Permissions.verifyIsDocuSignUser();
 
-		if (!Salesforce.isValidTarget(target)) throw new DocuSignException(DomainErrorPayload);
+		if (type == LoginInformation.TYPE_USER) {
+			if (!Salesforce.isValidTarget(target)) throw new DocuSignException(DOMAIN_ERROR_PAYLOAD);
+		} else if (type == LoginInformation.TYPE_DEVELOPER) {
+			if (String.isBlank(target) || !target.startsWith('/')) throw new DocuSignException(Label.InvalidRedirectUrl);
+		} else { // Only user (OOB) and developer (Apex Toolkit) logins are acceptable
+			throw new DocuSignException(Label.InvalidType);
+		}
 
 		Credentials c = Credentials.getInstance();
 		PageReference pg = new PageReference(new Url(c.environment.accountBaseUrl, '/oauth/auth').toExternalForm());
@@ -681,12 +720,57 @@ public with sharing class AuthService {
 			'client_id' => c.client.id,
 			'redirect_uri' => getOAuthRedirectUrl().toExternalForm(),
 			'state' => encodeState(generateNonce(), new State(
+				type,
 				target,
 				c.environment.environment,
-				c.environment.accountBaseUrl,
-				false))
+				c.environment.accountBaseUrl))
 		});
 		return new Url(pg.getUrl());
+	}
+
+	/**
+	 * Generates a DocuSign login URL where a user can grant consent to this application. The calling application should
+	 * redirect the user to this URL. Once login is complete, the user will be redirected to the path specified by
+	 * <code>redirectTo</code>.
+	 * <p>
+	 * The <code>redirectTo</code> parameter must be a path to a page in the current Salesforce org. The org domain base
+	 * URL will be prepended to this. Upon redirect, two additional parameters are appended:
+	 * <ul>
+	 *     <li><code>dfsle__status</code>: either <code>Success</code> or <code>Failure</code>.</li>
+	 * 	   <li><code>dfsle__message</code>: additional details in the case of failures.
+	 * </ul>
+	 * <p>
+	 * The resulting URL is valid for only a single use by the current user.
+	 * <p>
+	 * Callers must be assigned the <code>DocuSign User</code> permission set or better.
+	 * <p>
+	 * Example:
+	 * <pre>
+	 * Url loginUrl = dfsle.AuthService.getLoginUrl('/apex/MyReturnPage');
+	 *
+	 * // Redirect the user to loginUrl. There they can authenticate with DocuSign and grant consent to the application.
+	 *
+	 * // After successful authorization, the user is redirected to
+	 * // https://your-domain.my.salesforce.com/apex/MyReturnPage?dfsle__status=Success.
+	 * </pre>
+	 *
+	 * @param redirectTo Where to redirect the user to after login. This must be a local path to a page that will
+	 * handle the authorization result.
+	 *
+	 * @return The DocuSign login URL.
+	 */
+	global static Url getLoginUrl(final String redirectTo) {
+		Permissions.verifyIsDocuSignUser();
+
+		if (String.isBlank(redirectTo)) throw new DocuSignException(Label.InvalidRedirectUrl);
+
+		// Prevent double-slash in case browser allows it as a valid external redirect
+		String target = redirectTo;
+		if (target.startsWith('/')) {
+			target = target.replaceFirst('/+', '');
+		}
+
+		return getLoginUrl(LoginInformation.TYPE_DEVELOPER, '/' + target); // Ensure local redirect only
 	}
 
 	@TestVisible
@@ -697,10 +781,10 @@ public with sharing class AuthService {
 		if (state == null || !state.isValid) throw new DocuSignException(Label.InvalidAuthState);
 
 		return SecureUtils.encrypt(nonce
+			+ '|' + state.type
 			+ '|' + state.target
 			+ '|' + state.environment.name()
-			+ '|' + state.baseUrl.toExternalForm()
-			+ '|' + state.setup);
+			+ '|' + state.baseUrl.toExternalForm());
 	}
 
 	@TestVisible
@@ -736,39 +820,43 @@ public with sharing class AuthService {
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 5) Verify Salesforce target.
-		String target = toks[1];
-		if (!Salesforce.isValidTarget(target)) {
+		// 5) Parse type
+		String type = toks[1];
+		if (!isValidType(type)) {
+			LOG.error('Invalid login type: ' + type);
+			throw new UnauthorizedException(Label.InvalidAuthState);
+		}
+
+		// 6) Verify Salesforce event target or redirect URL.
+		String target = toks[2];
+		if (!isValidTarget(type, target)) {
 			LOG.error('Invalid Salesforce target: ' + target);
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 6) Verify DocuSign environment
-		DocuSign.Environment environment = DocuSign.parseEnvironment(toks[2]);
+		// 7) Verify DocuSign environment
+		DocuSign.Environment environment = DocuSign.parseEnvironment(toks[3]);
 		if (environment == null || environment == DocuSign.Environment.Invalid) {
-			LOG.error('Invalid DocuSign environment: ' + toks[2]);
+			LOG.error('Invalid DocuSign environment: ' + toks[3]);
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 7) Verify URL format
+		// 8) Verify DocuSign URL format
 		Url baseUrl;
 		try {
-			baseUrl = new Url(toks[3]);
+			baseUrl = new Url(toks[4]);
 		} catch (Exception ex) {
-			LOG.exception(ex, 'Invalid base URL: ' + toks[3]);
+			LOG.exception(ex, 'Invalid base URL: ' + toks[4]);
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 8) Verify whitelisted DocuSign URL
+		// 9) Verify whitelisted DocuSign URL
 		if (!DocuSign.isValidUrl(baseUrl)) {
 			LOG.error('Invalid DocuSign base URL: ' + baseUrl.toExternalForm());
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 9) Parse setup boolean
-		Boolean setup = Boolean.valueOf(toks[4]);
-
-		return new State(target, environment, baseUrl, setup);
+		return new State(type, target, environment, baseUrl);
 	}
 
 	@TestVisible
@@ -1025,7 +1113,7 @@ public with sharing class AuthService {
 
 		LoginInformation result = null;
 		State s = decodeState(state, UserSettings__c.getInstance().Nonce__c);
-		if (s.setup) {
+		if (s.type == LoginInformation.TYPE_SETUP) {
 			Permissions.verifyIsDocuSignAdministrator();
 			result = saveSetupCredentials(authorizationCode, s);
 		} else {
@@ -1033,7 +1121,7 @@ public with sharing class AuthService {
 			saveUserCredentials(authorizationCode, s.baseUrl);
 		}
 		return result == null
-			? new LoginInformation(LoginInformation.STATUS_SUCCESS, null, s.target)
+			? new LoginInformation(s.type, LoginInformation.STATUS_SUCCESS, null, s.target)
 			: result.withTarget(s.target);
 	}
 
@@ -1061,6 +1149,7 @@ public with sharing class AuthService {
 		try {
 			State s = decodeState(state, us.Nonce__c);
 			result = new LoginInformation(
+				s.type,
 				LoginInformation.STATUS_FAILURE,
 				errorCode == 'consent_required' || errorCode == 'access_denied' || String.isBlank(errorMessage)
 					? Label.ConsentRequired : errorMessage,
@@ -1246,7 +1335,7 @@ public with sharing class AuthService {
 		}
 	}
 
-	@Future(Callout=true)
+	@Future(Callout = true)
 	public static void setRootLevelFolderSecurity() {
 		//Check if Negotiate is enabled on the account.
 		//If Negotiate is not enabled then do not make this API call.

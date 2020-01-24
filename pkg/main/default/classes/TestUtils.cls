@@ -381,9 +381,9 @@ global class TestUtils {
 	public static String generateState(final Boolean setup) {
 		generateKey();
 		return SecureUtils.encrypt(generateNonce()
+			+ '|' + (setup ? LoginInformation.TYPE_SETUP : LoginInformation.TYPE_USER)
 			+ '|' + getOrigin()
-			+ '|Other|https://unit.test.docusign.net/|'
-			+ String.valueOf(setup));
+			+ '|Other|https://unit.test.docusign.net/');
 	}
 
 	public static GenTemplate__c createGenTemplate(final SObjectType sourceType) {

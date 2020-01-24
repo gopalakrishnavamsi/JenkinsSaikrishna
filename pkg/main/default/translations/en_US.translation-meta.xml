@@ -4569,6 +4569,10 @@
 		<label>Save time by migrating your DocuSign Gen for Salesforce users and template configuration here. You can&#39;t migrate your custom buttons, so you&#39;ll have to recreate them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Learn more.&lt;/a&gt;</label>
 		<name>MigrationHelpText</name>
 	</customLabels>
+	<customLabels>
+		<label>Invalid redirect URL.</label>
+		<name>InvalidRedirectUrl</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
