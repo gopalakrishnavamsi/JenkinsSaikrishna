@@ -4,24 +4,28 @@
 
     <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
 
+    <aura:attribute name="files" type="Id[]" default="[]"/>
+    <aura:attribute name="placeholderRecipients" type="Object"/>
+    <aura:attribute name="sendNow" type="Boolean" default="false"/>
+    <aura:attribute name="lock" type="Boolean" default="false"/>
+
     <aura:attribute name="filesSelected" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="selectedFileTitles" type="String" access="private"/>
     <aura:attribute name="disableNext" type="Boolean" default="{!true}" access="private"/>
     <aura:attribute name="showAdvancedOptions" type="Boolean" access="private"/>
-    <aura:attribute name="envelope" type="Object"/>
+    <aura:attribute name="envelope" type="Object" access="private"/>
     <aura:attribute name="defaultEmailSubject" type="String" access="private"/>
     <aura:attribute name="defaultEmailMessage" type="String" access="private"/>
     <aura:attribute name="documents" type="Object[]" access="private"/>
     <aura:attribute name="availableTemplates" type="Object[]" access="private"/>
     <aura:attribute name="template" type="Object" access="private"/>
-    <aura:attribute name="recipients" type="Object[]"/>
+    <aura:attribute name="recipients" type="Object[]" access="private"/>
     <aura:attribute name="defaultRoles" type="Object[]" access="private"/>
-    <aura:attribute name="emailLocalizations" type="Object[]"/>
+    <aura:attribute name="emailLocalizations" type="Object[]" access="private"/>
     <aura:attribute name="expiresOn" type="Date" access="private"/>
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>
     <aura:attribute name="activeStep" type="Integer" default="{!0}" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="files" type="String"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
     <aura:attribute name="isESignatureEnabled" type="Boolean" default="false" access="private"/>
@@ -78,10 +82,12 @@
                         <!-- Files -->
                         <div class="{!if(v.activeStep != 0, 'slds-hide')}">
                             <h3 class="slds-text-heading_medium slds-m-bottom_x-small">{!$Label.c.Files}</h3>
-                            <div class="slds-m-bottom_small">
-                                <c:FileUploader recordId="{!v.recordId}"
-                                                visualforce="{!v.visualforce}"/>
-                            </div>
+                            <aura:if isTrue="{!not(v.lock)}">
+                                <div class="slds-m-bottom_small">
+                                    <c:FileUploader recordId="{!v.recordId}"
+                                                    visualforce="{!v.visualforce}"/>
+                                </div>
+                            </aura:if>
 
                             <!-- Files List -->
                             <ul class="slds-has-dividers_bottom-space slds-border_top">
@@ -98,10 +104,14 @@
                                     <li class="slds-item slds-p-vertical_small">
                                         <article class="slds-tile slds-media">
                                             <div class="slds-media__figure">
-                                                <lightning:input aura:id="file-checkbox" name="{!doc.name}"
-                                                                 type="checkbox" checked="{!doc.selected}"
-                                                                 value="{!documentIndex}" label="{!$Label.c.Select}"
+                                                <lightning:input aura:id="file-checkbox"
+                                                                 name="{!doc.name}"
+                                                                 type="checkbox"
+                                                                 label="{!$Label.c.Select}"
+                                                                 checked="{!doc.selected}"
+                                                                 value="{!documentIndex}"
                                                                  class="ds-no-label"
+                                                                 disabled="{!v.lock}"
                                                                  onchange="{!c.handleFileSelected}"/>
                                             </div>
                                             <div class="slds-media__figure">
@@ -174,7 +184,7 @@
 
                         <!-- Recipients -->
                         <div class="{!if(v.activeStep != 1, 'slds-hide')}">
-                            <aura:if isTrue="{!v.filesSelected}">
+                            <aura:if isTrue="{!and(not(v.lock), v.filesSelected)}">
                                 <h3 class="slds-text-heading_medium">{!$Label.c.Recipients}</h3>
                                 <div class="slds-box slds-box_x-small slds-theme_shade slds-m-top_small">
                                     <h4 class="slds-text-heading_label slds-truncate"
@@ -214,6 +224,26 @@
                                                       onclick="{!c.addRecipient}"/>
                                 </div>
                             </aura:if>
+                            <aura:if isTrue="{!not(empty(v.placeholderRecipients))}">
+                                <h3 class="{!'slds-text-heading_medium' + if(v.filesSelected, ' slds-m-top_large')}">{!$Label.c.TemplateRoles}</h3>
+                                <div class="ds-template-roles slds-box slds-box_x-small slds-theme_shade slds-m-top_small">
+                                    <div class="ds-template-roles__title slds-grid slds-gutters_xx-small">
+                                        <h4 class="slds-col slds-text-heading_label">{!v.placeholderRecipients.templateName}</h4>
+                                    </div>
+                                    <aura:iteration items="{!v.recipients}" var="recipient">
+                                        <div class="ds-template-roles__role slds-m-top_small slds-is-relative">
+                                            <c:Recipient
+                                                    recipient="{!recipient}"
+                                                    sourceId="{#recipient.source.id}"
+                                                    emailLocalizations="{!v.emailLocalizations}"
+                                                    onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
+                                                    onEditPrivateMessage="{!c.handleEditPrivateMessage}"
+                                                    onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
+                                            />
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                            </aura:if>
                             <aura:if isTrue="{!not(empty(v.template))}">
                                 <h3 class="{!'slds-text-heading_medium' + if(v.filesSelected, ' slds-m-top_large')}">{!$Label.c.TemplateRoles}</h3>
                                 <div class="ds-template-roles slds-box slds-box_x-small slds-theme_shade slds-m-top_small">
@@ -230,7 +260,7 @@
                                             <!-- Empty State -->
                                         </aura:if>
                                     </div>
-                                    <aura:iteration items="{!v.recipients}" var="recipient" indexVar="index">
+                                    <aura:iteration items="{!v.recipients}" var="recipient">
                                         <aura:if isTrue="{!recipient.templateId == v.template.id.value}">
                                             <div class="ds-template-roles__role slds-m-top_small slds-is-relative">
                                                 <c:Recipient
@@ -378,7 +408,7 @@
                         </div>
                         <div class="slds-col slds-no-flex">
                             <lightning:button variant="brand" disabled="{!or(v.disableNext, v.loading)}"
-                                              label="{!if(v.activeStep == 2, $Label.c.ContinueAndTag, $Label.c.Next)}"
+                                              label="{!if(v.activeStep == 2, $Label.c.Send, $Label.c.Next)}"
                                               onclick="{!if(v.activeStep == 2, c.continueAndTag, c.goNext)}"/>
                         </div>
                     </div>

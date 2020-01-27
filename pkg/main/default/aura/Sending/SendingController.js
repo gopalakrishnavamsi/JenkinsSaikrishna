@@ -1,17 +1,17 @@
 ({
   onChangeIsAuthorized: function (component, event, helper) {
-    if (component.get('v.isAuthorized')) {
-      var products = component.get('v.products');
-      if (!$A.util.isUndefinedOrNull(products)) {
-        products.forEach(function (product) {
-          if (product.name === 'e_sign') {
-            component.set('v.isESignatureEnabled', product.status === 'active');
-            component.set('v.isESignatureTrialExpired', product.isExpired);
-          }
-        });
+      if (component.get('v.isAuthorized')) {
+        var products = component.get('v.products');
+        if (!$A.util.isUndefinedOrNull(products)) {
+          products.forEach(function (product) {
+            if (product.name === 'e_sign') {
+              component.set('v.isESignatureEnabled', product.status === 'active');
+              component.set('v.isESignatureTrialExpired', product.isExpired);
+            }
+          });
+        }
       }
-    }
-    helper.createEnvelope(component, component.get('v.recordId'));
+      helper.createEnvelope(component, component.get('v.recordId'));
   },
 
   setExpirationDate: function (component, event, helper) {
@@ -29,7 +29,6 @@
     var envelope = component.get('v.envelope');
     envelope.documents = helper.getDocumentsForSending(documents, component.get('v.template'));
     envelope.recipients = helper.getRecipientsForSending(component.get('v.recipients'), hasDocuments, component.get('v.defaultRoles'));
-
     helper.tagEnvelope(component, envelope);
   },
 
@@ -92,13 +91,16 @@
       var selectedFileTitles = '';
 
       fileCheckboxes.forEach(function (file) {
-        if (typeof (file) !== 'undefined' && file.get('v.checked')) {
+        if (typeof(file) !== 'undefined' && file.get('v.checked')) {
           selectedFileTitles += ', ' + documents[file.get('v.value')].name;
         }
       });
       selectedFileTitles = selectedFileTitles.slice(2);
       component.set('v.selectedFileTitles', selectedFileTitles);
-      component.set('v.recipients', helper.getRecipients(component.get('v.recipients'), component.get('v.template')));
+      component.set('v.recipients', helper.getRecipients(
+        component.get('v.recipients'),
+        component.get('v.placeholderRecipients'),
+        component.get('v.template')));
     }
   },
 

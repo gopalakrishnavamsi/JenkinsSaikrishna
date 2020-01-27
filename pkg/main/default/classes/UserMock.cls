@@ -163,6 +163,20 @@ global class UserMock {
 		return u;
 	}
 
+	public static User createDocuSignGeneratorAdminUser(final Boolean createAccountSettings) {
+		User u = createDocuSignAdministrator(UUID.randomUUID());
+		if (createAccountSettings) {
+			System.runAs(u) {
+				createAccountConfiguration(UUID.randomUUID());
+			}
+		}
+		System.runAs(getAdministrator()) {
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { u.Id });
+		}
+		return u;
+	}
+
 	/**
 	 * Creates a user and assigns the <code>DocuSign Negotiator</code> permission set for unit tests. This may be used
 	 * for DocuSign Negotiate methods that negotiate documents.
@@ -469,6 +483,10 @@ global class UserMock {
 			EmailMessage__c = 'This email contains a document');
 
 		createdAccountConfiguration = true;
+
+		OnlineEditorRoot__c onEditorRootSettings = OnlineEditorRoot__c.getOrgDefaults();
+		onEditorRootSettings.FolderId__c = UUID.randomUUID().toString();
+		insert onEditorRootSettings;
 
 		return accountId;
 	}

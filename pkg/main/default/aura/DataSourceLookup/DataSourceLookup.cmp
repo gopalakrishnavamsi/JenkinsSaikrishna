@@ -1,0 +1,111 @@
+<aura:component description="DataSourceLookup" controller="DataSourceLookupController">
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
+
+    <aura:attribute name="errMsg" type="String"/>
+    <aura:attribute name="config" type="Object" access="private"/>
+    <aura:attribute name="commonObjectsOption" type="String[]" access="private"/>
+    <aura:attribute name="otherObjectsOption" type="String[]" access="private"/>
+
+    <aura:attribute name="openDropDown" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="template" type="Object"/>
+    <aura:attribute name="inputValue" type="String" access="private"/>
+    <aura:attribute name="iconName" type="String" access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="combobox-id-21"
+               style="{! empty(v.label) ? 'display:hidden;' : 'display:block;'}">
+            <abbr class="slds-required" title="required">*</abbr>{!$Label.c.SelectDataSource}
+        </label>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div class="{! v.openDropDown ? 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open' : 'slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click'}"
+                     aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                    <div class="{!'slds-combobox__form-element slds-input-has-icon '+if(empty(v.iconName), 'slds-input-has-icon_right' , 'slds-input-has-icon_left-right')}"
+                         role="none">
+                         <span class="{!if(!empty(v.iconName),'slds-icon_container slds-input__icon slds-input__icon_left','slds-hide')}">
+                             <lightning:icon iconName="{!v.iconName}" size="x-small"/>
+                         </span>
+                        <input type="text"
+                               class="slds-input slds-combobox__input slds-has-focus slds-combobox__input-value"
+                               id="combobox-id-21" aria-autocomplete="list" aria-controls="listbox-id-11"
+                               autoComplete="off" onkeyup="{!c.searchHandler}" role="textbox" placeholder="Search..."
+                               value="{!v.inputValue}" onclick="{!c.showOptions}"/>
+                        <aura:if isTrue="{!empty(v.template.sourceObject)}">
+                            <span
+                                    class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                <lightning:icon iconName="utility:search" size="x-small"/>
+                            </span>
+                            <aura:set attribute="else">
+                                <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                        title="Clear the text input" onclick="{!c.clearOption}">
+                                    <lightning:icon iconName="utility:clear" size="x-small"/>
+                                </button>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    <div id="listbox-id-11" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                         role="listbox">
+                        <ul class="slds-listbox slds-listbox_vertical" role="group" aria-label="{!$Label.c.MostCommonlyUsed}">
+                            <li role="presentation" class="slds-listbox__item">
+                                <div id="option0"
+                                     class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                     role="presentation">
+                                    <div class="slds-listbox__option-header slds-text-title_caps" role="presentation">
+                                        {!$Label.c.MostCommonlyUsed}
+                                    </div>
+                                </div>
+                            </li>
+                            <aura:iteration items="{!v.commonObjectsOption}" var="obj">
+                                <li role="presentation" class="slds-listbox__item" data-id="{!obj.name}"
+                                    data-value="{!obj.label}" onclick="{!c.optionClickHandler}">
+                                    <div id="{!obj.name}"
+                                         class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                         role="option">
+                                        <span class="slds-media__figure slds-listbox__option-icon">
+                                             <lightning:icon iconName="{!'standard:'+obj.lowerName}" size="x-small"/>
+                                        </span>
+                                        <span class="slds-media__body">
+                                            <span class="slds-truncate" title="All Data Sources">
+                                                <span>{!obj.label}</span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </aura:iteration>
+                        </ul>
+                        <ul class="slds-listbox slds-listbox_vertical" role="group" aria-label="{!$Label.c.OtherItems}">
+                            <li role="presentation" class="slds-listbox__item">
+                                <div id="option0"
+                                     class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                     role="presentation">
+                                    <div class="slds-listbox__option-header slds-text-title_caps" role="presentation">
+                                        {!$Label.c.OtherItems}
+                                    </div>
+                                </div>
+                            </li>
+                            <aura:iteration items="{!v.otherObjectsOption}" var="obj">
+                                <li role="presentation" class="slds-listbox__item" data-id="{!obj.name}"
+                                    data-value="{!obj.label}" onclick="{!c.optionClickHandler}">
+                                    <div id="{!obj.name}"
+                                         class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                                         role="option">
+                                        <span class="slds-media__figure slds-listbox__option-icon">
+                                             <lightning:icon iconName="standard:account" size="x-small"/>
+                                        </span>
+                                        <span class="slds-media__body">
+                                            <span class="slds-truncate" title="All Data Sources">
+                                                <span>{!obj.label}</span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </aura:iteration>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

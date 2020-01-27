@@ -32,10 +32,21 @@
         var url = event.getParam('url');
         window.open(url, '_self');
       };
+      var _files = '{!JSENCODE($CurrentPage.parameters.files)}'.trim();
+      _files = _files ? _files.split(',') : [];
+      var _phrs = '{!JSENCODE($CurrentPage.parameters.phrs)}'.trim();
+      _phrs = _phrs ? JSON.parse(_phrs) : null;
+      var _sendNow = '{!JSENCODE($CurrentPage.parameters.sendNow)}'.trim() === '1';
+      var _lock = '{!JSENCODE($CurrentPage.parameters.lock)}'.trim() === '1';
       $Lightning.use(_namespace + ':SendingApp', function () {
         $Lightning.createComponent(_namespace + ':Sending', {
-          visualforce: true, recordId: '{!JSENCODE($CurrentPage.parameters.sId)}',files:'{!JSENCODE($CurrentPage.parameters.files)}'
-        }, 'ds-sending', function (cmp) {
+          visualforce: true,
+          recordId: '{!JSENCODE($CurrentPage.parameters.sId)}',
+          files: _files,
+          placeholderRecipients: _phrs,
+          sendNow: _sendNow,
+          lock: _lock
+        }, 'ds-sending', function () {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': _navigateToURL});
         });
       });

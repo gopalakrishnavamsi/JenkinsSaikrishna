@@ -51,7 +51,10 @@ public with sharing class SendingController extends Controller {
 	}
 
 	@AuraEnabled
-	public static DraftEnvelope createDraftEnvelope(final Id sourceId) {
+	public static DraftEnvelope createDraftEnvelope(
+		final Id sourceId,
+		final List<Id> files) {
+
 		try {
 			Permissions.verifyIsDocuSignUser();
 
@@ -60,22 +63,27 @@ public with sharing class SendingController extends Controller {
 			// TODO: Check account features for templates. Pull on demand.
 			List<Template> templates;
 			List<Document> documents;
-			try {
-				templates = TemplateAPI.getInstance().getTemplates();
-			} catch (APIException ex) {
-				if (ex.error != null
-					&& ex.error instanceof AuthService.AuthError
-					&& ((AuthService.AuthError)ex.error).reason == APIErrorCode.CONSENT_REQUIRED) {
+			if (Collection.isEmpty(files)) {
+				try {
+					templates = TemplateAPI.getInstance().getTemplates();
+				} catch (APIException ex) {
+					if (ex.error != null
+						&& ex.error instanceof AuthService.AuthError
+						&& ((AuthService.AuthError)ex.error).reason == APIErrorCode.CONSENT_REQUIRED) {
 
-					LoggerService.getInstance().error('Failed to retrieve DocuSign templates: user consent required');
-					throw ex; // Let frontend deal with consent flow
+						LoggerService.getInstance().error('Failed to retrieve DocuSign templates: user consent required');
+						throw ex; // Let frontend deal with consent flow
+					}
+					LoggerService.getInstance().warn('User does not have access to DocuSign templates');
+					templates = new List<Template>();
+				} finally {
+					Credentials.save();
 				}
-				LoggerService.getInstance().warn('User does not have access to DocuSign templates');
+				documents = DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false);
+			} else {
 				templates = new List<Template>();
-			} finally {
-				Credentials.save();
+				documents = DocumentService.getDocuments(ContentVersion.getSObjectType(), new Set<Id>(files));
 			}
-			documents = DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false);
 
 			List<Recipient> recipients = RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds);
 
@@ -139,7 +147,8 @@ public with sharing class SendingController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Envelope sendEnvelope(final String envelopeJson) {
+	public static Envelope sendEnvelope(final String envelopeJson, final Boolean sendNow,
+		final Boolean updateNow) {
 		if (AccountProducts.getInstance().isESignatureTrialExpired()) {
 			AccountProducts.save();
 			throw Controller.wrapException(Label.ExpiredTrialAccount);
@@ -148,8 +157,8 @@ public with sharing class SendingController extends Controller {
 		try {
 			Envelope result = EnvelopeService.sendEnvelope(
 				(Envelope)JSON.deserialize(envelopeJson, Envelope.class),
-				false,
-				true,
+				sendNow,
+				updateNow,
 				Application.name);
 			AccountProducts.save();
 			return result;
@@ -188,6 +197,28 @@ public with sharing class SendingController extends Controller {
 			if (!(ex instanceof DocuSignException && ex.getMessage() == Label.EnvelopeNotFound)) {
 				throw Controller.wrapException(ex, 'Failed to delete envelope');
 			}
+		}
+	}
+
+	// TODO: Pass file ID and recipient placeholders/IDs into this method.
+	@AuraEnabled
+	public static DraftEnvelope createResponsiveHtmlEnvelope(final Id sourceId) {
+		try {
+			Permissions.verifyIsDocuSignUser();
+
+			Set<Id> sourceIds = new Set<Id> { sourceId };
+			EnvelopeSettings es = EnvelopeSettings.getInstance();
+			Credentials.save();
+
+			return new DraftEnvelope(
+				EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),
+				new List<Template>(),
+				DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, true),
+				RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds),
+				es.defaultRoles,
+				es.allowRecipientLanguageSelection ? es.emailLocalizations : new List<Recipient.EmailSettings>());
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get draft envelope');
 		}
 	}
 }

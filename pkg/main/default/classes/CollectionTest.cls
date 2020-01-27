@@ -162,6 +162,14 @@ private class CollectionTest {
 	}
 
 	@IsTest
+	static void test_tail() {
+		System.assertEquals(null, Collection.tail(null));
+		System.assertEquals(null, Collection.tail(new List<Object>()));
+		System.assertEquals(new List<Integer> { }, Collection.tail(new List<Integer> { 1 }));
+		System.assertEquals(new List<Integer> { 2, 3 }, Collection.tail(new List<Integer> { 1, 2, 3 }));
+	}
+
+	@IsTest
 	static void test_last() {
 		System.assertEquals(null, Collection.last(null));
 		System.assertEquals(null, Collection.last(new List<Object>()));

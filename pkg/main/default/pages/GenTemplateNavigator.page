@@ -1,0 +1,38 @@
+<apex:page id="GenTemplateNavigator" sidebar="false" showHeader="true" standardController="GenTemplate__c"
+           title="{!$Label.DocuSign}" extensions="GenController"
+           action="{!redirectOnEdit}">
+    <apex:includeLightning/>
+    <apex:includeScript value="{!$Resource.navUtils}"/>
+    <apex:includeScript value="{!$Resource.stringUtils}"/>
+    <apex:slds/>
+
+    <!-- div for rendering the lightning component -->
+    <div id="lightning"></div>
+
+    <script type="text/javascript">
+      var navigate = function (event) {
+        var recordId = event.getParam('recordId');
+        if (typeof sforce != 'undefined') {
+          sforce.one.navigateToSObject(recordId);
+        } else {
+          window.location.href = '/' + recordId;
+        }
+      };
+      var navigateToURL = function (event) {
+        var url = event.getParam('url');
+        window.open(url, '_blank');
+      };
+      var ns = '{!JSENCODE(namespace)}';
+      $Lightning.use(ns + ':GenTemplateNavigatorApp', function () {
+        $Lightning.createComponent(ns + ':GenTemplateNavigator', {
+          templateId: '{!GenTemplate__c.Id}',
+          isRedirectOnCancel: true
+        }, 'lightning', function (component, status) {
+          if (status === 'SUCCESS') {
+            $A.eventService.addHandler({'event': 'force:navigateToSObject', 'handler': navigate});
+            $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
+          }
+        });
+      });
+    </script>
+</apex:page>

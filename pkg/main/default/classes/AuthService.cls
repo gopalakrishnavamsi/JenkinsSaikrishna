@@ -257,6 +257,7 @@ global with sharing class AuthService {
 					'Authorization' => 'Bearer ' + accessToken,
 					'Content-Type' => 'application/json; charset=utf-8'
 				},
+				//updated the name of instance application to 'DocuSign' here so that it matches with the client application name of root IK
 				JSON.serialize(new Map<String, Object> {
 					'account_id' => String.valueOf(accountId),
 					'redirect_uris' => uris
@@ -506,6 +507,11 @@ global with sharing class AuthService {
 			//Clear SpringCM folder id to Salesforce Object id mapping stored in Agreement configuration object
 			//This will invoke a Batch job to delete all records from the AgreementConfiguration custom object
 			clearFolderConfiguration();
+
+			// Delete OnlineEditor template folder configuration.
+			OnlineEditorRoot__c ct = OnlineEditorRoot__c.getOrgDefaults();
+			ct.FolderId__c = null;
+			upsert ct;
 		}
 		return result;
 	}
@@ -1004,7 +1010,7 @@ global with sharing class AuthService {
 	@Future
 	private static void assignClmAdministratorPermissionSet(final Id userId) {
 		if (String.isBlank(userId)) return;
-
+		
 		Permissions.assignClmAdministratorPermissionSet(new Set<Id> { userId });
 	}
 

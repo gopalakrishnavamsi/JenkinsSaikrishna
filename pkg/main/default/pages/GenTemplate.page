@@ -1,5 +1,4 @@
-<apex:page sidebar="false" showHeader="true" standardController="GenTemplate__c" title="{!$Label.DocuSign}"
-           extensions="GenController">
+<apex:page sidebar="false" showHeader="true" controller="GenController" title="{!$Label.DocuSign}">
     <apex:includeLightning/>
     <apex:includeScript value="{!$Resource.navUtils}"/>
     <apex:slds/>
@@ -63,7 +62,7 @@
       var ns = '{!JSENCODE(namespace)}';
       $Lightning.use(ns + ':GenTemplateApp', function () {
         $Lightning.createComponent(ns + ':GenTemplate', {
-          templateId: '{!GenTemplate__c.Id}', isClassic: '{!$User.UIThemeDisplayed}' === 'Theme3'
+          templateId: '{!$CurrentPage.parameters.id}', isClassic: '{!$User.UIThemeDisplayed}' === 'Theme3'
         }, 'lightning', function (component, status, errorMessage) {
           if (status === 'SUCCESS') {
             document.getElementById('spinner').style.display = 'none';

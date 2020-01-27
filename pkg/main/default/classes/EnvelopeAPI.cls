@@ -531,19 +531,36 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
+	private class APIHtmlDefinition {
+		public String source;
+
+		public APIHtmlDefinition(final String source) {
+			this.source = source;
+		}
+	}
+
+	@TestVisible
 	private class APIDocument {
 		public String documentId;
 		public String name;
 		public String fileExtension;
 		public String documentBase64;
+		public APIHtmlDefinition htmlDefinition;
 
-		public APIDocument(final Document doc, final Blob content) {
+		public APIDocument(
+			final Document doc,
+			final Blob content) {
+
 			if (doc != null && doc.type != Document.TYPE_TEMPLATE) {
 				this.documentId = String.valueOf(doc.sequence);
 				this.name = doc.name;
 				this.fileExtension = doc.extension;
 				if (content != null) {
-					this.documentBase64 = EncodingUtil.base64Encode(content);
+					if (doc.extension == 'html') {
+						this.htmlDefinition = new APIHtmlDefinition(content.toString());
+					} else {
+						this.documentBase64 = EncodingUtil.base64Encode(content);
+					}
 				}
 			}
 		}
@@ -604,7 +621,8 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			final Boolean hasTemplates) {
 
 			if (r != null) {
-				this.recipientId = String.valueOf(r.sequence);
+				this.recipientId = String.isBlank(r.envelopeRecipientId)
+					? String.valueOf(r.sequence) : r.envelopeRecipientId;
 				if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
 					this.signerName = r.name;
 					this.signerEmail = r.email == r.hostEmail ? null : r.email;
@@ -633,7 +651,11 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					}
 				}
 				this.note = r.note;
-				if (includeDefaultAnchorTags && r.role != null && r.role.hasValue) {
+				if (includeDefaultAnchorTags
+					&& String.isBlank(r.envelopeRecipientId)
+					&& r.role != null
+					&& r.role.hasValue) {
+
 					// Only add default anchor tags if role is defined and has a valid (> 0) value.
 					this.tabs = new EnvelopeAPI.DefaultAnchorTags(documentId, this.recipientId,
 						String.valueOf(r.role.value));
@@ -653,7 +675,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				null, // id
 				null, // source
 				type,
-				Integer.valueOf(this.recipientId),
+				null,
 				this.status,
 				inPersonSigner ? this.signerName : this.name,
 				inPersonSigner ? this.signerEmail : this.email,
@@ -756,6 +778,10 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				}
 			}
 			result.sort();
+			Integer sequence = 0;
+			for (Recipient.Status rs : result) {
+				rs = rs.withSequence(++sequence);
+			}
 			return result;
 		}
 	}
@@ -1073,7 +1099,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 						includeDefaultAnchorTags, documentContent, e.customFields, e.source);
 				} else {
 					if (e.documents != null) {
-						this.documents = new List<APIDocument>();
+						this.documents = new List<EnvelopeAPI.APIDocument>();
 						for (Document d : e.documents) {
 							this.documents.add(new APIDocument(d,
 								d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId)
@@ -1162,6 +1188,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
+		// TODO: determine fetch documents dynamically based on documents.
 		RestAPI.Response response = this.post(
 			getBaseUrl(),
 			new List<Object> { 'envelopes' },
@@ -1171,7 +1198,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				envelope,
 				options != null && options.sendNow,
 				options != null && options.includeDefaultAnchorTabs,
-				options != null && options.fetchDocuments,
+				false, //options != null && options.fetchDocuments,
 				options != null && options.useAccountNotificationDefaults),
 				true),
 			timeout);

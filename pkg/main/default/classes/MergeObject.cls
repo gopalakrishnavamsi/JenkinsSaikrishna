@@ -3,6 +3,7 @@ public class MergeObject implements Comparable {
 	private static final Set<SObjectType> BLACKLIST = new Set<SObjectType> {
 		Schema.Task.getSObjectType()
 	};
+	private static final String CUSTOM_METADATA_SUFFIX = 'mdt';
 
 	transient public SObjectType type { get; private set; }
 	transient public DescribeSObjectResult describe { get; private set; }
@@ -13,6 +14,8 @@ public class MergeObject implements Comparable {
 	public String label { get; private set; }
 	@AuraEnabled
 	public Boolean isUpdateable { get; private set; }
+	@AuraEnabled
+	public String lowerName { get; private set; }
 
 	private MergeObject(
 		final SObjectType type,
@@ -26,6 +29,7 @@ public class MergeObject implements Comparable {
 		this.name = name;
 		this.label = label;
 		this.isUpdateable = isUpdateable;
+		this.lowerName = name.toLowerCase();
 	}
 
 	public static Boolean isValid(final SObjectType type) {
@@ -37,7 +41,11 @@ public class MergeObject implements Comparable {
 			&& !BLACKLIST.contains(type.getSObjectType())
 			&& type.isAccessible()
 			&& type.isCreateable()
-			&& type.isQueryable();
+			&& type.isQueryable()
+			&& !type.isDeprecatedAndHidden()
+			&& !type.isCustomSetting()
+			&& !type.getName().startsWithIgnoreCase(Application.namespacePrefix)
+			&& !type.getName().endsWithIgnoreCase(CUSTOM_METADATA_SUFFIX);
 	}
 
 	public static MergeObject forType(final SObjectType type) {

@@ -1,6 +1,6 @@
 public class MergeField implements Comparable {
 
-	public static final Integer MAX_DEPTH = 4; // TODO: Move max depth to config
+	public static final Integer MAX_DEPTH = 5; // TODO: Move max depth to config
 	private static final String TYPE_CHILD_RELATIONSHIP = 'CHILD_RELATIONSHIP';
 	// removing OwnerId to show on UI
 	private static final List<String> BLACKLIST = new List<String> {

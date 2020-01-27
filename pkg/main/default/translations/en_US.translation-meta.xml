@@ -4525,6 +4525,116 @@
 		<label>Authorizing</label>
 		<name>Authorizing</name>
 	</customLabels>
+	<!-- Start of Chorus Gen Labels -->
+	<customLabels>
+		<label>Template &quot;{0}&quot; created.</label>
+		<name>OnlineEditorTemplateCreated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Template &quot;{0}&quot; updated.</label>
+		<name>OnlineEditorTemplateUpdated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Template &quot;{0}&quot; buttons updated.</label>
+		<name>OnlineEditorAfterPublish_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Create New Template</label>
+		<name>CreateNewTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Create and upload a Word file. To update your template upload a new version.</label>
+		<name>MicrosoftWordDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Use DocuSign's online editor to build and update templates in real time.</label>
+		<name>OnlineEditorDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Data Source</label>
+		<name>SelectDataSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Document Type</label>
+		<name>SelectDocumentType</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Template Name</label>
+		<name>AddTemplateName</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Description</label>
+		<name>AddTemplateDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Learn more about online editor</label>
+		<name>OnlineEditorHelpLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/guides/</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
+	<customLabels>
+		<name>CreateLabel</name>
+		<label>Create</label>
+	</customLabels>
+	<customLabels>
+		<name>DeployLabel</name>
+		<label>Deploy</label>
+	</customLabels>
+	<customLabels>
+		<name>PublishLabel</name>
+		<label>Publish</label>
+	</customLabels>
+	<customLabels>
+		<name>SetFileNameRules</name>
+		<label>Set File Naming Rules</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorFileToolTip</name>
+		<label>Any documents generated with this template will take on the name you input in the boxes. For example, if File Name is &quot;asdSales Order&quot;asd and suffix is &quot;asdDate&quot;asd, a generated document could be named &quot;asdSales Order_3-06-2019&quot;asd</label>
+	</customLabels>
+	<customLabels>
+		<name>FileName</name>
+		<label>File Name</label>
+	</customLabels>
+	<customLabels>
+		<name>AddCustomButton</name>
+		<label>Add Custom Button</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorButtonPublishPrompt</name>
+		<label>Add a new custom button to allow your users to generate documents from one or more of the page layouts below.</label>
+	</customLabels>
+	<customLabels>
+		<name>ShowButtonInPrompt</name>
+		<label>Show button in:</label>
+	</customLabels>
+	<customLabels>
+		<name>ExportDataIsUndefinedLabel</name>
+		<label>Export data is undefined</label>
+	</customLabels>
+	<customLabels>
+		<name>InvalidPathLabel</name>
+		<label>Invalid Path</label>
+	</customLabels>
+	<customLabels>
+		<name>UndefinedOnlineEditorTemplate</name>
+		<label>Undefined Online Editor template</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorSaveValidation</name>
+		<label>You must save this template before navigating to this step</label>
+	</customLabels>
+	<customLabels>
+		<name>MostCommonlyUsed</name>
+		<label>MOST COMMONLY USED</label>
+	</customLabels>
+	<customLabels>
+		<name>OtherItems</name>
+		<label>OTHER ITEMS</label>
+	</customLabels>
+	<!-- End of Chorus Gen Labels -->
 	<customLabels>
 		<label>Other Sources</label>
 		<name>OtherSourcesText</name>

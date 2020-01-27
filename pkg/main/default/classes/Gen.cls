@@ -1,5 +1,7 @@
 public class Gen {
 
+	public static final String ONLINE_EDITOR_TYPE = 'Online Editor';
+
 	public class File {
 		@AuraEnabled
 		public Id id { get; private set; }
@@ -80,6 +82,10 @@ public class Gen {
 		@AuraEnabled
 		public String sourceObject { get; private set; }
 		@AuraEnabled
+		public String templateType { get; private set; }
+		@AuraEnabled
+		public String description { get; private set; }
+		@AuraEnabled
 		public List<Gen.ObjectMappings> objectMappings { get; private set; }
 		@AuraEnabled
 		public List<Gen.SignerFieldMappings> signerMappings { get; private set; }
@@ -95,11 +101,23 @@ public class Gen {
 		public Boolean isSample { get; private set; }
 		@AuraEnabled
 		public List<File> generated { get; private set; }
+		@AuraEnabled
+		public UUID springTemplateId { get; private set; }
+		@AuraEnabled
+		public String fileName { get; private set; }
+		@AuraEnabled
+		public String fileSuffix { get; private set; }
+
+		public Template(final String name) {
+			this.name = name;
+		}
 
 		public Template(
 			final Id id,
 			final String name,
 			final String sourceObject,
+			final String templateType,
+			final String description,
 			final List<Gen.ObjectMappings> objectMappings,
 			final List<Gen.SignerFieldMappings> signerMappings,
 			final Boolean useAllTemplates,
@@ -107,11 +125,16 @@ public class Gen {
 			final Boolean hasPreviewedDocuments,
 			final Integer stepsCompleted,
 			final Boolean isSample,
-			final List<File> generated) {
+			final List<File> generated,
+			final UUID springTemplateId,
+			final String fileName,
+			final String fileSuffix) {
 
 			this.id = id;
 			this.name = name;
 			this.sourceObject = sourceObject;
+			this.templateType = templateType;
+			this.description = description;
 			this.objectMappings = objectMappings == null ? new List<Gen.ObjectMappings>() : objectMappings;
 			this.signerMappings = signerMappings == null ? new List<Gen.SignerFieldMappings>() : signerMappings;
 			this.useAllTemplates = useAllTemplates;
@@ -120,6 +143,9 @@ public class Gen {
 			this.stepsCompleted = stepsCompleted;
 			this.isSample = isSample;
 			this.generated = generated == null ? new List<File>() : generated;
+			this.springTemplateId = springTemplateId;
+			this.fileName = fileName;
+			this.fileSuffix = fileSuffix;
 		}
 	}
 

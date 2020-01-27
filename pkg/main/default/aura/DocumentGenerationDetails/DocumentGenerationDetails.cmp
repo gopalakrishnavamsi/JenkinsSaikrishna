@@ -9,7 +9,7 @@
     <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}" afterScriptsLoaded="{!c.init}"/>
     <!-- register events -->
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
-
+    <div aura:id="genTemplateNavigator"></div>
     <div>
         <!-- component markup -->
         <aura:if isTrue="{!v.loading}">

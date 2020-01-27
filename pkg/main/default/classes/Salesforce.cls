@@ -300,4 +300,8 @@ public with sharing class Salesforce {
 		}
 		return parentSObjectType;
 	}
+
+	public static Boolean checkIfMultiCurrencyIsEnabled() {
+		return UserInfo.isMultiCurrencyOrganization();
+	}
 }

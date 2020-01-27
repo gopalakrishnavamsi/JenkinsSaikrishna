@@ -178,6 +178,12 @@ public class Collection {
 		return l[0];
 	}
 
+	public static Object tail(final List<Object> l) {
+		if (Collection.isEmpty(l)) return null;
+		l.remove(0);
+		return l;
+	}
+
 	public static Id head(final Set<Id> s) {
 		if (Collection.isEmpty(s)) return null;
 
@@ -219,7 +225,7 @@ public class Collection {
 	public static List<List<String>> chunk(final List<String> l, final Integer s) {
 		List<List<String>> result = new List<List<String>>();
 		List<String> tempList = new List<String>();
-		if (l <> null && l.size() > 0) {
+		if (l != null && l.size() > 0) {
 			for (Integer i = 0; i < l.size(); i++) {
 				tempList.add(l[i]);
 				if (tempList.size() >= s) {

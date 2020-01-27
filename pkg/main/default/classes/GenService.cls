@@ -5,6 +5,8 @@ public with sharing class GenService {
 	private static final SObjectType CONTENT_VERSION_TYPE = ContentVersion.getSObjectType();
 	private static final SObjectType CONTENT_DOCUMENT_LINK_TYPE = ContentDocumentLink.getSObjectType();
 	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
+	private static final String ADMIN = 'admin';
+	private static final String TEMPLATES_HTML = 'templates_html';
 
 	private class Database {
 
@@ -37,6 +39,8 @@ public with sharing class GenService {
 			return new GenTemplate__c(
 				Id = template.id,
 				Name = template.name,
+				Description__c = template.description,
+				TemplateType__c = template.templateType,
 				SourceObject__c = template.sourceObject,
 				ObjectMappings__c = Collection.isEmpty(template.objectMappings)
 					? null : JSON.serialize(template.objectMappings),
@@ -46,7 +50,10 @@ public with sharing class GenService {
 				UseCurrentRecord__c = template.useCurrentRecord == true,
 				HasPreviewedDocuments__c = template.hasPreviewedDocuments == true,
 				StepsCompleted__c = template.stepsCompleted,
-				IsSample__c = template.isSample == true);
+				IsSample__c = template.isSample == true,
+				TemplateId__c = UUID.toString(template.springTemplateId),
+				FileName__c = String.isNotBlank(template.filename) ? template.filename : '',
+				FileSuffix__c = String.isNotBlank(template.fileSuffix) ? template.fileSuffix : '');
 		}
 
 		@TestVisible
@@ -85,6 +92,8 @@ public with sharing class GenService {
 				template.Id,
 				template.Name,
 				template.SourceObject__c,
+				template.TemplateType__c,
+				template.Description__c,
 				String.isBlank(objMapJson) ? null : (List<Gen.ObjectMappings>)JSON.deserialize(objMapJson, List<Gen.ObjectMappings>.class),
 				String.isBlank(signMapJson) ? null : (List<Gen.SignerFieldMappings>)JSON.deserialize(signMapJson, List<Gen.SignerFieldMappings>.class),
 				template.UseAllTemplates__c == true,
@@ -92,7 +101,10 @@ public with sharing class GenService {
 				template.HasPreviewedDocuments__c == true,
 				Integer.valueOf(template.StepsCompleted__c),
 				template.IsSample__c == true,
-				generatedFiles);
+				generatedFiles,
+				UUID.tryParse(template.TemplateId__c),
+				String.isNotBlank(template.FileName__c) ? template.FileName__c : '',
+				String.isNotBlank(template.FileSuffix__c) ? template.FileSuffix__c : '');
 		}
 
 		private List<Gen.File> queryGeneratedFiles(final Id templateId) {
@@ -114,12 +126,14 @@ public with sharing class GenService {
 		public Gen.Template queryTemplate(final Id templateId) {
 			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> {
 				'Id', 'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c'
+				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c',
+				'TemplateType__c', 'TemplateId__c', 'FileName__c', 'FileSuffix__c'
 			});
 
 			return convert((GenTemplate__c)Collection.head([
 				SELECT Id, Name, SourceObject__c, ObjectMappings__c, SignerMappings__c, UseAllTemplates__c,
-					UseCurrentRecord__c, HasPreviewedDocuments__c, StepsCompleted__c, IsSample__c
+					UseCurrentRecord__c, HasPreviewedDocuments__c, StepsCompleted__c, IsSample__c, Description__c,
+					TemplateType__c, TemplateId__c, FileName__c, FileSuffix__c
 				FROM GenTemplate__c
 				WHERE Id = :templateId
 				LIMIT 1
@@ -134,7 +148,7 @@ public with sharing class GenService {
 			for (GenTemplate__c template : [
 				SELECT Id, Name, SourceObject__c, LastModifiedDate
 				FROM GenTemplate__c
-				ORDER BY LastModifiedDate desc
+				ORDER BY LastModifiedDate DESC
 				LIMIT 50000
 			]) {
 				templatesList.add(new Gen.GenTemplateDisplay(
@@ -144,6 +158,36 @@ public with sharing class GenService {
 					template.LastModifiedDate));
 			}
 			return templatesList;
+		}
+
+		@TestVisible
+		private Boolean deleteTemplate(final Id templateId) {
+			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> { 'Id' });
+			Permissions.verifyIsDeletable(GenTemplate__c.getSObjectType());
+
+			Boolean result = false;
+			if (templateId != null) {
+				GenTemplate__c genTemplate = (GenTemplate__c)Collection.head([SELECT Id FROM GenTemplate__c WHERE Id = :templateId LIMIT 1]);
+				delete genTemplate;
+				result = true;
+			}
+			return result;
+		}
+
+		@TestVisible
+		private UUID getTemplateFolderId() {
+			UUID templateFolderId;
+			OnlineEditorRoot__c onlineEditorRootFolderSettings = OnlineEditorRoot__c.getOrgDefaults();
+			if (onlineEditorRootFolderSettings.FolderId__c != null) {
+				templateFolderId = UUID.parse(onlineEditorRootFolderSettings.FolderId__c);
+			} else {
+				UUID rootFolder = NegotiateAPI.getInstance().getRootFolder();
+				UUID adminFolder = NegotiateAPI.getInstance().createFolder(ADMIN, rootFolder);
+				templateFolderId = NegotiateAPI.getInstance().createFolder(TEMPLATES_HTML, adminFolder);
+				onlineEditorRootFolderSettings.FolderId__c = templateFolderId.toString();
+				upsert onlineEditorRootFolderSettings;
+			}
+			return templateFolderId;
 		}
 
 		private String getCopyName(final String name) {
@@ -213,6 +257,100 @@ public with sharing class GenService {
 			];
 		}
 
+		private List<SObject> getEntityRecords(final SObjectType objectType, final String nameField) {
+			Schema.DescribeSObjectResult objectDescription = objectType.getDescribe();
+			List<String> objectFields = new List<String> { 'Id', nameField };
+			Permissions.verifyIsQueryable(
+				objectType,
+				objectFields
+			);
+
+			String queryTemplate = 'SELECT {0} FROM {1} LIMIT 25';
+
+			return System.Database.query(
+				String.format(
+					queryTemplate,
+					new List<String> {
+						String.join(objectFields, ','),
+						objectDescription.getName()
+					}
+				)
+			);
+		}
+
+		private String getObjectNameField(final SObjectType objectType) {
+			if (objectType == null) return null;
+
+			Map<String, Schema.SObjectField> fieldsMap = objectType.getDescribe().fields.getMap();
+			if (fieldsMap.containsKey('Name')) {
+				return 'Name';
+			} else {
+				for (String fieldName : fieldsMap.keySet()) {
+					if (fieldsMap.containsKey(fieldName) && fieldsMap.get(fieldName).getDescribe().isNameField()) return fieldsMap.get(fieldName).getDescribe().getName();
+				}
+			}
+			return null;
+		}
+
+		private Map<String, Object> getEntityRecords(final SObjectType objectType, final String searchValue, final String filterBy, final String orderBy, final Integer recordsPerPage, final Integer pageIndex) {
+
+			if (pageIndex == null || pageIndex < 0 || filterBy == null || searchValue == null) throw new DocuSignException(Label.InvalidGenQuery);
+
+			Schema.DescribeSObjectResult objectDescription = objectType.getDescribe();
+			List<String> objectFields = new List<String> { 'Id', filterBy };
+			Permissions.verifyIsQueryable(
+				objectType,
+				objectFields
+			);
+
+			String query = null;
+			String queryFormattedSearchValue = '%' + searchValue + '%';
+			Integer entityRecordCount = System.Database.countQuery(
+				String.format(
+					'SELECT count() FROM {0} WHERE {1} LIKE :queryFormattedSearchValue ',
+					new List<String> {
+						objectDescription.getName(),
+						filterBy
+					}
+				)
+			);
+
+			Integer totalPageIndexes = entityRecordCount <= recordsPerPage ? 0 : (Integer)Math.floor(entityRecordCount / recordsPerPage);
+			Integer queryOffSet = totalPageIndexes < pageIndex ? 0 : pageIndex * recordsPerPage;
+
+			if (totalPageIndexes > 0) {
+				query = String.format(
+					'SELECT {0} FROM {1} WHERE {2} LIKE :queryFormattedSearchValue ORDER BY {3} LIMIT {4} OFFSET {5}',
+					new List<String> {
+						String.join(objectFields, ','),
+						objectDescription.getName(),
+						filterBy,
+						orderBy,
+						String.valueOf(recordsPerPage),
+						String.valueOf(queryOffSet)
+					}
+				);
+			} else if (pageIndex == 0) {
+				query = String.format(
+					'SELECT {0} FROM {1} WHERE {2} LIKE :queryFormattedSearchValue ORDER BY {3}',
+					new List<String> {
+						String.join(objectFields, ','),
+						objectDescription.getName(),
+						filterBy,
+						orderBy
+					}
+				);
+			}
+
+			return new Map<String, Object> {
+				'pageIndex' => pageIndex,
+				'results' => query == null ? new List<SObject>() : System.Database.query(query),
+				'filterBy' => filterBy,
+				'totalRecords' => entityRecordCount,
+				'totalPages' => totalPageIndexes + 1
+			};
+		}
+
 		private List<ContentDocumentLink> createContentDocumentLinks(
 			final Id linkedEntityId,
 			final List<ContentVersion> contentVersions) {
@@ -239,16 +377,19 @@ public with sharing class GenService {
 		public Gen.Template cloneTemplate(final Id templateId) {
 			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> {
 				'Id', 'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c'
+				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c', 'TemplateType__c',
+				'FileName__c', 'FileSuffix__c'
 			});
 			Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
 				'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c'
+				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c', 'TemplateType__c',
+				'FileName__c', 'FileSuffix__c'
 			});
 
 			GenTemplate__c original = (GenTemplate__c)Collection.head([
 				SELECT Id, Name, SourceObject__c, ObjectMappings__c, SignerMappings__c, UseAllTemplates__c,
-					UseCurrentRecord__c, HasPreviewedDocuments__c, StepsCompleted__c, IsSample__c
+					UseCurrentRecord__c, HasPreviewedDocuments__c, StepsCompleted__c, IsSample__c, Description__c, TemplateType__c,
+					FileName__c, FileSuffix__c
 				FROM GenTemplate__c
 				WHERE Id = :templateId
 				LIMIT 1
@@ -257,6 +398,7 @@ public with sharing class GenService {
 
 			GenTemplate__c clone = original.clone(false, true);
 			clone.Name = getCopyName(clone.Name);
+			clone.TemplateId__c = null;
 			insert clone;
 
 			List<ContentVersion> cvs = cloneContentVersions(templateId);
@@ -270,7 +412,8 @@ public with sharing class GenService {
 		public Gen.Template insertTemplate(final Gen.Template template) {
 			Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
 				'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c'
+				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c', 'TemplateType__c',
+				'TemplateId__c', 'FileName__c', 'FileSuffix__c'
 			});
 
 			if (template == null) return null;
@@ -284,7 +427,9 @@ public with sharing class GenService {
 		public Gen.Template updateTemplate(final Gen.Template template) {
 			Permissions.verifyIsUpdateable(GenTemplate__c.getSObjectType(), new List<String> {
 				'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c'
+				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c',
+				'TemplateId__c', 'FileName__c', 'FileSuffix__c'
+
 			});
 			Permissions.verifyIsUpdateable(ContentVersion.getSObjectType(), new List<String> {
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
@@ -541,12 +686,17 @@ public with sharing class GenService {
 			null,
 			null,
 			null,
+			null,
+			null,
 			true,
 			true,
 			false,
 			0,
 			false,
-			null));
+			null,
+			UUID.empty,
+			'',
+			''));
 	}
 
 	public static Gen.Template getTemplate(final Id templateId) {
@@ -560,8 +710,7 @@ public with sharing class GenService {
 		Permissions.verifyIsDocuSignAdministrator();
 		Permissions.verifyIsDocuSignGenerator();
 		if (template == null) throw new DocuSignException(Label.UndefinedArgument);
-
-		return DB.updateTemplate(template);
+		return template.id != null ? DB.updateTemplate(template) : DB.insertTemplate(template) ;
 	}
 
 	public static List<Id> getRecentRecordIds(
@@ -616,7 +765,7 @@ public with sharing class GenService {
 	public static List<Gen.Job> queueDocumentGeneration(
 		final Id templateId,
 		final Id sourceId,
-		final String xmlPayload, // FIXME: Generate XML in service class. The callout payload must be opaque to clients.
+		final String xmlPayload,
 		final Boolean isPreview,
 		final List<Id> contentDocumentIds) {
 
@@ -686,8 +835,7 @@ public with sharing class GenService {
 
 	public static Boolean checkMultiCurrency() {
 		Permissions.verifyIsDocuSignGenerator();
-		Boolean isMultiCurrencyOrganization = UserInfo.isMultiCurrencyOrganization() ? true : false;
-		return isMultiCurrencyOrganization;
+		return Salesforce.checkIfMultiCurrencyIsEnabled();
 	}
 
 	/**
@@ -746,6 +894,15 @@ public with sharing class GenService {
 		return DB.queryTemplates();
 	}
 
+	public static List<SObject> getRelatedEntityRecords(final SObjectType objectType) {
+		Permissions.verifyIsDocuSignGenerator();
+		return DB.getEntityRecords(objectType, DB.getObjectNameField(objectType));
+	}
+
+	public static Map<String, Object> getRelatedEntityRecords(final SObjectType objectType, final String searchValue, final Integer pageIndex) {
+		return DB.getEntityRecords(objectType, searchValue, DB.getObjectNameField(objectType), 'LastModifiedDate', 25, pageIndex);
+	}
+
 	public static Url getNewGenTemplateUrl() {
 		Permissions.verifyIsDocuSignAdministrator();
 		Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
@@ -757,9 +914,229 @@ public with sharing class GenService {
 			Application.namespacePrefix + 'UseCurrentRecord__c',
 			Application.namespacePrefix + 'HasPreviewedDocuments__c',
 			Application.namespacePrefix + 'StepsCompleted__c',
-			Application.namespacePrefix + 'IsSample__c'
+			Application.namespacePrefix + 'IsSample__c',
+			Application.namespacePrefix + 'Description__c',
+			Application.namespacePrefix + 'TemplateType__c'
 		});
 		PageReference genTemplatePage = Page.GenTemplate;
 		return new Url(Salesforce.baseUrl, genTemplatePage.getUrl());
+	}
+
+	public static Map<String, String> getGenTemplateValues() {
+		Permissions.verifyIsDocuSignAdministrator();
+		Permissions.verifyIsDocuSignGenerator();
+		return MetadataService.picklistValues(Application.namespacePrefix + 'GenTemplate__c', Application.namespacePrefix + 'TemplateType__C');
+	}
+
+	public static Url getTemplateUrl(final Gen.Template template, final Boolean isFromSetupWizard) {
+		Permissions.verifyIsDocuSignAdministrator();
+		Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
+			'Name',
+			Application.namespacePrefix + 'SourceObject__c',
+			Application.namespacePrefix + 'ObjectMappings__c',
+			Application.namespacePrefix + 'SignerMappings__c',
+			Application.namespacePrefix + 'UseAllTemplates__c',
+			Application.namespacePrefix + 'UseCurrentRecord__c',
+			Application.namespacePrefix + 'HasPreviewedDocuments__c',
+			Application.namespacePrefix + 'StepsCompleted__c',
+			Application.namespacePrefix + 'IsSample__c',
+			Application.namespacePrefix + 'Description__c',
+			Application.namespacePrefix + 'TemplateType__c',
+			Application.namespacePrefix + 'TemplateId__c'
+		});
+		PageReference templatePage = template.templateType.equals(Gen.ONLINE_EDITOR_TYPE) ? Page.OnlineEditorGenTemplate : Page.GenTemplate;
+		templatePage.getParameters().put('id', template.id);
+		templatePage.getParameters().put('isFromSetupWizard', String.valueOf(isFromSetupWizard));
+		return new Url(Salesforce.baseUrl, templatePage.getUrl());
+	}
+
+	//onlineEditorService start
+
+	public static Negotiate.LimitedAccessToken generateUploadToken(UUID templateFolderId) {
+		Permissions.verifyIsDocuSignGenerator();
+		return ScmTokenAPI.getInstance().generateLimitedAccessToken(templateFolderId, AuthService.getContentAccessToken());
+	}
+
+	public static UUID getTemplateFolderId() {
+		Permissions.verifyIsDocuSignGenerator();
+		return DB.getTemplateFolderId();
+	}
+
+	public static Boolean deleteTemplate(final Id templateId) {
+		Permissions.verifyIsDocuSignGenerator();
+		return DB.deleteTemplate(templateId);
+	}
+
+	public static String getOnlineEditorTemplateId(final Id templateId) {
+		Permissions.verifyIsDocuSignGenerator();
+		return UUID.toString(DB.queryTemplate(templateId).springTemplateId);
+	}
+
+	public static Id saveAttachments(final Id recordId, final String htmlData, final Id salesforceOnlineEditorTemplateId) {
+		Permissions.verifyIsDocuSignGenerator();
+
+		Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
+			'Id', 'ContentDocumentId'
+		});
+		Permissions.verifyIsCreateable(ContentVersion.getSObjectType(), new List<String> {
+			'Title', 'PathOnClient', 'VersionData'
+		});
+		Permissions.verifyIsCreateable(ContentDocumentLink.getSObjectType(), new List<String> {
+			'ContentDocumentId', 'LinkedEntityId', 'ShareType'
+		});
+
+		Gen.Template genTemplate = DB.queryTemplate(salesforceOnlineEditorTemplateId);
+
+		ContentVersion attachment = new ContentVersion();
+		attachment.VersionData = Blob.valueOf(htmlData);
+		attachment.Title = getFileName(genTemplate.fileName, genTemplate.fileSuffix, genTemplate.sourceObject);
+		attachment.PathOnClient = getFileName(genTemplate.fileName, genTemplate.fileSuffix, genTemplate.sourceObject);
+		insert attachment;
+
+		ContentDocumentLink attachmentLink = new ContentDocumentLink();
+		attachmentLink.ContentDocumentId = [SELECT Id, ContentDocumentId FROM ContentVersion WHERE Id = :attachment.Id].ContentDocumentId;
+		attachmentLink.LinkedEntityId = recordId;
+		attachmentLink.ShareType = 'V';
+		insert attachmentLink;
+
+		return attachment.Id;
+	}
+
+	public static OnlineEditor.Query getOnlineEditorMergeData(
+		final Id sourceId,
+		final OnlineEditor.Query onlineEditorQuery) {
+
+		Permissions.verifyIsDocuSignGenerator();
+
+		if (sourceId == null || onlineEditorQuery == null) throw new DocuSignException(Label.UndefinedArgument);
+
+		Gen.Query genQuery = convertQuery(onlineEditorQuery);
+
+		SObject result = GenService.getMergeData(sourceId, genQuery);
+		return convertData(onlineEditorQuery, result);
+	}
+
+	@TestVisible
+	private static String formatAddress(final Address location) {
+		return location == null ? null : String.join(new List<String> { location.getStreet(), location.getCity(), location.getState() + ' ' + location.getPostalCode(), location.getCountry() }, ', ');
+	}
+
+	@TestVisible
+	private static SObject fieldLookUp(List<String> fieldNames, SObject data) {
+		if (data == null || Collection.isEmpty(fieldNames)) {
+			return null;
+		}
+		SObject result = data.getSObject((String)Collection.head(fieldNames));
+		if (fieldNames.size() == 2) {
+			return result;
+		}
+		return fieldLookUp((List<String>)Collection.tail(fieldNames), result);
+	}
+
+	public static OnlineEditor.Query convertData(final OnlineEditor.Query onlineEditorQuery, SObject data) {
+		Permissions.verifyIsDocuSignGenerator();
+
+		List<OnlineEditor.Query> childQueries = new List<OnlineEditor.Query>();
+		List<OnlineEditor.Field > fields = new List<OnlineEditor.Field >();
+		for (OnlineEditor.Field f : onlineEditorQuery.fields) {
+			Object fieldValue;
+			String value = '';
+			if (f.name.contains('.')) {
+				List<String> fieldNames = f.name.split('\\.');
+				SObject fieldLookup = fieldLookUp(fieldNames, data);
+				fieldValue = fieldLookup != null ? fieldLookup.get((String)Collection.last(fieldNames)) : null;
+				if (fieldValue != null) {
+					if (fieldValue instanceof Datetime) {
+						Datetime dt = (Datetime)fieldValue;
+						value = dt.format();
+					} else if (fieldValue instanceof Address) {
+						value = GenService.formatAddress((Address)fieldValue);
+					} else {
+						value = String.valueOf(fieldValue);
+					}
+				}
+			} else {
+				fieldValue = data.get(f.name);
+				if (fieldValue != null) {
+					if (fieldValue instanceof Datetime) {
+						Datetime dt = (Datetime)fieldValue;
+						value = dt.format();
+					} else if (fieldValue instanceof Address) {
+						value = GenService.formatAddress((Address)fieldValue);
+					} else {
+						value = String.valueOf(fieldValue);
+					}
+				}
+			}
+			fields.add(new OnlineEditor.Field(f.name, value, f.type));
+		}
+		if (Collection.isNotEmpty(onlineEditorQuery.children)) {
+			for (OnlineEditor.Query child : onlineEditorQuery.children) {
+				List<SObject> tempData = data.getSObjects(child.relationship);
+				if (Collection.isNotEmpty(tempData)) {
+					for (SObject childData : tempData) {
+						childQueries.add(convertData(child, childData));
+					}
+				} else {
+					childQueries.add(child);
+				}
+			}
+		}
+		return new OnlineEditor.Query(onlineEditorQuery.type, onlineEditorQuery.relationship, fields, childQueries);
+	}
+
+	public static Gen.Query convertQuery(final OnlineEditor.Query onlineEditorQuery) {
+		Permissions.verifyIsDocuSignGenerator();
+
+		List<String> genFields = new List<String>();
+		List<Gen.Query> listGenQuery = new List<Gen.Query>();
+
+		if (Collection.isNotEmpty(onlineEditorQuery.fields)) {
+			genFields = convertFields(onlineEditorQuery.fields);
+		}
+
+		if (Collection.isNotEmpty(onlineEditorQuery.children)) {
+			for (OnlineEditor.Query child : onlineEditorQuery.children) {
+				listGenQuery.add(convertQuery(child));
+			}
+		}
+
+		Gen.Query result = new Gen.Query(
+			onlineEditorQuery.type,
+			onlineEditorQuery.relationship,
+			genFields,
+			listGenQuery);
+
+		return result;
+	}
+
+	@TestVisible
+	private static List<String> convertFields(final List<OnlineEditor.Field> fields) {
+		Permissions.verifyIsDocuSignGenerator();
+
+		List<String> genFields = new List<String>();
+		for (OnlineEditor.Field f : fields) {
+			genFields.add(f.name);
+		}
+		return genFields;
+	}
+
+	@TestVisible
+	private static String getFileName(final String fileName, final String fileSuffix, final String dataSource) {
+		String formattedFileName;
+		if (fileSuffix == 'Main Data Source Name') {
+			formattedFileName = String.format('{0} {1}', new List<String> { fileName, dataSource });
+		} else if (fileSuffix == 'Date') {
+			formattedFileName = String.format('{0} {1}', new List<String> { fileName, StringUtils.formatDatetime(Datetime.now()) });
+		} else if (fileSuffix == 'Main Data Source Name and Date') {
+			formattedFileName = String.format('{0} {1} {2}', new List<String> { fileName, dataSource, StringUtils.formatDatetime(Datetime.now()) });
+		} else if (String.isBlank(fileName)) {
+			formattedFileName = Label.Untitled;
+		} else {
+			formattedFileName = fileName;
+		}
+
+		formattedFileName = formattedFileName.length() > 75 ? formattedFileName.substring(0, 75) + '.html' : formattedFileName + '.html';
+		return formattedFileName;
 	}
 }

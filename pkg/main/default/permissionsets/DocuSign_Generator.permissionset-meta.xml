@@ -3,6 +3,31 @@
 	<description>Provides access to document generation</description>
 	<fieldPermissions>
 		<editable>false</editable>
+		<field>GenTemplate__c.Description__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.TemplateId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.FileName__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.FileSuffix__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.SourceObject__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
 		<field>GenTemplate__c.HasPreviewedDocuments__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -24,6 +49,16 @@
 	<fieldPermissions>
 		<editable>false</editable>
 		<field>GenTemplate__c.SourceObject__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.Description__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>GenTemplate__c.TemplateType__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>

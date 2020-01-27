@@ -4,7 +4,7 @@ public with sharing class AgreementsController extends Controller {
 
 	public AgreementsController() {
 		Id sourceId = ApexPages.currentPage().getParameters().get('sId');
-		if (sourceId <> null && sourceEntity == null) {
+		if (sourceId != null && sourceEntity == null) {
 			sourceEntity = getSourceDetails(sourceId);
 		}
 	}

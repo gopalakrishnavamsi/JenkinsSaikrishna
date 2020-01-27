@@ -507,6 +507,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Recipient__c.EnvelopeRecipientId__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Recipient__c.EmailMessage__c</field>
         <readable>true</readable>
     </fieldPermissions>

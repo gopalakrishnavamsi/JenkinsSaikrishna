@@ -132,7 +132,8 @@ global with sharing class RecipientService {
 				r.SignNow__c == true,
 				String.isNotBlank(r.SourceId__c) ? new Entity(Id.valueOf(r.SourceId__c), r.Name, null) : null,
 				false,
-				false);
+				false)
+				.withEnvelopeRecipientId(r.EnvelopeRecipientId__c); // TODO: Move this to constructor
 		}
 
 		@TestVisible
@@ -142,6 +143,7 @@ global with sharing class RecipientService {
 			return new Recipient__c(
 				Envelope__c = envelopeId,
 				Id = r.id,
+				EnvelopeRecipientId__c = String.isBlank(r.envelopeRecipientId) ? null : r.envelopeRecipientId,
 				Sequence__c = sequence,
 				Type__c = r.type,
 				RoutingOrder__c = r.routingOrder,
@@ -192,28 +194,28 @@ global with sharing class RecipientService {
 
 		private List<Recipient__c> queryRecipientsInternal(final Id envelopeId, final Boolean orderBySequence) {
 			Permissions.verifyIsQueryable(TYPE_RECIPIENT, new List<String> {
-				'Id', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'RoleValue__c',
-				'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c',
-				'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c',
-				'SigningGroupName__c', 'SourceId__c'
+				'Id', 'EnvelopeRecipientId__c', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c',
+				'Role__c', 'RoleValue__c', 'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c',
+				'Language__c', 'EmailSubject__c', 'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c',
+				'SigningGroupId__c', 'SigningGroupName__c', 'SourceId__c'
 			});
 
 			if (orderBySequence) {
 				return [
-					SELECT Id, Sequence__c, Name, Email__c, RoutingOrder__c, Type__c, Role__c, RoleValue__c,
-						AccessCode__c, IdCheckRequired__c, SmsPhoneNumber__c, Note__c, Language__c, EmailSubject__c,
-						EmailMessage__c, HostName__c, HostEmail__c, SignNow__c, SigningGroupId__c, SigningGroupName__c,
-						SourceId__c
+					SELECT Id, EnvelopeRecipientId__c, Sequence__c, Name, Email__c, RoutingOrder__c, Type__c, Role__c,
+						RoleValue__c, AccessCode__c, IdCheckRequired__c, SmsPhoneNumber__c, Note__c, Language__c,
+						EmailSubject__c, EmailMessage__c, HostName__c, HostEmail__c, SignNow__c, SigningGroupId__c,
+						SigningGroupName__c, SourceId__c
 					FROM Recipient__c
 					WHERE Envelope__c = :envelopeId
 					ORDER BY Sequence__c
 				];
 			} else { // Order by routing order
 				return [
-					SELECT Id, Sequence__c, Name, Email__c, RoutingOrder__c, Type__c, Role__c, RoleValue__c,
-						AccessCode__c, IdCheckRequired__c, SmsPhoneNumber__c, Note__c, Language__c, EmailSubject__c,
-						EmailMessage__c, HostName__c, HostEmail__c, SignNow__c, SigningGroupId__c, SigningGroupName__c,
-						SourceId__c
+					SELECT Id, EnvelopeRecipientId__c, Sequence__c, Name, Email__c, RoutingOrder__c, Type__c, Role__c,
+						RoleValue__c, AccessCode__c, IdCheckRequired__c, SmsPhoneNumber__c, Note__c, Language__c,
+						EmailSubject__c, EmailMessage__c, HostName__c, HostEmail__c, SignNow__c, SigningGroupId__c,
+						SigningGroupName__c, SourceId__c
 					FROM Recipient__c
 					WHERE Envelope__c = :envelopeId
 					ORDER BY RoutingOrder__c
@@ -238,9 +240,9 @@ global with sharing class RecipientService {
 
 		public List<Recipient> insertRecipients(final Id envelopeId, final List<Recipient> recipients) {
 			Permissions.verifyIsCreateable(TYPE_RECIPIENT, new List<String> {
-				'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'RoleValue__c',
-				'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c',
-				'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c',
+				'EnvelopeRecipientId__c', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c',
+				'RoleValue__c', 'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c',
+				'EmailSubject__c', 'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c',
 				'SigningGroupName__c', 'SourceId__c'
 			});
 
@@ -478,15 +480,15 @@ global with sharing class RecipientService {
 
 		public List<Recipient> upsertRecipients(final Id envelopeId, final List<Recipient> recipients) {
 			Permissions.verifyIsCreateable(TYPE_RECIPIENT, new List<String> {
-				'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'RoleValue__c',
-				'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c',
-				'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c',
+				'EnvelopeRecipientId__c', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c',
+				'RoleValue__c', 'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c',
+				'EmailSubject__c', 'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c',
 				'SigningGroupName__c', 'SourceId__c'
 			});
 			Permissions.verifyIsUpdateable(TYPE_RECIPIENT, new List<String> {
-				'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c', 'RoleValue__c',
-				'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c', 'EmailSubject__c',
-				'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c',
+				'EnvelopeRecipientId__c', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c', 'Role__c',
+				'RoleValue__c', 'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c', 'Language__c',
+				'EmailSubject__c', 'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c', 'SigningGroupId__c',
 				'SigningGroupName__c', 'SourceId__c'
 			});
 

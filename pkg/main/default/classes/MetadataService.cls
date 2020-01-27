@@ -11,12 +11,15 @@ public with sharing class MetadataService {
 	public static final String REMOTE_SITE_MERGE = 'Merge';
 	public static final String REMOTE_SITE_AUTH = 'Auth';
 	public static final Integer METADATA_API_LAYOUT_LIMIT = 10;
+	public static final Set<String> COMMON_OBJECT_API_NAMES = new Set<String> { 'Account', 'Case', 'Contact', 'Lead', 'Opportunity' };
 
 	private static final Map<SObjectType, MetadataAPI.WebLink> SEND_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
 	private static final Map<SObjectType, MetadataAPI.WebLink> GEN_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
-	private static final List<String> PARAMETERS_ADD_QUOTES = new List<String> { 'templateId', 'title' };
+	private static final Map<SObjectType, MetadataAPI.WebLink> ONLINE_EDITOR_ACTIONS
+		= new Map<SObjectType, MetadataAPI.WebLink>();
+	private static final List<String> PARAMETERS_ADD_QUOTES = new List<String> { 'templateId', 'title', 'onlineEditorTemplateId' };
 	private static Boolean isChildObj;
 
 	/**
@@ -51,6 +54,26 @@ public with sharing class MetadataService {
 		List<MergeObject> result = new List<MergeObject>();
 		for (Schema.SObjectType type : Schema.getGlobalDescribe().values()) {
 			if (MergeObject.isValid(type)) {
+				result.add(MergeObject.forType(type));
+			}
+		}
+		result.sort();
+		return result;
+	}
+
+	/**
+	 * Returns a list of all Other Uncommon Salesforce object types.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
+	 *
+	 * @return The Salesforce objects.
+	 */
+	public static List<MergeObject> getAllOtherObjects() {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		List<MergeObject> result = new List<MergeObject>();
+		for (Schema.SObjectType type : Schema.getGlobalDescribe().values()) {
+			if (MergeObject.isValid(type) && !COMMON_OBJECT_API_NAMES.contains(type.getDescribe().name)) {
 				result.add(MergeObject.forType(type));
 			}
 		}
@@ -378,6 +401,8 @@ public with sharing class MetadataService {
 			return Layout.ACTION_TYPE_SEND;
 		} else if (apiName.contains(Layout.ACTION_NAME_GEN)) {
 			return Layout.ACTION_TYPE_GEN;
+		} else if (apiName.contains(Layout.ACTION_NAME_ONLINEEDITOR)) {
+			return Layout.ACTION_TYPE_ONLINEEDITOR;
 		} else {
 			return Layout.ACTION_TYPE_OTHER;
 		}
@@ -392,11 +417,11 @@ public with sharing class MetadataService {
 		if (Collection.isNotEmpty(mdLayouts)) {
 			for (MetadataAPI.Layout mdLayout : mdLayouts) {
 				actionApiNameToFullName = new Map<String, String>();
-				if (mdLayout.fullName <> null && layoutFullNames.containsKey(mdLayout.fullName)) {
+				if (mdLayout.fullName != null && layoutFullNames.containsKey(mdLayout.fullName)) {
 					MetadataAPI.FileProperties fpName = layoutFullNames.get(mdLayout.fullName);
-					if (fpName <> null && fpName.fullName <> null) {
+					if (fpName != null && fpName.fullName != null) {
 						String layoutName = getLayoutName(fpName.fullName);
-						if (layoutName <> null && mdLayout.customButtons <> null && Collection.isNotEmpty(mdLayout.customButtons)) {
+						if (layoutName != null && mdLayout.customButtons != null && Collection.isNotEmpty(mdLayout.customButtons)) {
 							for (String apiName : mdLayout.customButtons) {
 								actionApiNameToFullName.put(apiName, getActionFullName(type, apiName));
 								apiFullNames.add(getActionFullName(type, apiName));
@@ -419,7 +444,7 @@ public with sharing class MetadataService {
 				Map<String, String> apiNameToFullName = layoutNameToActionApiNameAndFullNameMap.get(layoutName);
 				for (String apiName : apiNameToFullName.keySet()) {
 					String apiFullName = apiNameToFullName.get(apiName);
-					if (apiFullName <> null && actionApiFullNameToLabel.containsKey(apiFullName)) {
+					if (apiFullName != null && actionApiFullNameToLabel.containsKey(apiFullName)) {
 						layoutActions.add(new Layout.Action(
 							getActionType(apiName),
 							apiName,
@@ -700,6 +725,7 @@ public with sharing class MetadataService {
 
 		Boolean hasSendAction = false;
 		Boolean hasGenAction = false;
+		Boolean hasOnlineEditorAction = false;
 		Gen.LayoutParameters genLayoutParameters;
 		if (String.isNotBlank(parameters)) {
 			genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
@@ -711,17 +737,20 @@ public with sharing class MetadataService {
 			} else if (a.type == Layout.ACTION_TYPE_GEN) {
 				hasGenAction = true;
 				break;
+			} else if (a.type == Layout.ACTION_TYPE_ONLINEEDITOR) {
+				hasOnlineEditorAction = true;
+				break;
 			}
 		}
 
 		currentLayout.customButtons = getCustomButtons(
-			genLayoutParameters != null ? hasGenAction : hasSendAction,
+			genLayoutParameters != null ? (hasGenAction || hasOnlineEditorAction) : hasSendAction,
 			genLayoutParameters != null ? genLayoutParameters.genButtonApiName : Layout.ACTION_NAME_SEND,
 			currentLayout.customButtons);
 		if (currentLayout.platformActionList != null) {
 			currentLayout.platformActionList.platformActionListItems = getPlatformActionListItems(
 				type,
-				genLayoutParameters != null ? hasGenAction : hasSendAction,
+				genLayoutParameters != null ? (hasGenAction || hasOnlineEditorAction) : hasSendAction,
 				genLayoutParameters != null ? genLayoutParameters.genButtonApiName : Layout.ACTION_NAME_SEND,
 				currentLayout.platformActionList.platformActionListItems);
 		}
@@ -823,9 +852,11 @@ public with sharing class MetadataService {
 				getSendAction(type);
 			} else if (l.hasGenAction()) {
 				getGenAction(type, parameters);
+			} else if (l.hasOnlineEditorAction()) {
+				getOnlineEditorAction(type, parameters);
 			}
 		}
-		if (ls <> null && ls.keySet().size() > 0) {
+		if (ls != null && ls.keySet().size() > 0) {
 			List<List<String>> layoutNamesChunk = Collection.chunk(new List<String>(ls.keySet()), METADATA_API_LAYOUT_LIMIT);
 			for (List<String> layoutNames : layoutNamesChunk) {
 				Map<String, MetadataAPI.Layout> mdLayouts = readLayouts(layoutNames);
@@ -838,4 +869,154 @@ public with sharing class MetadataService {
 		}
 		return layouts;
 	}
+
+	// OnlineEditor logic start
+	@TestVisible
+	private static MetadataAPI.WebLink getOnlineEditorWebLink(
+		final SObjectType type,
+		final String actionName,
+		final String actionLabel,
+		final Id onlineEditorSalesforceTemplateId) {
+
+		if (type == null || String.isBlank(actionName)) return null;
+
+		MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)Collection.head(MetadataAPI.getInstance().readMetadata(
+			'WebLink', new List<String> { getActionFullName(type, actionName) }));
+		String onlineEditorTemplateId = GenService.getOnlineEditorTemplateId(onlineEditorSalesforceTemplateId);
+		if (webLink == null) {
+
+			Map <String, String> parametersMap = new Map<String, String>();
+			parametersMap.put('templateId', onlineEditorSalesforceTemplateId);
+			parametersMap.put('recordId', type + '.Id');
+			parametersMap.put('recordName', type + '.' + Salesforce.getNameField(type));
+			parametersMap.put('title', actionLabel);
+			parametersMap.put('onlineEditorTemplateId', onlineEditorTemplateId);
+			webLink = createWebLink(
+				type,
+				actionName,
+				actionLabel,
+				Page.OnlineEditorDocumentGenerator,
+				parametersMap);
+		} else if (webLink != null && String.isNotBlank(webLink.masterLabel) && webLink.masterLabel != actionLabel) {
+			webLink.masterLabel = actionLabel;
+			validateResults(MetadataAPI.getInstance().updateMetadata(new List<MetadataAPI.Metadata> { webLink }));
+		}
+		return webLink;
+	}
+
+	@TestVisible
+	private static MetadataAPI.WebLink getOnlineEditorAction(
+		final SObjectType type,
+		final String parameters) {
+
+		if (type == null) return null;
+
+		MetadataAPI.WebLink result = ONLINE_EDITOR_ACTIONS.get(type);
+		if (result == null) {
+			Gen.LayoutParameters genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
+			result = getOnlineEditorWebLink(type, genLayoutParameters.genButtonApiName, genLayoutParameters.genButtonLabel, genLayoutParameters.genTemplateId);
+			ONLINE_EDITOR_ACTIONS.put(type, result);
+		}
+		return result;
+	}
+
+	public static OnlineEditorMergeObject getObjectsRecursively(final SObjectType type) {
+		if (type == null) throw new DocuSignException(Label.UndefinedArgument);
+		Permissions.verifyIsDocuSignAdministrator();
+
+		OnlineEditorMergeObject obj = OnlineEditorMergeObject.forType(type.getDescribe());
+		Map<String, String[]> resolvedObjects = new Map<String, String[]>();
+		String[] path = new List<String>();
+		return getObjectsRecursively(obj, 1, resolvedObjects, path);
+	}
+
+	public static OnlineEditorMergeObject getObjectsRecursively(
+		final OnlineEditorMergeObject obj,
+		Integer depth,
+		Map<String, String[]> resolvedObjects,
+		String[] path) {
+		if (!OnlineEditorMergeObject.isValid(obj.describe)) {
+			return obj;
+		}
+		if (depth == 1) {
+			obj.children.addAll(getChildRelationships(obj.describe, obj.name));
+		}
+
+		if (!resolvedObjects.containsKey(obj.name)) {
+			resolvedObjects.put(obj.name, path);
+		}
+		path.add(obj.name);
+		for (OnlineEditorMergeObject refObject : getReferenceObjects(obj.describe)) {
+			if (!resolvedObjects.containsKey(refObject.name)) {
+				obj.children.add(getObjectsRecursively(refObject, depth + 1, resolvedObjects, path.clone()));
+			} else {
+				refObject.childrenPath = resolvedObjects.get(refObject.name);
+				obj.children.add(refObject);
+			}
+		}
+
+		return obj;
+	}
+
+	private static List<OnlineEditorMergeObject> getReferenceObjects(final DescribeSObjectResult type) {
+		List<OnlineEditorMergeObject> result = new List<OnlineEditorMergeObject>();
+		for (SObjectField f : type.fields.getMap().values()) {
+			DescribeFieldResult field = f.getDescribe();
+			if (!field.getReferenceTo().isEmpty() && OnlineEditorMergeObject.isValid(field)) {
+				result.add(OnlineEditorMergeObject.forField(field));
+			}
+		}
+		return result;
+	}
+
+	private static List<OnlineEditorMergeObject> getChildRelationships(final DescribeSObjectResult type, final String parent) {
+		List<OnlineEditorMergeObject> result = new List<OnlineEditorMergeObject>();
+		for (Schema.ChildRelationship cr : type.getChildRelationships()) {
+			if (MergeField.isValid(cr)) {
+				OnlineEditorMergeObject obj = OnlineEditorMergeObject.forChildRelationship(cr);
+				result.add(obj);
+			}
+		}
+		return result;
+	}
+
+	private static List<MergeField> getOnlineEditorFields(final DescribeSObjectResult type) {
+		List<MergeField> result = new List<MergeField>();
+		for (SObjectField f : type.fields.getMap().values()) {
+			DescribeFieldResult field = f.getDescribe();
+			if (field.getReferenceTo().isEmpty() && MergeField.isValid(field)) {
+				result.add(MergeField.forField(field, null));
+			}
+		}
+		return result;
+	}
+
+	public static Map<String, MergeField[]> getFieldsRecursively(final OnlineEditorMergeObject obj) {
+		Map<String, MergeField[]> fields = new Map<String, MergeField[]>();
+		return getFieldsRecursively(obj, fields);
+	}
+
+	public static Map<String, MergeField[]> getFieldsRecursively(final OnlineEditorMergeObject obj, Map<String, MergeField[]> fields) {
+		if (!fields.containsKey(obj.name)) {
+			fields.put(obj.name, getOnlineEditorFields(obj.describe));
+		}
+		for (OnlineEditorMergeObject child : obj.children) {
+			getFieldsRecursively(child, fields);
+		}
+		return fields;
+	}
+
+	public static Map<String, String> picklistValues(String objectName, String fieldName) {
+		Map<String, String> values = new Map<String, String> {};
+		List<Schema.DescribeSobjectResult> results = Schema.describeSObjects(new List<String> { objectName });
+		for (Schema.DescribeSobjectResult res : results) {
+			for (Schema.PicklistEntry entry : res.fields.getMap().get(fieldName).getDescribe().getPicklistValues()) {
+				if (entry.isActive()) {
+					values.put(entry.getValue(), entry.getLabel());
+				}
+			}
+		}
+		return values;
+	}
+// OnlineEditor logic end
 }

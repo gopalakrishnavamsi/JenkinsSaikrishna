@@ -23,22 +23,22 @@
               label: $A.get('$Label.c.NameLabel'),
               fieldName: 'link',
               type: 'url',
-              typeAttributes: { label: { fieldName: 'name' }, target: '_blank' }
+              typeAttributes: {label: {fieldName: 'name'}, target: '_blank'}
             },
             {
               label: $A.get('$Label.c.MainDataSource'),
-              fieldName: 'sourceObject', 
-              type: 'text' },
+              fieldName: 'sourceObject',
+              type: 'text'
+            },
             {
               label: $A.get('$Label.c.LastModfiedDateLabel'),
               fieldName: 'lastModifiedDate',
               type: 'date',
-              typeAttributes: { year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' }
+              typeAttributes: {year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit'}
             }
           ]);
         }
-      }
-      else {
+      } else {
         helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
       }
       component.set('v.loading', false);
@@ -47,19 +47,29 @@
   },
 
   createNewGenTemplate: function (component, event, helper) {
-    component.set('v.loading', true);
-    var getNewGenTemplateUrlAction = component.get('c.getNewGenTemplateUrl');
-    getNewGenTemplateUrlAction.setCallback(this, $A.getCallback(function (response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        navUtils.navigateToUrl(response.getReturnValue());
+    helper.createComponent('genTemplateNavigator', component, 'c:GenTemplateNavigator',
+      {
+        loading: true,
+        isRedirectOnCancel: false,
+        isFromSetupWizard: true
       }
-      else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-      }
-      component.set('v.loading', false);
-    }));
-    $A.enqueueAction(getNewGenTemplateUrlAction);
+    );
+  },
+
+  createComponent: function (anchor, component, componentName, attributes) {
+    $A.createComponent(
+      componentName,
+      attributes,
+      $A.getCallback(function (componentBody) {
+          if (component.isValid()) {
+            var targetCmp = component.find(anchor);
+            var body = targetCmp.get('v.body');
+            targetCmp.set('v.body', []);
+            body.push(componentBody);
+            targetCmp.set('v.body', body);
+          }
+        }
+      ));
   },
 
   showToast: function (component, message, mode) {

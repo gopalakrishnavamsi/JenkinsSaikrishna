@@ -1,0 +1,21 @@
+.THIS .slds-modal {
+    display: grid;
+    overflow-y: auto;
+}
+
+.THIS .ds-gen-templates-setup-spinner {
+    min-height: 30vh;
+    position: static;
+}
+
+.THIS .slds-modal__content {
+    overflow: initial;
+}
+
+.THIS .ds-gen-templates-types {
+    cursor: pointer;
+}
+
+.THIS .ds-genType .slds-icon-text-default {
+    fill: white !important;
+}

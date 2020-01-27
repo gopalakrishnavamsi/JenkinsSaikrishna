@@ -69,6 +69,11 @@ global class Recipient implements Comparable {
 	@AuraEnabled
 	global Id id { get; private set; }
 	/**
+	 * The envelope recipient ID of the recipient.
+	 */
+	@AuraEnabled
+	public String envelopeRecipientId { get; private set; }
+	/**
 	 * The type of the recipient.
 	 */
 	@AuraEnabled
@@ -865,6 +870,18 @@ global class Recipient implements Comparable {
 			if (this.routingOrder > that.routingOrder) return 1;
 			return -1;
 		}
+
+		/**
+		 * Sets the <code>sequence</code> property.
+		 *
+		 * @param sequence The new sequence.
+		 *
+		 * @return The status with updated <code>sequence</code>.
+		 */
+		public Status withSequence(final Integer sequence) {
+			this.sequence = sequence;
+			return this;
+		}
 	}
 
 	/**
@@ -1058,6 +1075,18 @@ global class Recipient implements Comparable {
 		this.hostName = hostName;
 		this.hostEmail = hostEmail;
 		this.signNow = signNow;
+		return this;
+	}
+
+	/**
+	 * Sets the envelope recipient ID.
+	 *
+	 * @param envelopeRecipientId The envelope recipient ID.
+	 *
+	 * @return The recipient with updated <code>envelopeRecipientId</code>.
+	 */
+	public Recipient withEnvelopeRecipientId(final String envelopeRecipientId) {
+		this.envelopeRecipientId = envelopeRecipientId;
 		return this;
 	}
 

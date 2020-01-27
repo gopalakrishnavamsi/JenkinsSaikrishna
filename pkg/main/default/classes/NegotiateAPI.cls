@@ -19,6 +19,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	public static final String VIEW_EDIT_DELETE = 'ViewEditDelete';
 	public static final String APPROVE = 'Approve';
 	public static final String REJECT = 'Reject';
+	public static final String ROOT = 'root';
 	public static final Long SCM_OFFSET = 20;
 	public static final String SCM_SORT_PROPERTY = 'UpdatedDate';
 	public static final String SCM_SORT_DIRECTION = 'desc';
@@ -988,6 +989,55 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed to get reviews for Agreement - ' + documentId + ': ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
+	}
+
+	// Get the root system folder for an account - onlineEditor
+
+	public UUID getRootFolder() {
+
+		Map<String, String> queryStrings = new Map<String, String>();
+		queryStrings.put(SYSTEM_FOLDER, ROOT);
+
+		final RestAPI.Response response = get(
+			getBaseUrl(),
+			new List<Object> {
+				PATH_FOLDER, PATH_TYPE
+			},
+			new QueryString(queryStrings),
+			getDefaultHeaders(),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to get root folder : ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
+	}
+
+	// Create Folder
+
+	public UUID createFolder(final String folderName, final UUID parentFolder) {
+
+		final RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<String> {
+				PATH_FOLDER
+			},
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'Name' => folderName,
+				'ParentFolder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + String.valueOf(parentFolder))
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to create folder: ' + response.error);
 			throw new APIException(response.error);
 		}
 

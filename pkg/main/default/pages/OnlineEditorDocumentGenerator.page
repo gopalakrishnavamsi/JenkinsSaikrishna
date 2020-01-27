@@ -1,0 +1,97 @@
+<apex:page id="OnlineEditorDocumentGenerator" sidebar="false" showHeader="false" controller="GenController"
+           title="Generate Documents" standardStylesheets="false" applyHtmlTag="false">
+    <html>
+    <apex:includeLightning/>
+    <apex:slds/>
+    <apex:includeScript value="{!$Resource.jquery}"/>
+    <apex:includeScript value="{!$Resource.navUtils}"/>
+    <apex:includeScript value="{!$Resource.OnlineEditorJs}"/>
+    <apex:includeScript value="{!$Resource.scmwidgetsjs}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ds_editor, '/ds-editor-salesforce.js')}"/>
+
+    <script type="application/javascript">
+      Visualforce.remoting.timeout = 120000;
+
+      RemoteActions = {
+        generateDownloadToken: '{!$RemoteAction.GenController.generateDownloadToken}',
+        saveAttachments: '{!$RemoteAction.GenController.saveAttachments}',
+        getMergeData: '{!$RemoteAction.GenController.getOnlineEditorMergeData}',
+        getMergeFields: '{!$RemoteAction.GenController.getMergeFields}',
+        getEntityRecords: '{!$RemoteAction.GenController.getEntityRecords}'
+      };
+
+      Configuration = {
+        isCreating: false,
+        isEditing: false,
+        isGenerating: true,
+        namespace: '{!JSENCODE(namespace)}',
+        docuSignAccountId: '{!JSENCODE(docuSignAccountId)}',
+        docuSignUserId: '{!JSENCODE(docuSignUserId)}',
+        docuSignEnvironment: '{!JSENCODE(docuSignEnvironment)}',
+        template: Object.freeze(JSON.parse('{!JSENCODE(templateJson)}')),
+        sourceId: '{!JSENCODE($CurrentPage.parameters.recordId)}',
+        sendingUrl: '{!URLFOR($Page.Sending)}'
+      };
+    </script>
+
+    <style type="text/css">
+        #ds-spinner2 {
+            height: calc(100vh - 165px);
+        }
+
+        #onlineEditorGenerator {
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 72px);
+        }
+
+        .onlineEditorToolbarIcon {
+            background: rgb(243, 242, 242);
+        }
+    </style>
+
+    <div class="slds-scope">
+        <div id="toastNotificationContainer"></div>
+
+        <div id="inputPanel">
+            <div class="slds-page-header slds-border_bottom">
+                <div class="slds-grid">
+                    <div class="slds-col slds-has-flexi-truncate">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-custom">
+                                <img src="{!$Resource.dsdxicon}" class="slds-icon onlineEditorToolbarIcon" alt=""/>
+                            </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-page-header__name">
+                                    <div class="slds-page-header__name-title">
+                                        <span>{!$CurrentPage.parameters.recordName}</span>
+                                        <div class="slds-page-header__title slds-truncate">
+                                            {!$CurrentPage.parameters.title}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-no-flex slds-align-top">
+                        <button id="onlineEditorCancelGeneration" class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
+                        <button id="onlineEditorSendForSignature" class="slds-button slds-button_brand">{!$Label.SendForSignature}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="ds-spinner2">
+            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+        <div id="onlineEditorGenerator"></div>
+    </div>
+    
+    </html>
+</apex:page>

@@ -1,0 +1,133 @@
+<aura:component controller="GenController">
+    <!-- import scripts -->
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
+
+    <!-- component attributes -->
+    <aura:attribute name="templateId" type="Id"/>
+    <aura:attribute name="isRedirectOnCancel" type="Boolean"/>
+    <aura:attribute name="isFromSetupWizard" type="Boolean" default="false"/>
+    <aura:attribute name="template" type="Map" access="private" default="{}"/>
+    <aura:attribute name="errMsg" type="String" access="private"/>
+    <aura:attribute name="templateTypes" type="List" access="private"/>
+    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
+    <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isGenEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isGenTrialExpired" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="products" type="Product[]" access="private"/>
+    <aura:attribute name="selectedType" type="String" default="" access="private"/>
+    <aura:attribute name="loading" type="Boolean" default="false"/>
+
+    <!-- handlers -->
+    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
+    <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancel}"/>
+
+    <!-- markup -->
+    <c:strike_modal aura:id="genTemplateNavigator"
+                    title="{!$Label.c.CreateNewTemplate}"
+                    showModal="true"
+                    showHeader="true"
+                    showClose="true">
+
+        <aura:if isTrue="{!or(v.fetchingOAuthStatus, v.loading)}">
+            <div class="ds-gen-templates-setup-spinner">
+                <c:BlueSpinner/>
+            </div>
+        </aura:if>
+
+        <aura:if isTrue="{!not(v.isAuthorized)}">
+            <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
+                                    fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
+                                    products="{!v.products}"/>
+        </aura:if>
+
+        <aura:if isTrue="{!and(v.isAuthorized, not(or(v.fetchingOAuthStatus, v.loading)))}">
+            <aura:if isTrue="{!not(empty(v.errMsg))}">
+                <div class="slds-m-around_large slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_error"
+                     role="alert">
+                    <lightning:icon iconName="utility:error" variant="inverse" size="small"
+                                    class="slds-m-right_small slds-no-flex slds-align-top"/>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small">{!v.errMsg}</h2>
+                    </div>
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-scope slds-p-horizontal_medium">
+                        <div class="slds-grid slds-grid_vertical">
+                            <div class="slds-col slds-m-bottom_medium">
+                                <lightning:input type="text" label="{!$Label.c.AddTemplateName}"
+                                                 value="{!v.template.name}"
+                                                 required="true"/>
+                            </div>
+                            <div class="slds-col slds-m-bottom_medium">
+                                <lightning:textarea label="{!$Label.c.AddTemplateDescription}"
+                                                    value="{!v.template.description}"/>
+                            </div>
+                            <div class="slds-col slds-m-bottom_medium">
+                                <c:DataSourceLookup aura:id="account-records" errMsg="{!v.errMsg}"
+                                                    template="{!v.template}"/>
+                            </div>
+                            <div class="slds-col slds-m-bottom_medium slds-form-element">
+                                <label class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">*</abbr>{!$Label.c.SelectDocumentType}
+                                </label>
+                                <div class="slds-grid slds-gutters slds-m-top_xx-small slds-grid_vertical-align-end">
+                                    <aura:iteration items="{!v.templateTypes}" var="type" indexVar="name">
+                                        <div class="slds-col slds-wrap slds-form-element__control">
+                                            <div class="slds-visual-picker ds-genType">
+                                                <input type="radio" id="{!type.name}" value="{!type.name}"
+                                                       name="options" onclick="{!c.selectType}"/>
+                                                <label for="{!type.name}">
+                                                        <span class="slds-visual-picker__figure slds-visual-picker__text slds-p-around_small">
+                                                          <article class="slds-tile slds-media">
+                                                                <div class="slds-media__figure slds-align_absolute-center">
+                                                                    <lightning:icon
+                                                                            iconName="{!type.name == 'Online Editor'?'doctype:html':'doctype:word'}"/>
+                                                                </div>
+                                                                <div class="slds-media__body slds-border--left slds-p-left_small">
+                                                                    <h3 class="slds-truncate slds-text-title_bold slds-text-align_left">{!type.label}</h3>
+                                                                    <span class="slds-text-body_small slds-text-align_left">
+                                                                    <aura:if isTrue="{!type.name == 'Online Editor'}">
+                                                                        {!$Label.c.OnlineEditorDescription}
+                                                                        <aura:set attribute="else">
+                                                                            {!$Label.c.MicrosoftWordDescription}
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                    </span>
+                                                                </div>
+                                                             </article>
+                                                        </span>
+                                                    <span class="{!if(v.selectedType == type.name,'slds-icon_container slds-visual-picker__text-check' ,'slds-hide')}">
+                                                          <lightning:icon iconName="utility:check"
+                                                                          size="x-small"/>
+                                                        </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                        </div>
+                        <p>
+                            <lightning:formattedUrl value="{!$Label.c.OnlineEditorHelpUrl}"
+                                                    tooltip="{!$Label.c.OnlineEditorHelpUrl}"
+                                                    label="{!$Label.c.OnlineEditorHelpLabel}" target="_blank"/>
+                        </p>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </aura:if>
+
+        <!-- modal footer buttons -->
+        <aura:set attribute="footerButtons">
+            <lightning:button class="slds-button slds-button_neutral"
+                              label="{!$Label.c.Cancel}" onclick="{!c.cancel}"
+                              disabled="{!(v.loading || v.fetchingOAuthStatus)}">
+            </lightning:button>
+            <lightning:button class="slds-button slds-button_brand"
+                              label="Create"
+                              disabled="{!empty(v.template.name) || empty(v.selectedType) || empty(v.template.sourceObject)}"
+                              onclick="{!c.createTemplate}"></lightning:button>
+        </aura:set>
+
+    </c:strike_modal>
+</aura:component>

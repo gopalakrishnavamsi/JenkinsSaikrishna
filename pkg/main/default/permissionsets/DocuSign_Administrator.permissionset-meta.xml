@@ -59,6 +59,31 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>GenTemplate__c.Description__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>GenTemplate__c.TemplateId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>GenTemplate__c.FileName__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>GenTemplate__c.FileSuffix__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>GenTemplate__c.SourceObject__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>ContentVersion.GeneratedFileFormat__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -479,6 +504,16 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>GenTemplate__c.Description__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>GenTemplate__c.TemplateType__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>GenTemplate__c.StepsCompleted__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -545,6 +580,11 @@
 	<fieldPermissions>
 		<editable>true</editable>
 		<field>Recipient__c.AccessCode__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Recipient__c.EnvelopeRecipientId__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
@@ -777,6 +817,10 @@
 		<viewAllRecords>false</viewAllRecords>
 	</objectPermissions>
 	<pageAccesses>
+		<apexPage>OnlineEditorGenTemplate</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
 		<apexPage>CompleteOAuth</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
@@ -819,7 +863,11 @@
 	<pageAccesses>
 		<apexPage>Agreements</apexPage>
 		<enabled>true</enabled>
-	</pageAccesses>	
+	</pageAccesses>
+	<tabSettings>
+		<tab>GenTemplate__c</tab>
+		<visibility>Available</visibility>
+	</tabSettings>
 	<tabSettings>
 		<tab>EnvelopeStatus__c</tab>
 		<visibility>Available</visibility>

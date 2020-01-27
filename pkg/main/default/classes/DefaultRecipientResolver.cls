@@ -33,6 +33,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 			SELECT Id, Name, Email, Phone, MobilePhone, Account.Id, Account.Name
 			FROM Contact
 			WHERE AccountId IN :accountIds
+			ORDER BY CreatedDate
 		]) {
 			recipients.add(Recipient.fromSource(
 				c.Name,
@@ -59,6 +60,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 			SELECT Id, CaseNumber, Contact.Id, Contact.Name, Contact.Email, Contact.Phone, Contact.MobilePhone
 			FROM Case
 			WHERE Id IN :caseIds
+			ORDER BY CreatedDate
 		]) {
 			recipients.add(Recipient.fromSource(
 				c.Contact.Name,
@@ -85,6 +87,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 			SELECT Id, Name, Email, Phone, MobilePhone, Account.Id, Account.Name
 			FROM Contact
 			WHERE Id IN :contactIds
+			ORDER BY CreatedDate
 		]) {
 			recipients.add(Recipient.fromSource(
 				c.Name,
@@ -110,6 +113,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 			SELECT Id, Name, Email, Phone, MobilePhone
 			FROM Lead
 			WHERE Id IN :leadIds
+			ORDER BY CreatedDate
 		]) {
 			recipients.add(Recipient.fromSource(
 				c.Name,
@@ -167,6 +171,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 			SELECT Id, Name, Email, Phone, MobilePhone
 			FROM User
 			WHERE Id IN :userIds
+			ORDER BY CreatedDate
 		]) {
 			recipients.add(Recipient.fromSource(
 				u.Name,

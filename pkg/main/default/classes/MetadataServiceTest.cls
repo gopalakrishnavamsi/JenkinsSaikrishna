@@ -48,6 +48,29 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
+	static void test_getAllOtherObjects_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				MetadataService.getAllOtherObjects();
+				throw new AssertException('Expected getObjects to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getAllOtherObjects_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assert(Collection.isNotEmpty(MetadataService.getAllOtherObjects()));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_getFields_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();

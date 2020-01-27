@@ -1,3 +1,6 @@
 jquery*.js
 strike_*.js
 scmwidgetsjs.js
+/pkg/main/default/staticresources/ds_editor/*
+jquery.js
+mixpanel.js

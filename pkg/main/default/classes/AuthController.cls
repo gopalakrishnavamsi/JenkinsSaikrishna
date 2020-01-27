@@ -88,7 +88,7 @@ public with sharing class AuthController {
 	}
 
 	private static List<Product> processProductCheckInAccountSetting(List<Product> products) {
-		if (products <> null) {
+		if (products != null) {
 			Boolean isESignatureEnabled = AccountSettings.getInstance().isESignatureEnabled;
 			for (Integer i = 0; i < products.size(); i++) {
 				if (products[i].name == Product.ESIGNATURE && products[i].status == Product.STATUS_ACTIVE && !isESignatureEnabled) {

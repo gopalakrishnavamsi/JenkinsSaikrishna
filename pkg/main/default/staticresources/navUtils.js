@@ -40,21 +40,44 @@ window.navUtils = (function () {
   /**
    * Fires a URL navigation event.
    * @param url {string} The URL to navigate to.
+   * @param isRedirect {boolean} Whether or not the navigation is a redirect. Leave undefined if calling from a Lightning component.
    */
-  var navigateToUrl = function (url) {
-    var navEvt = $A.get('e.force:navigateToURL');
-    if (!$A.util.isEmpty(navEvt)) {
-      navEvt.setParams({
-        'url': url
-      });
-      navEvt.fire();
+  var navigateToUrlOnlineEditor = function (url, isRedirect) {
+    if (!isRedirect && typeof $A !== 'undefined' && $A) {
+      var navEvt = $A.get('e.force:navigateToURL');
+      if (!$A.util.isEmpty(navEvt)) {
+        navEvt.setParams({
+          'url': url
+        });
+        navEvt.fire();
+      }
+    } else if (_isLightningOrMobile()) {
+      sforce.one.navigateToURL(url, isRedirect);
+    } else {
+      window.location.href = url;
     }
+  };
+
+  /**
+   * Fires a URL navigation event.
+   * @param url {string} The URL to navigate to.
+   */
+
+  var navigateToUrl = function (url) {
+      var navEvt = $A.get('e.force:navigateToURL');
+      if (!$A.util.isEmpty(navEvt)) {
+        navEvt.setParams({
+          'url': url
+        });
+        navEvt.fire();
+      }
   };
 
   return Object.freeze({
     isInIFrame: isInIFrame,
     navigateToSObject: navigateToSObject,
     navigateToUrl: navigateToUrl,
-    isLightningOrMobile: _isLightningOrMobile,
+    navigateToUrlOnlineEditor: navigateToUrlOnlineEditor,
+    isLightningOrMobile: _isLightningOrMobile
   });
 }());

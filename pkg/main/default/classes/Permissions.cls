@@ -9,6 +9,7 @@ public with sharing class Permissions {
 	@TestVisible
 	private static final Boolean IS_FLS_SUPPORTED;
 	private static final Map<String, DescribeFieldResult> FIELD_DESCRIBE_MAP = new Map<String, DescribeFieldResult>();
+	private static final Set<String> SPECIAL_CASE_FIELDS = new Set<String> { 'Owner', 'MasterRecord', 'Parent' };
 	private static Map<String, Id> permissionSetMap = null;
 	private static Id dsAdministratorPermissionSetId = null;
 	private static Id dsUserPermissionSetId = null;
@@ -1129,10 +1130,15 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
+	private static String formatIdPointingField(final String fieldName) {
+		return String.format('{0}Id', new List<String> { fieldName }).toLowerCase();
+	}	
+
+	@TestVisible
 	private static FlsResults getFlsResults(final FlsAccess requestedAccess, final String objectName,
 		final DescribeSObjectResult objectDescribe, final List<String> fieldNames,
 		final Map<String, SObjectField> fieldMap) {
-
+		
 		if (String.isBlank(objectName)) {
 			return new FlsResults(requestedAccess, false, new FlsResult(Label.Unknown, FlsStatus.BadRequest),
 				new List<FlsResult>());
@@ -1147,10 +1153,16 @@ public with sharing class Permissions {
 					isAuthorized = false;
 					fieldResults.add(new FlsResult(Label.Unknown, FlsStatus.BadRequest));
 				} else {
+					// Using a value that is contained in SPECIAL_CASE_FIELDS, returns bad query, so we need to format it.
+					if (SPECIAL_CASE_FIELDS.contains(f)) f = formatIdPointingField(f);
 					SObjectField sof = fieldMap.get(f);
-					if (sof == null && f.endsWith('__c')) {
+					if (sof == null && !objectDescribe.isCustom() && !f.endsWith('__c') && Salesforce.exists(f)) {
+						String formattedField = formatIdPointingField(f);
+						sof = fieldMap.get(formattedField);
+						f = formattedField;
+					} else if (sof == null && f.endsWith('__c')) {
 						sof = fieldMap.get(Application.namespacePrefix + f);
-						f = sof == null ? f : Application.namespacePrefix + f;
+						f = sof == null ? f : Application.namespacePrefix + f;						
 					}
 					FlsResult fieldResult = getFlsResult(requestedAccess, f, describeField(objectName, f, sof));
 					isAuthorized &= fieldResult.isAuthorized;

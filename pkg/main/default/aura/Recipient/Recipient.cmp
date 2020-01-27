@@ -30,7 +30,7 @@
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
             <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                 <div class="slds-col slds-has-flexi-truncate">
-                    <aura:if isTrue="{!empty(v.recipient.templateId)}">
+                    <aura:if isTrue="{!and(empty(v.recipient.templateId), empty(v.recipient.envelopeRecipientId))}">
                         <!-- Recipient Type -->
                         <lightning:select value="{!v.recipient.type}" label="{!$Label.c.Type}" class="ds-no-label">
                             <option value="Signer">{!$Label.c.Signer}</option>

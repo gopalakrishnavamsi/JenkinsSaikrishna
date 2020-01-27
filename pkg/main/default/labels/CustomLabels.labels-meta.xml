@@ -3672,7 +3672,7 @@
 		<fullName>MigrateTemplateErrorText</fullName>
 		<categories>Gen-Error</categories>
 		<language>en_US</language>
-		<protected>ture</protected>
+		<protected>true</protected>
 		<shortDescription>MigrateTemplateErrorText</shortDescription>
 		<value>&lt;span class=&quot;slds-text-color_error&quot;&gt;We couldn&#39;t migrate {0} because of [{1}].&lt;/span &gt;</value>
 	</labels>
@@ -8721,6 +8721,224 @@
 		<shortDescription>Authorizing</shortDescription>
 		<value>Authorizing</value>
 	</labels>
+	<!-- Start of chorus migration -->
+	<labels>
+		<fullName>OnlineEditorTemplateCreated_1</fullName>
+		<categories>OnlineEditor</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Template Created</shortDescription>
+		<value>Template &quot;{0}&quot; created.</value>
+	</labels>
+	<labels>
+		<fullName>OnlineEditorTemplateUpdated_1</fullName>
+		<categories>OnlineEditor</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Template Updated</shortDescription>
+		<value>Template &quot;{0}&quot; updated.</value>
+	</labels>
+	<labels>
+		<fullName>OnlineEditorAfterPublish_1</fullName>
+		<categories>OnlineEditor</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Template Button Created</shortDescription>
+		<value>Template &quot;{0}&quot; buttons updated.</value>
+	</labels>
+	<labels>
+		<fullName>CreateNewTemplate</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>CreateNewTemplate</shortDescription>
+		<value>Create New Template</value>
+	</labels>
+	<labels>
+		<fullName>OnlineEditorDescription</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Online Editor Description</shortDescription>
+		<value>Use DocuSign's online editor to build and update templates in real time.</value>
+	</labels>
+	<labels>
+		<fullName>MicrosoftWordDescription</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Microsoft Word Description</shortDescription>
+		<value>Create and upload a Word file. To update your template upload a new version.</value>
+	</labels>
+	<labels>
+		<fullName>SelectDataSource</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Select Data Source</shortDescription>
+		<value>Select Data Source</value>
+	</labels>
+	<labels>
+		<fullName>SelectDocumentType</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SelectDocumentType</shortDescription>
+		<value>Select Document Type</value>
+	</labels>
+	<labels>
+		<fullName>AddTemplateName</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Template Name</shortDescription>
+		<value>Add Template Name</value>
+	</labels>
+	<labels>
+		<fullName>AddTemplateDescription</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Template Description</shortDescription>
+		<value>Add Description</value>
+	</labels>
+	<labels>
+		<fullName>OnlineEditorHelpLabel</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OnlineEditorHelpLabel</shortDescription>
+		<value>Learn more about online editor</value>
+	</labels>
+	<labels>
+		<fullName>OnlineEditorHelpUrl</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OnlineEditorHelpUrl</shortDescription>
+		<value>https://support.docusign.com/en/guides/</value>
+	</labels>
+	<labels>
+		<fullName>CreateLabel</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Create</shortDescription>
+		<value>Create</value>
+	</labels>
+	<labels>
+		<fullName>DeployLabel</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Deploy</shortDescription>
+		<value>Deploy</value>
+	</labels>
+	<labels>
+		<fullName>PublishLabel</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Publish</shortDescription>
+		<value>Publish</value>
+	</labels>
+	<labels>
+		<fullName>SetFileNameRules</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Set File Naming Rules</shortDescription>
+		<value>Set File Naming Rules</value>
+	</labels>
+	<labels>
+		<fullName>OnlineEditorFileToolTip</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Online Editor File Tool Tip</shortDescription>
+		<value>Any documents generated with this template will take on the name you input in the boxes. For example, if File Name is &quot;asdSales Order&quot;asd and suffix is &quot;asdDate&quot;asd, a generated document could be named &quot;asdSales Order_3-06-2019&quot;asd</value>
+	</labels>
+	<labels>
+		<fullName>FileName</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>File Name</shortDescription>
+		<value>File Name</value>
+	</labels>
+	<labels>
+		<fullName>AddCustomButton</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Custom Button</shortDescription>
+		<value>Add Custom Button</value>
+	</labels>
+	<labels>
+		<fullName>OnlineEditorButtonPublishPrompt</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Online Editor Button Publish Prompt</shortDescription>
+		<value>Add a new custom button to allow your users to generate documents from one or more of the page layouts below.</value>
+	</labels>
+	<labels>
+		<fullName>ShowButtonInPrompt</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Show button in prompt</shortDescription>
+		<value>Show button in:</value>
+	</labels>
+	<labels>
+		<fullName>ExportDataIsUndefinedLabel</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Show button in prompt</shortDescription>
+		<value>Export data is undefined</value>
+	</labels>
+	<labels>
+		<fullName>InvalidPathLabel</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid Path</shortDescription>
+		<value>Invalid Path</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedOnlineEditorTemplate</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined Online Editor template</shortDescription>
+		<value>Undefined Online Editor template</value>
+	</labels>
+	<labels>
+		<fullName>OnlineEditorSaveValidation</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Online Editor Save Validation</shortDescription>
+		<value>You must save this template before navigating to this step</value>
+	</labels>
+	<labels>
+		<fullName>MostCommonlyUsed</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Most Commonly Used</shortDescription>
+		<value>MOST COMMONLY USED</value>
+	</labels>
+	<labels>
+		<fullName>OtherItems</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Other Items</shortDescription>
+		<value>OTHER ITEMS</value>
+	</labels>
+	<!-- end of chorus migration -->
 	<labels>
 		<fullName>OtherSourcesText</fullName>
 		<categories>CLM</categories>

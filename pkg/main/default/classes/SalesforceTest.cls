@@ -260,4 +260,11 @@ private class SalesforceTest {
 		System.assertEquals(Schema.User.getSObjectType(), Salesforce.getParentSobjectType(Schema.Case.getSObjectType(), 'OwnerID'));
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_checkIfMultiCurrencyIsEnabled() {
+		Test.startTest();
+		System.assertEquals(UserInfo.isMultiCurrencyOrganization(), Salesforce.checkIfMultiCurrencyIsEnabled());
+		Test.stopTest();
+	}
 }
