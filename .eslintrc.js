@@ -15,6 +15,7 @@ module.exports = {
     UIHelper: "readonly",
     stringUtils: "readonly",
     navUtils: "readonly",
+    historyItemTypes: "readonly",
     SpringCM: "readonly",
     Promise: "readonly",
     AgreementActionManager: "readonly",

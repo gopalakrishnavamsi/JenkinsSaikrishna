@@ -9,7 +9,7 @@
     try {
       var uiHelper = component.get('v.uiHelper');
       var self = this;
-      var isCurrentUserLatestActor = this.isCurrentUserLatestActor(component, agreement);
+      var isCurrentUserSender = this.isCurrentUserSender(component, agreement);
       var isCurrentUserRecipientForApproval = this.isCurrentUserRecipientForApproval(component, agreement);
       Promise.all(
         [
@@ -31,7 +31,7 @@
             agreement,
             documentUrl,
             component.get('v.currentUserDocuSignAdmin'),
-            isCurrentUserLatestActor,
+            isCurrentUserSender,
             isCurrentUserRecipientForApproval
           );
           component.set('v.loading', false);
@@ -193,6 +193,7 @@
 
       //Internal Approval pending
       case 'pending approval':
+        var hasApproverResponded = this.hasCurrentApprovalRecipientResponded(component, agreement);
         //If current user is the sender of the Approval request but not an Admin User
         //In this case the user should be presented with the options for resending, cancelling the approval request
         if (isSender === true && isAdmin === false)
@@ -231,7 +232,7 @@
 
         //If the current user is the Approver for the Approval request
         //In this case the user should be presented with option for submitting a response for the approval
-        if (isApprover === true)
+        if (isApprover && !hasApproverResponded)
           return this.renderApprovalRecipientView(
             component,
             this.basePreview(
@@ -500,13 +501,19 @@
     document.addEventListener('springcm:preview:' + name, callback);
   },
 
-  isCurrentUserLatestActor: function (component, agreement) {
+  isCurrentUserSender: function (component, agreement) {
     var returnValue = false;
+    var currentAgreementStatus = agreement.status.toLowerCase();
+    var isPending = currentAgreementStatus === 'pending approval' || currentAgreementStatus === 'pending review';
+    if (isPending && !$A.util.isEmpty(agreement.historyItems)) {
+      var pendingHistoryItem = agreement.historyItems.find(function (item) {
+        return item.historyItemType === historyItemTypes.ApprovalCheckout || historyItemTypes.ExternalReviewInitiated;
+      });
 
-    if (!$A.util.isEmpty(agreement.historyItems) &&
-      !$A.util.isEmpty(agreement.historyItems[0].actor)) {
-      if (component.get('v.currentUserEmail') === agreement.historyItems[0].actor.email) {
-        returnValue = true;
+      if (!$A.util.isEmpty(pendingHistoryItem) && !$A.util.isEmpty(pendingHistoryItem.actor)) {
+        if (component.get('v.currentUserEmail') === pendingHistoryItem.actor.email) {
+          returnValue = true;
+        }
       }
     }
     return returnValue;
@@ -518,7 +525,7 @@
       !$A.util.isEmpty(agreement.historyItems)) {
 
       var approvalCheckoutHistoryItem = agreement.historyItems.find(function (item) {
-        return item.historyItemType === 'ApprovalCheckout';
+        return item.historyItemType === historyItemTypes.ApprovalCheckout;
       });
 
       if (!$A.util.isEmpty(approvalCheckoutHistoryItem) &&
@@ -531,6 +538,21 @@
       }
     }
     return returnValue;
+  },
+
+  hasCurrentApprovalRecipientResponded: function (component, agreement) {
+    var isCurrentUserApprovalRecipient = this.isCurrentUserRecipientForApproval(component, agreement);
+    if (isCurrentUserApprovalRecipient) {
+      for (var index = 0; index < agreement.historyItems.length && agreement.historyItems[index].historyItemType !== historyItemTypes.ApprovalCheckout; index++) {
+        var currentHistoryItem = agreement.historyItems[index];
+        if (currentHistoryItem.historyItemType === historyItemTypes.CompletedHumanActivity &&
+          !$A.util.isEmpty(currentHistoryItem.actor) &&
+          component.get('v.currentUserEmail') === currentHistoryItem.actor.email) {
+          return true;
+        }
+      }
+    }
+    return false;
   },
 
   externalReviewResendRequest: function (component, helper, reviewType) {
