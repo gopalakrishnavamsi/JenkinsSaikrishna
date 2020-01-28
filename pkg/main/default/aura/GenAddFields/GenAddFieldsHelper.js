@@ -16,6 +16,12 @@
     return fieldMapping;
   },
 
+  //validate custom date and time formats
+  validateFormats:function (component) {
+    return ((component.get('v.timePreview') === 'Invalid Time' && component.get('v.timeDropDown') === $A.get('$Label.c.Custom') ) ||
+        (component.get('v.datePreview') === 'Invalid Date' && component.get('v.dateDropDown') === $A.get('$Label.c.Custom') ))
+  },
+
   setConditionalRadio: function (component) {
     var mergeFieldDisplayOptions = [
       {
@@ -67,12 +73,15 @@
 
   formatPercent: function (component, percentFormat) {
     var defaultValue = 123456789000;
-    if (percentFormat === false) {
+    if(typeof percentFormat !== 'boolean') {
+     component.set('v.clonedFieldMapping.format', $A.util.getBooleanValue(percentFormat) ? true : false);
+    }
+    if (!$A.util.getBooleanValue(percentFormat)) {
       component.set('v.formattedPercent', $A.localizationService.formatNumber(defaultValue));
     } else {
       component.set(
-        'v.formattedPercent',
-        $A.localizationService.formatNumber(defaultValue, $A.get('$Locale').numberFormat) + '%');
+          'v.formattedPercent',
+          stringUtils.format('{0}{1}',$A.localizationService.formatNumber(defaultValue,$A.get('$Locale').numberFormat),' %'));
     }
   },
 

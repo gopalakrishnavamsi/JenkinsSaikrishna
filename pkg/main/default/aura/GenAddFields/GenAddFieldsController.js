@@ -33,53 +33,31 @@
     var optionModalParams = event.getParam('data');
     var fieldMapping = helper.getFieldMapping(component, optionModalParams);
     var clonedFieldMapping = Object.assign({}, fieldMapping);
-    if (fieldMapping.dataType === 'DATETIME') {
+    
+    if (fieldMapping.dataType === 'DATE' || fieldMapping.dataType === 'DATETIME') {
       component.set('v.userLocaleDateFormat', $A.localizationService.formatDate(new Date($A.get('$Label.c.X2019_01_18'))));
-      var formats = fieldMapping.format.split('|');//splitting datetime format using the | symbol because this symbol is not a valid seperator for date and time
-      if (!component.get('v.definedDateFormats').includes(formats[0])) {
+      var dateFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[0] : fieldMapping.format;
+      if (!component.get('v.definedDateFormats').includes(dateFormat)) {
         component.set('v.dateDropDown', $A.get('$Label.c.Custom'));
-        component.set('v.customDateInput', formats[0]);
+        component.set('v.customDateInput', dateFormat);
         helper.formatDate(component);
       } else {
         component.set('v.datePreview', '');
         component.set('v.customDateInput', '');
-        component.set('v.dateDropDown', formats[0]);
+        component.set('v.dateDropDown', dateFormat);
       }
+    }
 
-      if (!component.get('v.definedTimeFormats').includes(formats[1])) {
+    if (fieldMapping.dataType === 'TIME' || fieldMapping.dataType === 'DATETIME') {
+      var timeFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[1] : fieldMapping.format;
+      if (!component.get('v.definedTimeFormats').includes(timeFormat)) {
         component.set('v.timeDropDown', $A.get('$Label.c.Custom'));
-        component.set('v.customTimeInput', formats[1]);
+        component.set('v.customTimeInput', timeFormat);
         helper.formatTime(component);
       } else {
         component.set('v.customTimeInput', '');
         component.set('v.timePreview', '');
-        component.set('v.timeDropDown', formats[1]);
-      }
-
-
-    }
-    if (fieldMapping.dataType === 'DATE') {
-      component.set('v.userLocaleDateFormat', $A.localizationService.formatDate(new Date($A.get('$Label.c.X2019_01_18'))));
-      if (!component.get('v.definedDateFormats').includes(fieldMapping.format)) {
-        component.set('v.dateDropDown', $A.get('$Label.c.Custom'));
-        component.set('v.customDateInput', fieldMapping.format);
-        helper.formatDate(component);
-      } else {
-        component.set('v.datePreview', '');
-        component.set('v.customDateInput', '');
-        component.set('v.dateDropDown', fieldMapping.format);
-      }
-    }
-
-    if (fieldMapping.dataType === 'TIME') {
-      if (!component.get('v.definedTimeFormats').includes(fieldMapping.format)) {
-        component.set('v.timeDropDown', $A.get('$Label.c.Custom'));
-        component.set('v.customTimeInput', fieldMapping.format);
-        helper.formatTime(component);
-      } else {
-        component.set('v.customTimeInput', '');
-        component.set('v.timePreview', '');
-        component.set('v.timeDropDown', fieldMapping.format);
+        component.set('v.timeDropDown', timeFormat);
       }
     }
 
@@ -87,13 +65,12 @@
       helper.formatCurrency(component, fieldMapping.format);
     }
 
+    component.set('v.optionModalParams', optionModalParams);
+    component.set('v.clonedFieldMapping', clonedFieldMapping);
 
     if (fieldMapping.dataType === 'PERCENT') {
       helper.formatPercent(component, fieldMapping.format);
     }
-
-    component.set('v.optionModalParams', optionModalParams);
-    component.set('v.clonedFieldMapping', clonedFieldMapping);
     component.find('merge-token-options').show();
   },
 
@@ -104,34 +81,34 @@
     // eslint-disable-next-line no-unused-vars
     var fieldMapping = helper.getFieldMapping(component, optionModalParams);
     var clonedFieldMapping = component.get('v.clonedFieldMapping');
-    if (component.get('v.datePreview') === 'Invalid Date' ||
-      component.get('v.timePreview') === 'Invalid Time') {
-      return;
+    var timeFormat = '';
+    var dateFormat = '';
+
+    if(component.get('v.clonedFieldMapping').dataType === 'DATE' || component.get('v.clonedFieldMapping').dataType === 'DATETIME' ){
+      if (helper.validateFormats(component)) {
+          return;
+      }
+      component.set('v.clonedFieldMapping.format', component.get('v.dateDropDown') === $A.get('$Label.c.Custom') ? 
+                                                component.get('v.customDateInput') : component.get('v.dateDropDown'));
+      //storing updated format value into dateFormat
+      dateFormat = component.get('v.clonedFieldMapping.format');
+    }
+    if(component.get('v.clonedFieldMapping').dataType === 'TIME' || component.get('v.clonedFieldMapping').dataType === 'DATETIME'  ){
+        if(helper.validateFormats(component)) {
+            return;
+        }
+        component.set('v.clonedFieldMapping.format', component.get('v.timeDropDown') === $A.get('$Label.c.Custom') ? 
+                                                    component.get('v.customTimeInput') : component.get('v.timeDropDown'));
+        //storing updated format value into timeformat 
+        timeFormat = component.get('v.clonedFieldMapping.format');
     }
 
-    if (component.get('v.clonedFieldMapping').dataType === 'TIME') {
-      component.set('v.clonedFieldMapping.format', component.get('v.timeDropDown') === $A.get('$Label.c.Custom') ?
-        $A.util.isEmpty(component.get('v.customTimeInput')) ? 'default' : component.get('v.customTimeInput') : component.get('v.timeDropDown'));
+    
+
+    if (!$A.util.isEmpty(timeFormat) && !$A.util.isEmpty(dateFormat) ) {
+      component.set('v.clonedFieldMapping.format', stringUtils.format('{0}{1}{2}',dateFormat,'|',timeFormat));
     }
-    if (component.get('v.clonedFieldMapping').dataType === 'DATE') {
-      component.set('v.clonedFieldMapping.format', component.get('v.dateDropDown') === $A.get('$Label.c.Custom') ?
-        $A.util.isEmpty(component.get('v.customDateInput')) ? 'default' : component.get('v.customDateInput') : component.get('v.dateDropDown'));
-    }
-    if (component.get('v.clonedFieldMapping').dataType === 'DATETIME') {
-      var timeFormat;
-      var dateFormat;
-      if (component.get('v.customTimeInput') !== '') {
-        timeFormat = component.get('v.customTimeInput');
-      } else {
-        timeFormat = component.get('v.timeDropDown');
-      }
-      if (component.get('v.customDateInput') !== '') {
-        dateFormat = component.get('v.customDateInput');
-      } else {
-        dateFormat = component.get('v.dateDropDown');
-      }
-      component.set('v.clonedFieldMapping.format', dateFormat + '|' + timeFormat);
-    }
+
     if (clonedFieldMapping.isConditional && $A.util.isEmpty(clonedFieldMapping.conditionalValue)) {
       component.find('conditionalValue').showHelpMessageIfInvalid();
       return;

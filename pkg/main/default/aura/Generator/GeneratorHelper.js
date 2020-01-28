@@ -287,8 +287,8 @@
     if (!$A.util.isEmpty(addCurrencyFields) && !$A.util.isEmpty(fields)) {
       addCurrencyFields.forEach(function (obj) {
         var parentObj = obj.substring(0, obj.indexOf('.'));
-        if (obj.includes('.') && !fields.includes(parentObj + '.CurrencyIsoCode')) {
-          fields.push(parentObj + '.CurrencyIsoCode');
+        if (obj.includes('.') && !fields.includes(stringUtils.format('{0}{1}',parentObj,'.CurrencyIsoCode'))) {
+          fields.push(stringUtils.format('{0}{1}',parentObj,'.CurrencyIsoCode'));
         } else if (!fields.includes('CurrencyIsoCode')) {
           fields.push('CurrencyIsoCode');
         }
@@ -384,15 +384,19 @@
           fieldVal = ($A.localizationService.formatDateTimeUTC(date, 'YYYY-MM-DD,' + timeFormat)).split(',')[1];
         } else if (dataType === 'DATETIME') {
           var formats = fieldMap.format.split('|');
-          if (formats[0] === 'default') formats[0] = locale.dateFormat;
-          if (formats[1] === 'default') formats[1] = locale.timeFormat;
+          if (formats[0] === 'default') {
+            formats[0] = locale.dateFormat;
+          } 
+          if (formats[1] === 'default') {
+            formats[1] = locale.timeFormat;
+          }
           //ADDING TIMEZONE OFFSET
           $A.localizationService.UTCToWallTime(new Date(fieldVal), $A.get('$Locale.timezone'), function (offSetDateTime) {
             fieldVal = offSetDateTime;
           });
-          // FIXME: No hardcoded time format.
+          // FIXME: No hardcoded time format.         
           fieldVal = $A.localizationService.formatDateTimeUTC(
-            fieldVal, formats[0] + ' ' + formats[1]);
+            fieldVal, stringUtils.format('{0}{1}{2}', formats[0], ' ', formats[1]));
         } else if (dataType === 'CURRENCY') {
           var isMultiCurrency = component.get('v.isMultiCurrency');
           var currencyCode = locale.currencyCode;
@@ -431,8 +435,8 @@
             fieldVal += ' ' + address.country;
           }
         } else if (dataType === 'PERCENT') {
-          var percentSymbol =  fieldMap.format === 'true' ? '%' : '';
-          fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces) + percentSymbol;
+          var percentSymbol =  $A.util.getBooleanValue(fieldMap.format) ? '%' : '';
+          fieldVal = stringUtils.format('{0}{1}',helper.formatNumber(fieldVal, fieldMap.decimalPlaces), percentSymbol);
         } else if (dataType === 'DOUBLE') {
           fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces);
         }
@@ -457,7 +461,9 @@
     } else {
       getValue = helper.formatNumber(getValue, getFieldData.decimalPlaces);
     }
-    if (currencyFormat.indexOf('noSymbolNoCode') !== -1) return getValue;
+    if (currencyFormat.indexOf('noSymbolNoCode') !== -1) {
+      return getValue;
+    }
     // Using toLocalString() to get the currency symbol
     var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {
       style: 'currency', currency: getCurrencyCode,
@@ -470,10 +476,10 @@
 
   formatNumber: function (getNumberVal, decimalScale) {
     var getIntegerVal = getNumberVal.toString();
-    var getTrailingZeros = (decimalScale > 0) ? $A.get('$Locale').decimal + parseFloat(getNumberVal).toFixed(decimalScale).split('.')[1] : '';
+    var getTrailingZeros = (decimalScale > 0) ? stringUtils.format('{0}{1}',$A.get('$Locale').decimal ,parseFloat(getNumberVal).toFixed(decimalScale).split('.')[1]) : '';
     if (getIntegerVal.indexOf('.') !== -1)
       getIntegerVal = getIntegerVal.split('.')[0];
-    return $A.localizationService.formatNumber(getIntegerVal, $A.get('$Locale').numberFormat) + getTrailingZeros;
+    return stringUtils.format('{0}{1}',$A.localizationService.formatNumber(getIntegerVal, $A.get('$Locale').numberFormat) , getTrailingZeros);
   },
 
   generateDocuments: function (component, startingRecordId, xmlRoot) {

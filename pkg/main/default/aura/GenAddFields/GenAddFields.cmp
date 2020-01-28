@@ -1,4 +1,5 @@
 <aura:component>
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}"/>
     <aura:attribute name="config" type="Object"/>
     <aura:attribute name="optionModalParams" type="Object" access="private"/>
     <aura:attribute name="clonedFieldMapping" type="Object" access="private"/>
@@ -22,7 +23,6 @@
     <aura:attribute name="formattedPercent" type="String" access="private"/>
     <aura:attribute name="formattedCurrency" type="String" access="private"/>
 
-    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
     <aura:handler name="showOptionsModal" event="c:strike_evt" action="{!c.showOptionsModal}"/>
 
     <aura:method name="validate" action="{!c.validate}"/>
