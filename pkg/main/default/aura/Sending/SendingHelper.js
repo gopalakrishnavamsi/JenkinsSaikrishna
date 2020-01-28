@@ -560,25 +560,26 @@
           rs.push(self.addPlaceholderProperties(ph, ++ri));
         }
       });
+    }
 
-      if (!$A.util.isUndefinedOrNull(template) && !$A.util.isEmpty(template.recipients)) {
-        // Add or merge template recipients
-        usingTemplate = true;
-        template.recipients.forEach(function (tr) {
-          if (ri < recipients.length && !self.isValidRecipient(tr)) {
-            rs.push(self.mergeTemplateRecipient(tr, recipients[ri++]));
-          } else {
-            rs.push(tr);
-          }
-        });
-      }
-
-      if (!usingTemplate) {
-        for (var i = ri; i < recipients.length; i++) {
-          rs.push(recipients[i]);
+    if (!$A.util.isUndefinedOrNull(template) && !$A.util.isEmpty(template.recipients)) {
+      // Add or merge template recipients
+      usingTemplate = true;
+      template.recipients.forEach(function (tr) {
+        if (ri < recipients.length && !self.isValidRecipient(tr)) {
+          rs.push(self.mergeTemplateRecipient(tr, recipients[ri++]));
+        } else {
+          rs.push(tr);
         }
+      });
+    }
+
+    if (!usingTemplate && !$A.util.isEmpty(recipients)) {
+      for (var i = ri; i < recipients.length; i++) {
+        rs.push(recipients[i]);
       }
     }
+
     return rs;
   },
 

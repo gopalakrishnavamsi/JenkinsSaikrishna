@@ -85,7 +85,8 @@
     var activeStep = component.get('v.activeStep');
     if (activeStep === 0) { // Documents
       component.set('v.recipients', helper.resetRecipients(component.get('v.recipients')));
-    } else if (activeStep === 1) { // Recipients
+      component.set('v.areRecipientsSet', false);
+    } else if (activeStep === 1 && !component.get('v.areRecipientsSet')) { // Recipients
       var documents = component.get('v.documents');
       var fileCheckboxes = helper.enforceArray(component.find('file-checkbox'));
       var selectedFileTitles = '';
@@ -101,6 +102,7 @@
         component.get('v.recipients'),
         component.get('v.placeholderRecipients'),
         component.get('v.template')));
+      component.set('v.areRecipientsSet', true);
     }
   },
 
