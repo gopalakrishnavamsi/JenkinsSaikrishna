@@ -1177,7 +1177,7 @@ public with sharing class Permissions {
 	/**
 	 * Tests whether an object and its fields are createable by the current user.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 *
 	 * @return The results of the access request.
@@ -1192,7 +1192,7 @@ public with sharing class Permissions {
 	 * Tests whether an object and its fields are createable by the current user. If not, an
 	 * <code>UnauthorizedException</code> is thrown.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 */
 	public static void verifyIsCreateable(final SObjectType type, final List<String> fieldNames) {
@@ -1203,7 +1203,7 @@ public with sharing class Permissions {
 	/**
 	 * Tests whether an object is deletable by the current user.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 *
 	 * @return The results of the access request.
 	 */
@@ -1217,7 +1217,7 @@ public with sharing class Permissions {
 	 * Tests whether an object is deletable by the current user. If not, an <code>UnauthorizedException</code> is
 	 * thrown.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 */
 	public static void verifyIsDeletable(final SObjectType type) {
 		FlsResults results = isDeletable(type);
@@ -1225,9 +1225,20 @@ public with sharing class Permissions {
 	}
 
 	/**
+	 * Tests whether an object is queryable by the current user.
+	 *
+	 * @param type The Salesforce object type.
+	 *
+	 * @return The results of the access request.
+	 */
+	public static FlsResults isQueryable(final SObjectType type) {
+		return isQueryable(type, null);
+	}
+
+	/**
 	 * Tests whether an object and its fields are queryable by the current user.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 *
 	 * @return The results of the access request.
@@ -1239,10 +1250,21 @@ public with sharing class Permissions {
 	}
 
 	/**
+	 * Tests whether an object is queryable by the current users. Using this method implies that FLS is enforced
+	 * elsewhere, by a SOQL <code>WITH SECURITY ENFORCED</code> clause or <code>Security.stripInaccessible</code>.
+	 *
+	 * @param type The Salesforce object type.
+	 */
+	public static void verifyIsQueryable(final SObjectType type) {
+		FlsResults results = isQueryable(type, null);
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
+	}
+
+	/**
 	 * Tests whether an object and its fields are queryable by the current user. If not, an
 	 * <code>UnauthorizedException</code> is thrown.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 */
 	public static void verifyIsQueryable(final SObjectType type, final List<String> fieldNames) {
@@ -1253,7 +1275,7 @@ public with sharing class Permissions {
 	/**
 	 * Tests whether an object and its fields are updateable by the current user.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 *
 	 * @return The results of the access request.
@@ -1268,7 +1290,7 @@ public with sharing class Permissions {
 	 * Tests whether an object and its fields are updateable by the current user. If not, an
 	 * <code>UnauthorizedException</code> is thrown.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 */
 	public static void verifyIsUpdateable(final SObjectType type, final List<String> fieldNames) {
@@ -1279,7 +1301,7 @@ public with sharing class Permissions {
 	/**
 	 * Tests whether an object's fields are filterable.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 *
 	 * @return The results of the access request.
@@ -1293,7 +1315,7 @@ public with sharing class Permissions {
 	/**
 	 * Tests whether an object's fields are filterable. If not, an <code>UnauthorizedException</code> is thrown.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 */
 	public static void verifyIsFilterable(final SObjectType type, final List<String> fieldNames) {
@@ -1304,7 +1326,7 @@ public with sharing class Permissions {
 	/**
 	 * Tests whether an object's fields are unencrypted.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 *
 	 * @return The results of the access request.
@@ -1318,7 +1340,7 @@ public with sharing class Permissions {
 	/**
 	 * Tests whether an object's fields are unencrypted. If not, an <code>UnauthorizedException</code> is thrown.
 	 *
-	 * @param objectName The object name.
+	 * @param type The Salesforce object type.
 	 * @param fieldNames The field names.
 	 */
 	public static void verifyIsUnencrypted(final SObjectType type, final List<String> fieldNames) {

@@ -516,7 +516,7 @@ private class PermissionsTest {
 
 		Test.startTest();
 		System.runAs(u1) {
-			r1 = Permissions.isQueryable(OBJECT_TYPE, null);
+			r1 = Permissions.isQueryable(OBJECT_TYPE);
 		}
 		System.runAs(u2) {
 			r2 = Permissions.isQueryable(OBJECT_TYPE, new List<String> { 'Invalid__c' });
@@ -537,7 +537,7 @@ private class PermissionsTest {
 		Test.startTest();
 		System.runAs(u) {
 			try {
-				Permissions.verifyIsQueryable(OBJECT_TYPE, null);
+				Permissions.verifyIsQueryable(OBJECT_TYPE);
 			} catch (UnauthorizedException ex) {
 				ex1 = ex;
 			}

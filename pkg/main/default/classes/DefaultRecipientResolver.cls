@@ -25,16 +25,17 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	}
 
 	private static List<Recipient> getAccountRecipients(final Set<Id> accountIds) {
-		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
-		Permissions.verifyIsQueryable(TYPE_ACCOUNT, new List<String> { 'Id', 'Name' });
+		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Name', 'Email' });
+		Permissions.verifyIsQueryable(TYPE_ACCOUNT);
 
-		final List<Recipient> recipients = new List<Recipient>();
-		for (Contact c : [
+		List<Recipient> recipients = new List<Recipient>();
+		List<Contact> contacts = (List<Contact>)Security.stripInaccessible(AccessType.READABLE, [
 			SELECT Id, Name, Email, Phone, MobilePhone, Account.Id, Account.Name
 			FROM Contact
 			WHERE AccountId IN :accountIds
 			ORDER BY CreatedDate
-		]) {
+		]).getRecords();
+		for (Contact c : contacts) {
 			recipients.add(Recipient.fromSource(
 				c.Name,
 				c.Email,
@@ -52,16 +53,17 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	}
 
 	private static List<Recipient> getCaseRecipients(final Set<Id> caseIds) {
-		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
-		Permissions.verifyIsQueryable(TYPE_CASE, new List<String> { 'Id', 'CaseNumber' });
+		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Name', 'Email' });
+		Permissions.verifyIsQueryable(TYPE_CASE);
 
 		List<Recipient> recipients = new List<Recipient>();
-		for (Case c : [
+		List<Case> cases = (List<Case>)Security.stripInaccessible(AccessType.READABLE, [
 			SELECT Id, CaseNumber, Contact.Id, Contact.Name, Contact.Email, Contact.Phone, Contact.MobilePhone
 			FROM Case
 			WHERE Id IN :caseIds
 			ORDER BY CreatedDate
-		]) {
+		]).getRecords();
+		for (Case c : cases) {
 			recipients.add(Recipient.fromSource(
 				c.Contact.Name,
 				c.Contact.Email,
@@ -79,16 +81,17 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	}
 
 	private static List<Recipient> getContactRecipients(final Set<Id> contactIds) {
-		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
-		Permissions.verifyIsQueryable(TYPE_ACCOUNT, new List<String> { 'Id', 'Name' });
+		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Name', 'Email' });
+		Permissions.verifyIsQueryable(TYPE_ACCOUNT);
 
-		final List<Recipient> recipients = new List<Recipient>();
-		for (Contact c : [
+		List<Recipient> recipients = new List<Recipient>();
+		List<Contact> contacts = (List<Contact>)Security.stripInaccessible(AccessType.READABLE, [
 			SELECT Id, Name, Email, Phone, MobilePhone, Account.Id, Account.Name
 			FROM Contact
 			WHERE Id IN :contactIds
 			ORDER BY CreatedDate
-		]) {
+		]).getRecords();
+		for (Contact c : contacts) {
 			recipients.add(Recipient.fromSource(
 				c.Name,
 				c.Email,
@@ -106,15 +109,16 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	}
 
 	private static List<Recipient> getLeadRecipients(final Set<Id> leadIds) {
-		Permissions.verifyIsQueryable(TYPE_LEAD, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
+		Permissions.verifyIsQueryable(TYPE_LEAD, new List<String> { 'Name', 'Email' });
 
-		final List<Recipient> recipients = new List<Recipient>();
-		for (Lead c : [
+		List<Recipient> recipients = new List<Recipient>();
+		List<Lead> leads = (List<Lead>)Security.stripInaccessible(AccessType.READABLE, [
 			SELECT Id, Name, Email, Phone, MobilePhone
 			FROM Lead
 			WHERE Id IN :leadIds
 			ORDER BY CreatedDate
-		]) {
+		]).getRecords();
+		for (Lead c : leads) {
 			recipients.add(Recipient.fromSource(
 				c.Name,
 				c.Email,
@@ -126,12 +130,13 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	}
 
 	private static List<Recipient> getOpportunityRecipients(final Set<Id> opportunityIds) {
-		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
-		Permissions.verifyIsQueryable(TYPE_OPPORTUNITY_CONTACT_ROLE, new List<String> { 'Role' });
-		Permissions.verifyIsQueryable(TYPE_ACCOUNT, new List<String> { 'Id', 'Name' });
+		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Name', 'Email' });
+		Permissions.verifyIsQueryable(TYPE_OPPORTUNITY_CONTACT_ROLE);
+		Permissions.verifyIsQueryable(TYPE_ACCOUNT);
 
-		final List<Recipient> recipients = new List<Recipient>();
-		for (OpportunityContactRole c : [
+		List<Recipient> recipients = new List<Recipient>();
+		List<OpportunityContactRole> ocrs = (List<OpportunityContactRole>)Security.stripInaccessible(
+			AccessType.READABLE, [
 			SELECT
 				Id,
 				Contact.Id,
@@ -146,7 +151,8 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 			WHERE OpportunityId IN :opportunityIds
 			AND Contact.Id != NULL
 			ORDER BY CreatedDate
-		]) {
+		]).getRecords();
+		for (OpportunityContactRole c : ocrs) {
 			recipients.add(Recipient.fromSource(
 				c.Contact.Name,
 				c.Contact.Email,
@@ -164,15 +170,16 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	}
 
 	private static List<Recipient> getUserRecipients(final Set<Id> userIds) {
-		Permissions.verifyIsQueryable(TYPE_USER, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
+		Permissions.verifyIsQueryable(TYPE_USER, new List<String> { 'Name', 'Email' });
 
-		final List<Recipient> recipients = new List<Recipient>();
-		for (User u : [
+		List<Recipient> recipients = new List<Recipient>();
+		List<User> users = (List<User>)Security.stripInaccessible(AccessType.READABLE, [
 			SELECT Id, Name, Email, Phone, MobilePhone
 			FROM User
 			WHERE Id IN :userIds
 			ORDER BY CreatedDate
-		]) {
+		]).getRecords();
+		for (User u : users) {
 			recipients.add(Recipient.fromSource(
 				u.Name,
 				u.Email,
@@ -246,11 +253,14 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		return result;
 	}
 
-	private static List<Recipient> searchContacts(final String firstName, final String lastName,
-		final Boolean isCompound, final Boolean isExact) {
+	private static List<Recipient> searchContacts(
+		final String firstName,
+		final String lastName,
+		final Boolean isCompound,
+		final Boolean isExact) {
 
-		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
-		Permissions.verifyIsQueryable(TYPE_ACCOUNT, new List<String> { 'Id', 'Name' });
+		Permissions.verifyIsQueryable(TYPE_CONTACT, new List<String> { 'Name', 'Email' });
+		Permissions.verifyIsQueryable(TYPE_ACCOUNT);
 
 		Boolean ic = isCompound && Permissions.isFilterable(TYPE_CONTACT, new List<String> { 'Name' }).isAuthorized;
 		Boolean ie = isExact
@@ -259,7 +269,9 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		List<Recipient> recipients = new List<Recipient>();
 		String q = buildQuery('SELECT Id, Name, Email, Phone, MobilePhone, Account.Id, Account.Name FROM Contact',
 			firstName, lastName, ic, ie);
-		for (Contact c : System.Database.query(q)) {
+		List<Contact> contacts = (List<Contact>)Security.stripInaccessible(AccessType.READABLE,
+			System.Database.query(q)).getRecords();
+		for (Contact c : contacts) {
 			recipients.add(Recipient.fromSource(
 				c.Name,
 				c.Email,
@@ -276,10 +288,13 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		return recipients;
 	}
 
-	private static List<Recipient> searchLeads(final String firstName, final String lastName, final Boolean isCompound,
+	private static List<Recipient> searchLeads(
+		final String firstName,
+		final String lastName,
+		final Boolean isCompound,
 		final Boolean isExact) {
 
-		Permissions.verifyIsQueryable(TYPE_LEAD, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
+		Permissions.verifyIsQueryable(TYPE_LEAD, new List<String> { 'Name', 'Email' });
 
 		Boolean ic = isCompound && Permissions.isFilterable(TYPE_LEAD, new List<String> { 'Name' }).isAuthorized;
 		Boolean ie = isExact
@@ -288,7 +303,9 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		List<Recipient> recipients = new List<Recipient>();
 		String q = buildQuery('SELECT Id, Name, Email, Phone, MobilePhone FROM Lead',
 			firstName, lastName, ic, ie);
-		for (Lead l : System.Database.query(q)) {
+		List<Lead> leads = (List<Lead>)Security.stripInaccessible(AccessType.READABLE,
+			System.Database.query(q)).getRecords();
+		for (Lead l : leads) {
 			recipients.add(Recipient.fromSource(
 				l.Name,
 				l.Email,
@@ -299,10 +316,13 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		return recipients;
 	}
 
-	private static List<Recipient> searchUsers(final String firstName, final String lastName, final Boolean isCompound,
+	private static List<Recipient> searchUsers(
+		final String firstName,
+		final String lastName,
+		final Boolean isCompound,
 		final Boolean isExact) {
 
-		Permissions.verifyIsQueryable(TYPE_USER, new List<String> { 'Id', 'Name', 'Email', 'Phone', 'MobilePhone' });
+		Permissions.verifyIsQueryable(TYPE_USER, new List<String> { 'Name', 'Email' });
 
 		Boolean ic = isCompound && Permissions.isFilterable(TYPE_USER, new List<String> { 'Name' }).isAuthorized;
 		Boolean ie = isExact
@@ -311,7 +331,9 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		List<Recipient> recipients = new List<Recipient>();
 		String q = buildQuery('SELECT Id, Name, Email, Phone, MobilePhone FROM User',
 			firstName, lastName, ic, ie);
-		for (User u : System.Database.query(q)) {
+		List<User> users = (List<User>)Security.stripInaccessible(AccessType.READABLE,
+			System.Database.query(q)).getRecords();
+		for (User u : users) {
 			recipients.add(Recipient.fromSource(
 				u.Name,
 				u.Email,
