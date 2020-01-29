@@ -8,11 +8,6 @@
     <apex:includeScript value="{!$Resource.scmwidgetsjs}"/>
     <apex:includeScript value="{!$Resource.navUtils}"/>
     <apex:includeScript value="{!$Resource.OnlineEditorJs}"/>
-    <apex:form>
-        <apex:actionFunction name="setOnlineEditorNameMethod" rerender="renderName,renderName2,renderName3,renderName4">
-            <apex:param name="tempConfigName" assignTo="{!templateName}" value=""/>
-        </apex:actionFunction>
-    </apex:form>
 
     <script type="application/javascript">
       Visualforce.remoting.timeout = 120000;
@@ -154,7 +149,7 @@
 
     <div class="slds-scope">
         <div id="toastNotificationContainer"></div>
-
+        <div id="editModal"/>
         <!-- Toolbar -->
         <div id="onlineEditorToolBar" class="slds-page-header slds-border_bottom slds-grid">
             <div class="col">
@@ -169,11 +164,19 @@
                             <div class="slds-page-header__name-title">
                                 <span>{!$Label.TemplateConfigurationLabel}</span>
 
-                                <apex:outputPanel id="renderName3">
-                                    <h1 class="slds-page-header__title slds-truncate">
-                                        {!templateName}
-                                    </h1>
-                                </apex:outputPanel>
+
+                                <h1 class="slds-page-header__title slds-truncate">
+                                    <apex:outputPanel id="templateHeader"><strong
+                                                id="templateNameHeader">{!templateName}</strong></apex:outputPanel>
+                                    <button class="slds-button slds-button_icon slds-m-left_x-small"
+                                            title="{!$Label.Edit}" id="onlineEditorEdit">
+                                        <svg class="slds-button__icon" aria-hidden="true">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                 xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#edit')}"/>
+                                        </svg>
+                                        <span class="slds-assistive-text">{!$Label.Edit}</span>
+                                    </button>
+                                </h1>
 
                             </div>
                         </div>
@@ -233,11 +236,14 @@
             <div class="col">
                 <div class='slds-float_right'>
                     <!-- Step 1 -->
-                    <button id="onlineEditorTemplateCancel" class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
+                    <button id="onlineEditorTemplateCancel"
+                            class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
                     <button id="onlineEditorSaveClose" class="slds-button slds-button_brand">{!$Label.Next}</button>
                     <!-- Step 2 -->
-                    <button id="onlineEditorPublishCancel" class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
-                    <button id="onlineEditorPublish" class="slds-button slds-button_brand">{!$Label.PublishLabel}</button>
+                    <button id="onlineEditorPublishCancel"
+                            class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
+                    <button id="onlineEditorPublish"
+                            class="slds-button slds-button_brand">{!$Label.PublishLabel}</button>
                 </div>
             </div>
         </div>
@@ -298,9 +304,10 @@
                             <label class="slds-form-element__label" for="onlineEditorButtonNameInput">
                                 <abbr class="slds-required" title="required">* </abbr>{!$Label.ButtonLabel}</label>
                             <div class="slds-form-element__control">
-                                <apex:outputPanel id="renderName4">
-                                    <input maxlength="80" type="text" id="onlineEditorButtonNameInput" readonly="" placeholder=""
-                                           class="slds-input" value="Generate {!templateName}"/>
+                                <apex:outputPanel id="templateButtonName">
+                                    <input maxlength="80" type="text" id="onlineEditorButtonNameInput" readonly=""
+                                           placeholder=""
+                                           class="slds-input" value="{!$Label.Generate+' '+templateName}"/>
                                 </apex:outputPanel>
                             </div>
                         </div>

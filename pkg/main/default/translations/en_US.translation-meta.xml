@@ -4687,6 +4687,10 @@
 		<label>Impersonated users are not authorized to perform this action.</label>
 		<name>UnauthorizedImpersonation</name>
 	</customLabels>
+	<customLabels>
+		<label>Edit Template Name and Description</label>
+		<name>OnlineEditorTemplateEditTitle</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

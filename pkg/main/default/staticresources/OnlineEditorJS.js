@@ -386,7 +386,7 @@ jQuery(document).ready(function ($) {
   function addOnlineEditorActions(layout, buttonApiName, buttonLabelName) {
     layout.actions = [];
     layout.actions.push({
-      type: Configuration.layoutActionType ,
+      type: Configuration.layoutActionType,
       name: buttonApiName,
       label: buttonLabelName
     });
@@ -820,5 +820,25 @@ jQuery(document).ready(function ($) {
     } else {
       createToastComponent(Labels.templateUndefinedLabel, 'error');
     }
+  });
+
+  var renderTemplateDetails = function () {
+    window.location.reload();
+  };
+
+  $('#onlineEditorEdit').click(function () {
+    $Lightning.use(Configuration.namespace + ':LightningOutApp', function () {
+      $Lightning.createComponent(Configuration.namespace + ':OnlineEditorTemplateEdit',
+        {
+          recordId: Configuration.template.id,
+          namespace: Configuration.namespace,
+          renderTemplateDetails: renderTemplateDetails
+        },
+        'editModal',
+        function () {
+
+        }
+      );
+    });
   });
 });
