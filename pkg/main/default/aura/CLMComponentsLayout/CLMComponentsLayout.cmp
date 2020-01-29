@@ -7,7 +7,7 @@
 			<c:CLMInformationHelp isSubTitle="true" subTitle="{!$Label.c.FolderPortalViewYourObjectFolders}"
 				imageURL="{!($Resource.LayoutConfig)}" summary="{!$Label.c.FolderPortalSummary}" isLink="true"
 				link="{!$Label.c.LearnHowToConfigureYourLayouts}" firstButtonName="{!$Label.c.OpenObjectManagerButton}"
-				showIcon="false" hyperlinkedURI="['tab','8']" invokedBy="Components-OpenObjectManager"/>
+				showIcon="true" hyperlinkedURI="['tab','8']" invokedBy="Components-OpenObjectManager"/>
 		</div>
 	</div>
 </aura:component>

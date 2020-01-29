@@ -130,14 +130,14 @@
         </div>
         <div class="slds-border_top slds-p-bottom_large ">
             <c:CLMHelp title="{!$Label.c.ViewYourObjectFolders}" secondButtonName="{!$Label.c.ConfigureLayouts}"
-                showFirstButton="false" showIcon="true" imageURL="standard:folder" isIcon="true" iconColorClass="ds-icon-orange"
+                showFirstButton="false" showIcon="true" imageURL="standard:folder" isIcon="true" iconColorClass="ds-icon-orange" secondButtonIcon="true"
                 secondButtonVariant="neutral" summary="{!$Label.c.AddLayoutInfo}" isCard="false"/>
             <span class="slds-p-left_xx-large slds-m-left_xx-large">
                 <a href="javascript:void(0)" onclick="{!c.gotoHelp}">{!$Label.c.HomeConfigureLayout}</a>
             </span>
         </div>
         <div class="slds-border_top slds-p-bottom_large ">
-            <c:CLMHelp title="{!$Label.c.SpeedUpDocumentGeneration}" secondButtonName="{!$Label.c.ConfigureButtons}"
+            <c:CLMHelp title="{!$Label.c.SpeedUpDocumentGeneration}" secondButtonName="{!$Label.c.ConfigureButtons}" secondButtonIcon="true"
                 showFirstButton="false" showIcon="true" imageURL="standard:marketing_actions" isIcon="true" iconColorClass="ds-icon-darkshy"
                 secondButtonVariant="neutral" summary="{!$Label.c.ConfigureButtonInfo}" isCard="false"/>
             <span class="slds-p-left_xx-large slds-m-left_xx-large">

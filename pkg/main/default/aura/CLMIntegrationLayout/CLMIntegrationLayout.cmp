@@ -69,7 +69,7 @@
             <aura:if isTrue="{!v.showTrouble}">
                 <lightning:layoutItem size="12" padding="around-large">
                     <c:CLMHelp title="{!$Label.c.WhatsNext}" imageURL="standard:product_required"
-                        secondButtonName="{!$Label.c.ConfigureLayouts}" showIcon="true"
+                        secondButtonName="{!$Label.c.ConfigureLayouts}" showIcon="true" secondButtonIcon="true"
                         firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true" isIcon="true"
                         secondButtonVariant="neutral" summary="{!$Label.c.ConfigureObjectPageLayoutInfo}"/>
                 </lightning:layoutItem>

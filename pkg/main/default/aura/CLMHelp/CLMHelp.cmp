@@ -10,6 +10,8 @@
     <aura:attribute name="secondButtonName" type="String"/>
     <aura:attribute name="showIcon" type="Boolean" default="true"/>
     <aura:attribute name="showFirstButton" type="Boolean" default="true"/>
+    <aura:attribute name="firstButtonIcon" type="Boolean" default="false"/>
+    <aura:attribute name="secondButtonIcon" type="Boolean" default="false"/>
     <aura:attribute name="showSecondButton" type="Boolean" default="true"/>
     <aura:attribute name="secondButtonVariant" type="String" default="brand"/>
     <aura:attribute name="isGray" type="Boolean" default="false"/>
@@ -40,12 +42,13 @@
             <div class="slds-col_bump-left slds-p-top_small slds-p-right_x-small">
                 <aura:if isTrue="{!v.showFirstButton}">
                     <lightning:button label="{!v.firstButtonName}" title="{!v.firstButtonName}"
-                        iconName="utility:new_window" iconPosition="right" onclick="{!c.onSecondaryButtonClick}"
+                        iconName="{!v.firstButtonIcon ? 'utility:new_window':''}" iconPosition="right" onclick="{!c.onSecondaryButtonClick}"
                         class="ds-button-width slds-m-right_small"/>
                 </aura:if>
                 <aura:if isTrue="{!v.showSecondButton}">
                     <lightning:button variant="{!v.secondButtonVariant}" label="{!v.secondButtonName}"
-                        title="{!v.secondButtonName}" onclick="{!c.onPrimaryButtonClick}" class="ds-button-width"/>
+                        title="{!v.secondButtonName}" iconName="{!v.secondButtonIcon ? 'utility:new_window':''}" iconPosition="right"
+                        onclick="{!c.onPrimaryButtonClick}" class="ds-button-width"/>
                 </aura:if>
             </div>
         </div>
