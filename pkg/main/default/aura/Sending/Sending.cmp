@@ -20,7 +20,7 @@
     <aura:attribute name="availableTemplates" type="Object[]" access="private"/>
     <aura:attribute name="template" type="Object" access="private"/>
     <aura:attribute name="recipients" type="Object[]" access="private"/>
-    <aura:attribute name="defaultRoles" type="Object[]" access="private"/>
+    <aura:attribute name="defaultRoles" type="Object" access="private"/>
     <aura:attribute name="emailLocalizations" type="Object[]" access="private"/>
     <aura:attribute name="expiresOn" type="Date" access="private"/>
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private"/>

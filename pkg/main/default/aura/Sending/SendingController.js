@@ -101,7 +101,8 @@
       component.set('v.recipients', helper.getRecipients(
         component.get('v.recipients'),
         component.get('v.placeholderRecipients'),
-        component.get('v.template')));
+        component.get('v.template'),
+        component.get('v.defaultRoles')));
       component.set('v.areRecipientsSet', true);
     }
   },

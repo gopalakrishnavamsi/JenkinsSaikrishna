@@ -58,6 +58,10 @@
               }
             });
           }
+          var defaultRoles = result.defaultRoles.reduce(function(rolesMap, role) {
+              rolesMap[role.name.toLowerCase()] = role;
+              return rolesMap;
+          }, {});
           result.envelope.notifications = self.setExpiration(
             result.envelope.notifications,
             result.envelope.notifications.expireAfterDays,
@@ -73,7 +77,7 @@
           component.set('v.availableTemplates', result.templates);
           component.set('v.documents', result.documents);
           component.set('v.recipients', result.recipients);
-          component.set('v.defaultRoles', result.defaultRoles);
+          component.set('v.defaultRoles', defaultRoles);
           component.set('v.emailLocalizations', result.emailLocalizations);
           component.set(
             'v.isEmailLocalizationEnabled',
@@ -88,12 +92,13 @@
     }
   },
 
-  addPlaceholderProperties: function (placeholder, routingOrder) {
+  addPlaceholderProperties: function (placeholder, routingOrder, defaultRoles) {
+    var self = this;
     return {
       envelopeRecipientId: placeholder ? placeholder.envelopeRecipientId : null,
       type: 'Signer',
       routingOrder: routingOrder,
-      role: placeholder ? {name: placeholder.role, value: null} : null,
+      role: placeholder ? self.resolvedRole({name: placeholder.role, value: null}, defaultRoles) : null,
       name: null,
       email: null,
       signingGroup: null,
@@ -357,14 +362,15 @@
     var sequence = 1;
     if (!$A.util.isEmpty(recipients)) {
       recipients.forEach(function (r) {
+        var resolvedRole = self.isRoleDefined(r.role)
+            ? r.role
+            : self.getNextRole(defaultRoles);
         if (
           self.isValidRecipient(r) &&
           (!$A.util.isEmpty(r.templateId) || hasDocuments)
         ) {
           r.routingOrder = r.sequence = sequence++;
-          r.role = self.isRoleDefined(r.role)
-            ? r.role
-            : self.getNextRole(defaultRoles);
+          r.role = resolvedRole;
           delete r.templateId;
           delete r.original;
           rs.push(r);
@@ -379,7 +385,11 @@
   },
 
   getNextRole: function (defaultRoles) {
-    return $A.util.isEmpty(defaultRoles) ? null : defaultRoles.shift();
+    var nextRole = $A.util.isEmpty(defaultRoles) ? null : defaultRoles[Object.keys(defaultRoles)[0]];
+    
+    if (!$A.util.isUndefinedOrNull(nextRole)) delete defaultRoles[Object.keys(defaultRoles)[0]]
+
+    return nextRole;
   },
 
   tagEnvelope: function (component, envelope) {
@@ -433,18 +443,22 @@
     return $A.util.isEmpty(value) ? orElse : value;
   },
 
-  mergePlaceholderRecipient: function (placeholder, recipient, sequence) {
-    if ($A.util.isUndefinedOrNull(placeholder)) return recipient;
+  mergePlaceholderRecipient: function (placeholder, recipient, sequence, defaultRoles) {
+    var self = this;
+    if ($A.util.isUndefinedOrNull(placeholder)) {
+      recipient.role = self.resolveRole(recipient.role, defaultRoles);
+      return recipient;
+    }
 
     return {
       original: recipient,
       envelopeRecipientId: placeholder.envelopeRecipientId,
       type: recipient.type,
       routingOrder: sequence,
-      role: {
+      role: self.resolveRole({
         name: placeholder.role,
         value: null
-      },
+      }, defaultRoles),
       name: recipient.name,
       email: recipient.email,
       signingGroup: recipient.signingGroup,
@@ -459,7 +473,17 @@
     };
   },
 
-  mergeTemplateRecipient: function (templateRecipient, recipient) {
+  resolveRole: function(role, defaultRoles) {
+      if (!$A.util.isEmpty(role) 
+        && !$A.util.isUndefinedOrNull(role.name) 
+        && !$A.util.isUndefinedOrNull(defaultRoles[role.name.toLowerCase()])
+      ) {
+        delete defaultRoles[role.name.toLowerCase()];
+      }
+      return role;
+  },
+
+  mergeTemplateRecipient: function (templateRecipient, recipient, defaultRoles) {
     if ($A.util.isUndefinedOrNull(templateRecipient)) return recipient;
     if ($A.util.isUndefinedOrNull(recipient)) return templateRecipient;
 
@@ -471,14 +495,14 @@
       templateRecipient.emailSettings = {};
     if ($A.util.isUndefinedOrNull(recipient.emailSettings))
       recipient.emailSettings = {};
-
+    var self = this;
     return {
       templateId: templateRecipient.templateId,
       original: recipient,
       envelopeRecipientId: recipient.envelopeRecipientId,
       type: templateRecipient.type,
       routingOrder: templateRecipient.routingOrder,
-      role: templateRecipient.role,
+      role: self.resolveRole(templateRecipient.role, defaultRoles),
       name: this.valueOrElse(templateRecipient.name, recipient.name),
       email: this.valueOrElse(templateRecipient.email, recipient.email),
       signingGroup: this.valueOrElse(
@@ -545,7 +569,7 @@
     );
   },
 
-  getRecipients: function (recipients, placeholders, template) {
+  getRecipients: function (recipients, placeholders, template, defaultRoles) {
     var self = this;
     var rs = [];
     var ri = 0;
@@ -555,9 +579,11 @@
       usingTemplate = true;
       placeholders.recipients.forEach(function (ph) {
         if (!$A.util.isEmpty(recipients) && ri < recipients.length) {
-          rs.push(self.mergePlaceholderRecipient(ph, recipients[ri++], ri));
+          //#StartHere
+          var currentRecipient = recipients[ri++];
+          rs.push(self.mergePlaceholderRecipient(ph, currentRecipient, ri, defaultRoles));
         } else {
-          rs.push(self.addPlaceholderProperties(ph, ++ri));
+          rs.push(self.addPlaceholderProperties(ph, ++ri, defaultRoles));
         }
       });
     }
@@ -567,8 +593,9 @@
       usingTemplate = true;
       template.recipients.forEach(function (tr) {
         if (ri < recipients.length && !self.isValidRecipient(tr)) {
-          rs.push(self.mergeTemplateRecipient(tr, recipients[ri++]));
+          rs.push(self.mergeTemplateRecipient(tr, recipients[ri++], defaultRoles));
         } else {
+          tr.role = self.resolveRole(tr.role, defaultRoles);
           rs.push(tr);
         }
       });
