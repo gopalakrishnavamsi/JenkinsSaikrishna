@@ -38,6 +38,7 @@
     <aura:handler name="change" value="{!v.filesSelected}" action="{!c.setNextButtonState}"/>
     <aura:handler name="change" value="{!v.template}" action="{!c.setNextButtonState}"/>
     <aura:handler name="change" value="{!v.envelope.emailSubject}" action="{!c.setNextButtonState}"/>
+    <aura:handler name="change" value="{!v.recipients}" action="{!c.onRecipientsChange}"/>
     <aura:handler name="recipientIdChange" event="c:strike_evt" action="{!c.handleRecipientChange}"/>
 
     <div class="slds-scope ds-sending">

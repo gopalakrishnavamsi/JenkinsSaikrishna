@@ -276,7 +276,10 @@
           !$A.util.isUndefinedOrNull(component.get('v.template'))
         );
       case 1:
-        return !$A.util.isEmpty(component.get('v.recipients'));
+        var recipients = component.get('v.recipients');
+        return !$A.util.isEmpty(recipients) && !recipients.map(function (rt) {
+          return rt.name;
+        }).includes(null);
       case 2:
         return !$A.util.isEmpty(
           component.find('envelope-subject-input').get('v.value')
@@ -619,34 +622,51 @@
   resolveRecipient: function (component, recipient) {
     var self = this;
     var sourceId = self.getSourceId(recipient);
-    this.invokeAction(
-      component,
-      component.get('c.resolveRecipient'),
-      {
-        sourceId: sourceId
-      },
-      function (result) {
-        if (!$A.util.isUndefinedOrNull(result)) {
-          var updated = false;
-          var rs = component.get('v.recipients');
-          rs.forEach(function (r) {
-            // Update name, email, phone, full source for new recipient
-            if (self.getSourceId(r) === sourceId) {
-              r.name = result.name;
-              r.email = result.email;
-              r.phone = result.phone;
-              r.source = result.source;
-              updated = true;
-            }
-          });
-          // Prevent rebinding if nothing has changed.
-          if (updated) {
-            component.set('v.recipients', rs);
-            component.set('v.disableNext', false);
-          }
-        }
+    if (!$A.util.isUndefinedOrNull(sourceId)) {
+      if (recipient.source.deleted) {
+        self.removeRecipientName(component, sourceId);
+      } else {
+        self.addRecipientName(component, sourceId);
+      }
+    }
+  },
+
+  removeRecipientName: function (component, sourceId) {
+    var self = this;
+    var recipients = component.get('v.recipients');
+    recipients.forEach(function (rt) {
+      if (self.getSourceId(rt) === sourceId) {
+        rt.name = null;
+      }
+    });
+    component.set('v.recipients', recipients);
+  },
+
+  addRecipientName: function (component, sourceId) {
+    var self = this;
+    var action = component.get('c.resolveRecipient');
+    var parameters = {
+      sourceId: sourceId
+    };
+    self.invokeAction(component, action, parameters, function (recipientData) {
+        self.updateNewRecipient(component, sourceId, recipientData);
       }
     );
+  },
+
+  updateNewRecipient: function (component, sourceId, recipientData) {
+    var self = this;
+    var rs = component.get('v.recipients');
+    rs.forEach(function (r) {
+      // Update name, email, phone, full source for new recipient
+      if (self.getSourceId(r) === sourceId) {
+        r.name = recipientData.name;
+        r.email = recipientData.email;
+        r.phone = recipientData.phone;
+        r.source = recipientData.source;
+      }
+    });
+    component.set('v.recipients', rs);
   },
 
   cancelSend: function (component) {

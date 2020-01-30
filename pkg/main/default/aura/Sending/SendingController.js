@@ -1,17 +1,17 @@
 ({
   onChangeIsAuthorized: function (component, event, helper) {
-      if (component.get('v.isAuthorized')) {
-        var products = component.get('v.products');
-        if (!$A.util.isUndefinedOrNull(products)) {
-          products.forEach(function (product) {
-            if (product.name === 'e_sign') {
-              component.set('v.isESignatureEnabled', product.status === 'active');
-              component.set('v.isESignatureTrialExpired', product.isExpired);
-            }
-          });
-        }
+    if (component.get('v.isAuthorized')) {
+      var products = component.get('v.products');
+      if (!$A.util.isUndefinedOrNull(products)) {
+        products.forEach(function (product) {
+          if (product.name === 'e_sign') {
+            component.set('v.isESignatureEnabled', product.status === 'active');
+            component.set('v.isESignatureTrialExpired', product.isExpired);
+          }
+        });
       }
-      helper.createEnvelope(component, component.get('v.recordId'));
+    }
+    helper.createEnvelope(component, component.get('v.recordId'));
   },
 
   setExpirationDate: function (component, event, helper) {
@@ -92,7 +92,7 @@
       var selectedFileTitles = '';
 
       fileCheckboxes.forEach(function (file) {
-        if (typeof(file) !== 'undefined' && file.get('v.checked')) {
+        if (typeof (file) !== 'undefined' && file.get('v.checked')) {
           selectedFileTitles += ', ' + documents[file.get('v.value')].name;
         }
       });
@@ -121,5 +121,9 @@
       // Reload files
       helper.handleUploadFinished(component);
     }
+  },
+
+  onRecipientsChange: function (component, event, helper) {
+    component.set('v.disableNext', !helper.getValidity(component));
   }
 });

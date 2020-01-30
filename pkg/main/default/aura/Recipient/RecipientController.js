@@ -33,14 +33,18 @@
   },
 
   handleRecipientIdChange: function (component) {
-    var r = component.get('v.recipient');
+    var recipient = component.get('v.recipient');
     var sId = component.get('v.sourceId');
-    if (r && sId && (!r.source || (r.source.id !== sId))) {
+    var recipientIsDeleted = $A.util.isEmpty(sId);
+    if (!$A.util.isUndefinedOrNull(recipient)) {
       var e = component.getEvent('recipientIdChange');
-      r.source = {
-        id: sId
+      recipient.source = {
+        id: sId || recipient.source.id,
+        deleted: recipientIsDeleted
       };
-      e.setParams({data: r});
+      e.setParams({
+        data: recipient
+      });
       e.fire();
     }
   },
