@@ -11,7 +11,7 @@
 				isLink="true" link="{!$Label.c.LearnHowTo}" hyperlinkedURI="['tab','8']" showButton="false"/>				
 		</div>
 		<div class="slds-p-top_medium ds-card-padding">
-			<c:CLMInformationHelp isSubTitle="false" imageURL="{!($Resource.WorkflowDesignerCard)}"
+			<c:CLMInformationHelp isSubTitle="false" imageURL="{!($Resource.WorkflowDesignerCard2)}"
 				summary="{!$Label.c.KickoffWorkflowSummary}" isLink="true" link="{!$Label.c.LearnHowToKickoffAWorkflow}"
 				hyperlinkedURI="['tab','8']" showButton="false"/>
 		</div>
