@@ -84,7 +84,8 @@
               login: component.get('v.login'),
               products: component.get('v.products'),
               showSetupSpinner: component.get('v.showSetupSpinner'),
-              showSetupComponent: component.get('v.showSetupComponent')
+              showSetupComponent: component.get('v.showSetupComponent'),
+              navigateToNewTemplateUrl: component.get('v.navigateToNewTemplateUrl')
             });
           }
 

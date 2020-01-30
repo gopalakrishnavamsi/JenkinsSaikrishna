@@ -35,8 +35,21 @@ public with sharing class GenController extends Controller {
 		if (templateId != null) {
 			Gen.Template template = GenService.getTemplate(templateId);
 			Boolean editMode = template.templateType.equals(Gen.ONLINE_EDITOR_TYPE) ? template.springTemplateId != null : true;
-			redirectPage = new PageReference(GenService.getTemplateUrl(GenService.getTemplate(templateId), false).toExternalForm());
+			redirectPage = new PageReference(GenService.getTemplateUrl(template, false).toExternalForm());
 			redirectPage.getParameters().put('isEdit', String.valueOf(editMode));
+			redirectPage.setRedirect(true);
+		}
+		return redirectPage;
+	}
+
+	public PageReference redirectOnNewTemplate() {
+		PageReference redirectPage;
+		QueryString params = QueryString.fromCurrentPage();
+		Id templateId = params.getId('id', params.getId('templateId', null));
+		if (templateId != null) {
+			Gen.Template template = GenService.getTemplate(templateId);
+			redirectPage = new PageReference(GenService.getTemplateUrl(template, false).toExternalForm());
+			redirectPage.getParameters().put('isEdit', 'false');
 			redirectPage.setRedirect(true);
 		}
 		return redirectPage;
@@ -70,7 +83,7 @@ public with sharing class GenController extends Controller {
 			this.docuSignUserId = [SELECT Username__c FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1].Username__c;
 			this.docuSignEnvironment = settings.Environment__c;
 			this.templateListUrl = isFromSetupWizard ? new Url(
-				Salesforce.baseUrl, 
+				Salesforce.baseUrl,
 				Page.Setup.getUrl()
 			).toExternalForm() : new Url(
 				Salesforce.baseUrl,
@@ -261,15 +274,6 @@ public with sharing class GenController extends Controller {
 			return GenService.getGenTemplateValues();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get Template Types.');
-		}
-	}
-
-	@AuraEnabled
-	public static String saveAndCreateGenTemplateUrl(final String templateJson, final Boolean isFromSetupWizard) {
-		try {
-			return GenService.getTemplateUrl(GenService.saveTemplate((Gen.Template)JSON.deserialize(templateJson, Gen.Template.class)), isFromSetupWizard).toExternalForm();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to get Template Url.');
 		}
 	}
 

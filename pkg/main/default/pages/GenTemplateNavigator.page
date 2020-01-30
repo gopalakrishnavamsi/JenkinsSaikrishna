@@ -6,10 +6,22 @@
     <apex:includeScript value="{!$Resource.stringUtils}"/>
     <apex:slds/>
 
+    <apex:form>
+        <apex:actionFunction name="redirectToNewTemplateUrl" action="{!redirectOnNewTemplate}" reRender="">
+            <apex:param name="id" value=""/>
+        </apex:actionFunction>
+    </apex:form>
+
     <!-- div for rendering the lightning component -->
     <div id="lightning"></div>
 
     <script type="text/javascript">
+
+      var navigateToNewTemplateUrl = function (templateId) {
+        if (templateId != null) {
+          redirectToNewTemplateUrl(templateId);
+        }
+      }
       var navigate = function (event) {
         var recordId = event.getParam('recordId');
         if (typeof sforce != 'undefined') {
@@ -26,7 +38,8 @@
       $Lightning.use(ns + ':GenTemplateNavigatorApp', function () {
         $Lightning.createComponent(ns + ':GenTemplateNavigator', {
           templateId: '{!GenTemplate__c.Id}',
-          isRedirectOnCancel: true
+          isRedirectOnCancel: true,
+          navigateToNewTemplateUrl: navigateToNewTemplateUrl
         }, 'lightning', function (component, status) {
           if (status === 'SUCCESS') {
             $A.eventService.addHandler({'event': 'force:navigateToSObject', 'handler': navigate});

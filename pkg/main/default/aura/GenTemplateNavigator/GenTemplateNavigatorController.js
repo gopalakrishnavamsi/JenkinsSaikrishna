@@ -12,7 +12,7 @@
     }
   },
   createTemplate: function (component, event, helper) {
-    helper.saveTemplate(component, event, helper);
+    helper.saveTemplate(component);
   },
   selectType: function (component, event) {
     component.set('v.selectedType', event.currentTarget.value);

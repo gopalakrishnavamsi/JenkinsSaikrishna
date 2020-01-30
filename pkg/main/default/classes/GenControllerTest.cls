@@ -12,7 +12,7 @@ private class GenControllerTest {
 	@isTest
 	static void test_constructor_nonSetupWizard_Edit() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			GenTemplate__c testGenTemplate = new GenTemplate__c(Name='TestTemplate', TemplateType__c='Online Editor');
+			GenTemplate__c testGenTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = 'Online Editor');
 			insert testGenTemplate;
 			Test.startTest();
 			PageReference genTemplateNavigatorPageReference = Page.GenTemplateNavigator;
@@ -599,7 +599,7 @@ private class GenControllerTest {
 			Test.startTest();
 			GenController controller = new GenController();
 			PageReference result2 = controller.redirectOnEdit();
-			System.assertEquals(result2.getParameters().get('isEdit'), 'true');		
+			System.assertEquals(result2.getParameters().get('isEdit'), 'true');
 			Test.stopTest();
 		}
 	}
@@ -621,7 +621,7 @@ private class GenControllerTest {
 			Test.startTest();
 			GenController controller = new GenController();
 			PageReference result1 = controller.redirectOnEdit();
-			System.assertEquals(result1.getParameters().get('isEdit'), 'false');	
+			System.assertEquals(result1.getParameters().get('isEdit'), 'false');
 			Test.stopTest();
 		}
 	}
@@ -646,47 +646,6 @@ private class GenControllerTest {
 			Test.startTest();
 			try {
 				GenController.getTemplateTypes();
-				throw new AssertException('Expected to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_saveAndCreateGenTemplateUrl_fromSetupWizard() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			Gen.Template testGenTemplate = new Gen.Template(null, 'TestGenTemplate', 'Account', Gen.ONLINE_EDITOR_TYPE, null, null, null, null, null, null, null, null, null, null, null, null );
-			String resultUrl;
-			Test.startTest();
-			resultUrl = GenController.saveAndCreateGenTemplateUrl(JSON.serialize(testGenTemplate), true);
-			System.assertEquals(true, String.isNotBlank(resultUrl));
-			System.assertEquals(true, Boolean.valueOf(new PageReference(resultUrl).getParameters().get('isFromSetupWizard')));
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_saveAndCreateGenTemplateUrl_fromTab() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			Gen.Template testGenTemplate = new Gen.Template(null, 'TestGenTemplate', 'Account', Gen.ONLINE_EDITOR_TYPE, null, null, null, null, null, null, null, null, null, null, null, null );
-			String resultUrl;
-			Test.startTest();
-			resultUrl = GenController.saveAndCreateGenTemplateUrl(JSON.serialize(testGenTemplate), false);
-			System.assertEquals(true, String.isNotBlank(resultUrl));
-			System.assertEquals(false, Boolean.valueOf(new PageReference(resultUrl).getParameters().get('isFromSetupWizard')));
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_saveAndCreateGenTemplateUrl_unAuthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			Gen.Template testGenTemplate = new Gen.Template(null, 'TestGenTemplate', 'Account', Gen.ONLINE_EDITOR_TYPE, null, null, null, null, null, null, null, null, null, null, null, null );
-			try {
-				GenController.saveAndCreateGenTemplateUrl(JSON.serialize(testGenTemplate), true);
 				throw new AssertException('Expected to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -739,8 +698,7 @@ private class GenControllerTest {
 			try {
 				GenController.generateUploadToken(UUID.randomUUID().toString());
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -766,8 +724,7 @@ private class GenControllerTest {
 			try {
 				GenController.generateDownloadToken(UUID.randomUUID().toString());
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignNegotiator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -780,7 +737,7 @@ private class GenControllerTest {
 			TestUtils.createAccount();
 			Test.startTest();
 			List<SObject> testResultsList = new List<SObject>();
-			testResultsList= GenController.getEntityRecords('Account');
+			testResultsList = GenController.getEntityRecords('Account');
 			System.assertEquals(1, testResultsList.size());
 			Test.stopTest();
 		}
@@ -793,8 +750,7 @@ private class GenControllerTest {
 			try {
 				GenController.getEntityRecords('Account');
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -819,8 +775,7 @@ private class GenControllerTest {
 			try {
 				GenController.getTemplateFolderId();
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -830,7 +785,7 @@ private class GenControllerTest {
 	@IsTest
 	static void test_deleteTemplate_success() {
 		System.runAs(UserMock.createDocuSignGeneratorAdminUser(true)) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c='Account');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Account');
 			insert testTemplate;
 			Test.startTest();
 			System.assertEquals(1, [SELECT COUNT() FROM GenTemplate__c]);
@@ -843,14 +798,13 @@ private class GenControllerTest {
 	@IsTest
 	static void test_deleteTemplate_unAuthorized() {
 		System.runAs(UserMock.createUser()) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c='Account');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Account');
 			insert testTemplate;
 			Test.startTest();
 			try {
 				GenController.deleteTemplate(testTemplate.Id);
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -876,8 +830,7 @@ private class GenControllerTest {
 			try {
 				GenController.getLayouts('Account');
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -888,7 +841,7 @@ private class GenControllerTest {
 	static void test_updateLayouts_success() {
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignGeneratorAdminUser(true)) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c='Account');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Account');
 			insert testTemplate;
 			Layout l1 = new Layout(
 				Contact.getSObjectType(),
@@ -915,7 +868,7 @@ private class GenControllerTest {
 
 			Test.startTest();
 			String layoutJSONString = JSON.serialize(new List<Layout> { l1, l2 });
-			String parameters = '{"genButtonApiName":"testOnlineEditorbutton","genButtonLabel":"testOnlineEditorlabel", "genTemplateId":"'+testTemplate.Id+'"}';
+			String parameters = '{"genButtonApiName":"testOnlineEditorbutton","genButtonLabel":"testOnlineEditorlabel", "genTemplateId":"' + testTemplate.Id + '"}';
 			List<Layout> result = GenController.updateLayouts(
 				'Contact',
 				layoutJSONString,
@@ -933,8 +886,7 @@ private class GenControllerTest {
 			try {
 				GenController.updateLayouts('Account', null, null);
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -959,8 +911,7 @@ private class GenControllerTest {
 			try {
 				GenController.getSpringTemplateIdInUUIDFormat(UUID.randomUUID().toString());
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -970,13 +921,13 @@ private class GenControllerTest {
 	@IsTest
 	static void test_updateTemplate_success() {
 		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c='Account');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Account');
 			insert testTemplate;
 			System.assertNotEquals(null, testTemplate.Id);
 			System.assertEquals('TestTemplate', [SELECT Id, Name FROM GenTemplate__c LIMIT 1].Name);
 			System.assertEquals(Gen.ONLINE_EDITOR_TYPE, [SELECT Id, TemplateType__c FROM GenTemplate__c LIMIT 1].TemplateType__c);
 			System.assertEquals('Account', [SELECT Id, SourceObject__c FROM GenTemplate__c LIMIT 1].SourceObject__c);
-			Gen.Template testTemplateInstance = new Gen.Template(testTemplate.Id, 'UpdatedGenTemplate', 'Contact', Gen.ONLINE_EDITOR_TYPE, null, null, null, null, null, null, null, null, null, null, null, null );
+			Gen.Template testTemplateInstance = new Gen.Template(testTemplate.Id, 'UpdatedGenTemplate', 'Contact', Gen.ONLINE_EDITOR_TYPE, null, null, null, null, null, null, null, null, null, null, null, null);
 			Test.startTest();
 			testTemplateInstance = GenController.updateTemplate(JSON.serialize(testTemplateInstance));
 			Test.stopTest();
@@ -989,13 +940,12 @@ private class GenControllerTest {
 	@IsTest
 	static void test_updateTemplate_unAuthorized() {
 		System.runAs(UserMock.createUser()) {
-			Gen.Template testGenTemplate = new Gen.Template(null, 'TestGenTemplate', 'Account', Gen.ONLINE_EDITOR_TYPE, null, null, null, null, null, null, null, null, null, null, null, null );
+			Gen.Template testGenTemplate = new Gen.Template(null, 'TestGenTemplate', 'Account', Gen.ONLINE_EDITOR_TYPE, null, null, null, null, null, null, null, null, null, null, null, null);
 			Test.startTest();
 			try {
 				GenController.updateTemplate(JSON.serialize(testGenTemplate));
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -1005,9 +955,9 @@ private class GenControllerTest {
 	@IsTest
 	static void test_saveAttachments_success() {
 		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			Contact testContact = new Contact(FirstName='testContact', LastName='test', Email='unittest@test.com');
+			Contact testContact = new Contact(FirstName = 'testContact', LastName = 'test', Email = 'unittest@test.com');
 			insert testContact;
-			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c='Contact', FileName__c='Main', FileSuffix__c='Main Data Source');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Contact', FileName__c = 'Main', FileSuffix__c = 'Main Data Source');
 			insert testTemplate;
 			Id testAttachmentId;
 			Test.startTest();
@@ -1020,16 +970,15 @@ private class GenControllerTest {
 	@IsTest
 	static void test_saveAttachments_unAuthorized() {
 		System.runAs(UserMock.createUser()) {
-			Contact testContact = new Contact(FirstName='testContact', LastName='test', Email='unittest@test.com');
+			Contact testContact = new Contact(FirstName = 'testContact', LastName = 'test', Email = 'unittest@test.com');
 			insert testContact;
-			GenTemplate__c testTemplate = new GenTemplate__c(Name='TestTemplate', TemplateType__c=Gen.ONLINE_EDITOR_TYPE);
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE);
 			insert testTemplate;
 			Test.startTest();
 			try {
 				GenController.saveAttachments(UserInfo.getUserId(), 'test', UserInfo.getUserId());
 				throw new AssertException('Expected to fail');
-			}
-			catch (AuraHandledException ex) {
+			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
@@ -1050,13 +999,11 @@ private class GenControllerTest {
 			onlineEditorFields.add(new OnlineEditor.Field('Name', '', 'String'));
 			onlineEditorFields.add(new OnlineEditor.Field('Account.Name', '', 'String'));
 
-
 			List<OnlineEditor.Field> onlineEditorFieldsChild2 = new List<OnlineEditor.Field>();
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Name', '', 'String'));
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Email', '', 'String'));
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Role', '', 'String'));
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Id', '', 'String'));
-
 
 			OnlineEditor.Query q = new OnlineEditor.Query('Opportunity', null, onlineEditorFields, new List<OnlineEditor.Query> {
 				new OnlineEditor.Query('OpportunityContactRole', 'OpportunityContactRoles', onlineEditorFieldsChild2, null)
@@ -1099,13 +1046,11 @@ private class GenControllerTest {
 			onlineEditorFields.add(new OnlineEditor.Field('Name', '', 'String'));
 			onlineEditorFields.add(new OnlineEditor.Field('Account.Name', '', 'String'));
 
-
 			List<OnlineEditor.Field> onlineEditorFieldsChild2 = new List<OnlineEditor.Field>();
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Name', '', 'String'));
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Email', '', 'String'));
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Role', '', 'String'));
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Id', '', 'String'));
-
 
 			OnlineEditor.Query q = new OnlineEditor.Query('Opportunity', null, onlineEditorFields, new List<OnlineEditor.Query> {
 				new OnlineEditor.Query('OpportunityContactRole', 'OpportunityContactRoles', onlineEditorFieldsChild2, null)
@@ -1147,13 +1092,11 @@ private class GenControllerTest {
 			onlineEditorFields.add(new OnlineEditor.Field('Name', '', 'String'));
 			onlineEditorFields.add(new OnlineEditor.Field('Account.Name', '', 'String'));
 
-
 			List<OnlineEditor.Field> onlineEditorFieldsChild2 = new List<OnlineEditor.Field>();
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Name', '', 'String'));
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Email', '', 'String'));
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Role', '', 'String'));
 			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Id', '', 'String'));
-
 
 			OnlineEditor.Query q = new OnlineEditor.Query('Opportunity', null, onlineEditorFields, new List<OnlineEditor.Query> {
 				new OnlineEditor.Query('OpportunityContactRole', 'OpportunityContactRoles', onlineEditorFieldsChild2, null)
@@ -1169,4 +1112,55 @@ private class GenControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_redirectOnNewTemplate_OnlineEditor() {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { adminUser.Id });
+
+			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			template.TemplateType__c = Gen.ONLINE_EDITOR_TYPE;
+			update template;
+
+			Test.setCurrentPage(Page.GenTemplateNavigator);
+			ApexPages.currentPage().getParameters().put('id', template.id);
+			PageReference expectedOnlineEditorPage = Page.OnlineEditorGenTemplate ;
+			expectedOnlineEditorPage.getParameters().put('id', template.id);
+			expectedOnlineEditorPage.getParameters().put('isEdit', 'false');
+			expectedOnlineEditorPage.getParameters().put('isFromSetupWizard', 'false');
+			Test.startTest();
+			GenController controller = new GenController();
+			PageReference result = controller.redirectOnNewTemplate();
+			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedOnlineEditorPage.getUrl(), result.getUrl());
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_redirectOnNewTemplate_WordBasedGen() {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { adminUser.Id });
+
+			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			template.TemplateType__c = 'Microsoft Word';
+			update template;
+
+			Test.setCurrentPage(Page.GenTemplateNavigator);
+			ApexPages.currentPage().getParameters().put('id', template.id);
+			PageReference expectedWordBasedGenPage = Page.GenTemplate ;
+			expectedWordBasedGenPage.getParameters().put('id', template.id);
+			expectedWordBasedGenPage.getParameters().put('isEdit', 'false');
+			expectedWordBasedGenPage.getParameters().put('isFromSetupWizard', 'false');
+			Test.startTest();
+			GenController controller = new GenController();
+			PageReference result = controller.redirectOnNewTemplate();
+			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedWordBasedGenPage.getUrl(), result.getUrl());
+			Test.stopTest();
+		}
+	}
+
 }

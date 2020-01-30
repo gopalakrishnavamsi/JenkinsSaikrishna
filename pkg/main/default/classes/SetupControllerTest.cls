@@ -841,5 +841,55 @@ private class SetupControllerTest {
 			System.assertEquals('TestTemplate', templatesList[0].name);
 		}
 	}
+
+	@IsTest
+	static void test_redirectOnNewTemplate_OnlineEditor() {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { adminUser.Id });
+
+			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			template.TemplateType__c = Gen.ONLINE_EDITOR_TYPE;
+			update template;
+
+			Test.setCurrentPage(Page.GenTemplateNavigator);
+			ApexPages.currentPage().getParameters().put('id', template.id);
+			PageReference expectedOnlineEditorPage = Page.OnlineEditorGenTemplate ;
+			expectedOnlineEditorPage.getParameters().put('id', template.id);
+			expectedOnlineEditorPage.getParameters().put('isEdit', 'false');
+			expectedOnlineEditorPage.getParameters().put('isFromSetupWizard', 'true');
+			Test.startTest();
+			SetupController controller = new SetupController();
+			PageReference result = controller.redirectOnNewTemplate();
+			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedOnlineEditorPage.getUrl(), result.getUrl());
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_redirectOnNewTemplate_WordBasedGen() {
+		User adminUser = UserMock.createDocuSignAdministrator(false);
+		System.runAs(adminUser) {
+			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
+			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { adminUser.Id });
+
+			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			template.TemplateType__c = 'Microsoft Word';
+			update template;
+
+			Test.setCurrentPage(Page.GenTemplateNavigator);
+			ApexPages.currentPage().getParameters().put('id', template.id);
+			PageReference expectedWordBasedGenPage = Page.GenTemplate ;
+			expectedWordBasedGenPage.getParameters().put('id', template.id);
+			expectedWordBasedGenPage.getParameters().put('isEdit', 'false');
+			expectedWordBasedGenPage.getParameters().put('isFromSetupWizard', 'true');
+			Test.startTest();
+			SetupController controller = new SetupController();
+			PageReference result = controller.redirectOnNewTemplate();
+			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedWordBasedGenPage.getUrl(), result.getUrl());
+			Test.stopTest();
+		}
+	}
 }
 

@@ -4,6 +4,12 @@
     <apex:slds/>
     <apex:includeScript value="{!$Resource.stringUtils}"/>
 
+    <apex:form>
+        <apex:actionFunction name="redirectToNewTemplateUrl" action="{!redirectOnNewTemplate}" reRender="">
+            <apex:param name="id" value=""/>
+        </apex:actionFunction>
+    </apex:form>
+
     <style type="text/css">
         /* CSS to override default padding applied in Lightning Experience */
         html body.sfdcBody {
@@ -163,12 +169,19 @@
         document.getElementById('ds-pageContent').style.display = 'none';
       }
 
+      var navigateToNewTemplateUrl = function (templateId) {
+        if (templateId != null) {
+          redirectToNewTemplateUrl(templateId);
+        }
+      }
+
       $Lightning.use('{!JSENCODE(namespace)}:SetupApp', function () {
         $Lightning.createComponent('{!JSENCODE(namespace)}:Setup', {
           beginOAuth: beginOAuth,
           beginSpringOAuth: beginSpringOAuth,
           showSetupComponent: showSetupComponent,
-          showSetupSpinner: showSetupSpinner
+          showSetupSpinner: showSetupSpinner,
+          navigateToNewTemplateUrl: navigateToNewTemplateUrl
         }, 'ds-unifiedAppSetupSection', function (component, status, errorMessage) {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });

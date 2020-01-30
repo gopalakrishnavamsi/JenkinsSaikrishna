@@ -2,6 +2,7 @@
     <!-- attributes -->
     <aura:attribute name="genProduct" type="Product"/>
     <aura:attribute name="showMigrationBlock" type="Boolean" default="true"/>
+    <aura:attribute name="navigateToNewTemplateUrl" type="Object"/>
 
     <div>
         <!-- GenMigration -->
@@ -10,7 +11,7 @@
         </div>
         <aura:if isTrue="{!not(empty(v.genProduct))}">
             <!-- DocuSign Gen Templates section -->
-            <c:DocumentGenerationDetails/>
+            <c:DocumentGenerationDetails navigateToNewTemplateUrl="{!v.navigateToNewTemplateUrl}"/>
             <!-- Gen Product does not exist. Display Marketing component -->
             <aura:set attribute="else">
                 <!-- section for enabling trial -->

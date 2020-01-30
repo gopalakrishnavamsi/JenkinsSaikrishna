@@ -11,6 +11,7 @@
     <aura:attribute name="showSetupSpinner" type="Object"/>
     <aura:attribute name="showSetupComponent" type="Object"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
+    <aura:attribute name="navigateToNewTemplateUrl" type="Object"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <!--register events -->
     <aura:registerEvent name="logoutEvent" type="c:ReloadEvent"/>
@@ -230,7 +231,8 @@
                                     trialProductName="{!if(and(not(empty(v.negotiateProduct)), v.negotiateProduct.isTrial), $Label.c.NegotiateBadgeText, $Label.c.GenBadgeText)}"/>
                         </div>
                         <div class="ds-documentGeneration-section invisible-scrollbar slds-m-top_small ds-flex">
-                            <c:SetupDocumentGeneration genProduct="{!v.genProduct}"/>
+                            <c:SetupDocumentGeneration genProduct="{!v.genProduct}"
+                                                       navigateToNewTemplateUrl="{!v.navigateToNewTemplateUrl}"/>
                         </div>
                     </div>
                 </aura:if>

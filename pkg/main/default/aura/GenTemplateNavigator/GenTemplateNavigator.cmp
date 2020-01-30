@@ -16,6 +16,7 @@
     <aura:attribute name="products" type="Product[]" access="private"/>
     <aura:attribute name="selectedType" type="String" default="" access="private"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
+    <aura:attribute name="navigateToNewTemplateUrl" type="Object"/>
 
     <!-- handlers -->
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>

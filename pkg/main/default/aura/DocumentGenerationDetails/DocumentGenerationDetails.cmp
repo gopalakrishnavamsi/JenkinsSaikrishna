@@ -4,6 +4,7 @@
     <aura:attribute name="loading" type="Boolean" default="false" access="private"/>
     <aura:attribute name="data" type="Object" access="private"/>
     <aura:attribute name="columns" type="List" access="private"/>
+    <aura:attribute name="navigateToNewTemplateUrl" type="Object"/>
 
     <!-- scripts -->
     <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}" afterScriptsLoaded="{!c.init}"/>

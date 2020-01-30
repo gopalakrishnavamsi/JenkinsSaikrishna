@@ -23,14 +23,14 @@
       $A.enqueueAction(action);
     }
   },
-  saveTemplate: function (component, event, helper) {
+  saveTemplate: function (component) {
     component.set('v.loading', true);
     var template = component.get('v.template');
     template.templateType = component.get('v.selectedType');
     template.stepsCompleted = 1;
     template.useAllTemplates = true;
     template.useCurrentRecord = true;
-    var action = component.get('c.saveAndCreateGenTemplateUrl');
+    var action = component.get('c.saveTemplate');
     var saveTemplateParameters = JSON.stringify(template);
     action.setParams({
       templateJson: saveTemplateParameters
@@ -38,12 +38,10 @@
     action.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
-        var templateUrl = response.getReturnValue();
+        var responseTemplate = response.getReturnValue();
         component.find('genTemplateNavigator').destroy();
-        navUtils.navigateToUrl(templateUrl);
-        if (!component.get('v.isFromSetupWizard')) {
-          helper.redirectToCancelUrl(component);
-        }
+        var navigateToNewTemplateUrl = component.get('v.navigateToNewTemplateUrl');
+        navigateToNewTemplateUrl(responseTemplate.id);
       } else {
         component.set('v.errMsg', stringUtils.getErrorMessage(response));
       }

@@ -51,7 +51,8 @@
       {
         loading: true,
         isRedirectOnCancel: false,
-        isFromSetupWizard: true
+        isFromSetupWizard: true,
+        navigateToNewTemplateUrl: component.get('v.navigateToNewTemplateUrl')
       }
     );
   },

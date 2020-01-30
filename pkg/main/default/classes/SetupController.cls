@@ -348,4 +348,17 @@ public with sharing class SetupController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to get gen templates');
 		}
 	}
+
+	public PageReference redirectOnNewTemplate() {
+		PageReference redirectPage;
+		QueryString params = QueryString.fromCurrentPage();
+		Id templateId = params.getId('id', params.getId('templateId', null));
+		if (templateId != null) {
+			Gen.Template template = GenService.getTemplate(templateId);
+			redirectPage = new PageReference(GenService.getTemplateUrl(template, true).toExternalForm());
+			redirectPage.getParameters().put('isEdit', 'false');
+			redirectPage.setRedirect(true);
+		}
+		return redirectPage;
+	}
 }
