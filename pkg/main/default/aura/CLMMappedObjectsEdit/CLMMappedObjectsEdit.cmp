@@ -121,10 +121,11 @@
             </div>
         </div>
     </div>
-    <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large slds-p-top_large">
+    <div class="slds-m-around--xx-large">
+        <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large slds-p-top_large">
         <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_x-large slds-m-right_x-large"><c:CLMPath steps="{!v.pathValues}"/></div>
     </div>
-    <div
+        <div
         class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large slds-p-top_large slds-card__body slds-is-relative slds-p-left_x-large slds-p-right_x-large">
         <aura:if isTrue="{!v.loader}">
             <lightning:spinner alternativeText="{!$Label.c.Loading}" size="large"/>
@@ -367,6 +368,7 @@
                 </lightning:layoutItem>
             </lightning:layout>
         </div>
+    </div>
     </div>
     <div class="slds-p-bottom_xx-large slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large">
         <aura:if isTrue="{!v.currentStep!='1'}">
