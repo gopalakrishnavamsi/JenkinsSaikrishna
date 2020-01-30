@@ -298,7 +298,7 @@
 
   generateXML: function (xmlRoot, recordData, objMap, isChild, component) {
     var helper = this;
-    var objRoot = xmlRoot.createElement(objMap.label.replace(/\s/g, '_'));
+    var objRoot = xmlRoot.createElement(isChild ? objMap.label.replace(/\s/g, '_') : objMap.apiName.replace(/\s/g, '_'));
     var unformattedDataTypes = ['DATE', 'DATETIME', 'TIME', 'DOUBLE', 'PERCENT', 'CURRENCY'];
     var fieldMappings = isChild
       ? objMap.childFieldMappings

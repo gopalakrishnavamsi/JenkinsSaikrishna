@@ -48,7 +48,7 @@
                                       zIndex="{!v.objMapping.fieldMappings.length - index}"
                                       loadingChild="{!c.enableLoading}"
                                       childLoaded="{!c.childrenLoaded}" objLabel="{!v.objMapping.label}"
-                                      objIndex="{!v.objIndex}"/>
+                                      objApiName="{!v.objMapping.apiName}" objIndex="{!v.objIndex}"/>
                 </aura:iteration>
             </aura:if>
             <!-- /Merge Fields -->

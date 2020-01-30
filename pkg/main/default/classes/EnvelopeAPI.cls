@@ -955,20 +955,20 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			// add our customfield to identify the object we started with so we can attach docs there via connect
 			textCustomFields.add(new EnvelopeAPI.TextCustomField(
 				'DSFSSourceObjectId',
-				source.id + '~' + source.type,
+				source.id + '~' + source.typeName,
 				false,
 				false));
 
 			// Add related object custom fields
 			textCustomFields.add(new EnvelopeAPI.TextCustomField(
-				'##SF' + source.type,
+				'##SF' + source.typeName,
 				source.id,
 				false,
 				false));
 
 			if (Entity.isValid(source.parent)) {
 				textCustomFields.add(new EnvelopeAPI.TextCustomField(
-					'##SF' + source.parent.type,
+					'##SF' + source.parent.typeName,
 					source.parent.id,
 					false,
 					false));

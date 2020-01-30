@@ -1,7 +1,7 @@
 ({
   setTokenValue: function (component) {
     var fieldMapping = component.get('v.fieldMapping');
-    var objLabel = component.get('v.objLabel').replace(/\s/g, '_');
+    var objApiName = component.get('v.objApiName');
     var isChild = component.get('v.isChild');
     var token = '';
 
@@ -9,21 +9,21 @@
       return;
     }
     if (fieldMapping.isChildRelation) {
-      token = '<# <TableRow Select="/' + objLabel + '//' + fieldMapping.label + '" /> #>';
+      token = '<# <TableRow Select="/' + objApiName + '//' + fieldMapping.label + '" /> #>';
     } else if (fieldMapping.isConditional) {
       if (isChild) {
         token = '<# <Conditional Select="./' + fieldMapping.apiName + '" ' + fieldMapping.matchType + '="' + fieldMapping.conditionalValue +
           '" /> #> YOUR CONTENT HERE <# <EndConditional/> #>';
       } else {
-        token = '<# <Conditional Select="/' + objLabel + '/' + fieldMapping.apiName + '" ' + fieldMapping.matchType + '="' + fieldMapping.conditionalValue +
+        token = '<# <Conditional Select="/' + objApiName + '/' + fieldMapping.apiName + '" ' + fieldMapping.matchType + '="' + fieldMapping.conditionalValue +
           '" /> #> YOUR CONTENT HERE <# <EndConditional/> #>';
       }
     } else if (isChild) {
       token = '<# <Content Select="./' + fieldMapping.apiName + '"/> #>';
     } else if (fieldMapping.dataType === 'RICHTEXT') {
-      token = '<# <RichText Select="/' + objLabel + '/' + fieldMapping.apiName + '"/> #>';
+      token = '<# <RichText Select="/' + objApiName + '/' + fieldMapping.apiName + '"/> #>';
     } else {
-      token = '<# <Content Select="/' + objLabel + '/' + fieldMapping.apiName + '"/> #>';
+      token = '<# <Content Select="/' + objApiName + '/' + fieldMapping.apiName + '"/> #>';
     }
 
     component.set('v.token', token);

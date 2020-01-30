@@ -19,20 +19,7 @@
   saveData: function (component, isNavigate) {
     var helper = this;
     component.set('v.saving', true);
-    var isImportStep = component.get('v.currentStep') === 2;
-    if (isImportStep) {
-      var getConfigAction = helper.getConfiguration(component);
-      getConfigAction.then(
-        $A.getCallback(function (results) {
-          component.set('v.saving', false);
-          component.set('v.config', results.template);
-          helper.saveTemplate(component, isNavigate);
-        })
-      );
-    } else {
-      component.set('v.saving', false);
-      helper.saveTemplate(component, isNavigate);
-    }
+    helper.saveTemplate(component, isNavigate);
   },
 
   goToStep: function (component, stepIndex) {

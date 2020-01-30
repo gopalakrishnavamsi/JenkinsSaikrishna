@@ -21,6 +21,7 @@
     <aura:attribute name="zIndex" type="Integer"/>
 
     <aura:attribute name="objLabel" type="String"/>
+    <aura:attribute name="objApiName" type="String"/>
     <aura:attribute name="token" type="String"/>
     <aura:attribute name="previousFieldMappingName" type="String"/>
 
@@ -110,7 +111,7 @@
                                       isChild="{!true}" parentFieldMapping="{!v.fieldMapping}"
                                       fieldMapping="{!childFieldMapping}"
                                       mappingIndex="{!index}" parentMappingIndex="{!v.mappingIndex}"
-                                      objLabel="{!v.objLabel}"
+                                      objLabel="{!v.objLabel}" objApiName="{!v.objApiName}"
                                       objIndex="{!v.objIndex}"/>
                 </aura:iteration>
             </aura:if>

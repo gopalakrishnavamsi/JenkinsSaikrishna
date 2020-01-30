@@ -1252,16 +1252,21 @@ global with sharing class AuthService {
 			SpringOAuthLoginInformation results;
 			try {
 				Url u = AccountProducts.getInstance().getScmWebBaseUrl();
+				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 				if (u != null) {
 					Map<String, Object> body = new Map<String, Object> {
+						'accountId' => settings.AccountId__c,
 						'code' => authorizationCode,
 						'orgUrl' => Salesforce.baseUrl.toExternalForm()
 					};
 					Response response = super.post(
 						this.baseUrl,
-						new List<Object> { 'SetupSalesforce', 'UnifiedAppIntegration' },
+						new List<Object> { 'SetupSalesforce', 'DALIntegration' },
 						QueryString.empty,
-						new Map<String, String> { 'Content-Type' => 'application/json' },
+						new Map<String, String> {
+							'Authorization' => 'Bearer ' + AuthService.getAccessToken(),
+							'Content-Type' => 'application/json'
+						},
 						JSON.serialize(body),
 						RestAPI.defaultTimeout);
 
