@@ -66,6 +66,7 @@
 	<searchLayouts>
 		<searchResultsAdditionalFields>SourceObject__c</searchResultsAdditionalFields>
 		<searchResultsAdditionalFields>IsSample__c</searchResultsAdditionalFields>
+		<searchResultsAdditionalFields>TemplateType__c</searchResultsAdditionalFields>
 		<searchResultsAdditionalFields>LAST_UPDATE</searchResultsAdditionalFields>
 	</searchLayouts>
 	<sharingModel>ReadWrite</sharingModel>

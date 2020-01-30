@@ -13,6 +13,7 @@
             templateRows.push({
               name: template.name,
               sourceObject: $A.util.isUndefinedOrNull(template.sourceObject) ? null : template.sourceObject,
+              templateType: template.templateType,
               lastModifiedDate: template.lastModifiedDate,
               link: '/' + template.id
             });
@@ -28,6 +29,11 @@
             {
               label: $A.get('$Label.c.MainDataSource'),
               fieldName: 'sourceObject',
+              type: 'text'
+            },
+            {
+              label: 'Type',
+              fieldName: 'templateType',
               type: 'text'
             },
             {

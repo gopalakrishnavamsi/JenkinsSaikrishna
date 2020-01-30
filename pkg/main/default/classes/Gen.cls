@@ -339,17 +339,21 @@ public class Gen {
 		@AuraEnabled
 		public String sourceObject { get; private set; }
 		@AuraEnabled
+		public String templateType { get; private set; }
+		@AuraEnabled
 		public Datetime lastModifiedDate { get; private set; }
 
 		public GenTemplateDisplay(
 			final Id id,
 			final String name,
 			final String sourceObject,
+			final String templateType,
 			final Datetime lastModifiedDate) {
 
 			this.id = id;
 			this.name = name;
 			this.sourceObject = sourceObject;
+			this.templateType = templateType;
 			this.lastModifiedDate = lastModifiedDate;
 		}
 	}

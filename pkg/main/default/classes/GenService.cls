@@ -142,11 +142,11 @@ public with sharing class GenService {
 
 		public List<Gen.GenTemplateDisplay> queryTemplates() {
 			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Id', 'Name', 'SourceObject__c', 'LastModifiedDate'
+				'Id', 'Name', 'SourceObject__c', 'LastModifiedDate', 'TemplateType__c'
 			});
 			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
 			for (GenTemplate__c template : [
-				SELECT Id, Name, SourceObject__c, LastModifiedDate
+				SELECT Id, Name, SourceObject__c, LastModifiedDate, TemplateType__c
 				FROM GenTemplate__c
 				ORDER BY LastModifiedDate DESC
 				LIMIT 50000
@@ -155,6 +155,7 @@ public with sharing class GenService {
 					template.Id,
 					template.Name,
 					template.SourceObject__c,
+					template.TemplateType__c,
 					template.LastModifiedDate));
 			}
 			return templatesList;
@@ -534,9 +535,8 @@ public with sharing class GenService {
 				Permissions.verifyIsQueryable(t, accessMap.get(t));
 			}
 
-			if (Collection.isNotEmpty(query.fields)) q += String.join(query.fields, ', ');
-			else q += 'Id ';
-			
+			if (Collection.isNotEmpty(query.fields)) q += String.join(query.fields, ', '); else q += 'Id ';
+
 			if (Collection.isNotEmpty(childQueries)) {
 				q += ', ' + String.join(childQueries, ', ');
 			}
