@@ -307,7 +307,7 @@ public class Gen {
 	public static Boolean isValidQuery(final Query q) {
 		return q != null
 			&& String.isNotBlank(q.type)
-			&& Collection.isNotEmpty(q.fields);
+			&& (Collection.isNotEmpty(q.fields) || Collection.isNotEmpty(q.children));
 	}
 
 	public static Boolean isValidChildQuery(final Query q) {

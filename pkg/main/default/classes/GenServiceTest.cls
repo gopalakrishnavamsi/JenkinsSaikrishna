@@ -415,15 +415,25 @@ private class GenServiceTest {
 				}, null)
 			});
 
+			Gen.Query childOnlyQuery = new Gen.Query('Opportunity', null, new List<String>(), new List<Gen.Query> {
+				new Gen.Query('OpportunityContactRole', 'OpportunityContactRoles', new List<String> {
+					'Contact.Name', 'Contact.Email', 'Role'
+				}, null)
+			});			
+
 			Test.startTest();
 			SObject result = GenService.getMergeData(o.Id, q);
+			SObject result2 = GenService.getMergeData(o.Id, childOnlyQuery);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(o.Id, result.Id);
+			System.assertEquals(o.Id, result2.Id);
 			System.assertEquals(o.Name, (String)result.get('Name'));
 			List<OpportunityContactRole> ocrs = (List<OpportunityContactRole>)result.getSObjects('OpportunityContactRoles');
+			List<OpportunityContactRole> ocrs2 = (List<OpportunityContactRole>)result2.getSObjects('OpportunityContactRoles');
 			System.assertEquals(2, Collection.size(ocrs));
+			System.assertEquals(2, Collection.size(ocrs2));
 			Boolean foundOCR1 = false, foundOCR2 = false;
 			for (OpportunityContactRole ocr : ocrs) {
 				System.assertNotEquals(null, ocr);

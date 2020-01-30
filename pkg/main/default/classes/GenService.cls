@@ -534,7 +534,9 @@ public with sharing class GenService {
 				Permissions.verifyIsQueryable(t, accessMap.get(t));
 			}
 
-			q += String.join(query.fields, ', ');
+			if (Collection.isNotEmpty(query.fields)) q += String.join(query.fields, ', ');
+			else q += 'Id ';
+			
 			if (Collection.isNotEmpty(childQueries)) {
 				q += ', ' + String.join(childQueries, ', ');
 			}
