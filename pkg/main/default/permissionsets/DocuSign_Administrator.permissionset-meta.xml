@@ -4,9 +4,7 @@
 		<application>DocuSignForSalesforceCore</application>
 		<visible>true</visible>
 	</applicationVisibilities>
-	<description>Provides access to the DocuSign application, pages, and objects and administration
-		rights to the application settings.
-	</description>
+	<description>Provides administrative access to DocuSign Apps Launcher</description>
 	<fieldPermissions>
 		<editable>true</editable>
 		<field>BulkList__c.DocuSignId__c</field>

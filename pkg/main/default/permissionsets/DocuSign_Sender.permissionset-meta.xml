@@ -4,7 +4,7 @@
         <application>DocuSignForSalesforceCore</application>
         <visible>false</visible>
     </applicationVisibilities>
-    <description>Provides access to the DocuSign application, pages, and objects.</description>
+    <description>Enables users to send envelopes as the system sender in DocuSign Apps Launcher</description>
     <fieldPermissions>
         <editable>false</editable>
         <field>BulkList__c.DocuSignId__c</field>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-	<description>Provides administrative access to CLM</description>
+	<description>Provides administrative access to CLM in DocuSign Apps Launcher</description>
 	<fieldPermissions>
 		<editable>true</editable>
 		<field>User.Username__c</field>
