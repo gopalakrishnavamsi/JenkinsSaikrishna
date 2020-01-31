@@ -33,6 +33,11 @@ public class Agreement {
 	@AuraEnabled
 	public Datetime modifiedDate { get; private set; }
 /**
+* Date and time when the current version of the Agreement was uploaded.
+*/
+	@AuraEnabled
+	public Datetime contentCreatedDate { get; private set; }
+/**
 * Agreement status
 */
 	@AuraEnabled
@@ -69,6 +74,7 @@ public class Agreement {
 		final String modifiedBy,
 		final Datetime createdDate,
 		final Datetime modifiedDate,
+		final Datetime contentCreatedDate,
 		final String status,
 		final String href,
 		final Long pdfFileSize,
@@ -80,6 +86,7 @@ public class Agreement {
 		this.modifiedBy = modifiedBy;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
+		this.contentCreatedDate = contentCreatedDate;
 		this.status = status;
 		this.href = href;
 		this.pdfFileSize = pdfFileSize;

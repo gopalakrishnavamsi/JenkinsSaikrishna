@@ -1,7 +1,7 @@
 ({
   initializeNewVersionWidget: function (component, event, helper) {
     component.set('v.loading', true);
-    helper.fetchAgreementVersions(component);
+    helper.fetchAgreementVersions(component, helper);
     var agreement = component.get('v.agreementDetails');
     var limitedAccessToken = component.get('c.generateUploadNewVersionToken');
     limitedAccessToken.setParams({
@@ -48,25 +48,20 @@
     $A.enqueueAction(limitedAccessToken);
   },  
 
-  fetchAgreementVersions: function (component) {
-    var agreementVersions = [];
+  fetchAgreementVersions: function (component, helper) {
     var agreement = component.get('v.agreementDetails');
-    //set current version
-    var currentVersion = {
-      'name': stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-      'createdDate': agreement.createdDate,
-      'extension': agreement.extension
-    };
-
-    agreementVersions.push(currentVersion);
-    agreement.versions.forEach(function (versionInformation) {
-      agreementVersions.push({
-        'name': stringUtils.format('{0}{1}{2}', versionInformation.name, '.', versionInformation.extension),
-        'createdDate': versionInformation.createdDate,
-        'extension': versionInformation.extension
-      });
-    });
+    var agreementVersions = helper.getVersionsData([agreement].concat(agreement.versions));
     component.set('v.agreementVersions', agreementVersions);
+  },
+
+  getVersionsData: function (versions) {
+    return versions.map(function (v) {
+      return {
+        name: stringUtils.format('{0}{1}{2}', v.name, '.', v.extension),
+        contentCreatedDate: v.contentCreatedDate,
+        extension: v.extension
+      }
+    });
   },
 
   uploadButtonClicked: function (component, event, helper) {

@@ -72,7 +72,7 @@
                                         </div>
                                     </td>
                                     <td data-label="{!$Label.c.CurrentVersion}">
-                                        <lightning:formattedDateTime value="{!agreementVersion.createdDate}"
+                                        <lightning:formattedDateTime value="{!agreementVersion.contentCreatedDate}"
                                                                      year="numeric"
                                                                      month="numeric" day="numeric"/>
                                     </td>

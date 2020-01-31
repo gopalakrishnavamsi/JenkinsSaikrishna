@@ -383,6 +383,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		public String name;
 		public String updatedBy;
 		public Datetime createdDate;
+		public Datetime contentCreatedDate;
 		public String status;
 		public String href;
 		public Long pdfFileSize;
@@ -395,6 +396,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 				this.updatedBy,
 				this.createdDate,
 				this.createdDate,
+				this.contentCreatedDate,
 				AgreementStatus.NEW_AGREEMENT,
 				this.href,
 				this.pdfFileSize,

@@ -161,6 +161,7 @@ public with sharing class NegotiateAPITest {
 			System.assertEquals(UUID.parse('ea7ab407-ea41-e911-9c1d-3ca82a1e3f41'), result.get(0).id);
 			System.assertEquals(160453, result.get(0).pdfFileSize);
 			System.assertEquals('https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41', result.get(0).href);
+			System.assertNotEquals(null, result.get(0).contentCreatedDate);
 		}
 	}
 
