@@ -39,8 +39,11 @@ jQuery(document).ready(function ($) {
 
   hideAll();
   hideAllButtons();
-  if (Configuration.hasInitError) createToastComponent(Configuration.initError, 'error');
+
+  if (navUtils.isIE()) $('#IEWarning').show();
+  else if (Configuration.hasInitError) createToastComponent(Configuration.initError, 'error');
   else handleStepNavigation(1).onStart();
+
 
   function getSpringTemplateIdToString(template) {
     return template && template.springTemplateId ? template.springTemplateId.value : null;

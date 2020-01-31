@@ -1,6 +1,6 @@
 <aura:component controller="GenController">
     <!-- import scripts -->
-    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}" afterScriptsLoaded="{!c.validateBrowser}"/>
 
     <!-- component attributes -->
     <aura:attribute name="templateId" type="Id"/>
@@ -16,6 +16,7 @@
     <aura:attribute name="products" type="Product[]" access="private"/>
     <aura:attribute name="selectedType" type="String" default="" access="private"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
+    <aura:attribute name="isIE" type="Boolean" default="false" access="private"/>
     <aura:attribute name="navigateToNewTemplateUrl" type="Object"/>
 
     <!-- handlers -->
@@ -106,6 +107,20 @@
                                         </div>
                                     </aura:iteration>
                                 </div>
+                                <aura:if isTrue="{!and(v.selectedType == 'Online Editor', v.isIE)}">
+                                    <article class="ie-error slds-tile slds-media slds-m-top_xx-small">
+                                        <div class="slds-media__figure">
+                                            <span class="slds-icon_container" title="description of icon when needed">
+                                                <lightning:icon iconName="utility:error" size="small" alternativeText="Error!" variant="error" class="slds-align-top"/>
+                                            </span>
+                                        </div>
+                                        <div class="slds-media__body">
+                                            <h3 class="slds-tile__title slds-text-body_small slds-text-color_error" title="Salesforce UX">
+                                                {!$Label.c.IEValidationWarning}
+                                            </h3>
+                                        </div>
+                                    </article>
+                                </aura:if>
                             </div>
                         </div>
                         <p>

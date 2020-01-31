@@ -1,4 +1,8 @@
 ({
+  validateBrowser: function(component) {
+    if (navUtils.isIE()) component.set('v.isIE', true);
+  },
+
   onChangeIsAuthorized: function (component, event, helper) {
     var products = component.get('v.products');
     if (!$A.util.isUndefinedOrNull(products)) {
@@ -11,12 +15,15 @@
       helper.initSetup(component);
     }
   },
+
   createTemplate: function (component, event, helper) {
     helper.saveTemplate(component);
   },
+
   selectType: function (component, event) {
     component.set('v.selectedType', event.currentTarget.value);
   },
+
   cancel: function (component, event, helper) {
     var isRedirectOnCancel = component.get('v.isRedirectOnCancel');
     if (isRedirectOnCancel) {

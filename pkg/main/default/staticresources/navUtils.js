@@ -73,11 +73,21 @@ window.navUtils = (function () {
       }
   };
 
+  /**
+  * Checks to see if users current browser is running IE 11 or earlier. 
+  */
+
+  var isIE = function isIE() {
+    var agent = window.navigator.userAgent;
+    return agent.indexOf('MSIE ') > 0 || agent.indexOf('Trident/') > 0;
+  }; 
+
   return Object.freeze({
     isInIFrame: isInIFrame,
     navigateToSObject: navigateToSObject,
     navigateToUrl: navigateToUrl,
     navigateToUrlOnlineEditor: navigateToUrlOnlineEditor,
-    isLightningOrMobile: _isLightningOrMobile
+    isLightningOrMobile: _isLightningOrMobile,
+    isIE: isIE
   });
 }());

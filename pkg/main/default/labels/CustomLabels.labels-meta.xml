@@ -9048,4 +9048,18 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>OnlineEditorTemplateEdit Title</shortDescription>
 		<value>Edit Template Name and Description</value>
 	</labels>
+	<labels>
+		<fullName>IEValidationError</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Full Internet Explorer Validation error for Online Editor Page</shortDescription>
+		<value>It appears you are using Internet Explorer, which the Online Editor does not support. Switch to Chrome, Safari, or FireFox.</value>
+	</labels>
+	<labels>
+		<fullName>IEValidationWarning</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Internet Explorer warning on Gen Template Navigator Component</shortDescription>	
+		<value>DocuSign&#39;s Online Editor does not support Internet Explorer. Switch to a different browser if using IE.</value>
+	</labels>
 </CustomLabels>

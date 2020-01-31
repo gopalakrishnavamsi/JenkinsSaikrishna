@@ -4691,6 +4691,14 @@
 		<label>Edit Template Name and Description</label>
 		<name>OnlineEditorTemplateEditTitle</name>
 	</customLabels>
+	<customLabels>
+		<label>It appears you are using Internet Explorer, which the Online Editor does not support. Switch to Chrome, Safari, or FireFox.</label>
+		<name>IEValidationError</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign&#39;s Online Editor does not support Internet Explorer. Switch to a different browser if using IE.</label>
+		<name>IEValidationWarning</name>
+	</customLabels>	
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

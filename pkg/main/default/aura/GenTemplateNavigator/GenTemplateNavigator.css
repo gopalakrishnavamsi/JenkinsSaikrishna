@@ -19,3 +19,7 @@
 .THIS .ds-genType .slds-icon-text-default {
     fill: white !important;
 }
+
+.THIS .ie-error {
+	max-width: 20vw;
+}

@@ -102,6 +102,11 @@
             height: calc(100vh - 60px);
         }
 
+        #IEWarning {
+            margin-top: 40vh;
+            display: none;
+        }
+
         #onlineEditorNext, #onlineEditorPublish {
             background: rgb(36, 99, 209);
             border-color: rgb(36, 99, 209);
@@ -148,6 +153,17 @@
     </style>
 
     <div class="slds-scope">
+        <div id="IEWarning" class="slds-grid">           
+            <div class="slds-col slds-size_1-of-1">
+                <svg class="slds-align_absolute-center slds-icon_large slds-icon slds-icon-text-default slds-p-bottom_medium" aria-hidden="true">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#warning')}"/>
+                </svg>
+                <h3 class="slds-text-align_center">
+                    {!$Label.IEValidationError}
+                </h3>
+            </div>
+        </div>
         <div id="toastNotificationContainer"></div>
         <div id="editModal"/>
         <!-- Toolbar -->
