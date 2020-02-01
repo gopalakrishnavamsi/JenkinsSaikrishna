@@ -150,6 +150,10 @@
         .slds-path__scroller_inner {
             position: sticky;
         }
+
+        .hide-on-start-up {
+            display: none;
+        }
     </style>
 
     <div class="slds-scope">
@@ -252,20 +256,24 @@
             <div class="col">
                 <div class='slds-float_right'>
                     <!-- Step 1 -->
-                    <button id="onlineEditorTemplateCancel"
-                            class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
-                    <button id="onlineEditorSaveClose" class="slds-button slds-button_brand">{!$Label.Next}</button>
+                    <div>
+                        <button id="onlineEditorTemplateCancel"
+                                class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
+                        <button id="onlineEditorSaveClose" class="slds-button slds-button_brand">{!$Label.Next}</button>
+                    </div>
                     <!-- Step 2 -->
-                    <button id="onlineEditorPublishCancel"
-                            class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
-                    <button id="onlineEditorPublish"
-                            class="slds-button slds-button_brand">{!$Label.PublishLabel}</button>
+                    <div class="hide-on-start-up">
+                        <button id="onlineEditorPublishCancel"
+                                class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
+                        <button id="onlineEditorPublish"
+                                class="slds-button slds-button_brand">{!$Label.PublishLabel}</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Step Three -->
-        <div id="inputFilePanel">
+        <div id="inputFilePanel" class="hide-on-start-up">
             <div class="ds-white-brand slds-p-around_xx-large">
                 <div class="slds-box onlineEditorMainContentContainer">
                     <div class="slds-grid-vertical templateConfigContentContainer">

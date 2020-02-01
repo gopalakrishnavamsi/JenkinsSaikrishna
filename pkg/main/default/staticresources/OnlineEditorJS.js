@@ -34,6 +34,8 @@ jQuery(document).ready(function ($) {
     }
   });
 
+  displayStartupElements();
+
   Elements.spinner1.hide();
   Elements.spinner2.hide();
 
@@ -529,6 +531,10 @@ jQuery(document).ready(function ($) {
     $('#onlineEditorToolBar').hide();
     $('#inputFilePanel').hide();
     $('#namingHelp').hide();
+  }
+
+  function displayStartupElements() {
+    $('.hide-on-start-up').removeClass('hide-on-start-up');
   }
 
   function showSpinner() {
