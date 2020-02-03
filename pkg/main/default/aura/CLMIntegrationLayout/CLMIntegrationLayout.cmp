@@ -51,7 +51,7 @@
         <aura:if isTrue="{!!and(v.isEmpty,!v.showPathAndNew)}">
             <aura:if isTrue="{!!v.isClose}">
                 <aura:if isTrue="{!!v.showPathAndNew}">
-                    <lightning:layoutItem size="12" padding="around-large">
+                    <lightning:layoutItem size="12" padding="around-none">
                         <c:CLMScopedNotifications/>
                     </lightning:layoutItem>
                 </aura:if>
