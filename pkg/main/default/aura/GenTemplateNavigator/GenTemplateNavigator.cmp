@@ -58,6 +58,7 @@
                             <div class="slds-col slds-m-bottom_medium">
                                 <lightning:input type="text" label="{!$Label.c.AddTemplateName}"
                                                  value="{!v.template.name}"
+                                                 maxlength="80"
                                                  required="true"/>
                             </div>
                             <div class="slds-col slds-m-bottom_medium">

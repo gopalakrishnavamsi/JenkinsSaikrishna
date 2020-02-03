@@ -988,11 +988,11 @@ public with sharing class GenService {
 		});
 
 		Gen.Template genTemplate = DB.queryTemplate(salesforceOnlineEditorTemplateId);
-
+		String fileName = getFileName(genTemplate.fileName, genTemplate.fileSuffix, genTemplate.sourceObject);
 		ContentVersion attachment = new ContentVersion();
 		attachment.VersionData = Blob.valueOf(htmlData);
-		attachment.Title = getFileName(genTemplate.fileName, genTemplate.fileSuffix, genTemplate.sourceObject);
-		attachment.PathOnClient = getFileName(genTemplate.fileName, genTemplate.fileSuffix, genTemplate.sourceObject);
+		attachment.Title = fileName;
+		attachment.PathOnClient = fileName;
 		insert attachment;
 
 		ContentDocumentLink attachmentLink = new ContentDocumentLink();
