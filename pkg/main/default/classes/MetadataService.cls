@@ -11,7 +11,9 @@ public with sharing class MetadataService {
 	public static final String REMOTE_SITE_MERGE = 'Merge';
 	public static final String REMOTE_SITE_AUTH = 'Auth';
 	public static final Integer METADATA_API_LAYOUT_LIMIT = 10;
-	public static final Set<String> COMMON_OBJECT_API_NAMES = new Set<String> { 'Account', 'Case', 'Contact', 'Lead', 'Opportunity' };
+	public static final Set<String> COMMON_OBJECT_API_NAMES = new Set<String> {
+		'Account', 'Case', 'Contact', 'Lead', 'Opportunity'
+	};
 
 	private static final Map<SObjectType, MetadataAPI.WebLink> SEND_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
@@ -19,8 +21,9 @@ public with sharing class MetadataService {
 		= new Map<SObjectType, MetadataAPI.WebLink>();
 	private static final Map<SObjectType, MetadataAPI.WebLink> ONLINE_EDITOR_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
-	private static final List<String> PARAMETERS_ADD_QUOTES = new List<String> { 'templateId', 'title', 'onlineEditorTemplateId' };
-	private static Boolean isChildObj;
+	private static final List<String> PARAMETERS_ADD_QUOTES = new List<String> {
+		'templateId', 'title', 'onlineEditorTemplateId'
+	};
 
 	/**
 	 * Returns a list of common, supported Salesforce object types.
@@ -90,6 +93,7 @@ public with sharing class MetadataService {
 	 */
 	public static DescribeSObjectResult describeSObject(final Id recordId) {
 		if (recordId == null || String.isEmpty(recordId)) throw new DocuSignException(Label.UndefinedArgument);
+
 		return recordId.getSobjectType().getDescribe();
 	}
 
@@ -101,36 +105,32 @@ public with sharing class MetadataService {
 		return result;
 	}
 
-	private static List<MergeField> getFields(final DescribeSObjectResult type, final String relationShipName, final Boolean isChild) {
+	public static List<MergeField> getFields(
+		final SObjectType type,
+		final Integer depth) {
+
+		Permissions.verifyIsDocuSignAdministrator();
+
+		if (!MergeObject.isValid(type)) throw new DocuSignException(Label.InvalidType);
+		if (depth > MergeField.MAX_DEPTH) throw new DocuSignException(Label.MaxObjectDepthExceeded);
+
 		List<MergeField> result = new List<MergeField>();
-		if (MergeObject.isValid(type)) {
-			for (SObjectField f : type.fields.getMap().values()) {
-				DescribeFieldResult field = f.getDescribe();
-				if (MergeField.isValid(field)) {
-					if (field.getReferenceTo().isEmpty() || String.isNotBlank(relationShipName)) {
-						result.add(MergeField.forField(field, relationShipName));
-					} else if (!isChild && !field.getReferenceTo().isEmpty() && field.getRelationShipName() != null && String.isNotBlank(field.getRelationShipName())) {
-						for (Schema.SObjectType parentObjectType : field.getReferenceTo()) {
-							result.addAll(getParentFields(parentObjectType, field.getRelationShipName()));
-						}
-					}
+		DescribeSObjectResult typeDesc = type.getDescribe();
+		for (SObjectField f : typeDesc.fields.getMap().values()) {
+			DescribeFieldResult field = f.getDescribe();
+			if (MergeField.isValid(field)) {
+				if (depth < MergeField.MAX_DEPTH) {
+					result.add(MergeField.forField(field, field.getRelationshipName()));
+				} else if (Collection.isEmpty(field.getReferenceTo())) { // no relationships when at max depth
+					result.add(MergeField.forField(field, null));
 				}
 			}
 		}
-		return result;
-	}
 
-	public static List<MergeField> getFields(final SObjectType type, final Boolean isChild) {
-		Permissions.verifyIsDocuSignAdministrator();
-
-		if (type == null) throw new DocuSignException(Label.UndefinedArgument);
-		isChildObj = isChild;
-		DescribeSObjectResult typeDesc = type.getDescribe();
-		List<MergeField> result = getFields(typeDesc, null, isChild);
-		if (!isChildObj) {
+		if (depth <= MergeField.MAX_CHILD_DEPTH) {
 			result.addAll(getChildRelationships(typeDesc));
 		}
-		result.sort();
+
 		return result;
 	}
 
@@ -143,19 +143,6 @@ public with sharing class MetadataService {
 					if (!field.getReferenceTo().isEmpty()) {
 						result.add(MergeField.forField(field, ''));
 					}
-				}
-			}
-		}
-		return result;
-	}
-
-	private static List<MergeField> getParentFields(final SObjectType type, final String relationShipName) {
-		List<MergeField> result = new List<MergeField>();
-		for (SObjectField f : type.getDescribe().fields.getMap().values()) {
-			DescribeFieldResult field = f.getDescribe();
-			if (MergeField.isValid(field)) {
-				if (field.getReferenceTo().isEmpty()) {
-					result.add(MergeField.forField(field, relationShipName));
 				}
 			}
 		}
@@ -388,7 +375,7 @@ public with sharing class MetadataService {
 				for (Integer i = 0; i < webLinksMetaData.size(); i++) {
 					MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)webLinksMetaData[i];
 					if (webLink != null && String.isNotBlank(webLink.masterLabel)) {
-						result.put(apiFullNamesChunk[i], WebLink.masterLabel);
+						result.put(apiFullNamesChunk[i], webLink.masterLabel);
 					}
 				}
 			}
@@ -464,7 +451,7 @@ public with sharing class MetadataService {
 		final SObjectType type,
 		final MetadataAPI.FileProperties props,
 		final MetadataAPI.Layout layout,
-		final string layoutName,
+		final String layoutName,
 		final List<Layout.Action> layoutActions) {
 
 		if (type == null || props == null || layout == null || layoutName == null) return null;
@@ -484,9 +471,9 @@ public with sharing class MetadataService {
 
 		List<Layout> result = new List<Layout>();
 		if (type == null || client == null || Collection.isEmpty(fullNames)) return result;
-		List<List<String>> layoutNamesChunk = Collection.chunk(new List<String>(fullNames.keyset()), METADATA_API_LAYOUT_LIMIT);
+		List<List<String>> layoutNamesChunk = Collection.chunk(new List<String>(fullNames.keySet()), METADATA_API_LAYOUT_LIMIT);
 		List<MetadataAPI.Layout> layouts = new List<MetadataAPI.Layout>();
-		Map<String, List<layout.Action>> layoutNameToActions = new Map<String, List<layout.Action>>();
+		Map<String, List<Layout.Action>> layoutNameToActions = new Map<String, List<Layout.Action>>();
 		for (List<String> layoutNames : layoutNamesChunk) {
 			layouts.addAll((List<MetadataAPI.Layout>)client.readMetadata(
 				'Layout',
@@ -495,7 +482,7 @@ public with sharing class MetadataService {
 		layoutNameToActions = prepareLayoutNameToActions(fullNames, layouts, type);
 		for (MetadataAPI.Layout layout : (layouts == null ? new List<MetadataAPI.Layout>() : layouts)) {
 			MetadataAPI.FileProperties fpFullNameName = fullNames.get(layout.fullName);
-			String layoutName = getLayoutName(fpFullNameName.FullName);
+			String layoutName = getLayoutName(fpFullNameName.fullName);
 			result.add(convert(
 				type,
 				fpFullNameName,
@@ -1008,8 +995,8 @@ public with sharing class MetadataService {
 
 	public static Map<String, String> picklistValues(String objectName, String fieldName) {
 		Map<String, String> values = new Map<String, String> {};
-		List<Schema.DescribeSobjectResult> results = Schema.describeSObjects(new List<String> { objectName });
-		for (Schema.DescribeSobjectResult res : results) {
+		List<Schema.DescribeSObjectResult> results = Schema.describeSObjects(new List<String> { objectName });
+		for (Schema.DescribeSObjectResult res : results) {
 			for (Schema.PicklistEntry entry : res.fields.getMap().get(fieldName).getDescribe().getPicklistValues()) {
 				if (entry.isActive()) {
 					values.put(entry.getValue(), entry.getLabel());

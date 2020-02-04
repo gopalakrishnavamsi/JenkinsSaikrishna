@@ -9069,4 +9069,74 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Internet Explorer warning on Gen Template Navigator Component</shortDescription>	
 		<value>DocuSign&#39;s Online Editor does not support Internet Explorer. Switch to a different browser if using IE.</value>
 	</labels>
+	<labels>
+		<fullName>QueryError_2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Query error</shortDescription>
+		<value>{0}: {1}</value>
+	</labels>
+	<labels>
+		<fullName>InvalidSoql_2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid SOQL</shortDescription>
+		<value>Invalid SOQL: {0}\nDetails: {1}</value>
+	</labels>
+	<labels>
+		<fullName>CannotFilterSourceObjectResults</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Cannot filter source object results</shortDescription>
+		<value>Cannot filter source object results.</value>
+	</labels>
+	<labels>
+		<fullName>CannotOrderSourceObjectResults</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Cannot order source object results</shortDescription>
+		<value>Cannot order source object results.</value>
+	</labels>
+	<labels>
+		<fullName>CannotLimitSourceObjectResults</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Source object results is limited to 1</shortDescription>
+		<value>Source object results is limited to 1.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidLimit_1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid SOQL limit</shortDescription>
+		<value>Limit must be greater than zero and less than {0}.</value>
+	</labels>
+	<labels>
+		<fullName>MaxDescendantQueryDepthExceeded_1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Max descendant query depth exceeded</shortDescription>
+		<value>Max descendant query depth ({0}) exceeded.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedChildRelationship</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined child relationship</shortDescription>
+		<value>Child queries must have a defined relationship name.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedParent</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined parent</shortDescription>
+		<value>Descendant queries must have a defined parent ID field.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidQuery</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid query</shortDescription>
+		<value>Invalid query</value>
+	</labels>
 </CustomLabels>

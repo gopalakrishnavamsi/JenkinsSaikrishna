@@ -9,7 +9,7 @@ private class GenControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	static void test_constructor_nonSetupWizard_Edit() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			GenTemplate__c testGenTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = 'Online Editor');
@@ -25,12 +25,12 @@ private class GenControllerTest {
 			System.assertEquals(true, testController.editMode);
 			System.assertEquals(null, testController.errorMessage);
 			System.assertNotEquals(null, testController.templateJson);
-			System.assertEquals([SELECT Id, Name from GenTemplate__c LIMIT 1].Name, testController.templateName);
+			System.assertEquals([SELECT Id, Name FROM GenTemplate__c LIMIT 1].Name, testController.templateName);
 			Test.stopTest();
 		}
 	}
 
-	@isTest
+	@IsTest
 	static void test_constructor_setupWizard_New() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
@@ -48,12 +48,12 @@ private class GenControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	static void test_constructor_unAuthorized() {
 		System.runAs(UserMock.createRestrictedUser()) {
 			Test.startTest();
 			try {
-				GenController testController = new GenController();
+				new GenController();
 				throw new AssertException('Expected to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
@@ -151,7 +151,7 @@ private class GenControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				GenController.getMergeFields('Opportunity', false);
+				GenController.getMergeFields('Opportunity', 1);
 				throw new AssertException('Expected getMergeFields to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -164,7 +164,7 @@ private class GenControllerTest {
 	static void test_getMergeFields_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			List<MergeField> result = GenController.getMergeFields('Opportunity', false);
+			List<MergeField> result = GenController.getMergeFields('Opportunity', 1);
 			Test.stopTest();
 
 			System.assert(Collection.isNotEmpty(result));
@@ -477,13 +477,13 @@ private class GenControllerTest {
 			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
 			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
 
-			String fileIdsInCommaSeparated = String.Join(new List<String> { result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId }, ',');
+			String fileIdsInCommaSeparated = String.join(new List<String> { result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId }, ',');
 
 			Test.startTest();
-			Pagereference ref = new PageReference(GenController.getSendingDeepLink(a.Id, fileIdsInCommaSeparated));
+			PageReference ref = new PageReference(GenController.getSendingDeepLink(a.Id, fileIdsInCommaSeparated));
 			Test.stopTest();
 
-			System.assertEquals((Id)ref.getParameters().get('sid'), a.id);
+			System.assertEquals((Id)ref.getParameters().get('sid'), a.Id);
 			System.assertEquals(EncodingUtil.urlDecode(ref.getParameters().get('files'), StringUtils.ENCODING), fileIdsInCommaSeparated);
 		}
 	}
@@ -594,7 +594,7 @@ private class GenControllerTest {
 			update template;
 
 			Test.setCurrentPage(Page.OnlineEditorGenTemplate);
-			ApexPages.currentPage().getParameters().put('id', template.id);
+			ApexPages.currentPage().getParameters().put('id', template.Id);
 
 			Test.startTest();
 			GenController controller = new GenController();
@@ -616,7 +616,7 @@ private class GenControllerTest {
 			update template;
 
 			Test.setCurrentPage(Page.OnlineEditorGenTemplate);
-			ApexPages.currentPage().getParameters().put('id', template.id);
+			ApexPages.currentPage().getParameters().put('id', template.Id);
 
 			Test.startTest();
 			GenController controller = new GenController();
@@ -992,8 +992,8 @@ private class GenControllerTest {
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Contact c1 = TestUtils.createContact(a.Id);
 			Contact c2 = TestUtils.createContact(a.Id);
-			OpportunityContactRole ocr1 = TestUtils.createOpportunityContactRole(o.Id, c1.Id);
-			OpportunityContactRole ocr2 = TestUtils.createOpportunityContactRole(o.Id, c2.Id);
+			TestUtils.createOpportunityContactRole(o.Id, c1.Id);
+			TestUtils.createOpportunityContactRole(o.Id, c2.Id);
 
 			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
 			onlineEditorFields.add(new OnlineEditor.Field('Name', '', 'String'));
@@ -1039,8 +1039,8 @@ private class GenControllerTest {
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Contact c1 = TestUtils.createContact(a.Id);
 			Contact c2 = TestUtils.createContact(a.Id);
-			OpportunityContactRole ocr1 = TestUtils.createOpportunityContactRole(o.Id, c1.Id);
-			OpportunityContactRole ocr2 = TestUtils.createOpportunityContactRole(o.Id, c2.Id);
+			TestUtils.createOpportunityContactRole(o.Id, c2.Id);
+			TestUtils.createOpportunityContactRole(o.Id, c1.Id);
 
 			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
 			onlineEditorFields.add(new OnlineEditor.Field('Name', '', 'String'));
@@ -1057,7 +1057,7 @@ private class GenControllerTest {
 			});
 
 			Test.startTest();
-			OnlineEditor.Query result = GenController.getOnlineEditorMergeData(o.Id, Json.serialize(q));
+			OnlineEditor.Query result = GenController.getOnlineEditorMergeData(o.Id, JSON.serialize(q));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1085,8 +1085,8 @@ private class GenControllerTest {
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 			Contact c1 = TestUtils.createContact(a.Id);
 			Contact c2 = TestUtils.createContact(a.Id);
-			OpportunityContactRole ocr1 = TestUtils.createOpportunityContactRole(o.Id, c1.Id);
-			OpportunityContactRole ocr2 = TestUtils.createOpportunityContactRole(o.Id, c2.Id);
+			TestUtils.createOpportunityContactRole(o.Id, c1.Id);
+			TestUtils.createOpportunityContactRole(o.Id, c2.Id);
 
 			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
 			onlineEditorFields.add(new OnlineEditor.Field('Name', '', 'String'));
@@ -1125,9 +1125,9 @@ private class GenControllerTest {
 			update template;
 
 			Test.setCurrentPage(Page.GenTemplateNavigator);
-			ApexPages.currentPage().getParameters().put('id', template.id);
+			ApexPages.currentPage().getParameters().put('id', template.Id);
 			PageReference expectedOnlineEditorPage = Page.OnlineEditorGenTemplate ;
-			expectedOnlineEditorPage.getParameters().put('id', template.id);
+			expectedOnlineEditorPage.getParameters().put('id', template.Id);
 			expectedOnlineEditorPage.getParameters().put('isEdit', 'false');
 			expectedOnlineEditorPage.getParameters().put('isFromSetupWizard', 'false');
 			Test.startTest();
@@ -1150,9 +1150,9 @@ private class GenControllerTest {
 			update template;
 
 			Test.setCurrentPage(Page.GenTemplateNavigator);
-			ApexPages.currentPage().getParameters().put('id', template.id);
+			ApexPages.currentPage().getParameters().put('id', template.Id);
 			PageReference expectedWordBasedGenPage = Page.GenTemplate ;
-			expectedWordBasedGenPage.getParameters().put('id', template.id);
+			expectedWordBasedGenPage.getParameters().put('id', template.Id);
 			expectedWordBasedGenPage.getParameters().put('isEdit', 'false');
 			expectedWordBasedGenPage.getParameters().put('isFromSetupWizard', 'false');
 			Test.startTest();

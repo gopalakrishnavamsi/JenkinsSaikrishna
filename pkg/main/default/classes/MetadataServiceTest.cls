@@ -75,7 +75,7 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataService.getFields((SObjectType)null, false);
+				MetadataService.getFields((SObjectType)null, 1);
 				throw new AssertException('Expected getFields to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -87,11 +87,65 @@ private class MetadataServiceTest {
 	static void test_getFields_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			List<MergeField> result = MetadataService.getFields(Opportunity.getSObjectType(), false);
+			List<MergeField> result = MetadataService.getFields(Opportunity.getSObjectType(), 1);
 			Test.stopTest();
 
 			System.assert(Collection.isNotEmpty(result));
-			// TODO: Verify merge fields. Difficult as we cannot control the schema entirely.
+
+			// All lookups and related lists returned
+			Boolean foundLookup = false, foundRelated = false;
+			for (MergeField mf : result) {
+				if (mf.type == 'REFERENCE') foundLookup = true;
+				if (mf.type == MergeField.TYPE_CHILD_RELATIONSHIP) foundRelated = true;
+
+				if (foundLookup && foundRelated) break;
+			}
+			System.assert(foundLookup);
+			System.assert(foundRelated);
+		}
+	}
+
+	@IsTest
+	static void test_getFields_success_max_child_depth() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			List<MergeField> result = MetadataService.getFields(Opportunity.getSObjectType(), MergeField.MAX_CHILD_DEPTH + 1);
+			Test.stopTest();
+
+			System.assert(Collection.isNotEmpty(result));
+
+			// No related lists returned
+			Boolean foundLookup = false, foundRelated = false;
+			for (MergeField mf : result) {
+				if (mf.type == 'REFERENCE') foundLookup = true;
+				if (mf.type == MergeField.TYPE_CHILD_RELATIONSHIP) foundRelated = true;
+
+				if (foundLookup && foundRelated) break;
+			}
+			System.assert(foundLookup);
+			System.assert(!foundRelated);
+		}
+	}
+
+	@IsTest
+	static void test_getFields_success_max_depth() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			List<MergeField> result = MetadataService.getFields(Opportunity.getSObjectType(), MergeField.MAX_DEPTH);
+			Test.stopTest();
+
+			System.assert(Collection.isNotEmpty(result));
+
+			// No lookups or related lists returned
+			Boolean foundLookup = false, foundRelated = false;
+			for (MergeField mf : result) {
+				if (mf.type == 'REFERENCE') foundLookup = true;
+				if (mf.type == MergeField.TYPE_CHILD_RELATIONSHIP) foundRelated = true;
+
+				if (foundLookup && foundRelated) break;
+			}
+			System.assert(!foundLookup);
+			System.assert(!foundRelated);
 		}
 	}
 

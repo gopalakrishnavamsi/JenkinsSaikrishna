@@ -1,6 +1,6 @@
-@isTest
+@IsTest
 public class CLMMapObjectControllerTest {
-	@isTest
+	@IsTest
 	public static void getMappedObjectsListTest_authorized() {
 		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
@@ -10,7 +10,7 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void getMappedObjectsListTest_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
@@ -24,7 +24,7 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void getAllObjectsTest_authorized() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
@@ -34,7 +34,7 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void getAllObjectsTest_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
@@ -48,22 +48,22 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void getAllObjectFieldsTest_authorized() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			List<MergeField> result = CLMMapObjectController.getAllObjectFields('Case', false);
+			List<MergeField> result = CLMMapObjectController.getAllObjectFields('Case', 1);
 			Test.stopTest();
 			System.assertNotEquals(null, result);
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void getAllObjectFields_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				CLMMapObjectController.getAllObjectFields(null, false);
+				CLMMapObjectController.getAllObjectFields(null, 1);
 				throw new AssertException('Expected failure when fetching all object fields.');
 			} catch (AuraHandledException ae) {
 				System.assertNotEquals(null, ae);
@@ -72,7 +72,7 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void removeMappedObjectTest_authorized() {
 		System.runAs(UserMock.createClmAdministrator()) {
 			String objToRemove = UUID.randomUUID().toShortString();
@@ -88,7 +88,7 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void removeMappedObjectTest_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			String objToRemove = UUID.randomUUID().toShortString();
@@ -103,7 +103,7 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void getRecordCountTest_authorized() {
 		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
@@ -113,7 +113,7 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void getRecordCountTest_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
@@ -127,7 +127,7 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void setMappedObjectTest_authorized() {
 		System.runAs(UserMock.createClmAdministrator()) {
 			EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
@@ -141,7 +141,7 @@ public class CLMMapObjectControllerTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	public static void setMappedObjectTest_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();

@@ -287,7 +287,7 @@ public with sharing class Salesforce {
 		return GLOBAL_DESCRIBE.containsKey(sObjectName);
 	}
 
-	public static SObjectType getParentSobjectType(SObjectType baseSObject, String referenceFieldName) {
+	public static SObjectType getParentSObjectType(SObjectType baseSObject, String referenceFieldName) {
 		SObjectType parentSObjectType ;
 		Map<String, Schema.SObjectField> parentFieldsMap = baseSObject.getDescribe().fields.getMap();
 		if (parentFieldsMap.containsKey(referenceFieldName)) {

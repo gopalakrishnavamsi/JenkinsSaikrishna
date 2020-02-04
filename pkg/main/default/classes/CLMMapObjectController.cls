@@ -33,12 +33,12 @@ public with sharing class CLMMapObjectController {
 	public static Boolean setMappedObject(EOS_Type__c eosDetails) {
 		try {
 			Permissions.verifyIsClmAdministrator();
-			Map<String,List<String> > pathDetails = parsePath(eosDetails.Path__c);
+			Map<String, List<String> > pathDetails = parsePath(eosDetails.Path__c);
 			if (pathDetails.containsKey('Variables') && pathDetails.containsKey('PathFormat')) {
-				eosDetails.Variables__c = String.join(pathDetails.get('Variables'),',');
-				eosDetails.PathFormat__c = String.join(pathDetails.get('PathFormat'),'');
+				eosDetails.Variables__c = String.join(pathDetails.get('Variables'), ',');
+				eosDetails.PathFormat__c = String.join(pathDetails.get('PathFormat'), '');
 				eosDetails.FolderNameFormat__c = '{' + pathDetails.get('Variables').size() + '}';
-				String ObjectName = eosDetails.FolderName__c.split('\\.').get(0).substringAfter('{!');
+//				String ObjectName = eosDetails.FolderName__c.split('\\.').get(0).substringAfter('{!');
 			}
 			upsert eosDetails;
 			return true;
@@ -47,25 +47,24 @@ public with sharing class CLMMapObjectController {
 		}
 	}
 
-	private static Map<String,List<String> > parsePath(String path) {
-		Map<String,List<String> > result = new Map<String,List<String> >();
+	private static Map<String, List<String> > parsePath(String path) {
+		Map<String, List<String> > result = new Map<String, List<String> >();
 		List<String> variables = new List<String>();
 		String formatted = '';
 		Integer index = 0;
-		for (String folder:path.split('/')) {
+		for (String folder : path.split('/')) {
 			String objName = folder.substringAfter('{!').substringBefore('}');
 			if (String.isNotBlank(objName)) {
 				variables.add(objName);
-				formatted += folder.substringBefore('{!') + '{' + index +'}' + folder.substringAfter('}') + '/';
+				formatted += folder.substringBefore('{!') + '{' + index + '}' + folder.substringAfter('}') + '/';
 				index++;
-			}
-			else {
+			} else {
 				formatted += folder + '/';
 			}
 		}
-		result.put('Path',new List<String> {path});
-		result.put('PathFormat',new List<String> {formatted});
-		result.put('Variables',variables);
+		result.put('Path', new List<String> { path });
+		result.put('PathFormat', new List<String> { formatted });
+		result.put('Variables', variables);
 		return result;
 	}
 
@@ -90,13 +89,13 @@ public with sharing class CLMMapObjectController {
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static List<MergeField> getAllObjectFields(String apiName, Boolean isChild) {
+	public static List<MergeField> getAllObjectFields(String apiName, Integer depth) {
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
 			SObjectType type = Schema.getGlobalDescribe().get(apiName);
-			List<MergeField> result= new List<MergeField>();
+			List<MergeField> result = new List<MergeField>();
 			result.addAll(MetadataService.getFields(type.getDescribe()));
-			result.addAll(MetadataService.getFields(type, isChild));
+			result.addAll(MetadataService.getFields(type, depth));
 			return result;
 		} catch (Exception e) {
 			throw Controller.wrapException(e, 'Failed to get all object fields list.');

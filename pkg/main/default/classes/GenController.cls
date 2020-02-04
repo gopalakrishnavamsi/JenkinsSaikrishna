@@ -24,6 +24,7 @@ public with sharing class GenController extends Controller {
 		onlineEditorInit();
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public GenController(final ApexPages.StandardController c) {
 		this();
 	}
@@ -64,6 +65,7 @@ public with sharing class GenController extends Controller {
 		}
 	}
 
+	// TODO: Split Word and Online controllers. Logic specific to each type should reside in the appropriate controller.
 	public void onlineEditorInit() {
 		try {
 			Permissions.verifyIsDocuSignGenerator();
@@ -135,9 +137,12 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static List<MergeField> getMergeFields(final String sObjectType, final Boolean isChild) {
+	public static List<MergeField> getMergeFields(
+		final String sObjectType,
+		final Integer depth) {
+
 		try {
-			return MetadataService.getFields(Salesforce.getSObjectType(sObjectType), isChild);
+			return MetadataService.getFields(Salesforce.getSObjectType(sObjectType), depth > 0 ? 1 : depth);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to retrieve merge fields.');
 		}
@@ -180,7 +185,10 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static SObject getMergeData(final Id sourceId, final String queryJson) {
+	public static SObject getMergeData(
+		final Id sourceId,
+		final String queryJson) {
+
 		try {
 			return GenService.getMergeData(sourceId, (Gen.Query)JSON.deserialize(queryJson, Gen.Query.class));
 		} catch (Exception ex) {
@@ -408,7 +416,7 @@ public with sharing class GenController extends Controller {
 			OnlineEditor.Query onlineEditorQuery = (OnlineEditor.Query)JSON.deserialize(queryJson, OnlineEditor.Query.class);
 			if (sourceId == null || onlineEditorQuery == null) throw new DocuSignException(Label.UndefinedArgument);
 			Gen.Query genQuery = GenService.convertQuery(onlineEditorQuery);
-			SObject result = GenService.getMergeData(sourceId, genQuery);
+			SObject result = GenService.getMergeData(sourceId, genQuery); // TODO: Chorus should support Word query results
 			return GenService.convertData(onlineEditorQuery, result);
 		} catch (Exception ex) {
 			return new OnlineEditor.Query('', '', null, null);

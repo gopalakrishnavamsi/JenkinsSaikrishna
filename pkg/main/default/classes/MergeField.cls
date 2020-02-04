@@ -1,6 +1,8 @@
 public class MergeField implements Comparable {
 
 	public static final Integer MAX_DEPTH = 5; // TODO: Move max depth to config
+	public static final Integer MAX_CHILD_DEPTH = 2;
+	@TestVisible
 	private static final String TYPE_CHILD_RELATIONSHIP = 'CHILD_RELATIONSHIP';
 	// removing OwnerId to show on UI
 	private static final List<String> BLACKLIST = new List<String> {
@@ -18,6 +20,8 @@ public class MergeField implements Comparable {
 	@AuraEnabled
 	public String relatesTo { get; private set; }
 	@AuraEnabled
+	public String relationship { get; private set; }
+	@AuraEnabled
 	public Boolean isUpdateable { get; private set; }
 	@AuraEnabled
 	public Boolean hasRelationship { get; private set; }
@@ -30,6 +34,7 @@ public class MergeField implements Comparable {
 		final String type,
 		final String label,
 		final String relatesTo,
+		final String relationship,
 		final Boolean isUpdateable,
 		final Integer scale) {
 
@@ -38,8 +43,9 @@ public class MergeField implements Comparable {
 		this.type = type;
 		this.label = label;
 		this.relatesTo = relatesTo;
+		this.relationship = relationship;
 		this.isUpdateable = isUpdateable;
-		this.hasRelationship = String.isNotBlank(relatesTo);
+		this.hasRelationship = String.isNotBlank(relatesTo) && String.isNotBlank(relationship);
 		this.scale = scale;
 	}
 
@@ -74,10 +80,11 @@ public class MergeField implements Comparable {
 
 		return new MergeField(
 			field,
-			String.isNotBlank(relationshipName) ? relationshipName + '.' + field.getName() : field.getName(),
+			field.getName(),
 			getType(field),
 			field.getLabel(),
 			String.valueOf(Collection.head(field.getReferenceTo())),
+			field.getRelationshipName(),
 			field.isUpdateable(),
 			field.getScale());
 	}
@@ -85,13 +92,15 @@ public class MergeField implements Comparable {
 	public static MergeField forChildRelationship(final ChildRelationship childRelationship) {
 		if (!isValid(childRelationship)) throw new DocuSignException(Label.InvalidType);
 
-		DescribeSObjectResult typeDesc = childRelationship.getChildSObject().getDescribe();
+		DescribeSObjectResult childDesc = childRelationship.getChildSObject().getDescribe();
+		DescribeFieldResult fieldDesc = childRelationship.getField().getDescribe();
 		return new MergeField(
-			childRelationship.getField().getDescribe(),
-			childRelationship.getRelationshipName(),
+			fieldDesc,
+			fieldDesc.getName(),
 			TYPE_CHILD_RELATIONSHIP,
-			typeDesc.getLabelPlural(),
-			typeDesc.getName(),
+			childDesc.getLabelPlural(),
+			childDesc.getName(),
+			childRelationship.getRelationshipName(),
 			false,
 			childRelationship.getField().getDescribe().getScale());
 	}
