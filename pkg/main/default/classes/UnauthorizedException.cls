@@ -55,9 +55,14 @@ global class UnauthorizedException extends Exception {
 	 * @param details Additional error details.
 	 */
 	public UnauthorizedException(final String message, final Object details) {
-		this(message + (details == null ? '' : '\n' + details));
-
-		this.requirement = AccessRequirement.Unspecified;
+		if (details instanceof AccessRequirement) {
+			this(message);
+			this.requirement = (AccessRequirement)details;
+		} else {
+			this(message + (details == null ? '' : '\n' + details));
+			this.requirement = AccessRequirement.Unspecified;
+		}
+		this.userId = UserInfo.getUserId();
 	}
 
 	/**

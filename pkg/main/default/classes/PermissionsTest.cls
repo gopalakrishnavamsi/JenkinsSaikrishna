@@ -316,6 +316,13 @@ private class PermissionsTest {
 	}
 
 	@IsTest
+	static void test_formatIdPointingField() {
+		Test.startTest();
+		System.assertEquals('testid', Permissions.formatIdPointingField('TEST'));
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_isCreateable_authorized() {
 		User u = UserMock.createDocuSignUser();
 		Permissions.FlsResults r1, r2;
@@ -776,127 +783,17 @@ private class PermissionsTest {
 //	}
 
 	@IsTest
-	static void test_getDocuSignAdministratorPermissionSetId() {
-		Id id = [
-			SELECT Id
-			FROM PermissionSet
-			WHERE Name = :Permissions.DOCUSIGN_ADMINISTRATOR
-			AND NamespacePrefix = :Application.packageNamespace
-			LIMIT 1
-		].Id;
-
+	static void test_assignPermissionSets_invalid_arguments() {
 		Test.startTest();
-		System.assertEquals(id, Permissions.getDocuSignAdministratorPermissionSetId());
+		System.assert(!Permissions.assignPermissionSets(null, new Set<String> { 'whatever' }));
+		System.assert(!Permissions.assignPermissionSets(new Set<Id>(), new Set<String> { 'whatever' }));
+		System.assert(!Permissions.assignPermissionSets(new Set<Id> { UserInfo.getUserId() }, null));
+		System.assert(!Permissions.assignPermissionSets(new Set<Id> { UserInfo.getUserId() }, new Set<String>()));
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_getDocuSignUserPermissionSetId() {
-		Id id = [
-			SELECT Id
-			FROM PermissionSet
-			WHERE Name = :Permissions.DOCUSIGN_USER
-			AND NamespacePrefix = :Application.packageNamespace
-			LIMIT 1
-		].Id;
-
-		Test.startTest();
-		System.assertEquals(id, Permissions.getDocuSignUserPermissionSetId());
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_getDocuSignSenderPermissionSetId() {
-		Id id = [
-			SELECT Id
-			FROM PermissionSet
-			WHERE Name = :Permissions.DOCUSIGN_SENDER
-			AND NamespacePrefix = :Application.packageNamespace
-			LIMIT 1
-		].Id;
-
-		Test.startTest();
-		System.assertEquals(id, Permissions.getDocuSignSenderPermissionSetId());
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_getDocuSignGeneratorPermissionSetId() {
-		Id id = [
-			SELECT Id
-			FROM PermissionSet
-			WHERE Name = :Permissions.DOCUSIGN_GENERATOR
-			AND NamespacePrefix = :Application.packageNamespace
-			LIMIT 1
-		].Id;
-
-		Test.startTest();
-		System.assertEquals(id, Permissions.getDocuSignGeneratorPermissionSetId());
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_getDocuSignNegotiatorPermissionSetId() {
-		Id id = [
-			SELECT Id
-			FROM PermissionSet
-			WHERE Name = :Permissions.DOCUSIGN_NEGOTIATOR
-			AND NamespacePrefix = :Application.packageNamespace
-			LIMIT 1
-		].Id;
-
-		Test.startTest();
-		System.assertEquals(id, Permissions.getDocuSignNegotiatorPermissionSetId());
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_getClmAdministratorPermissionSetId() {
-		Id id = [
-			SELECT Id
-			FROM PermissionSet
-			WHERE Name = :Permissions.CLM_ADMINISTRATOR
-			AND NamespacePrefix = :Application.packageNamespace
-			LIMIT 1
-		].Id;
-
-		Test.startTest();
-		System.assertEquals(id, Permissions.getClmAdministratorPermissionSetId());
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_getClmUserPermissionSetId() {
-		Id id = [
-			SELECT Id
-			FROM PermissionSet
-			WHERE Name = :Permissions.CLM_USER
-			AND NamespacePrefix = :Application.packageNamespace
-			LIMIT 1
-		].Id;
-
-		Test.startTest();
-		System.assertEquals(id, Permissions.getClmUserPermissionSetId());
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_getClmViewerPermissionSetId() {
-		Id id = [
-			SELECT Id
-			FROM PermissionSet
-			WHERE Name = :Permissions.CLM_VIEWER
-			AND NamespacePrefix = :Application.packageNamespace
-			LIMIT 1
-		].Id;
-
-		Test.startTest();
-		System.assertEquals(id, Permissions.getClmViewerPermissionSetId());
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_assignDocuSignAdministratorPermissionSet() {
+	static void test_assignPermissionSets_ds_administrator() {
 		final User testUser = UserMock.createUser();
 
 		Test.startTest();
@@ -905,18 +802,16 @@ private class PermissionsTest {
 		System.assert(!Permissions.isDocuSignUser(testUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
 		// Assign docusign user permission set to user
-		System.assert(Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { testUser.Id }));
+		System.assert(Permissions.assignPermissionSets(new Set<Id> { testUser.Id }, new Set<String> { Permissions.DOCUSIGN_ADMINISTRATOR }));
 		// Verify the user has the permission set before assigning
 		System.assert(Permissions.isDocuSignSender(testUser.Id));
 		System.assert(Permissions.isDocuSignUser(testUser.Id));
 		System.assert(Permissions.isDocuSignAdministrator(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignDocuSignAdministratorPermissionSet(null));
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_assignDocuSignUserPermissionSet() {
+	static void test_assignPermissionSets_ds_user() {
 		final User testUser = UserMock.createUser();
 
 		Test.startTest();
@@ -925,18 +820,16 @@ private class PermissionsTest {
 		System.assert(!Permissions.isDocuSignUser(testUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
 		// Assign docusign user permission set to user
-		System.assert(Permissions.assignDocuSignUserPermissionSet(new Set<Id> { testUser.Id }));
+		System.assert(Permissions.assignPermissionSets(new Set<Id> { testUser.Id }, new Set<String> { Permissions.DOCUSIGN_USER }));
 		// Verify the user has the permission set before assigning
 		System.assert(Permissions.isDocuSignSender(testUser.Id));
 		System.assert(Permissions.isDocuSignUser(testUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignDocuSignUserPermissionSet(null));
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_assignDocuSignSenderPermissionSet() {
+	static void test_assignPermissionSets_ds_sender() {
 		final User testUser = UserMock.createUser();
 
 		Test.startTest();
@@ -945,51 +838,46 @@ private class PermissionsTest {
 		System.assert(!Permissions.isDocuSignUser(testUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
 		// Assign docusign user permission set to user
-		System.assert(Permissions.assignDocuSignSenderPermissionSet(new Set<Id> { testUser.Id }));
+		System.assert(Permissions.assignPermissionSets(new Set<Id> { testUser.Id }, new Set<String> { Permissions.DOCUSIGN_SENDER }));
 		// Verify the user has the permission set before assigning
 		System.assert(Permissions.isDocuSignSender(testUser.Id));
 		System.assert(!Permissions.isDocuSignUser(testUser.Id));
 		System.assert(!Permissions.isDocuSignAdministrator(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignDocuSignSenderPermissionSet(null));
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_assignDocuSignGeneratorPermissionSet() {
+	static void test_assignPermissionSets_generator() {
 		final User testUser = UserMock.createUser();
 
 		Test.startTest();
 		// Verify the user doesn't have the permission set before assigning
 		System.assert(!Permissions.isDocuSignGenerator(testUser.Id));
 		// Assign permission set to user
-		System.assert(Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { testUser.Id }));
+		System.assert(Permissions.assignPermissionSets(new Set<Id> { testUser.Id }, new Set<String> { Permissions.DOCUSIGN_GENERATOR }));
 		// Verify the user has the permission set before assigning
 		System.assert(Permissions.isDocuSignGenerator(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignDocuSignGeneratorPermissionSet(null));
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_assignDocuSignNegotiatorPermissionSet() {
+	static void test_assignPermissionSets_negotiator() {
 		final User testUser = UserMock.createUser();
 
 		Test.startTest();
 		// Verify the user doesn't have the permission set before assigning
 		System.assert(!Permissions.isDocuSignNegotiator(testUser.Id));
 		// Assign permission set to user
-		System.assert(Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { testUser.Id }));
+		System.assert(Permissions.assignPermissionSets(new Set<Id> { testUser.Id }, new Set<String> { Permissions.DOCUSIGN_NEGOTIATOR }));
 		// Verify the user has the permission set before assigning
 		System.assert(Permissions.isDocuSignNegotiator(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignDocuSignNegotiatorPermissionSet(null));
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_assignClmAdministratorPermissionSet() {
+	static void test_assignPermissionSets_clm_administrator() {
 		User testUser = UserMock.createUser();
+
 		// Verify the user doesn't have the permission set before assigning
 		System.assert(!Permissions.isClmAdministrator(testUser.Id));
 		System.assert(!Permissions.isClmUser(testUser.Id));
@@ -997,9 +885,7 @@ private class PermissionsTest {
 
 		Test.startTest();
 		// Assign permission set to user
-		System.assert(Permissions.assignClmAdministratorPermissionSet(new Set<Id> { testUser.Id }));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignClmAdministratorPermissionSet(null));
+		System.assert(Permissions.assignPermissionSets(new Set<Id> { testUser.Id }, new Set<String> { Permissions.CLM_ADMINISTRATOR }));
 		Test.stopTest();
 
 		// Verify the user has the permission set after assignment
@@ -1009,7 +895,7 @@ private class PermissionsTest {
 	}
 
 	@IsTest
-	static void test_assignClmUserPermissionSet() {
+	static void test_assignPermissionSets_clm_user() {
 		final User testUser = UserMock.createUser();
 
 		Test.startTest();
@@ -1018,18 +904,16 @@ private class PermissionsTest {
 		System.assert(!Permissions.isClmUser(testUser.Id));
 		System.assert(!Permissions.isClmViewer(testUser.Id));
 		// Assign permission set to user
-		System.assert(Permissions.assignClmUserPermissionSet(new Set<Id> { testUser.Id }));
+		System.assert(Permissions.assignPermissionSets(new Set<Id> { testUser.Id }, new Set<String> { Permissions.CLM_USER }));
 		// Verify the user has the permission set after assignment
 		System.assert(!Permissions.isClmAdministrator(testUser.Id));
 		System.assert(Permissions.isClmUser(testUser.Id));
 		System.assert(Permissions.isClmViewer(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignClmUserPermissionSet(null));
 		Test.stopTest();
 	}
 
 	@IsTest
-	static void test_assignClmViewerPermissionSet() {
+	static void test_assignPermissionSets_clm_viewer() {
 		final User testUser = UserMock.createUser();
 
 		Test.startTest();
@@ -1038,13 +922,11 @@ private class PermissionsTest {
 		System.assert(!Permissions.isClmUser(testUser.Id));
 		System.assert(!Permissions.isClmViewer(testUser.Id));
 		// Assign permission set to user
-		System.assert(Permissions.assignClmViewerPermissionSet(new Set<Id> { testUser.Id }));
+		System.assert(Permissions.assignPermissionSets(new Set<Id> { testUser.Id }, new Set<String> { Permissions.CLM_VIEWER }));
 		// Verify the user has the permission set after assignment
 		System.assert(!Permissions.isClmAdministrator(testUser.Id));
 		System.assert(!Permissions.isClmUser(testUser.Id));
 		System.assert(Permissions.isClmViewer(testUser.Id));
-		// Make sure it handles invalid inputs
-		System.assert(!Permissions.assignClmViewerPermissionSet(null));
 		Test.stopTest();
 	}
 
@@ -1658,23 +1540,23 @@ private class PermissionsTest {
 	}
 
 	@IsTest
-	static void test_getPermissionSetIds_invalid() {
+	static void test_reducePermissionSets_invalid() {
 		Test.startTest();
 		try {
-			Permissions.getPermissionSetIds(new Set<String> { Permissions.DOCUSIGN_USER, null, Permissions.DOCUSIGN_GENERATOR });
-			throw new AssertException('Expected getPermissionSetIds to fail');
+			Permissions.reducePermissionSets(new Set<String> { Permissions.DOCUSIGN_USER, null, Permissions.DOCUSIGN_GENERATOR });
+			throw new AssertException('Expected reducePermissionSets to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(String.format(Label.InvalidPermissionSet_1, new List<String> { null }), ex.getMessage());
 		}
 		try {
-			Permissions.getPermissionSetIds(new Set<String> { '\t' });
-			throw new AssertException('Expected getPermissionSetIds to fail');
+			Permissions.reducePermissionSets(new Set<String> { '\t' });
+			throw new AssertException('Expected reducePermissionSets to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(String.format(Label.InvalidPermissionSet_1, new List<String> { '\t' }), ex.getMessage());
 		}
 		try {
-			Permissions.getPermissionSetIds(new Set<String> { 'BAD', Permissions.DOCUSIGN_GENERATOR });
-			throw new AssertException('Expected getPermissionSetIds to fail');
+			Permissions.reducePermissionSets(new Set<String> { 'BAD', Permissions.DOCUSIGN_GENERATOR });
+			throw new AssertException('Expected reducePermissionSets to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(String.format(Label.InvalidPermissionSet_1, new List<String> { 'BAD' }), ex.getMessage());
 		}
@@ -1682,9 +1564,9 @@ private class PermissionsTest {
 	}
 
 	@IsTest
-	static void test_getPermissionSetIds_valid() {
+	static void test_reducePermissionSets_valid() {
 		Test.startTest();
-		Set<Id> result = Permissions.getPermissionSetIds(new Set<String> {
+		Set<String> result = Permissions.reducePermissionSets(new Set<String> {
 			Permissions.DOCUSIGN_ADMINISTRATOR,
 			Permissions.DOCUSIGN_GENERATOR,
 			Permissions.DOCUSIGN_NEGOTIATOR,
@@ -1692,54 +1574,54 @@ private class PermissionsTest {
 		});
 		Test.stopTest();
 
-		System.assertEquals(new Set<Id> {
-			Permissions.getDocuSignAdministratorPermissionSetId(),
-			Permissions.getDocuSignGeneratorPermissionSetId(),
-			Permissions.getDocuSignNegotiatorPermissionSetId(),
-			Permissions.getClmAdministratorPermissionSetId()
+		System.assertEquals(new Set<String> {
+			Permissions.DOCUSIGN_ADMINISTRATOR,
+			Permissions.DOCUSIGN_GENERATOR,
+			Permissions.DOCUSIGN_NEGOTIATOR,
+			Permissions.CLM_ADMINISTRATOR
 		}, result);
 	}
 
 	@IsTest
-	static void test_getPermissionSetIds_eSignature() {
+	static void test_reducePermissionSets_eSignature() {
 		Test.startTest();
-		Set<Id> result1 = Permissions.getPermissionSetIds(new Set<String> {
+		Set<String> result1 = Permissions.reducePermissionSets(new Set<String> {
 			Permissions.DOCUSIGN_ADMINISTRATOR,
 			Permissions.DOCUSIGN_USER
 		});
-		Set<Id> result2 = Permissions.getPermissionSetIds(new Set<String> {
+		Set<String> result2 = Permissions.reducePermissionSets(new Set<String> {
 			Permissions.DOCUSIGN_USER,
 			Permissions.DOCUSIGN_SENDER
 		});
-		Set<Id> result3 = Permissions.getPermissionSetIds(new Set<String> {
+		Set<String> result3 = Permissions.reducePermissionSets(new Set<String> {
 			Permissions.DOCUSIGN_SENDER
 		});
 		Test.stopTest();
 
-		System.assertEquals(new Set<Id> { Permissions.getDocuSignAdministratorPermissionSetId() }, result1);
-		System.assertEquals(new Set<Id> { Permissions.getDocuSignUserPermissionSetId() }, result2);
-		System.assertEquals(new Set<Id> { Permissions.getDocuSignSenderPermissionSetId() }, result3);
+		System.assertEquals(new Set<String> { Permissions.DOCUSIGN_ADMINISTRATOR }, result1);
+		System.assertEquals(new Set<String> { Permissions.DOCUSIGN_USER }, result2);
+		System.assertEquals(new Set<String> { Permissions.DOCUSIGN_SENDER }, result3);
 	}
 
 	@IsTest
-	static void test_getPermissionSetIds_clm() {
+	static void test_reducePermissionSets_clm() {
 		Test.startTest();
-		Set<Id> result1 = Permissions.getPermissionSetIds(new Set<String> {
+		Set<String> result1 = Permissions.reducePermissionSets(new Set<String> {
 			Permissions.CLM_ADMINISTRATOR,
 			Permissions.CLM_USER
 		});
-		Set<Id> result2 = Permissions.getPermissionSetIds(new Set<String> {
+		Set<String> result2 = Permissions.reducePermissionSets(new Set<String> {
 			Permissions.CLM_USER,
 			Permissions.CLM_VIEWER
 		});
-		Set<Id> result3 = Permissions.getPermissionSetIds(new Set<String> {
+		Set<String> result3 = Permissions.reducePermissionSets(new Set<String> {
 			Permissions.CLM_VIEWER
 		});
 		Test.stopTest();
 
-		System.assertEquals(new Set<Id> { Permissions.getClmAdministratorPermissionSetId(), Permissions.getDocuSignAdministratorPermissionSetId() }, result1);
-		System.assertEquals(new Set<Id> { Permissions.getClmUserPermissionSetId() }, result2);
-		System.assertEquals(new Set<Id> { Permissions.getClmViewerPermissionSetId() }, result3);
+		System.assertEquals(new Set<String> { Permissions.CLM_ADMINISTRATOR, Permissions.DOCUSIGN_ADMINISTRATOR }, result1);
+		System.assertEquals(new Set<String> { Permissions.CLM_USER }, result2);
+		System.assertEquals(new Set<String> { Permissions.CLM_VIEWER }, result3);
 	}
 
 	@IsTest
@@ -1769,31 +1651,14 @@ private class PermissionsTest {
 		Test.stopTest();
 	}
 
-	@IsTest
-	static void test_Database_queryUserPermissionSetIds() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			insert new PermissionSetAssignment(
-				AssigneeId = UserInfo.getUserId(),
-				PermissionSetId = Permissions.getDocuSignNegotiatorPermissionSetId());
-			User u1 = UserMock.createClmUser(false);
-			User u2 = UserMock.createUser();
-			Set<Id> userIds = new Set<Id> { UserInfo.getUserId(), u1.Id, u2.Id };
-
-			Test.startTest();
-			Map<Id, Set<Id>> result = Permissions.DB.queryUserPermissionSetIds(userIds);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(userIds, result.keySet());
-			System.assertEquals(
-				new Set<Id> {
-					Permissions.getDocuSignAdministratorPermissionSetId(),
-					Permissions.getDocuSignNegotiatorPermissionSetId()
-				},
-				result.get(UserInfo.getUserId()));
-			System.assertEquals(new Set<Id> { Permissions.getClmUserPermissionSetId() }, result.get(u1.Id));
-			System.assertEquals(new Set<Id>(), result.get(u2.Id));
-		}
+	static Id getPermissionSetId(final String name) {
+		return [
+			SELECT Id
+			FROM PermissionSet
+			WHERE NamespacePrefix = :Application.packageNamespace
+			AND Name = :name
+			LIMIT 1
+		].Id;
 	}
 
 	@IsTest
@@ -1801,14 +1666,14 @@ private class PermissionsTest {
 		System.runAs(UserMock.createClmAdministrator(false)) {
 			insert new PermissionSetAssignment(
 				AssigneeId = UserInfo.getUserId(),
-				PermissionSetId = Permissions.getDocuSignGeneratorPermissionSetId());
+				PermissionSetId = getPermissionSetId(Permissions.DOCUSIGN_GENERATOR));
 
 			Test.startTest();
 			System.assert(Permissions.updateCurrentUserPermissionSets(
-				new Set<Id> {
-					Permissions.getDocuSignSenderPermissionSetId(),
-					Permissions.getClmViewerPermissionSetId(),
-					Permissions.getDocuSignNegotiatorPermissionSetId()
+				new Set<String> {
+					Permissions.DOCUSIGN_SENDER,
+					Permissions.CLM_VIEWER,
+					Permissions.DOCUSIGN_NEGOTIATOR
 				}));
 			Test.stopTest();
 
@@ -1817,11 +1682,11 @@ private class PermissionsTest {
 			System.assert(!Permissions.isDocuSignGenerator());
 			System.assert(Permissions.isDocuSignNegotiator());
 
-			Set<Id> psIds = Permissions.DB.queryUserPermissionSetIds(new Set<Id> { UserInfo.getUserId() }).get(UserInfo.getUserId());
-			System.assert(!psIds.contains(Permissions.getDocuSignUserPermissionSetId()));
-			System.assert(!psIds.contains(Permissions.getDocuSignSenderPermissionSetId()));
-			System.assert(!psIds.contains(Permissions.getClmUserPermissionSetId()));
-			System.assert(!psIds.contains(Permissions.getClmViewerPermissionSetId()));
+			Set<String> pss = Permissions.getAssignedPermissionSets(UserInfo.getUserId());
+			System.assert(!pss.contains(Permissions.DOCUSIGN_USER));
+			System.assert(!pss.contains(Permissions.DOCUSIGN_SENDER));
+			System.assert(!pss.contains(Permissions.CLM_USER));
+			System.assert(!pss.contains(Permissions.CLM_VIEWER));
 		}
 	}
 
@@ -1830,14 +1695,14 @@ private class PermissionsTest {
 		System.runAs(UserMock.createClmAdministrator(false)) {
 			insert new PermissionSetAssignment(
 				AssigneeId = UserInfo.getUserId(),
-				PermissionSetId = Permissions.getDocuSignGeneratorPermissionSetId());
+				PermissionSetId = getPermissionSetId(Permissions.DOCUSIGN_GENERATOR));
 
 			Test.startTest();
 			System.assert(!Permissions.updateCurrentUserPermissionSets(
-				new Set<Id> {
-					Permissions.getDocuSignUserPermissionSetId(),
-					Permissions.getClmUserPermissionSetId(),
-					Permissions.getDocuSignGeneratorPermissionSetId()
+				new Set<String> {
+					Permissions.DOCUSIGN_USER,
+					Permissions.CLM_USER,
+					Permissions.DOCUSIGN_GENERATOR
 				}));
 			Test.stopTest();
 
@@ -1846,11 +1711,11 @@ private class PermissionsTest {
 			System.assert(Permissions.isDocuSignGenerator());
 			System.assert(!Permissions.isDocuSignNegotiator());
 
-			Set<Id> psIds = Permissions.DB.queryUserPermissionSetIds(new Set<Id> { UserInfo.getUserId() }).get(UserInfo.getUserId());
-			System.assert(!psIds.contains(Permissions.getDocuSignUserPermissionSetId()));
-			System.assert(!psIds.contains(Permissions.getDocuSignSenderPermissionSetId()));
-			System.assert(!psIds.contains(Permissions.getClmUserPermissionSetId()));
-			System.assert(!psIds.contains(Permissions.getClmViewerPermissionSetId()));
+			Set<String> pss = Permissions.getAssignedPermissionSets(UserInfo.getUserId());
+			System.assert(!pss.contains(Permissions.DOCUSIGN_USER));
+			System.assert(!pss.contains(Permissions.DOCUSIGN_SENDER));
+			System.assert(!pss.contains(Permissions.CLM_USER));
+			System.assert(!pss.contains(Permissions.CLM_VIEWER));
 		}
 	}
 
@@ -1952,7 +1817,7 @@ private class PermissionsTest {
 		System.runAs(UserMock.createClmAdministrator()) {
 			insert new PermissionSetAssignment(
 				AssigneeId = UserInfo.getUserId(),
-				PermissionSetId = Permissions.getDocuSignGeneratorPermissionSetId());
+				PermissionSetId = getPermissionSetId(Permissions.DOCUSIGN_GENERATOR));
 
 			Test.startTest();
 			System.assert(Permissions.replaceRoles(
@@ -1969,11 +1834,11 @@ private class PermissionsTest {
 			System.assert(!Permissions.isDocuSignGenerator());
 			System.assert(Permissions.isDocuSignNegotiator());
 
-			Set<Id> psIds = Permissions.DB.queryUserPermissionSetIds(new Set<Id> { UserInfo.getUserId() }).get(UserInfo.getUserId());
-			System.assert(!psIds.contains(Permissions.getDocuSignUserPermissionSetId()));
-			System.assert(!psIds.contains(Permissions.getDocuSignSenderPermissionSetId()));
-			System.assert(!psIds.contains(Permissions.getClmUserPermissionSetId()));
-			System.assert(!psIds.contains(Permissions.getClmViewerPermissionSetId()));
+			Set<String> pss = Permissions.getAssignedPermissionSets(UserInfo.getUserId());
+			System.assert(!pss.contains(Permissions.DOCUSIGN_USER));
+			System.assert(!pss.contains(Permissions.DOCUSIGN_SENDER));
+			System.assert(!pss.contains(Permissions.CLM_USER));
+			System.assert(!pss.contains(Permissions.CLM_VIEWER));
 		}
 	}
 
@@ -1983,21 +1848,21 @@ private class PermissionsTest {
 			insert new List<PermissionSetAssignment> {
 				new PermissionSetAssignment(
 					AssigneeId = UserInfo.getUserId(),
-					PermissionSetId = Permissions.getDocuSignUserPermissionSetId()),
+					PermissionSetId = getPermissionSetId(Permissions.DOCUSIGN_USER)),
 				new PermissionSetAssignment(
 					AssigneeId = UserInfo.getUserId(),
-					PermissionSetId = Permissions.getDocuSignGeneratorPermissionSetId()),
+					PermissionSetId = getPermissionSetId(Permissions.DOCUSIGN_GENERATOR)),
 				new PermissionSetAssignment(
 					AssigneeId = UserInfo.getUserId(),
-					PermissionSetId = Permissions.getClmViewerPermissionSetId())
+					PermissionSetId = getPermissionSetId(Permissions.CLM_VIEWER))
 			};
 
 			Test.startTest();
 			System.assert(Permissions.clear(new Set<Id> { UserInfo.getUserId() }));
 			Test.stopTest();
 
-			Set<Id> psIds = Permissions.DB.queryUserPermissionSetIds(new Set<Id> { UserInfo.getUserId() }).get(UserInfo.getUserId());
-			System.assertEquals(new Set<Id> { Permissions.getDocuSignAdministratorPermissionSetId() }, psIds);
+			System.assertEquals(new Set<String> { Permissions.DOCUSIGN_ADMINISTRATOR },
+				Permissions.getAssignedPermissionSets(UserInfo.getUserId()));
 		}
 	}
 
@@ -2015,13 +1880,15 @@ private class PermissionsTest {
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :UserInfo.getUserId()
-				AND PermissionSetId = :Permissions.getDocuSignAdministratorPermissionSetId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name = :Permissions.DOCUSIGN_ADMINISTRATOR
 			]));
 			System.assertEquals(0, Collection.size([
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :(NEW Set<Id> { u1.Id, u2.Id })
-				AND PermissionSetId = :Permissions.getPermissionSetMap().values()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name IN :Permissions.VALID_PERMISSION_SETS
 			]));
 		}
 	}
@@ -2045,24 +1912,27 @@ private class PermissionsTest {
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :UserInfo.getUserId()
-				AND PermissionSetId = :Permissions.getDocuSignAdministratorPermissionSetId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name = :Permissions.DOCUSIGN_ADMINISTRATOR
 			]));
 			System.assertEquals(0, Collection.size([
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :(NEW Set<Id> { u1.Id, u2.Id })
-				AND PermissionSetId = :(NEW Set<Id> {
-					Permissions.getDocuSignAdministratorPermissionSetId(),
-					Permissions.getClmUserPermissionSetId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name IN :(NEW Set<String> {
+					Permissions.DOCUSIGN_ADMINISTRATOR,
+					Permissions.CLM_USER
 				})
 			]));
 			System.assertEquals(4, Collection.size([
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :(NEW Set<Id> { u1.Id, u2.Id })
-				AND PermissionSetId = :(NEW Set<Id> {
-					Permissions.getDocuSignNegotiatorPermissionSetId(),
-					Permissions.getClmViewerPermissionSetId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name IN :(NEW Set<String> {
+					Permissions.DOCUSIGN_NEGOTIATOR,
+					Permissions.CLM_VIEWER
 				})
 			]));
 		}
@@ -2121,9 +1991,9 @@ private class PermissionsTest {
 		Set<Id> uIds = new Set<Id> { u1.Id, u2.Id, u3.Id, u4.Id, u5.Id, u6.Id, u7.Id, u8.Id };
 
 		System.runAs(u1) {
-			Permissions.assignDocuSignSenderPermissionSet(new Set<Id> { u2.Id });
-			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { u2.Id });
-			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { u2.Id });
+			Permissions.assignPermissionSets(
+				new Set<Id> { u2.Id },
+				new Set<String> { Permissions.DOCUSIGN_SENDER, Permissions.DOCUSIGN_GENERATOR, Permissions.DOCUSIGN_NEGOTIATOR });
 		}
 
 		Test.startTest();
@@ -2225,5 +2095,32 @@ private class PermissionsTest {
 		}
 
 		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getFlsResults_lookups() {
+		DescribeSObjectResult oppDesc = Opportunity.getSObjectType().getDescribe();
+		DescribeSObjectResult acctDesc = Schema.Account.getSObjectType().getDescribe();
+
+		Test.startTest();
+		Permissions.FlsResults result1 = Permissions.getFlsResults(
+			Permissions.FlsAccess.Queryable,
+			'Opportunity',
+			oppDesc,
+			new List<String> { 'Name', 'Account', 'Owner' },
+			oppDesc.fields.getMap());
+		Permissions.FlsResults result2 = Permissions.getFlsResults(
+			Permissions.FlsAccess.Queryable,
+			'Account',
+			acctDesc,
+			new List<String> { 'Name', 'Parent', 'MasterRecord', 'Owner' },
+			acctDesc.fields.getMap());
+		Test.stopTest();
+
+		System.assertNotEquals(null, result1);
+		System.assert(result1.isAuthorized);
+
+		System.assertNotEquals(null, result2);
+		System.assert(result2.isAuthorized);
 	}
 }

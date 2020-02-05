@@ -47,7 +47,7 @@ global class UserMock {
 		User u = createUser(getSystemAdministratorProfileId(),
 			(dsUserId == null ? UUID.randomUUID().toString() : dsUserId.toString()) + '@unit.test', dsUserId, true);
 		System.runAs(u) {
-			Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignPermissionSets(new Set<Id> { u.Id }, new Set<String> { Permissions.DOCUSIGN_ADMINISTRATOR });
 		}
 		return u;
 	}
@@ -88,7 +88,7 @@ global class UserMock {
 		User u = createUser(getStandardUserProfileId(),
 			(dsUserId == null ? UUID.randomUUID().toString() : dsUserId.toString()) + '@unit.test', dsUserId, false);
 		System.runAs(getAdministrator()) {
-			Permissions.assignDocuSignUserPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignPermissionSets(new Set<Id> { u.Id }, new Set<String> { Permissions.DOCUSIGN_USER });
 		}
 		return u;
 	}
@@ -123,7 +123,7 @@ global class UserMock {
 			}
 		}
 		System.runAs(getAdministrator()) {
-			Permissions.assignDocuSignSenderPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignPermissionSets(new Set<Id> { u.Id }, new Set<String> { Permissions.DOCUSIGN_SENDER });
 		}
 		return u;
 	}
@@ -158,21 +158,7 @@ global class UserMock {
 			}
 		}
 		System.runAs(getAdministrator()) {
-			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { u.Id });
-		}
-		return u;
-	}
-
-	public static User createDocuSignGeneratorAdminUser(final Boolean createAccountSettings) {
-		User u = createDocuSignAdministrator(UUID.randomUUID());
-		if (createAccountSettings) {
-			System.runAs(u) {
-				createAccountConfiguration(UUID.randomUUID());
-			}
-		}
-		System.runAs(getAdministrator()) {
-			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { u.Id });
-			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignPermissionSets(new Set<Id> { u.Id }, new Set<String> { Permissions.DOCUSIGN_GENERATOR });
 		}
 		return u;
 	}
@@ -207,7 +193,7 @@ global class UserMock {
 			}
 		}
 		System.runAs(getAdministrator()) {
-			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignPermissionSets(new Set<Id> { u.Id }, new Set<String> { Permissions.DOCUSIGN_NEGOTIATOR });
 		}
 		return u;
 	}
@@ -242,8 +228,9 @@ global class UserMock {
 			}
 		}
 		System.runAs(getAdministrator()) {
-			Permissions.assignDocuSignAdministratorPermissionSet(new Set<Id> { u.Id });
-			Permissions.assignClmAdministratorPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignPermissionSets(
+				new Set<Id> { u.Id },
+				new Set<String> { Permissions.DOCUSIGN_ADMINISTRATOR, Permissions.CLM_ADMINISTRATOR });
 		}
 		return u;
 	}
@@ -278,7 +265,7 @@ global class UserMock {
 			}
 		}
 		System.runAs(getAdministrator()) {
-			Permissions.assignClmUserPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignPermissionSets(new Set<Id> { u.Id }, new Set<String> { Permissions.CLM_USER });
 		}
 		return u;
 	}
@@ -313,7 +300,7 @@ global class UserMock {
 			}
 		}
 		System.runAs(getAdministrator()) {
-			Permissions.assignClmViewerPermissionSet(new Set<Id> { u.Id });
+			Permissions.assignPermissionSets(new Set<Id> { u.Id }, new Set<String> { Permissions.CLM_VIEWER });
 		}
 		return u;
 	}

@@ -844,19 +844,19 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_redirectOnNewTemplate_OnlineEditor() {
-		User adminUser = UserMock.createDocuSignAdministrator(false);
-		System.runAs(adminUser) {
-			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
-			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { adminUser.Id });
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Permissions.assignPermissionSets(
+				new Set<Id> { UserInfo.getUserId() },
+				new Set<String> { Permissions.DOCUSIGN_GENERATOR, Permissions.DOCUSIGN_NEGOTIATOR });
 
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			template.TemplateType__c = Gen.ONLINE_EDITOR_TYPE;
 			update template;
 
 			Test.setCurrentPage(Page.GenTemplateNavigator);
-			ApexPages.currentPage().getParameters().put('id', template.id);
+			ApexPages.currentPage().getParameters().put('id', template.Id);
 			PageReference expectedOnlineEditorPage = Page.OnlineEditorGenTemplate ;
-			expectedOnlineEditorPage.getParameters().put('id', template.id);
+			expectedOnlineEditorPage.getParameters().put('id', template.Id);
 			expectedOnlineEditorPage.getParameters().put('isEdit', 'false');
 			expectedOnlineEditorPage.getParameters().put('isFromSetupWizard', 'true');
 			Test.startTest();
@@ -869,19 +869,19 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_redirectOnNewTemplate_WordBasedGen() {
-		User adminUser = UserMock.createDocuSignAdministrator(false);
-		System.runAs(adminUser) {
-			Permissions.assignDocuSignGeneratorPermissionSet(new Set<Id> { adminUser.Id });
-			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { adminUser.Id });
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Permissions.assignPermissionSets(
+				new Set<Id> { UserInfo.getUserId() },
+				new Set<String> { Permissions.DOCUSIGN_GENERATOR, Permissions.DOCUSIGN_NEGOTIATOR });
 
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			template.TemplateType__c = 'Microsoft Word';
 			update template;
 
 			Test.setCurrentPage(Page.GenTemplateNavigator);
-			ApexPages.currentPage().getParameters().put('id', template.id);
+			ApexPages.currentPage().getParameters().put('id', template.Id);
 			PageReference expectedWordBasedGenPage = Page.GenTemplate ;
-			expectedWordBasedGenPage.getParameters().put('id', template.id);
+			expectedWordBasedGenPage.getParameters().put('id', template.Id);
 			expectedWordBasedGenPage.getParameters().put('isEdit', 'false');
 			expectedWordBasedGenPage.getParameters().put('isFromSetupWizard', 'true');
 			Test.startTest();

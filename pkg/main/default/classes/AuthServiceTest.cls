@@ -689,6 +689,7 @@ private class AuthServiceTest {
 	@IsTest
 	static void test_getContentAccessToken_success() {
 		DocuSignAPIMock.success();
+
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
 			String result = AuthService.getContentAccessToken();
@@ -772,7 +773,8 @@ private class AuthServiceTest {
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :UserInfo.getUserId()
-				AND PermissionSetId = :Permissions.getDocuSignAdministratorPermissionSetId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name = :Permissions.DOCUSIGN_ADMINISTRATOR
 			]));
 
 			System.assert(Collection.isEmpty(ProductSettings__c.getAll()));
@@ -1654,7 +1656,8 @@ private class AuthServiceTest {
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :UserInfo.getUserId()
-				AND PermissionSetId = :Permissions.getClmAdministratorPermissionSetId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name = :Permissions.CLM_ADMINISTRATOR
 			];
 			System.assert(Collection.isEmpty(psas));
 
@@ -1674,7 +1677,8 @@ private class AuthServiceTest {
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :UserInfo.getUserId()
-				AND PermissionSetId = :Permissions.getClmAdministratorPermissionSetId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name = :Permissions.CLM_ADMINISTRATOR
 				LIMIT 1
 			];
 			System.assert(Collection.isNotEmpty(psas));
@@ -1691,7 +1695,8 @@ private class AuthServiceTest {
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :UserInfo.getUserId()
-				AND PermissionSetId = :Permissions.getClmAdministratorPermissionSetId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name = :Permissions.CLM_ADMINISTRATOR
 				LIMIT 1
 			];
 			System.assert(Collection.isNotEmpty(psas));
@@ -1711,7 +1716,8 @@ private class AuthServiceTest {
 				SELECT Id
 				FROM PermissionSetAssignment
 				WHERE AssigneeId = :UserInfo.getUserId()
-				AND PermissionSetId = :Permissions.getClmAdministratorPermissionSetId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name = :Permissions.CLM_ADMINISTRATOR
 			];
 			System.assertEquals(psas.size(), 1);
 		}

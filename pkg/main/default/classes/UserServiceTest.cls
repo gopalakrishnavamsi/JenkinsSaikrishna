@@ -469,25 +469,26 @@ private class UserServiceTest {
 
 			Set<String> psas = new Set<String>();
 			for (PermissionSetAssignment psa : [
-				SELECT AssigneeId, PermissionSetId, PermissionSet.Name
+				SELECT AssigneeId, PermissionSet.Name
 				FROM PermissionSetAssignment
 				WHERE AssigneeId IN :(NEW Set<Id> { UserInfo.getUserId(), u1.Id, u2.Id, u3.Id })
-				AND PermissionSetId IN :Permissions.getPermissionSetMap().values()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name IN :Permissions.VALID_PERMISSION_SETS
 			]) {
-				psas.add(psa.AssigneeId + ':' + psa.PermissionSetId);
+				psas.add(psa.AssigneeId + ':' + psa.PermissionSet.Name.toLowerCase());
 			}
 			System.assertEquals(11, psas.size());
-			System.assert(psas.contains(UserInfo.getUserId() + ':' + Permissions.getDocuSignAdministratorPermissionSetId()));
-			System.assert(psas.contains(UserInfo.getUserId() + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
-			System.assert(psas.contains(u1.Id + ':' + Permissions.getDocuSignAdministratorPermissionSetId()));
-			System.assert(psas.contains(u1.Id + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
-			System.assert(psas.contains(u1.Id + ':' + Permissions.getClmViewerPermissionSetId()));
-			System.assert(psas.contains(u2.Id + ':' + Permissions.getDocuSignAdministratorPermissionSetId()));
-			System.assert(psas.contains(u2.Id + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
-			System.assert(psas.contains(u2.Id + ':' + Permissions.getClmViewerPermissionSetId()));
-			System.assert(psas.contains(u3.Id + ':' + Permissions.getDocuSignAdministratorPermissionSetId()));
-			System.assert(psas.contains(u3.Id + ':' + Permissions.getDocuSignGeneratorPermissionSetId()));
-			System.assert(psas.contains(u3.Id + ':' + Permissions.getClmViewerPermissionSetId()));
+			System.assert(psas.contains(UserInfo.getUserId() + ':' + Permissions.DOCUSIGN_ADMINISTRATOR));
+			System.assert(psas.contains(UserInfo.getUserId() + ':' + Permissions.DOCUSIGN_GENERATOR));
+			System.assert(psas.contains(u1.Id + ':' + Permissions.DOCUSIGN_ADMINISTRATOR));
+			System.assert(psas.contains(u1.Id + ':' + Permissions.DOCUSIGN_GENERATOR));
+			System.assert(psas.contains(u1.Id + ':' + Permissions.CLM_VIEWER));
+			System.assert(psas.contains(u2.Id + ':' + Permissions.DOCUSIGN_ADMINISTRATOR));
+			System.assert(psas.contains(u2.Id + ':' + Permissions.DOCUSIGN_GENERATOR));
+			System.assert(psas.contains(u2.Id + ':' + Permissions.CLM_VIEWER));
+			System.assert(psas.contains(u3.Id + ':' + Permissions.DOCUSIGN_ADMINISTRATOR));
+			System.assert(psas.contains(u3.Id + ':' + Permissions.DOCUSIGN_GENERATOR));
+			System.assert(psas.contains(u3.Id + ':' + Permissions.CLM_VIEWER));
 		}
 	}
 
@@ -721,10 +722,9 @@ private class UserServiceTest {
 	static void test_updateUserRoles_self_remove() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createClmAdministrator()) {
-			insert new List<PermissionSetAssignment> {
-				new PermissionSetAssignment(AssigneeId = UserInfo.getUserId(), PermissionSetId = Permissions.getDocuSignSenderPermissionSetId()),
-				new PermissionSetAssignment(AssigneeId = UserInfo.getUserId(), PermissionSetId = Permissions.getDocuSignNegotiatorPermissionSetId())
-			};
+			Permissions.assignPermissionSets(
+				new Set<Id> { UserInfo.getUserId() },
+				new Set<String> { Permissions.DOCUSIGN_SENDER, Permissions.DOCUSIGN_NEGOTIATOR });
 
 			Test.startTest();
 			List<Account.User> result = UserService.updateUserRoles(

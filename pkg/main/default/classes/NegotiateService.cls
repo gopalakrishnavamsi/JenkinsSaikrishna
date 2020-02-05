@@ -280,7 +280,7 @@ public with sharing class NegotiateService {
 		return taskStatus;
 	}
 
-	public static Negotiate.LimitedAccessToken generateUploadToken(final Id objectId) {
+	public static LimitedAccessToken generateUploadToken(final Id objectId) {
 		Permissions.verifyIsDocuSignNegotiator();
 
 		return ScmTokenAPI.getInstance().generateLimitedAccessToken(
@@ -288,7 +288,7 @@ public with sharing class NegotiateService {
 			AuthService.getContentAccessToken());
 	}
 
-	public static Negotiate.LimitedAccessToken generateDownloadToken(final UUID agreementId) {
+	public static LimitedAccessToken generateDownloadToken(final UUID agreementId) {
 		Permissions.verifyIsDocuSignNegotiator();
 
 		return ScmTokenAPI.getInstance().generateLimitedAccessToken(
@@ -296,7 +296,7 @@ public with sharing class NegotiateService {
 			AuthService.getContentAccessToken());
 	}
 
-	public static Negotiate.LimitedAccessToken generateUploadNewVersionToken(final UUID agreementId) {
+	public static LimitedAccessToken generateUploadNewVersionToken(final UUID agreementId) {
 		Permissions.verifyIsDocuSignNegotiator();
 
 		return ScmTokenAPI.getInstance().generateLimitedAccessToken(

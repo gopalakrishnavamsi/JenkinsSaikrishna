@@ -1,5 +1,5 @@
 <apex:page id="OnlineEditorGenTemplate" sidebar="false" showHeader="false" standardController="GenTemplate__c"
-           title="{!$Label.DocuSign}" extensions="GenController" standardStylesheets="false" applyHtmlTag="false">
+           title="{!$Label.DocuSign}" extensions="OnlineEditorController" standardStylesheets="false" applyHtmlTag="false">
     <html>
     <apex:includeLightning/>
     <apex:slds/>
@@ -16,18 +16,19 @@
       var initErrorMessage = '{!JSENCODE(errorMessage)}';
 
       RemoteActions = {
-        deleteTemplate: '{!$RemoteAction.GenController.deleteTemplate}',
-        getLayouts: '{!$RemoteAction.GenController.getLayouts}',
-        getMergeFields: '{!$RemoteAction.GenController.getMergeFields}',
-        updateLayouts: '{!$RemoteAction.GenController.updateLayouts}',
-        generateDownloadToken: '{!$RemoteAction.GenController.generateDownloadToken}',
-        generateUploadToken: '{!$RemoteAction.GenController.generateUploadToken}',
-        getTemplateFolderId: '{!$RemoteAction.GenController.getTemplateFolderId}',
-        getSpringTemplateIdInUUIDFormat: '{!$RemoteAction.GenController.getSpringTemplateIdInUUIDFormat}',
-        updateTemplateIdInSalesforce: '{!$RemoteAction.GenController.updateTemplate}',
-        updateFileDetailsInSalesforce: '{!$RemoteAction.GenController.updateTemplate}',
-        getEntityRecords: '{!$RemoteAction.GenController.getEntityRecords}',
-        getMergeData: '{!$RemoteAction.GenController.getOnlineEditorMergeData}'
+        deleteTemplate: '{!$RemoteAction.OnlineEditorController.deleteTemplate}',
+        getLayouts: '{!$RemoteAction.OnlineEditorController.getLayouts}',
+        getMergeFields: '{!$RemoteAction.OnlineEditorController.getMergeFields}',
+        updateLayouts: '{!$RemoteAction.OnlineEditorController.updateLayouts}',
+        generateDownloadToken: '{!$RemoteAction.OnlineEditorController.generateDownloadToken}',
+        generateUploadToken: '{!$RemoteAction.OnlineEditorController.generateUploadToken}',
+        getTemplateFolderId: '{!$RemoteAction.OnlineEditorController.getTemplateFolderId}',
+        getSpringTemplateIdInUUIDFormat: '{!$RemoteAction.OnlineEditorController.getSpringTemplateIdInUUIDFormat}',
+        updateTemplateIdInSalesforce: '{!$RemoteAction.OnlineEditorController.updateTemplate}',
+        // FIXME: This is pointing to the same method as updateTemplateIdInSalesforce. Also the names are overly verbose.
+        updateFileDetailsInSalesforce: '{!$RemoteAction.OnlineEditorController.updateTemplate}',
+        getEntityRecords: '{!$RemoteAction.OnlineEditorController.getEntityRecords}',
+        getMergeData: '{!$RemoteAction.OnlineEditorController.getMergeData}'
       };
 
       Configuration = {
@@ -35,7 +36,7 @@
         isEditing: {!editMode},
         isGenerating: false,
         initError: initErrorMessage,
-        hasInitError: initErrorMessage !== null && initErrorMessage !== '',
+        hasInitError: !!initErrorMessage,
         namespace: '{!JSENCODE(namespace)}',
         docuSignAccountId: '{!JSENCODE(docuSignAccountId)}',
         docuSignUserId: '{!JSENCODE(docuSignUserId)}',
@@ -82,11 +83,6 @@
             margin: auto;
         }
 
-        #templateConfigurationDescriptionInput {
-            height: 106px;
-            resize: none;
-        }
-
         .col {
             flex: 1 !important;
         }
@@ -107,7 +103,7 @@
             display: none;
         }
 
-        #onlineEditorNext, #onlineEditorPublish {
+        #onlineEditorPublish {
             background: rgb(36, 99, 209);
             border-color: rgb(36, 99, 209);
         }
@@ -169,7 +165,7 @@
             </div>
         </div>
         <div id="toastNotificationContainer"></div>
-        <div id="editModal"/>
+        <div id="editModal"></div>
         <!-- Toolbar -->
         <div id="onlineEditorToolBar" class="slds-page-header slds-border_bottom slds-grid">
             <div class="col">

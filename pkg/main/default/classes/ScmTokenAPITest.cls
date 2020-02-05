@@ -21,7 +21,7 @@ private class ScmTokenAPITest {
 			UUID entityId = UUID.randomUUID();
 
 			Test.startTest();
-			Negotiate.LimitedAccessToken limitedAccessToken = ScmTokenAPI.getInstance().generateLimitedAccessToken(entityId, 'unit.test');
+			LimitedAccessToken limitedAccessToken = ScmTokenAPI.getInstance().generateLimitedAccessToken(entityId, 'unit.test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, limitedAccessToken);

@@ -454,7 +454,8 @@ global with sharing class AuthService {
 	}
 
 	public static String getContentAccessToken() {
-		Permissions.verifyIsDocuSignNegotiator();
+		// No need to check permissions here. Credentials.getInstance() will throw an exception if the user is not
+		// provisioned and exchangeJwt will fail if the user is invalid or has not granted consent.
 		Credentials c = Credentials.getInstance();
 		return getAuthAPI(c.environment.accountBaseUrl).exchangeJwt(generateJwt(
 			c.environment.accountBaseUrl.getHost(),
@@ -1010,8 +1011,8 @@ global with sharing class AuthService {
 	@Future
 	private static void assignClmAdministratorPermissionSet(final Id userId) {
 		if (String.isBlank(userId)) return;
-		
-		Permissions.assignClmAdministratorPermissionSet(new Set<Id> { userId });
+
+		Permissions.assignPermissionSets(new Set<Id> { userId }, new Set<String> { Permissions.CLM_ADMINISTRATOR });
 	}
 
 	@TestVisible

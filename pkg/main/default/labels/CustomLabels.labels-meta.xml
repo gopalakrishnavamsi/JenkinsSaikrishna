@@ -9139,4 +9139,11 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Invalid query</shortDescription>
 		<value>Invalid query</value>
 	</labels>
+	<labels>
+		<fullName>MustBeAdministratorOrGenerator</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Must be administrator or generator</shortDescription>
+		<value>You must have DocuSign administrator or generator permissions to perform this operation.</value>
+	</labels>
 </CustomLabels>

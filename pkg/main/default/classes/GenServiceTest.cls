@@ -30,7 +30,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_clone_undefined_id() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(true)) {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			Test.startTest();
 			try {
 				GenService.clone(null);
@@ -44,7 +44,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_clone_success() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(true)) {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			GenTemplate__c t = TestUtils.createGenTemplate(Contact.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(t.Id);
 			ContentVersion cv2 = TestUtils.createGenFile(t.Id);
@@ -106,7 +106,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_createBlankTemplate_success() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(true)) {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			Test.startTest();
 			Gen.Template result = GenService.createBlankTemplate();
 			Test.stopTest();
@@ -148,7 +148,7 @@ private class GenServiceTest {
 				GenService.getTemplate(null);
 				throw new AssertException('Expected getTemplate to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -232,7 +232,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_saveTemplate_undefined_template() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
 				GenService.saveTemplate(null);
@@ -246,7 +246,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_saveTemplate_success() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			GenTemplate__c gtt = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			gtt.Name = TestUtils.randomString(12);
 			gtt.SourceObject__c = 'Opportunity';
@@ -311,7 +311,7 @@ private class GenServiceTest {
 				GenService.getRecentRecordIds(null, 0);
 				throw new AssertException('Expected getRecentRecordIds to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -319,7 +319,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getRecentRecords_undefined_type() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
 				GenService.getRecentRecordIds(null, 0);
@@ -333,7 +333,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getRecentRecords_success() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Lead l1 = TestUtils.createLead();
 			Lead l2 = TestUtils.createLead();
 
@@ -354,7 +354,7 @@ private class GenServiceTest {
 				GenService.getMergeData(null, null);
 				throw new AssertException('Expected getMergeData to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -419,7 +419,7 @@ private class GenServiceTest {
 				new Gen.Query('OpportunityContactRole', 'OpportunityContactRoles', new List<String> {
 					'Contact.Name', 'Contact.Email', 'Role'
 				}, null)
-			});			
+			});
 
 			Test.startTest();
 			SObject result = GenService.getMergeData(o.Id, q);
@@ -461,7 +461,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getOutputFileName_name() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			System.assertEquals(null, GenService.getOutputFileName(null, null, null));
 			Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name', null);
 			System.assertEquals('a', GenService.getOutputFileName(f, null, null));
@@ -472,7 +472,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getOutputFileName_date() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			System.assertEquals(null, GenService.getOutputFileName(null, null, null));
 			Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'date', null);
 			Datetime dt = Datetime.now();
@@ -482,7 +482,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_getOutputFileName_name_date() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			System.assertEquals(null, GenService.getOutputFileName(null, null, null));
 			Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name_date', null);
 			Datetime dt = Datetime.now();
@@ -493,11 +493,25 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_queueDocumentGeneration_unauthorized() {
+	static void test_queueDocumentGeneration_preview_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				GenService.queueDocumentGeneration(null, null, null, null, null);
+				GenService.queueDocumentGeneration(null, null, null, true, null);
+				throw new AssertException('Expected queueDocumentGeneration to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_queueDocumentGeneration_non_preview_unauthorized() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				GenService.queueDocumentGeneration(null, null, null, false, null);
 				throw new AssertException('Expected queueDocumentGeneration to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
@@ -660,7 +674,7 @@ private class GenServiceTest {
 				GenService.getJobStatus(null);
 				throw new AssertException('Expected getJobStatus to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -762,31 +776,6 @@ private class GenServiceTest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, testContentVersion);
-		}
-	}
-
-	@IsTest
-	static void test_checkMultiCurrency_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				GenService.checkMultiCurrency();
-				throw new AssertException('Expected failure');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_checkMultiCurrency_success() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			Test.startTest();
-			Boolean result = GenService.checkMultiCurrency();
-			Test.stopTest();
-
-			System.assertEquals(UserInfo.isMultiCurrencyOrganization(), result);
 		}
 	}
 
@@ -978,530 +967,4 @@ private class GenServiceTest {
 			System.assertEquals(b.Id, (String)result.get('ParentId'));
 		}
 	}
-
-	@IsTest
-	static void test_getEntityRecords_search() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			List<Schema.Account> testAccounts = new List<Schema.Account>();
-			for (Integer i = 0; i <= 25; i++) {
-				testAccounts.add(TestUtils.createAccount());
-			}
-			Test.startTest();
-			Map<String, Object> testQuery = GenService.getRelatedEntityRecords(Schema.Account.getSObjectType(), 'UNIT TEST', 0);
-			Map<String, Object> testQuery2 = GenService.getRelatedEntityRecords(Schema.Account.getSObjectType(), 'UNIT TEST', 1);
-			List<Schema.Account> results = (List<Schema.Account>)testQuery.get('results');
-			List<Schema.Account> results2 = (List<Schema.Account>)testQuery2.get('results');
-			Test.stopTest();
-			System.assertEquals((Integer)testQuery.get('totalRecords'), 26);
-			System.assertEquals(results.size(), 25, results.size());
-			System.assertEquals(results2.size(), 1, results.size());
-		}
-	}
-
-	@IsTest
-	static void test_getEntityRecords() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			for (Integer i = 0; i <= 25; i++) {
-				TestUtils.createAccount();
-			}
-			Test.startTest();
-			List<Schema.Account> testQuery = GenService.getRelatedEntityRecords(Schema.Account.getSObjectType());
-			Test.stopTest();
-			System.assertNotEquals(testQuery, null, testQuery);
-			System.assertEquals(testQuery.size(), 25);
-		}
-	}
-
-	@IsTest
-	static void test_convertFields_success() {
-		DocuSignAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(true)) {
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			onlineEditorFields.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('Quantity', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			Test.startTest();
-			List<String> result = GenService.convertFields(onlineEditorFields);
-			Test.stopTest();
-
-			System.assert(Collection.isNotEmpty(result));
-			System.assertEquals(onlineEditorFields[0].name, result[0]);
-			System.assertEquals(onlineEditorFields[1].name, result[1]);
-			System.assertEquals(onlineEditorFields[2].name, result[2]);
-		}
-	}
-
-	@IsTest
-	static void test_convertFields_viewer_success() {
-		DocuSignAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignGenerator(true)) {
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			onlineEditorFields.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('Quantity', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			Test.startTest();
-			List<String> result = GenService.convertFields(onlineEditorFields);
-			Test.stopTest();
-
-			System.assert(Collection.isNotEmpty(result));
-			System.assertEquals(onlineEditorFields[0].name, result[0]);
-			System.assertEquals(onlineEditorFields[1].name, result[1]);
-			System.assertEquals(onlineEditorFields[2].name, result[2]);
-		}
-	}
-
-	@IsTest
-	static void test_convertQuery_success() {
-		DocuSignAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(true)) {
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			onlineEditorFields.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('Quantity', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			OnlineEditor.Query onlineEditorQuery = new OnlineEditor.Query('Account', '', onlineEditorFields, new List<OnlineEditor.Query>());
-
-			Test.startTest();
-			Gen.Query result = GenService.convertQuery(onlineEditorQuery);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(onlineEditorQuery.type, result.type);
-			System.assertEquals(onlineEditorQuery.relationship, result.relationship);
-			System.assertEquals(onlineEditorQuery.fields[0].name, result.fields[0]);
-			System.assertEquals(onlineEditorQuery.fields[1].name, result.fields[1]);
-			System.assertEquals(onlineEditorQuery.fields[2].name, result.fields[2]);
-			System.assert(Collection.isEmpty(result.children));
-		}
-	}
-
-	@IsTest
-	static void test_convertQuery_viewer_success() {
-		DocuSignAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignGenerator(true)) {
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			OnlineEditorFields.add(new onlineEditor.Field('Id', 'val', 'String'));
-			OnlineEditorFields.add(new onlineEditor.Field('Quantity', 'val', 'String'));
-			OnlineEditorFields.add(new onlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			OnlineEditor.Query onlineEditorQuery = new OnlineEditor.Query('Account', '', onlineEditorFields, new List<OnlineEditor.Query>());
-
-			Test.startTest();
-			Gen.Query result = GenService.convertQuery(onlineEditorQuery);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(onlineEditorQuery.type, result.type);
-			System.assertEquals(onlineEditorQuery.relationship, result.relationship);
-			System.assertEquals(onlineEditorQuery.fields[0].name, result.fields[0]);
-			System.assertEquals(onlineEditorQuery.fields[1].name, result.fields[1]);
-			System.assertEquals(onlineEditorQuery.fields[2].name, result.fields[2]);
-			System.assert(Collection.isEmpty(result.children));
-		}
-	}
-
-	@IsTest
-	static void test_convertQuery2_success() {
-		DocuSignAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(true)) {
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			onlineEditorFields.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('Quantity', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			List<OnlineEditor.Field> onlineEditorFieldsChild = new List<OnlineEditor.Field>();
-			onlineEditorFieldsChild.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild.add(new OnlineEditor.Field('Name', 'val', 'String'));
-			onlineEditorFieldsChild.add(new OnlineEditor.Field('BillingCity', 'val', 'String'));
-
-			OnlineEditor.Query onlineEditorQueryChild = new OnlineEditor.Query('Opportunity', 'Opportunities', onlineEditorFieldsChild, new List<OnlineEditor.Query>());
-			OnlineEditor.Query onlineEditorQuery = new OnlineEditor.Query('Account', '', onlineEditorFields, new List<OnlineEditor.Query> { onlineEditorQueryChild });
-
-			Test.startTest();
-			Gen.Query result = GenService.convertQuery(onlineEditorQuery);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(onlineEditorQuery.type, result.type);
-			System.assertEquals(onlineEditorQuery.relationship, result.relationship);
-			System.assertEquals(onlineEditorQuery.fields[0].name, result.fields[0]);
-			System.assertEquals(onlineEditorQuery.fields[1].name, result.fields[1]);
-			System.assertEquals(onlineEditorQuery.fields[2].name, result.fields[2]);
-			System.assert(Collection.isNotEmpty(result.children));
-			System.assertEquals(onlineEditorQuery.children[0].type, result.children[0].type);
-			System.assertEquals(onlineEditorQuery.children[0].relationship, result.children[0].relationship);
-			System.assertEquals(onlineEditorQuery.children[0].fields[0].name, result.children[0].fields[0]);
-			System.assertEquals(onlineEditorQuery.children[0].fields[1].name, result.children[0].fields[1]);
-			System.assertEquals(onlineEditorQuery.children[0].fields[2].name, result.children[0].fields[2]);
-			System.assert(Collection.isEmpty(result.children[0].children));
-		}
-	}
-
-	@IsTest
-	static void test_convertQuery2_viewer_success() {
-		DocuSignAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignGenerator(true)) {
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			onlineEditorFields.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('Quantity', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			List<OnlineEditor.Field> onlineEditorFieldsChild = new List<OnlineEditor.Field>();
-			onlineEditorFieldsChild.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild.add(new OnlineEditor.Field('Name', 'val', 'String'));
-			onlineEditorFieldsChild.add(new OnlineEditor.Field('BillingCity', 'val', 'String'));
-
-			OnlineEditor.Query onlineEditorQueryChild = new OnlineEditor.Query('Opportunity', 'Opportunities', onlineEditorFieldsChild, new List<OnlineEditor.Query>());
-			OnlineEditor.Query onlineEditorQuery = new OnlineEditor.Query('Account', '', onlineEditorFields, new List<OnlineEditor.Query> { onlineEditorQueryChild });
-
-			Test.startTest();
-			Gen.Query result = GenService.convertQuery(onlineEditorQuery);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(onlineEditorQuery.type, result.type);
-			System.assertEquals(onlineEditorQuery.relationship, result.relationship);
-			System.assertEquals(onlineEditorQuery.fields[0].name, result.fields[0]);
-			System.assertEquals(onlineEditorQuery.fields[1].name, result.fields[1]);
-			System.assertEquals(onlineEditorQuery.fields[2].name, result.fields[2]);
-			System.assert(Collection.isNotEmpty(result.children));
-			System.assertEquals(onlineEditorQuery.children[0].type, result.children[0].type);
-			System.assertEquals(onlineEditorQuery.children[0].relationship, result.children[0].relationship);
-			System.assertEquals(onlineEditorQuery.children[0].fields[0].name, result.children[0].fields[0]);
-			System.assertEquals(onlineEditorQuery.children[0].fields[1].name, result.children[0].fields[1]);
-			System.assertEquals(onlineEditorQuery.children[0].fields[2].name, result.children[0].fields[2]);
-			System.assert(Collection.isEmpty(result.children[0].children));
-		}
-	}
-
-
-	@IsTest
-	static void test_convertQuery3_success() {
-		DocuSignAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(true)) {
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			onlineEditorFields.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('Name', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			List<OnlineEditor.Field> onlineEditorFieldsChild1 = new List<OnlineEditor.Field>();
-			onlineEditorFieldsChild1.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild1.add(new OnlineEditor.Field('Quantity', 'val', 'String'));
-
-			List<OnlineEditor.Field> onlineEditorFieldsChild2 = new List<OnlineEditor.Field>();
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			OnlineEditor.Query onlineEditorQueryChild1 = new OnlineEditor.Query('OpportunityLineItem', 'OpportunityLineItems', onlineEditorFieldsChild1, new List<OnlineEditor.Query>());
-			OnlineEditor.Query onlineEditorQueryChild2 = new OnlineEditor.Query('OpportunityLineItem', 'OpportunityLineItems', onlineEditorFieldsChild2, new List<OnlineEditor.Query>());
-			OnlineEditor.Query onlineEditorQueryOpp = new OnlineEditor.Query('Opportunity', '', onlineEditorFields, new List<OnlineEditor.Query> { onlineEditorQueryChild1, onlineEditorQueryChild2 });
-			OnlineEditor.Query onlineEditorQuery = new OnlineEditor.Query('Account', '', onlineEditorFields, new List<OnlineEditor.Query> { onlineEditorQueryOpp });
-
-			Test.startTest();
-			Gen.Query result = GenService.convertQuery(onlineEditorQuery);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(onlineEditorQuery.type, result.type);
-			System.assertEquals(onlineEditorQuery.relationship, result.relationship);
-			System.assertEquals(onlineEditorQuery.fields[0].name, result.fields[0]);
-			System.assertEquals(onlineEditorQuery.fields[1].name, result.fields[1]);
-			System.assertEquals(onlineEditorQuery.fields[2].name, result.fields[2]);
-			System.assert(Collection.isNotEmpty(result.children));
-			System.assertEquals(onlineEditorQuery.children[0].type, result.children[0].type);
-			System.assertEquals(onlineEditorQuery.children[0].relationship, result.children[0].relationship);
-			System.assertEquals(onlineEditorQuery.children[0].fields[0].name, result.children[0].fields[0]);
-			System.assertEquals(onlineEditorQuery.children[0].fields[1].name, result.children[0].fields[1]);
-			System.assert(Collection.isNotEmpty(result.children[0].children));
-			System.assertEquals(onlineEditorQuery.children[0].children[0].type, result.children[0].children[0].type);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].relationship, result.children[0].children[0].relationship);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].fields[0].name, result.children[0].children[0].fields[0]);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].fields[1].name, result.children[0].children[0].fields[1]);
-
-		}
-	}
-
-	@IsTest
-	static void test_convertQuery3_viewer_success() {
-		DocuSignAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignGenerator(true)) {
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			onlineEditorFields.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('Name', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			List<OnlineEditor.Field> onlineEditorFieldsChild1 = new List<OnlineEditor.Field>();
-			onlineEditorFieldsChild1.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild1.add(new OnlineEditor.Field('Quantity', 'val', 'String'));
-
-			List<OnlineEditor.Field> onlineEditorFieldsChild2 = new List<OnlineEditor.Field>();
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('UnitPrice', 'val', 'String'));
-
-			OnlineEditor.Query onlineEditorQueryChild1 = new OnlineEditor.Query('OpportunityLineItem', 'OpportunityLineItems', onlineEditorFieldsChild1, new List<OnlineEditor.Query>());
-			OnlineEditor.Query onlineEditorQueryChild2 = new OnlineEditor.Query('OpportunityLineItem', 'OpportunityLineItems', onlineEditorFieldsChild2, new List<OnlineEditor.Query>());
-			OnlineEditor.Query onlineEditorQueryOpp = new OnlineEditor.Query('Opportunity', '', onlineEditorFields, new List<OnlineEditor.Query> { onlineEditorQueryChild1, onlineEditorQueryChild2 });
-			OnlineEditor.Query onlineEditorQuery = new OnlineEditor.Query('Account', '', onlineEditorFields, new List<OnlineEditor.Query> { onlineEditorQueryOpp });
-
-			Test.startTest();
-			Gen.Query result = GenService.convertQuery(onlineEditorQuery);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(onlineEditorQuery.type, result.type);
-			System.assertEquals(onlineEditorQuery.relationship, result.relationship);
-			System.assertEquals(onlineEditorQuery.fields[0].name, result.fields[0]);
-			System.assertEquals(onlineEditorQuery.fields[1].name, result.fields[1]);
-			System.assertEquals(onlineEditorQuery.fields[2].name, result.fields[2]);
-			System.assert(Collection.isNotEmpty(result.children));
-			System.assertEquals(onlineEditorQuery.children[0].type, result.children[0].type);
-			System.assertEquals(onlineEditorQuery.children[0].relationship, result.children[0].relationship);
-			System.assertEquals(onlineEditorQuery.children[0].fields[0].name, result.children[0].fields[0]);
-			System.assertEquals(onlineEditorQuery.children[0].fields[1].name, result.children[0].fields[1]);
-			System.assert(Collection.isNotEmpty(result.children[0].children));
-			System.assertEquals(onlineEditorQuery.children[0].children[0].type, result.children[0].children[0].type);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].relationship, result.children[0].children[0].relationship);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].fields[0].name, result.children[0].children[0].fields[0]);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].fields[1].name, result.children[0].children[0].fields[1]);
-
-		}
-	}
-
-	@IsTest
-	static void test_getMergeData_success2() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			Schema.Account a = TestUtils.createAccount();
-			Opportunity o = TestUtils.createOpportunity(a.Id);
-			Contact c1 = TestUtils.createContact(a.Id);
-			Contact c2 = TestUtils.createContact(a.Id);
-			OpportunityContactRole ocr1 = TestUtils.createOpportunityContactRole(o.Id, c1.Id);
-			OpportunityContactRole ocr2 = TestUtils.createOpportunityContactRole(o.Id, c2.Id);
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			onlineEditorFields.add(new OnlineEditor.Field('Name', '', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('Account.Name', '', 'String'));
-
-			List<OnlineEditor.Field> onlineEditorFieldsChild2 = new List<OnlineEditor.Field>();
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Name', '', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Email', '', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Role', '', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Id', '', 'String'));
-
-			OnlineEditor.Query q = new OnlineEditor.Query('Opportunity', null, onlineEditorFields, new List<OnlineEditor.Query> {
-				new OnlineEditor.Query('OpportunityContactRole', 'OpportunityContactRoles', onlineEditorFieldsChild2, null)
-			});
-
-			Test.startTest();
-			OnlineEditor.Query result = GenService.getOnlineEditorMergeData(o.Id, q);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(q.type, result.type);
-			System.assertEquals(q.relationship, result.relationship);
-			System.assertEquals(q.fields[0].type, result.fields[0].type);
-			System.assertEquals(q.fields[0].name, result.fields[0].name);
-			System.assertEquals(o.Name, result.fields[0].value);
-			System.assertEquals(q.fields[1].type, result.fields[1].type);
-			System.assertEquals(q.fields[1].name, result.fields[1].name);
-			System.assertEquals(a.Name, result.fields[1].value);
-			System.assertEquals(q.children[0].type, result.children[0].type);
-			System.assertEquals(q.children[0].relationship, result.children[0].relationship);
-			System.assertEquals(q.children[0].fields[0].type, result.children[0].fields[0].type);
-			System.assertEquals(q.children[0].fields[0].name, result.children[0].fields[0].name);
-			System.assertEquals(q.children[0].children, result.children[0].children);
-
-		}
-	}
-
-	@IsTest
-	static void test_getMergeData_viewer_success() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			Schema.Account a = TestUtils.createAccount();
-			Opportunity o = TestUtils.createOpportunity(a.Id);
-			Contact c1 = TestUtils.createContact(a.Id);
-			Contact c2 = TestUtils.createContact(a.Id);
-			OpportunityContactRole ocr1 = TestUtils.createOpportunityContactRole(o.Id, c1.Id);
-			OpportunityContactRole ocr2 = TestUtils.createOpportunityContactRole(o.Id, c2.Id);
-
-			List<OnlineEditor.Field> onlineEditorFields = new List<OnlineEditor.Field>();
-			onlineEditorFields.add(new OnlineEditor.Field('Name', '', 'String'));
-			onlineEditorFields.add(new OnlineEditor.Field('Account.Name', '', 'String'));
-
-			List<OnlineEditor.Field> onlineEditorFieldsChild2 = new List<OnlineEditor.Field>();
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Name', '', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Contact.Email', '', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Role', '', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditor.Field('Id', '', 'String'));
-
-			OnlineEditor.Query q = new OnlineEditor.Query('Opportunity', null, onlineEditorFields, new List<OnlineEditor.Query> {
-				new OnlineEditor.Query('OpportunityContactRole', 'OpportunityContactRoles', onlineEditorFieldsChild2, null)
-			});
-
-			Test.startTest();
-			OnlineEditor.Query result = GenService.getOnlineEditorMergeData(o.Id, q);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(q.type, result.type);
-			System.assertEquals(q.relationship, result.relationship);
-			System.assertEquals(q.fields[0].type, result.fields[0].type);
-			System.assertEquals(q.fields[0].name, result.fields[0].name);
-			System.assertEquals(o.Name, result.fields[0].value);
-			System.assertEquals(q.fields[1].type, result.fields[1].type);
-			System.assertEquals(q.fields[1].name, result.fields[1].name);
-			System.assertEquals(a.Name, result.fields[1].value);
-			System.assertEquals(q.children[0].type, result.children[0].type);
-			System.assertEquals(q.children[0].relationship, result.children[0].relationship);
-			System.assertEquals(q.children[0].fields[0].type, result.children[0].fields[0].type);
-			System.assertEquals(q.children[0].fields[0].name, result.children[0].fields[0].name);
-			System.assertEquals(q.children[0].children, result.children[0].children);
-
-		}
-	}
-
-	@IsTest
-	static void test_convertData() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			List<OnlineEditor.Field> fields = new List<OnlineEditor.Field>();
-			Fields.add(new OnlineEditor.Field('Name', '', 'String'));
-			Fields.add(new OnlineEditor.Field('IsDeleted', '', 'Boolean'));
-			Fields.add(new OnlineEditor.Field('BillingAddress', '', 'String'));
-			Fields.add(new OnlineEditor.Field('CreatedDate', '', 'String'));
-
-			List<OnlineEditor.Field> childFields = new List<OnlineEditor.Field>();
-			childFields.add(new OnlineEditor.Field('Name', '', 'String'));
-
-			OnlineEditor.Query queryChild = new OnlineEditor.Query('Opportunity', 'Opportunities', childFields, new List<OnlineEditor.Query>());
-			OnlineEditor.Query query = new OnlineEditor.Query('Account', '', fields, new List<OnlineEditor.Query> { queryChild });
-
-			Schema.Account testAccount = new Schema.Account(
-				Name = 'Unit Test Gen ConvertData Account',
-				BillingStreet = '123 Street',
-				BillingCity = 'Fake City',
-				BillingState = 'WA',
-				BillingCountry = 'USA',
-				BillingPostalCode = '98055'
-			);
-			insert testAccount;
-
-			TestUtils.createOpportunity(testAccount.id);
-
-			Schema.Account instertedAccount = (Schema.Account)Collection.head([SELECT Id, BillingAddress, CreatedDate FROM Account WHERE ID = :testAccount.id LIMIT 1]);
-
-			Test.startTest();
-			OnlineEditor.Query result = GenService.convertData(query, GenService.getMergeData(testAccount.id, GenService.convertQuery(query)));
-			System.assertNotEquals(null, result);
-			System.assertEquals(query.type, result.type);
-			System.assertEquals(query.relationship, result.relationship);
-			System.assertEquals(query.fields[0].type, result.fields[0].type);
-			System.assertEquals(query.fields[0].name, result.fields[0].name);
-			System.assertEquals(testAccount.Name, result.fields[0].value);
-			System.assertEquals(query.fields[1].type, result.fields[1].type);
-			System.assertEquals(query.fields[1].name, result.fields[1].name);
-			System.assertEquals('false', result.fields[1].value, result.fields[1].value);
-			System.assertEquals(GenService.formatAddress(instertedAccount.BillingAddress), result.fields[2].value);
-			System.assertEquals(instertedAccount.CreatedDate.format(), result.fields[3].value);
-			System.assertEquals(query.children[0].type, result.children[0].type);
-			System.assertEquals(query.children[0].relationship, result.children[0].relationship);
-			System.assertEquals(query.children[0].fields[0].type, result.children[0].fields[0].type);
-			System.assertEquals(query.children[0].fields[0].name, result.children[0].fields[0].name);
-			System.assertEquals(query.children[0].children, result.children[0].children);
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_formatAddress() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			Test.startTest();
-			Schema.Account a = new Schema.Account(Name = 'UNIT TEST test_formatAddress', BillingStreet = '123 Street', BillingCity = 'Fake City', BillingState = 'WA', BillingCountry = 'USA', BillingPostalCode = '98055');
-			insert a;
-			Schema.Account instertedAccount = (Schema.Account)Collection.head([SELECT ID, BillingAddress FROM Account WHERE ID = :a.id LIMIT 1]);
-			System.assertEquals(
-				String.join(new List<String> { instertedAccount.BillingAddress.getStreet(), instertedAccount.BillingAddress.getCity(), instertedAccount.BillingAddress.getState() + ' ' + instertedAccount.BillingAddress.getPostalCode(), instertedAccount.BillingAddress.getCountry() }, ', '),
-				GenService.formatAddress(instertedAccount.BillingAddress)
-			);
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_saveAttachments() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			Schema.Account testAccount = TestUtils.createAccount();
-			Opportunity testOpportunity = TestUtils.createOpportunity(testAccount.id);
-			GenTemplate__c genTemplate = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
-			genTemplate.Name = TestUtils.randomString(12);
-			genTemplate.SourceObject__c = 'Opportunity';
-			genTemplate.FileName__c = TestUtils.randomString(100);
-			genTemplate.FileSuffix__c = 'Main Data Source Name';
-			update genTemplate;
-
-			String htmlData = '<h1>Hello World</h1>';
-
-			Test.startTest();
-			Id fileId = GenService.saveAttachments(testOpportunity.id, htmlData, genTemplate.id);
-			System.assertNotEquals(fileId, null);
-			ContentVersion cv = (ContentVersion)Collection.head([SELECT Id, Title FROM ContentVersion WHERE Id = :fileId]);
-			Test.stopTest();
-			System.assertEquals(cv.Title.length(), 80);
-			System.assertEquals(cv.Title.substringAfterLast('.'), 'html');
-		}
-	}
-
-	@IsTest
-	static void test_getFileName_mainDataSourceSuffix() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			System.assert(GenService.getFileName('One', 'Main Data Source Name', 'Account').contains('Account'));
-		}
-	}
-
-	@IsTest
-	static void test_getFileName_dateSuffix() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			System.assertEquals(false, GenService.getFileName('One', 'Date', 'Account').contains('Account'));
-		}
-	}
-
-	@IsTest
-	static void test_getFileName_mainDataSourceAndDateSuffix() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			System.assert(GenService.getFileName('One', 'Main Data Source Name and Date', 'Account').contains('Account'));
-			System.assert(GenService.getFileName('One', 'Main Data Source Name and Date', 'Account').contains('One'));
-		}
-	}
-
-	@IsTest
-	static void test_getFileName_blankFileName() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			System.assertEquals(true, GenService.getFileName(null, null, 'Account').contains(Label.Untitled));
-			System.assertEquals(false, GenService.getFileName(null, null, 'Account').contains('Account'));
-		}
-	}
-
-	@IsTest
-	static void test_getFileName_emptySuffix() {
-		System.runAs(UserMock.createDocuSignGeneratorAdminUser(false)) {
-			System.assertEquals('One.html', GenService.getFileName('One', null, 'Account'));
-		}
-	}
-
 }

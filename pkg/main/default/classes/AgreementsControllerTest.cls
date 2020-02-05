@@ -331,7 +331,7 @@ private class AgreementsControllerTest {
 		TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString());
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
-			Negotiate.LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadToken(ScmAPIMock.SOURCE_OBJECT_ID_2);
+			LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadToken(ScmAPIMock.SOURCE_OBJECT_ID_2);
 			Test.stopTest();
 			System.assertNotEquals(null, limitedAccessToken);
 		}
@@ -357,7 +357,7 @@ private class AgreementsControllerTest {
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
-			Negotiate.LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(ScmAPIMock.DOCUMENT_ID.value);
+			LimitedAccessToken limitedAccessToken = AgreementsController.generateDownloadToken(ScmAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assertNotEquals(null, limitedAccessToken);
 		}
@@ -383,7 +383,7 @@ private class AgreementsControllerTest {
 
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
-			Negotiate.LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadNewVersionToken(ScmAPIMock.DOCUMENT_ID.value);
+			LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadNewVersionToken(ScmAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
 			System.assertNotEquals(null, limitedAccessToken);
 		}
@@ -539,9 +539,8 @@ private class AgreementsControllerTest {
 	@IsTest
 	static void test_approveOnBehalfOrRecipientResponse_success() {
 		ScmAPIMock.success();
-		User user = UserMock.createDocuSignAdministrator();
-		System.runAs(user) {
-			Permissions.assignDocuSignNegotiatorPermissionSet(new Set<Id> { user.Id });
+
+		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
 			Boolean result = AgreementsController.approveOnBehalfOrRecipientResponse('Test comment', true, ScmAPIMock.DOCUMENT_ID.value);
 			Test.stopTest();
@@ -679,13 +678,13 @@ private class AgreementsControllerTest {
 			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
 			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
 
-			String fileIdsInCommaSeparated = String.Join(new List<String> { result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId }, ',');
+			String fileIdsInCommaSeparated = String.join(new List<String> { result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId }, ',');
 
 			Test.startTest();
-			Pagereference ref = new PageReference(AgreementsController.getSendingDeepLink(a.Id, fileIdsInCommaSeparated));
+			PageReference ref = new PageReference(AgreementsController.getSendingDeepLink(a.Id, fileIdsInCommaSeparated));
 			Test.stopTest();
 
-			System.assertEquals((Id)ref.getParameters().get('sid'), a.id);
+			System.assertEquals((Id)ref.getParameters().get('sid'), a.Id);
 			System.assertEquals(EncodingUtil.urlDecode(ref.getParameters().get('files'), StringUtils.ENCODING), fileIdsInCommaSeparated);
 		}
 	}

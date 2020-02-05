@@ -84,7 +84,7 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Negotiate.LimitedAccessToken generateUploadToken(final Id objectId) {
+	public static LimitedAccessToken generateUploadToken(final Id objectId) {
 		try {
 			return NegotiateService.generateUploadToken(objectId);
 		} catch (Exception ex) {
@@ -93,7 +93,7 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Negotiate.LimitedAccessToken generateDownloadToken(final String objectId) {
+	public static LimitedAccessToken generateDownloadToken(final String objectId) {
 		try {
 			return NegotiateService.generateDownloadToken(UUID.parse(objectId));
 		} catch (Exception ex) {
@@ -102,7 +102,7 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Negotiate.LimitedAccessToken generateUploadNewVersionToken(final String agreementId) {
+	public static LimitedAccessToken generateUploadNewVersionToken(final String agreementId) {
 		try {
 			return NegotiateService.generateUploadNewVersionToken(UUID.parse(agreementId));
 		} catch (Exception ex) {

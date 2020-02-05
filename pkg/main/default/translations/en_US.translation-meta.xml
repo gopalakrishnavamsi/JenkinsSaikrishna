@@ -4743,6 +4743,10 @@
 		<label>Invalid query</label>
 		<name>InvalidQuery</name>
 	</customLabels>
+	<customLabels>
+		<label>You must have DocuSign administrator or generator permissions to perform this operation.</label>
+		<name>MustBeAdministratorOrGenerator</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

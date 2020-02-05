@@ -845,7 +845,7 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataService.updateLayouts(Contact.getSObjectType(), null, null);
+				MetadataService.updateLayouts(Contact.getSObjectType(), null, null, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -866,19 +866,19 @@ private class MetadataServiceTest {
 
 			Test.startTest();
 			try {
-				MetadataService.updateLayouts(null, new List<Layout> { l }, null);
+				MetadataService.updateLayouts(null, new List<Layout> { l }, null, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				MetadataService.updateLayouts(Contact.getSObjectType(), null, null);
+				MetadataService.updateLayouts(Contact.getSObjectType(), null, null, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				MetadataService.updateLayouts(Contact.getSObjectType(), new List<Layout>(), null);
+				MetadataService.updateLayouts(Contact.getSObjectType(), new List<Layout>(), null, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
@@ -892,7 +892,7 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				MetadataService.updateLayouts(Lead.getSObjectType(), new List<Layout> { null }, null);
+				MetadataService.updateLayouts(Lead.getSObjectType(), new List<Layout> { null }, null, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidLayout, ex.getMessage());
@@ -931,7 +931,9 @@ private class MetadataServiceTest {
 			Test.startTest();
 			List<Layout> result = MetadataService.updateLayouts(
 				Contact.getSObjectType(),
-				new List<Layout> { l1, l2 }, null);
+				new List<Layout> { l1, l2 },
+				null,
+				null);
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
@@ -970,7 +972,8 @@ private class MetadataServiceTest {
 			List<Layout> result = MetadataService.updateLayouts(
 				Contact.getSObjectType(),
 				new List<Layout> { l1, l2 },
-				parameters);
+				parameters,
+				null);
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));

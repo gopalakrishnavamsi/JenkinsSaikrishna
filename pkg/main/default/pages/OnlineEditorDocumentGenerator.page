@@ -1,4 +1,4 @@
-<apex:page id="OnlineEditorDocumentGenerator" sidebar="false" showHeader="false" controller="GenController"
+<apex:page id="OnlineEditorDocumentGenerator" sidebar="false" showHeader="false" controller="OnlineEditorController"
            title="Generate Documents" standardStylesheets="false" applyHtmlTag="false">
     <html>
     <apex:includeLightning/>
@@ -13,11 +13,11 @@
       Visualforce.remoting.timeout = 120000;
 
       RemoteActions = {
-        generateDownloadToken: '{!$RemoteAction.GenController.generateDownloadToken}',
-        saveAttachments: '{!$RemoteAction.GenController.saveAttachments}',
-        getMergeData: '{!$RemoteAction.GenController.getOnlineEditorMergeData}',
-        getMergeFields: '{!$RemoteAction.GenController.getMergeFields}',
-        getEntityRecords: '{!$RemoteAction.GenController.getEntityRecords}'
+        generateDownloadToken: '{!$RemoteAction.OnlineEditorController.generateDownloadToken}',
+        saveAttachments: '{!$RemoteAction.OnlineEditorController.saveAttachments}',
+        getMergeData: '{!$RemoteAction.OnlineEditorController.getMergeData}',
+        getMergeFields: '{!$RemoteAction.OnlineEditorController.getMergeFields}',
+        getEntityRecords: '{!$RemoteAction.OnlineEditorController.getEntityRecords}'
       };
 
       Configuration = {

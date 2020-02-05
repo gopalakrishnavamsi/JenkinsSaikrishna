@@ -180,4 +180,19 @@ private class UnauthorizedExceptionTest {
 		System.assertEquals(UserInfo.getUserId(), result.userId);
 		System.assertEquals(UnauthorizedException.AccessRequirement.OriginalUser, result.requirement);
 	}
+
+	@IsTest
+	static void test_requirement() {
+		Test.startTest();
+		UnauthorizedException result = new UnauthorizedException(
+			'test',
+			UnauthorizedException.AccessRequirement.SecurityPermission);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals('test', result.getMessage());
+		System.assertEquals(UserInfo.getUserId(), result.userId);
+		System.assertEquals(UnauthorizedException.AccessRequirement.SecurityPermission, result.requirement);
+
+	}
 }

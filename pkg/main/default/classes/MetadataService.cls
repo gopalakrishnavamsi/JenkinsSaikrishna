@@ -822,10 +822,12 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+	// FIXME: Consolidate Gen action logic. Pass in deserialized, validated types to this method.
 	public static List<Layout> updateLayouts(
 		final SObjectType type,
 		final List<Layout> layouts,
-		final String parameters) {
+		final String parameters,
+		final UUID scmTemplateId) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -840,7 +842,7 @@ public with sharing class MetadataService {
 			} else if (l.hasGenAction()) {
 				getGenAction(type, parameters);
 			} else if (l.hasOnlineEditorAction()) {
-				getOnlineEditorAction(type, parameters);
+				getOnlineEditorAction(type, parameters, scmTemplateId);
 			}
 		}
 		if (ls != null && ls.keySet().size() > 0) {
@@ -863,21 +865,21 @@ public with sharing class MetadataService {
 		final SObjectType type,
 		final String actionName,
 		final String actionLabel,
-		final Id onlineEditorSalesforceTemplateId) {
+		final Id templateId,
+		final UUID scmTemplateId) {
 
 		if (type == null || String.isBlank(actionName)) return null;
 
 		MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)Collection.head(MetadataAPI.getInstance().readMetadata(
 			'WebLink', new List<String> { getActionFullName(type, actionName) }));
-		String onlineEditorTemplateId = GenService.getOnlineEditorTemplateId(onlineEditorSalesforceTemplateId);
 		if (webLink == null) {
 
 			Map <String, String> parametersMap = new Map<String, String>();
-			parametersMap.put('templateId', onlineEditorSalesforceTemplateId);
+			parametersMap.put('templateId', templateId);
 			parametersMap.put('recordId', type + '.Id');
 			parametersMap.put('recordName', type + '.' + Salesforce.getNameField(type));
 			parametersMap.put('title', actionLabel);
-			parametersMap.put('onlineEditorTemplateId', onlineEditorTemplateId);
+			parametersMap.put('onlineEditorTemplateId', String.valueOf(scmTemplateId));
 			webLink = createWebLink(
 				type,
 				actionName,
@@ -894,116 +896,23 @@ public with sharing class MetadataService {
 	@TestVisible
 	private static MetadataAPI.WebLink getOnlineEditorAction(
 		final SObjectType type,
-		final String parameters) {
+		final String parameters,
+		final UUID scmTemplateId) {
 
 		if (type == null) return null;
 
 		MetadataAPI.WebLink result = ONLINE_EDITOR_ACTIONS.get(type);
 		if (result == null) {
 			Gen.LayoutParameters genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
-			result = getOnlineEditorWebLink(type, genLayoutParameters.genButtonApiName, genLayoutParameters.genButtonLabel, genLayoutParameters.genTemplateId);
+			result = getOnlineEditorWebLink(
+				type,
+				genLayoutParameters.genButtonApiName,
+				genLayoutParameters.genButtonLabel,
+				genLayoutParameters.genTemplateId,
+				scmTemplateId);
 			ONLINE_EDITOR_ACTIONS.put(type, result);
 		}
 		return result;
 	}
-
-	public static OnlineEditorMergeObject getObjectsRecursively(final SObjectType type) {
-		if (type == null) throw new DocuSignException(Label.UndefinedArgument);
-		Permissions.verifyIsDocuSignAdministrator();
-
-		OnlineEditorMergeObject obj = OnlineEditorMergeObject.forType(type.getDescribe());
-		Map<String, String[]> resolvedObjects = new Map<String, String[]>();
-		String[] path = new List<String>();
-		return getObjectsRecursively(obj, 1, resolvedObjects, path);
-	}
-
-	public static OnlineEditorMergeObject getObjectsRecursively(
-		final OnlineEditorMergeObject obj,
-		Integer depth,
-		Map<String, String[]> resolvedObjects,
-		String[] path) {
-		if (!OnlineEditorMergeObject.isValid(obj.describe)) {
-			return obj;
-		}
-		if (depth == 1) {
-			obj.children.addAll(getChildRelationships(obj.describe, obj.name));
-		}
-
-		if (!resolvedObjects.containsKey(obj.name)) {
-			resolvedObjects.put(obj.name, path);
-		}
-		path.add(obj.name);
-		for (OnlineEditorMergeObject refObject : getReferenceObjects(obj.describe)) {
-			if (!resolvedObjects.containsKey(refObject.name)) {
-				obj.children.add(getObjectsRecursively(refObject, depth + 1, resolvedObjects, path.clone()));
-			} else {
-				refObject.childrenPath = resolvedObjects.get(refObject.name);
-				obj.children.add(refObject);
-			}
-		}
-
-		return obj;
-	}
-
-	private static List<OnlineEditorMergeObject> getReferenceObjects(final DescribeSObjectResult type) {
-		List<OnlineEditorMergeObject> result = new List<OnlineEditorMergeObject>();
-		for (SObjectField f : type.fields.getMap().values()) {
-			DescribeFieldResult field = f.getDescribe();
-			if (!field.getReferenceTo().isEmpty() && OnlineEditorMergeObject.isValid(field)) {
-				result.add(OnlineEditorMergeObject.forField(field));
-			}
-		}
-		return result;
-	}
-
-	private static List<OnlineEditorMergeObject> getChildRelationships(final DescribeSObjectResult type, final String parent) {
-		List<OnlineEditorMergeObject> result = new List<OnlineEditorMergeObject>();
-		for (Schema.ChildRelationship cr : type.getChildRelationships()) {
-			if (MergeField.isValid(cr)) {
-				OnlineEditorMergeObject obj = OnlineEditorMergeObject.forChildRelationship(cr);
-				result.add(obj);
-			}
-		}
-		return result;
-	}
-
-	private static List<MergeField> getOnlineEditorFields(final DescribeSObjectResult type) {
-		List<MergeField> result = new List<MergeField>();
-		for (SObjectField f : type.fields.getMap().values()) {
-			DescribeFieldResult field = f.getDescribe();
-			if (field.getReferenceTo().isEmpty() && MergeField.isValid(field)) {
-				result.add(MergeField.forField(field, null));
-			}
-		}
-		return result;
-	}
-
-	public static Map<String, MergeField[]> getFieldsRecursively(final OnlineEditorMergeObject obj) {
-		Map<String, MergeField[]> fields = new Map<String, MergeField[]>();
-		return getFieldsRecursively(obj, fields);
-	}
-
-	public static Map<String, MergeField[]> getFieldsRecursively(final OnlineEditorMergeObject obj, Map<String, MergeField[]> fields) {
-		if (!fields.containsKey(obj.name)) {
-			fields.put(obj.name, getOnlineEditorFields(obj.describe));
-		}
-		for (OnlineEditorMergeObject child : obj.children) {
-			getFieldsRecursively(child, fields);
-		}
-		return fields;
-	}
-
-	public static Map<String, String> picklistValues(String objectName, String fieldName) {
-		Map<String, String> values = new Map<String, String> {};
-		List<Schema.DescribeSObjectResult> results = Schema.describeSObjects(new List<String> { objectName });
-		for (Schema.DescribeSObjectResult res : results) {
-			for (Schema.PicklistEntry entry : res.fields.getMap().get(fieldName).getDescribe().getPicklistValues()) {
-				if (entry.isActive()) {
-					values.put(entry.getValue(), entry.getLabel());
-				}
-			}
-		}
-		return values;
-	}
-// OnlineEditor logic end
+	// OnlineEditor logic end
 }

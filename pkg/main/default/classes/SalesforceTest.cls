@@ -254,17 +254,10 @@ private class SalesforceTest {
 	@IsTest
 	static void test_getParentSobjectType() {
 		Test.startTest();
-		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getParentSobjectType(Schema.Account.getSObjectType(), 'ParentId'));
-		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getParentSobjectType(Schema.Account.getSObjectType(), 'MasterRecordId'));
-		System.assertEquals(Schema.Case.getSObjectType(), Salesforce.getParentSobjectType(Schema.Case.getSObjectType(), 'ParentId'));
-		System.assertEquals(Schema.User.getSObjectType(), Salesforce.getParentSobjectType(Schema.Case.getSObjectType(), 'OwnerID'));
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_checkIfMultiCurrencyIsEnabled() {
-		Test.startTest();
-		System.assertEquals(UserInfo.isMultiCurrencyOrganization(), Salesforce.checkIfMultiCurrencyIsEnabled());
+		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getParentSObjectType(Schema.Account.getSObjectType(), 'ParentId'));
+		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getParentSObjectType(Schema.Account.getSObjectType(), 'MasterRecordId'));
+		System.assertEquals(Schema.Case.getSObjectType(), Salesforce.getParentSObjectType(Schema.Case.getSObjectType(), 'ParentId'));
+		System.assertEquals(Schema.User.getSObjectType(), Salesforce.getParentSObjectType(Schema.Case.getSObjectType(), 'OwnerID'));
 		Test.stopTest();
 	}
 }

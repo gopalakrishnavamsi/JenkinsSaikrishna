@@ -372,7 +372,7 @@ private class NegotiateServiceTest {
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString());
 			Test.startTest();
-			Negotiate.LimitedAccessToken limitedAccessToken = NegotiateService.generateUploadToken(ScmAPIMock.SOURCE_OBJECT_ID_2);
+			LimitedAccessToken limitedAccessToken = NegotiateService.generateUploadToken(ScmAPIMock.SOURCE_OBJECT_ID_2);
 			Test.stopTest();
 
 			System.assertNotEquals(null, limitedAccessToken);
@@ -388,7 +388,7 @@ private class NegotiateServiceTest {
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
-			Negotiate.LimitedAccessToken limitedAccessToken = NegotiateService.generateDownloadToken(ScmAPIMock.DOCUMENT_ID);
+			LimitedAccessToken limitedAccessToken = NegotiateService.generateDownloadToken(ScmAPIMock.DOCUMENT_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, limitedAccessToken);
@@ -404,7 +404,7 @@ private class NegotiateServiceTest {
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
 			Test.startTest();
-			Negotiate.LimitedAccessToken limitedAccessToken = NegotiateService.generateUploadNewVersionToken(ScmAPIMock.DOCUMENT_ID);
+			LimitedAccessToken limitedAccessToken = NegotiateService.generateUploadNewVersionToken(ScmAPIMock.DOCUMENT_ID);
 			Test.stopTest();
 
 			System.assertNotEquals(null, limitedAccessToken);

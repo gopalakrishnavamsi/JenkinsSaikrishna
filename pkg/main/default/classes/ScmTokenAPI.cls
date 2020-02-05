@@ -37,11 +37,11 @@ public with sharing class ScmTokenAPI extends ScmAPI {
 		public String APIUploadBaseUrl;
 		public String APIDownloadBaseUrl;
 
-		public Negotiate.LimitedAccessToken toExternalForm(
+		public LimitedAccessToken toExternalForm(
 			final UUID accountId,
 			final UUID entityId) {
 
-			return new Negotiate.LimitedAccessToken(
+			return new LimitedAccessToken(
 				accessToken,
 				accountId,
 				entityId,
@@ -51,7 +51,7 @@ public with sharing class ScmTokenAPI extends ScmAPI {
 		}
 	}
 
-	public Negotiate.LimitedAccessToken generateLimitedAccessToken(
+	public LimitedAccessToken generateLimitedAccessToken(
 		final UUID entityId,
 		final String accessToken) {
 
@@ -61,7 +61,7 @@ public with sharing class ScmTokenAPI extends ScmAPI {
 			RestAPI.defaultTimeout);
 	}
 
-	public Negotiate.LimitedAccessToken generateLimitedAccessToken(
+	public LimitedAccessToken generateLimitedAccessToken(
 		final UUID entityId,
 		final String accessToken,
 		final Integer timeout) {
