@@ -2,6 +2,54 @@
 private class GenControllerTest {
 
 	@IsTest
+	static void test_constructor_default() {
+		PageReference pg = Page.GenDocumentGenerator;
+		Test.setCurrentPage(pg);
+
+		Test.startTest();
+		try {
+			new GenController();
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedId, ex.getMessage());
+		}
+
+		pg.getParameters().put('id', UserInfo.getOrganizationId());
+		GenController result1 = new GenController();
+
+		pg.getParameters().put('templateId', UserInfo.getUserId());
+		GenController result2 = new GenController();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result1);
+		System.assertEquals(UserInfo.getOrganizationId(), result1.templateId);
+
+		System.assertNotEquals(null, result2);
+		System.assertEquals(UserInfo.getUserId(), result2.templateId);
+	}
+
+	@IsTest
+	static void test_constructor_standard() {
+		GenTemplate__c template = new GenTemplate__c(
+			Name = UUID.randomUUID().toString(),
+			TemplateType__c = Gen.TYPE_WORD);
+		insert template;
+
+		Test.startTest();
+		try {
+			new GenController(null);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedId, ex.getMessage());
+		}
+		GenController result = new GenController(new ApexPages.StandardController(template));
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(template.Id, result.templateId);
+	}
+
+	@IsTest
 	static void test_clone_failure() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
@@ -513,18 +561,30 @@ private class GenControllerTest {
 	}
 
 	@IsTest
+	static void test_redirectOnEdit_word() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			template.TemplateType__c = Gen.TYPE_WORD;
+			update template;
+
+			Test.startTest();
+			GenController controller = new GenController(new ApexPages.StandardController(template));
+			PageReference result1 = controller.redirectOnEdit();
+			System.assertEquals(result1.getParameters().get('isEdit'), 'true');
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_redirectOnEdit_isEdit() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			template.TemplateId__c = UUID.randomUUID().toString();
-			template.TemplateType__c = Gen.ONLINE_EDITOR_TYPE;
+			template.TemplateType__c = Gen.TYPE_ONLINE;
 			update template;
 
-			Test.setCurrentPage(Page.OnlineEditorGenTemplate);
-			ApexPages.currentPage().getParameters().put('id', template.Id);
-
 			Test.startTest();
-			GenController controller = new GenController();
+			GenController controller = new GenController(new ApexPages.StandardController(template));
 			PageReference result2 = controller.redirectOnEdit();
 			System.assertEquals(result2.getParameters().get('isEdit'), 'true');
 			Test.stopTest();
@@ -535,14 +595,11 @@ private class GenControllerTest {
 	static void test_redirectOnEdit() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
-			template.TemplateType__c = Gen.ONLINE_EDITOR_TYPE;
+			template.TemplateType__c = Gen.TYPE_ONLINE;
 			update template;
 
-			Test.setCurrentPage(Page.OnlineEditorGenTemplate);
-			ApexPages.currentPage().getParameters().put('id', template.Id);
-
 			Test.startTest();
-			GenController controller = new GenController();
+			GenController controller = new GenController(new ApexPages.StandardController(template));
 			PageReference result1 = controller.redirectOnEdit();
 			System.assertEquals(result1.getParameters().get('isEdit'), 'false');
 			Test.stopTest();
@@ -603,20 +660,19 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_redirectOnNewTemplate_OnlineEditor() {
+	static void test_redirectOnNewTemplate_online() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
-			template.TemplateType__c = Gen.ONLINE_EDITOR_TYPE;
+			template.TemplateType__c = Gen.TYPE_ONLINE;
 			update template;
 
-			Test.setCurrentPage(Page.GenTemplateNavigator);
-			ApexPages.currentPage().getParameters().put('id', template.Id);
 			PageReference expectedOnlineEditorPage = Page.OnlineEditorGenTemplate ;
 			expectedOnlineEditorPage.getParameters().put('id', template.Id);
 			expectedOnlineEditorPage.getParameters().put('isEdit', 'false');
 			expectedOnlineEditorPage.getParameters().put('isFromSetupWizard', 'false');
+
 			Test.startTest();
-			GenController controller = new GenController();
+			GenController controller = new GenController(new ApexPages.StandardController(template));
 			PageReference result = controller.redirectOnNewTemplate();
 			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedOnlineEditorPage.getUrl(), result.getUrl());
 			Test.stopTest();
@@ -624,20 +680,19 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_redirectOnNewTemplate_WordBasedGen() {
+	static void test_redirectOnNewTemplate_word() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
-			template.TemplateType__c = 'Microsoft Word';
+			template.TemplateType__c = Gen.TYPE_WORD;
 			update template;
 
-			Test.setCurrentPage(Page.GenTemplateNavigator);
-			ApexPages.currentPage().getParameters().put('id', template.Id);
-			PageReference expectedWordBasedGenPage = Page.GenTemplate ;
+			PageReference expectedWordBasedGenPage = Page.GenTemplate;
 			expectedWordBasedGenPage.getParameters().put('id', template.Id);
 			expectedWordBasedGenPage.getParameters().put('isEdit', 'false');
 			expectedWordBasedGenPage.getParameters().put('isFromSetupWizard', 'false');
+
 			Test.startTest();
-			GenController controller = new GenController();
+			GenController controller = new GenController(new ApexPages.StandardController(template));
 			PageReference result = controller.redirectOnNewTemplate();
 			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedWordBasedGenPage.getUrl(), result.getUrl());
 			Test.stopTest();

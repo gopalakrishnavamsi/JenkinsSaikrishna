@@ -131,6 +131,8 @@ public with sharing class MetadataService {
 			result.addAll(getChildRelationships(typeDesc));
 		}
 
+		result.sort();
+
 		return result;
 	}
 

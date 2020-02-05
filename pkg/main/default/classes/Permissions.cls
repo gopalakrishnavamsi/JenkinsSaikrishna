@@ -177,7 +177,6 @@ public with sharing class Permissions {
 				List<PermissionSetAssignment> ps = new List<PermissionSetAssignment>();
 				for (Id userId : userIds) {
 					for (Id permissionSetId : permissionSetIds) {
-						System.debug(userId + ':' + permissionSetId);
 						ps.add(new PermissionSetAssignment(PermissionSetId = permissionSetId, AssigneeId = userId));
 					}
 				}

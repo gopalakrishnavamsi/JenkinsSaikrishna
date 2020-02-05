@@ -1,13 +1,25 @@
 public with sharing class GenController extends Controller {
 
-	public PageReference redirectOnEdit() {
-		PageReference redirectPage;
+	public Id templateId { get; set; }
+
+	public GenController() {
 		QueryString params = QueryString.fromCurrentPage();
-		Id templateId = params.getId('id', params.getId('templateId', null));
-		if (templateId != null) {
-			Gen.Template template = GenService.getTemplate(templateId);
-			Boolean editMode = template.templateType.equals(Gen.ONLINE_EDITOR_TYPE) ? template.springTemplateId != null : true;
-			redirectPage = new PageReference(GenService.getTemplateUrl(template, false).toExternalForm());
+		this.templateId = params.getId('templateId', params.getId('id', null));
+		if (String.isBlank(templateId)) throw new DocuSignException(Label.UndefinedId);
+	}
+
+	public GenController(final ApexPages.StandardController c) {
+		this.templateId = c == null ? null : c.getId();
+		if (String.isBlank(templateId)) throw new DocuSignException(Label.UndefinedId);
+	}
+
+	public PageReference redirectOnEdit() {
+		PageReference redirectPage = null;
+		if (this.templateId != null) {
+			Gen.Template template = GenService.getTemplate(this.templateId);
+			Boolean editMode = template.templateType != Gen.TYPE_ONLINE || template.springTemplateId != null;
+			redirectPage = new PageReference(
+				GenService.getTemplateUrl(template, false).toExternalForm());
 			redirectPage.getParameters().put('isEdit', String.valueOf(editMode));
 			redirectPage.setRedirect(true);
 		}
@@ -16,10 +28,8 @@ public with sharing class GenController extends Controller {
 
 	public PageReference redirectOnNewTemplate() {
 		PageReference redirectPage;
-		QueryString params = QueryString.fromCurrentPage();
-		Id templateId = params.getId('id', params.getId('templateId', null));
-		if (templateId != null) {
-			Gen.Template template = GenService.getTemplate(templateId);
+		if (this.templateId != null) {
+			Gen.Template template = GenService.getTemplate(this.templateId);
 			redirectPage = new PageReference(GenService.getTemplateUrl(template, false).toExternalForm());
 			redirectPage.getParameters().put('isEdit', 'false');
 			redirectPage.setRedirect(true);

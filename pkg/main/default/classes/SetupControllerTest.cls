@@ -850,7 +850,7 @@ private class SetupControllerTest {
 				new Set<String> { Permissions.DOCUSIGN_GENERATOR, Permissions.DOCUSIGN_NEGOTIATOR });
 
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
-			template.TemplateType__c = Gen.ONLINE_EDITOR_TYPE;
+			template.TemplateType__c = Gen.TYPE_ONLINE;
 			update template;
 
 			Test.setCurrentPage(Page.GenTemplateNavigator);

@@ -614,7 +614,7 @@ private class OnlineEditorControllerTest {
 	@IsTest
 	static void test_deleteTemplate_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Account');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.TYPE_ONLINE, SourceObject__c = 'Account');
 			insert testTemplate;
 			Test.startTest();
 			System.assertEquals(1, [SELECT COUNT() FROM GenTemplate__c]);
@@ -627,7 +627,7 @@ private class OnlineEditorControllerTest {
 	@IsTest
 	static void test_deleteTemplate_unauthorized() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Account');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.TYPE_ONLINE, SourceObject__c = 'Account');
 			insert testTemplate;
 			Test.startTest();
 			try {
@@ -670,7 +670,7 @@ private class OnlineEditorControllerTest {
 	static void test_updateLayouts_success() {
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Account');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.TYPE_ONLINE, SourceObject__c = 'Account');
 			insert testTemplate;
 			Layout l1 = new Layout(
 				Contact.getSObjectType(),
@@ -750,13 +750,13 @@ private class OnlineEditorControllerTest {
 	@IsTest
 	static void test_updateTemplate_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Account');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.TYPE_ONLINE, SourceObject__c = 'Account');
 			insert testTemplate;
 			System.assertNotEquals(null, testTemplate.Id);
 			System.assertEquals('TestTemplate', [SELECT Id, Name FROM GenTemplate__c LIMIT 1].Name);
-			System.assertEquals(Gen.ONLINE_EDITOR_TYPE, [SELECT Id, TemplateType__c FROM GenTemplate__c LIMIT 1].TemplateType__c);
+			System.assertEquals(Gen.TYPE_ONLINE, [SELECT Id, TemplateType__c FROM GenTemplate__c LIMIT 1].TemplateType__c);
 			System.assertEquals('Account', [SELECT Id, SourceObject__c FROM GenTemplate__c LIMIT 1].SourceObject__c);
-			Gen.Template testTemplateInstance = new Gen.Template(testTemplate.Id, 'UpdatedGenTemplate', 'Contact', Gen.ONLINE_EDITOR_TYPE, null, null, null, null, null, null, null, null, null, null, null, null);
+			Gen.Template testTemplateInstance = new Gen.Template(testTemplate.Id, 'UpdatedGenTemplate', 'Contact', Gen.TYPE_ONLINE, null, null, null, null, null, null, null, null, null, null, null, null);
 			Test.startTest();
 			testTemplateInstance = OnlineEditorController.updateTemplate(JSON.serialize(testTemplateInstance));
 			Test.stopTest();
@@ -769,7 +769,7 @@ private class OnlineEditorControllerTest {
 	@IsTest
 	static void test_updateTemplate_unauthorized() {
 		System.runAs(UserMock.createUser()) {
-			Gen.Template testGenTemplate = new Gen.Template(null, 'TestGenTemplate', 'Account', Gen.ONLINE_EDITOR_TYPE, null, null, null, null, null, null, null, null, null, null, null, null);
+			Gen.Template testGenTemplate = new Gen.Template(null, 'TestGenTemplate', 'Account', Gen.TYPE_ONLINE, null, null, null, null, null, null, null, null, null, null, null, null);
 			Test.startTest();
 			try {
 				OnlineEditorController.updateTemplate(JSON.serialize(testGenTemplate));
@@ -786,7 +786,7 @@ private class OnlineEditorControllerTest {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Contact testContact = new Contact(FirstName = 'testContact', LastName = 'test', Email = 'unittest@test.com');
 			insert testContact;
-			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE, SourceObject__c = 'Contact', FileName__c = 'Main', FileSuffix__c = 'Main Data Source');
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.TYPE_ONLINE, SourceObject__c = 'Contact', FileName__c = 'Main', FileSuffix__c = 'Main Data Source');
 			insert testTemplate;
 			Id testAttachmentId;
 			Test.startTest();
@@ -801,7 +801,7 @@ private class OnlineEditorControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Contact testContact = new Contact(FirstName = 'testContact', LastName = 'test', Email = 'unittest@test.com');
 			insert testContact;
-			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.ONLINE_EDITOR_TYPE);
+			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.TYPE_ONLINE);
 			insert testTemplate;
 			Test.startTest();
 			try {

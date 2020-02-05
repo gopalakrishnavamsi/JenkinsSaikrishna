@@ -8,7 +8,7 @@
 
     <apex:form>
         <apex:actionFunction name="redirectToNewTemplateUrl" action="{!redirectOnNewTemplate}" reRender="">
-            <apex:param name="id" value=""/>
+            <apex:param name="templateId" assignTo="{!templateId}" value=""/>
         </apex:actionFunction>
     </apex:form>
 

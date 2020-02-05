@@ -1,6 +1,7 @@
 public class Gen {
 
-	public static final String ONLINE_EDITOR_TYPE = 'Online Editor';
+	public static final String TYPE_WORD = 'Microsoft Word';
+	public static final String TYPE_ONLINE = 'Online Editor';
 
 	public class File {
 		@AuraEnabled

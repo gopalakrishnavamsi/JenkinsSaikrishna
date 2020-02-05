@@ -832,7 +832,8 @@ public with sharing class GenService {
 			Application.namespacePrefix + 'TemplateType__c',
 			Application.namespacePrefix + 'TemplateId__c'
 		});
-		PageReference templatePage = template.templateType.equals(Gen.ONLINE_EDITOR_TYPE) ? Page.OnlineEditorGenTemplate : Page.GenTemplate;
+		PageReference templatePage = template.templateType == Gen.TYPE_ONLINE
+			? Page.OnlineEditorGenTemplate : Page.GenTemplate;
 		templatePage.getParameters().put('id', template.id);
 		templatePage.getParameters().put('isFromSetupWizard', String.valueOf(isFromSetupWizard));
 		return new Url(Salesforce.baseUrl, templatePage.getUrl());
