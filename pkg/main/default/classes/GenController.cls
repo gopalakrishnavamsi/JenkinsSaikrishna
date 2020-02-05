@@ -90,7 +90,7 @@ public with sharing class GenController extends Controller {
 		final Integer depth) {
 
 		try {
-			return MetadataService.getFields(Salesforce.getSObjectType(sObjectType), depth > 0 ? 1 : depth);
+			return MetadataService.getFields(Salesforce.getSObjectType(sObjectType), depth > 0 ? depth : 1);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to retrieve merge fields.');
 		}
