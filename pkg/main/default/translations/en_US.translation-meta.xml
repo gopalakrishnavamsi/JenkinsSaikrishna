@@ -2246,8 +2246,12 @@
 		<name>SetApprovalOrder</name>
 	</customLabels>
 	<customLabels>
-		<label>Choose from the Salesforce users in your organization.</label>
+		<label>Select Approvers: Any users you choose from your organization’s Salesforce users will be able to approve.</label>
 		<name>InternalApprovalChooseUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Approvers: Control the order in which your organization’s Salesforce users will receive and approve your documents.</label>
+		<name>InternalApprovalChooseUsersSequential</name>
 	</customLabels>
 	<customLabels>
 		<label>Select Approvers</label>

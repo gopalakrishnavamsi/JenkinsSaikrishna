@@ -4589,7 +4589,14 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>InternalApprovalChooseUsers</shortDescription>
-		<value>Choose from the Salesforce users in your organization.</value>
+		<value>Select Approvers: Any users you choose from your organization’s Salesforce users will be able to approve.</value>
+	</labels>
+	<labels>
+		<fullName>InternalApprovalChooseUsersSequential</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>InternalApprovalChooseUsersSequential</shortDescription>
+		<value>Select Approvers: Control the order in which your organization’s Salesforce users will receive and approve your documents.</value>
 	</labels>
 	<labels>
 		<fullName>SelectApprovers</fullName>

@@ -48,7 +48,12 @@
                 <article class="slds-card slds-p-bottom_medium">
                     <div class="slds-text-align_center">
                         <div class="slds-text-body_small slds-p-bottom_large">
-                            {!$Label.c.InternalApprovalChooseUsers}
+                            <aura:if isTrue="{!v.showApprovalOrder}">
+                                  {!$Label.c.InternalApprovalChooseUsersSequential}
+                                <aura:set attribute="else">
+                                  {!$Label.c.InternalApprovalChooseUsers}
+                                </aura:set>
+                            </aura:if>
                         </div>
                     </div>
                     <div class="slds-card__body_inner slds-p-horizontal--large">
