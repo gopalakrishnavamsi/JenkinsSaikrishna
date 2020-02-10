@@ -98,7 +98,7 @@
       envelopeRecipientId: placeholder ? placeholder.envelopeRecipientId : null,
       type: 'Signer',
       routingOrder: routingOrder,
-      role: placeholder ? self.resolvedRole({name: placeholder.role, value: null}, defaultRoles) : null,
+      role: placeholder ? self.resolveRole({name: placeholder.role, value: null}, defaultRoles) : null,
       name: null,
       email: null,
       signingGroup: null,
