@@ -150,6 +150,17 @@
         .hide-on-start-up {
             display: none;
         }
+
+        .layout-default {
+            padding: 8px !important;
+        }
+
+        .layout-checkbox[type="checkbox"]:checked + .slds-checkbox__label .slds-checkbox_faux:after {
+            top: 44% !important;
+            left: 50% !important;
+            height: .35rem !important;
+            width: .70rem !important;
+        }
     </style>
 
     <div class="slds-scope">

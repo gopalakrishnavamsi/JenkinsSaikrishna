@@ -515,7 +515,7 @@ jQuery(document).ready(function ($) {
             var layout = layouts[i];
             layoutsById[layout.id] = layout;
             var checked = !Configuration.isEditing || hasOnlineEditorAction(layout, templateId) ? 'checked' : '';
-            $('#layoutCheckboxes').append('<div><input name=layoutCheckboxI type=checkbox value="' + layout.id + '" ' + checked + '><label class="slds-form-element__label slds-p-left_small onlineEditorContentText">' + layout.name + '</label><div>');
+            $('#layoutCheckboxes').append('<div class="slds-form-element slds-p-bottom--small"><div class="slds-form-element__control"><div class="slds-checkbox"><input type="checkbox" class="layout-checkbox" name="layoutCheckboxI" id="' + layout.id + '" value="' + layout.id + '" ' + checked + '/><label class="slds-checkbox__label" for="' + layout.id + '"><span class="slds-checkbox_faux layout-default"></span><span class="slds-form-element__label onlineEditorContentText">' + layout.name + '</span></label></div></div></div>');
           }
           resolve(layoutsById);
         } catch (err) {

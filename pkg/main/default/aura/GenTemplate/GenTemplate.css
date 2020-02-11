@@ -120,19 +120,19 @@
 }
 
 .THIS .ds-checkbox_large [type="checkbox"] + .slds-checkbox__label .slds-checkbox_faux {
-    width: t(spacingLarge);
-    height: t(spacingLarge);
-    box-shadow: 0 0 3px 3px t(colorBackground) inset;
+    width: 1.14rem;
+    height: 1.14rem;
     background-color: #fdfdfd;
     margin: 0;
 }
 
 .THIS .ds-checkbox_large [type="checkbox"]:checked + .slds-checkbox__label .slds-checkbox_faux:after {
-    width: t(spacingMedium);
-    height: t(spacingXSmall);
-    border-bottom-width: 4px;
-    border-left-width: 4px;
-    top: 44%;
+    width: 0.63rem;
+    height: 0.31rem;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    top: 45%;
+    left: 52%;
 }
 
 .THIS .ds-radio_large [type="radio"] + .slds-radio__label .slds-radio_faux {
