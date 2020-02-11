@@ -127,12 +127,12 @@
 }
 
 .THIS .ds-checkbox_large [type="checkbox"]:checked + .slds-checkbox__label .slds-checkbox_faux:after {
-    width: 0.63rem;
-    height: 0.31rem;
+    width: 0.60rem;
+    height: 0.30rem;
     border-bottom-width: 2px;
     border-left-width: 2px;
     top: 45%;
-    left: 52%;
+    left: 50%;
 }
 
 .THIS .ds-radio_large [type="radio"] + .slds-radio__label .slds-radio_faux {
