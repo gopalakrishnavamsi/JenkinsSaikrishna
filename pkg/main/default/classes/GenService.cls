@@ -742,7 +742,7 @@ public with sharing class GenService {
 		final String title,
 		final String base64Data) {
 
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministrator();
 
 		if (linkedEntityId == null
 			|| String.isBlank(title)
@@ -773,7 +773,7 @@ public with sharing class GenService {
 	 * @return Boolean
 	 */
 	public static Boolean deleteContentDocument(final Id contentVersionId) {
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministrator();
 
 		return DB.deleteContentDocument(contentVersionId);
 	}

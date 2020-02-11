@@ -38,7 +38,6 @@ public with sharing class CLMMapObjectController {
 				eosDetails.Variables__c = String.join(pathDetails.get('Variables'), ',');
 				eosDetails.PathFormat__c = String.join(pathDetails.get('PathFormat'), '');
 				eosDetails.FolderNameFormat__c = '{' + pathDetails.get('Variables').size() + '}';
-//				String ObjectName = eosDetails.FolderName__c.split('\\.').get(0).substringAfter('{!');
 			}
 			upsert eosDetails;
 			return true;

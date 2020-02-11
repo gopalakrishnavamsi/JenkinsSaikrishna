@@ -787,7 +787,7 @@ private class GenServiceTest {
 				GenService.saveFile(null, null, null, null);
 				throw new AssertException('Expected failure');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -795,7 +795,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_saveFile_undefined_argument() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
 				GenService.saveFile(UserInfo.getUserId(), null, 'title', 'base64data');
@@ -833,7 +833,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_saveFile_create() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Schema.Account a = TestUtils.createAccount();
 
 			Test.startTest();
@@ -854,7 +854,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_saveFile_update() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Schema.Account a = TestUtils.createAccount();
 			ContentVersion cv = TestUtils.createContentVersion(a.Id);
 
@@ -877,7 +877,7 @@ private class GenServiceTest {
 				GenService.deleteContentDocument(null);
 				throw new AssertException('Expected failure');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -885,7 +885,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_deleteContentDocument_success() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			ContentVersion cv = TestUtils.createContentVersion();
 			System.assertNotEquals(null, cv.ContentDocumentId);
 

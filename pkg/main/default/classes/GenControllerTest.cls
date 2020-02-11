@@ -372,7 +372,7 @@ private class GenControllerTest {
 				GenController.checkMultiCurrency();
 				throw new AssertException('Expected checkMultiCurrency to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -380,7 +380,7 @@ private class GenControllerTest {
 
 	@IsTest
 	static void test_deleteContentDocument_success() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Boolean testResult;
 			ContentVersion testContentVersion = TestUtils.createContentVersion();
 			Test.startTest();
@@ -401,7 +401,7 @@ private class GenControllerTest {
 				GenController.deleteContentDocument(testContentVersion.Id);
 				throw new AssertException('Expected deleteContentDocument to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -409,7 +409,7 @@ private class GenControllerTest {
 
 	@IsTest
 	static void test_saveChunk_success() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Schema.Account a = TestUtils.createAccount();
 			System.assertNotEquals(null, a.Id);
 			ContentVersion testContentVersion = TestUtils.createContentVersion(a.Id);
@@ -437,7 +437,7 @@ private class GenControllerTest {
 				GenController.saveChunk(testContentVersion.Id, a.Id, testContentVersion.Title, 'Test');
 				throw new AssertException('Expected saveChunk to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
