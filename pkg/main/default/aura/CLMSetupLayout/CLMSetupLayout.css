@@ -1,4 +1,8 @@
-.THIS .ds-gray-color {    
+.THIS {
+    height: 100vh;
+}
+
+.THIS .ds-gray-color {
     background-color: #FAFAFB;
     border-radius: t(borderRadiusMedium);        
 }
@@ -9,4 +13,42 @@
 
 .THIS .ds-round{
     border-radius:.25rem;
+}
+
+.THIS .ds-admin-sidebarSection {
+    width: 280px;
+}
+.THIS .slds-template_default {
+    padding: 0.75rem;
+    overflow: hidden;
+}
+
+.THIS .ds-center-section {
+    background: rgb(255, 255, 255);
+    border-radius: 4px;
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.THIS .invisible-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.THIS .ds-scrollable-container {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.THIS .ds-flex {
+    flex: 1 0 auto;
+}
+
+.THIS .ds-flex-header {
+    flex: 0 0 auto;
 }

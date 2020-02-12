@@ -15,7 +15,7 @@
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
     <aura:attribute name="isClmAdmin" type="Boolean" default="false"/>
-    <aura:attribute name="isCloseNotification" type="Boolean" default="false"/>                                        
+    <aura:attribute name="isCloseNotification" type="Boolean" default="false"/>
     <aura:attribute name="isClmEnabled" type="Boolean" default="false" access="private"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
@@ -27,34 +27,34 @@
     <c:Toast aura:id="toast" message="{!v.toastTitle}" mode="{!v.toastVariantType}"/>
 
     <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}" fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
-        products="{!v.products}"/>
+                            products="{!v.products}"/>
 
     <aura:if isTrue="{!and(and(v.isAuthorized, v.isClmEnabled), v.isClmAdmin)}">
         <lightning:layout>
             <aura:if isTrue="{!v.isSidebar}">
-                <lightning:layoutItem size="2" class="slds-theme_default">
+                <lightning:layoutItem size="2" class="slds-theme_default slds-scrollable_y ds-admin-sidebarSection">
                     <!--left side bar-->
                     {!v.sideBar}
                 </lightning:layoutItem>
             </aura:if>
-            <lightning:layoutItem flexibility="grow" class="slds-m-around_medium">
-                <lightning:layout multipleRows="true">
+            <lightning:layoutItem flexibility="grow" class="slds-template_default">
+                <div class="ds-scrollable-container">
                     <aura:if isTrue="{!!v.fullLayout}">
-                        <lightning:layoutItem size="12" class="slds-p-bottom_small">
+                        <lightning:layoutItem size="12" class="slds-p-bottom_small ds-flex-header">
                             <!--header-->
                             {!v.header}
                         </lightning:layoutItem>
                     </aura:if>
-                    <lightning:layoutItem flexibility="grow" size="12" padding="{!v.isSidebar ? '' : 'around-none'}">
+                    <div class="ds-center-section invisible-scrollbar ds-flex">
                         <!-- Main -->
                         <div
-                            class="{!v.fullLayout ? v.isSidebar ? 'slds-box ds-gray-color slds-theme_default':'ds-gray-color ds-round slds-theme_default' : v.isCenter ? 'slds-box  slds-theme_default' : 'ds-round slds-theme_default'}">
+                                class="{!v.fullLayout ? v.isSidebar ? 'slds-p-around_small ds-gray-color slds-theme_default':'ds-gray-color ds-round slds-theme_default' : v.isCenter ? 'slds-p-around_small slds-theme_default' : 'ds-round slds-theme_default'}">
                             <div class="{!v.isCenter ? 'slds-p-left_xx-large slds-p-right_xx-large' : ''}">
                                 {!v.main}
                             </div>
                         </div>
-                    </lightning:layoutItem>
-                </lightning:layout>
+                    </div>
+                </div>
             </lightning:layoutItem>
         </lightning:layout>
         <aura:set attribute="else">
@@ -62,7 +62,7 @@
                 <lightning:layout>
                     <lightning:layoutItem flexibility="grow" class="slds-m-around_medium slds-theme_default">
                         <div
-                            class="slds-text-heading_large slds-m-around_medium slds-text-color_error slds-text-align_center">
+                                class="slds-text-heading_large slds-m-around_medium slds-text-color_error slds-text-align_center">
                             {!$Label.c.CLMNotConfigured}
                         </div>
                     </lightning:layoutItem>
