@@ -3,18 +3,15 @@ public with sharing class GenController extends Controller {
 	public Id templateId { get; set; }
 
 	public GenController() {
-		QueryString params = QueryString.fromCurrentPage();
-		this.templateId = params.getId('templateId', params.getId('id', null));
-		if (String.isBlank(templateId)) throw new DocuSignException(Label.UndefinedId);
 	}
 
 	public GenController(final ApexPages.StandardController c) {
-		this.templateId = c == null ? null : c.getId();
-		if (String.isBlank(templateId)) throw new DocuSignException(Label.UndefinedId);
 	}
 
 	public PageReference redirectOnEdit() {
 		PageReference redirectPage = null;
+		QueryString params = QueryString.fromCurrentPage();
+		this.templateId = params.getId('templateId', params.getId('id', null));
 		if (this.templateId != null) {
 			Gen.Template template = GenService.getTemplate(this.templateId);
 			Boolean editMode = template.templateType != Gen.TYPE_ONLINE || template.springTemplateId != null;
