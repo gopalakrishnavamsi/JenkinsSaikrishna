@@ -42,13 +42,14 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		'workitems' => Application.classNamespacePrefix + 'ScmAPIMock.WorkItemMock',
 		'documents' => Application.classNamespacePrefix + 'ScmAPIMock.DocumentMock',
 		'members' => Application.classNamespacePrefix + 'ScmAPIMock.MemberMock',
-		'changesecuritytasks' => Application.classNamespacePrefix + 'ScmAPIMock.ChangeSecurityTask'
+		'changesecuritytasks' => Application.classNamespacePrefix + 'ScmAPIMock.ChangeSecurityTask',
+		'templates' => Application.classNamespacePrefix + 'ScmAPIMock.TemplateMock'
 	};
 	private static final Map<String, MockResource> MOCKS = new Map<String, MockResource>();
 
 	// Capture group 1 = gen?, group 2 = api version, group 3 = account ID, group 4 = the rest
 	private static final Pattern BASE_PATH_PATTERN = Pattern.compile(
-		'\\/(gen\\/)?(v[1,2])\\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})\\/(.+)');
+		'\\/(gen\\/|negotiate\\/api\\/)?(v[1,2])\\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})\\/(.+)');
 
 	private final Boolean success;
 
@@ -110,6 +111,17 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 				}
 			} else if (request.method == 'POST') {
 				response = MockResponse.created('{"Href":"https://unit.test/folders/' + FOLDER_ID + '"}');
+			}
+			return response;
+		}
+	}
+
+	public class TemplateMock implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			if (request.method == 'GET') {
+				response = MockResponse.ok('{"name": "html_templates","id": "' + FOLDER_ID +'"}');
 			}
 			return response;
 		}

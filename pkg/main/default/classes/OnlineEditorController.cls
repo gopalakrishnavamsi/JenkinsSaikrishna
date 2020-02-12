@@ -365,7 +365,7 @@ public with sharing class OnlineEditorController extends Controller {
 
 	@RemoteAction
 	public static List<SObject> getEntityRecords(final String sourceObject) {
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministrator();
 
 		SObjectType type = Salesforce.getSObjectType(sourceObject);
 		String nameField = Salesforce.getNameField(type);
@@ -382,7 +382,7 @@ public with sharing class OnlineEditorController extends Controller {
 
 	@RemoteAction
 	public static String getTemplateFolderId() {
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministrator();
 
 		String templateFolderId;
 		OnlineEditorRoot__c onlineEditorRootFolderSettings = OnlineEditorRoot__c.getOrgDefaults();
@@ -390,9 +390,7 @@ public with sharing class OnlineEditorController extends Controller {
 			templateFolderId = onlineEditorRootFolderSettings.FolderId__c;
 		} else {
 			NegotiateAPI client = NegotiateAPI.getInstance();
-			UUID rootFolder = client.getRootFolder();
-			UUID adminFolder = client.createFolder('admin', rootFolder);
-			templateFolderId = String.valueOf(client.createFolder('templates_html', adminFolder));
+			templateFolderId = String.valueOf(client.getTemplateHtmlFolder());
 			onlineEditorRootFolderSettings.FolderId__c = templateFolderId;
 			upsert onlineEditorRootFolderSettings;
 		}
@@ -413,7 +411,7 @@ public with sharing class OnlineEditorController extends Controller {
 
 	@RemoteAction
 	public static MergeFieldsResult getMergeFields(final String sObjectType) {
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministrator();
 
 		OnlineEditorMergeObject obj = getObjectsRecursively(Salesforce.getSObjectType(sObjectType));
 		return new MergeFieldsResult(new List<OnlineEditorMergeObject> { obj }, getFieldsRecursively(obj));
@@ -440,8 +438,6 @@ public with sharing class OnlineEditorController extends Controller {
 	// FIXME: This is a mostly useless function. If the springTemplateId is needed in UUID form on the client, just create it there.
 	@RemoteAction
 	public static UUID getSpringTemplateIdInUUIDFormat(final String springTemplateId) {
-		Permissions.verifyIsDocuSignGenerator();
-
 		return UUID.parse(springTemplateId);
 	}
 

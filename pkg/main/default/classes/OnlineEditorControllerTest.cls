@@ -501,7 +501,7 @@ private class OnlineEditorControllerTest {
 
 	@IsTest
 	static void test_getEntityRecords_success() {
-		System.runAs(UserMock.createDocuSignGenerator(true)) {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			TestUtils.createAccount();
 			Test.startTest();
 			List<SObject> testResultsList = new List<SObject>();
@@ -519,7 +519,7 @@ private class OnlineEditorControllerTest {
 				OnlineEditorController.getEntityRecords('Account');
 				throw new AssertException('Expected to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -527,7 +527,7 @@ private class OnlineEditorControllerTest {
 
 	@IsTest
 	static void test_getTemplateFolderId_success() {
-		System.runAs(UserMock.createDocuSignGenerator(true)) {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			Test.startTest();
 			String testTemplateFolderId;
 			testTemplateFolderId = OnlineEditorController.getTemplateFolderId();
@@ -605,7 +605,7 @@ private class OnlineEditorControllerTest {
 				OnlineEditorController.getTemplateFolderId();
 				throw new AssertException('Expected to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -730,20 +730,6 @@ private class OnlineEditorControllerTest {
 			testUUID = OnlineEditorController.getSpringTemplateIdInUUIDFormat(UUID.randomUUID().toString());
 			Test.stopTest();
 			System.assertNotEquals(null, testUUID);
-		}
-	}
-
-	@IsTest
-	static void test_getSpringTemplateIdInUUIDFormat_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				OnlineEditorController.getSpringTemplateIdInUUIDFormat(UUID.randomUUID().toString());
-				throw new AssertException('Expected to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 

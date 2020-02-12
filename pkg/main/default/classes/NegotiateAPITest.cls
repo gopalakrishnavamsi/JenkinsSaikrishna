@@ -548,4 +548,37 @@ public with sharing class NegotiateAPITest {
 		}
 	}
 
+	@IsTest
+	static void test_getTemplateHtmlFolder_success() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+
+			Test.startTest();
+			UUID templateId = NegotiateAPI.getInstance().getTemplateHtmlFolder();
+			Test.stopTest();
+
+			System.assertEquals(templateId, ScmAPIMock.FOLDER_ID);
+		}
+	}
+
+	@IsTest
+	static void test_getTemplateHtmlFolder_failure() {
+		ScmAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+
+			Test.startTest();
+			try {
+				NegotiateAPI.getInstance().getTemplateHtmlFolder();
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertNotEquals(null, ex.error.code);
+				System.assertNotEquals(null, ex.error.description);
+			}
+			Test.stopTest();
+
+		}
+	}
+
 }

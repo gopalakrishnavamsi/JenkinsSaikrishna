@@ -1,25 +1,9 @@
 public with sharing class NegotiateAPI extends ScmAPI {
 
-	public static final String PATH_FOLDER = 'folders';
-	public static final String PATH_DOCUMENTS = 'documents';
-	public static final String PATH_AGREEMENT_IN_EOS_FOLDER = 'salesforcecontentdocumentimporttasks';
-	public static final String PATH_AGREEMENT_IN_SALESFORCE = 'salesforcecontentdocumentexporttasks';
-	public static final String PATH_AGREEMENT_COMPARE = 'documentcomparetasks';
-	public static final String PATH_AGREEMENT_VERSIONS = 'versions';
-	public static final String PATH_WORKFLOWS = 'workflows';
-	public static final String PATH_WORK_ITEMS = 'workitems';
-	public static final String PATH_LOCK = 'lock';
-	public static final String PATH_REVIEWS = 'reviews';
-	public static final String PATH_MEMBERS = 'members';
-	public static final String PATH_TYPE = 'type';
-	public static final String PATH_CHANGE_SECURITY_TASKS = 'changesecuritytasks';
-	public static final String SYSTEM_FOLDER = 'SystemFolder';
-	public static final String OTHER_SOURCES = 'other sources';
 	public static final String FULL_SUBSCRIBER = 'FullSubscriber';
 	public static final String VIEW_EDIT_DELETE = 'ViewEditDelete';
 	public static final String APPROVE = 'Approve';
 	public static final String REJECT = 'Reject';
-	public static final String ROOT = 'root';
 	public static final Long SCM_OFFSET = 20;
 	public static final String SCM_SORT_PROPERTY = 'UpdatedDate';
 	public static final String SCM_SORT_DIRECTION = 'desc';
@@ -27,27 +11,20 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 	private static final String APPROVAL_COMMENTS_PLACEHOLDER = '&lt;%#ApproveComments%&gt;';
 	private static NegotiateAPI self = null;
+	private UUID accountId = null;
 
 	private NegotiateAPI(
 		final Url baseUrl,
-		final String apiVersion,
 		final UUID accountId) {
-
-		super(new Url(baseUrl, String.format('{0}/{1}/',
-			new List<String> {
-				apiVersion,
-				String.valueOf(accountId)
-			})));
+		super(baseUrl);
+		this.accountId = accountId;
 	}
 
 	public static NegotiateAPI getInstance() {
 		if (self == null) {
 			Url baseUrl = AccountProducts.getInstance().getScmApiBaseUrl();
 			if (baseUrl == null) throw new DocuSignException(Label.NegotiateNotConfigured);
-			self = new NegotiateAPI(
-				baseUrl,
-				'v2',
-				Credentials.getInstance().account.id);
+			self = new NegotiateAPI(baseUrl, Credentials.getInstance().account.id);
 		}
 		return self;
 	}
@@ -357,7 +334,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		final String objectType) {
 
 		RestAPI.Response response = this.post(
-			new List<String> { PATH_FOLDER },
+			new List<Object> { 'v2', accountId, 'folders' },
 			JSON.serialize(new Map<String, Object> {
 				'EosInfo' => new EosInfo(objectName, objectId, objectType)
 			}),
@@ -448,10 +425,10 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		final UUID folderId,
 		final String documentName) {
 		RestAPI.Response response = this.post(
-			new List<String> { PATH_AGREEMENT_IN_EOS_FOLDER },
+			new List<Object> { 'v2', accountId, 'salesforcecontentdocumentimporttasks' },
 			JSON.serialize(new Map<String, Object> {
 				'SfContentVersionId' => sfContentVersionId,
-				'Folder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + String.valueOf(folderId)),
+				'Folder' => new APIFolder(getBaseUrl() + '/folders/' + String.valueOf(folderId)),
 				'Name' => documentName
 			}),
 			RestAPI.defaultTimeout);
@@ -470,10 +447,10 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		final UUID documentId) {
 
 		RestAPI.Response response = this.post(
-			new List<String> { PATH_AGREEMENT_IN_SALESFORCE },
+			new List<Object> { 'v2', accountId, 'salesforcecontentdocumentexporttasks' },
 			JSON.serialize(new Map<String, Object> {
 				'SfObjectId' => sourceId,
-				'Document' => new APIDocument(getBaseUrl() + '/' + PATH_DOCUMENTS + '/' + String.valueOf(documentId))
+				'Document' => new APIDocument(getBaseUrl() + '/documents/' + String.valueOf(documentId))
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
@@ -493,7 +470,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		final String compareVersionHref) {
 
 		RestAPI.Response response = this.post(
-			new List<String> { PATH_AGREEMENT_COMPARE },
+			new List<Object> { 'v2', accountId, 'documentcomparetasks' },
 			JSON.serialize(new Map<String, Object> {
 				'OriginalDocument' => new APIDocument(originalDocumentHref),
 				'RevisedDocument' => new APIDocument(compareVersionHref)
@@ -541,7 +518,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 		while (status != 'Success' && count < API_RETRY_LIMIT) {
 			RestAPI.Response response = this.get(
-				new List<Object> { PATH_AGREEMENT_IN_EOS_FOLDER, taskId },
+				new List<Object> { 'v2', accountId, 'salesforcecontentdocumentimporttasks', taskId },
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
 				this.log.error('Failed to get status of newly Agreement in EOSfolder for - ' + taskId + ': ' + response.error);
@@ -563,7 +540,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		while (status != 'Success' && count < API_RETRY_LIMIT) {
 			final RestAPI.Response response = this.get(
 				new List<Object> {
-					PATH_AGREEMENT_COMPARE, taskId
+					'v2', accountId, 'documentcomparetasks', taskId
 				},
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
@@ -587,7 +564,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 			final RestAPI.Response response = this.get(
 				new List<Object> {
-					PATH_AGREEMENT_IN_SALESFORCE, taskId
+					'v2', accountId, 'salesforcecontentdocumentexporttasks', taskId
 				},
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
@@ -630,7 +607,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			queryStrings.put('SortDirection', SCM_SORT_DIRECTION);
 			final RestAPI.Response response = get(
 				new List<Object> {
-					PATH_FOLDER, folderId, PATH_DOCUMENTS
+					'v2', accountId, 'folders', folderId, 'documents'
 				},
 				new QueryString(queryStrings),
 				RestAPI.defaultTimeout);
@@ -655,7 +632,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 		final RestAPI.Response response = get(
 			new List<Object> {
-				PATH_DOCUMENTS, agreementId
+				'v2', accountId, 'documents', agreementId
 			},
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
@@ -671,7 +648,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 		final RestAPI.Response response = put(
 			new List<Object> {
-				PATH_DOCUMENTS, documentId
+				'v2', accountId, 'documents' , documentId
 			},
 			JSON.serialize(new Map<String, Object> {
 				'Name' => documentName
@@ -690,7 +667,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 		final RestAPI.Response response = del(
 			new List<Object> {
-				PATH_DOCUMENTS, documentId
+				'v2', accountId, 'documents', documentId
 			},
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
@@ -715,7 +692,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 			final RestAPI.Response response = get(
 				new List<Object> {
-					PATH_DOCUMENTS, documentId, PATH_AGREEMENT_VERSIONS
+					'v2', accountId, 'documents', documentId, 'versions'
 				},
 				RestAPI.defaultTimeout);
 			if (response.hasError && response.statusCode == 404) {
@@ -740,8 +717,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	public UUID sendForApproval(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> approvers, final String subject, final String message, final Boolean isSequential) {
 
 		RestAPI.Response response = post(
-			new List<String> {
-				PATH_WORKFLOWS
+			new List<Object> {
+				'v2', accountId, 'workflows'
 			},
 			JSON.serialize(new Map<String, Object> {
 				'Name' => 'Negotiate_Approval_Template',
@@ -760,8 +737,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	// Send for External Review
 	public UUID sendForExternalReview(final String agreementName, final Id sourceId, final List<UUID> documentsIds, final List<Recipient> reviewers, final String subject, final String body, final Integer expiresInNumberOfDays) {
 		RestAPI.Response response = post(
-			new List<String> {
-				PATH_WORKFLOWS
+			new List<Object> {
+				'v2', accountId, 'workflows'
 			},
 			JSON.serialize(new Map<String, Object> {
 				'Name' => 'Negotiate_ExternalReview_Template',
@@ -786,7 +763,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 			final RestAPI.Response response = get(
 				new List<Object> {
-					PATH_WORKFLOWS, taskId
+					'v2', accountId, 'workflows', taskId
 				},
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
@@ -851,7 +828,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			final RestAPI.Response response = get(
 				getBaseUrl(),
 				new List<Object> {
-					PATH_DOCUMENTS, documentId, PATH_WORK_ITEMS
+					'v2', accountId, 'documents', documentId, 'workitems'
 				},
 				new QueryString(queryStrings),
 				getDefaultHeaders(),
@@ -878,7 +855,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		final RestAPI.Response response = get(
 			getBaseUrl(),
 			new List<Object> {
-				PATH_MEMBERS, memberId
+				'v2', accountId, 'members', memberId
 			},
 			QueryString.empty,
 			getDefaultHeaders(),
@@ -895,7 +872,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 		final RestAPI.Response response = del(
 			new List<Object> {
-				PATH_DOCUMENTS, documentId, PATH_LOCK
+				'v2', accountId, 'documents', documentId, 'lock'
 			},
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
@@ -922,8 +899,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	public Boolean approveOnBehalfOrRecipientResponse(final String comment, final String itemResponse, final UUID workItemsId) {
 
 		final RestAPI.Response response = put(
-			new List<String> {
-				PATH_WORK_ITEMS, workItemsId.value
+			new List<Object> {
+				'v2', accountId, 'workitems', workItemsId.value
 			},
 			JSON.serialize(new Map<String, Object> {
 				'Selected' => new APISelected(comment, itemResponse)
@@ -967,7 +944,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		final RestAPI.Response response = put(
 			getBaseUrl(),
 			new List<Object> {
-				PATH_REVIEWS, externalReviewId
+				'v2', accountId, 'reviews', externalReviewId
 			},
 			QueryString.empty,
 			getDefaultHeaders(),
@@ -986,35 +963,11 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 		final RestAPI.Response response = get(
 			new List<Object> {
-				PATH_DOCUMENTS, documentId, PATH_REVIEWS
+				'v2', accountId, 'documents', documentId, 'reviews'
 			},
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
 			this.log.error('Failed to get reviews for Agreement - ' + documentId + ': ' + response.error);
-			throw new APIException(response.error);
-		}
-
-		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
-		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
-	}
-
-	// Get the root system folder for an account - onlineEditor
-
-	public UUID getRootFolder() {
-
-		Map<String, String> queryStrings = new Map<String, String>();
-		queryStrings.put(SYSTEM_FOLDER, ROOT);
-
-		final RestAPI.Response response = get(
-			getBaseUrl(),
-			new List<Object> {
-				PATH_FOLDER, PATH_TYPE
-			},
-			new QueryString(queryStrings),
-			getDefaultHeaders(),
-			RestAPI.defaultTimeout);
-		if (response.hasError) {
-			this.log.error('Failed to get root folder : ' + response.error);
 			throw new APIException(response.error);
 		}
 
@@ -1028,14 +981,14 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 		final RestAPI.Response response = post(
 			getBaseUrl(),
-			new List<String> {
-				PATH_FOLDER
+			new List<Object> {
+				'v2', accountId, 'folders'
 			},
 			QueryString.empty,
 			getDefaultHeaders(),
 			JSON.serialize(new Map<String, Object> {
 				'Name' => folderName,
-				'ParentFolder' => new APIFolder(getBaseUrl() + '/' + PATH_FOLDER + '/' + String.valueOf(parentFolder))
+				'ParentFolder' => new APIFolder(getBaseUrl() + '/folders/' + String.valueOf(parentFolder))
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
@@ -1047,14 +1000,37 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
+	// Get template_html folder for an account
+	public UUID getTemplateHtmlFolder() {
+
+		Map<String, String> queryStrings = new Map<String, String>();
+		queryStrings.put('templateType', 'html');
+
+		final RestAPI.Response response = get(
+			getBaseUrl(),
+			new List<Object> {
+				'negotiate', 'api', 'v1', accountId ,'templates', 'root'
+			},
+			new QueryString(queryStrings),
+			getDefaultHeaders(),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to get template html folder : ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse((String)body.get('id'));
+	}
+
 	//Get the href for root level folder on the account
 	public Url getRootLevelFolderUrl() {
 		Map<String, String> queryStrings = new Map<String, String>();
-		queryStrings.put(SYSTEM_FOLDER, OTHER_SOURCES);
+		queryStrings.put('SystemFolder', 'other sources');
 
 		final RestAPI.Response response = get(
 			new List<Object> {
-				PATH_FOLDER, PATH_TYPE
+				'v2', accountId, 'folders', 'type'
 			},
 			new QueryString(queryStrings),
 			RestAPI.defaultTimeout);
@@ -1081,7 +1057,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			roles.add(new APIRoles(FULL_SUBSCRIBER, VIEW_EDIT_DELETE));
 
 			RestAPI.Response response = this.post(
-				new List<String> { PATH_CHANGE_SECURITY_TASKS },
+				new List<Object> { 'v2', accountId, 'changesecuritytasks' },
 				JSON.serialize(new Map<String, Object> {
 					'Folder' => new APIHref(rootLevelFolderUrl.toExternalForm()),
 					'Security' => new APISecurity(roles)
