@@ -5,27 +5,9 @@ private class GenControllerTest {
 	static void test_constructor_default() {
 		PageReference pg = Page.GenDocumentGenerator;
 		Test.setCurrentPage(pg);
-
 		Test.startTest();
-		try {
-			new GenController();
-			throw new AssertException('Expected failure');
-		} catch (DocuSignException ex) {
-			System.assertEquals(Label.UndefinedId, ex.getMessage());
-		}
-
-		pg.getParameters().put('id', UserInfo.getOrganizationId());
-		GenController result1 = new GenController();
-
-		pg.getParameters().put('templateId', UserInfo.getUserId());
-		GenController result2 = new GenController();
+		new GenController();
 		Test.stopTest();
-
-		System.assertNotEquals(null, result1);
-		System.assertEquals(UserInfo.getOrganizationId(), result1.templateId);
-
-		System.assertNotEquals(null, result2);
-		System.assertEquals(UserInfo.getUserId(), result2.templateId);
 	}
 
 	@IsTest
@@ -36,17 +18,10 @@ private class GenControllerTest {
 		insert template;
 
 		Test.startTest();
-		try {
-			new GenController(null);
-			throw new AssertException('Expected failure');
-		} catch (DocuSignException ex) {
-			System.assertEquals(Label.UndefinedId, ex.getMessage());
-		}
+		new GenController(null);
 		GenController result = new GenController(new ApexPages.StandardController(template));
 		Test.stopTest();
-
 		System.assertNotEquals(null, result);
-		System.assertEquals(template.Id, result.templateId);
 	}
 
 	@IsTest
@@ -567,6 +542,10 @@ private class GenControllerTest {
 			template.TemplateType__c = Gen.TYPE_WORD;
 			update template;
 
+			PageReference pg = Page.GenTemplateNavigator;
+			Test.setCurrentPage(pg);
+			pg.getParameters().put('templateId', template.Id);
+
 			Test.startTest();
 			GenController controller = new GenController(new ApexPages.StandardController(template));
 			PageReference result1 = controller.redirectOnEdit();
@@ -583,6 +562,10 @@ private class GenControllerTest {
 			template.TemplateType__c = Gen.TYPE_ONLINE;
 			update template;
 
+			PageReference pg = Page.GenTemplateNavigator;
+			Test.setCurrentPage(pg);
+			pg.getParameters().put('templateId', template.Id);
+
 			Test.startTest();
 			GenController controller = new GenController(new ApexPages.StandardController(template));
 			PageReference result2 = controller.redirectOnEdit();
@@ -598,8 +581,13 @@ private class GenControllerTest {
 			template.TemplateType__c = Gen.TYPE_ONLINE;
 			update template;
 
+			PageReference pg = Page.GenTemplateNavigator;
+			Test.setCurrentPage(pg);
+			pg.getParameters().put('templateId', template.Id);
+
 			Test.startTest();
 			GenController controller = new GenController(new ApexPages.StandardController(template));
+			controller.templateId = template.id;
 			PageReference result1 = controller.redirectOnEdit();
 			System.assertEquals(result1.getParameters().get('isEdit'), 'false');
 			Test.stopTest();
@@ -673,6 +661,7 @@ private class GenControllerTest {
 
 			Test.startTest();
 			GenController controller = new GenController(new ApexPages.StandardController(template));
+			controller.templateId = template.id;
 			PageReference result = controller.redirectOnNewTemplate();
 			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedOnlineEditorPage.getUrl(), result.getUrl());
 			Test.stopTest();
@@ -693,6 +682,7 @@ private class GenControllerTest {
 
 			Test.startTest();
 			GenController controller = new GenController(new ApexPages.StandardController(template));
+			controller.templateId = template.id;
 			PageReference result = controller.redirectOnNewTemplate();
 			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedWordBasedGenPage.getUrl(), result.getUrl());
 			Test.stopTest();
