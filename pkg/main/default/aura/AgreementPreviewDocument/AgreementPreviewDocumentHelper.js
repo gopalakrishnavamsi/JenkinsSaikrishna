@@ -507,7 +507,7 @@
     var isPending = currentAgreementStatus === 'pending approval' || currentAgreementStatus === 'pending review';
     if (isPending && !$A.util.isEmpty(agreement.historyItems)) {
       var pendingHistoryItem = agreement.historyItems.find(function (item) {
-        return item.historyItemType === historyItemTypes.ApprovalCheckout || historyItemTypes.ExternalReviewInitiated;
+        return item.historyItemType === historyItemTypes.ApprovalCheckout || item.historyItemType === historyItemTypes.ExternalReviewInitiated;
       });
 
       if (!$A.util.isEmpty(pendingHistoryItem) && !$A.util.isEmpty(pendingHistoryItem.actor)) {
