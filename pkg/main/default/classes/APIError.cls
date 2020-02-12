@@ -22,6 +22,10 @@ global virtual class APIError {
 	 * Constant for an unauthorized error.
 	 */
 	public static final APIError badRequest = new APIError(APIErrorCode.BAD_REQUEST, null);
+	/**
+	 * Constant for a consent required error.
+	 */
+	public static final APIError consentRequired = new APIError(APIErrorCode.CONSENT_REQUIRED, null);
 
 	/**
 	 * The error code.

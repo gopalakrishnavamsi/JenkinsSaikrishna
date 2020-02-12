@@ -45,10 +45,7 @@ public with sharing class AuthController {
 		} catch (APIException ex) {
 			LoggerService.getInstance().exception(ex, 'Error while checking user status for ' + UserInfo.getUserName());
 			isAuthorized = false;
-			if (ex.error != null
-				&& ex.error instanceof AuthService.AuthError
-				&& ((AuthService.AuthError)ex.error).reason == APIErrorCode.CONSENT_REQUIRED) {
-
+			if (ex.error == APIError.consentRequired) {
 				isConsentRequired = true;
 				message = Label.ConsentRequired;
 			} else {

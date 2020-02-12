@@ -48,15 +48,6 @@ global with sharing class AuthService {
 		}
 	}
 
-	public class AuthError extends APIError {
-		public Integer reason { get; private set; }
-
-		private AuthError(final Integer reason, final String description) {
-			super(APIErrorCode.UNAUTHORIZED, description);
-			this.reason = reason;
-		}
-	}
-
 	@TestVisible
 	private static String base64UrlEncode(final Blob input) {
 		if (input == null) return '';
@@ -149,18 +140,18 @@ global with sharing class AuthService {
 				String body = response.getBody();
 				this.log.warn('Authorization service error:\n' + body);
 				if (body == 'Bad Request') { // Less-fragile method of checking this?
-					e = new AuthError(APIErrorCode.USER_NOT_ACTIVATED, Label.MustBeActivated);
+					e = new APIError(APIErrorCode.USER_NOT_ACTIVATED, Label.MustBeActivated);
 				} else {
 					try {
 						Map<String, Object> errResp = (Map<String, Object>)JSON.deserializeUntyped(body);
 						switch on (String)errResp.get('error') {
 							when 'consent_required' {
-								e = new AuthError(APIErrorCode.CONSENT_REQUIRED, Label.ConsentRequired);
+								e = new APIError(APIErrorCode.CONSENT_REQUIRED, Label.ConsentRequired);
 							} when 'invalid_grant' {
-								e = new AuthError(APIErrorCode.INVALID_GRANT, Label.InvalidGrant);
+								e = new APIError(APIErrorCode.INVALID_GRANT, Label.InvalidGrant);
 							} when else {
 								this.log.warn('Unknown auth error');
-								e = new AuthError(response.getStatusCode(), errResp.containsKey('error_message')
+								e = new APIError(APIErrorCode.UNAUTHORIZED, errResp.containsKey('error_message')
 									? (String)errResp.get('error_message') : response.getStatus());
 							}
 						}

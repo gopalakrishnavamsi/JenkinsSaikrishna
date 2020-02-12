@@ -72,32 +72,23 @@ private class AuthServiceTest {
 		System.assertEquals(APIError.none, result1);
 
 		System.assertNotEquals(null, result2);
-		System.assertEquals(APIErrorCode.UNAUTHORIZED, result2.code);
-		System.assert(result2 instanceof AuthService.AuthError);
-		System.assertEquals(APIErrorCode.CONSENT_REQUIRED, ((AuthService.AuthError)result2).reason);
+		System.assertEquals(APIErrorCode.CONSENT_REQUIRED, result2.code);
 		System.assertEquals(Label.ConsentRequired, result2.description);
 
 		System.assertNotEquals(null, result3);
-		System.assertEquals(APIErrorCode.UNAUTHORIZED, result3.code);
-		System.assert(result3 instanceof AuthService.AuthError);
-		System.assertEquals(APIErrorCode.INVALID_GRANT, ((AuthService.AuthError)result3).reason);
+		System.assertEquals(APIErrorCode.INVALID_GRANT, result3.code);
 		System.assertEquals(Label.InvalidGrant, result3.description);
 
 		System.assertNotEquals(null, result4);
 		System.assertEquals(APIErrorCode.UNAUTHORIZED, result4.code);
-		System.assert(result4 instanceof AuthService.AuthError);
-		System.assertEquals(APIErrorCode.BAD_REQUEST, ((AuthService.AuthError)result4).reason);
 		System.assertEquals('other error', result4.description);
 
 		System.assertNotEquals(null, result5);
-		System.assert(!(result5 instanceof AuthService.AuthError));
 		System.assertEquals(APIErrorCode.BAD_REQUEST, result5.code);
 		System.assertEquals('UNKNOWN', result5.description);
 
 		System.assertNotEquals(null, result6);
-		System.assert(result6 instanceof AuthService.AuthError);
-		System.assertEquals(APIErrorCode.UNAUTHORIZED, result6.code);
-		System.assertEquals(APIErrorCode.USER_NOT_ACTIVATED, ((AuthService.AuthError)result6).reason);
+		System.assertEquals(APIErrorCode.USER_NOT_ACTIVATED, result6.code);
 		System.assertEquals(Label.MustBeActivated, result6.description);
 	}
 
@@ -487,9 +478,7 @@ private class AuthServiceTest {
 				getAuthClient().exchangeCode('1234', UUID.randomUUID().toString(), UUID.randomUUID().toString());
 				throw new AssertException('Expected AuthAPI.exchangeCode to fail');
 			} catch (APIException ex) {
-				System.assertNotEquals(null, ex.error);
-				System.assert(ex.error instanceof AuthService.AuthError);
-				System.assertEquals(APIErrorCode.CONSENT_REQUIRED, ((AuthService.AuthError)ex.error).reason);
+				System.assertEquals(APIError.consentRequired, ex.error);
 			}
 			Test.stopTest();
 		}

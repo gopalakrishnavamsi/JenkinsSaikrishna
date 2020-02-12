@@ -5,6 +5,7 @@ public with sharing class SendingController extends Controller {
 	public SendingController() {
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public SendingController(final ApexPages.StandardController c) {
 	}
 
@@ -67,10 +68,7 @@ public with sharing class SendingController extends Controller {
 				try {
 					templates = TemplateAPI.getInstance().getTemplates();
 				} catch (APIException ex) {
-					if (ex.error != null
-						&& ex.error instanceof AuthService.AuthError
-						&& ((AuthService.AuthError)ex.error).reason == APIErrorCode.CONSENT_REQUIRED) {
-
+					if (ex.error == APIError.consentRequired) {
 						LoggerService.getInstance().error('Failed to retrieve DocuSign templates: user consent required');
 						throw ex; // Let frontend deal with consent flow
 					}
