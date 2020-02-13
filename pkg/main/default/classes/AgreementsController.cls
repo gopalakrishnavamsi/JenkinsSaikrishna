@@ -137,6 +137,11 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
+	public static Map<String, String> getAgreementStatusTypes() {
+		return AgreementStatus.getAgreementStatusTypes();
+	}
+
+	@AuraEnabled
 	public static String compareAgreements(final String originalDocumentHref, final String compareVersionHref) {
 		try {
 			UUID compareTaskId = NegotiateService.compareAgreements(originalDocumentHref, compareVersionHref);

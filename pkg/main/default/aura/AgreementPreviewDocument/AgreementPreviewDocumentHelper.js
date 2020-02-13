@@ -5,6 +5,16 @@
     helper.loadWidget(component, agreement, agreement.href);
   },
 
+  loadAgreementStatusTypes: function (component) {
+    var action = component.get('c.getAgreementStatusTypes');
+    action.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        component.set('v.AgreementStatusTypes', response.getReturnValue());
+      }
+    });
+    $A.enqueueAction(action);
+  },
+
   loadWidget: function (component, agreement, documentUrl) {
     try {
       var uiHelper = component.get('v.uiHelper');
@@ -139,153 +149,156 @@
   },
 
   resolvePreview: function (component, auth, agreement, documentUrl, isAdmin, isSender, isApprover) {
-    switch (agreement.status.toLowerCase()) {
-      case 'new' ||
-      'new version' ||
-      'completed' ||
-      'rejected' ||
-      'approval canceled' ||
-      'review canceled' ||
-      'reviewed' ||
-      'review expired' ||
-      'approved' :
-        //render the Status + History View
-        return this.basePreview(
+    var agreementStatus = agreement.status.toUpperCase();
+    var AgreementStatusTypes = component.get('v.AgreementStatusTypes');
+    if (agreementStatus === AgreementStatusTypes.NEW_AGREEMENT ||
+      agreementStatus === AgreementStatusTypes.NEW_VERSION ||
+      agreementStatus === AgreementStatusTypes.COMPLETED ||
+      agreementStatus === AgreementStatusTypes.REJECTED ||
+      agreementStatus === AgreementStatusTypes.APPROVAL_CANCELLED ||
+      agreementStatus === AgreementStatusTypes.REVIEW_CANCELLED ||
+      agreementStatus === AgreementStatusTypes.REVIEWED ||
+      agreementStatus === AgreementStatusTypes.REVIEW_EXPIRED ||
+      agreementStatus === AgreementStatusTypes.APPROVED) {
+      //render the Status + History View
+      return this.basePreview(
+        component,
+        agreement.id.value,
+        stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+        documentUrl,
+        agreement.historyItems,
+        true,
+        auth
+      );
+    }
+
+    //External Review Pending
+    else if (agreementStatus === AgreementStatusTypes.PENDING_REVIEW) {
+      //If current user is the sender of the external review request or the current user is an admin user
+      //In this case the user should be presented with the options for resending, completing and cancelling the review
+      if (isSender === true || isAdmin === true)
+        return this.externalReviewSenderView(
           component,
-          agreement.id.value,
-          stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-          documentUrl,
-          agreement.historyItems,
-          true,
-          auth
-        );
-
-      //External Review Pending
-      case 'pending review':
-        //If current user is the sender of the external review request or the current user is an admin user
-        //In this case the user should be presented with the options for resending, completing and cancelling the review
-        if (isSender === true || isAdmin === true)
-          return this.externalReviewSenderView(
+          this.basePreview(
             component,
-            this.basePreview(
-              component,
-              agreement.id.value,
-              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-              documentUrl,
-              agreement.historyItems,
-              true,
-              auth
-            ),
-            true
-          );
-
-        //If the current user is neither the sender of the external review nor an Admin user
-        //In this case the user should just be shown the History + Status view
-        return this.basePreview(
-          component,
-          agreement.id.value,
-          stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-          documentUrl,
-          agreement.historyItems,
-          true,
-          auth
-        );
-
-      //Internal Approval pending
-      case 'pending approval':
-        var hasApproverResponded = this.hasCurrentApprovalRecipientResponded(component, agreement);
-        //If current user is the sender of the Approval request but not an Admin User
-        //In this case the user should be presented with the options for resending, cancelling the approval request
-        if (isSender === true && isAdmin === false)
-          return this.approvalSenderView(
-            component,
-            this.basePreview(
-              component,
-              agreement.id.value,
-              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-              documentUrl,
-              agreement.historyItems,
-              true,
-              auth
-            ),
+            agreement.id.value,
+            stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+            documentUrl,
+            agreement.historyItems,
             true,
-            false
-          );
-
-        //If current user is the sender of the Approval request and also an Admin User
-        //In this case the user should be presented with the options for resending, cancelling as well as approving on behalf of
-        if (isSender === true && isAdmin === true)
-          return this.approvalSenderView(
-            component,
-            this.basePreview(
-              component,
-              agreement.id.value,
-              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-              documentUrl,
-              agreement.historyItems,
-              true,
-              auth
-            ),
-            true,
-            true
-          );
-
-        //If the current user is the Approver for the Approval request
-        //In this case the user should be presented with option for submitting a response for the approval
-        if (isApprover && !hasApproverResponded)
-          return this.renderApprovalRecipientView(
-            component,
-            this.basePreview(
-              component,
-              agreement.id.value,
-              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-              documentUrl,
-              agreement.historyItems,
-              true,
-              auth
-            )
-          );
-
-        //If the current user is neither and Approver nor the Sender but an Admin user
-        ////In this case the user should be presented with the options for resending, cancelling as well as approving on behalf of
-        if (isAdmin === true && (isSender !== true && isApprover !== true))
-          return this.approvalSenderView(
-            component,
-            this.basePreview(
-              component,
-              agreement.id.value,
-              stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-              documentUrl,
-              agreement.historyItems,
-              true,
-              auth
-            ),
-            true,
-            true
-          );
-
-        //If current user is neither the sender , admin or recipient of the approval request
-        //In this case the user should be displayed with the base Status+History View
-        return this.basePreview(
-          component,
-          agreement.id.value,
-          stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-          documentUrl,
-          agreement.historyItems,
-          true,
-          auth
+            auth
+          ),
+          true
         );
 
-      default:
-        return this.basePreview(
+      //If the current user is neither the sender of the external review nor an Admin user
+      //In this case the user should just be shown the History + Status view
+      return this.basePreview(
+        component,
+        agreement.id.value,
+        stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+        documentUrl,
+        agreement.historyItems,
+        true,
+        auth
+      );
+    }
+
+    //Internal Approval pending
+    else if (agreementStatus === AgreementStatusTypes.PENDING_APPROVAL) {
+      var hasApproverResponded = this.hasCurrentApprovalRecipientResponded(component, agreement);
+      //If current user is the sender of the Approval request but not an Admin User
+      //In this case the user should be presented with the options for resending, cancelling the approval request
+      if (isSender === true && isAdmin === false)
+        return this.approvalSenderView(
           component,
-          agreement.id.value,
-          stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
-          documentUrl,
-          agreement.historyItems,
+          this.basePreview(
+            component,
+            agreement.id.value,
+            stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+            documentUrl,
+            agreement.historyItems,
+            true,
+            auth
+          ),
           true,
-          auth
+          false
         );
+
+      //If current user is the sender of the Approval request and also an Admin User
+      //In this case the user should be presented with the options for resending, cancelling as well as approving on behalf of
+      if (isSender === true && isAdmin === true)
+        return this.approvalSenderView(
+          component,
+          this.basePreview(
+            component,
+            agreement.id.value,
+            stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+            documentUrl,
+            agreement.historyItems,
+            true,
+            auth
+          ),
+          true,
+          true
+        );
+
+      //If the current user is the Approver for the Approval request
+      //In this case the user should be presented with option for submitting a response for the approval
+      if (isApprover && !hasApproverResponded)
+        return this.renderApprovalRecipientView(
+          component,
+          this.basePreview(
+            component,
+            agreement.id.value,
+            stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+            documentUrl,
+            agreement.historyItems,
+            true,
+            auth
+          )
+        );
+
+      //If the current user is neither and Approver nor the Sender but an Admin user
+      ////In this case the user should be presented with the options for resending, cancelling as well as approving on behalf of
+      if (isAdmin === true && (isSender !== true && isApprover !== true))
+        return this.approvalSenderView(
+          component,
+          this.basePreview(
+            component,
+            agreement.id.value,
+            stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+            documentUrl,
+            agreement.historyItems,
+            true,
+            auth
+          ),
+          true,
+          true
+        );
+
+      //If current user is neither the sender , admin or recipient of the approval request
+      //In this case the user should be displayed with the base Status+History View
+      return this.basePreview(
+        component,
+        agreement.id.value,
+        stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+        documentUrl,
+        agreement.historyItems,
+        true,
+        auth
+      );
+
+    } else {
+      return this.basePreview(
+        component,
+        agreement.id.value,
+        stringUtils.format('{0}{1}{2}', agreement.name, '.', agreement.extension),
+        documentUrl,
+        agreement.historyItems,
+        true,
+        auth
+      );
     }
   },
 
@@ -503,8 +516,9 @@
 
   isCurrentUserSender: function (component, agreement) {
     var returnValue = false;
-    var currentAgreementStatus = agreement.status.toLowerCase();
-    var isPending = currentAgreementStatus === 'pending approval' || currentAgreementStatus === 'pending review';
+    var AgreementStatusTypes = component.get('v.AgreementStatusTypes');
+    var currentAgreementStatus = agreement.status.toUpperCase();
+    var isPending = currentAgreementStatus === AgreementStatusTypes.PENDING_APPROVAL || currentAgreementStatus === AgreementStatusTypes.PENDING_REVIEW;
     if (isPending && !$A.util.isEmpty(agreement.historyItems)) {
       var pendingHistoryItem = agreement.historyItems.find(function (item) {
         return item.historyItemType === historyItemTypes.ApprovalCheckout || item.historyItemType === historyItemTypes.ExternalReviewInitiated;
@@ -521,7 +535,8 @@
 
   isCurrentUserRecipientForApproval: function (component, agreement) {
     var returnValue = false;
-    if (agreement.status.toLowerCase() === 'pending approval' &&
+    var AgreementStatusTypes = component.get('v.AgreementStatusTypes');
+    if (agreement.status.toUpperCase() === AgreementStatusTypes.PENDING_APPROVAL &&
       !$A.util.isEmpty(agreement.historyItems)) {
 
       var approvalCheckoutHistoryItem = agreement.historyItems.find(function (item) {

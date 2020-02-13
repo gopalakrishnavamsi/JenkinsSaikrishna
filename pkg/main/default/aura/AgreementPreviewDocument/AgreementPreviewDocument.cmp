@@ -11,8 +11,10 @@
     <aura:attribute name="widget" type="Object"/>
     <aura:attribute name="uiHelper" type="Object" access="public"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
+    <aura:attribute name="AgreementStatusTypes" type="Object"/>
 
     <!--handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.initializeResources}"/>
     <aura:handler name="change" value="{!v.agreement}" action="{!c.onLoad}"/>
 
     <!-- events -->

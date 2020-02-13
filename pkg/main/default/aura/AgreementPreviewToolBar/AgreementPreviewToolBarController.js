@@ -107,6 +107,10 @@
   sendForSignature: function (component, event, helper) {
     var sendForEsign = true;
     helper.exportAgreementToSalesforce(component, sendForEsign);
+  },
+
+  initializeResources: function (component, event, helper) {
+    helper.loadAgreementStatusTypes(component, helper);
   }
 
 });

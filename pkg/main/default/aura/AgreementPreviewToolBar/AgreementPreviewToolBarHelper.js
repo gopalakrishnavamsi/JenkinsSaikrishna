@@ -9,5 +9,15 @@
       var uiHelper = component.get('v.uiHelper');
       uiHelper.showToast(err, uiHelper.ToastMode.ERROR);
     }
+  },
+
+  loadAgreementStatusTypes: function (component) {
+    var action = component.get('c.getAgreementStatusTypes');
+    action.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        component.set('v.AgreementStatusTypes', response.getReturnValue());
+      }
+    });
+    $A.enqueueAction(action);
   }
 });

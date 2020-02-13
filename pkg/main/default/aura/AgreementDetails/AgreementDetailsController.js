@@ -1,6 +1,6 @@
 ({
   onLoad: function (component, event, helper) {
-    helper.initAgreementActionManager(component);
+    helper.initializeResources(component, helper);
   },
 
   viewAgreement: function (component, event, helper) {

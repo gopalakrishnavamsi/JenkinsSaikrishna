@@ -11,6 +11,7 @@
     <aura:attribute name="namespace" type="String"/>
     <aura:attribute name="uiHelper" type="Object"/>
     <aura:attribute name="isESignatureEnabled" type="Boolean" default="false"/>
+    <aura:attribute name="AgreementStatusTypes" type="Object"/>
 
     <ltng:require styles="{!$Resource.scmwidgetscss}"
                   scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.navUtils)}"
@@ -46,22 +47,22 @@
                                                              minute="2-digit" hour12="false"/>
                             </li>
                             <li class="slds-item slds-p-top_small">
-                                    <span class="{!'slds-badge' + if(v.agreementDetails.status == 'NEW',' ds-greenAgreement-status')
-                                            + if(v.agreementDetails.status == 'NEW VERSION',' ds-greenAgreement-status')
-                                            + if(v.agreementDetails.status == 'PENDING REVIEW',' ds-warningAgreement-status')
-                                            + if(v.agreementDetails.status == 'REVIEWED',' ds-greenAgreement-status')
-                                            + if(v.agreementDetails.status == 'REVIEW CANCELLED',' ds-redAgreement-status')
-                                            + if(v.agreementDetails.status == 'REVIEW EXPIRED',' ds-redAgreement-status')
-                                            + if(v.agreementDetails.status == 'PENDING APPROVAL',' ds-warningAgreement-status')
-                                            + if(v.agreementDetails.status == 'APPROVED',' ds-greenAgreement-status')
-                                            + if(v.agreementDetails.status == 'APPROVAL CANCELLED',' ds-redAgreement-status')
-                                            + if(v.agreementDetails.status == 'COMPLETED',' ds-greenAgreement-status')
-                                            + if(v.agreementDetails.status == 'REJECTED',' ds-redAgreement-status')
-                                            + if(v.agreementDetails.status == 'SIGNED',' ds-greenAgreement-status')
-                                            + if(v.agreementDetails.status == 'SIGNATURE CANCELLED',' ds-redAgreement-status')
-                                            + if(v.agreementDetails.status == 'NO STATUS','  ds-greenAgreement-status')
-                                            + if(v.agreementDetails.status == 'PENDING SIGNATURE',' ds-warningAgreement-status')
-                                            + if(v.agreementDetails.status == 'SYSTEM ERROR',' ds-redAgreement-status')}">
+                                    <span class="{!'slds-badge' + if(v.agreementDetails.status == v.AgreementStatusTypes.NEW_AGREEMENT,' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.NEW_VERSION,' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.PENDING_REVIEW,' ds-warningAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.REVIEWED,' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.REVIEW_CANCELLED,' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.REVIEW_EXPIRED,' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.PENDING_APPROVAL,' ds-warningAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.APPROVED,' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.APPROVAL_CANCELLED,' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.COMPLETED,' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.REJECTED,' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.SIGNED,' ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.SIGNATURE_CANCELLED,' ds-redAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.NO_STATUS,'  ds-greenAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.PENDING_SIGNATURE,' ds-warningAgreement-status')
+                                            + if(v.agreementDetails.status == v.AgreementStatusTypes.SYSTEM_ERROR,' ds-redAgreement-status')}">
                                         {!v.agreementDetails.status}
                                     </span>
                             </li>
@@ -90,22 +91,22 @@
 
                 <lightning:menuItem label="{!$Label.c.UploadNewVersion}" value="{!$Label.c.UploadNewVersion}"
                                     onactive="{!c.showUploadModal}"
-                                    disabled="{!v.agreementDetails.status == 'COMPLETED'
-                                                || v.agreementDetails.status == 'PENDING REVIEW'
-                                                || v.agreementDetails.status == 'PENDING APPROVAL'}"/>
+                                    disabled="{!v.agreementDetails.status == v.AgreementStatusTypes.COMPLETED
+                                                || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_REVIEW
+                                                || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_APPROVAL}"/>
 
 
                 <lightning:menuItem label="{!$Label.c.Rename}" value="{!$Label.c.Rename}"
                                     onactive="{!c.showRenameModal}"
-                                    disabled="{!v.agreementDetails.status == 'PENDING REVIEW'
-                                               || v.agreementDetails.status == 'PENDING APPROVAL'
-                                               || v.agreementDetails.status == 'PENDING SIGNATURE'}"/>
+                                    disabled="{!v.agreementDetails.status == v.AgreementStatusTypes.PENDING_REVIEW
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_APPROVAL
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_SIGNATURE}"/>
 
                 <lightning:menuItem label="{!$Label.c.DeleteButtonLabel}" value="{!$Label.c.DeleteButtonLabel}"
                                     onactive="{!c.showDeleteModal}"
-                                    disabled="{!v.agreementDetails.status == 'PENDING REVIEW'
-                                               || v.agreementDetails.status == 'PENDING APPROVAL'
-                                               || v.agreementDetails.status == 'PENDING SIGNATURE'}"/>
+                                    disabled="{!v.agreementDetails.status == v.AgreementStatusTypes.PENDING_REVIEW
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_APPROVAL
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_SIGNATURE}"/>
             </lightning:buttonMenu>
 
             <lightning:buttonMenu aura:id="shareMenu" iconName="utility:internal_share" class="slds-p-left_xx-small"
@@ -117,25 +118,25 @@
                 <lightning:menuItem label="{!$Label.c.AgreementsExternalReview}"
                                     value="{!$Label.c.AgreementsExternalReview}"
                                     onactive="{!c.showExternalReviewModal}"
-                                    disabled="{!v.agreementDetails.status == 'PENDING REVIEW'
-                                               || v.agreementDetails.status == 'PENDING APPROVAL'
-                                               || v.agreementDetails.status == 'PENDING SIGNATURE'
-                                               || v.agreementDetails.status == 'COMPLETED'}"/>
+                                    disabled="{!v.agreementDetails.status == v.AgreementStatusTypes.PENDING_REVIEW
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_APPROVAL
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_SIGNATURE
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.COMPLETED}"/>
 
                 <lightning:menuItem label="{!$Label.c.AgreementsInternalApproval}"
                                     value="{!$Label.c.AgreementsInternalApproval}"
                                     onactive="{!c.showInternalApprovalModal}"
-                                    disabled="{!v.agreementDetails.status == 'PENDING REVIEW'
-                                               || v.agreementDetails.status == 'PENDING APPROVAL'
-                                               || v.agreementDetails.status == 'PENDING SIGNATURE'
-                                               || v.agreementDetails.status == 'COMPLETED'}"/>
+                                    disabled="{!v.agreementDetails.status == v.AgreementStatusTypes.PENDING_REVIEW
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_APPROVAL
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_SIGNATURE
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.COMPLETED}"/>
 
                 <lightning:menuItem label="{!$Label.c.SendForSignature}"
                                     value="{!$Label.c.SendForSignature}"
                                     onactive="{!c.sendForSignature}"
-                                    disabled="{!v.agreementDetails.status == 'PENDING REVIEW'
-                                               || v.agreementDetails.status == 'PENDING APPROVAL'
-                                               || v.agreementDetails.status == 'PENDING SIGNATURE'}"
+                                    disabled="{!v.agreementDetails.status == v.AgreementStatusTypes.PENDING_REVIEW
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_APPROVAL
+                                               || v.agreementDetails.status == v.AgreementStatusTypes.PENDING_SIGNATURE}"
                                     class="{!if(!v.isESignatureEnabled,'slds-hide','')}"/>
 
             </lightning:buttonMenu>

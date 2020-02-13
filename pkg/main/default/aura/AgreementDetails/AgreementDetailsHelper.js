@@ -1,5 +1,5 @@
 ({
-  initAgreementActionManager: function (component) {
+  initializeResources: function (component, helper) {
     //Saving instance of uiHelper
     var uiHelper = new UIHelper(
       function () {
@@ -16,6 +16,17 @@
       component.get('v.namespace')
     );
     component.set('v.agreementActionManager', manager);
+    helper.loadAgreementStatusTypes(component);
+  },
+
+  loadAgreementStatusTypes: function (component) {
+    var action = component.get('c.getAgreementStatusTypes');
+    action.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        component.set('v.AgreementStatusTypes', response.getReturnValue());
+      }
+    });
+    $A.enqueueAction(action);
   },
 
   createUploadComponent: function (component) {
