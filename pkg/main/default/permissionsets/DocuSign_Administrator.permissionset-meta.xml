@@ -862,6 +862,10 @@
 		<apexPage>Agreements</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
+	<pageAccesses>
+		<apexPage>GenTemplateDelete</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
 	<tabSettings>
 		<tab>GenTemplate__c</tab>
 		<visibility>Available</visibility>

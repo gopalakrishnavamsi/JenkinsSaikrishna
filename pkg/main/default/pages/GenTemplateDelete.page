@@ -1,0 +1,19 @@
+<apex:page id="GenTemplateDelete" sidebar="false" showHeader="true" standardController="GenTemplate__c"
+           title="{!$Label.DocuSign}" extensions="GenController">
+    <apex:includeLightning/>
+    <apex:includeScript value="{!$Resource.navUtils}"/>
+    <apex:includeScript value="{!$Resource.stringUtils}"/>
+    <apex:slds/>
+    <!-- div for rendering the lightning component -->
+    <div id="lightning"></div>
+
+    <script type="text/javascript">
+      var ns = '{!JSENCODE(namespace)}';
+      $Lightning.use(ns + ':GenTemplateDeleteApp', function () {
+        $Lightning.createComponent(ns + ':GenTemplateDelete', {
+          templateId: '{!GenTemplate__c.Id}',
+        }, 'lightning', function (component, status) {
+        });
+      });
+    </script>
+</apex:page>

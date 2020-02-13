@@ -690,6 +690,20 @@ private class GenControllerTest {
 	}
 
 	@IsTest
+	static void test_deleteTemplate_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			gt.TemplateId__c = String.valueOf(ScmAPIMock.DOCUMENT_ID);
+			gt.TemplateType__c = Gen.TYPE_ONLINE;
+			update gt;
+			Test.startTest();
+			Boolean isDeleted = GenController.deleteTemplate(gt.Id);
+			System.assertEquals(isDeleted, true);
+			Test.stopTest();
+		}
+	}
+	@IsTest
 	static void test_redirectOnEdit_Unauthorized() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
@@ -704,6 +718,24 @@ private class GenControllerTest {
 		}
 	}
 
+	@IsTest
+	static void test_deleteTemplate_unauthorized() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			gt.TemplateId__c = String.valueOf(ScmAPIMock.DOCUMENT_ID);
+			gt.TemplateType__c = Gen.TYPE_ONLINE;
+			update gt;
+			Test.startTest();
+			try {
+				Boolean isDeleted = GenController.deleteTemplate(gt.Id);
+				throw new AssertException('Expected delete template to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
 	@IsTest
 	static void test_redirectOnNewTemplate_Unauthorized() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {

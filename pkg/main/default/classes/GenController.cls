@@ -257,4 +257,13 @@ public with sharing class GenController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to Prepare Cancel Url.');
 		}
 	}
+
+	@AuraEnabled
+	public static Boolean deleteTemplate(final Id templateId) {
+		try {
+			return GenService.deleteTemplate(templateId);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to delete template.');
+		}
+	}
 }

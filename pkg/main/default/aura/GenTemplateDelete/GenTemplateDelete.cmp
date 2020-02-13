@@ -1,0 +1,44 @@
+<aura:component controller="GenController">
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
+    <aura:attribute name="templateId" type="Id"/>
+    <aura:attribute name="template" type="Object" access="private"/>
+    <aura:attribute name="templateRecord" type="Object" access="private"/>
+    <aura:attribute name="message" type="String" access="private"/>
+    <aura:attribute name="mode" type="String" access="private"/>
+    <aura:attribute name="showToast" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isProcessing" type="Boolean" default="false" access="private"/>
+
+    <force:recordData recordId="{!v.templateId}"
+                      targetRecord="{!v.template}"
+                      targetFields="{!v.templateRecord}"
+                      fields="Id, Name"/>
+    <c:Toast aura:id="toast" message="{!v.message}" mode="{!v.mode}" showToast="{!v.showToast}"/>
+    <c:strike_modal aura:id="genTemplateDelete"
+                    title="{!v.templateRecord.Name}"
+                    showModal="true"
+                    showHeader="true"
+                    showClose="true">
+        <aura:if isTrue="{!v.isProcessing}">
+            <div class="ds-gen-templates-setup-spinner">
+                <c:BlueSpinner/>
+            </div>
+        </aura:if>
+        <div class="slds-scope slds-p-horizontal--xx-large">
+            <div class="slds-grid slds-grid_vertical">
+                <div class="slds-col">
+                    <div class="slds-text-align--center slds-text-body_regular">
+                        {!$Label.c.DeleteTemplateMessage}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal footer buttons -->
+        <aura:set attribute="footerButtons">
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelClicked}"
+                              label="{!$Label.c.Cancel}">
+            </lightning:button>
+            <lightning:button class="slds-button slds-button_destructive" onclick="{!c.deleteClicked}"
+                              label="{!$Label.c.DeleteButtonLabel}" disabled="{!v.isProcessing}"></lightning:button>
+        </aura:set>
+    </c:strike_modal>
+</aura:component>

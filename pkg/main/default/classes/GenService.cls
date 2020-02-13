@@ -177,7 +177,9 @@ public with sharing class GenService {
 				FROM GenTemplate__c
 				WHERE Name LIKE :(name + '%')
 			];
-			return String.format(Label.GenTemplateCopyName_2, new List<String> { name, String.valueOf(count) });
+			return String.format(Label.GenTemplateCopyName_2, new List<String> {
+				name, String.valueOf(count)
+			});
 		}
 
 		private Set<Id> queryLinkedDocumentIds(final Id linkedEntityId) {
@@ -372,7 +374,9 @@ public with sharing class GenService {
 			if (accessMap.containsKey(type)) {
 				accessMap.get(type).add(fieldName);
 			} else {
-				accessMap.put(type, new List<String> { fieldName });
+				accessMap.put(type, new List<String> {
+					fieldName
+				});
 			}
 
 			return accessMap;
@@ -426,7 +430,9 @@ public with sharing class GenService {
 			if (Collection.isNotEmpty(childQueries)) {
 				q += ', ' + String.join(childQueries, ', ');
 			}
-			q += String.format(' FROM {0} WHERE Id = :sourceId', new List<String> { String.valueOf(type) });
+			q += String.format(' FROM {0} WHERE Id = :sourceId', new List<String> {
+				String.valueOf(type)
+			});
 			return System.Database.query(q);
 		}
 
@@ -450,7 +456,9 @@ public with sharing class GenService {
 			final SObjectType type,
 			final Integer maximumRecords) {
 
-			Permissions.verifyIsQueryable(type, new List<String> { 'Id' });
+			Permissions.verifyIsQueryable(type, new List<String> {
+				'Id'
+			});
 
 			List<SObject> records = [
 				SELECT Id
@@ -523,7 +531,9 @@ public with sharing class GenService {
 				'ContentDocumentId', 'Title', 'PathOnClient', 'FileExtension', 'VersionData', 'ContentSize',
 				'LastModifiedDate', 'GeneratedFileFormat__c', 'GeneratedFileSuffix__c', 'GeneratedFileName__c'
 			});
-			Permissions.verifyIsUpdateable(CONTENT_VERSION_TYPE, new List<String> { 'VersionData' });
+			Permissions.verifyIsUpdateable(CONTENT_VERSION_TYPE, new List<String> {
+				'VersionData'
+			});
 
 			ContentVersion cv = [
 				SELECT VersionData
@@ -841,7 +851,11 @@ public with sharing class GenService {
 
 	public static Boolean deleteTemplate(final Id templateId) {
 		Permissions.verifyIsDocuSignAdministrator();
-
+		Gen.Template templateRecord = getTemplate(templateId);
+		UUID scmDocumentId = templateRecord.springTemplateId;
+		if (scmDocumentId != null) {
+			NegotiateAPI.getInstance().deleteAgreement(scmDocumentId);
+		}
 		return DB.deleteTemplate(templateId);
 	}
 

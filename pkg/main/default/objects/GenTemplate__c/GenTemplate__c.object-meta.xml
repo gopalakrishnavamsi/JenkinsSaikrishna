@@ -16,7 +16,8 @@
 	</actionOverrides>
 	<actionOverrides>
 		<actionName>Delete</actionName>
-		<type>Default</type>
+		<content>GenTemplateDelete</content>
+		<type>Visualforce</type>
 	</actionOverrides>
 	<actionOverrides>
 		<actionName>Edit</actionName>

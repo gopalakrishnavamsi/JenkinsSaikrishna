@@ -4748,6 +4748,18 @@
 		<name>MustBeAdministratorOrGenerator</name>
 	</customLabels>
 	<customLabels>
+		<label>Delete Template</label>
+		<name>DeleteTemplateTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Are you sure you want to delete this template?</label>
+		<name>DeleteTemplateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>The template has been deleted.</label>
+		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
 		<label>Error</label>
 		<name>Error</name>
 	</customLabels>

@@ -9147,6 +9147,27 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>You must have DocuSign administrator or generator permissions to perform this operation.</value>
 	</labels>
 	<labels>
+		<fullName>DeleteTemplateTitle</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Delete Template</shortDescription>
+		<value>Delete Template</value>
+	</labels>
+	<labels>
+		<fullName>DeleteTemplateMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Delete Template Message</shortDescription>
+		<value>Are you sure you want to delete this template?</value>
+	</labels>
+	<labels>
+		<fullName>TemplateDeleted</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TemplateDeleted</shortDescription>
+		<value>The template has been deleted.</value>
+	</labels>
+	<labels>
 		<fullName>Error</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
