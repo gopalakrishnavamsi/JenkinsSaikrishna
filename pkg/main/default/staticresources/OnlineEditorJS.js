@@ -8,7 +8,18 @@ jQuery(document).ready(function ($) {
   var _toolTip = false;
   var _currentProgressStep = null;
   var _toastComponent;
+  var _userEvents;
+  var _sessionType;
   var _layoutMap = {};
+  var EventLabels = Object.freeze({
+    CREATE_TEMPLATE: 'Create Gen Template',
+    UPDATE_TEMPLATE: 'Update Gen Template',
+    PUBLISH_BUTTON: 'Publish Gen Button',
+    PREVIEW_DOCUMENT: 'Preview Gen Document',
+    GENERATE_DOCUMENT: 'Generate Gen Document',
+    templateUndefined: 'Template Undefined',
+    navigationError: 'Handle Navigation error'
+  });  
 
   var Elements = Object.freeze({
     spinner1: $('#ds-spinner'),
@@ -42,10 +53,49 @@ jQuery(document).ready(function ($) {
   hideAll();
   hideAllButtons();
 
-  if (navUtils.isIE()) $('#IEWarning').show();
-  else if (Configuration.hasInitError) createToastComponent(Configuration.initError, 'error');
-  else handleStepNavigation(1).onStart();
+  createUserEventsComponent()
+  .then(function(component) {
+    _userEvents = component;
 
+    if (Configuration.isGenerating) _sessionType = EventLabels.GENERATE_DOCUMENT;
+    else Configuration.isEditing ? EventLabels.UPDATE_TEMPLATE : EventLabels.CREATE_TEMPLATE;
+
+    _userEvents.time(_sessionType);
+    _userEvents.addProperties(getBaseEventProps()) 
+
+    if (navUtils.isIE()) $('#IEWarning').show();
+    else if (Configuration.hasInitError) {
+      createToastComponent(Configuration.initError, 'error');
+      _userEvents.error(
+        _sessionType, 
+        {
+
+        }, 
+        Configuration.initError 
+      )
+    }
+    else if (!Configuration.isGenerating) handleStepNavigation(1).onStart();
+  })
+  .catch(function(err) {
+    createToastComponent(err, 'error');
+  });
+
+
+  function getBaseEventProps() {
+
+    if (!Configuration || !Configuration.template) return { 
+      'Product': 'Gen',
+      'Template Type': 'Online Editor'
+    };
+
+    return {
+      'Product': 'Gen',
+      'Template Type': 'Online Editor',
+      'Source Object': Configuration.template.sourceObject ? Configuration.template.sourceObject : undefined,      
+      'Template Name': Configuration.template.name ?  Configuration.template.name : undefined,
+      'Template Id': Configuration.template.id ?  Configuration.template.id : undefined
+    };
+  }
 
   function getSpringTemplateIdToString(template) {
     return template && template.springTemplateId ? template.springTemplateId.value : null;
@@ -86,6 +136,24 @@ jQuery(document).ready(function ($) {
     });
   }
 
+  function createUserEventsComponent() {
+    return new Promise(function (resolve, reject) {
+      try {
+        $Lightning.use(Configuration.namespace + ':LightningOutApp', function () {
+          $Lightning.createComponent(Configuration.namespace + ':UserEvents',
+            null,
+            'userEventsContainer',
+            function (cmp) {
+              resolve(cmp);
+            }
+          );
+        });  
+      } catch(err) {
+        reject(err);
+      }       
+    })
+  }
+
   function getMergeFields() {
     return new Promise(
       function (resolve, reject) {
@@ -98,10 +166,24 @@ jQuery(document).ready(function ($) {
               if (event.status) {
                 resolve(result);
               } else {
+                _userEvents.error(
+                  EventLabels.PREVIEW_DOCUMENT, 
+                  {
+
+                  }, 
+                  event.message
+                );
                 reject(event.message);
               }
             });
         } catch (err) {
+          _userEvents.error(
+            EventLabels.PREVIEW_DOCUMENT, 
+            {
+
+            }, 
+            err
+          );
           reject(err);
         }
       }
@@ -121,10 +203,24 @@ jQuery(document).ready(function ($) {
               if (event.status) {
                 resolve(result);
               } else {
+                _userEvents.error(
+                  EventLabels.PREVIEW_DOCUMENT, 
+                  {
+
+                  }, 
+                  event.message
+                );                
                 reject(event.message);
               }
             });
         } catch (err) {
+          _userEvents.error(
+            EventLabels.PREVIEW_DOCUMENT, 
+            {
+
+            }, 
+            err
+          );
           reject(err);
         }
       }
@@ -142,10 +238,24 @@ jQuery(document).ready(function ($) {
               if (event.status) {
                 resolve(result);
               } else {
+                _userEvents.error(
+                  EventLabels.PREVIEW_DOCUMENT, 
+                  {
+
+                  }, 
+                  event.message
+                );
                 reject(event.message);
               }
             });
         } catch (err) {
+          _userEvents.error(
+            EventLabels.PREVIEW_DOCUMENT, 
+            {
+
+            }, 
+            err
+          );
           reject(err);
         }
       }
@@ -418,6 +528,13 @@ jQuery(document).ready(function ($) {
   function handleStepNavigation(step) {
     if (step === null || step === undefined || step > 2 || step < 1) {
       createToastComponent(Labels.templateInvalidPathLabel, 'error');
+      _userEvents.error(
+        _sessionType, 
+        {
+
+        }, 
+        EventLabels.navigationError 
+      )
       return;
     }
 
@@ -555,6 +672,13 @@ jQuery(document).ready(function ($) {
       })
       .catch(function (error) {
         createToastComponent(error, 'error');
+        _userEvents.error(
+          _sessionType, 
+          {
+
+          }, 
+          error
+        );
       });
   });
 
@@ -625,23 +749,41 @@ jQuery(document).ready(function ($) {
       .then(function (layoutsById) {
         _layoutMap = layoutsById;
         createToastComponent((isEditing ? Labels.templateUpdatedLabel : Labels.templateCreatedLabel).replace('{0}', Configuration.template.name), 'success');
+        _userEvents.success(
+          _sessionType, 
+          { 
+            springTemplateId: springTemplateId 
+          } 
+        );
         navStep.onEnd();
       })
       .catch(function (error) {
         Elements.spinner1.hide();
+        _userEvents.error(
+          _sessionType, 
+          { 
+            springTemplateId: springTemplateId 
+          }, 
+          error
+        );
         createToastComponent(error, 'error');
       });
   }
 
   function onlineEditorPublish(template, buttonLabel) {
-    if (template) {
-      showSpinner();
       var buttonApiName = template.id;
-      return updateFileDetailsInSalesforce($('#fileNameInput').val(), $('#fileSuffix').val())
+      var selectedLayouts = [];
+
+      return new Promise(function(resolve, reject) {
+        if (!template) reject(Labels.templateUndefinedLabel);
+
+        showSpinner();
+        
+        updateFileDetailsInSalesforce($('#fileNameInput').val(), $('#fileSuffix').val())
         .then(function (t) {
           Configuration.template = t;
           buttonApiName = Configuration.layoutActionName + buttonApiName;
-          var selectedLayouts = [];
+          
           $.each($('input[name="layoutCheckboxI"]:checked'), function () {
             var layout = _layoutMap[$(this).val()];
             delete _layoutMap[$(this).val()];
@@ -661,10 +803,25 @@ jQuery(document).ready(function ($) {
           };
 
           return updateObjectLayouts(template.sourceObject, selectedLayouts, parameters);
-        });
-    } else {
-      return Promise.reject(Labels.templateUndefinedLabel);
-    }
+        })
+        .then(function() {
+          _userEvents.success(
+            EventLabels.PUBLISH_BUTTON,
+            {
+              buttonLabel: buttonLabel,
+              buttonApiName: buttonApiName,
+              layouts: selectedLayouts.map(function(layout) {
+                return {
+                  name: layout.name, 
+                  id: layout.id
+                }
+              })
+            }
+          );
+
+          resolve(true);
+        })
+      });
   }
 
   function onlineEditorPublishCancel(templateId, isEditing) {
@@ -673,6 +830,13 @@ jQuery(document).ready(function ($) {
         navUtils.navigateToUrlOnlineEditor(Configuration.templateListUrl, true);
       })
       .catch(function (error) {
+        _userEvents.error(
+          _sessionType, 
+          {
+
+          }, 
+          error
+        );
         createToastComponent(error, 'error');
       });
   }
@@ -696,6 +860,13 @@ jQuery(document).ready(function ($) {
         }, 3000);
       })
       .catch(function (err) {
+        _userEvents.error(
+          _sessionType, 
+          {
+
+          }, 
+          err
+        );
         createToastComponent(err, 'error');
       });
   });
@@ -712,6 +883,13 @@ jQuery(document).ready(function ($) {
     if (_currentProgressStep === 2) return;
     var template = Configuration.template;
     if (!template || !template.id || !template.springTemplateId || !template.sourceObject) {
+       _userEvents.error(
+        _sessionType, 
+        {
+
+        }, 
+        EventLabels.templateUndefined
+      );
       createToastComponent(Labels.templateSaveValidationLabel, 'error');
       return;
     }
@@ -731,6 +909,13 @@ jQuery(document).ready(function ($) {
         })
         .catch(function (error) {
           createToastComponent(error, 'error');
+          _userEvents.error(
+            _sessionType, 
+            {
+              layouts : Object.keys(_layoutMap)
+            }, 
+            error
+          );
         });
     }
   });
@@ -751,9 +936,23 @@ jQuery(document).ready(function ($) {
         })
         .catch(function (err) {
           createToastComponent(err, 'error');
+          _userEvents.error(
+            _sessionType, 
+            {
+
+            }, 
+            err
+          );
         });
     } else {
       createToastComponent(Labels.templateUndefinedLabel, 'error');
+      _userEvents.error(
+        _sessionType, 
+        {
+
+        }, 
+        EventLabels.templateUndefined
+      );
     }
   });
 
@@ -822,12 +1021,32 @@ jQuery(document).ready(function ($) {
             + '&sendNow=1';
           Elements.spinner2.hide();
           window.open(pageUrl, '_self');
+          _userEvents.success(
+            _sessionType, 
+            {
+
+            }
+          );          
         })
         .catch(function (err) {
           createToastComponent(err, 'error');
+          _userEvents.error(
+            _sessionType, 
+            {
+
+            }, 
+            err
+          );
         });
     } else {
       createToastComponent(Labels.templateUndefinedLabel, 'error');
+      _userEvents.error(
+        _sessionType, 
+        {
+
+        },
+        EventLabels.templateUndefined
+      );
     }
   });
 

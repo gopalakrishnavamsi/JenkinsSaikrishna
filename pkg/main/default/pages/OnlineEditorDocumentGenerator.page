@@ -32,6 +32,11 @@
         sourceId: '{!JSENCODE($CurrentPage.parameters.recordId)}',
         sendingUrl: '{!URLFOR($Page.Sending)}'
       };
+      
+      Labels = {
+        templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}'
+      };
+
     </script>
 
     <style type="text/css">
@@ -105,6 +110,7 @@
                     </div>
                 </div>
             </div>
+        <div id="userEventsContainer"/>
         </apex:outputPanel>
         <apex:outputPanel rendered="{!errorMessage==null}">
             <div id="ds-spinner2">
@@ -116,6 +122,5 @@
             <div id="onlineEditorGenerator"></div>
         </apex:outputPanel>
     </div>
-
     </html>
 </apex:page>

@@ -57,6 +57,7 @@
         templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}',
         templateSaveValidationLabel: '{!$Label.OnlineEditorSaveValidation}'
       };
+
     </script>
 
     <style type="text/css">
@@ -359,6 +360,7 @@
             </div>
         </div>
     </div>
+    <div id="userEventsContainer"/>
     <div id="onlineEditor"></div>
     </html>
 </apex:page>
