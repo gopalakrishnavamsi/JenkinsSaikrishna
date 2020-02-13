@@ -85,9 +85,7 @@
                         <button id="onlineEditorCancelGeneration"
                                 class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
                         <button id="onlineEditorSendForSignature"
-                                class="slds-button slds-button_brand"
-                                disabled="{!errorMessage!=null}">{!$Label.SendForSignature}
-                        </button>
+                                class="slds-button slds-button_brand">{!$Label.SendForSignature}</button>
                     </div>
                 </div>
             </div>

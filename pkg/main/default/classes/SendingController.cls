@@ -197,26 +197,4 @@ public with sharing class SendingController extends Controller {
 			}
 		}
 	}
-
-	// TODO: Pass file ID and recipient placeholders/IDs into this method.
-	@AuraEnabled
-	public static DraftEnvelope createResponsiveHtmlEnvelope(final Id sourceId) {
-		try {
-			Permissions.verifyIsDocuSignUser();
-
-			Set<Id> sourceIds = new Set<Id> { sourceId };
-			EnvelopeSettings es = EnvelopeSettings.getInstance();
-			Credentials.save();
-
-			return new DraftEnvelope(
-				EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),
-				new List<Template>(),
-				DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, true),
-				RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds),
-				es.defaultRoles,
-				es.allowRecipientLanguageSelection ? es.emailLocalizations : new List<Recipient.EmailSettings>());
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to get draft envelope');
-		}
-	}
 }
