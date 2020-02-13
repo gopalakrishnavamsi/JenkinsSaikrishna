@@ -856,7 +856,7 @@ jQuery(document).ready(function ($) {
         createToastComponent(Labels.templatePublishedLabel.replace('{0}', Configuration.template.name), 'success');
         window.setTimeout(function () {
           if (_toastComponent) _toastComponent.destroy();
-          navUtils.navigateToUrlOnlineEditor(Configuration.templateListUrl, true);
+          navUtils.navigateToSObject(Configuration.template.id);
         }, 3000);
       })
       .catch(function (err) {
