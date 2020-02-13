@@ -689,4 +689,39 @@ private class GenControllerTest {
 		}
 	}
 
+	@IsTest
+	static void test_redirectOnEdit_Unauthorized() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			template.TemplateType__c = Gen.TYPE_WORD;
+			update template;
+
+			Test.startTest();
+			GenController controller = new GenController(new ApexPages.StandardController(template));
+			PageReference result1 = controller.redirectOnEdit();
+			System.assertEquals(controller.errorMessage, Label.MustBeDocuSignAdministrator);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_redirectOnNewTemplate_Unauthorized() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			template.TemplateType__c = Gen.TYPE_WORD;
+			update template;
+
+			PageReference expectedWordBasedGenPage = Page.GenTemplate;
+			expectedWordBasedGenPage.getParameters().put('id', template.Id);
+			expectedWordBasedGenPage.getParameters().put('isEdit', 'false');
+			expectedWordBasedGenPage.getParameters().put('isFromSetupWizard', 'false');
+
+			Test.startTest();
+			GenController controller = new GenController(new ApexPages.StandardController(template));
+			controller.templateId = template.id;
+			PageReference result = controller.redirectOnNewTemplate();
+			System.assertEquals(controller.errorMessage, Label.MustBeDocuSignAdministrator);
+			Test.stopTest();
+		}
+	}
 }

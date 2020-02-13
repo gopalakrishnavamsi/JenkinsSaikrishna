@@ -124,6 +124,15 @@ public with sharing class OnlineEditorController extends Controller {
 		}
 	}
 
+	public void verifyDocuSignGenerator() {
+		try {
+			Permissions.verifyIsDocuSignGenerator();
+		} catch (Exception ex) {
+			this.errorMessage = ex.getMessage();
+			LoggerService.getInstance().exception(ex, 'failed to validate docusign generator');
+		}
+	}
+
 	@TestVisible
 	private static List<String> convertFields(final List<OnlineEditorController.Field> fields) {
 		Permissions.verifyIsDocuSignGenerator();

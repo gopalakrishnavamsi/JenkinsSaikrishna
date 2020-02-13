@@ -4747,6 +4747,10 @@
 		<label>You must have DocuSign administrator or generator permissions to perform this operation.</label>
 		<name>MustBeAdministratorOrGenerator</name>
 	</customLabels>
+	<customLabels>
+		<label>Error</label>
+		<name>Error</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

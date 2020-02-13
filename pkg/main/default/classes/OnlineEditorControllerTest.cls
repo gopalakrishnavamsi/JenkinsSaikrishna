@@ -925,4 +925,26 @@ private class OnlineEditorControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_verifyDocuSignGenerator() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Test.startTest();
+			  OnlineEditorController controller = new OnlineEditorController();
+			  controller.verifyDocuSignGenerator();
+			  system.assertEquals(controller.errorMessage,null);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_verifyDocuSignGenerator_Unauthorized() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			OnlineEditorController controller = new OnlineEditorController();
+			controller.verifyDocuSignGenerator();
+			system.assertEquals(controller.errorMessage, Label.MustBeDocuSignGenerator);
+			Test.stopTest();
+		}
+	}
 }

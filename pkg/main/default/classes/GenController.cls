@@ -1,6 +1,7 @@
 public with sharing class GenController extends Controller {
 
 	public Id templateId { get; set; }
+	public String errorMessage { get; private set; }
 
 	public GenController() {
 	}
@@ -10,26 +11,38 @@ public with sharing class GenController extends Controller {
 
 	public PageReference redirectOnEdit() {
 		PageReference redirectPage = null;
-		QueryString params = QueryString.fromCurrentPage();
-		this.templateId = params.getId('templateId', params.getId('id', null));
-		if (this.templateId != null) {
-			Gen.Template template = GenService.getTemplate(this.templateId);
-			Boolean editMode = template.templateType != Gen.TYPE_ONLINE || template.springTemplateId != null;
-			redirectPage = new PageReference(
-				GenService.getTemplateUrl(template, false).toExternalForm());
-			redirectPage.getParameters().put('isEdit', String.valueOf(editMode));
-			redirectPage.setRedirect(true);
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+			QueryString params = QueryString.fromCurrentPage();
+			this.templateId = params.getId('templateId', params.getId('id', null));
+			if (this.templateId != null) {
+				Gen.Template template = GenService.getTemplate(this.templateId);
+				Boolean editMode = template.templateType != Gen.TYPE_ONLINE || template.springTemplateId != null;
+				redirectPage = new PageReference(
+					GenService.getTemplateUrl(template, false).toExternalForm());
+				redirectPage.getParameters().put('isEdit', String.valueOf(editMode));
+				redirectPage.setRedirect(true);
+			}
+		} catch (Exception ex) {
+			this.errorMessage = ex.getMessage();
+			LoggerService.getInstance().exception(ex, 'Failed to redirect to Gen template page');
 		}
 		return redirectPage;
 	}
 
 	public PageReference redirectOnNewTemplate() {
 		PageReference redirectPage;
-		if (this.templateId != null) {
-			Gen.Template template = GenService.getTemplate(this.templateId);
-			redirectPage = new PageReference(GenService.getTemplateUrl(template, false).toExternalForm());
-			redirectPage.getParameters().put('isEdit', 'false');
-			redirectPage.setRedirect(true);
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+			if (this.templateId != null) {
+				Gen.Template template = GenService.getTemplate(this.templateId);
+				redirectPage = new PageReference(GenService.getTemplateUrl(template, false).toExternalForm());
+				redirectPage.getParameters().put('isEdit', 'false');
+				redirectPage.setRedirect(true);
+			}
+		} catch (Exception ex) {
+			this.errorMessage = ex.getMessage();
+			LoggerService.getInstance().exception(ex, 'Failed to redirect to Gen template page');
 		}
 		return redirectPage;
 	}

@@ -831,11 +831,11 @@
 		<enabled>true</enabled>
 	</pageAccesses>
 	<pageAccesses>
-		<apexPage>GenTemplateClone</apexPage>
+		<apexPage>GenTemplateNavigator</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
 	<pageAccesses>
-		<apexPage>GenDocumentGenerator</apexPage>
+		<apexPage>GenTemplateClone</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
 	<pageAccesses>

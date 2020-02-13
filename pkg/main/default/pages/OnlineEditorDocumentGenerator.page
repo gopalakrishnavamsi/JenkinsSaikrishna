@@ -1,5 +1,5 @@
 <apex:page id="OnlineEditorDocumentGenerator" sidebar="false" showHeader="false" controller="OnlineEditorController"
-           title="Generate Documents" standardStylesheets="false" applyHtmlTag="false">
+           title="Generate Documents" standardStylesheets="false" applyHtmlTag="false" action="{!verifyDocuSignGenerator}">
     <html>
     <apex:includeLightning/>
     <apex:slds/>
@@ -77,21 +77,45 @@
                         </div>
                     </div>
                     <div class="slds-col slds-no-flex slds-align-top">
-                        <button id="onlineEditorCancelGeneration" class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
-                        <button id="onlineEditorSendForSignature" class="slds-button slds-button_brand">{!$Label.SendForSignature}
+                        <button id="onlineEditorCancelGeneration"
+                                class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
+                        <button id="onlineEditorSendForSignature"
+                                class="slds-button slds-button_brand"
+                                disabled="{!errorMessage!=null}">{!$Label.SendForSignature}
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="ds-spinner2">
-            <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
-                <div class="slds-spinner__dot-a"></div>
-                <div class="slds-spinner__dot-b"></div>
+        <apex:outputPanel rendered="{!errorMessage!=null}">
+            <div id="error" class="slds-container slds-container_large slds-container_center slds-p-around_large">
+                <div class="slds-notify_container slds-is-relative">
+                    <div class="slds-notify slds-notify_toast slds-theme_error slds-size_1-of-1 slds-m-around_none slds-p-right_large slds-grid_align-center"
+                         role="status">
+          <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top"
+                title="{!$Label.Error}">
+              <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                       xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#error')}"></use>
+              </svg>
+          </span>
+                        <div class="slds-notify__content">
+                            <h2 id="errorMessage" class="slds-text-heading_small">{!errorMessage}</h2>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="onlineEditorGenerator"></div>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!errorMessage==null}">
+            <div id="ds-spinner2">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+            <div id="onlineEditorGenerator"></div>
+        </apex:outputPanel>
     </div>
-    
+
     </html>
 </apex:page>

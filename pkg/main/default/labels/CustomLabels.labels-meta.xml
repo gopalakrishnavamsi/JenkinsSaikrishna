@@ -9146,4 +9146,11 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Must be administrator or generator</shortDescription>
 		<value>You must have DocuSign administrator or generator permissions to perform this operation.</value>
 	</labels>
+	<labels>
+		<fullName>Error</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Error</shortDescription>
+		<value>Error</value>
+	</labels>
 </CustomLabels>
