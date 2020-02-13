@@ -587,7 +587,7 @@ private class GenControllerTest {
 
 			Test.startTest();
 			GenController controller = new GenController(new ApexPages.StandardController(template));
-			controller.templateId = template.id;
+			controller.templateId = template.Id;
 			PageReference result1 = controller.redirectOnEdit();
 			System.assertEquals(result1.getParameters().get('isEdit'), 'false');
 			Test.stopTest();
@@ -654,17 +654,17 @@ private class GenControllerTest {
 			template.TemplateType__c = Gen.TYPE_ONLINE;
 			update template;
 
-			PageReference expectedOnlineEditorPage = Page.OnlineEditorGenTemplate ;
-			expectedOnlineEditorPage.getParameters().put('id', template.Id);
-			expectedOnlineEditorPage.getParameters().put('isEdit', 'false');
-			expectedOnlineEditorPage.getParameters().put('isFromSetupWizard', 'false');
-
 			Test.startTest();
 			GenController controller = new GenController(new ApexPages.StandardController(template));
-			controller.templateId = template.id;
+			controller.templateId = template.Id;
 			PageReference result = controller.redirectOnNewTemplate();
-			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedOnlineEditorPage.getUrl(), result.getUrl());
 			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.getUrl().toLowerCase().contains(Application.namespacePrefix + 'onlineeditorgentemplate'));
+			System.assertEquals(template.Id, (Id)result.getParameters().get('id'));
+			System.assertEquals('false', result.getParameters().get('isEdit'));
+			System.assertEquals('false', result.getParameters().get('isFromSetupWizard'));
 		}
 	}
 
@@ -675,17 +675,17 @@ private class GenControllerTest {
 			template.TemplateType__c = Gen.TYPE_WORD;
 			update template;
 
-			PageReference expectedWordBasedGenPage = Page.GenTemplate;
-			expectedWordBasedGenPage.getParameters().put('id', template.Id);
-			expectedWordBasedGenPage.getParameters().put('isEdit', 'false');
-			expectedWordBasedGenPage.getParameters().put('isFromSetupWizard', 'false');
-
 			Test.startTest();
 			GenController controller = new GenController(new ApexPages.StandardController(template));
-			controller.templateId = template.id;
+			controller.templateId = template.Id;
 			PageReference result = controller.redirectOnNewTemplate();
-			System.assertEquals(Salesforce.baseUrl.toExternalForm() + expectedWordBasedGenPage.getUrl(), result.getUrl());
 			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.getUrl().toLowerCase().contains(Application.namespacePrefix + 'gentemplate'));
+			System.assertEquals(template.Id, (Id)result.getParameters().get('id'));
+			System.assertEquals('false', result.getParameters().get('isEdit'));
+			System.assertEquals('false', result.getParameters().get('isFromSetupWizard'));
 		}
 	}
 
