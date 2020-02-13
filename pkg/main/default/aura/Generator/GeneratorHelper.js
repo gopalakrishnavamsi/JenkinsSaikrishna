@@ -27,19 +27,20 @@
   },
 
   checkMultiCurrency: function (component) {
+    var self = this;
     var action = component.get('c.checkMultiCurrency');
     action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var isMultiCurrency = response.getReturnValue();
         component.set('v.isMultiCurrency', isMultiCurrency);
-        this._getUserEvents(component).addProperties({
+        self._getUserEvents(component).addProperties({
           'Multi-Currency': isMultiCurrency
         });
       } else {
         var errMsg = stringUtils.getErrorMessage(response);
         component.set('v.errType', 'error');
         component.set('v.errMsg', errMsg);
-        this.endGenerationError(component, errMsg);
+        self.endGenerationError(component, errMsg);
       }
     });
     $A.enqueueAction(action);
@@ -278,7 +279,7 @@
           component.set('v.errMsg', error);
           component.set('v.errType', 'error');
           component.set('v.isGenerating', false);
-          this.endGenerationError(component, error);
+          helper.endGenerationError(component, error);
         })
       );
   },
