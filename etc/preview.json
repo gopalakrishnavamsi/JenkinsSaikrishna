@@ -1,0 +1,11 @@
+{
+  "orgName": "DAL Preview",
+  "edition": "Developer",
+  "release": "Preview",
+  "hasSampleData": true,
+  "settings": {
+    "languageSettings": {
+      "enableTranslationWorkbench": true
+    }
+  }
+}

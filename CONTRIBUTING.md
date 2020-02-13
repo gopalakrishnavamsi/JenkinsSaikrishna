@@ -1,24 +1,23 @@
-# DfS Contribution Guidelines
+# Contribution Guidelines
 
 ## Before submitting a PR
 1. Verify you are pointing to the correct target branch.
 2. Ensure Apex code is covered by unit tests.
 2. Ensure all files you touch are properly formatted. Current style configurations are located in the [`style` directory](https://github.docusignhq.com/Integrations/Salesforce/tree/master/style).  
-3. Run all unit tests against your dev org.
-    - Also run all unit tests against a clean org via `ant test`. (RECOMMENDED)
+3. Run all unit tests against your scratch org: `sfdx force:apex:test:run -c -r human -w 15`.
 4. Ensure commit(s) build successfully via CI integration.
     - If you break the build, you get the skull.
 5. Fill out entire PR form with accurate information.
-6. If security-related, be sure to include @morgan-roman or a security team member as a code reviewer.
+6. If security-related, be sure to include AppSec reviewers.
 
 ## Apex Style guide
 As Apex is very similar to Java in syntax, we adhere to the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
-Additionally, DfS Apex code must:
+Additionally, Apex code must:
 - Use **tabs** over **spaces** for indentation. This is considered best practice because every Apex class character counts towards Force.com limits.
 - Use consistent capitalization even though Apex is (mostly) case-insensitive.
 - Use proper spelling.
-- Use consistent, concise, and clear type and variable naming. Do not prepend `DocuSign` or `DS` to type names unless it must be disambiguated from other types. Keep in mind that all types in the DfS managed package will include the namespace prefix `dfsle__`.
+- Use consistent, concise, and clear type and variable naming. Do not prepend `DocuSign` or `DS` to type names unless it must be disambiguated from other types. Keep in mind that all types in the managed package will include the namespace prefix `dfsle`.
 
 | Bad Naming | Good Naming |
 | --- | ---- |
@@ -48,8 +47,13 @@ Eventually, linting will be introduced into our CI process and fail with any cod
 |All Admin|DocuSign administrator|`verifyIsDocuSignAdministrator()`|
 |Create Envelope|DocuSign user|`verifyIsDocuSignUser()`|
 |Edit and Send Envelope|Envelope owner|`verifyIsOwner()`|
+|Generate Document|Document generator|`verifyIsDocuSignGenerator()`|
+|Negotiate Document|Document negotiator|`verifyIsDocuSignNegotiator()`|
 
-- **ALWAYS** check CRUD and FLS with the `Permissions.verifyIs*` methods.    
+- **ALWAYS** check CRUD and FLS. 
+    - To provide the user with a detailed error message, use the `Permissions.verifyIs*` methods. This is the preferred approach for most cases.
+    - To enforce read FLS automatically with a generic error message, use the SOQL `WITH SECURITY_ENFORCED` clause.
+    - To remove fields from the query results the user cannot access, use `Security.stripInaccessible()`.
 - **ALWAYS** use appropriate randomness and entropy when generating secrets. E.g. use `UUID.randomUUID().toString()`.
 - **AVOID** dynamic SOQL unless absolutely necessary.
 
@@ -66,7 +70,7 @@ Eventually, linting will be introduced into our CI process and fail with any cod
 - Favor [immutability](https://en.wikipedia.org/wiki/Immutable_object). This makes the code easier to comprehend and mitigates entire classes of bugs.
 - Avoid returning `null`, but check for it exhaustively.
 - Avoid superfluous logging. This is expensive on the Force.com platform and we quickly run into size limits. It also reduces the readability of logs.
-Once the feature is implemented and unit tested, log only exceptional cases using `LoggerService`.
+Once the feature is implemented and unit tested, log only exceptional cases using `LoggerService`. Any `System.debug` or `console.log` statements will fail code review.
 - Avoid short-circuiting non-trivial functions by returning in the middle.
 - Avoid side effects such as writing to the database or making a callout unless the function is clearly marked as such.
 - Avoid `void` return types. Functions should return the result of some computation or action.
@@ -75,13 +79,18 @@ Once the feature is implemented and unit tested, log only exceptional cases usin
 - Only URL-decode or encode at the point where is returned to or read from the client. Bear in mind the Force.com platform will automatically do this conversion for you when reading or writing query string values.
 - Do not repeat yourself ([DRY](https://en.wikipedia.org/wiki/Don't_repeat_yourself)). If the same logic exists in two places, it is a good time to refactor. 
 - Do not overload or overuse strings for various return types or statuses. Checking the string for specific values is error-prone and brittle.
-- Use specific types where appropriate: `Id`, `UUID`, `URL`, etc. This gives us free validation.
+- Use specific types where appropriate: `Id`, `UUID`, `Url`, etc. This gives us free validation.
 - Do not reinvent the wheel. Check to see if someone has already implemented some or all of your code and reuse.
 - Do not swallow exceptions or otherwise silently fail. No empty `catch` blocks.
+- Do not hide error details. This will drive support calls and force us to look at debug logs to determine why something failed. It is OK to show a friendly error message if the details are also displayed to the user. Best case, the error details allow the user to fix the issue without calling into support. Worst case, we have the context we need to troubleshoot without subscriber org access.
 - Only catch exceptions if you will handle them, otherwise let them bubble up the stack.
 - Code that relies on non-default features such as `Quote` or `FeedItem` must use generic `SObjects` in place of the reified types. This code will fail on organizations that do not have these enabled.
 - Use `Salesforce` class methods to determine org feature support.
 - Do not directly return API-specific types from `RestAPI`. This causes external representations to be strongly coupled with our internal ones and leads to anti-patterns such as using `String` in place of more specific types such as `Boolean`, `Integer`, or `Decimal`.
+- Use controllers to format responses for specific clients. Service classes should not have any client-specific logic. For example, any online editor-specific requirements should be handled in `OnlineEditorController`, while the `GenService` class should be agnostic of which experience is being used.
+
+### Globalization
+Refer to our [globalization guidelines](doc/globalization.md).
 
 ### Testing
 - Unit test all the things.
@@ -95,7 +104,7 @@ Once the feature is implemented and unit tested, log only exceptional cases usin
 - The `UserMock.createDocuSignAdministrator()` and `UserMock.createDocuSignUser()` methods will also create a test DocuSign account configuration by default. You can override this behavior by passing `false` to the overloaded constructor.
 - Test both authorized and unauthorized scenarios.
 - Wrap actual test part of the code with `Test.startTest()` and `Test.stopTest()`. This resets context and governor limits.
-- `Test.stopTest()` also causes asynchronous code (e.g. `@future` methods) to immediately complete, thus making the result of the asynchronous code assertable.
-- Unless you need a very specific callout response, make use of standard test mocks such as `ESignatureAPIMock`.
+- `Test.stopTest()` also causes asynchronous code (e.g. `@Future` methods) to immediately complete, thus making the result of the asynchronous code assertable.
+- Unless you need a very specific callout response, make use of standard test mocks such as `DocuSignAPIMock`.
 - The `TestUtils` class is your friend. It has methods to easily and safely create all sorts of test data, users with varying access, 
 etc.
