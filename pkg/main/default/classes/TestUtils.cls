@@ -356,23 +356,13 @@ global class TestUtils {
 		return nonce;
 	}
 
-	private static String namespace;
-
-	public static String getNamespace() {
-		if (namespace == null) {
-			namespace = [SELECT NamespacePrefix FROM ApexClass WHERE Name = 'TestUtils' LIMIT 1].NamespacePrefix;
-			namespace = String.isBlank(namespace) ? 'c' : namespace;
-		}
-		return namespace;
-	}
-
 	private static String origin;
 
 	public static String getOrigin() {
 		if (origin == null) {
 			origin = 'https://'
 				+ Url.getOrgDomainUrl().getHost().substringBefore('.')
-				+ '--' + getNamespace()
+				+ '--' + Application.namespace
 				+ '.visualforce.com';
 		}
 		return origin;

@@ -314,7 +314,9 @@ public with sharing class SetupController extends Controller {
 	@AuraEnabled
 	public static List<Product> getProductsOnAccount() {
 		try {
-			return AccountProducts.getProducts();
+			List<Product> result = AccountProducts.getProducts();
+			AccountProducts.save();
+			return result;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check Products on account.');
 		}

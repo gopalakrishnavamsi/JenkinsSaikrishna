@@ -634,18 +634,18 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getProductsOnAccount_positive() {
-		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser(true)) {
 			Test.startTest();
 			List<Product> productsList = SetupController.getProductsOnAccount();
 			Test.stopTest();
+
 			System.assertEquals(false, productsList.isEmpty());
 			System.assertEquals(4, productsList.size());
 		}
 	}
 
 	@IsTest
-	static void test_getProductsOnAccount_unAuthorized() {
+	static void test_getProductsOnAccount_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {

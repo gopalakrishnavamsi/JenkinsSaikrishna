@@ -56,6 +56,8 @@ public with sharing class AuthController {
 			LoggerService.getInstance().exception(ex, 'Error while checking user status for ' + UserInfo.getUserName());
 			isAuthorized = false;
 			message = ex.getMessage();
+		} finally {
+			AccountProducts.save(); // Save results from API so we do not make unnecessary callouts
 		}
 
 		return new AuthStatus(
@@ -78,7 +80,9 @@ public with sharing class AuthController {
 	@AuraEnabled
 	public static List<Product> getProductsOnAccount() {
 		try {
-			return processProductCheckInAccountSetting(AccountProducts.getProducts());
+			List<Product> result = processProductCheckInAccountSetting(AccountProducts.getProducts());
+			AccountProducts.save();
+			return result;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to check Products on account.');
 		}

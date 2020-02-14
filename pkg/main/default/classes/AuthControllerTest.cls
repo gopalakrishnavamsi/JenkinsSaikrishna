@@ -110,7 +110,6 @@ private class AuthControllerTest {
 
 	@IsTest
 	static void test_getAuthStatus_success() {
-		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			AuthController.AuthStatus result = AuthController.getAuthStatus();
@@ -152,22 +151,21 @@ private class AuthControllerTest {
 
 	@IsTest
 	static void test_getProductsOnAccount() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(true)) {
 			Test.startTest();
 			List<Product> products = AuthController.getProductsOnAccount();
 			Test.stopTest();
+
 			System.assertEquals(4, products.size());
 		}
 	}
 
 	@IsTest
 	static void test_getProductsOnAccountFailure() {
-		DocuSignAPIMock.success();
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				List<Product> products = AuthController.getProductsOnAccount();
+				AuthController.getProductsOnAccount();
 				throw new AssertException('Expected getProducts to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
@@ -178,14 +176,15 @@ private class AuthControllerTest {
 
 	@IsTest
 	static void test_processProductCheckInAccountSetting() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createDocuSignUser()) {
+		System.runAs(UserMock.createDocuSignUser(true)) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.IsESignatureEnabled__c = false;
 			update s;
+
 			Test.startTest();
 			List<Product> products = AuthController.getProductsOnAccount();
 			Test.stopTest();
+
 			System.assertEquals(3, products.size());
 		}
 	}
