@@ -2,6 +2,8 @@
 // HACK: Deserializing JSON string here because @AuraEnabled methods fail hard with unhelpful server errors on custom types.
 public with sharing class SendingController extends Controller {
 
+	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
+
 	public SendingController() {
 	}
 
@@ -196,5 +198,26 @@ public with sharing class SendingController extends Controller {
 				throw Controller.wrapException(ex, 'Failed to delete envelope');
 			}
 		}
+	}
+
+	@AuraEnabled
+	public static void deleteAttachment(final Id fileId) {
+		try {
+			deleteContentDocument(fileId);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to delete document');
+		}
+	}
+
+	private static Boolean deleteContentDocument(final Id contentVersionId) {
+		Permissions.verifyIsDeletable(CONTENT_DOCUMENT_TYPE);
+		Boolean result = false;
+		if (contentVersionId != null) {
+			ContentVersion contentVersionInstance = [SELECT ContentDocumentId,FileType FROM ContentVersion WHERE Id = :contentVersionId];
+			ContentDocument contentDocumentInstance = [SELECT Id FROM ContentDocument WHERE Id = :contentVersionInstance.ContentDocumentId];
+			delete contentDocumentInstance;
+			result = true;
+		}
+		return result;
 	}
 }

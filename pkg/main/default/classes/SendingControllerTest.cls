@@ -403,4 +403,17 @@ private class SendingControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_deleteAttachment_success() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			ContentVersion cv = TestUtils.createContentVersion();
+			System.assertNotEquals(null, cv.ContentDocumentId);
+			Test.startTest();
+			SendingController.deleteAttachment(cv.Id);
+			Test.stopTest();
+			System.assert(Collection.isEmpty([SELECT Id FROM ContentVersion WHERE Id = :cv.Id]));
+			System.assert(Collection.isEmpty([SELECT Id FROM ContentDocument WHERE Id = :cv.ContentDocumentId]));
+		}
+	}
 }

@@ -58,9 +58,9 @@
               }
             });
           }
-          var defaultRoles = result.defaultRoles.reduce(function(rolesMap, role) {
-              rolesMap[role.name.toLowerCase()] = role;
-              return rolesMap;
+          var defaultRoles = result.defaultRoles.reduce(function (rolesMap, role) {
+            rolesMap[role.name.toLowerCase()] = role;
+            return rolesMap;
           }, {});
           result.envelope.notifications = self.setExpiration(
             result.envelope.notifications,
@@ -366,8 +366,8 @@
     if (!$A.util.isEmpty(recipients)) {
       recipients.forEach(function (r) {
         var resolvedRole = self.isRoleDefined(r.role)
-            ? r.role
-            : self.getNextRole(defaultRoles);
+          ? r.role
+          : self.getNextRole(defaultRoles);
         if (
           self.isValidRecipient(r) &&
           (!$A.util.isEmpty(r.templateId) || hasDocuments)
@@ -389,8 +389,8 @@
 
   getNextRole: function (defaultRoles) {
     var nextRole = $A.util.isEmpty(defaultRoles) ? null : defaultRoles[Object.keys(defaultRoles)[0]];
-    
-    if (!$A.util.isUndefinedOrNull(nextRole)) delete defaultRoles[Object.keys(defaultRoles)[0]]
+
+    if (!$A.util.isUndefinedOrNull(nextRole)) delete defaultRoles[Object.keys(defaultRoles)[0]];
 
     return nextRole;
   },
@@ -415,6 +415,7 @@
     sendEnvelope.setCallback(self, function (response1) {
       if (response1.getState() === 'SUCCESS') {
         if (sendNow) {
+          self.deleteAttachment(component);
           navUtils.navigateToSObject(component.get('v.recordId'));
         } else {
           var getTaggerUrl = component.get('c.getTaggerUrl');
@@ -476,14 +477,14 @@
     };
   },
 
-  resolveRole: function(role, defaultRoles) {
-      if (!$A.util.isEmpty(role) 
-        && !$A.util.isUndefinedOrNull(role.name) 
-        && !$A.util.isUndefinedOrNull(defaultRoles[role.name.toLowerCase()])
-      ) {
-        delete defaultRoles[role.name.toLowerCase()];
-      }
-      return role;
+  resolveRole: function (role, defaultRoles) {
+    if (!$A.util.isEmpty(role)
+      && !$A.util.isUndefinedOrNull(role.name)
+      && !$A.util.isUndefinedOrNull(defaultRoles[role.name.toLowerCase()])
+    ) {
+      delete defaultRoles[role.name.toLowerCase()];
+    }
+    return role;
   },
 
   mergeTemplateRecipient: function (templateRecipient, recipient, defaultRoles) {
@@ -670,7 +671,22 @@
   },
 
   cancelSend: function (component) {
+    this.deleteAttachment(component);
     this.trackCancel(component, this.SEND_FOR_SIGNATURE);
     navUtils.navigateToSObject(component.get('v.recordId'));
+  },
+
+  deleteAttachment: function (component) {
+    var files = component.get('v.files');
+    var isOnlineEditor = component.get('v.lock') === true;
+    if (!$A.util.isEmpty(files) && isOnlineEditor) {
+      this.invokeAction(component, component.get('c.deleteAttachment'),
+        {
+          fileId: files[0]
+        },
+        function () {
+        }
+      );
+    }
   }
 });
