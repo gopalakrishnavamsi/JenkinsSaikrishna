@@ -58,6 +58,7 @@
 
     <div class="slds-scope">
         <div id="toastNotificationContainer"></div>
+        <div id="userEventsContainer"/>
 
         <div id="inputPanel">
             <div class="slds-page-header slds-border_bottom">
@@ -108,7 +109,6 @@
                     </div>
                 </div>
             </div>
-        <div id="userEventsContainer"/>
         </apex:outputPanel>
         <apex:outputPanel rendered="{!errorMessage==null}">
             <div id="ds-spinner2">
