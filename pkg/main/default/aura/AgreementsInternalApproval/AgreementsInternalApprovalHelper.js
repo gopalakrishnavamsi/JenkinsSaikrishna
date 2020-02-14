@@ -219,7 +219,7 @@
     action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
         var result = response.getReturnValue();
-        if (result.status === 'Waiting') {
+        if (result.status === 'Waiting' || result.status === 'Completed') {
           self.showToast(component, result.message, 'success');
           self.reloadAgreementsSpace(component);
           self.close(component);

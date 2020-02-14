@@ -8,6 +8,7 @@ public with sharing class NegotiateService {
 	public static final String TASK_WAITING = 'Waiting';
 	public static final String TASK_EXECUTING = 'Executing';
 	public static final String TASK_PROCESSING = 'Processing';
+	public static final String TASK_COMPLETED = 'Completed';
 
 	private class Database {
 
@@ -256,7 +257,7 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignNegotiator();
 		UUID taskId = NegotiateAPI.getInstance().sendForExternalReview(agreementName, sourceId, documentsIds, reviewers, subject, body, expiresInNumberOfDays);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
-		if (taskStatus.status.equals(TASK_WAITING)) {
+		if (taskStatus.status.equals(TASK_WAITING) || taskStatus.status.equals(TASK_COMPLETED)) {
 			taskStatus.message = Label.ExternalReviewSuccess;
 		} else if (taskStatus.status.equals(TASK_EXECUTING)) {
 			taskStatus.message = Label.ExternalReviewProcessing;
@@ -270,7 +271,7 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignNegotiator();
 		UUID taskId = NegotiateAPI.getInstance().sendForApproval(agreementName, sourceId, documentsIds, approvers, subject, body, isSequential);
 		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getWorkFlowStatus(taskId);
-		if (taskStatus.status.equals(TASK_WAITING)) {
+		if (taskStatus.status.equals(TASK_WAITING) || taskStatus.status.equals(TASK_COMPLETED)) {
 			taskStatus.message = Label.InternalApprovalSuccess;
 		} else if (taskStatus.status.equals(TASK_EXECUTING)) {
 			taskStatus.message = Label.InternalApprovalProcessing;
