@@ -1,6 +1,6 @@
 ({
   cancelClicked: function (component, event, helper) {
-    helper.redirectToCancelUrl(component);
+    helper.navigateToObjectHome(component);
   },
   deleteClicked: function (component, event, helper) {
     helper.deleteTemplate(component);

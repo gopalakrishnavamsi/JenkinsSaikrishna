@@ -212,7 +212,7 @@
                                 </div>
                             </div>
                             <!--Header-->
-                            <p class="{!'slds-m-top_large slds-grid slds-grid_align-center'+if(v.isPreview, ' slds-hide', '')}">{!$Label.c.GenSendSignatureMsg}</p>
+                            <p class="{!'slds-m-top_large slds-grid slds-grid_align-center'+if(or(v.isPreview, empty(v.generatedFiles)), ' slds-hide', '')}">{!$Label.c.GenSendSignatureMsg}</p>
                             <div class="slds-modal__content slds-has-flexi-truncate ds-genFileContent slds-box">
                                 <!-- File -->
                                 <ul class="slds-m-top_small">

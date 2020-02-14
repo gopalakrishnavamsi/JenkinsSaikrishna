@@ -6,8 +6,11 @@ private class GenControllerTest {
 		PageReference pg = Page.GenDocumentGenerator;
 		Test.setCurrentPage(pg);
 		Test.startTest();
-		new GenController();
+		GenController result = new GenController();
 		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals('/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o', result.objectHomeUrl);
 	}
 
 	@IsTest
@@ -21,7 +24,9 @@ private class GenControllerTest {
 		new GenController(null);
 		GenController result = new GenController(new ApexPages.StandardController(template));
 		Test.stopTest();
+
 		System.assertNotEquals(null, result);
+		System.assertEquals('/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o', result.objectHomeUrl);
 	}
 
 	@IsTest
@@ -623,31 +628,6 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_prepareCancelUrl_success() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			String resultUrl;
-			Test.startTest();
-			resultUrl = GenController.prepareCancelUrl();
-			System.assertEquals(true, String.isNotBlank(resultUrl));
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_prepareCancelUrl_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				GenController.prepareCancelUrl();
-				throw new AssertException('Expected to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_redirectOnNewTemplate_online() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
@@ -703,18 +683,20 @@ private class GenControllerTest {
 			Test.stopTest();
 		}
 	}
+
 	@IsTest
 	static void test_redirectOnEdit_Unauthorized() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			GenTemplate__c template = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			template.TemplateType__c = Gen.TYPE_WORD;
 			update template;
+			GenController controller = new GenController(new ApexPages.StandardController(template));
 
 			Test.startTest();
-			GenController controller = new GenController(new ApexPages.StandardController(template));
-			PageReference result1 = controller.redirectOnEdit();
-			System.assertEquals(controller.errorMessage, Label.MustBeDocuSignAdministrator);
+			controller.redirectOnEdit();
 			Test.stopTest();
+
+			System.assertEquals(controller.errorMessage, Label.MustBeDocuSignAdministrator);
 		}
 	}
 
@@ -728,7 +710,7 @@ private class GenControllerTest {
 			update gt;
 			Test.startTest();
 			try {
-				Boolean isDeleted = GenController.deleteTemplate(gt.Id);
+				GenController.deleteTemplate(gt.Id);
 				throw new AssertException('Expected delete template to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -736,6 +718,7 @@ private class GenControllerTest {
 			Test.stopTest();
 		}
 	}
+
 	@IsTest
 	static void test_redirectOnNewTemplate_Unauthorized() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
@@ -748,12 +731,14 @@ private class GenControllerTest {
 			expectedWordBasedGenPage.getParameters().put('isEdit', 'false');
 			expectedWordBasedGenPage.getParameters().put('isFromSetupWizard', 'false');
 
-			Test.startTest();
 			GenController controller = new GenController(new ApexPages.StandardController(template));
-			controller.templateId = template.id;
-			PageReference result = controller.redirectOnNewTemplate();
-			System.assertEquals(controller.errorMessage, Label.MustBeDocuSignAdministrator);
+			controller.templateId = template.Id;
+
+			Test.startTest();
+			controller.redirectOnNewTemplate();
 			Test.stopTest();
+
+			System.assertEquals(controller.errorMessage, Label.MustBeDocuSignAdministrator);
 		}
 	}
 }

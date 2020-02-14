@@ -1,4 +1,4 @@
-<aura:application description="GenTemplateDeleteApp" extends="ltng:outApp" access="global">
-    <aura:dependency resource="c:GenTemplateDelete"/>
-    <aura:dependency resource="markup://force:*" type="EVENT"/>
+<aura:application description="GenTemplateDeleteApp" extends="ltng:outApp" access="public">
+    <aura:dependency resource="markup://c:GenTemplateDelete"/>
+    <aura:dependency resource="markup://force:navigateToObjectHome" type="EVENT"/>
 </aura:application>

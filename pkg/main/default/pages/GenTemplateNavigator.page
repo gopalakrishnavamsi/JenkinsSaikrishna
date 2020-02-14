@@ -42,29 +42,20 @@
             if (templateId != null) {
               redirectToNewTemplateUrl(templateId);
             }
-          }
-          var navigate = function (event) {
-            var recordId = event.getParam('recordId');
-            if (typeof sforce !== 'undefined') {
-              sforce.one.navigateToSObject(recordId);
-            } else {
-              window.location.href = '/' + recordId;
-            }
           };
-          var navigateToURL = function (event) {
-            var url = event.getParam('url');
-            window.open(url, '_blank');
+          var onCancel = function () {
+            window.location.replace('{!JSENCODE(objectHomeUrl)}');
           };
           var ns = '{!JSENCODE(namespace)}';
           $Lightning.use(ns + ':GenTemplateNavigatorApp', function () {
             $Lightning.createComponent(ns + ':GenTemplateNavigator', {
+              namespace: ns,
               templateId: '{!GenTemplate__c.Id}',
               isRedirectOnCancel: true,
               navigateToNewTemplateUrl: navigateToNewTemplateUrl
             }, 'lightning', function (component, status) {
               if (status === 'SUCCESS') {
-                $A.eventService.addHandler({'event': 'force:navigateToSObject', 'handler': navigate});
-                $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
+                $A.eventService.addHandler({'event': 'force:navigateToObjectHome', 'handler': onCancel});
               }
             });
           });

@@ -48,18 +48,5 @@
       component.set('v.loading', false);
     });
     $A.enqueueAction(action);
-  },
-  redirectToCancelUrl: function (component) {
-    var action = component.get('c.prepareCancelUrl');
-    action.setCallback(this, function (response) {
-      var state = response.getState();
-      if (state === 'SUCCESS') {
-        var cancelUrl = response.getReturnValue();
-        window.open(cancelUrl, '_self');
-      } else {
-        component.set('v.errMsg', stringUtils.getErrorMessage(response));
-      }
-    });
-    $A.enqueueAction(action);
   }
 });

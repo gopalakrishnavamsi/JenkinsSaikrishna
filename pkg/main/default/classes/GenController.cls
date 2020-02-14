@@ -2,11 +2,15 @@ public with sharing class GenController extends Controller {
 
 	public Id templateId { get; set; }
 	public String errorMessage { get; private set; }
+	public String objectHomeUrl { get; private set; }
 
 	public GenController() {
+		this.objectHomeUrl = '/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o';
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public GenController(final ApexPages.StandardController c) {
+		this();
 	}
 
 	public PageReference redirectOnEdit() {
@@ -242,19 +246,6 @@ public with sharing class GenController extends Controller {
 			return GenService.getTemplateTypes();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get Template Types.');
-		}
-	}
-
-	@AuraEnabled
-	public static String prepareCancelUrl() {
-		try {
-			Permissions.verifyIsDocuSignGenerator();
-			return new Url(
-				Salesforce.baseUrl,
-				'/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o')
-				.toExternalForm();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to Prepare Cancel Url.');
 		}
 	}
 

@@ -1,5 +1,5 @@
 ({
-  validateBrowser: function(component) {
+  validateBrowser: function (component) {
     if (navUtils.isIE()) component.set('v.isIE', true);
   },
 
@@ -24,10 +24,18 @@
     component.set('v.selectedType', event.currentTarget.value);
   },
 
-  cancel: function (component, event, helper) {
+  cancel: function (component) {
     var isRedirectOnCancel = component.get('v.isRedirectOnCancel');
     if (isRedirectOnCancel) {
-      helper.redirectToCancelUrl(component);
+      var ns = component.get('v.namespace');
+      if ($A.util.isEmpty(ns)) {
+        ns = '';
+      } else {
+        ns += '__';
+      }
+      var event = $A.get('e.force:navigateToObjectHome');
+      event.setParam('scope', ns + 'GenTemplate__c');
+      event.fire();
     } else {
       component.find('genTemplateNavigator').destroy();
     }

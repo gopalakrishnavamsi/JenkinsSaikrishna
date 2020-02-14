@@ -1,4 +1,4 @@
-<aura:application description="GenTemplateNavigatorApp" extends="ltng:outApp" access="global">
-    <aura:dependency resource="c:GenTemplateNavigator"/>
-    <aura:dependency resource="markup://force:*" type="EVENT"/>
+<aura:application description="GenTemplateNavigatorApp" extends="ltng:outApp" access="public">
+    <aura:dependency resource="markup://c:GenTemplateNavigator" type="COMPONENT"/>
+    <aura:dependency resource="markup://force:navigateToObjectHome" type="EVENT"/>
 </aura:application>

@@ -1,5 +1,7 @@
 <aura:component controller="GenController">
     <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
+
+    <aura:attribute name="namespace" type="String" required="true"/>
     <aura:attribute name="templateId" type="Id"/>
     <aura:attribute name="template" type="Object" access="private"/>
     <aura:attribute name="templateRecord" type="Object" access="private"/>
@@ -38,7 +40,7 @@
                               label="{!$Label.c.Cancel}">
             </lightning:button>
             <lightning:button class="slds-button slds-button_destructive" onclick="{!c.deleteClicked}"
-                              label="{!$Label.c.DeleteButtonLabel}" disabled="{!v.isProcessing}"></lightning:button>
+                              label="{!$Label.c.DeleteButtonLabel}" disabled="{!v.isProcessing}"/>
         </aura:set>
     </c:strike_modal>
 </aura:component>

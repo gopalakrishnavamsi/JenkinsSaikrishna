@@ -3,6 +3,7 @@
     <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}" afterScriptsLoaded="{!c.validateBrowser}"/>
 
     <!-- component attributes -->
+    <aura:attribute name="namespace" type="String" required="true"/>
     <aura:attribute name="templateId" type="Id"/>
     <aura:attribute name="isRedirectOnCancel" type="Boolean"/>
     <aura:attribute name="isFromSetupWizard" type="Boolean" default="false"/>
