@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value -->
+    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label,CustomObjectTranslation/nameFieldLabel -->
     <caseValues>
         <plural>false</plural>
         <value>Modèle DocuSign Gen</value>
@@ -9,6 +9,14 @@
         <plural>true</plural>
         <value>Modèles DocuSign Gen</value>
     </caseValues>
-    <startsWith>Consonant</startsWith>
     <gender>Feminine</gender>
+    <layouts>
+        <layout>Gen Template Layout</layout>
+        <sections>
+            <label>Custom Links</label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <nameFieldLabel>Name</nameFieldLabel>
+    <startsWith>Consonant</startsWith>
 </CustomObjectTranslation>

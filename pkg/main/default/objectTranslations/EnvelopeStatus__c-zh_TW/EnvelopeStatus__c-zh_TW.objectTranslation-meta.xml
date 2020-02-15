@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label -->
+    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label,CustomObjectTranslation/nameFieldLabel -->
     <caseValues>
         <plural>false</plural>
         <value>DocuSign 狀態</value>
@@ -8,12 +8,13 @@
     <layouts>
         <layout>DocuSign Envelope Status Layout</layout>
         <sections>
-            <label><!--資訊--></label>
+            <label>Information</label>
             <section>Information</section>
         </sections>
         <sections>
-            <label><!--系統資訊--></label>
+            <label>System Information</label>
             <section>System Information</section>
         </sections>
     </layouts>
+    <nameFieldLabel>Envelope#</nameFieldLabel>
 </CustomObjectTranslation>

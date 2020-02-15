@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label -->
+    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label,CustomObjectTranslation/nameFieldLabel -->
     <caseValues>
+        <caseType>Nominative</caseType>
         <plural>false</plural>
         <value>DocuSign-Umschlag</value>
     </caseValues>
     <caseValues>
+        <caseType>Nominative</caseType>
         <plural>true</plural>
         <value>DocuSign-Umschläge</value>
     </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>false</plural>
+        <value>DocuSign-Umschlag</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Accusative</caseType>
+        <plural>true</plural>
+        <value>DocuSign-Umschläge</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>false</plural>
+        <value>DocuSign-Umschlag</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Genitive</caseType>
+        <plural>true</plural>
+        <value>DocuSign-Umschläge</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>false</plural>
+        <value>DocuSign-Umschlag</value>
+    </caseValues>
+    <caseValues>
+        <caseType>Dative</caseType>
+        <plural>true</plural>
+        <value>DocuSign-Umschläge</value>
+    </caseValues>
+    <gender>Masculine</gender>
     <layouts>
         <layout>DocuSign Envelope Layout</layout>
         <sections>
@@ -16,5 +49,5 @@
             <section>Custom Links</section>
         </sections>
     </layouts>
-    <gender>Masculine</gender>
+    <nameFieldLabel>DocuSign Envelope</nameFieldLabel>
 </CustomObjectTranslation>

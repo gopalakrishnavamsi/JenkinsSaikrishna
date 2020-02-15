@@ -10,4 +10,5 @@
         <value>Estado de envío masivo de DocuSign</value>
     </caseValues>
     <gender>Masculine</gender>
+    <nameFieldLabel>Envelope#</nameFieldLabel>
 </CustomObjectTranslation>

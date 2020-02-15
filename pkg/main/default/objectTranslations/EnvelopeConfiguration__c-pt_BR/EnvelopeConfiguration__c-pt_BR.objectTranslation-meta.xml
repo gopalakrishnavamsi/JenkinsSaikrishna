@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label -->
+    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label,CustomObjectTranslation/nameFieldLabel -->
     <caseValues>
         <plural>false</plural>
         <value>Configuração do envelope do DocuSign</value>
@@ -9,6 +9,7 @@
         <plural>true</plural>
         <value>Configurações do envelope do DocuSign</value>
     </caseValues>
+    <gender>Feminine</gender>
     <layouts>
         <layout>DocuSign Envelope Configuration Layout</layout>
         <sections>
@@ -20,5 +21,5 @@
             <section>Information</section>
         </sections>
     </layouts>
-    <gender>Feminine</gender>
+    <nameFieldLabel>Name</nameFieldLabel>
 </CustomObjectTranslation>

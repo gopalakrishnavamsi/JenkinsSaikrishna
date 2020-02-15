@@ -3,5 +3,5 @@
     <!-- smartling.translate_paths = CustomFieldTranslation/label,CustomFieldTranslation/relationshipLabel -->
     <label>信封設定</label>
     <name>EnvelopeConfiguration__c</name>
-    <relationshipLabel><!-- Custom Recipients --></relationshipLabel>
+    <relationshipLabel>Custom Recipients</relationshipLabel>
 </CustomFieldTranslation>
