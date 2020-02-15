@@ -44,18 +44,6 @@
         </aura:if>
 
         <aura:if isTrue="{!and(v.isAuthorized, not(or(v.fetchingOAuthStatus, v.loading)))}">
-
-            <aura:if isTrue="{!v.isGenTrialExpired}">
-                <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                    {!$Label.c.GenTrialExpired}
-                </div>
-                <aura:set attribute="else">
-                    <div class="slds-m-around_medium slds-text-color_error slds-text-align_center">
-                        {!$Label.c.GenNotConfigured}
-                    </div>
-                </aura:set>
-            </aura:if>
-            
             <aura:if isTrue="{!not(empty(v.errMsg))}">
                 <div class="slds-m-around_large slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_error"
                      role="alert">

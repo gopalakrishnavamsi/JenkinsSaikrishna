@@ -23,6 +23,7 @@
       $A.enqueueAction(action);
     }
   },
+
   saveTemplate: function (component) {
     component.set('v.loading', true);
     var template = component.get('v.template');

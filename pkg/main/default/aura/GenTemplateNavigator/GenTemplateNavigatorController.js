@@ -5,13 +5,25 @@
 
   onChangeIsAuthorized: function (component, event, helper) {
     var products = component.get('v.products');
-    if (!$A.util.isUndefinedOrNull(products)) {
-      products.forEach(function (product) {
+    var isExpired = false;
+    var isActive = false;
+    if (!$A.util.isEmpty(products)) {
+      for (var i = 0; i < products.length; i++) {
+        var product = products[i];
         if (product.name === 'gen') {
-          component.set('v.isGenEnabled', product.status === 'active');
-          component.set('v.isGenTrialExpired', product.isExpired);
+          isActive = product.status === 'active';
+          isExpired = product.isExpired;
+          break;
         }
-      });
+      }
+    }
+    component.set('v.isGenTrialExpired', isExpired);
+    component.set('v.isGenEnabled', isActive);
+    if (isExpired) {
+      component.set('v.errMsg', $A.get('$Label.c.GenTrialExpired'));
+    } else if (!isActive) {
+      component.set('v.errMsg', $A.get('$Label.c.GenNotConfigured'));
+    } else {
       helper.initSetup(component);
     }
   },
