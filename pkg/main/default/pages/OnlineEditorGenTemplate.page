@@ -28,6 +28,7 @@
         // FIXME: This is pointing to the same method as updateTemplateIdInSalesforce. Also the names are overly verbose.
         updateFileDetailsInSalesforce: '{!$RemoteAction.OnlineEditorController.updateTemplate}',
         getEntityRecords: '{!$RemoteAction.OnlineEditorController.getEntityRecords}',
+        getEntityRecordsWithSearch: '{!$RemoteAction.OnlineEditorController.getEntityRecordsWithSearch}',
         getMergeData: '{!$RemoteAction.OnlineEditorController.getMergeData}'
       };
 

@@ -193,6 +193,124 @@ public with sharing class OnlineEditorController extends Controller {
 	}
 
 	@TestVisible
+	private static Map<String, Object> queryEntityRecords(final SObjectType objectType, final String filterBy, final String orderBy, final Integer recordsPerPage, final Integer pageIndex) {
+		Permissions.verifyIsDocuSignGenerator();
+
+		if (pageIndex == null || pageIndex < 0 || filterBy == null) throw new DocuSignException(Label.InvalidGenQuery);
+
+		Schema.DescribeSObjectResult objectDescription = objectType.getDescribe();
+		List<String> objectFields = new List<String> { 'Id', filterBy };
+		Permissions.verifyIsQueryable(
+			objectType,
+			objectFields
+		);
+
+		String query = null;
+		Integer entityRecordCount = System.Database.countQuery(
+			String.format(
+				'SELECT count() FROM {0}',
+				new List<String> {
+					objectDescription.getName()
+				}
+			)
+		);
+
+		Integer totalPageIndexes = entityRecordCount <= recordsPerPage ? 0 : (Integer)Math.floor(entityRecordCount / recordsPerPage);
+		Integer queryOffSet = totalPageIndexes < pageIndex ? 0 : pageIndex * recordsPerPage;
+
+		if (totalPageIndexes > 0) {
+			query = String.format(
+				'SELECT {0} FROM {1} ORDER BY {2} LIMIT {3} OFFSET {4}',
+				new List<String> {
+					String.join(objectFields, ','),
+					objectDescription.getName(),
+					orderBy,
+					String.valueOf(recordsPerPage),
+					String.valueOf(queryOffSet)
+				}
+			);
+		} else if (pageIndex == 0) {
+			query = String.format(
+				'SELECT {0} FROM {1} ORDER BY {2}',
+				new List<String> {
+					String.join(objectFields, ','),
+					objectDescription.getName(),
+					orderBy
+				}
+			);
+		}
+
+		return new Map<String, Object> {
+			'pageIndex' => pageIndex,
+			'results' => query == null ? new List<SObject>() : System.Database.query(query),
+			'filterBy' => filterBy,
+			'totalRecords' => entityRecordCount,
+			'totalPages' => totalPageIndexes + 1
+		};
+	}
+	
+	@TestVisible
+	private static Map<String, Object> queryEntityRecords(final SObjectType objectType, final String searchValue, final String filterBy, final String orderBy, final Integer recordsPerPage, final Integer pageIndex) {
+		Permissions.verifyIsDocuSignGenerator();
+
+		if (pageIndex == null || pageIndex < 0 || filterBy == null || searchValue == null) throw new DocuSignException(Label.InvalidGenQuery);
+
+		Schema.DescribeSObjectResult objectDescription = objectType.getDescribe();
+		List<String> objectFields = new List<String> { 'Id', filterBy };
+		Permissions.verifyIsQueryable(
+			objectType,
+			objectFields
+		);
+
+		String query = null;
+		String queryFormattedSearchValue = searchValue + '%';
+		Integer entityRecordCount = System.Database.countQuery(
+			String.format(
+				'SELECT count() FROM {0} WHERE {1} LIKE :queryFormattedSearchValue ',
+				new List<String> {
+					objectDescription.getName(),
+					filterBy
+				}
+			)
+		);
+
+		Integer totalPageIndexes = entityRecordCount <= recordsPerPage ? 0 : (Integer)Math.floor(entityRecordCount / recordsPerPage);
+		Integer queryOffSet = totalPageIndexes < pageIndex ? 0 : pageIndex * recordsPerPage;
+
+		if (totalPageIndexes > 0) {
+			query = String.format(
+				'SELECT {0} FROM {1} WHERE {2} LIKE :queryFormattedSearchValue ORDER BY {3} LIMIT {4} OFFSET {5}',
+				new List<String> {
+					String.join(objectFields, ','),
+					objectDescription.getName(),
+					filterBy,
+					orderBy,
+					String.valueOf(recordsPerPage),
+					String.valueOf(queryOffSet)
+				}
+			);
+		} else if (pageIndex == 0) {
+			query = String.format(
+				'SELECT {0} FROM {1} WHERE {2} LIKE :queryFormattedSearchValue ORDER BY {3}',
+				new List<String> {
+					String.join(objectFields, ','),
+					objectDescription.getName(),
+					filterBy,
+					orderBy
+				}
+			);
+		}
+
+		return new Map<String, Object> {
+			'pageIndex' => pageIndex,
+			'results' => query == null ? new List<SObject>() : System.Database.query(query),
+			'filterBy' => filterBy,
+			'totalRecords' => entityRecordCount,
+			'totalPages' => totalPageIndexes + 1
+		};
+	}	
+
+	@TestVisible
 	private static OnlineEditorController.Query convertData(
 		final OnlineEditorController.Query onlineEditorQuery,
 		final SObject data) {
@@ -373,21 +491,16 @@ public with sharing class OnlineEditorController extends Controller {
 	}
 
 	@RemoteAction
-	public static List<SObject> getEntityRecords(final String sourceObject) {
-		Permissions.verifyIsDocuSignAdministrator();
-
+	public static Map<String, Object> getEntityRecords(final String sourceObject, final Integer pageIndex) {
 		SObjectType type = Salesforce.getSObjectType(sourceObject);
-		String nameField = Salesforce.getNameField(type);
-		List<String> fields = new List<String> { 'Id', nameField };
-
-		Permissions.verifyIsQueryable(type, fields);
-
-		return System.Database.query(String.format('SELECT {0} FROM {1} LIMIT 25', new List<String> {
-			String.join(fields, ','),
-			type.getDescribe().getName()
-		}));
-
+		return queryEntityRecords(type, Salesforce.getNameField(type), 'LastModifiedDate', 25, pageIndex);
 	}
+
+	@RemoteAction
+	public static Map<String, Object> getEntityRecordsWithSearch(final String sourceObject, final Integer pageIndex, final String searchValue) {
+		SObjectType type = Salesforce.getSObjectType(sourceObject);
+		return queryEntityRecords(type, searchValue, Salesforce.getNameField(type), 'LastModifiedDate', 25, pageIndex);
+	}		
 
 	@RemoteAction
 	public static String getTemplateFolderId() {

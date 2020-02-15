@@ -227,27 +227,53 @@ jQuery(document).ready(function ($) {
     );
   }
 
-  function getEntityRecords() {
+  function getEntityRecords(index, searchValue) {
     return new Promise(
       function (resolve, reject) {
         try {
-          Visualforce.remoting.Manager.invokeAction(
-            RemoteActions.getEntityRecords,
-            Configuration.template.sourceObject,
-            function (result, event) {
-              if (event.status) {
-                resolve(result);
-              } else {
-                _userEvents.error(
-                  EventLabels.PREVIEW_DOCUMENT, 
-                  {
+          var pageIndex = index === undefined || index === null ? 0 : index;
+          
+          if (!searchValue) {
+            Visualforce.remoting.Manager.invokeAction(
+              RemoteActions.getEntityRecords,
+              Configuration.template.sourceObject,
+              pageIndex,
+              function (result, event) {
+                if (event.status) {
+                  resolve(result);
+                } else {
+                  _userEvents.error(
+                    EventLabels.PREVIEW_DOCUMENT, 
+                    {
 
-                  }, 
-                  event.message
-                );
-                reject(event.message);
-              }
-            });
+                    }, 
+                    event.message
+                  );
+                  reject(event.message);
+                }
+              });            
+          } else {
+            Visualforce.remoting.Manager.invokeAction(
+              RemoteActions.getEntityRecordsWithSearch,
+              Configuration.template.sourceObject,
+              pageIndex,
+              searchValue,
+              function (result, event) {
+                if (event.status) {
+                  resolve(result);
+                } else {
+                  _userEvents.error(
+                    EventLabels.PREVIEW_DOCUMENT, 
+                    {
+
+                    }, 
+                    event.message
+                  );
+                  reject(event.message);
+                }
+              });             
+          }
+
         } catch (err) {
           _userEvents.error(
             EventLabels.PREVIEW_DOCUMENT, 

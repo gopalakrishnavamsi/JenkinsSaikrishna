@@ -501,13 +501,23 @@ private class OnlineEditorControllerTest {
 
 	@IsTest
 	static void test_getEntityRecords_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			TestUtils.createAccount();
+		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			for (Integer i = 0; i <= 24; i++) {
+				TestUtils.createAccount();
+			}
+			Schema.Account uniqueAccount = TestUtils.createAccount();
+			uniqueAccount.name = 'UNIT TEST getEntityRecords';
+			update uniqueAccount;
+
 			Test.startTest();
-			List<SObject> testResultsList = new List<SObject>();
-			testResultsList = OnlineEditorController.getEntityRecords('Account');
-			System.assertEquals(1, testResultsList.size());
+			Map<String, Object> testQuery = OnlineEditorController.getEntityRecords('Account', 0);
+			Map<String, Object> testQuery2 = OnlineEditorController.getEntityRecordsWithSearch('Account', 0, uniqueAccount.name);
+			List<Schema.Account> results = (List<Schema.Account>)testQuery.get('results');
+			List<Schema.Account> results2 = (List<Schema.Account>)testQuery2.get('results');
 			Test.stopTest();
+			System.assertEquals((Integer)testQuery.get('totalRecords'), 26);
+			System.assertEquals(results.size(), 25, results.size());
+			System.assertEquals(results2.size(), 1, results2.size());
 		}
 	}
 
@@ -516,13 +526,13 @@ private class OnlineEditorControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				OnlineEditorController.getEntityRecords('Account');
+				OnlineEditorController.getEntityRecords('Account', 0);
 				throw new AssertException('Expected to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
-		}
+		}		
 	}
 
 	@IsTest

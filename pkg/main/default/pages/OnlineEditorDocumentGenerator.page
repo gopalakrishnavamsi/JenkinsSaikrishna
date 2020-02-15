@@ -17,7 +17,8 @@
         saveAttachments: '{!$RemoteAction.OnlineEditorController.saveAttachments}',
         getMergeData: '{!$RemoteAction.OnlineEditorController.getMergeData}',
         getMergeFields: '{!$RemoteAction.OnlineEditorController.getMergeFields}',
-        getEntityRecords: '{!$RemoteAction.OnlineEditorController.getEntityRecords}'
+        getEntityRecords: '{!$RemoteAction.OnlineEditorController.getEntityRecords}',
+        getEntityRecordsWithSearch: '{!$RemoteAction.OnlineEditorController.getEntityRecordsWithSearch}'
       };
 
       Configuration = {
