@@ -30,6 +30,8 @@ window.UserEvents = function (application, version, environment, accountIdHash, 
   // Stub out functions if no DS user is defined.
   if (!userIdHash || userIdHash === '' || navigator.doNotTrack === '1') return Object.freeze({
     Status: Status,
+    addProperties: function () {
+    },
     time: function () {
     },
     success: function () {
