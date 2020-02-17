@@ -206,7 +206,7 @@ private class QueryTest {
 
 		Query q = Query.newQuery(
 			'Account',
-			new List<String> { 'Name', 'Owner.Name', 'OperatingHours.Name' },
+			new List<String> { 'Name', 'Owner.Name' },
 			new List<Query> {
 				Query.newSubQuery(
 					'Contact',
