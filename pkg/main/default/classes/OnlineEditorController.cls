@@ -190,12 +190,12 @@ public with sharing class OnlineEditorController extends Controller {
 
 		return result;
 	}
-
+	
 	@TestVisible
-	private static Map<String, Object> queryEntityRecords(final SObjectType objectType, final String filterBy, final String orderBy, final Integer recordsPerPage, final Integer pageIndex) {
+	private static Map<String, Object> queryEntityRecords(final SObjectType objectType, final String searchValue, final String filterBy, final Integer pageIndex) {
 		Permissions.verifyIsDocuSignGenerator();
 
-		if (pageIndex == null || pageIndex < 0 || filterBy == null) throw new DocuSignException(Label.InvalidGenQuery);
+		if (pageIndex == null || pageIndex < 0 || filterBy == null || searchValue == null) throw new DocuSignException(Label.InvalidGenQuery);
 
 		Schema.DescribeSObjectResult objectDescription = objectType.getDescribe();
 		List<String> objectFields = new List<String> { 'Id', filterBy };
@@ -205,11 +205,15 @@ public with sharing class OnlineEditorController extends Controller {
 		);
 
 		String query = null;
+		String orderBy = 'LastModifiedDate';
+		Integer recordsPerPage = 25;
+		String queryFormattedSearchValue = searchValue + '%';
 		Integer entityRecordCount = System.Database.countQuery(
 			String.format(
-				'SELECT count() FROM {0}',
+				'SELECT count() FROM {0} WHERE {1} LIKE :queryFormattedSearchValue ',
 				new List<String> {
-					objectDescription.getName()
+					objectDescription.getName(),
+					filterBy
 				}
 			)
 		);
@@ -219,10 +223,11 @@ public with sharing class OnlineEditorController extends Controller {
 
 		if (totalPageIndexes > 0) {
 			query = String.format(
-				'SELECT {0} FROM {1} ORDER BY {2} LIMIT {3} OFFSET {4}',
+				'SELECT {0} FROM {1} WHERE {2} LIKE :queryFormattedSearchValue ORDER BY {3} LIMIT {4} OFFSET {5}',
 				new List<String> {
 					String.join(objectFields, ','),
 					objectDescription.getName(),
+					filterBy,
 					orderBy,
 					String.valueOf(recordsPerPage),
 					String.valueOf(queryOffSet)
@@ -230,10 +235,11 @@ public with sharing class OnlineEditorController extends Controller {
 			);
 		} else if (pageIndex == 0) {
 			query = String.format(
-				'SELECT {0} FROM {1} ORDER BY {2}',
+				'SELECT {0} FROM {1} WHERE {2} LIKE :queryFormattedSearchValue ORDER BY {3}',
 				new List<String> {
 					String.join(objectFields, ','),
 					objectDescription.getName(),
+					filterBy,
 					orderBy
 				}
 			);
@@ -490,10 +496,10 @@ public with sharing class OnlineEditorController extends Controller {
 	}
 
 	@RemoteAction
-	public static Map<String, Object> getEntityRecords(final String sourceObject, final Integer pageIndex) {
+	public static Map<String, Object> getEntityRecords(final String sourceObject, final Integer pageIndex, final String searchValue) {
 		SObjectType type = Salesforce.getSObjectType(sourceObject);
-		return queryEntityRecords(type, Salesforce.getNameField(type), 'LastModifiedDate', 25, pageIndex);
-	}
+		return queryEntityRecords(type, searchValue, Salesforce.getNameField(type), pageIndex);
+	}	
 
 	@RemoteAction
 	public static Map<String, Object> getEntityRecordsWithSearch(final String sourceObject, final Integer pageIndex, final String searchValue) {

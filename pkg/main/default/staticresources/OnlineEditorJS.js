@@ -232,48 +232,25 @@ jQuery(document).ready(function ($) {
       function (resolve, reject) {
         try {
           var pageIndex = index === undefined || index === null ? 0 : index;
-          
-          if (!searchValue) {
-            Visualforce.remoting.Manager.invokeAction(
-              RemoteActions.getEntityRecords,
-              Configuration.template.sourceObject,
-              pageIndex,
-              function (result, event) {
-                if (event.status) {
-                  resolve(result);
-                } else {
-                  _userEvents.error(
-                    EventLabels.PREVIEW_DOCUMENT, 
-                    {
+          Visualforce.remoting.Manager.invokeAction(
+            RemoteActions.getEntityRecords,
+            Configuration.template.sourceObject,
+            pageIndex,
+            searchValue || '',
+            function (result, event) {
+              if (event.status) {
+                resolve(result);
+              } else {
+                _userEvents.error(
+                  EventLabels.PREVIEW_DOCUMENT, 
+                  {
 
-                    }, 
-                    event.message
-                  );
-                  reject(event.message);
-                }
-              });            
-          } else {
-            Visualforce.remoting.Manager.invokeAction(
-              RemoteActions.getEntityRecordsWithSearch,
-              Configuration.template.sourceObject,
-              pageIndex,
-              searchValue,
-              function (result, event) {
-                if (event.status) {
-                  resolve(result);
-                } else {
-                  _userEvents.error(
-                    EventLabels.PREVIEW_DOCUMENT, 
-                    {
-
-                    }, 
-                    event.message
-                  );
-                  reject(event.message);
-                }
-              });             
-          }
-
+                  }, 
+                  event.message
+                );
+                reject(event.message);
+              }
+            });             
         } catch (err) {
           _userEvents.error(
             EventLabels.PREVIEW_DOCUMENT, 
@@ -286,7 +263,7 @@ jQuery(document).ready(function ($) {
         }
       }
     );
-  }
+  }  
 
   function deleteTemplate(templateId, isEditing) {
     return new Promise(

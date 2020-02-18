@@ -510,8 +510,8 @@ private class OnlineEditorControllerTest {
 			update uniqueAccount;
 
 			Test.startTest();
-			Map<String, Object> testQuery = OnlineEditorController.getEntityRecords('Account', 0);
-			Map<String, Object> testQuery2 = OnlineEditorController.getEntityRecordsWithSearch('Account', 0, uniqueAccount.name);
+			Map<String, Object> testQuery = OnlineEditorController.getEntityRecords('Account', 0, '');
+			Map<String, Object> testQuery2 = OnlineEditorController.getEntityRecords('Account', 0, uniqueAccount.name);
 			List<Schema.Account> results = (List<Schema.Account>)testQuery.get('results');
 			List<Schema.Account> results2 = (List<Schema.Account>)testQuery2.get('results');
 			Test.stopTest();
@@ -526,7 +526,7 @@ private class OnlineEditorControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				OnlineEditorController.getEntityRecords('Account', 0);
+				OnlineEditorController.getEntityRecords('Account', 0, '');
 				throw new AssertException('Expected to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
