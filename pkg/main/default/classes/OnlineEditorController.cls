@@ -134,7 +134,7 @@ public with sharing class OnlineEditorController extends Controller {
 
 	@TestVisible
 	private static List<String> convertFields(final List<OnlineEditorController.Field> fields) {
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
 		List<String> genFields = new List<String>();
 		for (OnlineEditorController.Field f : fields) {
@@ -167,7 +167,7 @@ public with sharing class OnlineEditorController extends Controller {
 
 	@TestVisible
 	private static Gen.Query convertQuery(final OnlineEditorController.Query onlineEditorQuery) {
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
 		List<String> genFields = new List<String>();
 		List<Gen.Query> listGenQuery = new List<Gen.Query>();
@@ -320,7 +320,7 @@ public with sharing class OnlineEditorController extends Controller {
 		final OnlineEditorController.Query onlineEditorQuery,
 		final SObject data) {
 
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
 		List<OnlineEditorController.Query> childQueries = new List<OnlineEditorController.Query>();
 		List<OnlineEditorController.Field > fields = new List<OnlineEditorController.Field >();
@@ -488,7 +488,7 @@ public with sharing class OnlineEditorController extends Controller {
 
 	@RemoteAction
 	public static LimitedAccessToken generateUploadToken(String templateFolderId) {
-		GenService.verifyIsDocuSignAdministratorOrGenerator();
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
 		return ScmTokenAPI.getInstance().generateLimitedAccessToken(
 			UUID.parse(templateFolderId),
@@ -575,7 +575,7 @@ public with sharing class OnlineEditorController extends Controller {
 
 	@RemoteAction
 	public static LimitedAccessToken generateDownloadToken(final String scmFileId) {
-		GenService.verifyIsDocuSignAdministratorOrGenerator();
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
 		return ScmTokenAPI.getInstance().generateLimitedAccessToken(
 			UUID.parse(scmFileId),

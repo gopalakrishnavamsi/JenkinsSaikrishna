@@ -294,6 +294,14 @@ public with sharing class Permissions {
 		verifyIsDocuSignAdministrator(UserInfo.getUserId());
 	}
 
+	public static void verifyIsDocuSignAdministratorOrGenerator() {
+		if (!isDocuSignAdministrator() && !isDocuSignGenerator()) {
+			throw new UnauthorizedException(
+				Label.MustBeAdministratorOrGenerator,
+				UnauthorizedException.AccessRequirement.SecurityPermission);
+		}
+	}
+
 	@TestVisible
 	private static void verifyIsDocuSignAdministrator(final Id userId) {
 		if (String.isBlank(userId) || !isDocuSignAdministrator(userId)) {

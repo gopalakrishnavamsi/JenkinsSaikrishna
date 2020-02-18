@@ -598,7 +598,7 @@ public with sharing class GenService {
 	}
 
 	public static Gen.Template getTemplate(final Id templateId) {
-		verifyIsDocuSignAdministratorOrGenerator();
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
 		if (templateId == null) throw new DocuSignException(Label.UndefinedId);
 		Gen.Template template = DB.queryTemplate(templateId);
@@ -628,7 +628,7 @@ public with sharing class GenService {
 		final Id sourceId,
 		final Gen.Query query) {
 
-		verifyIsDocuSignAdministratorOrGenerator();
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
 		if (sourceId == null || query == null) throw new DocuSignException(Label.UndefinedArgument);
 		if (!Gen.isValidQuery(query)) throw new DocuSignException(Label.InvalidGenQuery);
@@ -670,7 +670,7 @@ public with sharing class GenService {
 		final List<Id> contentDocumentIds) {
 
 		if (isPreview) {
-			verifyIsDocuSignAdministratorOrGenerator();
+			Permissions.verifyIsDocuSignAdministratorOrGenerator();
 		} else {
 			Permissions.verifyIsDocuSignGenerator();
 		}
@@ -707,7 +707,7 @@ public with sharing class GenService {
 	}
 
 	public static List<Gen.Job> getJobStatus(final List<UUID> jobIds) {
-		verifyIsDocuSignAdministratorOrGenerator();
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
 		if (Collection.isEmpty(jobIds)) throw new DocuSignException(Label.UndefinedArgument);
 
@@ -860,11 +860,4 @@ public with sharing class GenService {
 		return DB.deleteTemplate(templateId);
 	}
 
-	public static void verifyIsDocuSignAdministratorOrGenerator() {
-		if (!Permissions.isDocuSignAdministrator() && !Permissions.isDocuSignGenerator()) {
-			throw new UnauthorizedException(
-				Label.MustBeAdministratorOrGenerator,
-				UnauthorizedException.AccessRequirement.SecurityPermission);
-		}
-	}
 }

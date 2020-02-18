@@ -131,7 +131,7 @@ public with sharing class GenController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static Boolean checkMultiCurrency() {
 		try {
-			GenService.verifyIsDocuSignAdministratorOrGenerator();
+			Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
 			return UserInfo.isMultiCurrencyOrganization();
 		} catch (Exception ex) {
