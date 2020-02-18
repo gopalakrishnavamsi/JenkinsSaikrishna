@@ -532,7 +532,7 @@ private class OnlineEditorControllerTest {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
-		}		
+		}
 	}
 
 	@IsTest
@@ -597,12 +597,8 @@ private class OnlineEditorControllerTest {
 	static void test_constructor_unauthorized() {
 		System.runAs(UserMock.createRestrictedUser()) {
 			Test.startTest();
-			try {
-				new OnlineEditorController();
-				throw new AssertException('Expected to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
-			}
+			OnlineEditorController controller = new OnlineEditorController();
+			System.assertEquals(Label.MustBeAdministratorOrGenerator, controller.errorMessage);
 			Test.stopTest();
 		}
 	}
@@ -613,7 +609,6 @@ private class OnlineEditorControllerTest {
 			Test.startTest();
 			try {
 				OnlineEditorController.getTemplateFolderId();
-				throw new AssertException('Expected to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -940,9 +935,9 @@ private class OnlineEditorControllerTest {
 	static void test_verifyDocuSignGenerator() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
-			  OnlineEditorController controller = new OnlineEditorController();
-			  controller.verifyDocuSignGenerator();
-			  system.assertEquals(controller.errorMessage,null);
+			OnlineEditorController controller = new OnlineEditorController();
+			controller.verifyDocuSignGenerator();
+			System.assertEquals(controller.errorMessage, null);
 			Test.stopTest();
 		}
 	}
@@ -953,7 +948,7 @@ private class OnlineEditorControllerTest {
 			Test.startTest();
 			OnlineEditorController controller = new OnlineEditorController();
 			controller.verifyDocuSignGenerator();
-			system.assertEquals(controller.errorMessage, Label.MustBeDocuSignGenerator);
+			System.assertEquals(controller.errorMessage, Label.MustBeDocuSignGenerator);
 			Test.stopTest();
 		}
 	}

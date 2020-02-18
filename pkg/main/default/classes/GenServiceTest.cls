@@ -1087,4 +1087,24 @@ private class GenServiceTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_getTemplate_failureOnDelete() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			gt.TemplateId__c = String.valueOf(ScmAPIMock.DOCUMENT_ID);
+			gt.TemplateType__c = Gen.TYPE_ONLINE;
+			update gt;
+			Test.startTest();
+			try {
+				System.assert(GenService.deleteTemplate(gt.Id));
+				Genservice.getTemplate(gt.Id);
+				throw new AssertException('Expected get template to fail');
+			} catch (Exception ex) {
+				System.assertEquals(Label.GenTemplateNotFound, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
 }

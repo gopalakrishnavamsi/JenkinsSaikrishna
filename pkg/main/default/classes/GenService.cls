@@ -601,8 +601,9 @@ public with sharing class GenService {
 		verifyIsDocuSignAdministratorOrGenerator();
 
 		if (templateId == null) throw new DocuSignException(Label.UndefinedId);
-
-		return DB.queryTemplate(templateId);
+		Gen.Template template = DB.queryTemplate(templateId);
+		if (template == null) throw new DocuSignException(Label.GenTemplateNotFound);
+		return template;
 	}
 
 	public static Gen.Template saveTemplate(final Gen.Template template) {

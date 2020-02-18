@@ -120,7 +120,6 @@ public with sharing class OnlineEditorController extends Controller {
 		} catch (Exception ex) {
 			this.errorMessage = ex.getMessage();
 			LoggerService.getInstance().error(ex.getMessage());
-			throw Controller.wrapException(ex, 'Failed to invoke constructor.');
 		}
 	}
 
