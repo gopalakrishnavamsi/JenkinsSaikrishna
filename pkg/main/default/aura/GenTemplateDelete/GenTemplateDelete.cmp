@@ -9,6 +9,7 @@
     <aura:attribute name="mode" type="String" access="private"/>
     <aura:attribute name="showToast" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isProcessing" type="Boolean" default="false" access="private"/>
+    <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelClicked}"/>
 
     <force:recordData recordId="{!v.templateId}"
                       targetRecord="{!v.template}"
