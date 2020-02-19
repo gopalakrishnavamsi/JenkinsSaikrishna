@@ -64,7 +64,8 @@
                             </div>
                             <div class="slds-col slds-m-bottom_medium">
                                 <lightning:textarea label="{!$Label.c.AddTemplateDescription}"
-                                                    value="{!v.template.description}"/>
+                                                    value="{!v.template.description}"
+                                                    maxlength="255"/>
                             </div>
                             <div class="slds-col slds-m-bottom_medium">
                                 <c:DataSourceLookup aura:id="account-records" errMsg="{!v.errMsg}"
