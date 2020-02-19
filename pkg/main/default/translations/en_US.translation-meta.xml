@@ -4547,11 +4547,11 @@
 		<name>CreateNewTemplate</name>
 	</customLabels>
 	<customLabels>
-		<label>Create and upload a Word file. To update your template upload a new version.</label>
+		<label>Create contract templates. Copy and paste fields from Salesforce to Word.</label>
 		<name>MicrosoftWordDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Use DocuSign's online editor to build and update templates in real time.</label>
+		<label>Build contract templates in a few clicks. Just drag and drop fields in our web editor.</label>
 		<name>OnlineEditorDescription</name>
 	</customLabels>
 	<customLabels>
@@ -4567,11 +4567,11 @@
 		<name>AddTemplateName</name>
 	</customLabels>
 	<customLabels>
-		<label>Add Description</label>
+		<label>Add Template Description</label>
 		<name>AddTemplateDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Learn more about online editor</label>
+		<label>Learn more about the Online Editor</label>
 		<name>OnlineEditorHelpLabel</name>
 	</customLabels>
 	<customLabels>

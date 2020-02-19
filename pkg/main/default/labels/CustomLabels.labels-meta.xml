@@ -8767,7 +8767,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Online Editor Description</shortDescription>
-		<value>Use DocuSign's online editor to build and update templates in real time.</value>
+		<value>Build contract templates in a few clicks. Just drag and drop fields in our web editor.</value>
 	</labels>
 	<labels>
 		<fullName>MicrosoftWordDescription</fullName>
@@ -8775,7 +8775,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Microsoft Word Description</shortDescription>
-		<value>Create and upload a Word file. To update your template upload a new version.</value>
+		<value>Create contract templates. Copy and paste fields from Salesforce to Word.</value>
 	</labels>
 	<labels>
 		<fullName>SelectDataSource</fullName>
@@ -8807,7 +8807,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Add Template Description</shortDescription>
-		<value>Add Description</value>
+		<value>Add Template Description</value>
 	</labels>
 	<labels>
 		<fullName>OnlineEditorHelpLabel</fullName>
@@ -8815,7 +8815,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>OnlineEditorHelpLabel</shortDescription>
-		<value>Learn more about online editor</value>
+		<value>Learn more about the Online Editor</value>
 	</labels>
 	<labels>
 		<fullName>OnlineEditorHelpUrl</fullName>
