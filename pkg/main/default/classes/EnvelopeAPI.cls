@@ -6,6 +6,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	private static final String UNKNOWN_ENVELOPE_RECIPIENT = 'UNKNOWN_ENVELOPE_RECIPIENT';
 	private static final String USER_LACKS_PERMISSIONS = 'USER_LACKS_PERMISSIONS';
 	private static final List<DocumentResolver> DOCUMENT_RESOLVERS = new List<DocumentResolver>();
+	private static final Set<String> HTML_EXTENSIONS = new Set<String> { 'htm', 'html', 'adf' };
 
 	static {
 		String rs = AccountSettings__c.getOrgDefaults().DocumentResolvers__c;
@@ -539,6 +540,13 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		}
 	}
 
+	private static Boolean isHtml(final Document doc) {
+		return doc != null
+			&& doc.type != Document.TYPE_SCM
+			&& String.isNotBlank(doc.extension)
+			&& HTML_EXTENSIONS.contains(doc.extension.toLowerCase());
+	}
+
 	@TestVisible
 	private class APIDocument {
 		public String documentId;
@@ -556,7 +564,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.name = doc.name;
 				this.fileExtension = doc.extension;
 				if (content != null) {
-					if (doc.extension == 'html') {
+					if (isHtml(doc)) {
 						this.htmlDefinition = new APIHtmlDefinition(content.toString());
 					} else {
 						this.documentBase64 = EncodingUtil.base64Encode(content);
@@ -864,7 +872,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			final Integer sequence,
 			final List<Recipient> recipients,
 			final Boolean includeDefaultAnchorTags,
-			final Map<Id, Blob> documentContent,
+			final Map<String, Blob> documentContent,
 			final List<CustomField> customFields,
 			final Entity source) {
 
@@ -877,7 +885,11 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					};
 				}
 				if (recipients != null) {
-					this.recipients = new Recipients(recipients, this.sequence, includeDefaultAnchorTags, true);
+					this.recipients = new Recipients(
+						recipients,
+						this.sequence,
+						includeDefaultAnchorTags,
+						true);
 				}
 				this.customFields = buildCustomFields(customFields, source);
 			}
@@ -905,19 +917,27 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			final Integer sequence,
 			final List<Recipient> recipients,
 			final Boolean includeDefaultAnchorTags,
-			final Map<Id, Blob> documentContent,
+			final Map<String, Blob> documentContent,
 			final List<CustomField> customFields,
 			final Entity source) {
 
 			if (document != null) {
 				if (document.templateId != null) {
 					this.serverTemplates = new List<ServerTemplate> {
-						new ServerTemplate(document.templateId, sequence)
+						new ServerTemplate(
+							document.templateId,
+							sequence)
 					};
 				}
 				this.inlineTemplates = new List<InlineTemplate> {
-					new InlineTemplate(document, sequence, recipients, includeDefaultAnchorTags, documentContent,
-						customFields, source)
+					new InlineTemplate(
+						document,
+						sequence,
+						recipients,
+						includeDefaultAnchorTags,
+						documentContent,
+						customFields,
+						source)
 				};
 			}
 		}
@@ -985,7 +1005,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		final List<Document> documents,
 		final List<Recipient> recipients,
 		final Boolean includeDefaultAnchorTags,
-		final Map<Id, Blob> documentContent,
+		final Map<String, Blob> documentContent,
 		final List<CustomField> customFields,
 		final Entity source) {
 
@@ -996,7 +1016,12 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			Boolean addTags = includeDefaultAnchorTags;
 			for (Document d : documents) {
 				// FIXME: All recipients should not be added to every document in every case.
-				compositeTemplates.add(new CompositeTemplate(d, sequence++, recipients, addTags, documentContent,
+				compositeTemplates.add(new CompositeTemplate(
+					d,
+					sequence++,
+					recipients,
+					addTags,
+					documentContent,
 					customFields, source));
 				addTags = false;
 			}
@@ -1004,16 +1029,18 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		return compositeTemplates;
 	}
 
-	private static Map<Id, Blob> getDocumentContent(final Map<SObjectType, Set<Id>> sourceMap) {
-		if (sourceMap == null) throw new DocuSignException(Label.UndefinedArgument);
+	private static Map<String, Blob> getDocumentContent(final Map<SObjectType, Set<Id>> sourceMap) {
+		if (sourceMap == null) return new Map<String, Blob>();
 
-		Map<Id, Blob> result = new Map<Id, Blob>();
+		Map<String, Blob> result = new Map<String, Blob>();
 		for (SObjectType type : sourceMap.keySet()) {
 			for (DocumentResolver resolver : DOCUMENT_RESOLVERS) {
 				if (resolver.canResolveDocuments(type)) {
 					Map<Id, Blob> m = resolver.getDocumentContent(type, sourceMap.get(type));
 					if (m != null) {
-						result.putAll(m);
+						for (Id id : m.keySet()) {
+							result.put(id, m.get(id));
+						}
 						break;
 					}
 				}
@@ -1023,43 +1050,53 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
-	private static Map<Id, Blob> getDocumentContent(final List<Document> documents, final Boolean fetchDocuments) {
-		Map<Id, Blob> result = new Map<Id, Blob>();
-		if (documents != null) {
-			if (fetchDocuments && !Salesforce.isCommunitySite) { // Encode the source IDs
-				for (Document d : documents) {
-					if (d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId)) {
-						result.put(d.sourceId, Blob.valueOf(d.sourceId));
-					}
-				}
-			} else { // Retrieve document bytes
-				Map<SObjectType, Set<Id>> sourceMap = new Map<SObjectType, Set<Id>>();
-				for (Document d : documents) {
-					if (d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId)) {
-						Entity source = new Entity(d.sourceId);
-						if (sourceMap.containsKey(source.type)) {
-							sourceMap.get(source.type).add(source.id);
-						} else {
-							sourceMap.put(source.type, new Set<Id> { source.id });
-						}
-					}
-				}
-				result.putAll(getDocumentContent(sourceMap));
-			}
+	private static Map<String, Blob> getDocumentContent(
+		final List<Document> documents,
+		final Boolean fetchDocuments) {
 
-			List<String> missingContent = new List<String>();
-			for (Document d : documents) {
-				if (d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId) && result.get(d.sourceId) == null) {
-					missingContent.add(String.format('{0} ({1})', new List<String> { d.name, d.sourceId }));
-				}
-			}
+		if (documents == null) return new Map<String, Blob>();
 
-			if (Collection.isNotEmpty(missingContent)) {
-				throw new DocuSignException(String.format(Label.CannotReadDocumentContent_1, new List<String> {
-					Collection.mkString(missingContent, ', ')
-				}));
+		Map<String, Blob> result = new Map<String, Blob>();
+		Map<SObjectType, Set<Id>> sourceMap = new Map<SObjectType, Set<Id>>();
+		for (Document d : documents) {
+			if (d.type == Document.TYPE_TEMPLATE || String.isBlank(d.sourceId)) continue;
+
+			// TODO: Verify non-Community restriction on document fetch.
+			if (d.type == Document.TYPE_SCM) { // content is SCM file ID
+				result.put(d.sourceId, Blob.valueOf('scm:' + d.sourceId));
+			} else if (!isHtml(d) && fetchDocuments && !Salesforce.isCommunitySite) { // content is SFDC document ID
+				result.put(d.sourceId, Blob.valueOf(d.sourceId));
+			} else { // content is SFDC document bytes -- build source map for later
+				Entity source = new Entity(d.sourceId);
+				if (sourceMap.containsKey(source.type)) {
+					sourceMap.get(source.type).add(source.id);
+				} else {
+					sourceMap.put(source.type, new Set<Id> { source.id });
+				}
 			}
 		}
+
+		// resolve any document content in source map
+		result.putAll(getDocumentContent(sourceMap));
+
+		// did we resolve all the documents?
+		List<String> missingContent = new List<String>();
+		for (Document d : documents) {
+			if (d.type != Document.TYPE_TEMPLATE
+				&& String.isNotBlank(d.sourceId)
+				&& result.get(d.sourceId) == null) {
+
+				missingContent.add(String.format('{0} ({1})', new List<String> { d.name, d.sourceId }));
+			}
+		}
+
+		// if any document could not be resolved, throw an exception
+		if (Collection.isNotEmpty(missingContent)) {
+			throw new DocuSignException(String.format(Label.CannotReadDocumentContent_1, new List<String> {
+				Collection.mkString(missingContent, ', ')
+			}));
+		}
+
 		return result;
 	}
 
@@ -1077,14 +1114,17 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public EnvelopeAPI.EnvelopeNotification notification;
 		public EnvelopeAPI.DefaultAnchorTags tabs;
 		public String completedDateTime;
-		public String deliveredDateTime;
 		public String declinedDateTime;
 		public String sentDateTime;
 		public String voidedDateTime;
 		public String voidedReason;
 
-		public APIEnvelope(final Envelope e, final Boolean send, final Boolean includeDefaultAnchorTags,
-			final Boolean fetchDocuments, final Boolean useAccountNotificationDefaults) {
+		public APIEnvelope(
+			final Envelope e,
+			final Boolean send,
+			final Boolean includeDefaultAnchorTags,
+			final Boolean fetchDocuments,
+			final Boolean useAccountNotificationDefaults) {
 
 			if (e != null) {
 				this.status = send ? 'sent' : 'created';
@@ -1093,7 +1133,8 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.emailSubject = e.emailSubject;
 				this.notification = new EnvelopeNotification(e.notifications, useAccountNotificationDefaults);
 
-				Map<Id, Blob> documentContent = e.hasDocuments ? getDocumentContent(e.documents, fetchDocuments) : null;
+				Map<String, Blob> documentContent =
+					e.hasDocuments ? getDocumentContent(e.documents, fetchDocuments) : null;
 				if (e.hasTemplates) {
 					this.compositeTemplates = buildCompositeTemplates(e.documents, e.recipients,
 						includeDefaultAnchorTags, documentContent, e.customFields, e.source);
@@ -1188,7 +1229,6 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
 
-		// TODO: determine fetch documents dynamically based on documents.
 		RestAPI.Response response = this.post(
 			getBaseUrl(),
 			new List<Object> { 'envelopes' },
@@ -1198,7 +1238,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				envelope,
 				options != null && options.sendNow,
 				options != null && options.includeDefaultAnchorTabs,
-				false, //options != null && options.fetchDocuments,
+				options != null && options.fetchDocuments,
 				options != null && options.useAccountNotificationDefaults),
 				true),
 			timeout);
@@ -1216,8 +1256,6 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				error = new APIError(APIErrorCode.INVALID_DOCUMENT, Label.InvalidFileExtension);
 			} else if (response.error.description.containsIgnoreCase('account lacks sufficient permissions')) {
 				error = new APIError(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, Label.AccountInSessionSigningMustBeEnabled);
-			} else if (response.error.description.containsIgnoreCase('user lacks sufficient permissions')) {
-				error = new APIError(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, Label.InvalidAccountSettings);
 			} else if (response.error.description.containsIgnoreCase('Group has no members')) {
 				error = new APIError(APIErrorCode.INVALID_SIGNING_GROUP, Label.EmptySigningGroup);
 			} else if (response.error.description.containsIgnoreCase('user name for the recipient is invalid')) {

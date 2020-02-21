@@ -134,17 +134,20 @@ private class EnvelopeAPITest {
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
 			Schema.Document d1 = TestUtils.createDocument();
-			Document t1 = new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, Datetime.now(), UUID.randomUUID().toString());
+			Document t1 = Document.fromTemplate(UUID.randomUUID(), 'UnitTestTemplate');
+			Document scm1 = Document.fromScmFile(UUID.randomUUID(), 'UnitTestScmFile', 'adf');
 
 			Test.startTest();
-			Map<Id, Blob> result1 = EnvelopeAPI.getDocumentContent(new List<Document> {
+			Map<String, Blob> result1 = EnvelopeAPI.getDocumentContent(new List<Document> {
 				t1,
+				scm1,
 				DocumentService.convert(cv1),
 				DocumentService.convert(cv2),
 				DocumentService.convert(d1)
 			}, false);
-			Map<Id, Blob> result2 = EnvelopeAPI.getDocumentContent(new List<Document> {
+			Map<String, Blob> result2 = EnvelopeAPI.getDocumentContent(new List<Document> {
 				t1,
+				scm1,
 				DocumentService.convert(cv1),
 				DocumentService.convert(cv2),
 				DocumentService.convert(d1)
@@ -152,13 +155,15 @@ private class EnvelopeAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
-			System.assertEquals(3, result1.size());
+			System.assertEquals(4, result1.size());
+			System.assertEquals('scm:' + scm1.sourceId, result1.get(scm1.sourceId).toString());
 			System.assertEquals(cv1.VersionData.toString(), result1.get(cv1.Id).toString());
 			System.assertEquals(cv2.VersionData.toString(), result1.get(cv2.Id).toString());
 			System.assertEquals(d1.Body.toString(), result1.get(d1.Id).toString());
 
 			System.assertNotEquals(null, result2);
-			System.assertEquals(3, result2.size());
+			System.assertEquals(4, result2.size());
+			System.assertEquals('scm:' + scm1.sourceId, result2.get(scm1.sourceId).toString());
 			System.assertEquals(cv1.Id, result2.get(cv1.Id).toString());
 			System.assertEquals(cv2.Id, result2.get(cv2.Id).toString());
 			System.assertEquals(d1.Id, result2.get(d1.Id).toString());
@@ -985,7 +990,8 @@ private class EnvelopeAPITest {
 				CustomField.newTextField('cf1', '1', true, true),
 				CustomField.newListField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
 			};
-			Map<Id, Blob> content = EnvelopeAPI.getDocumentContent(new List<Document> { doc }, true);
+			Map<String, Blob> content = EnvelopeAPI.getDocumentContent(
+				new List<Document> { doc }, true);
 
 			Test.startTest();
 			List<EnvelopeAPI.CompositeTemplate> compositeTemplatesList = EnvelopeAPI.buildCompositeTemplates(
@@ -1302,40 +1308,6 @@ private class EnvelopeAPITest {
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
 				System.assertEquals(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, ex.error.code);
-			}
-			Test.stopTest();
-		}
-	}
-
-	class UserPermissionErrorMock extends OAuthTokenMock {
-		override public HttpResponse getResponse(final HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			response.setStatusCode(400);
-			response.setStatus('BAD_REQUEST');
-			response.setHeader('Content-Type', 'application/json; charset=utf-8');
-			response.setBody('{"errorCode":"USER_LACKS_PERMISSIONS","message":"user lacks sufficient permissions"}');
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_createEnvelope_error_user_permissions() {
-		Test.setMock(HttpCalloutMock.class, new UserPermissionErrorMock());
-
-		System.runAs(UserMock.createDocuSignUser()) {
-			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope());
-			EnvelopeAPI client = EnvelopeAPI.getInstance();
-
-			Test.startTest();
-			try {
-				client.createEnvelope(
-					e,
-					new Envelope.Options(false, true, true, true),
-					'Unit Test');
-				throw new AssertException('Expected createEnvelope call to fail');
-			} catch (APIException ex) {
-				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.UNAUTHORIZED, ex.error.code);
 			}
 			Test.stopTest();
 		}
@@ -1862,5 +1834,47 @@ private class EnvelopeAPITest {
 		System.assertEquals('r2 subject', result.recipients.signers[1].emailNotification.emailSubject);
 		System.assertEquals('r2 message', result.recipients.signers[1].emailNotification.emailBody);
 		System.assertEquals(null, result.recipients.signers[2].emailNotification);
+	}
+
+	@IsTest
+	static void test_APIEnvelope_html() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
+		insert s;
+		Envelope__c e1 = TestUtils.createEnvelope();
+		ContentVersion cv1 = new ContentVersion(
+			Title = 'test1',
+			PathOnClient = 'test1.pdf',
+			VersionData = Blob.valueOf('test'),
+			IsMajorVersion = true);
+		ContentVersion cv2 = new ContentVersion(
+			Title = 'test2',
+			PathOnClient = 'test2.html',
+			VersionData = Blob.valueOf('<html/>'),
+			IsMajorVersion = true);
+		insert new List<ContentVersion> { cv1, cv2 };
+		cv1 = [SELECT Id, Title, ContentSize, FileExtension FROM ContentVersion WHERE Id = :cv1.Id];
+		cv2 = [SELECT Id, Title, ContentSize, FileExtension FROM ContentVersion WHERE Id = :cv2.Id];
+		Document__c d1 = TestUtils.createEnvelopeDocument(e1.Id, cv1, 1);
+		Document__c d2 = TestUtils.createEnvelopeDocument(e1.Id, cv2, 2);
+		Envelope e2 = new Envelope(null, 'Envelope subject', 'Envelope message', null)
+			.withDocuments(new List<Document> {
+				DocumentService.DB.convert(d1),
+				DocumentService.DB.convert(d2)
+			});
+
+		Test.startTest();
+		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(e2, false, false, true, true);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(2, Collection.size(result.documents));
+		System.assertNotEquals(null, result.documents[0]);
+		System.assertEquals(EncodingUtil.base64Encode(Blob.valueOf(cv1.Id)), result.documents[0].documentBase64);
+		System.assertEquals(null, result.documents[0].htmlDefinition);
+		System.assertNotEquals(null, result.documents[1]);
+		System.assertEquals(null, result.documents[1].documentBase64);
+		System.assertNotEquals(null, result.documents[1].htmlDefinition);
+		System.assertEquals('<html/>', result.documents[1].htmlDefinition.source);
 	}
 }

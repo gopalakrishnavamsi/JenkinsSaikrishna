@@ -14,6 +14,10 @@ global class Document {
 	 * Salesforce document type constant.
 	 */
 	global static final String TYPE_DOCUMENT = 'Document';
+	/**
+	 * SpringCM repository document type constant.
+	 */
+	public static final String TYPE_SCM = 'SCM';
 
 	/**
 	 * The ID of the associated dfsle__Document__c record.
@@ -193,7 +197,10 @@ global class Document {
 	 *
 	 * @return The newly-created DocuSign envelope document.
 	 */
-	global static Document fromTemplate(final UUID docuSignId, final String name) {
+	global static Document fromTemplate(
+		final UUID docuSignId,
+		final String name) {
+
 		return new Document(
 			null,
 			TYPE_TEMPLATE,
@@ -203,5 +210,21 @@ global class Document {
 			null,
 			null,
 			String.valueOf(docuSignId));
+	}
+
+	public static Document fromScmFile(
+		final UUID scmId,
+		final String name,
+		final String extension) {
+
+		return new Document(
+			null,
+			TYPE_SCM,
+			null,
+			name,
+			extension,
+			null,
+			null,
+			String.valueOf(scmId));
 	}
 }

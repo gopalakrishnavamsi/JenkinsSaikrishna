@@ -248,13 +248,15 @@ private class DocumentServiceTest {
 			Document d2 = new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.LastModifiedDate, d.Id);
 			UUID tId = UUID.randomUUID();
 			Document d3 = Document.fromTemplate(tId, 'template1');
+			UUID scmId = UUID.randomUUID();
+			Document d4 = Document.fromScmFile(scmId, 'scm1', 'adf');
 
 			Test.startTest();
-			List<Document> result = DocumentService.DB.insertDocuments(e.Id, new List<Document> { d2, d3 });
+			List<Document> result = DocumentService.DB.insertDocuments(e.Id, new List<Document> { d2, d3, d4 });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
+			System.assertEquals(3, result.size());
 
 			System.assertNotEquals(null, result[0]);
 			System.assertNotEquals(null, result[0].id);
@@ -275,6 +277,16 @@ private class DocumentServiceTest {
 			System.assertEquals(null, result[1].size);
 			System.assertEquals(null, result[1].lastModified);
 			System.assertEquals(String.valueOf(tId), result[1].sourceId);
+
+			System.assertNotEquals(null, result[2]);
+			System.assertNotEquals(null, result[2].id);
+			System.assertEquals(Document.TYPE_SCM, result[2].type);
+			System.assertEquals(4, result[2].sequence);
+			System.assertEquals('scm1', result[2].name);
+			System.assertEquals('adf', result[2].extension);
+			System.assertEquals(null, result[2].size);
+			System.assertEquals(null, result[2].lastModified);
+			System.assertEquals(String.valueOf(scmId), result[2].sourceId);
 		}
 	}
 

@@ -11,7 +11,7 @@ global with sharing class DocumentService {
 	private static final Document.Folder PERSONAL_FOLDER = new Document.Folder(UserInfo.getUserId(), Label.MyPersonalContent);
 	@TestVisible
 	private static final Set<String> VALID_EXTENSIONS = new Set<String> {
-		'as', 'asl', 'asp', 'doc', 'docm', 'docx', 'dot',
+		'adf' /* Online Editor format */, 'as', 'asl', 'asp', 'doc', 'docm', 'docx', 'dot',
 		'dotm', 'dotx', 'htm', 'html', 'pdf', 'pdx', 'rtf', 'txt', 'wpd', 'wps', 'wpt', 'dwg', 'dxf', 'emz', 'svg', 'svgz',
 		'vdx', 'vsd', 'vss', 'vst', 'bmp', 'cdr', 'dcx', 'gif', 'ico', 'jpg', 'jpeg', 'pct', 'pic', 'png', 'rgb', 'sam',
 		'tga', 'tif', 'tiff', 'wpg', 'dps', 'dpt', 'pot', 'potx', 'pps', 'ppt', 'pptm', 'pptx', 'csv', 'et', 'ett', 'xls',
