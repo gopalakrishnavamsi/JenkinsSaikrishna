@@ -183,7 +183,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 					'AssignTasksInOrder' => isSequential == true ? XMLSerializer.fromPrimitive(true, 'AssignTasksInOrder') : XMLSerializer.fromPrimitive(false, 'AssignTasksInOrder'),
 					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
 					'RequiresAllToApprove' => XMLSerializer.fromPrimitive(true, 'RequiresAllToApprove'),
-					'RequiresAllToComplete' => XMLSerializer.fromPrimitive(true, 'RequiresAllToComplete'),
+					'RequiresAllToComplete' => XMLSerializer.fromPrimitive(false, 'RequiresAllToComplete'),
 					'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'email' }, this.approvers, 'Approvers', 'Approver', false),
 					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'id' }, this.documents, 'Documents', 'Document', false),
 					'Email' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('Email'), 'Email', false),
