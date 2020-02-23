@@ -741,4 +741,27 @@ private class GenControllerTest {
 			System.assertEquals(controller.errorMessage, Label.MustBeDocuSignAdministrator);
 		}
 	}
+
+	@IsTest
+	static void test_verifyDocuSignGenerator() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Test.startTest();
+			System.assert(Gencontroller.verifyDocuSignGenerator());
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_verifyDocuSignGenerator_Unauthorized() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				Gencontroller.verifyDocuSignGenerator();
+				throw new AssertException('Expected verify DocuSignGeneratore to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
 }

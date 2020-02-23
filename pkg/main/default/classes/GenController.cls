@@ -257,4 +257,14 @@ public with sharing class GenController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to delete template.');
 		}
 	}
+
+	@AuraEnabled
+	public static Boolean verifyDocuSignGenerator() {
+		try {
+			Permissions.verifyIsDocuSignGenerator();
+			return true;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to validate.');
+		}
+	}
 }

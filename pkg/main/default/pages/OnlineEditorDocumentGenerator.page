@@ -1,7 +1,5 @@
 <apex:page id="OnlineEditorDocumentGenerator" sidebar="false" showHeader="false" controller="OnlineEditorController"
-           title="Generate Documents" standardStylesheets="false" applyHtmlTag="false"
-           action="{!verifyDocuSignGenerator}">
-    <html>
+           title="Generate Documents" standardStylesheets="false" applyHtmlTag="false">
     <apex:includeLightning/>
     <apex:slds/>
     <apex:includeScript value="{!$Resource.jquery}"/>
@@ -43,6 +41,27 @@
         templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}'
       };
 
+      var renderOnlineEditorGenerator = function () {
+        prepareOnlineEditorDocumentGenerator();
+      };
+
+      var sendForSignature = function () {
+        prepareSendForSignature();
+      };
+
+      var ns = '{!JSENCODE(namespace)}';
+      $Lightning.use(ns + ':LightningOutApp', function () {
+        $Lightning.createComponent(ns + ':OnlineEditorDocumentGenerator', {
+          templateId: '{!JSENCODE($CurrentPage.parameters.templateId)}',
+          recordName: '{!JSENCODE($CurrentPage.parameters.recordName)}',
+          title: '{!JSENCODE($CurrentPage.parameters.title)}',
+          recordId: '{!JSENCODE($CurrentPage.parameters.recordId)}',
+          renderOnlineEditorGenerator: renderOnlineEditorGenerator,
+          sendForSignature: sendForSignature
+        }, 'lightning', function (component, status, errorMessage) {
+        });
+      });
+
     </script>
 
     <style type="text/css">
@@ -62,50 +81,7 @@
         }
     </style>
 
-    <div class="slds-scope">
-        <div id="toastNotificationContainer"></div>
-        <div id="userEventsContainer"/>
-
-        <div id="inputPanel">
-            <div class="slds-page-header slds-border_bottom">
-                <div class="slds-grid">
-                    <div class="slds-col slds-has-flexi-truncate">
-                        <div class="slds-media slds-media_center">
-                            <div class="slds-media__figure">
-                            <span class="slds-icon_container slds-icon-standard-custom">
-                                <img src="{!$Resource.dsdxicon}" class="slds-icon onlineEditorToolbarIcon" alt=""/>
-                            </span>
-                            </div>
-                            <div class="slds-media__body">
-                                <div class="slds-page-header__name">
-                                    <div class="slds-page-header__name-title">
-                                        <span>{!$CurrentPage.parameters.recordName}</span>
-                                        <div class="slds-page-header__title slds-truncate">
-                                            {!$CurrentPage.parameters.title}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="slds-col slds-no-flex slds-align-top">
-                        <button id="onlineEditorCancelGeneration"
-                                class="slds-button slds-button_neutral">{!$Label.Cancel}</button>
-                        <button id="onlineEditorSendForSignature"
-                                class="slds-button slds-button_brand">{!$Label.SendForSignature}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <apex:outputPanel rendered="{!errorMessage==null}">
-            <div id="ds-spinner2">
-                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
-                    <div class="slds-spinner__dot-a"></div>
-                    <div class="slds-spinner__dot-b"></div>
-                </div>
-            </div>
-            <div id="onlineEditorGenerator"></div>
-        </apex:outputPanel>
-    </div>
-    </html>
+    <div id="toastNotificationContainer"></div>
+    <div id="userEventsContainer"/>
+    <div id="lightning"></div>
 </apex:page>
