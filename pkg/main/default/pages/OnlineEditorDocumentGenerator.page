@@ -41,6 +41,7 @@
         templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}'
       };
 
+
       var renderOnlineEditorGenerator = function () {
         prepareOnlineEditorDocumentGenerator();
       };
