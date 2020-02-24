@@ -4337,6 +4337,10 @@
 		<label>Als u eenmaal een workflow hebt gecreëerd in CLM, kunt u het integreren met Salesforce. Het genereren van een document kan bijvoorbeeld een beoordelingsworkflow van een document activeren.</label>
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-instellingen</label>
 		<name>Setup</name>

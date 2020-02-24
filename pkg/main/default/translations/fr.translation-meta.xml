@@ -26,6 +26,10 @@
 		<name>AccountNotConfigured</name>
 	</customLabels>
 	<customLabels>
+		<label>https://support.docusign.com/fr/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
+	<customLabels>
 		<label>Ajouter</label>
 		<name>Add</name>
 	</customLabels>

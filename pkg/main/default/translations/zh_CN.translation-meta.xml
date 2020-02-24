@@ -4337,6 +4337,10 @@
 		<label>在 CLM 中创建工作流后，即可将其与 Salesforce 集成。例如，生成文档会触发文档审核工作流。</label>
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 设置</label>
 		<name>Setup</name>

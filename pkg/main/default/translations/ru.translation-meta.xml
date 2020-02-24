@@ -4337,6 +4337,10 @@
 		<label>После того как вы создадите рабочий процесс в CLM, вы сможете интегрировать его с SalesForce. Например, создание документа может вызывать рабочий процесс его проверки.</label>
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>Настройка DocuSign</label>
 		<name>Setup</name>

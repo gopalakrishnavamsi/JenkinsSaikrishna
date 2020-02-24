@@ -4336,6 +4336,10 @@
 		<label>CLMでワークフローを作成して、それをSalesforceに統合します。たとえば、文書レビュー用のワークフローを作成して、文書生成時にそのワークフローが自動的に実行されるように設定できます。</label>
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/jp/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSignセットアップ</label>
 		<name>Setup</name>

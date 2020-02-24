@@ -4337,6 +4337,10 @@
 		<label>CLM에 워크플로를 생성하면 이를 Salesforce와 통합할 수 있습니다. 예를 들어, 문서를 생성하면 문서 검토 워크플로가 트리거될 수 있습니다.</label>
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 설정</label>
 		<name>Setup</name>

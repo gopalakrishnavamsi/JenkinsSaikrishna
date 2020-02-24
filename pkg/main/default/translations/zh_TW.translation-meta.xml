@@ -4337,6 +4337,10 @@
 		<label>在 CLM 中建立工作流程後，即可整合到 Salesforce 裡面。舉例來說，產生文件後，可以啟動文件審核的工作流程。</label>
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 設定</label>
 		<name>Setup</name>

@@ -4335,6 +4335,10 @@
 		<label>Nachdem Sie einen Workflow in CLM erstellt haben, können Sie diesen in Salesforce integrieren. Das Erstellen eines Dokuments kann beispielsweise einen Workflow zum Prüfen eines Dokuments auslösen.</label>
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/de/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>
 		<name>Setup</name>

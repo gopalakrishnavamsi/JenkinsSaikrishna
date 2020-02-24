@@ -4338,6 +4338,10 @@
 		<label>Una vez que haya creado un flujo de trabajo en CLM, podrá integrarlo en Salesforce. Por ejemplo, generar un documento podría activar un flujo de trabajo de revisión del documento.</label>
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>Configuración de DocuSign</label>
 		<name>Setup</name>
