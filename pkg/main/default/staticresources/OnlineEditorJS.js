@@ -1,6 +1,7 @@
 /* global jQuery, RemoteActions, Configuration, Labels, DSEditor, Visualforce, $Lightning  */
 /* exported prepareOnlineEditorDocumentGenerator ,prepareSendForSignature  */
 jQuery.noConflict();
+
 var prepareOnlineEditorDocumentGenerator;
 var prepareSendForSignature;
 // FIXME: Split JS file between edit and generate VF pages. Can share common functions in 3rd JS file.
@@ -40,7 +41,8 @@ jQuery(document).ready(function ($) {
     if (Configuration.template.fileSuffix) $('#fileSuffix').val(Configuration.template.fileSuffix);
   }
 
-  var _editor = new DSEditor({
+
+  var _editor = navUtils.isIE() ? null : new DSEditor({
     api: {
       getMergeFields: getMergeFields,
       getEntityRecords: getEntityRecords,
@@ -60,8 +62,9 @@ jQuery(document).ready(function ($) {
     .then(function (component) {
       _userEvents = component;
 
-      if (Configuration.isGenerating) _sessionType = EventLabels.GENERATE_DOCUMENT;
-      else Configuration.isEditing ? EventLabels.UPDATE_TEMPLATE : EventLabels.CREATE_TEMPLATE;
+    if (Configuration.isGenerating) _sessionType = EventLabels.GENERATE_DOCUMENT;
+    else _sessionType = Configuration.isEditing ? EventLabels.UPDATE_TEMPLATE : EventLabels.CREATE_TEMPLATE;
+
 
       _userEvents.time(_sessionType);
       _userEvents.addProperties(getBaseEventProps());
@@ -231,6 +234,12 @@ jQuery(document).ready(function ($) {
             searchValue || '',
             function (result, event) {
               if (event.status) {
+                _userEvents.success(
+                  EventLabels.PREVIEW_DOCUMENT, 
+                  {
+
+                  }
+                ); 
                 resolve(result);
               } else {
                 _userEvents.error(
