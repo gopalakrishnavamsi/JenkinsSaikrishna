@@ -35,6 +35,7 @@ public with sharing class WordTemplateUpdater implements Database.Batchable<SObj
 		Boolean isCurrencyFormatDefined = String.isNotBlank(v1.currencyFormat) && v1.currencyFormat != 'default';
 		if (isDateFormatDefined &&
 			(v1.dataType == 'DATE'
+				|| v1.dataType == 'TIME'
 				|| v1.dataType == 'DATETIME'
 				|| v1.apiName == 'CurrentDate')) {
 

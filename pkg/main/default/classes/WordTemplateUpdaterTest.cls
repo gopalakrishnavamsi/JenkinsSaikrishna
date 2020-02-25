@@ -50,12 +50,17 @@ private class WordTemplateUpdaterTest {
 		f4.dataType = '';
 		f4.currencyFormat = 'cf';
 		f4.dateFormat = 'df';
+		WordTemplateUpdater.FieldV1 f5 = new WordTemplateUpdater.FieldV1();
+		f5.dataType = 'TIME';
+		f5.currencyFormat = 'cf';
+		f5.dateFormat = 'df';
 
 		Test.startTest();
 		System.assertEquals('df', WordTemplateUpdater.convertFormat(f1));
 		System.assertEquals(null, WordTemplateUpdater.convertFormat(f2));
 		System.assertEquals('df', WordTemplateUpdater.convertFormat(f3));
 		System.assertEquals('df', WordTemplateUpdater.convertFormat(f4));
+		System.assertEquals('df', WordTemplateUpdater.convertFormat(f5));
 
 		Test.stopTest();
 	}
