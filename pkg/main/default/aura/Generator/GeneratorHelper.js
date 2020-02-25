@@ -161,10 +161,10 @@
 
   parseFieldMappings: function (fieldMappings, isMultiCurrency) {
     var helper = this;
-    var map = new Object();// this implementation needs to change to support objects in es5 and remove map implementation
+    var map = {};
     fieldMappings.forEach(function (fieldMapping) {
       var key = fieldMapping.key + '_' + fieldMapping.depth + '_' + fieldMapping.type;
-      map.set(key, fieldMapping);
+      map[key] = fieldMapping;
     });
     var query = helper.traverseFieldMapping(fieldMappings[0], '', '', fieldMappings[0].key, map, isMultiCurrency);
     return JSON.stringify(query);
@@ -186,7 +186,7 @@
       } else {
         childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
       }
-      var child = map.get(childKey);
+      var child = map[childKey];
       if (field.type === 'CHILD_RELATIONSHIP') {
         children.push(helper.traverseFieldMapping(child, field.relationship, field.parentIdField, field.name, map, isMultiCurrency));
       } else if (field.type === 'REFERENCE') {
@@ -211,7 +211,7 @@
     fm.fields.forEach(function (field) {
       if (field.type === 'REFERENCE') {
         var childKey = this.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
-        var child = map.get(childKey);
+        var child = map[childKey];
         helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
           fields.push(f);
         });
