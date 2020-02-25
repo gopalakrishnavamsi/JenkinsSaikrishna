@@ -70,14 +70,16 @@
             background: rgb(243, 242, 242);
         }
 
-        .slds-scope .slds-path__link {
-            padding: 0;
-            height: 32px;
-            font-size: 13px;
+        body {
+            margin: 0;
         }
 
-        .slds-scope .slds-path__item:before, .slds-scope .slds-path__item:after {
-            height: 16px;
+        .slds-page-header__title {
+            font-weight: 600;
+        }
+
+        .slds-scope .slds-page-header {
+            font-size: 15px;
         }
 
         .templateConfigContentContainer {
