@@ -184,7 +184,7 @@ public with sharing class OnlineEditorController extends Controller {
 	
 	@TestVisible
 	private static Map<String, Object> queryEntityRecords(final SObjectType objectType, final String searchValue, final String filterBy, final Integer pageIndex) {
-		Permissions.verifyIsDocuSignGenerator();
+		Permissions.verifyIsDocuSignAdministrator();
 
 		if (pageIndex == null || pageIndex < 0 || filterBy == null || searchValue == null) throw new DocuSignException(Label.InvalidGenQuery);
 

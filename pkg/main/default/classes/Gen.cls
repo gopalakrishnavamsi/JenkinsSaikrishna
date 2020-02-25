@@ -87,7 +87,7 @@ public class Gen {
 		@AuraEnabled
 		public String description { get; private set; }
 		@AuraEnabled
-		public List<Gen.ObjectMappings> objectMappings { get; private set; }
+		public Gen.ObjectMapping objectMappings { get; private set; }
 		@AuraEnabled
 		public List<Gen.SignerFieldMappings> signerMappings { get; private set; }
 		@AuraEnabled
@@ -119,7 +119,7 @@ public class Gen {
 			final String sourceObject,
 			final String templateType,
 			final String description,
-			final List<Gen.ObjectMappings> objectMappings,
+			final Gen.ObjectMapping objectMappings,
 			final List<Gen.SignerFieldMappings> signerMappings,
 			final Boolean useAllTemplates,
 			final Boolean useCurrentRecord,
@@ -136,7 +136,7 @@ public class Gen {
 			this.sourceObject = sourceObject;
 			this.templateType = templateType;
 			this.description = description;
-			this.objectMappings = objectMappings == null ? new List<Gen.ObjectMappings>() : objectMappings;
+			this.objectMappings = objectMappings;
 			this.signerMappings = signerMappings == null ? new List<Gen.SignerFieldMappings>() : signerMappings;
 			this.useAllTemplates = useAllTemplates;
 			this.useCurrentRecord = useCurrentRecord;
@@ -153,130 +153,118 @@ public class Gen {
 	public class SignerFieldMappings {
 		@AuraEnabled
 		public List<Gen.SignerFieldMappingDetails> fieldMappings { get; private set; }
-		public SignerFieldMappings(
-			final List<Gen.SignerFieldMappingDetails> fieldMappings) {
-			this.fieldMappings = fieldMappings == null ? new List<Gen.SignerFieldMappingDetails>() : fieldMappings;
-		}
 	}
 
 	public class SignerFieldMappingDetails {
 		@AuraEnabled
 		public String apiName { get; private set; }
-		public SignerFieldMappingDetails(
-			final String apiName) {
-			this.apiName = apiName;
-		}
 	}
 
-	public class ObjectMappings {
+	public class ObjectMapping {
 		@AuraEnabled
-		public String apiName { get; private set; }
+		public Integer version { get; private set; }
+		@AuraEnabled
+		public String name { get; private set; }
 		@AuraEnabled
 		public String label { get; private set; }
 		@AuraEnabled
-		public String objLabel { get; private set; }
-		@AuraEnabled
-		public List<Gen.FieldMappings> fieldMappings { get; private set; }
-		@AuraEnabled
-		public Boolean isPrimary { get; private set; }
+		public List<FieldMapping> fieldMappings { get; private set; }
 
-		public ObjectMappings(
-			final String apiName,
+		public ObjectMapping(
+			final Integer version,
+			final String name,
 			final String label,
-			final String objLabel,
-			final List<Gen.FieldMappings> fieldMappings,
-			final Boolean isPrimary) {
-			this.apiName = apiName;
+			final List<FieldMapping> fieldMappings) {
+
+			this.version = version;
+			this.name = name;
 			this.label = label;
-			this.objLabel = objLabel;
-			this.fieldMappings = fieldMappings == null ? new List<Gen.FieldMappings>() : fieldMappings;
-			this.isPrimary = isPrimary;
+			this.fieldMappings = fieldMappings == null ? new List<FieldMapping>() : fieldMappings;
 		}
 	}
 
-	public class FieldMappings {
+	public class FieldMapping {
 		@AuraEnabled
-		public String apiName { get; private set; }
+		public String type { get; private set; }
 		@AuraEnabled
-		public String dataType { get; private set; }
+		public Integer depth { get; private set; }
 		@AuraEnabled
-		public List<Gen.ChildFieldMappings> childFieldMappings { get; private set; }
+		public String key { get; private set; }
 		@AuraEnabled
-		public Boolean isConditional { get; private set; }
+		public List<String> path { get; private set; }
 		@AuraEnabled
-		public Boolean isChildRelation { get; private set; }
+		public List<Field> fields { get; private set; }
+		public transient Boolean isRoot {
+			get {
+				return this.type == 'ROOT';
+			}
+		}
+
+		public FieldMapping(
+			final String type,
+			final Integer depth,
+			final String key,
+			final List<String> path,
+			final List<Field> fields) {
+
+			this.type = type;
+			this.depth = depth;
+			this.key = key;
+			this.path = path == null ? new List<String>() : path;
+			this.fields = fields == null ? new List<Field>() : fields;
+		}
+	}
+
+	public class Field {
+		@AuraEnabled
+		public String type { get; private set; }
+		@AuraEnabled
+		public String name { get; private set; }
+		@AuraEnabled
+		public String label { get; private set; }
+		@AuraEnabled
+		public String relatesTo { get; private set; }
+		@AuraEnabled
+		public String relationship { get; private set; }
+		@AuraEnabled
+		public String parentIdField { get; private set; }
 		@AuraEnabled
 		public String format { get; private set; }
 		@AuraEnabled
-		public Integer decimalPlaces { get; private set; }
+		public Integer scale { get; private set; }
 		@AuraEnabled
-		public String label { get; private set; }
+		public Boolean isChildRelation { get; private set; }
+		@AuraEnabled
+		public Boolean isConditional { get; private set; }
 		@AuraEnabled
 		public String matchType { get; private set; }
 		@AuraEnabled
 		public String conditionalValue { get; private set; }
 
-		public FieldMappings(
-			final String apiName,
-			final String dataType,
-			final List<Gen.ChildFieldMappings> childFieldMappings,
-			final Boolean isConditional,
-			final Boolean isChildRelation,
-			final String format,
-			final Integer decimalPlaces,
+		public Field(
+			final String type,
+			final String name,
 			final String label,
+			final String relatesTo,
+			final String relationship,
+			final String parentIdField,
+			final String format,
+			final Integer scale,
+			final Boolean isChildRelation,
+			final Boolean isConditional,
 			final String matchType,
 			final String conditionalValue) {
-			this.apiName = apiName;
-			this.dataType = dataType;
-			this.childFieldMappings = childFieldMappings == null ? new List<Gen.ChildFieldMappings>() : childFieldMappings;
-			this.isConditional = isConditional;
-			this.isChildRelation = isChildRelation;
-			this.decimalPlaces = decimalPlaces;
-			this.format = format;
-			this.label = label;
-			this.matchType = matchType;
-			this.conditionalValue = conditionalValue;
-		}
-	}
 
-	public class ChildFieldMappings {
-		@AuraEnabled
-		public String apiName { get; private set; }
-		@AuraEnabled
-		public String dataType { get; private set; }
-		@AuraEnabled
-		public Boolean isConditional { get; private set; }
-		@AuraEnabled
-		public String format { get; private set; }
-		@AuraEnabled
-		public Integer decimalPlaces { get; private set; }
-		@AuraEnabled
-		public Boolean isChildRelation { get; private set; }
-		@AuraEnabled
-		public String label { get; private set; }
-		@AuraEnabled
-		public String matchType { get; private set; }
-		@AuraEnabled
-		public String conditionalValue { get; private set; }
-
-		public ChildFieldMappings(
-			final String apiName,
-			final String dataType,
-			final Boolean isConditional,
-			final String format,
-			final Integer decimalPlaces,
-			final Boolean isChildRelation,
-			final String label,
-			final String matchType,
-			final String conditionalValue) {
-			this.apiName = apiName;
-			this.dataType = dataType;
-			this.isConditional = isConditional;
-			this.format = format;
-			this.decimalPlaces = decimalPlaces;
-			this.isChildRelation = isChildRelation;
+			this.type = type;
+			this.name = name;
 			this.label = label;
+			this.relatesTo = relatesTo;
+			this.relationship = relationship;
+			this.parentIdField = parentIdField;
+			this.format = format;
+			this.scale = scale;
+			this.isChildRelation = isChildRelation;
+			this.isConditional = isConditional;
 			this.matchType = matchType;
 			this.conditionalValue = conditionalValue;
 		}
@@ -320,16 +308,6 @@ public class Gen {
 		public String genButtonApiName { get; private set; }
 		public String genButtonLabel { get; private set; }
 		public String genTemplateId { get; private set; }
-
-		public LayoutParameters(
-			final String genButtonApiName,
-			final String genButtonLabel,
-			final String genTemplateId) {
-
-			this.genButtonApiName = genButtonApiName;
-			this.genButtonLabel = genButtonLabel;
-			this.genTemplateId = genTemplateId;
-		}
 	}
 
 	public class GenTemplateDisplay {

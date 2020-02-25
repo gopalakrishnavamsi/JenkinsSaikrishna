@@ -1,0 +1,475 @@
+public with sharing class WordTemplateUpdater implements Database.Batchable<SObject>, PostInstallScript {
+
+	private static final Set<SObjectType> TYPE_BLACKLIST = new Set<SObjectType> { Schema.Group.getSObjectType() };
+	private static Integer templateCount = null;
+	@TestVisible
+	private static Integer batchLimit = 200;
+
+	@TestVisible
+	private class ObjectV1 {
+		public String apiName;
+		public String label;
+		public List<FieldV1> fieldMappings;
+	}
+
+	@TestVisible
+	private class FieldV1 {
+		public String apiName;
+		public String dataType;
+		public List<FieldV1> childFieldMappings;
+		public Boolean isConditional;
+		public String dateFormat;
+		public String currencyFormat;
+		public Integer decimalPlaces;
+		public String label;
+		public String matchType;
+		public String conditionalValue;
+	}
+
+	@TestVisible
+	private static String convertFormat(final FieldV1 v1) {
+		if (v1 == null) return null;
+
+		String result = null;
+		Boolean isDateFormatDefined = String.isNotBlank(v1.dateFormat) && v1.dateFormat != 'default';
+		Boolean isCurrencyFormatDefined = String.isNotBlank(v1.currencyFormat) && v1.currencyFormat != 'default';
+		if (isDateFormatDefined &&
+			(v1.dataType == 'DATE'
+				|| v1.dataType == 'DATETIME'
+				|| v1.apiName == 'CurrentDate')) {
+
+			result = v1.dateFormat;
+		} else if (isCurrencyFormatDefined && v1.dataType == 'CURRENCY') {
+			result = v1.currencyFormat;
+		}
+		return result;
+	}
+
+	@TestVisible
+	private class Relationship {
+		public String name { get; private set; }
+		public String label { get; private set; }
+		public String relatesTo { get; private set; }
+		public String parentIdField { get; private set; }
+
+		public Relationship(
+			final String name,
+			final String label,
+			final String relatesTo,
+			final String parentIdField) {
+
+			this.name = name;
+			this.label = label;
+			this.relatesTo = relatesTo;
+			this.parentIdField = parentIdField;
+		}
+	}
+
+	// TODO: This is more solid than Salesforce.getParentObjectType. Replace with this.
+	@TestVisible
+	private static Relationship getLookupField(
+		final DescribeSObjectResult objectDescribe,
+		final String relationshipName) {
+
+		if (objectDescribe == null || String.isBlank(relationshipName)) return null;
+
+		Relationship result;
+		for (SObjectField f : objectDescribe.fields.getMap().values()) {
+			DescribeFieldResult fd = f.getDescribe();
+			if (fd != null && fd.getType() == Schema.DisplayType.REFERENCE && fd.getRelationshipName() == relationshipName) {
+				Set<SObjectType> refs = new Set<SObjectType>(fd.getReferenceTo());
+				refs.removeAll(TYPE_BLACKLIST); // This can be polymorphic, filter out types we can't deal with (for now)
+				SObjectType t = (SObjectType)Collection.head(new List<SObjectType>(refs));
+				if (t != null) {
+					result = new Relationship(
+						fd.getRelationshipName(),
+						fd.getLabel(),
+						t.getDescribe().getName(),
+						fd.getName());
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Relationship getChildRelationship(
+		final DescribeSObjectResult objectDescribe,
+		final String relationshipName) {
+
+		if (objectDescribe == null || String.isBlank(relationshipName)) return null;
+
+		Relationship result = null;
+		for (ChildRelationship cr : objectDescribe.getChildRelationships()) {
+			if (cr != null && cr.relationshipName == relationshipName) {
+				DescribeFieldResult dfr = cr.getField().getDescribe();
+				result = new Relationship(
+					cr.getRelationshipName(),
+					dfr.getLabel(),
+					cr.getChildSObject().getDescribe().getName(),
+					dfr.getName());
+				break;
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Gen.FieldMapping convert(
+		final FieldV1 v1,
+		final DescribeSObjectResult objectDescribe,
+		final Gen.FieldMapping root,
+		final Map<String, Gen.FieldMapping> lookups,
+		final Map<String, Relationship> childRelationships) {
+
+		if (v1 == null
+			|| String.isBlank(v1.apiName)
+			|| objectDescribe == null
+			|| root == null
+			|| root.fields == null
+			|| lookups == null
+			|| childRelationships == null) {
+
+			return null;
+		}
+
+		List<String> path = v1.apiName.split('\\.');
+		String type = path.size() > 1 ? 'REFERENCE' : v1.dataType;
+		if (String.isBlank(type)) {
+			type = v1.apiName == 'CurrentDate' ? 'DATE' : 'CHILD_RELATIONSHIP';
+		}
+
+		Gen.FieldMapping result;
+		switch on (type) {
+			when 'REFERENCE' { // Lookup path[0] objectType.
+				String relationshipName = path[0];
+				Gen.FieldMapping lookup = lookups.get(relationshipName);
+				if (lookup == null) {
+					Relationship lookupField = getLookupField(objectDescribe, relationshipName);
+					if (lookupField == null) {
+						LoggerService.getInstance().warn('Invalid relationship ' + relationshipName
+							+ ' for object ' + objectDescribe.getName());
+						return null;
+					}
+
+					// add root lookup field
+					root.fields.add(new Gen.Field(
+						type,
+						lookupField.name,
+						lookupField.label,
+						lookupField.relatesTo,
+						lookupField.name,
+						lookupField.parentIdField,
+						null,
+						null,
+						false,
+						false,
+						null,
+						null));
+					// Cache relationship for later
+					lookup = new Gen.FieldMapping(
+						type,
+						2,
+						relationshipName,
+						new List<String> { relationshipName },
+						null);
+					lookups.put(relationshipName, lookup);
+				}
+				lookup.fields.add(new Gen.Field(
+					v1.dataType,
+					path[1],
+					v1.label,
+					null,
+					null,
+					null,
+					convertFormat(v1),
+					v1.decimalPlaces,
+					false,
+					v1.isConditional,
+					v1.matchType,
+					v1.conditionalValue));
+				result = lookup;
+			} when 'CHILD_RELATIONSHIP' {
+				Relationship childRelationship = childRelationships.get(v1.apiName);
+				if (childRelationship == null) {
+					// V1 stores relationship name in label field
+					childRelationship = getChildRelationship(objectDescribe, v1.label);
+					root.fields.add(new Gen.Field(
+						type,
+						childRelationship.relatesTo,
+						childRelationship.label,
+						childRelationship.relatesTo,
+						childRelationship.name,
+						childRelationship.parentIdField,
+						null,
+						null,
+						true,
+						false,
+						null,
+						null));
+					childRelationships.put(v1.apiName, childRelationship);
+				}
+				Gen.FieldMapping child = new Gen.FieldMapping(
+					type,
+					2,
+					v1.apiName,
+					new List<String> { v1.apiName },
+					null);
+				SObjectType childType = Salesforce.getSObjectType(v1.apiName);
+				if (childType != null && v1.childFieldMappings != null) {
+					for (FieldV1 childFieldV1 : v1.childFieldMappings) {
+						convert(
+							childFieldV1,
+							childType.getDescribe(),
+							child,
+							lookups,
+							childRelationships);
+					}
+				}
+				result = child;
+			} when else { // use type as-is
+				root.fields.add(new Gen.Field(
+					type,
+					v1.apiName,
+					v1.label,
+					null,
+					null,
+					null,
+					convertFormat(v1),
+					v1.decimalPlaces,
+					false,
+					v1.isConditional,
+					v1.matchType,
+					v1.conditionalValue));
+				result = root;
+			}
+		}
+		return result;
+	}
+
+	private static List<Gen.FieldMapping> convert(
+		final List<FieldV1> v1,
+		final DescribeSObjectResult objectDescribe) {
+
+		if (objectDescribe == null || v1 == null) return new List<Gen.FieldMapping>();
+
+		Gen.FieldMapping root = new Gen.FieldMapping(
+			'ROOT',
+			1,
+			objectDescribe.getName(),
+			null,
+			null);
+		List<Gen.FieldMapping> result = new List<Gen.FieldMapping> { root };
+		Map<String, Gen.FieldMapping> lookups = new Map<String, Gen.FieldMapping>();
+		Map<String, Relationship> childRelationships = new Map<String, Relationship>();
+		for (FieldV1 f : v1) {
+			Gen.FieldMapping v2 = convert(
+				f,
+				objectDescribe,
+				root,
+				lookups,
+				childRelationships);
+			if (v2 != null && !v2.isRoot) { // Root is already added
+				result.add(v2);
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static Gen.ObjectMapping convert(final ObjectV1 v1) {
+		if (v1 == null) return null;
+
+		Gen.ObjectMapping result = null;
+		SObjectType t = Salesforce.getSObjectType(v1.apiName);
+		if (t != null) {
+			result = new Gen.ObjectMapping(
+				2,
+				v1.apiName,
+				v1.label,
+				convert(
+					v1.fieldMappings,
+					t.getDescribe()));
+		}
+		return result;
+	}
+
+	@TestVisible
+	public static GenTemplate__c updateTemplate(final GenTemplate__c template) {
+		if (template != null) {
+			if (String.isNotBlank(template.ObjectMappings__c)) {
+				JSONParser p = JSON.createParser(template.ObjectMappings__c);
+				if (p.nextToken() == JSONToken.START_ARRAY) { // v1
+					List<ObjectV1> v1s = (List<ObjectV1>)JSON.deserialize(
+						template.ObjectMappings__c,
+						List<ObjectV1>.class);
+					Gen.ObjectMapping v2 = convert((ObjectV1)Collection.head(v1s));
+					if (v2 != null) template.ObjectMappings__c = JSON.serialize(v2);
+				}
+			}
+			if (String.isBlank(template.TemplateType__c)) template.TemplateType__c = Gen.TYPE_WORD;
+		}
+		return template;
+	}
+
+	private static List<GenTemplate__c> updateTemplates(final List<GenTemplate__c> templates) {
+		if (templates == null) return new List<GenTemplate__c>();
+
+		List<GenTemplate__c> result = new List<GenTemplate__c>();
+		for (GenTemplate__c t : templates) {
+			result.add(updateTemplate(t));
+		}
+		return result;
+	}
+
+	public Database.QueryLocator start(final Database.BatchableContext context) {
+		LoggerService.getInstance().info('Starting Gen template migration batch: '
+			+ (context == null ? 'UNKNOWN' : context.getJobId()));
+
+		return Database.getQueryLocator('SELECT '
+			+ Application.namespacePrefix + 'TemplateType__c, '
+			+ Application.namespacePrefix + 'ObjectMappings__c '
+			+ 'FROM ' + Application.namespacePrefix + 'GenTemplate__c '
+			+ 'WHERE ' + Application.namespacePrefix + 'TemplateType__c != \'Online Editor\'');
+	}
+
+	public void execute(
+		final Database.BatchableContext context,
+		final List<GenTemplate__c> scope) {
+
+		LoggerService.getInstance().info('Executing Gen template migration batch - '
+			+ scope.size() + ' record(s): ' + (context == null ? 'UNKNOWN' : context.getJobId()));
+
+		update updateTemplates(scope);
+	}
+
+	public void finish(final Database.BatchableContext context) {
+		GenMigrationSettings__c s = GenMigrationSettings__c.getOrgDefaults();
+		s.WordTemplatesUpdated__c = true;
+		upsert s;
+
+		LoggerService.getInstance().info('Gen template migration batch job complete: '
+			+ (context == null ? 'UNKNOWN' : context.getJobId()));
+	}
+
+	private static AsyncApexJob getExistingJob() {
+		return (AsyncApexJob)Collection.head([
+			SELECT Id
+			FROM AsyncApexJob
+			WHERE ApexClass.NamespacePrefix = :Application.packageNamespace
+			AND ApexClass.Name = 'WordTemplateUpdater'
+			AND Status NOT IN ('Aborted', 'Completed', 'Failed')
+			ORDER BY CreatedDate DESC
+			LIMIT 1
+		]);
+	}
+
+	public class UpdateResult {
+		public Integer templateCount { get; private set; }
+		public Id jobId { get; private set; }
+
+		@TestVisible
+		private UpdateResult(
+			final Integer templateCount,
+			final Id jobId) {
+
+			this.templateCount = templateCount;
+			this.jobId = jobId;
+		}
+
+		override public String toString() {
+			if (String.isNotBlank(this.jobId)) {
+				return String.format(Label.UpgradeTemplatesQueued_2, new List<Object> {
+					this.templateCount, this.jobId
+				});
+			}
+			return String.format(Label.UpgradeTemplatesComplete_1, new List<Object> {
+				this.templateCount
+			});
+		}
+	}
+
+	private static Integer getTemplateCount() {
+		if (templateCount == null) {
+			templateCount = [
+				SELECT COUNT()
+				FROM GenTemplate__c
+				WHERE TemplateType__c != :Gen.TYPE_ONLINE
+			];
+		}
+		return templateCount;
+	}
+
+	public static UpdateResult updateTemplates() {
+		Permissions.verifyIsUpdateable(GenTemplate__c.getSObjectType(), new List<String> {
+			Application.namespacePrefix + 'TemplateType__c',
+			Application.namespacePrefix + 'ObjectMappings__c'
+		});
+
+		Id jobId = null;
+		AsyncApexJob job = getExistingJob();
+		Integer templates = getTemplateCount();
+		if (job != null) {
+			jobId = job.Id;
+		} else {
+			LoggerService.getInstance().info('Found ' + templateCount
+				+ ' Word template(s) that may require updates.');
+			if (templates > batchLimit) { // queue batch job
+				jobId = Database.executeBatch(new WordTemplateUpdater());
+			} else if (templates > 0) { // update now
+				update updateTemplates([
+					SELECT TemplateType__c, ObjectMappings__c
+					FROM GenTemplate__c
+					WHERE TemplateType__c != :Gen.TYPE_ONLINE
+					LIMIT 200
+				]);
+				GenMigrationSettings__c s = GenMigrationSettings__c.getOrgDefaults();
+				s.WordTemplatesUpdated__c = true;
+				upsert s;
+			}
+		}
+		return new UpdateResult(
+			templates,
+			jobId);
+	}
+
+	public Boolean shouldExecute(
+		final Id organizationId,
+		final Id installerId,
+		final Version previousVersion,
+		final Boolean isPush,
+		final Boolean isUpgrade) {
+
+		// Only execute if upgrading from < v2.2 and there are templates that haven't been updated
+		return isUpgrade
+			&& previousVersion != null
+			&& previousVersion.major() <= 2
+			&& previousVersion.minor() < 2
+			&& !GenMigrationSettings__c.getOrgDefaults().WordTemplatesUpdated__c
+			&& getTemplateCount() > 0;
+	}
+
+	public PostInstallResults execute(
+		final Id organizationId,
+		final Id installerId,
+		final Version previousVersion,
+		final Boolean isPush,
+		final Boolean isUpgrade) {
+
+		if (!this.shouldExecute(organizationId, installerId, previousVersion, isPush, isUpgrade)) {
+			return new PostInstallResults().skipStep(Label.UpgradeWordTemplates, Label.PostInstallCriteriaNotMet);
+		}
+
+		PostInstallResults result = new PostInstallResults();
+		try {
+			UpdateResult updateResult = updateTemplates();
+			result.endStepSuccess(
+				Label.UpgradeWordTemplates,
+				updateResult == null ? Label.Unknown : String.valueOf(updateResult));
+		} catch (Exception ex) {
+			result.endStepFailure(Label.UpgradeWordTemplates, ex);
+		}
+		return result;
+	}
+}

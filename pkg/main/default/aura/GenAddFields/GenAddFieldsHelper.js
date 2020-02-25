@@ -1,19 +1,46 @@
 ({
-  getFieldMapping: function (component, optionModalParams) {
-    var config = component.get('v.config');
-    var fieldMapping;
-    var objMapping = config.objectMappings[optionModalParams.objIndex];
+  getMergeFieldMapping: function (component, optionModalParams) {
+    var self = this;
+    var mergeFieldTree = component.get('v.config').objectMappings.fieldMappings;
 
-    if (optionModalParams.isChild) {
-      var parentFieldMapping =
-        objMapping.fieldMappings[optionModalParams.parentIndex];
-      fieldMapping =
-        parentFieldMapping.childFieldMappings[optionModalParams.fieldIndex];
-    } else {
-      fieldMapping = objMapping.fieldMappings[optionModalParams.fieldIndex];
+    var parentNodeOfField = mergeFieldTree.find(function (node) {
+      return self.isParentOfField(
+        node,
+        {
+          type: optionModalParams.type,
+          depth: optionModalParams.depth,
+          path: optionModalParams.path
+        });
+    });
+
+    return parentNodeOfField.fields[optionModalParams.fieldIndex];
+  },
+
+  isParentOfField: function (mergeFieldTreeNode, parentData) {
+    var type = parentData.type;
+    var pathToParent = parentData.path.join('.');
+
+    switch (type) {
+      case 'ROOT':
+        return mergeFieldTreeNode.type === type;
+      case 'REFERENCE':
+      case 'CHILD_RELATIONSHIP':
+        return mergeFieldTreeNode.key === pathToParent;
+      default:
+        return false;
     }
+  },
 
-    return fieldMapping;
+  checkPath: function (pathToCheck, mergeTreePath) {
+    if (pathToCheck.length !== mergeTreePath.length) {
+      return false;
+    }
+    for (var i = 0; i < pathToCheck.length; i++) {
+      if (pathToCheck[i] !== mergeTreePath[i]) {
+        return false;
+      }
+    }
+    return true;
   },
 
   //validate custom date and time formats
@@ -104,6 +131,27 @@
       });
 
       component.set('v.formattedCurrency', getCurrencySymbol.replace('0', number));
+    }
+  },
+
+  updateFieldMappingInConfig: function (component, fieldMapping) {
+    var self = this;
+    var parentIndexInTree;
+    var mergeFieldTree = component.get('v.config').objectMappings.fieldMappings.slice();
+    var optionModalParams = component.get('v.optionModalParams');
+
+    var parentNodeOfField = mergeFieldTree.find(function (node, index) {
+      if (self.isParentOfField(node, optionModalParams)) {
+        parentIndexInTree = index;
+        return true;
+      }
+      return false;
+    });
+
+    if (!$A.util.isUndefinedOrNull(parentIndexInTree)) {
+      parentNodeOfField.fields[optionModalParams.fieldIndex] = fieldMapping;
+      mergeFieldTree[parentIndexInTree] = parentNodeOfField;
+      component.set('v.config.objectMappings.fieldMappings', mergeFieldTree);
     }
   }
 });

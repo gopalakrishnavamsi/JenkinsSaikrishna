@@ -115,7 +115,7 @@ private class GenServiceTest {
 			System.assertNotEquals(null, result.id);
 			System.assertEquals(Label.Untitled, result.name);
 			System.assertEquals(null, result.sourceObject);
-			System.assert(Collection.isEmpty(result.objectMappings));
+			System.assertEquals(null, result.objectMappings);
 			System.assert(Collection.isEmpty(result.signerMappings));
 			System.assert(result.useAllTemplates);
 			System.assert(result.useCurrentRecord);
@@ -350,8 +350,9 @@ private class GenServiceTest {
 	static void test_getMergeData_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
+			Gen.Query q = null;
 			try {
-				GenService.getMergeData(null, null);
+				GenService.getMergeData(null, q);
 				throw new AssertException('Expected getMergeData to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
@@ -363,15 +364,16 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getMergeData_undefined_argument() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Gen.Query q = null;
 			Test.startTest();
 			try {
-				GenService.getMergeData(null, null);
+				GenService.getMergeData(null, q);
 				throw new AssertException('Expected getMergeData to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				GenService.getMergeData(UserInfo.getUserId(), null);
+				GenService.getMergeData(UserInfo.getUserId(), q);
 				throw new AssertException('Expected getMergeData to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
@@ -1105,6 +1107,84 @@ private class GenServiceTest {
 				System.assertEquals(Label.GenTemplateNotFound, ex.getMessage());
 			}
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getMergeData_success2() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Schema.Account a = TestUtils.createAccount();
+
+			Contact ct1 = TestUtils.createContact(a.Id);
+			Contact ct2 = TestUtils.createContact(a.Id);
+
+			Asset a1 = new Asset(Name = 'Asset 1 - Contact 1', AccountId = a.Id, ContactId = ct1.Id);
+			Asset a2 = new Asset(Name = 'Asset 1 - Contact 2', AccountId = a.Id, ContactId = ct2.Id);
+			Asset a3 = new Asset(Name = 'Asset 2 - Contact 2', AccountId = a.Id, ContactId = ct2.Id);
+			insert new List<Asset> { a1, a2, a3 };
+
+			Case cs1 = new Case(AccountId = a.Id, ContactId = ct1.Id, AssetId = a1.Id);
+			Case cs2 = new Case(AccountId = a.Id, ContactId = ct2.Id, AssetId = a2.Id);
+			insert new List<Case> { cs1, cs2 };
+
+			Query q = Query.newQuery(
+				'Account',
+				new List<String> { 'Name', 'Owner.Name' },
+				new List<Query> {
+					Query.newSubQuery(
+						'Contact',
+						new List<String> { 'Name' },
+						'Contacts',
+						null,
+						'Name DESC',
+						100,
+						new List<Query> {
+							Query.newChildQuery(
+								'Case',
+								new List<String> { 'CaseNumber' },
+								'Cases',
+								'ContactId',
+								null,
+								null,
+								100)
+						}),
+					Query.newSubQuery(
+						'Asset',
+						new List<String> { 'Name' },
+						'Assets',
+						'Name LIKE \'Asset 1%\'',
+						null,
+						null,
+						new List<Query> {
+							Query.newChildQuery(
+								'Case',
+								new List<String> { 'CaseNumber' },
+								'Cases',
+								'AssetId',
+								null,
+								null,
+								100)
+						})
+				});
+
+			Test.startTest();
+			Query.Result result = GenService.getMergeData(a.Id, q);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.result);
+			System.assert(result.result instanceof Schema.Account);
+			Schema.Account aa = (Schema.Account)result.result;
+			System.assertEquals(2, Collection.size(aa.Assets));
+			System.assertEquals(2, Collection.size(aa.Contacts));
+			System.assertNotEquals(null, aa.Owner);
+			System.assertEquals(UserInfo.getName(), aa.Owner.Name);
+
+			System.assertNotEquals(null, result.children);
+			System.assertEquals(1, result.children.size());
+			System.assertEquals(4, Collection.size(result.children.get('Cases')));
+
+
 		}
 	}
 }

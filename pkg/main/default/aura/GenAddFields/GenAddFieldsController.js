@@ -4,37 +4,23 @@
   },
   validate: function (component) {
     return new Promise(
-      $A.getCallback(function (resolve /*, reject*/) {
+      $A.getCallback(function (resolve, reject) {
         var config = component.get('v.config');
-
-        config.objectMappings.forEach(function (objMapping) {
-          objMapping.fieldMappings = objMapping.fieldMappings.filter(function (
-            fieldMapping
-          ) {
-            if (fieldMapping.isChildRelation) {
-              fieldMapping.childFieldMappings = fieldMapping.childFieldMappings.filter(
-                function (childMapping) {
-                  return !$A.util.isEmpty(childMapping.apiName);
-                }
-              );
-            }
-
-            return !$A.util.isEmpty(fieldMapping.apiName);
-          });
-        });
-
-        resolve();
+        if (!$A.util.isUndefinedOrNull(config.objectMappings)) {
+          resolve();
+        } else {
+          reject();
+        }
       })
     );
   },
 
-  showOptionsModal: function (component, event, helper) {
-
+  showMergeOptionsModal: function (component, event, helper) {
     var optionModalParams = event.getParam('data');
-    var fieldMapping = helper.getFieldMapping(component, optionModalParams);
+    var fieldMapping = helper.getMergeFieldMapping(component, optionModalParams);
     var clonedFieldMapping = Object.assign({}, fieldMapping);
-    
-    if (fieldMapping.dataType === 'DATE' || fieldMapping.dataType === 'DATETIME') {
+
+    if (fieldMapping.type === 'DATE' || fieldMapping.type === 'DATETIME') {
       component.set('v.userLocaleDateFormat', $A.localizationService.formatDate(new Date($A.get('$Label.c.X2019_01_18'))));
       var dateFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[0] : fieldMapping.format;
       if (!component.get('v.definedDateFormats').includes(dateFormat)) {
@@ -48,7 +34,7 @@
       }
     }
 
-    if (fieldMapping.dataType === 'TIME' || fieldMapping.dataType === 'DATETIME') {
+    if (fieldMapping.type === 'TIME' || fieldMapping.type === 'DATETIME') {
       var timeFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[1] : fieldMapping.format;
       if (!component.get('v.definedTimeFormats').includes(timeFormat)) {
         component.set('v.timeDropDown', $A.get('$Label.c.Custom'));
@@ -61,49 +47,47 @@
       }
     }
 
-    if (fieldMapping.dataType === 'CURRENCY') {
+    if (fieldMapping.type === 'CURRENCY') {
       helper.formatCurrency(component, fieldMapping.format);
     }
 
     component.set('v.optionModalParams', optionModalParams);
     component.set('v.clonedFieldMapping', clonedFieldMapping);
 
-    if (fieldMapping.dataType === 'PERCENT') {
+    if (fieldMapping.type === 'PERCENT') {
       helper.formatPercent(component, fieldMapping.format);
     }
     component.find('merge-token-options').show();
   },
 
-  // TODO: Clean up this function. Not clear what's actually being saved here. Config is not updated with anything, unused vars, etc.
-  saveOptions: function (component, event, helper) {
-    var config = component.get('v.config');
+  saveMergeOptions: function (component, event, helper) {
     var optionModalParams = component.get('v.optionModalParams');
     // eslint-disable-next-line no-unused-vars
-    var fieldMapping = helper.getFieldMapping(component, optionModalParams);
+    var fieldMapping = helper.getMergeFieldMapping(component, optionModalParams);
     var clonedFieldMapping = component.get('v.clonedFieldMapping');
     var timeFormat = '';
     var dateFormat = '';
 
-    if(component.get('v.clonedFieldMapping').dataType === 'DATE' || component.get('v.clonedFieldMapping').dataType === 'DATETIME' ){
+    if(component.get('v.clonedFieldMapping').type === 'DATE' || component.get('v.clonedFieldMapping').type === 'DATETIME' ){
       if (helper.validateFormats(component)) {
-          return;
+        return;
       }
-      component.set('v.clonedFieldMapping.format', component.get('v.dateDropDown') === $A.get('$Label.c.Custom') ? 
-                                                component.get('v.customDateInput') : component.get('v.dateDropDown'));
+      component.set('v.clonedFieldMapping.format', component.get('v.dateDropDown') === $A.get('$Label.c.Custom') ?
+        component.get('v.customDateInput') : component.get('v.dateDropDown'));
       //storing updated format value into dateFormat
       dateFormat = component.get('v.clonedFieldMapping.format');
     }
-    if(component.get('v.clonedFieldMapping').dataType === 'TIME' || component.get('v.clonedFieldMapping').dataType === 'DATETIME'  ){
-        if(helper.validateFormats(component)) {
-            return;
-        }
-        component.set('v.clonedFieldMapping.format', component.get('v.timeDropDown') === $A.get('$Label.c.Custom') ? 
-                                                    component.get('v.customTimeInput') : component.get('v.timeDropDown'));
-        //storing updated format value into timeformat 
-        timeFormat = component.get('v.clonedFieldMapping.format');
+    if(component.get('v.clonedFieldMapping').type === 'TIME' || component.get('v.clonedFieldMapping').type === 'DATETIME'  ){
+      if(helper.validateFormats(component)) {
+        return;
+      }
+      component.set('v.clonedFieldMapping.format', component.get('v.timeDropDown') === $A.get('$Label.c.Custom') ?
+        component.get('v.customTimeInput') : component.get('v.timeDropDown'));
+      //storing updated format value into timeformat
+      timeFormat = component.get('v.clonedFieldMapping.format');
     }
 
-    
+
 
     if (!$A.util.isEmpty(timeFormat) && !$A.util.isEmpty(dateFormat) ) {
       component.set('v.clonedFieldMapping.format', stringUtils.format('{0}{1}{2}',dateFormat,'|',timeFormat));
@@ -115,7 +99,7 @@
     }
 
     fieldMapping = Object.assign(fieldMapping, clonedFieldMapping);
-    component.set('v.config', config);
+    helper.updateFieldMappingInConfig(component, fieldMapping);
     component.find('merge-token-options').hide();
   },
 

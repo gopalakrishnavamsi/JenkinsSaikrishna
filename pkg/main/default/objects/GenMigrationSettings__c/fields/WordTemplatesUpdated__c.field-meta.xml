@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+	<fullName>WordTemplatesUpdated__c</fullName>
+	<defaultValue>false</defaultValue>
+	<description>Setting this value to TRUE after updating Word Templates to v2.2</description>
+	<externalId>false</externalId>
+	<label>Word templates updated?</label>
+	<trackTrending>false</trackTrending>
+	<type>Checkbox</type>
+</CustomField>

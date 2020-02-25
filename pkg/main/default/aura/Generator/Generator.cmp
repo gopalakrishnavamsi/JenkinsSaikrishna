@@ -118,14 +118,14 @@
                 <aura:if isTrue="{!not(v.finishedGenerating)}">
                     <div class="{!if(and(not(v.isPreview), v.isClassic), 'slds-box')}">
                         <aura:if
-                                isTrue="{!not(and(v.config.objectMappings.length == 1, v.config.useCurrentRecord, v.config.useAllTemplates ))}">
+                                isTrue="{!not(and(v.config.useCurrentRecord, v.config.useAllTemplates ))}">
                             {!v.body}
                         </aura:if>
                         <div
                                 class="{!'slds-text-align_left slds-form_stacked' + if(and(v.config.useCurrentRecord, not(v.isPreview)), ' slds-hide', '')}">
                             <c:strike_lookup aura:id="recordLookup" value="{!v.recordId}"
-                                             label="{!v.config.objectMappings[0].label}"
-                                             object="{!v.config.objectMappings[0].apiName}" searchField="Name"
+                                             label="{!v.config.objectMappings.label}"
+                                             object="{!v.config.objectMappings.name}" searchField="Name"
                                              placeholder="{!$Label.c.SelectAnOptionNoDash}" order="Name" limit="5"
                                              loadingMessage="{!$Label.c.Loading}" required="true"
                                              errorMessage="{!$Label.c.InvalidInput}" isDocuSignGenPreview="true"/>

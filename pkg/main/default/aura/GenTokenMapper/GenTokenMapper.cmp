@@ -1,61 +1,61 @@
 <aura:component controller="GenController">
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
-
-    <aura:attribute name="objMapping" type="Object"/>
-    <aura:attribute name="childRelations" type="Object[]"/>
-    <aura:attribute name="allFields" type="Object[]"/>
-    <aura:attribute name="allFieldsByApiName" type="Object"/>
-    <aura:attribute name="optionModalParams" type="Object"/>
-    <aura:attribute name="clonedFieldMapping" type="Object"/>
-    <aura:attribute name="objIndex" type="Integer"/>
-    <aura:attribute name="loadedChildren" type="Integer" default="{!0}"/>
+    <!-- require scripts -->
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInit}"/>
+    <aura:attribute name="objMappings" type="Object"/>
     <aura:attribute name="isLoading" type="Boolean" default="{!true}"/>
-
-    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:attribute name="topLevelMergeFields" type="Object"/>
+    <aura:attribute name="mergeFieldTree" type="Object"/>
 
     <h3 class="slds-m-bottom_xx-small slds-m-top_medium">
-		<span
-                class="slds-text-heading_label slds-show_inline-block slds-m-bottom_xx-small">{!v.objMapping.objLabel}</span>
-        <lightning:badge label="{!if(v.objMapping.isPrimary, $Label.c.StartingObject, v.objMapping.label)}"
+        <span class="slds-text-heading_label slds-show_inline-block slds-m-bottom_xx-small">{!v.objMappings.label}</span>
+        <lightning:badge label="{!$Label.c.StartingObject}"
                          class="ds-badge-adjustment slds-theme_info slds-m-left_x-small"/>
     </h3>
 
     <div class="ds-repeater-box slds-box slds-box_x-small slds-theme_shade slds-is-relative">
         <aura:if isTrue="{!v.isLoading}">
             <div class="ds-text-loading-state slds-text-align_center slds-m-vertical_large">
-				{!$Label.c.RetrievingFields}
-			</div>
+                {!$Label.c.RetrievingFields}
+            </div>
         </aura:if>
 
         <div class="{!if(v.isLoading, 'slds-hide', '')}">
-            <aura:if isTrue="{!v.objMapping.fieldMappings.length gt 0}">
-                <div class="slds-grid slds-grid_pull-padded-large">
-                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
-                        <div class="slds-form-element__label">{!$Label.c.FieldLabel}</div>
-                    </div>
-                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
-                        <div class="slds-form-element__label">{!$Label.c.AnchorText}</div>
-                    </div>
+            <div class="slds-grid slds-grid_pull-padded-large">
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
+                    <div class="slds-form-element__label">{!$Label.c.FieldLabel}</div>
                 </div>
-            </aura:if>
-            <!-- Merge Fields -->
-            <aura:if isTrue="{!not(empty(v.allFields))}">
-                <aura:iteration items="{!v.objMapping.fieldMappings}" var="fieldMapping" indexVar="index">
-                    <c:GenFieldPicker allFieldMappings="{!v.objMapping.fieldMappings}" fieldMapping="{!fieldMapping}"
-                                      mappingIndex="{!index}" allFields="{!v.allFields}"
-                                      allFieldsByApiName="{!v.allFieldsByApiName}"
-                                      childRelations="{!v.childRelations}" removeMapping="{!c.removeField}"
-                                      zIndex="{!v.objMapping.fieldMappings.length - index}"
-                                      loadingChild="{!c.enableLoading}"
-                                      childLoaded="{!c.childrenLoaded}" objLabel="{!v.objMapping.label}"
-                                      objApiName="{!v.objMapping.apiName}" objIndex="{!v.objIndex}"/>
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
+                    <div class="slds-form-element__label">{!$Label.c.AnchorText}</div>
+                </div>
+            </div>
+
+            <!-- Depth = 1 -->
+            <aura:if isTrue="{!not(empty(v.mergeFieldTree))}">
+                <aura:iteration items="{!v.mergeFieldTree}" var="mergeFieldTreeInstance">
+                    <aura:if isTrue="{!mergeFieldTreeInstance.type == 'ROOT'}">
+                        <aura:iteration items="{!mergeFieldTreeInstance.fields}" var="field" indexVar="index">
+                            <c:GenFieldPicker isParentObjectPicker="{!true}"
+                                              currentObjectLabel="{!v.objMappings.label}"
+                                              currentObjectName="{!v.objMappings.name}"
+                                              currentDepth="1"
+                                              fieldIndex="{!index}"
+                                              parentObjectName="{!v.objMappings.name}"
+                                              currentObjectFields="{!v.topLevelMergeFields[0].fields}"
+                                              selectedMergeField="{!field}"
+                                              changeFieldSelection="{!c.changeMergeFieldSelection}"
+                                              removeField="{!c.removeField}"
+                                              mergeFieldTree="{!v.mergeFieldTree}"
+                                              addLookupField="{!c.addLookupField}"
+                                              addChildField="{!c.addChildField}"
+                                              zIndex="{!mergeFieldTreeInstance.fields.length - index}"/>
+                        </aura:iteration>
+                    </aura:if>
                 </aura:iteration>
             </aura:if>
-            <!-- /Merge Fields -->
 
             <lightning:button iconName="utility:add" label="{!$Label.c.Add}"
-                              class="{!if(v.objMapping.fieldMappings.length lt 1, 'slds-m-top_xx-small')}"
-                              onclick="{!c.addField}"/>
+                              class="slds-m-top_xx-small"
+                              onclick="{!c.addRootField}"/>
         </div>
     </div>
 </aura:component>

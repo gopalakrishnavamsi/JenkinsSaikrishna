@@ -155,6 +155,77 @@
     );
   },
 
+  getChildKey: function (name, depth, type) {
+    return name + '_' + (depth + 1) + '_' + type;
+  },
+
+  parseFieldMappings: function (fieldMappings, isMultiCurrency) {
+    var helper = this;
+    var map = new Object();// this implementation needs to change to support objects in es5 and remove map implementation
+    fieldMappings.forEach(function (fieldMapping) {
+      var key = fieldMapping.key + '_' + fieldMapping.depth + '_' + fieldMapping.type;
+      map.set(key, fieldMapping);
+    });
+    var query = helper.traverseFieldMapping(fieldMappings[0], '', '', fieldMappings[0].key, map, isMultiCurrency);
+    return JSON.stringify(query);
+  },
+
+  traverseFieldMapping: function (fm, relationship, parentIdField, type, map, isMultiCurrency) {
+    var helper = this;
+    var query = {};
+    var fields = [];
+    var children = [];
+
+    query.type = type;
+    query.relationship = relationship;
+    query.parentIdField = parentIdField;
+    fm.fields.forEach(function (field) {
+      var childKey = '';
+      if (fm.depth === 1) {
+        childKey = helper.getChildKey(field.name, fm.depth, field.type);
+      } else {
+        childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
+      }
+      var child = map.get(childKey);
+      if (field.type === 'CHILD_RELATIONSHIP') {
+        children.push(helper.traverseFieldMapping(child, field.relationship, field.parentIdField, field.name, map, isMultiCurrency));
+      } else if (field.type === 'REFERENCE') {
+        this.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
+          fields.push(f);
+        });
+      } else if (isMultiCurrency && field.type === 'CURRENCY') {
+        fields.push('CurrencyIsoCode');
+        fields.push(field.name);
+      } else if (field.name !== 'CurrentDate') {
+        fields.push(field.name);
+      }
+    });
+    query.fields = fields;
+    query.children = children;
+    return query;
+  },
+
+  traverseLookUp: function (fm, map, isMultiCurrency) {
+    var helper = this;
+    var fields = [];
+    fm.fields.forEach(function (field) {
+      if (field.type === 'REFERENCE') {
+        var childKey = this.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
+        var child = map.get(childKey);
+        helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
+          fields.push(f);
+        });
+      } else if (isMultiCurrency && field.type === 'CURRENCY') {
+        fields.push(fm.key + '.CurrencyIsoCode');
+        fields.push(fm.key + '.' + field.name);
+      } else if (field.name !== 'CurrentDate') {
+        fields.push(fm.key + '.' + field.name);
+      }
+    });
+    return fields;
+  },
+
+
   getRecordData: function (component) {
     var helper = this;
     var lookups = component.find('recordLookup');
@@ -184,85 +255,41 @@
 
     xmlRoot.appendChild(templateConfig);
 
-    config.objectMappings.forEach(function (objMap, index) {
-      if (!$A.util.isEmpty(objMap.fieldMappings)) {
-        var promise = new Promise(
-          $A.getCallback(function (resolve, reject) {
-            var action = component.get('c.getMergeData');
-            var currentFieldMappings = objMap.fieldMappings;
-            var fields = [];
-            var addCurrencyFields = [];
-            var children = [];
+    if (!$A.util.isEmpty(config.objectMappings.fieldMappings)) {
+      var promise = new Promise(
+        $A.getCallback(function (resolve, reject) {
+          var action = component.get('c.getMergeData');
+          var fieldMappings = config.objectMappings.fieldMappings;
+          var jsonString = helper.parseFieldMappings(fieldMappings, isMultiCurrency);
+          action.setParams({
+            sourceId: objIds[0],
+            queryJson: jsonString
+          });
 
-            currentFieldMappings.forEach(function (object) {
-              if (!object.isChildRelation) {
-                if (object.apiName !== 'CurrentDate') {
-                  fields.push(object.apiName);
-                }
-                if (isMultiCurrency && object.dataType === 'CURRENCY') {
-                  addCurrencyFields.push(object.apiName);
-                }
-              } else {
-                var childrenFields = [];
-                var isCurrencyFieldExists = false;
-                object.childFieldMappings.forEach(function (obj) {
-                  childrenFields.push(obj.apiName);
-                  isCurrencyFieldExists = isMultiCurrency && obj.dataType === 'CURRENCY';
-                });
-                var childrenObject = {
-                  type: object.apiName,
-                  relationship: object.label,
-                  fields: childrenFields,
-                  children: []
-                };
-                if (isCurrencyFieldExists && !childrenFields.includes('CurrencyIsoCode')) {
-                  childrenFields.push('CurrencyIsoCode');
-                }
-                children.push(childrenObject);
-              }
-            });
-            if ($A.util.isEmpty(fields)) {
-              fields.push('Id');
+          action.setCallback(this, function (response) {
+            var state = response.getState();
+            if (state === 'SUCCESS') {
+              var results = response.getReturnValue();
+              var objXML = helper.generateXML(
+                xmlRoot,
+                results,
+                config.objectMappings.fieldMappings, // check whether to add objectMappings or fieldMappings
+                false,
+                component
+              );
+              templateConfig.appendChild(objXML);
+              resolve();
+            } else {
+              reject(stringUtils.getErrorMessage(response));
             }
-            helper.setCurrencyIsoCode(addCurrencyFields, fields);
-            var inputParamter = {
-              type: objMap.apiName,
-              relationship: '',
-              fields: fields,
-              children: children
-            };
-            var jsonString = JSON.stringify(inputParamter);
+          });
+          action.setBackground();
+          $A.enqueueAction(action);
+        })
+      );
 
-            action.setParams({
-              sourceId: objIds[index],
-              queryJson: jsonString
-            });
-
-            action.setCallback(this, function (response) {
-              var state = response.getState();
-              if (state === 'SUCCESS') {
-                var results = response.getReturnValue();
-                var objXML = helper.generateXML(
-                  xmlRoot,
-                  results,
-                  objMap,
-                  false,
-                  component
-                );
-                templateConfig.appendChild(objXML);
-                resolve();
-              } else {
-                reject(stringUtils.getErrorMessage(response));
-              }
-            });
-            action.setBackground();
-            $A.enqueueAction(action);
-          })
-        );
-
-        objPromises.push(promise);
-      }
-    });
+      objPromises.push(promise);
+    }
 
     Promise.all(objPromises)
       .then(
@@ -282,19 +309,6 @@
           helper.endGenerationError(component, error);
         })
       );
-  },
-
-  setCurrencyIsoCode: function (addCurrencyFields, fields) {
-    if (!$A.util.isEmpty(addCurrencyFields) && !$A.util.isEmpty(fields)) {
-      addCurrencyFields.forEach(function (obj) {
-        var parentObj = obj.substring(0, obj.indexOf('.'));
-        if (obj.includes('.') && !fields.includes(stringUtils.format('{0}{1}',parentObj,'.CurrencyIsoCode'))) {
-          fields.push(stringUtils.format('{0}{1}',parentObj,'.CurrencyIsoCode'));
-        } else if (!fields.includes('CurrencyIsoCode')) {
-          fields.push('CurrencyIsoCode');
-        }
-      });
-    }
   },
 
   generateXML: function (xmlRoot, recordData, objMap, isChild, component) {

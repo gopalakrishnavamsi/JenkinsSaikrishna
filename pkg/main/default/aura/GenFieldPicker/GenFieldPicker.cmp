@@ -1,124 +1,468 @@
 <aura:component controller="GenController">
-    <ltng:require scripts="{!$Resource.stringUtils}"/>
+    <!-- required scripts -->
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInit}"/>
 
-    <aura:attribute name="allFieldMappings" type="Object[]"
-                    description="All the field mappings in the current object. Used to prevent duplicates"/>
-    <aura:attribute name="parentFieldMapping" type="Object"
-                    description="Only populated if the current field mapping is a child type. This is used to handle removing children"/>
-    <aura:attribute name="fieldMapping" type="Object" description="The current field map we're manipulating"/>
-    <aura:attribute name="allFields" type="Object[]"/>
-    <aura:attribute name="allFieldsByApiName" type="Object"/>
-    <aura:attribute name="childRelations" type="Object[]"/>
-    <aura:attribute name="allChildObjFields" type="Object[]"/>
-    <aura:attribute name="allChildFieldsByApiName" type="Object"/>
-    <aura:attribute name="mergeFieldDisplayOptions" type="Object[]"/>
-
-    <aura:attribute name="isChild" type="Boolean" default="{!false}"/>
-
-    <aura:attribute name="objIndex" type="Integer"/>
-    <aura:attribute name="parentMappingIndex" type="Integer"/>
-    <aura:attribute name="mappingIndex" type="Integer"/>
+    <!-- attributes -->
+    <!-- attributes passed while creating the component -->
+    <aura:attribute name="isParentObjectPicker" type="Boolean" default="{!false}"/>
+    <aura:attribute name="currentObjectLabel" type="String"/>
+    <aura:attribute name="currentObjectName" type="String"/>
+    <aura:attribute name="currentDepth" type="Integer"/>
+    <aura:attribute name="parentObjectName" type="String"/>
+    <aura:attribute name="fieldIndex" type="Integer"/>
+    <aura:attribute name="currentObjectFields" type="Object"/>
+    <aura:attribute name="selectedMergeField" type="Object"/>
+    <aura:attribute name="selectedMergeFieldName" type="String"/>
+    <aura:attribute name="mergeFieldTree" type="Object"/>
+    <aura:attribute name="isLookupRelationShipPicker" type="Boolean" default="{!false}"/>
+    <aura:attribute name="isChildRelationShipPicker" type="Boolean" default="{!false}"/>
+    <aura:attribute name="currentMergeTreePath" type="List" default="[]"/>
+    <aura:attribute name="nextMergeTreePath" type="List" default="[]"/>
+    <aura:attribute name="nextMergeTreeKey" type="String"/>
+    <aura:attribute name="isChildLookup" type="Boolean" default="{!false}"/>
     <aura:attribute name="zIndex" type="Integer"/>
+    <!-- end of attributes passed while creating the component -->
 
-    <aura:attribute name="objLabel" type="String"/>
-    <aura:attribute name="objApiName" type="String"/>
     <aura:attribute name="token" type="String"/>
-    <aura:attribute name="previousFieldMappingName" type="String"/>
-
-    <aura:handler name="change" value="{!v.fieldMapping.isConditional}" action="{!c.setToken}"/>
-    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:attribute name="lookupFieldExists" type="Boolean" access="private"/>
+    <aura:attribute name="childFieldExists" type="Boolean" access="private"/>
+    <aura:attribute name="currentFieldLookup" type="Boolean"/>
+    <aura:attribute name="currentFieldChild" type="Boolean"/>
 
     <aura:registerEvent name="showToast" type="c:strike_evt"/>
-    <aura:registerEvent name="showOptionsModal" type="c:strike_evt"/>
-    <aura:registerEvent name="removeMapping" type="c:strike_evt"/>
-    <aura:registerEvent name="loadingChild" type="c:strike_evt"/>
-    <aura:registerEvent name="childLoaded" type="c:strike_evt"/>
+    <aura:registerEvent name="changeFieldSelection" type="c:strike_evt"/>
+    <aura:registerEvent name="addLookupField" type="c:strike_evt"/>
+    <aura:registerEvent name="addChildField" type="c:strike_evt"/>
+    <aura:registerEvent name="removeField" type="c:strike_evt"/>
+    <aura:registerEvent name="showMergeOptionsModal" type="c:strike_evt"/>
 
-    <div class="{!'slds-is-relative slds-m-bottom_x-small' + if(v.isChild, ' ds-merge-field__subfield slds-m-top_x-small', ' ds-merge-field')}"
+    <aura:handler name="change" value="{!v.mergeFieldTree}" action="{!c.mergeFieldTreeChangeHandler}"/>
+
+    <div class="{!'slds-is-relative slds-m-bottom_x-small' + if(v.currentDepth gt 1, ' ds-merge-field__subfield slds-m-top_x-small', ' ds-merge-field')}"
          style="{!'z-index: ' + v.zIndex}">
-        <aura:if isTrue="{!v.isChild}">
-            <div class="ds-merge-field__subfield-line slds-is-absolute"></div>
+        <aura:if isTrue="{!v.currentDepth gt 1}">
+            <div class="{!'ds-merge-field__subfield-line slds-is-absolute' + if(v.currentDepth == 3, ' ds-childNode-secondLevel-leftMargin')
+                                                                 + if(v.currentDepth == 4, ' ds-childNode-thirdLevel-leftMargin')
+                                                                 + if(v.currentDepth == 5, ' ds-childNode-fourthLevel-leftMargin')}"></div>
         </aura:if>
-        <div class="slds-grid slds-grid_pull-padded-large slds-is-relative">
-            <!-- Arrow -->
-            <lightning:icon class="ds-merge-field__arrow slds-is-absolute" iconName="utility:forward" size="x-small"/>
-            <!-- /Arrow -->
-            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
-                <lightning:select label="{!$Label.c.FieldLabel}" variant="label-hidden"
-                                  value="{!v.fieldMapping.apiName}"
-                                  onchange="{!c.processFieldSelection}"
-                                  class="{!'ds-no-label' + if(v.isChild, ' slds-m-left_xx-large')}">
-                    <option disabled="{!true}" value="">{!$Label.c.SelectAnOption}</option>
-                    <aura:if isTrue="{!v.allFields.length gt 0}">
-                        <aura:iteration items="{!v.allFields}" var="fieldGroup">
-                            <!--Printing Current Date without label -->
-                            <aura:if isTrue="{!empty(fieldGroup.label)}">
-                                <aura:iteration items="{!fieldGroup.fields}" var="field">
-                                    <option value="{!field.name}">{!field.label}</option>
-                                </aura:iteration>
-                                <aura:set attribute="else">
-                                    <optgroup label="{!fieldGroup.label}">
-                                        <aura:iteration items="{!fieldGroup.fields}" var="field">
-                                            <option value="{!field.name}">{!field.label}</option>
-                                        </aura:iteration>
-                                    </optgroup>
-                                </aura:set>
-                            </aura:if>
-                        </aura:iteration>
-                    </aura:if>
-                    <aura:if isTrue="{!v.childRelations.length gt 0}">
-                        <optgroup label="{!$Label.c.ChildRelations}">
-                            <aura:iteration items="{!v.childRelations}" var="field">
-                                <option value="{!field.relatesTo}">{!field.label}</option>
-                            </aura:iteration>
-                        </optgroup>
-                    </aura:if>
-                </lightning:select>
-            </div>
+        <!-- Root Level / Top Level Fields / Parent Object Picker -->
+        <aura:if isTrue="{!v.isParentObjectPicker}">
+            <div class="slds-grid slds-grid_pull-padded-large slds-is-relative">
+                <aura:if isTrue="{!and(v.selectedMergeFieldName != '', not(v.currentFieldLookup))}">
+                    <lightning:icon class="ds-merge-field__arrow slds-is-absolute" iconName="utility:forward"
+                                    size="x-small"/>
+                </aura:if>
+                <!-- Start of field selection -->
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large" style="{!'z-index: ' + v.currentDepth}">
+                    <lightning:select label="{!$Label.c.FieldLabel}" variant="label-hidden"
+                                      class="{!'ds-no-label'}"
+                                      onchange="{!c.fieldSelectionChange}"
+                                      value="{!v.selectedMergeFieldName}">
 
-            <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
-                <div class="slds-grid slds-gutters_xx-small">
-                    <div class="slds-col">
-                        <div class="slds-form-element">
-                            <div class="slds-form-element__control">
-                                <input type="text" aura:id="token-input" class="ds-readonly slds-input"
-                                       readonly="readonly" value="{!v.token}"/>
+                        <option value="" disabled="{!v.selectedMergeFieldName != ''}"
+                                selected="{!v.selectedMergeField.name == ''}">{!$Label.c.SelectAnOption}</option>
+                        <aura:if isTrue="{!v.currentObjectFields.length gt 0}">
+                            <optgroup label="{!v.currentObjectLabel}">
+                                <aura:iteration items="{!v.currentObjectFields}" var="field">
+                                    <aura:if
+                                            isTrue="{!and(not(field.type == 'REFERENCE'), not(field.type == 'CHILD_RELATIONSHIP'))}">
+                                        <option value="{!field.name}"
+                                                selected="{!field.name == v.selectedMergeField.name}">{!field.label}</option>
+                                    </aura:if>
+                                </aura:iteration>
+                            </optgroup>
+
+                            <aura:if
+                                    isTrue="{!v.lookupFieldExists &amp;&amp; not(v.isChildRelationShipPicker)}">
+                                <optgroup label="{!'Lookup Relationships'}">
+                                    <aura:iteration items="{!v.currentObjectFields}" var="field">
+                                        <aura:if
+                                                isTrue="{!and(field.type == 'REFERENCE', field.hasRelationship == true)}">
+                                            <option value="{!field.relationship}"
+                                                    selected="{!field.relationship == v.selectedMergeField.name}">{!field.relationship}</option>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </optgroup>
+                            </aura:if>
+
+                            <aura:if
+                                    isTrue="{!v.childFieldExists &amp;&amp; not(v.isLookupRelationShipPicker)}">
+                                <optgroup label="{!'Related Lists'}">
+                                    <aura:iteration items="{!v.currentObjectFields}" var="field">
+                                        <aura:if
+                                                isTrue="{!and(field.type == 'CHILD_RELATIONSHIP', field.hasRelationship == true)}">
+                                            <option value="{!field.relatesTo}"
+                                                    selected="{!field.relatesTo == v.selectedMergeField.name}">{!field.label}</option>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </optgroup>
+                            </aura:if>
+                        </aura:if>
+                    </lightning:select>
+                </div>
+                <!-- End of field selection -->
+
+                <!-- Token Mapper components -->
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
+                    <div class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col">
+                            <aura:if isTrue="{!not(empty(v.token))}">
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element__control">
+                                        <input type="text" aura:id="token-input" class="ds-readonly slds-input"
+                                               readonly="readonly" value="{!v.token}"/>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </div>
+                        <div class="slds-col slds-no-flex">
+                            <div class="slds-button-group">
+                                <aura:if isTrue="{!not(empty(v.token))}">
+                                    <lightning:button label="{!$Label.c.Copy}" variant="neutral"
+                                                      onclick="{!c.copyToken}"/>
+                                    <lightning:buttonMenu menuAlignment="right" onselect="{!c.selectedButtonMenuItem}"
+                                                          variant="border-filled">
+                                        <lightning:menuItem label="{!$Label.c.Options}" value="options"/>
+                                        <lightning:menuItem label="{!$Label.c.Remove}" value="remove"/>
+                                    </lightning:buttonMenu>
+                                    <aura:set attribute="else">
+                                        <lightning:button label="{!$Label.c.Remove}" variant="neutral"
+                                                          onclick="{!c.removeField}"
+                                                          class="remove-button-padding"/>
+                                    </aura:set>
+                                </aura:if>
                             </div>
                         </div>
                     </div>
-                    <div class="slds-col slds-no-flex">
-                        <div class="slds-button-group">
-                            <lightning:button label="{!$Label.c.Copy}" variant="neutral" disabled="{!empty(v.token)}"
-                                              onclick="{!c.copyToken}"/>
-                            <lightning:buttonMenu menuAlignment="right" onselect="{!c.selectedButtonMenuItem}"
-                                                  variant="border-filled">
-                                <lightning:menuItem label="{!$Label.c.Options}" value="options"
-                                                    disabled="{!empty(v.fieldMapping.apiName)}"/>
-                                <lightning:menuItem label="{!$Label.c.Remove}" value="remove"/>
-                            </lightning:buttonMenu>
-                        </div>
-                    </div>
                 </div>
+                <!-- End of Token Mapper components -->
             </div>
-        </div>
 
-        <aura:if isTrue="{!v.fieldMapping.isChildRelation}">
-            <aura:if isTrue="{!not(empty(v.allChildObjFields))}">
-                <aura:iteration items="{!v.fieldMapping.childFieldMappings}" var="childFieldMapping" indexVar="index">
-                    <c:GenFieldPicker allFieldMappings="{!v.fieldMapping.childFieldMappings}"
-                                      allFields="{!v.allChildObjFields}"
-                                      allFieldsByApiName="{!v.allChildFieldsByApiName}"
-                                      isChild="{!true}" parentFieldMapping="{!v.fieldMapping}"
-                                      fieldMapping="{!childFieldMapping}"
-                                      mappingIndex="{!index}" parentMappingIndex="{!v.mappingIndex}"
-                                      objLabel="{!v.objLabel}" objApiName="{!v.objApiName}"
-                                      objIndex="{!v.objIndex}"/>
+            <aura:if isTrue="{!v.currentFieldLookup}">
+                <aura:iteration items="{!v.mergeFieldTree}" var="mergeFieldTreeInstance">
+                    <aura:if isTrue="{!mergeFieldTreeInstance.type == 'REFERENCE' &amp;&amp;
+                                           mergeFieldTreeInstance.key == v.nextMergeTreeKey}">
+                        <aura:iteration items="{!mergeFieldTreeInstance.fields}" var="field" indexVar="index">
+                            <c:GenFieldPicker isLookupRelationShipPicker="{!true}"
+                                              currentObjectLabel="{!v.selectedMergeField.name}"
+                                              currentObjectName="{!v.selectedMergeField.relatesTo}"
+                                              currentDepth="{!v.currentDepth + 1}"
+                                              fieldIndex="{!index}"
+                                              parentObjectName="{!v.parentObjectName}"
+                                              selectedMergeField="{!field}"
+                                              mergeFieldTree="{!v.mergeFieldTree}"
+                                              currentMergeTreePath="{!v.nextMergeTreePath}"/>
+                        </aura:iteration>
+                        <div class="slds-m-vertical_x-small ds-childNode-secondLevel-leftMargin">
+                            <lightning:button iconName="utility:add" label="{!$Label.c.add}"
+                                              onclick="{!c.addLookupField}"/>
+                        </div>
+                    </aura:if>
                 </aura:iteration>
             </aura:if>
 
-            <div class="slds-m-vertical_x-small slds-p-left_xx-large">
-                <lightning:button iconName="utility:add" label="{!$Label.c.add}" onclick="{!c.addChildField}"/>
-            </div>
+            <aura:if isTrue="{!v.currentFieldChild}">
+                <aura:iteration items="{!v.mergeFieldTree}" var="mergeFieldTreeInstance">
+                    <aura:if isTrue="{!(mergeFieldTreeInstance.type == 'CHILD_RELATIONSHIP' &amp;&amp;
+                                           mergeFieldTreeInstance.key == v.nextMergeTreeKey &amp;&amp;
+                                           mergeFieldTreeInstance.depth == v.currentDepth + 1)}">
+                        <aura:iteration items="{!mergeFieldTreeInstance.fields}" var="field" indexVar="index">
+                            <c:GenFieldPicker isChildRelationShipPicker="{!true}"
+                                              currentObjectLabel="{!v.selectedMergeField.name}"
+                                              currentObjectName="{!v.selectedMergeField.relatesTo}"
+                                              currentDepth="{!v.currentDepth + 1}"
+                                              fieldIndex="{!index}"
+                                              parentObjectName="{!v.parentObjectName}"
+                                              selectedMergeField="{!field}"
+                                              mergeFieldTree="{!v.mergeFieldTree}"
+                                              currentMergeTreePath="{!v.nextMergeTreePath}"/>
+                        </aura:iteration>
+                        <div class="slds-m-vertical_x-small ds-childNode-secondLevel-leftMargin">
+                            <lightning:button iconName="utility:add" label="{!$Label.c.add}"
+                                              onclick="{!c.addChildField}"/>
+                        </div>
+                    </aura:if>
+                </aura:iteration>
+            </aura:if>
+        </aura:if>
+
+        <aura:if isTrue="{!v.isLookupRelationShipPicker}">
+            <aura:if isTrue="{!not(empty(v.currentObjectFields))}">
+                <div class="slds-grid slds-grid_pull-padded-large slds-is-relative">
+                    <aura:if isTrue="{!and(v.selectedMergeFieldName != '', not(v.currentFieldLookup))}">
+                        <lightning:icon class="ds-merge-field__arrow slds-is-absolute" iconName="utility:forward"
+                                        size="x-small"/>
+                    </aura:if>
+                    <!-- Start of field selection -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large"
+                         style="{!'z-index: ' + v.currentDepth}">
+                        <lightning:select label="{!$Label.c.FieldLabel}" variant="label-hidden"
+                                          class="{!'ds-no-label' + if(v.currentDepth == 2, ' ds-childNode-secondLevel-leftMargin')
+                                                                 + if(v.currentDepth == 3, ' ds-childNode-thirdLevel-leftMargin')
+                                                                 + if(v.currentDepth == 4, ' ds-childNode-fourthLevel-leftMargin')
+                                                                 + if(v.currentDepth == 5, ' ds-childNode-fifthLevel-leftMargin')}"
+                                          value="{!v.selectedMergeFieldName}"
+                                          onchange="{!c.fieldSelectionChange}">
+
+                            <option value="" disabled="{!v.selectedMergeFieldName != ''}"
+                                    selected="{!v.selectedMergeField.name == ''}">{!$Label.c.SelectAnOption}</option>
+                            <aura:if isTrue="{!v.currentObjectFields.length gt 0}">
+                                <optgroup label="{!v.currentObjectLabel}">
+                                    <aura:iteration items="{!v.currentObjectFields}" var="field">
+                                        <aura:if
+                                                isTrue="{!and(not(field.type == 'REFERENCE'), not(field.type == 'CHILD_RELATIONSHIP'))}">
+                                            <option value="{!field.name}"
+                                                    selected="{!field.name == v.selectedMergeField.name}">{!field.label}</option>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </optgroup>
+
+                                <aura:if
+                                        isTrue="{!v.lookupFieldExists &amp;&amp; not(v.isChildRelationShipPicker)}">
+                                    <optgroup label="{!'Lookup Relationships'}">
+                                        <aura:iteration items="{!v.currentObjectFields}" var="field">
+                                            <aura:if
+                                                    isTrue="{!and(field.type == 'REFERENCE', field.hasRelationship == true)}">
+                                                <option value="{!field.relationship}"
+                                                        selected="{!field.relationship == v.selectedMergeField.name}">{!field.relationship}</option>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </optgroup>
+                                </aura:if>
+
+                                <aura:if
+                                        isTrue="{!v.childFieldExists &amp;&amp; not(v.isLookupRelationShipPicker)}">
+                                    <optgroup label="{!'Related Lists'}">
+                                        <aura:iteration items="{!v.currentObjectFields}" var="field">
+                                            <aura:if
+                                                    isTrue="{!and(field.type == 'CHILD_RELATIONSHIP', field.hasRelationship == true)}">
+                                                <option value="{!field.relatesTo}"
+                                                        selected="{!field.relatesTo == v.selectedMergeField.name}">{!field.label}</option>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </optgroup>
+                                </aura:if>
+                            </aura:if>
+                        </lightning:select>
+                    </div>
+                    <!-- End of field selection -->
+
+                    <!-- Token Mapper components -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
+                        <div class="slds-grid slds-gutters_xx-small">
+                            <div class="slds-col">
+                                <aura:if isTrue="{!not(empty(v.token))}">
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control">
+                                            <input type="text" aura:id="token-input" class="ds-readonly slds-input"
+                                                   readonly="readonly" value="{!v.token}"/>
+                                        </div>
+                                    </div>
+                                </aura:if>
+                            </div>
+                            <div class="slds-col slds-no-flex">
+                                <div class="slds-button-group">
+                                    <aura:if isTrue="{!not(empty(v.token))}">
+                                        <lightning:button label="{!$Label.c.Copy}" variant="neutral"
+                                                          onclick="{!c.copyToken}"/>
+                                        <lightning:buttonMenu menuAlignment="right"
+                                                              onselect="{!c.selectedButtonMenuItem}"
+                                                              variant="border-filled">
+                                            <lightning:menuItem label="{!$Label.c.Options}" value="options"/>
+                                            <lightning:menuItem label="{!$Label.c.Remove}" value="remove"/>
+                                        </lightning:buttonMenu>
+                                        <aura:set attribute="else">
+                                            <lightning:button label="{!$Label.c.Remove}" variant="neutral"
+                                                              onclick="{!c.removeField}"
+                                                              class="remove-button-padding"/>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Token Mapper components -->
+                </div>
+                <aura:if isTrue="{!v.currentFieldLookup}">
+                    <aura:iteration items="{!v.mergeFieldTree}" var="mergeFieldTreeInstance">
+                        <aura:if
+                                isTrue="{!and(mergeFieldTreeInstance.type == 'REFERENCE', mergeFieldTreeInstance.key == v.nextMergeTreeKey)}">
+                            <aura:iteration items="{!mergeFieldTreeInstance.fields}" var="field" indexVar="index">
+                                <c:GenFieldPicker isLookupRelationShipPicker="{!true}"
+                                                  currentObjectLabel="{!v.selectedMergeField.name}"
+                                                  currentObjectName="{!v.selectedMergeField.relatesTo}"
+                                                  currentDepth="{!v.currentDepth + 1}"
+                                                  fieldIndex="{!index}"
+                                                  parentObjectName="{!v.parentObjectName}"
+                                                  selectedMergeField="{!field}"
+                                                  mergeFieldTree="{!v.mergeFieldTree}"
+                                                  currentMergeTreePath="{!v.nextMergeTreePath}"/>
+                            </aura:iteration>
+                            <div class="{!'slds-m-vertical_x-small' + if(v.currentDepth == 2, ' ds-childNode-thirdLevel-leftMargin')
+                                                                    + if(v.currentDepth == 3, ' ds-childNode-fourthLevel-leftMargin')
+                                                                    + if(v.currentDepth == 4, ' ds-childNode-fifthLevel-leftMargin')
+                                                                    + if(v.currentDepth == 5, ' ds-childNode-sixthLevel-leftMargin')}">
+                                <lightning:button iconName="utility:add" label="{!$Label.c.add}"
+                                                  onclick="{!c.addLookupField}"/>
+                            </div>
+                        </aura:if>
+                    </aura:iteration>
+                </aura:if>
+            </aura:if>
+        </aura:if>
+
+        <aura:if isTrue="{!v.isChildRelationShipPicker}">
+            <aura:if isTrue="{!not(empty(v.currentObjectFields))}">
+                <!-- decide the css based on the depth -->
+                <div class="slds-is-absolute"></div>
+                <!-- decide the css based on the depth -->
+                <div class="slds-grid slds-grid_pull-padded-large slds-is-relative">
+                    <aura:if isTrue="{!and(v.selectedMergeFieldName != '', not(v.currentFieldLookup))}">
+                        <lightning:icon class="ds-merge-field__arrow slds-is-absolute" iconName="utility:forward"
+                                        size="x-small"/>
+                    </aura:if>
+                    <!-- Start of field selection -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large"
+                         style="{!'z-index: ' + v.currentDepth}">
+                        <lightning:select label="{!$Label.c.FieldLabel}" variant="label-hidden"
+                                          value="{!v.selectedMergeFieldName}"
+                                          onchange="{!c.fieldSelectionChange}"
+                                          class="{!'ds-no-label' + if(v.currentDepth == 2, ' ds-childNode-secondLevel-leftMargin')
+                                                                 + if(v.currentDepth == 3, ' ds-childNode-thirdLevel-leftMargin')
+                                                                 + if(v.currentDepth == 4, ' ds-childNode-fourthLevel-leftMargin')
+                                                                 + if(v.currentDepth == 5, ' ds-childNode-fifthLevel-leftMargin')}">
+
+                            <option value="" disabled="{!v.selectedMergeFieldName != ''}"
+                                    selected="{!v.selectedMergeField.name == ''}">{!$Label.c.SelectAnOption}</option>
+                            <aura:if isTrue="{!v.currentObjectFields.length gt 0}">
+                                <optgroup label="{!v.currentObjectLabel}">
+                                    <aura:iteration items="{!v.currentObjectFields}" var="field">
+                                        <aura:if
+                                                isTrue="{!and(not(field.type == 'REFERENCE'), not(field.type == 'CHILD_RELATIONSHIP'))}">
+                                            <option value="{!field.name}"
+                                                    selected="{!field.name == v.selectedMergeField.name}">{!field.label}</option>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </optgroup>
+
+                                <aura:if isTrue="{!v.lookupFieldExists &amp;&amp; not(v.currentDepth >= 4)}">
+                                    <optgroup label="{!'Lookup Relationships'}">
+                                        <aura:iteration items="{!v.currentObjectFields}" var="field">
+                                            <aura:if
+                                                    isTrue="{!field.type == 'REFERENCE' &amp;&amp; field.hasRelationship == true}">
+                                                <option value="{!field.relationship}"
+                                                        selected="{!field.relationship == v.selectedMergeField.name}">{!field.relationship}</option>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </optgroup>
+                                </aura:if>
+
+                                <aura:if
+                                        isTrue="{!v.childFieldExists &amp;&amp; not(v.isLookupRelationShipPicker) &amp;&amp; not(v.isChildLookup) &amp;&amp; v.currentObjectFields.length gt 0}">
+                                    <optgroup label="{!'Related Lists'}">
+                                        <aura:iteration items="{!v.currentObjectFields}" var="field">
+                                            <aura:if
+                                                    isTrue="{!and(field.type == 'CHILD_RELATIONSHIP', field.hasRelationship == true)}">
+                                                <option value="{!field.relatesTo}"
+                                                        selected="{!field.relatesTo == v.selectedMergeField.name}">{!field.label}</option>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </optgroup>
+                                </aura:if>
+                            </aura:if>
+                        </lightning:select>
+                    </div>
+                    <!-- End of field selection -->
+
+                    <!-- Token Mapper components -->
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
+                        <div class="slds-grid slds-gutters_xx-small">
+                            <div class="slds-col">
+                                <aura:if isTrue="{!not(empty(v.token))}">
+                                    <div class="slds-form-element">
+                                        <div class="slds-form-element__control">
+                                            <input type="text" aura:id="token-input" class="ds-readonly slds-input"
+                                                   readonly="readonly" value="{!v.token}"/>
+                                        </div>
+                                    </div>
+                                </aura:if>
+                            </div>
+                            <div class="slds-col slds-no-flex">
+                                <div class="slds-button-group">
+                                    <aura:if isTrue="{!not(empty(v.token))}">
+                                        <lightning:button label="{!$Label.c.Copy}" variant="neutral"
+                                                          onclick="{!c.copyToken}"/>
+                                        <lightning:buttonMenu menuAlignment="right"
+                                                              onselect="{!c.selectedButtonMenuItem}"
+                                                              variant="border-filled">
+                                            <lightning:menuItem label="{!$Label.c.Options}" value="options"/>
+                                            <lightning:menuItem label="{!$Label.c.Remove}" value="remove"/>
+                                        </lightning:buttonMenu>
+                                        <aura:set attribute="else">
+                                            <lightning:button label="{!$Label.c.Remove}" variant="neutral"
+                                                              onclick="{!c.removeField}"
+                                                              class="remove-button-padding"/>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Token Mapper components -->
+                </div>
+
+                <aura:if isTrue="{!v.currentFieldLookup}">
+                    <aura:iteration items="{!v.mergeFieldTree}" var="mergeFieldTreeInstance">
+                        <aura:if isTrue="{!mergeFieldTreeInstance.type == 'REFERENCE' &amp;&amp;
+                                           mergeFieldTreeInstance.key == v.nextMergeTreeKey}">
+                            <aura:iteration items="{!mergeFieldTreeInstance.fields}" var="field" indexVar="index">
+                                <c:GenFieldPicker isChildRelationShipPicker="{!true}"
+                                                  currentObjectLabel="{!v.selectedMergeField.name}"
+                                                  currentObjectName="{!v.selectedMergeField.relatesTo}"
+                                                  currentDepth="{!v.currentDepth + 1}"
+                                                  fieldIndex="{!index}"
+                                                  parentObjectName="{!v.parentObjectName}"
+                                                  selectedMergeField="{!field}"
+                                                  mergeFieldTree="{!v.mergeFieldTree}"
+                                                  currentMergeTreePath="{!v.nextMergeTreePath}"
+                                                  isChildLookup="{!true}"/>
+                            </aura:iteration>
+                            <div class="{!'slds-m-vertical_x-small' + if(v.currentDepth == 2, ' ds-childNode-thirdLevel-leftMargin')
+                                                                    + if(v.currentDepth == 3, ' ds-childNode-fourthLevel-leftMargin')
+                                                                    + if(v.currentDepth == 4, ' ds-childNode-fifthLevel-leftMargin')
+                                                                    + if(v.currentDepth == 5, ' ds-childNode-sixthLevel-leftMargin')}">
+                                <lightning:button iconName="utility:add" label="{!$Label.c.add}"
+                                                  onclick="{!c.addLookupField}"/>
+                            </div>
+                        </aura:if>
+                    </aura:iteration>
+                </aura:if>
+
+                <aura:if isTrue="{!v.currentFieldChild}">
+                    <aura:iteration items="{!v.mergeFieldTree}" var="mergeFieldTreeInstance">
+                        <aura:if isTrue="{!(mergeFieldTreeInstance.type == 'CHILD_RELATIONSHIP' &amp;&amp;
+                                           mergeFieldTreeInstance.key == v.nextMergeTreeKey &amp;&amp;
+                                           mergeFieldTreeInstance.depth == v.currentDepth + 1)}">
+                            <aura:iteration items="{!mergeFieldTreeInstance.fields}" var="field" indexVar="index">
+                                <c:GenFieldPicker isChildRelationShipPicker="{!true}"
+                                                  currentObjectLabel="{!v.selectedMergeField.name}"
+                                                  currentObjectName="{!v.selectedMergeField.relatesTo}"
+                                                  currentDepth="{!v.currentDepth + 1}"
+                                                  fieldIndex="{!index}"
+                                                  parentObjectName="{!v.parentObjectName}"
+                                                  selectedMergeField="{!field}"
+                                                  mergeFieldTree="{!v.mergeFieldTree}"
+                                                  currentMergeTreePath="{!v.nextMergeTreePath}"/>
+                            </aura:iteration>
+                            <div class="{!'slds-m-vertical_x-small' + if(v.currentDepth == 2, ' ds-childNode-thirdLevel-leftMargin')
+                                                                    + if(v.currentDepth == 3, ' ds-childNode-fourthLevel-leftMargin')}">
+                                <lightning:button iconName="utility:add" label="{!$Label.c.add}"
+                                                  onclick="{!c.addChildField}"/>
+                            </div>
+                        </aura:if>
+                    </aura:iteration>
+                </aura:if>
+            </aura:if>
         </aura:if>
     </div>
 </aura:component>

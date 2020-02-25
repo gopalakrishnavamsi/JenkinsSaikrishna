@@ -16,8 +16,11 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 	}
 
 	@TestVisible
-	private static Boolean notify(final PostInstallResults results, final Id organizationId,
-		final Id installerId, final Version previousVersion) {
+	private static Boolean notify(
+		final PostInstallResults results,
+		final Id organizationId,
+		final Id installerId,
+		final Version previousVersion) {
 
 		Boolean result = true;
 		try {
@@ -38,8 +41,11 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 	}
 
 	@TestVisible
-	private static Messaging.SingleEmailMessage generateEmail(final PostInstallResults results,
-		final List<String> toAddresses, final Id organizationId, final Version previousVersion) {
+	private static Messaging.SingleEmailMessage generateEmail(
+		final PostInstallResults results,
+		final List<String> toAddresses,
+		final Id organizationId,
+		final Version previousVersion) {
 
 		Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
 		email.setToAddresses(toAddresses);
@@ -235,8 +241,14 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 	}
 
 	@TestVisible
-	private PostInstallResults executeScript(final String name, final PostInstallScript script, final Id organizationId,
-		final Id installerId, final Version previousVersion, final Boolean isPush, final Boolean isUpgrade) {
+	private PostInstallResults executeScript(
+		final String name,
+		final PostInstallScript script,
+		final Id organizationId,
+		final Id installerId,
+		final Version previousVersion,
+		final Boolean isPush,
+		final Boolean isUpgrade) {
 
 		PostInstallResults results = new PostInstallResults();
 		if (this.forceExecute || script.shouldExecute(organizationId, installerId, previousVersion, isPush, isUpgrade)) {
@@ -270,14 +282,22 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 		}
 	}
 
-	public Boolean shouldExecute(final Id organizationId, final Id installerId, final Version previousVersion,
-		final Boolean isPush, final Boolean isUpgrade) {
+	public Boolean shouldExecute(
+		final Id organizationId,
+		final Id installerId,
+		final Version previousVersion,
+		final Boolean isPush,
+		final Boolean isUpgrade) {
 
 		return true; // Always execute container script
 	}
 
-	public PostInstallResults execute(final Id organizationId, final Id installerId, final Version previousVersion,
-		final Boolean isPush, final Boolean isUpgrade) {
+	public PostInstallResults execute(
+		final Id organizationId,
+		final Id installerId,
+		final Version previousVersion,
+		final Boolean isPush,
+		final Boolean isUpgrade) {
 
 		PostInstallResults results = new PostInstallResults();
 
@@ -290,8 +310,23 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 		results.addResults(createDefaultRecipientRoles());
 		results.addResults(createDefaultCLMObjMappings());
 
-		results.addResults(executeScript(Label.PostInstall2, new PostInstall2(), organizationId, installerId,
-			previousVersion, isPush, isUpgrade));
+		results.addResults(executeScript(
+			Label.PostInstall2,
+			new PostInstall2(),
+			organizationId,
+			installerId,
+			previousVersion,
+			isPush,
+			isUpgrade));
+
+		results.addResults(executeScript(
+			Label.UpgradeWordTemplates,
+			new WordTemplateUpdater(),
+			organizationId,
+			installerId,
+			previousVersion,
+			isPush,
+			isUpgrade));
 
 		return results;
 	}

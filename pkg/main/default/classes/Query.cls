@@ -71,13 +71,15 @@ public with sharing class Query {
 		if (String.isNotBlank(this.orderBy)) {
 			sq += ' ORDER BY ' + this.orderBy;
 		}
-		return String.format('({0} LIMIT {1})', new List<Object> { sq, this.maximumRecords });
+		return String.format('({0} LIMIT {1})', new List<Object> { sq, this.getLimit() });
 	}
 
 	private String getFields() {
 		String result = String.join(this.fields, ', ');
-		for (Query q : this.children) {
-			result += ', ' + q.getSubQuery();
+		if (this.children != null) {
+			for (Query q : this.children) {
+				result += ', ' + q.getSubQuery();
+			}
 		}
 		if (String.isNotBlank(this.parentIdField)) result += ', ' + this.parentIdField;
 		return result;
@@ -93,6 +95,11 @@ public with sharing class Query {
 		return String.isBlank(this.orderBy) ? '' : ' ORDER BY ' + this.orderBy + ' ';
 	}
 
+	private Integer getLimit() {
+		return this.maximumRecords == null || this.maximumRecords < 0 || this.maximumRecords > MAXIMUM_RECORDS
+			? MAXIMUM_RECORDS : this.maximumRecords;
+	}
+
 	private String getSoql() {
 		if (this.soql == null) {
 			this.soql = String.format('SELECT {0} FROM {1} WHERE {2}{3} LIMIT {4}', new List<Object> {
@@ -100,7 +107,7 @@ public with sharing class Query {
 				this.type,
 				this.getFilters(),
 				this.getOrdering(),
-				this.maximumRecords
+				this.getLimit()
 			});
 		}
 		return this.soql;
@@ -326,6 +333,10 @@ public with sharing class Query {
 	private static void validate(final Query query) {
 		ValidationResult result = validate(query, null, 1);
 		if (!result.isValid) throw new ValidationException(Label.InvalidQuery, result);
+	}
+
+	public void validate() {
+		validate(this);
 	}
 
 	private List<SObject> queryChildren(

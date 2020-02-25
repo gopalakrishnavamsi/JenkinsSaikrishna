@@ -9174,4 +9174,25 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Error</shortDescription>
 		<value>Error</value>
 	</labels>
+	<labels>
+		<fullName>UpgradeWordTemplates</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Upgrade Word templates</shortDescription>
+		<value>Upgrade Microsoft Word Gen templates</value>
+	</labels>
+	<labels>
+		<fullName>UpgradeTemplatesQueued_2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Upgrade templates queued</shortDescription>
+		<value>Queued {0} template(s) for upgrade with Apex job {1}.</value>
+	</labels>
+	<labels>
+		<fullName>UpgradeTemplatesComplete_1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Upgrade templates complete</shortDescription>
+		<value>Upgraded {0} template(s).</value>
+	</labels>
 </CustomLabels>

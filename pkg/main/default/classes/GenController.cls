@@ -149,12 +149,12 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled(Cacheable = true)
-	public static SObject getMergeData(
+	public static Query.Result getMergeData(
 		final Id sourceId,
 		final String queryJson) {
 
 		try {
-			return GenService.getMergeData(sourceId, (Gen.Query)JSON.deserialize(queryJson, Gen.Query.class));
+			return GenService.getMergeData(sourceId, (Query)JSON.deserialize(queryJson, Query.class));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get object merge data.');
 		}

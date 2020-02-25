@@ -40,8 +40,8 @@ public with sharing class GenService {
 				Description__c = template.description,
 				TemplateType__c = template.templateType,
 				SourceObject__c = template.sourceObject,
-				ObjectMappings__c = Collection.isEmpty(template.objectMappings)
-					? null : JSON.serialize(template.objectMappings),
+				ObjectMappings__c = template.objectMappings != null ?
+					JSON.serialize(template.objectMappings) : null,
 				SignerMappings__c = Collection.isEmpty(template.signerMappings)
 					? null : JSON.serialize(template.signerMappings),
 				UseAllTemplates__c = template.useAllTemplates == true,
@@ -92,7 +92,7 @@ public with sharing class GenService {
 				template.SourceObject__c,
 				template.TemplateType__c,
 				template.Description__c,
-				String.isBlank(objMapJson) ? null : (List<Gen.ObjectMappings>)JSON.deserialize(objMapJson, List<Gen.ObjectMappings>.class),
+				String.isBlank(objMapJson) ? null : (Gen.ObjectMapping)JSON.deserialize(objMapJson, Gen.ObjectMapping.class),
 				String.isBlank(signMapJson) ? null : (List<Gen.SignerFieldMappings>)JSON.deserialize(signMapJson, List<Gen.SignerFieldMappings>.class),
 				template.UseAllTemplates__c == true,
 				template.UseCurrentRecord__c == true,
@@ -624,6 +624,7 @@ public with sharing class GenService {
 		return DB.queryRecentRecordIds(type, maximumRecords);
 	}
 
+	// FIXME: remove this method, currently being used by OnlineEditor flow.
 	public static SObject getMergeData(
 		final Id sourceId,
 		final Gen.Query query) {
@@ -634,6 +635,18 @@ public with sharing class GenService {
 		if (!Gen.isValidQuery(query)) throw new DocuSignException(Label.InvalidGenQuery);
 
 		return DB.querySource(sourceId, query);
+	}
+
+	public static Query.Result getMergeData(
+		final Id sourceId,
+		final Query query) {
+
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
+
+		if (sourceId == null || query == null) throw new DocuSignException(Label.UndefinedArgument);
+		query.validate();
+
+		return query.execute(sourceId);
 	}
 
 	@TestVisible

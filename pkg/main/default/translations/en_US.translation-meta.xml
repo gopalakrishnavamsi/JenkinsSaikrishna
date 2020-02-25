@@ -4763,6 +4763,18 @@
 		<label>Error</label>
 		<name>Error</name>
 	</customLabels>
+	<customLabels>
+		<label>Upgrade Microsoft Word Gen templates</label>
+		<name>UpgradeWordTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Queued {0} template(s) for upgrade with Apex job {1}.</label>
+		<name>UpgradeTemplatesQueued_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgraded {0} template(s).</label>
+		<name>UpgradeTemplatesComplete_1</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

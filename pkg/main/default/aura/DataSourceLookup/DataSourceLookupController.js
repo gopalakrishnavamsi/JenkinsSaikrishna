@@ -14,14 +14,13 @@
     component.set('v.inputValue', selectedValue);
     component.set('v.openDropDown', false);
     var template = component.get('v.template');
-    template.objectMappings = [];
-
-    template.objectMappings.push({
-      apiName: selectedId,
+    var fieldMappingsString = '[{"type":"ROOT","path":[],"key":"' + selectedId + '","fields":[],"depth":1}]';
+    template.objectMappings = {
+      version: 2,
+      name: selectedId,
       label: selectedValue,
-      fieldMappings: [],
-      isPrimary: true
-    });
+      fieldMappings: JSON.parse(fieldMappingsString),
+    };
     template.sourceObject = selectedId;
     component.set('v.template', template);
     component.set('v.iconName', commonObjects.includes(selectedId) ? 'standard:' + selectedId.toLowerCase() : 'standard:account');
@@ -31,13 +30,12 @@
     component.set('v.openDropDown', false);
     component.set('v.inputValue', '');
     var template = component.get('v.template');
-    template.objectMappings = [];
-    template.objectMappings.push({
-      apiName: '',
+    template.objectMappings = {
+      version: 2,
+      name: '',
       label: '',
       fieldMappings: [],
-      isPrimary: true
-    });
+    };
     template.sourceObject = '';
     component.set('v.template', template);
     component.set('v.iconName', '');

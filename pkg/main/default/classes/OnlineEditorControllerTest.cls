@@ -501,7 +501,7 @@ private class OnlineEditorControllerTest {
 
 	@IsTest
 	static void test_getEntityRecords_success() {
-		System.runAs(UserMock.createDocuSignGenerator(true)) {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			for (Integer i = 0; i <= 24; i++) {
 				TestUtils.createAccount();
 			}
@@ -529,7 +529,7 @@ private class OnlineEditorControllerTest {
 				OnlineEditorController.getEntityRecords('Account', 0, '');
 				throw new AssertException('Expected to fail');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}

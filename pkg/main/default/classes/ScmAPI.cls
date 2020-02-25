@@ -27,18 +27,48 @@ public with sharing abstract class ScmAPI extends DocuSignAPI {
 	}
 
 	@TestVisible
+	private static Map<String, Object> getNode(
+		final Map<String, Object> response,
+		final List<String> path) {
+
+		Map<String, Object> result = response;
+		if (response != null && path != null) {
+			for (Integer i = 0; i < path.size(); i++) {
+				if (result == null) break;
+				result = (Map<String, Object>)result.get(path[i]);
+			}
+		}
+		return result;
+	}
+
+	@TestVisible
 	override protected virtual APIError getError(final HttpResponse response) {
 		APIError e = APIError.none;
 		Integer statusCode = response.getStatusCode();
 		if (statusCode >= 400) {
 			String body = response.getBody();
 			try {
-				Map<String, Object> error = (Map<String, Object>)((Map<String, Object>)JSON.deserializeUntyped(body))
-					.get('Error');
-				e = new ScmAPI.Error(
-					error.containsKey('ErrorCode') ? (Integer)error.get('ErrorCode') : statusCode,
-					UUID.tryParse((String)error.get('ReferenceId')),
-					error.containsKey('UserMessage') ? (String)error.get('UserMessage') : response.getStatus());
+				Map<String, Object> errResp = (Map<String, Object>)JSON.deserializeUntyped(body);
+				Map<String, Object> error = errResp == null ? null : (Map<String, Object>)errResp.get('Error'); // try V1
+				if (error == null) { // try V2
+					error = getNode(errResp, new List<String> { 'Extensions', 'additionalDetails', 'Error' });
+				}
+				if (error != null
+					&& error.containsKey('ErrorCode')
+					&& error.containsKey('ReferenceId')
+					&& error.containsKey('UserMessage')) { // understood SCM error
+
+					e = new ScmAPI.Error(
+						(Integer)error.get('ErrorCode'),
+						UUID.tryParse((String)error.get('ReferenceId')),
+						(String)error.get('UserMessage'));
+				} else { // did not understand SCM error
+					this.log.error('Failed to parse SpringCM API error. Response body:\n' + body);
+					e = new ScmAPI.Error(
+						statusCode,
+						null,
+						response.getStatus());
+				}
 				this.log.warn('SpringCM API error: ' + e);
 			} catch (Exception ex) {
 				this.log.exception(ex, 'Failed to parse SpringCM API error. Response body:\n' + body);

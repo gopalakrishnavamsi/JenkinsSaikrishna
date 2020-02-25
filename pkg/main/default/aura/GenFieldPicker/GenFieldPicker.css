@@ -1,0 +1,37 @@
+.THIS .ds-merge-field,
+.THIS .ds-merge-field__subfield {
+    z-index: auto;
+}
+
+.THIS .ds-merge-field__subfield-line {
+    pointer-events: none;
+    display: block;
+    width: 3rem;
+    height: 46px;
+    border-left: thin solid rgb(217, 219, 221);
+    border-bottom: thin solid rgb(217, 219, 221);
+    left: 16px;
+    top: -29px;
+    z-index: 0;
+}
+
+.THIS .ds-childNode-secondLevel-leftMargin {
+    margin-left: 2rem;
+}
+
+.THIS .ds-childNode-thirdLevel-leftMargin {
+    margin-left: 4rem;
+}
+
+.THIS .ds-childNode-fourthLevel-leftMargin {
+    margin-left: 6rem;
+}
+
+.THIS .ds-childNode-fifthLevel-leftMargin {
+    margin-left: 8rem;
+}
+
+.THIS .remove-button-padding {
+    padding-left: 23px !important;
+    padding-right: 22px !important;
+}

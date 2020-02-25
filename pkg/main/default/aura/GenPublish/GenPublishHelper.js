@@ -48,7 +48,7 @@
     var getLayoutsAction = component.get('c.getLayouts');
     component.set('v.fetchingLayout', true);
     getLayoutsAction.setParams({
-      sObjectType: config.objectMappings[0].apiName
+      sObjectType: config.objectMappings.name
     });
 
     getLayoutsAction.setCallback(this, $A.getCallback(function (response) {
@@ -208,7 +208,7 @@
     };
 
     action.setParams({
-      sObjectType: config.objectMappings[0].apiName,
+      sObjectType: config.objectMappings.name,
       layoutsJson: JSON.stringify(selectedLayouts),
       parameters: JSON.stringify(parameters)
     });
