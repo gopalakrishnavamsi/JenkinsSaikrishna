@@ -13,6 +13,16 @@ private class SalesforceTest {
 	}
 
 	@IsTest
+	static void test_namespace() {
+		System.assertEquals([SELECT NamespacePrefix FROM Organization LIMIT 1].NamespacePrefix, Salesforce.namespace);
+	}
+
+	@IsTest
+	static void test_instance() {
+		System.assertEquals([SELECT InstanceName FROM Organization LIMIT 1].InstanceName.toLowerCase(), Salesforce.instance);
+	}
+
+	@IsTest
 	static void test_baseUrl() {
 		String siteBaseUrl = Site.getBaseUrl();
 		System.assertNotEquals(null, Salesforce.baseUrl);
@@ -21,9 +31,30 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_edition() {
-		System.assertEquals([SELECT OrganizationType FROM Organization LIMIT 1].OrganizationType,
-			Salesforce.edition);
+	static void test_isSandbox() {
+		System.assertEquals([SELECT IsSandbox FROM Organization LIMIT 1].IsSandbox, Salesforce.isSandbox);
+	}
+
+	@IsTest
+	static void test_isApiSupported() {
+		String orgType = null;
+		List<Organization> orgs = [SELECT Id, OrganizationType FROM Organization LIMIT 1];
+		if (Collection.isNotEmpty(orgs)) {
+			orgType = orgs[0].OrganizationType;
+		}
+		System.assertEquals((orgType == 'Professional Edition' || orgType == 'Developer Edition' || orgType == 'Enterprise Edition' || orgType == 'Unlimited Edition'),
+			Salesforce.isApiSupported);
+	}
+
+	@IsTest
+	static void test_isFlsSupported() {
+		String orgType = null;
+		List<Organization> orgs = [SELECT Id, OrganizationType FROM Organization LIMIT 1];
+		if (Collection.isNotEmpty(orgs)) {
+			orgType = orgs[0].OrganizationType;
+		}
+		System.assertEquals((orgType == 'Developer Edition' || orgType == 'Enterprise Edition' || orgType == 'Unlimited Edition'),
+			Salesforce.isFlsSupported);
 	}
 
 	@IsTest
@@ -33,33 +64,8 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_isSandbox() {
-		System.assertEquals([SELECT IsSandbox FROM Organization LIMIT 1].IsSandbox, Salesforce.isSandbox);
-	}
-
-	@IsTest
-	static void test_isCpqEnabled() {
-		System.assertEquals(Schema.getGlobalDescribe().containsKey('SBQQ__QuoteDocument__c'), Salesforce.isCpqEnabled);
-	}
-
-	@IsTest
-	static void test_areContractsEnabled() {
-		System.assertEquals(Schema.getGlobalDescribe().containsKey('Contract'), Salesforce.areContractsEnabled);
-	}
-
-	@IsTest
-	static void test_areQuotesEnabled() {
-		System.assertEquals(Schema.getGlobalDescribe().containsKey('QuoteDocument'), Salesforce.areQuotesEnabled);
-	}
-
-	@IsTest
 	static void test_isCommunitySite() {
 		System.assertEquals(Site.getSiteType() == 'ChatterNetwork', Salesforce.isCommunitySite);
-	}
-
-	@IsTest
-	static void test_areWorkOrdersEnabled() {
-		System.assertEquals(Schema.getGlobalDescribe().containsKey('WorkOrder'), Salesforce.areWorkOrdersEnabled);
 	}
 
 	@IsTest
@@ -135,7 +141,7 @@ private class SalesforceTest {
 	@IsTest
 	static void test_getOrigin() {
 		String myDomain = Salesforce.baseUrl.getHost().substringBefore('.');
-		String instance = Salesforce.INSTANCE_NAME.toLowerCase();
+		String instance = Salesforce.instance;
 		String namespace = Salesforce.namespace;
 		String rootDomain = 'salesforce.com';
 
@@ -162,7 +168,7 @@ private class SalesforceTest {
 		return 'https://'
 			+ Url.getOrgDomainUrl().getHost().substringBefore('.')
 			+ '--' + Application.namespace
-			+ '.' + Salesforce.INSTANCE_NAME.toLowerCase()
+			+ '.' + Salesforce.instance
 			+ '.visual.force.com';
 	}
 
@@ -189,7 +195,7 @@ private class SalesforceTest {
 		return 'https://'
 			+ Url.getOrgDomainUrl().getHost().substringBefore('.')
 //			+ '--' + Application.namespace
-			+ '.' + Salesforce.INSTANCE_NAME.toLowerCase()
+			+ '.' + Salesforce.instance
 			+ '.lightning.force.com';
 	}
 

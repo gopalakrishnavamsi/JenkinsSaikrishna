@@ -1,94 +1,62 @@
+//noinspection ApexModifierAgreement
 public with sharing class Salesforce {
 
 	private static final Map<String, SObjectType> GLOBAL_DESCRIBE;
-	private static final Boolean IS_CHATTER_ENABLED;
-	private static final Boolean IS_CPQ_ENABLED;
-	private static final Boolean ARE_CONTRACTS_ENABLED;
-	private static final Boolean ARE_QUOTES_ENABLED;
-	private static final Boolean ARE_WORK_ORDERS_ENABLED;
-	private static final Boolean IS_COMMUNITY_SITE;
-	private static final Url BASE_URL;
-	@TestVisible
-	private static final String INSTANCE_NAME;
-	private static final String NAMESPACE_PREFIX;
-	private static final Boolean IS_SANDBOX;
-	private static final String ORG_TYPE;
-	public static final Double API_VERSION = 47.0;
-
+	
 	private static List<String> visualforceOrigins;
 	private static List<String> lightningOrigins;
 
-	public static Url baseUrl {
-		get {
-			return BASE_URL;
-		}
-	}
-	public static Boolean isSandbox {
-		get {
-			return IS_SANDBOX;
-		}
-	}
-	public static String namespace {
-		get {
-			return NAMESPACE_PREFIX;
-		}
-	}
-	public static String edition {
-		get {
-			return ORG_TYPE;
-		}
-	}
-	public static Boolean isChatterEnabled {
-		get {
-			return IS_CHATTER_ENABLED;
-		}
-	}
-	public static Boolean isCpqEnabled {
-		get {
-			return IS_CPQ_ENABLED;
-		}
-	}
-	public static Boolean areContractsEnabled {
-		get {
-			return ARE_CONTRACTS_ENABLED;
-		}
-	}
-	public static Boolean areQuotesEnabled {
-		get {
-			return ARE_QUOTES_ENABLED;
-		}
-	}
-	public static Boolean areWorkOrdersEnabled {
-		get {
-			return ARE_WORK_ORDERS_ENABLED;
-		}
-	}
-	public static Boolean isCommunitySite {
-		get {
-			return IS_COMMUNITY_SITE;
-		}
-	}
-	public static Url oauthUrl {
-		get {
-			return new Url(BASE_URL, '/services/oauth2/authorize');
-		}
-	}
+	public static final Double API_VERSION = 47.0;
+
+	@TestVisible
+	public static String namespace { get; private set; }
+	@TestVisible
+	public static String instance { get; private set; }
+	@TestVisible
+	public static Url baseUrl { get; private set; }
+	@TestVisible
+	public static Boolean isSandbox { get; private set; }
+	@TestVisible
+	public static Boolean isApiSupported { get; private set; }
+	@TestVisible
+	public static Boolean isFlsSupported { get; private set; }
+	@TestVisible
+	public static Boolean isChatterEnabled { get; private set; }
+	@TestVisible
+	public static Boolean isCommunitySite { get; private set; }
+	@TestVisible
+	public static Url oauthUrl { get; private set; }
 
 	static {
 		String siteBaseUrl = Site.getBaseUrl();
-		BASE_URL = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl) : Url.getOrgDomainUrl();
-		Organization org = [SELECT InstanceName, IsSandbox, OrganizationType, NamespacePrefix FROM Organization LIMIT 1];
-		INSTANCE_NAME = org.InstanceName.toLowerCase();
-		IS_SANDBOX = org.IsSandbox;
-		ORG_TYPE = org.OrganizationType;
-		NAMESPACE_PREFIX = org.NamespacePrefix;
+		baseUrl = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl) : Url.getOrgDomainUrl();
+		oauthUrl = new Url(baseUrl, '/services/oauth2/authorize');
+		Organization org = [
+			SELECT InstanceName, IsSandbox, OrganizationType, NamespacePrefix
+			FROM Organization
+			LIMIT 1
+		];
+		instance = org.InstanceName.toLowerCase();
+		isSandbox = org.IsSandbox;
+		switch on (org.OrganizationType) {
+			when 'Professional Edition' {
+				isApiSupported = true;
+				isFlsSupported = false;
+			} when 'Enterprise Edition', 'Developer Edition', 'Unlimited Edition' {
+				isApiSupported = true;
+				isFlsSupported = true;
+			} when else {
+				// Group (Team), Essentials (Base?), Contact Manager, Personal
+				// The picklist values don't have associated labels and they are not documented by Salesforce.
+				// Furthermore, some of the values have changed in meaning over time.
+				isApiSupported = false;
+				isFlsSupported = false;
+			}
+		}
+		namespace = org.NamespacePrefix;
 		GLOBAL_DESCRIBE = Schema.getGlobalDescribe();
-		ARE_CONTRACTS_ENABLED = GLOBAL_DESCRIBE.containsKey('Contract');
-		ARE_QUOTES_ENABLED = GLOBAL_DESCRIBE.containsKey('QuoteDocument');
-		ARE_WORK_ORDERS_ENABLED = GLOBAL_DESCRIBE.containsKey('WorkOrder');
-		IS_CHATTER_ENABLED = GLOBAL_DESCRIBE.containsKey('FeedItem');
-		IS_CPQ_ENABLED = GLOBAL_DESCRIBE.containsKey('SBQQ__QuoteDocument__c');
-		IS_COMMUNITY_SITE = Site.getSiteType() == 'ChatterNetwork';
+		isChatterEnabled = GLOBAL_DESCRIBE.containsKey('FeedItem');
+		isCommunitySite = Site.getSiteType() == 'ChatterNetwork';
 	}
 
 	public class MetadataApiNotSupportedException extends Exception {
@@ -110,7 +78,7 @@ public with sharing class Salesforce {
 	}
 
 	public static Boolean exists(final String sObjectType) {
-		return exists(sObjectType, null);
+		return Salesforce.exists(sObjectType, null);
 	}
 
 	public static Boolean exists(final String sObjectType, final Set<String> fields) {
@@ -174,13 +142,13 @@ public with sharing class Salesforce {
 				result = String.format('https://{0}--{1}.{2}.{3}', new List<String> {
 					myDomain,
 					Application.namespace,
-					INSTANCE_NAME,
+					Salesforce.instance,
 					rootDomain
 				});
 			} else {
 				result = String.format('https://{0}.{1}.{2}', new List<String> {
 					myDomain,
-					INSTANCE_NAME,
+					Salesforce.instance,
 					rootDomain
 				});
 			}
@@ -201,11 +169,11 @@ public with sharing class Salesforce {
 	}
 
 	public static List<String> getVisualforceOrigins() {
-		if (visualforceOrigins == null) {
-			String host = BASE_URL.getHost();
+		if (Salesforce.visualforceOrigins == null) {
+			String host = baseUrl.getHost();
 			String myDomain = host.substringBefore('.');
 
-			visualforceOrigins = new List<String> {
+			Salesforce.visualforceOrigins = new List<String> {
 				getOrigin(
 					myDomain,
 					Application.namespace,
@@ -214,19 +182,19 @@ public with sharing class Salesforce {
 				getOrigin(
 					myDomain,
 					Application.namespace,
-					INSTANCE_NAME,
+					Salesforce.instance,
 					'visual.force.com')
 			};
 		}
-		return visualforceOrigins;
+		return Salesforce.visualforceOrigins;
 	}
 
 	public static List<String> getLightningOrigins() {
-		if (lightningOrigins == null) {
-			String host = BASE_URL.getHost();
+		if (Salesforce.lightningOrigins == null) {
+			String host = baseUrl.getHost();
 			String myDomain = host.substringBefore('.');
 
-			lightningOrigins = new List<String> {
+			Salesforce.lightningOrigins = new List<String> {
 				getOrigin(
 					myDomain,
 					null,
@@ -235,17 +203,17 @@ public with sharing class Salesforce {
 				getOrigin(
 					myDomain,
 					null,
-					INSTANCE_NAME,
+					Salesforce.instance,
 					'lightning.force.com')
 			};
 		}
-		return lightningOrigins;
+		return Salesforce.lightningOrigins;
 	}
 
 	public static Boolean isValidOrigin(final String origin) {
 		//Make case insensitive comparison
 		Boolean result = false;
-		List<String> visualForceOrigins = getVisualforceOrigins();
+		List<String> visualForceOrigins = Salesforce.getVisualforceOrigins();
 		if (visualForceOrigins != null && !visualForceOrigins.isEmpty()) {
 			for (String vfOrigin : visualForceOrigins) {
 				if (vfOrigin.equalsIgnoreCase(origin)) {
@@ -262,8 +230,8 @@ public with sharing class Salesforce {
 		//this is sometimes in a different case as compared to the myDomain names returned from Apex.
 		//Hence we need to make a case insensitive comparison.
 		Boolean result = false;
-		List<String> visualForceOrigins = getVisualforceOrigins();
-		List<String> lightningOrigins = getLightningOrigins();
+		List<String> visualForceOrigins = Salesforce.getVisualforceOrigins();
+		List<String> lightningOrigins = Salesforce.getLightningOrigins();
 		if (visualForceOrigins != null && !visualForceOrigins.isEmpty()) {
 			for (String vfOrigin : visualForceOrigins) {
 				if (vfOrigin.equalsIgnoreCase(target)) {
@@ -295,7 +263,7 @@ public with sharing class Salesforce {
 			// removing 'Group,' if getReferenceTo() returns Owner as polymorphic field
 			if (dfr1.getType() == Schema.DisplayType.REFERENCE && dfr1.getReferenceTo() != null) {
 				String parentSObjectName = String.valueOf(dfr1.getReferenceTo()).remove('Group,').substringBetween('(', ')');
-				parentSObjectType = getSObjectType(parentSObjectName);
+				parentSObjectType = Salesforce.getSObjectType(parentSObjectName);
 			}
 		}
 		return parentSObjectType;

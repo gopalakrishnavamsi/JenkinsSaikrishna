@@ -6,8 +6,6 @@ public with sharing class Permissions {
 	@TestVisible
 	private static final Permissions.Database DB = new Permissions.Database();
 	private static final SObjectType TYPE_PERMISSION_SET_ASSIGNMENT = PermissionSetAssignment.getSObjectType();
-	@TestVisible
-	private static final Boolean IS_FLS_SUPPORTED;
 	private static final Map<String, DescribeFieldResult> FIELD_DESCRIBE_MAP = new Map<String, DescribeFieldResult>();
 	private static final Set<String> SPECIAL_CASE_FIELDS = new Set<String> { 'Owner', 'MasterRecord', 'Parent' };
 	private static final Map<Id, Set<String>> ASSIGNMENTS = new Map<Id, Set<String>>();
@@ -32,10 +30,6 @@ public with sharing class Permissions {
 		DOCUSIGN_NEGOTIATOR,
 		CLM_ADMINISTRATOR, CLM_USER, CLM_VIEWER
 	};
-
-	static {
-		IS_FLS_SUPPORTED = (Salesforce.edition == 'Developer Edition' || Salesforce.edition == 'Enterprise Edition' || Salesforce.edition == 'Unlimited Edition');
-	}
 
 	@TestVisible
 	private class ProductRole {
@@ -999,7 +993,7 @@ public with sharing class Permissions {
 	 * @return The results of the access request.
 	 */
 	public static FlsResults isCreateable(final SObjectType type, final List<String> fieldNames) {
-		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Createable, true, null, null);
+		if (!Salesforce.isFlsSupported) return new FlsResults(FlsAccess.Createable, true, null, null);
 
 		return getFlsResults(FlsAccess.Createable, type, fieldNames);
 	}
@@ -1024,7 +1018,7 @@ public with sharing class Permissions {
 	 * @return The results of the access request.
 	 */
 	public static FlsResults isDeletable(final SObjectType type) {
-		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Deletable, true, null, null);
+		if (!Salesforce.isFlsSupported) return new FlsResults(FlsAccess.Deletable, true, null, null);
 
 		return getFlsResults(FlsAccess.Deletable, type, null);
 	}
@@ -1060,7 +1054,7 @@ public with sharing class Permissions {
 	 * @return The results of the access request.
 	 */
 	public static FlsResults isQueryable(final SObjectType type, final List<String> fieldNames) {
-		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Queryable, true, null, null);
+		if (!Salesforce.isFlsSupported) return new FlsResults(FlsAccess.Queryable, true, null, null);
 
 		return getFlsResults(FlsAccess.Queryable, type, fieldNames);
 	}
@@ -1097,7 +1091,7 @@ public with sharing class Permissions {
 	 * @return The results of the access request.
 	 */
 	public static FlsResults isUpdateable(final SObjectType type, final List<String> fieldNames) {
-		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Updateable, true, null, null);
+		if (!Salesforce.isFlsSupported) return new FlsResults(FlsAccess.Updateable, true, null, null);
 
 		return getFlsResults(FlsAccess.Updateable, type, fieldNames);
 	}
@@ -1123,7 +1117,7 @@ public with sharing class Permissions {
 	 * @return The results of the access request.
 	 */
 	public static FlsResults isFilterable(final SObjectType type, final List<String> fieldNames) {
-		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Filterable, true, null, null);
+		if (!Salesforce.isFlsSupported) return new FlsResults(FlsAccess.Filterable, true, null, null);
 
 		return getFlsResults(FlsAccess.Filterable, type, fieldNames);
 	}
@@ -1148,7 +1142,7 @@ public with sharing class Permissions {
 	 * @return The results of the access request.
 	 */
 	public static FlsResults isUnencrypted(final SObjectType type, final List<String> fieldNames) {
-		if (!IS_FLS_SUPPORTED) return new FlsResults(FlsAccess.Unencrypted, true, null, null);
+		if (!Salesforce.isFlsSupported) return new FlsResults(FlsAccess.Unencrypted, true, null, null);
 
 		return getFlsResults(FlsAccess.Unencrypted, type, fieldNames);
 	}

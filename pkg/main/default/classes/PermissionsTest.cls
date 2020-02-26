@@ -6,17 +6,6 @@ private class PermissionsTest {
 	static final String FIELD_NAME = Application.namespacePrefix + 'DocuSignId__c';
 
 	@IsTest
-	static void test_isFlsSupported() {
-		String orgType = null;
-		List<Organization> orgs = [SELECT Id, OrganizationType FROM Organization LIMIT 1];
-		if (Collection.isNotEmpty(orgs)) {
-			orgType = orgs[0].OrganizationType;
-		}
-		System.assertEquals((orgType == 'Developer Edition' || orgType == 'Enterprise Edition' || orgType == 'Unlimited Edition'),
-			Permissions.IS_FLS_SUPPORTED);
-	}
-
-	@IsTest
 	static void test_describeField() {
 		Test.startTest();
 		DescribeFieldResult r1 = Permissions.describeField(OBJECT_NAME, FIELD_NAME, null);
