@@ -71,13 +71,11 @@
         helper.addDocumentProperties(file, true);
       });
       component.set('v.templateFiles', templateFiles);
-      config.objectMappings.forEach(function (objMapping) {
-        var lookupObj = {
-          apiName: objMapping.apiName,
-          label: objMapping.label
-        };
-        lookupObjs.push(lookupObj);
-      });
+      var lookupObj = {
+        apiName: config.objectMappings.name,
+        label: config.objectMappings.label
+      };
+      lookupObjs.push(lookupObj);
       component.set('v.lookupObjs', lookupObjs);
     }
 
@@ -190,7 +188,7 @@
       if (field.type === 'CHILD_RELATIONSHIP') {
         children.push(helper.traverseFieldMapping(child, field.relationship, field.parentIdField, field.name, map, isMultiCurrency));
       } else if (field.type === 'REFERENCE') {
-        this.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
+        helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
           fields.push(f);
         });
       } else if (isMultiCurrency && field.type === 'CURRENCY') {
@@ -210,7 +208,7 @@
     var fields = [];
     fm.fields.forEach(function (field) {
       if (field.type === 'REFERENCE') {
-        var childKey = this.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
+        var childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
         var child = map[childKey];
         helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
           fields.push(f);

@@ -286,7 +286,7 @@ public with sharing class Query {
 				result.add(formatMessage(query.type, null, null,
 					Label.CannotOrderSourceObjectResults));
 			}
-			if (query.maximumRecords != 1) {
+			if (query.maximumRecords != null && query.maximumRecords != 1) {
 				result.add(formatMessage(query.type, null, null,
 					Label.CannotLimitSourceObjectResults));
 			}
@@ -329,14 +329,9 @@ public with sharing class Query {
 		return result;
 	}
 
-	@TestVisible
-	private static void validate(final Query query) {
+	public static void validate(final Query query) {
 		ValidationResult result = validate(query, null, 1);
 		if (!result.isValid) throw new ValidationException(Label.InvalidQuery, result);
-	}
-
-	public void validate() {
-		validate(this);
 	}
 
 	private List<SObject> queryChildren(

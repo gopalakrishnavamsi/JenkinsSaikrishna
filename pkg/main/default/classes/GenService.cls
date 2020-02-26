@@ -639,14 +639,14 @@ public with sharing class GenService {
 
 	public static Query.Result getMergeData(
 		final Id sourceId,
-		final Query query) {
+		final Query q) {
 
 		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
-		if (sourceId == null || query == null) throw new DocuSignException(Label.UndefinedArgument);
-		query.validate();
+		if (sourceId == null || q == null) throw new DocuSignException(Label.UndefinedArgument);
+		Query.validate(q);
 
-		return query.execute(sourceId);
+		return q.execute(sourceId);
 	}
 
 	@TestVisible
