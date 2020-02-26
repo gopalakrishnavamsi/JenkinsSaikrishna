@@ -76,13 +76,14 @@
                                 <label class="slds-form-element__label">
                                     <abbr class="slds-required" title="required">*</abbr>{!$Label.c.SelectDocumentType}
                                 </label>
-                                <div class="slds-grid slds-gutters slds-m-top_xx-small slds-grid_vertical-align-end">
+                                <div class="slds-grid slds-gutters_xx-small slds-m-top_xx-small slds-wrap">
                                     <aura:iteration items="{!v.templateTypes}" var="type" indexVar="name">
-                                        <div class="slds-col slds-wrap slds-form-element__control">
-                                            <div class="slds-visual-picker ds-genType">
-                                                <input type="radio" id="{!type.name}" value="{!type.name}"
-                                                       name="options" onclick="{!c.selectType}"/>
-                                                <label for="{!type.name}">
+                                        <div class="slds-col slds-form-element__control slds-size_1-of-2 slds-large-size_1-of-2 slds-medium-size--1-of-1 slds-small-size--1-of-1">
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-visual-picker ds-genType">
+                                                    <input type="radio" id="{!type.name}" value="{!type.name}"
+                                                           name="options" onclick="{!c.selectType}"/>
+                                                    <label for="{!type.name}">
                                                         <span class="slds-visual-picker__figure slds-visual-picker__text slds-p-around_small">
                                                           <article class="slds-tile slds-media">
 
@@ -109,11 +110,12 @@
                                                                 </div>
                                                              </article>
                                                         </span>
-                                                    <span class="{!if(v.selectedType == type.name,'slds-icon_container slds-visual-picker__text-check' ,'slds-hide')}">
+                                                        <span class="{!if(v.selectedType == type.name,'slds-icon_container slds-visual-picker__text-check' ,'slds-hide')}">
                                                           <lightning:icon iconName="utility:check"
                                                                           size="x-small"/>
                                                         </span>
-                                                </label>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </aura:iteration>
