@@ -6,6 +6,7 @@
     navUtils.navigateToSObject(component.get('v.recordId'));
   },
   sendForSignatureClicked: function (component) {
+    component.set('v.loading',true);
     var sendForSignature = component.get('v.sendForSignature');
     sendForSignature();
   }

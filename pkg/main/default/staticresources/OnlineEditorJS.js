@@ -27,7 +27,6 @@ jQuery(document).ready(function ($) {
 
   var Elements = Object.freeze({
     spinner1: $('#ds-spinner'),
-    spinner2: $('#ds-spinner2'),
     buttons: {
       cancelPublish: $('#onlineEditorPublishCancel'),
       cancelTemplate: $('#onlineEditorTemplateCancel'),
@@ -53,7 +52,6 @@ jQuery(document).ready(function ($) {
   displayStartupElements();
 
   Elements.spinner1.hide();
-  Elements.spinner2.hide();
 
   hideAll();
   hideAllButtons();
@@ -62,8 +60,8 @@ jQuery(document).ready(function ($) {
     .then(function (component) {
       _userEvents = component;
 
-    if (Configuration.isGenerating) _sessionType = EventLabels.GENERATE_DOCUMENT;
-    else _sessionType = Configuration.isEditing ? EventLabels.UPDATE_TEMPLATE : EventLabels.CREATE_TEMPLATE;
+      if (Configuration.isGenerating) _sessionType = EventLabels.GENERATE_DOCUMENT;
+      else _sessionType = Configuration.isEditing ? EventLabels.UPDATE_TEMPLATE : EventLabels.CREATE_TEMPLATE;
 
 
       _userEvents.time(_sessionType);
@@ -235,11 +233,9 @@ jQuery(document).ready(function ($) {
             function (result, event) {
               if (event.status) {
                 _userEvents.success(
-                  EventLabels.PREVIEW_DOCUMENT, 
-                  {
-
-                  }
-                ); 
+                  EventLabels.PREVIEW_DOCUMENT,
+                  {}
+                );
                 resolve(result);
               } else {
                 _userEvents.error(
@@ -914,32 +910,31 @@ jQuery(document).ready(function ($) {
   prepareOnlineEditorDocumentGenerator = (function () {
     if (!Configuration.isGenerating) return;
     return function () {
-      if (Configuration.template) {
-        $('#onlineEditorGenerator').show();
-        Elements.spinner2.show();
-        generateDownloadToken(getSpringTemplateIdToString(Configuration.template))
-          .then(function (accessToken) {
-            return renderEditor(accessToken, document.getElementById('onlineEditorGenerator'), Configuration.template.name, Configuration.sourceId, true);
-          })
-          .then(function () {
-            Elements.spinner2.hide();
-          })
-          .catch(function (err) {
+      return new Promise(function (resolve, reject) {
+        if (Configuration.template) {
+          $('#onlineEditorGenerator').show();
+          generateDownloadToken(getSpringTemplateIdToString(Configuration.template))
+            .then(function (accessToken) {
+              resolve(renderEditor(accessToken, document.getElementById('onlineEditorGenerator'), Configuration.template.name, Configuration.sourceId, true));
+            }).catch(function (err) {
             createToastComponent(err, 'error');
             _userEvents.error(
               _sessionType,
               {},
               err
             );
+            reject(err);
           });
-      } else {
-        createToastComponent(Labels.templateUndefinedLabel, 'error');
-        _userEvents.error(
-          _sessionType,
-          {},
-          EventLabels.templateUndefined
-        );
-      }
+        } else {
+          createToastComponent(Labels.templateUndefinedLabel, 'error');
+          _userEvents.error(
+            _sessionType,
+            {},
+            EventLabels.templateUndefined
+          );
+          reject(Labels.templateUndefinedLabel);
+        }
+      });
     };
   })();
 
@@ -988,7 +983,6 @@ jQuery(document).ready(function ($) {
   prepareSendForSignature = (function () {
     return function () {
       hideAll();
-      Elements.spinner2.show();
       if (Configuration.template) {
         exportDocument('html')
           .then(function (htmlData) {
@@ -1007,7 +1001,6 @@ jQuery(document).ready(function ($) {
               + '&phrs=' + encodeURIComponent(JSON.stringify(getPlaceholderRecipients()))
               + '&lock=1'
               + '&sendNow=1';
-            Elements.spinner2.hide();
             window.open(pageUrl, '_self');
             _userEvents.success(
               _sessionType,

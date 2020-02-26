@@ -12,7 +12,7 @@
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isGenEnabled" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="isSendForSignatureEnabled" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isSendForSignatureEnabled" type="Boolean" default="false"/>
     <aura:attribute name="isGenTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
