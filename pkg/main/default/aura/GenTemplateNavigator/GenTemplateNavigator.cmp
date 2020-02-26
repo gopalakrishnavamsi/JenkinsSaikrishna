@@ -86,11 +86,15 @@
                                                     <label for="{!type.name}">
                                                         <span class="slds-visual-picker__figure slds-visual-picker__text slds-p-around_small">
                                                           <article class="slds-tile slds-media">
-
-                                                                <div class="slds-media__figure slds-align_absolute-center">
-                                                                    <lightning:icon
-                                                                            iconName="{!type.name == 'Online Editor'? 'doctype:html':'doctype:word'}"/>
-                                                                </div>
+                                                               <div class="slds-media__figure slds-align_absolute-center">
+                                                              <aura:if isTrue="{!type.name == 'Online Editor'}">
+                                                                  <img class="slds-is-relative slds-icon"
+                                                                       src="{!$Resource.adflogo}"/>
+                                                                      <aura:set attribute="else">
+                                                                          <lightning:icon iconName="doctype:word"/>
+                                                                      </aura:set>
+                                                                  </aura:if>
+                                                               </div>
                                                                 <div class="slds-media__body slds-border--left slds-p-left_small">
                                                                     <h3 class="slds-truncate slds-text-title_bold slds-text-align_left">{!type.label}</h3>
                                                                     <span class="slds-text-body_small slds-text-align_left">
