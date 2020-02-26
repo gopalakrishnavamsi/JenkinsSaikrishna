@@ -146,6 +146,7 @@
 
   mergeFieldTreeChangeHandler: function (component, event, helper) {
     helper.trackCurrentFieldType(component);
+    helper.setToken(component);
   },
 
   checkDuplicateField: function (component, event, helper, parentNodeOfField) {
@@ -184,19 +185,19 @@
     var selectedFieldValue = event.getSource().get('v.value');
     var type = helper.getParentTypeOfField(component);
     var propertySearchNames = ['name', 'relatesTo', 'relationship'];
-    var selectedFieldFromTree;
+    var selectedFieldFromOptions;
 
     for (var index in propertySearchNames) {
       var propertySearchName = propertySearchNames[index];
-      selectedFieldFromTree = helper.getFieldByProperty(component, propertySearchName, selectedFieldValue);
-      if (helper.isNotUndefinedAndEmpty(selectedFieldFromTree)) {
+      selectedFieldFromOptions = helper.getFieldByProperty(component, propertySearchName, selectedFieldValue);
+      if (helper.isNotUndefinedAndEmpty(selectedFieldFromOptions)) {
         break;
       }
     }
 
     evt.setParams({
       data: {
-        field: selectedFieldFromTree,
+        field: selectedFieldFromOptions,
         depth: component.get('v.currentDepth'),
         fieldIndex: component.get('v.fieldIndex'),
         path: component.get('v.currentMergeTreePath'),

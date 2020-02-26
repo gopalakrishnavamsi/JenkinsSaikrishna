@@ -1,6 +1,6 @@
 ({
   init: function (component, event, helper) {
-    helper.setConditionalRadio(component);
+    helper.loadConditionalOptions(component);
   },
   validate: function (component) {
     return new Promise(
@@ -68,7 +68,7 @@
     var timeFormat = '';
     var dateFormat = '';
 
-    if(component.get('v.clonedFieldMapping').type === 'DATE' || component.get('v.clonedFieldMapping').type === 'DATETIME' ){
+    if (component.get('v.clonedFieldMapping').type === 'DATE' || component.get('v.clonedFieldMapping').type === 'DATETIME') {
       if (helper.validateFormats(component)) {
         return;
       }
@@ -77,8 +77,8 @@
       //storing updated format value into dateFormat
       dateFormat = component.get('v.clonedFieldMapping.format');
     }
-    if(component.get('v.clonedFieldMapping').type === 'TIME' || component.get('v.clonedFieldMapping').type === 'DATETIME'  ){
-      if(helper.validateFormats(component)) {
+    if (component.get('v.clonedFieldMapping').type === 'TIME' || component.get('v.clonedFieldMapping').type === 'DATETIME') {
+      if (helper.validateFormats(component)) {
         return;
       }
       component.set('v.clonedFieldMapping.format', component.get('v.timeDropDown') === $A.get('$Label.c.Custom') ?
@@ -88,9 +88,8 @@
     }
 
 
-
-    if (!$A.util.isEmpty(timeFormat) && !$A.util.isEmpty(dateFormat) ) {
-      component.set('v.clonedFieldMapping.format', stringUtils.format('{0}{1}{2}',dateFormat,'|',timeFormat));
+    if (!$A.util.isEmpty(timeFormat) && !$A.util.isEmpty(dateFormat)) {
+      component.set('v.clonedFieldMapping.format', stringUtils.format('{0}{1}{2}', dateFormat, '|', timeFormat));
     }
 
     if (clonedFieldMapping.isConditional && $A.util.isEmpty(clonedFieldMapping.conditionalValue)) {
@@ -120,11 +119,13 @@
     helper.formatPercent(component, component.find('percent').get('v.checked'));
   },
 
-  convertToBoolean: function (component, event) {
+  setConditionalProperties: function (component, event) {
     //html always returns the value as a string so we're going to convert it back to boolean
     var conditionalValue = event.getSource().get('v.value');
     var clonedFieldMapping = component.get('v.clonedFieldMapping');
+    var defaultConditionalType = component.get('v.conditionalTypes')[0];
     clonedFieldMapping.isConditional = conditionalValue === 'true';
+    clonedFieldMapping.matchType = clonedFieldMapping.isConditional && $A.util.isUndefinedOrNull(clonedFieldMapping.matchType) ? defaultConditionalType.value : clonedFieldMapping.matchType;
     component.set('v.clonedFieldMapping', clonedFieldMapping);
   },
 

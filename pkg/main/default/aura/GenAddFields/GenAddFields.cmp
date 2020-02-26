@@ -4,6 +4,7 @@
     <aura:attribute name="optionModalParams" type="Object" access="private"/>
     <aura:attribute name="clonedFieldMapping" type="Object" access="private"/>
     <aura:attribute name="mergeFieldDisplayOptions" type="Object[]" access="private"/>
+    <aura:attribute name="conditionalTypes" type="Object[]" access="private"/>
 
     <!-- Date Attributes -->
     <aura:attribute name="userLocaleDateFormat" type="String" access="private"/>
@@ -248,7 +249,7 @@
             <lightning:radioGroup name="mergeFieldDisplayOption" label="{!$Label.c.DisplaysOptions}"
                                   options="{!v.mergeFieldDisplayOptions}" type="radio"
                                   value="{!v.clonedFieldMapping.isConditional}" class="slds-m-top_small"
-                                  onchange="{!c.convertToBoolean}"/>
+                                  onchange="{!c.setConditionalProperties}"/>
 
             <aura:if isTrue="{!v.clonedFieldMapping.isConditional}">
                 <div class="slds-m-top_x-small slds-m-left_large slds-border_left slds-p-left_small">
@@ -257,8 +258,9 @@
 
                     <div class="slds-show_inline-block ds-align-top">
                         <lightning:select class="ds-no-label" value="{!v.clonedFieldMapping.matchType}">
-                            <option value="Match">{!$Label.c.MatchesLabel}</option>
-                            <option value="NotMatch">{!$Label.c.DoesNotMatch}</option>
+                            <aura:iteration items="{!v.conditionalTypes}" var="conditionalType">
+                                <option value="{!conditionalType.value}">{!conditionalType.label}</option>
+                            </aura:iteration>
                         </lightning:select>
                     </div>
 

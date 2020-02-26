@@ -44,12 +44,12 @@
   },
 
   //validate custom date and time formats
-  validateFormats:function (component) {
-    return ((component.get('v.timePreview') === 'Invalid Time' && component.get('v.timeDropDown') === $A.get('$Label.c.Custom') ) ||
-        (component.get('v.datePreview') === 'Invalid Date' && component.get('v.dateDropDown') === $A.get('$Label.c.Custom') ))
+  validateFormats: function (component) {
+    return ((component.get('v.timePreview') === 'Invalid Time' && component.get('v.timeDropDown') === $A.get('$Label.c.Custom')) ||
+      (component.get('v.datePreview') === 'Invalid Date' && component.get('v.dateDropDown') === $A.get('$Label.c.Custom')));
   },
 
-  setConditionalRadio: function (component) {
+  loadConditionalOptions: function (component) {
     var mergeFieldDisplayOptions = [
       {
         label: $A.get('$Label.c.AlwaysDisplayThisField'),
@@ -61,7 +61,19 @@
       }
     ];
 
+    var conditionalTypes = [
+      {
+        label: $A.get('$Label.c.MatchesLabel'),
+        value: 'Match'
+      },
+      {
+        label: $A.get('$Label.c.DoesNotMatch'),
+        value: 'NotMatch'
+      }
+    ];
+
     component.set('v.mergeFieldDisplayOptions', mergeFieldDisplayOptions);
+    component.set('v.conditionalTypes', conditionalTypes);
   },
 
   // TOOD: Generalize formatDate and formatCurrency and move to stringUtils
@@ -100,15 +112,15 @@
 
   formatPercent: function (component, percentFormat) {
     var defaultValue = 123456789000;
-    if(typeof percentFormat !== 'boolean') {
-     component.set('v.clonedFieldMapping.format', $A.util.getBooleanValue(percentFormat) ? true : false);
+    if (typeof percentFormat !== 'boolean') {
+      component.set('v.clonedFieldMapping.format', $A.util.getBooleanValue(percentFormat) ? true : false);
     }
     if (!$A.util.getBooleanValue(percentFormat)) {
       component.set('v.formattedPercent', $A.localizationService.formatNumber(defaultValue));
     } else {
       component.set(
-          'v.formattedPercent',
-          stringUtils.format('{0}{1}',$A.localizationService.formatNumber(defaultValue,$A.get('$Locale').numberFormat),' %'));
+        'v.formattedPercent',
+        stringUtils.format('{0}{1}', $A.localizationService.formatNumber(defaultValue, $A.get('$Locale').numberFormat), ' %'));
     }
   },
 
