@@ -76,6 +76,7 @@
 
         .slds-page-header__title {
             font-weight: 600;
+            height:16px;
         }
 
         .slds-scope .slds-page-header {
@@ -194,21 +195,25 @@
                         <div class="slds-page-header__name">
                             <div class="slds-page-header__name-title">
                                 <span>{!$Label.TemplateConfigurationLabel}</span>
-
-
-                                <h1 class="slds-page-header__title slds-truncate">
-                                    <apex:outputPanel id="templateHeader"><strong
-                                                id="templateNameHeader">{!templateName}</strong></apex:outputPanel>
-                                    <button class="slds-button slds-button_icon slds-m-left_x-small"
-                                            title="{!$Label.Edit}" id="onlineEditorEdit">
-                                        <svg class="slds-button__icon" aria-hidden="true">
-                                            <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                 xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#edit')}"/>
-                                        </svg>
-                                        <span class="slds-assistive-text">{!$Label.Edit}</span>
-                                    </button>
-                                </h1>
-
+                                <div class="slds-page-header__title slds-grid">
+                                    <div class="slds-col slds-truncate">
+                                        <h1 class="slds-page-header__title slds-truncate">
+                                            <apex:outputPanel id="templateHeader"><strong
+                                                        id="templateNameHeader">{!templateName}</strong>
+                                            </apex:outputPanel>
+                                        </h1>
+                                    </div>
+                                    <div class="slds-col">
+                                        <button class="slds-button slds-button_icon slds-m-left_x-small"
+                                                title="{!$Label.Edit}" id="onlineEditorEdit">
+                                            <svg class="slds-button__icon" aria-hidden="true">
+                                                <use xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                     xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#edit')}"/>
+                                            </svg>
+                                            <span class="slds-assistive-text">{!$Label.Edit}</span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
