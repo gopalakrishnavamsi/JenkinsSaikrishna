@@ -4551,15 +4551,23 @@
 		<name>MicrosoftWordDescription</name>
 	</customLabels>
 	<customLabels>
+		<label>Output format: DOCX, PDF</label>
+		<name>MicrosoftWordFormats</name>
+	</customLabels>
+	<customLabels>
 		<label>Build contract templates in a few clicks. Just drag and drop fields in our web editor.</label>
 		<name>OnlineEditorDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Output format: ADF, HTML</label>
+		<name>OnlineEditorFormats</name>
 	</customLabels>
 	<customLabels>
 		<label>Select Data Source</label>
 		<name>SelectDataSource</name>
 	</customLabels>
 	<customLabels>
-		<label>Select Document Type</label>
+		<label>Select Template Editor</label>
 		<name>SelectDocumentType</name>
 	</customLabels>
 	<customLabels>

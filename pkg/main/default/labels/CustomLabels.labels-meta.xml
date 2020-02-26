@@ -8770,12 +8770,28 @@
 		<value>Build contract templates in a few clicks. Just drag and drop fields in our web editor.</value>
 	</labels>
 	<labels>
+		<fullName>OnlineEditorFormats</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Allowed formats</shortDescription>
+		<value>Output format: ADF, HTML</value>
+	</labels>
+	<labels>
 		<fullName>MicrosoftWordDescription</fullName>
 		<categories>Gen</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Microsoft Word Description</shortDescription>
 		<value>Create contract templates. Copy and paste fields from Salesforce to Word.</value>
+	</labels>
+	<labels>
+		<fullName>MicrosoftWordFormats</fullName>
+		<categories>Gen</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Allowed formats</shortDescription>
+		<value>Output format: DOCX, PDF</value>
 	</labels>
 	<labels>
 		<fullName>SelectDataSource</fullName>
@@ -8791,7 +8807,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>SelectDocumentType</shortDescription>
-		<value>Select Document Type</value>
+		<value>Select Template Editor</value>
 	</labels>
 	<labels>
 		<fullName>AddTemplateName</fullName>

@@ -1,6 +1,7 @@
 <aura:component controller="GenController">
     <!-- import scripts -->
-    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}" afterScriptsLoaded="{!c.validateBrowser}"/>
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"
+                  afterScriptsLoaded="{!c.validateBrowser}"/>
 
     <!-- component attributes -->
     <aura:attribute name="namespace" type="String" required="true"/>
@@ -84,17 +85,24 @@
                                                 <label for="{!type.name}">
                                                         <span class="slds-visual-picker__figure slds-visual-picker__text slds-p-around_small">
                                                           <article class="slds-tile slds-media">
+
                                                                 <div class="slds-media__figure slds-align_absolute-center">
                                                                     <lightning:icon
-                                                                            iconName="{!type.name == 'Online Editor'?'doctype:html':'doctype:word'}"/>
+                                                                            iconName="{!type.name == 'Online Editor'? 'doctype:html':'doctype:word'}"/>
                                                                 </div>
                                                                 <div class="slds-media__body slds-border--left slds-p-left_small">
                                                                     <h3 class="slds-truncate slds-text-title_bold slds-text-align_left">{!type.label}</h3>
                                                                     <span class="slds-text-body_small slds-text-align_left">
                                                                     <aura:if isTrue="{!type.name == 'Online Editor'}">
                                                                         {!$Label.c.OnlineEditorDescription}
+                                                                        <span class="slds-text-body_small slds-text-align_left ds-format-modal">
+                                                                        {!$Label.c.OnlineEditorFormats}
+                                                                        </span>
                                                                         <aura:set attribute="else">
                                                                             {!$Label.c.MicrosoftWordDescription}
+                                                                            <span class="slds-text-body_small slds-text-align_left ds-format-modal">
+                                                                            {!$Label.c.MicrosoftWordFormats}
+                                                                            </span>
                                                                         </aura:set>
                                                                     </aura:if>
                                                                     </span>
@@ -114,11 +122,14 @@
                                     <article class="ie-error slds-tile slds-media slds-m-top_xx-small">
                                         <div class="slds-media__figure">
                                             <span class="slds-icon_container" title="description of icon when needed">
-                                                <lightning:icon iconName="utility:error" size="small" alternativeText="Error!" variant="error" class="slds-align-top"/>
+                                                <lightning:icon iconName="utility:error" size="small"
+                                                                alternativeText="Error!" variant="error"
+                                                                class="slds-align-top"/>
                                             </span>
                                         </div>
                                         <div class="slds-media__body">
-                                            <h3 class="slds-tile__title slds-text-body_small slds-text-color_error" title="Salesforce UX">
+                                            <h3 class="slds-tile__title slds-text-body_small slds-text-color_error"
+                                                title="Salesforce UX">
                                                 {!$Label.c.IEValidationWarning}
                                             </h3>
                                         </div>
