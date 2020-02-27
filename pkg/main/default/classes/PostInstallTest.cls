@@ -164,112 +164,98 @@ private class PostInstallTest {
 	}
 
 	@IsTest
-	static void test_initializeSettings_envelope_new() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
-				Label.InitializeEnvelopeSettings => EnvelopeSettings__c.getOrgDefaults()
-			});
-			Test.stopTest();
+	static void test_initializeEnvelopeSettings_new() {
+		Test.startTest();
+		PostInstallResults result = PostInstall.initializeEnvelopeSettings();
+		Test.stopTest();
 
-			System.assertNotEquals(null, result);
-			System.assert(result.success);
-			List<PostInstallResults.Step> steps = result.getSteps();
-			System.assertNotEquals(null, steps);
-			System.assertEquals(1, steps.size());
-			System.assertNotEquals(null, steps[0]);
-			System.assertEquals(Label.InitializeEnvelopeSettings, steps[0].name);
-			System.assertEquals(PostInstallResults.StepStatus.SUCCESS, steps[0].status);
-		}
+		System.assertNotEquals(null, result);
+		System.assert(result.success);
+		List<PostInstallResults.Step> steps = result.getSteps();
+		System.assertNotEquals(null, steps);
+		System.assertEquals(1, steps.size());
+		System.assertNotEquals(null, steps[0]);
+		System.assertEquals(Label.InitializeEnvelopeSettings, steps[0].name);
+		System.assertEquals(PostInstallResults.StepStatus.SUCCESS, steps[0].status);
+		System.assertNotEquals(null, EnvelopeSettings__c.getOrgDefaults().Id);
+		System.assertEquals(true, EnvelopeSettings__c.getOrgDefaults().AllowSequentialSignNow__c);
 	}
 
 	@IsTest
-	static void test_initializeSettings_envelope_upgrade() {
-		System.runAs(UserMock.createUser()) {
-			insert EnvelopeSettings__c.getOrgDefaults();
+	static void test_initializeEnvelopeSettings_upgrade() {
+		EnvelopeSettings__c s = EnvelopeSettings__c.getOrgDefaults();
+		s.AllowSequentialSignNow__c = false;
+		insert s;
 
-			Test.startTest();
-			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
-				Label.InitializeEnvelopeSettings => EnvelopeSettings__c.getOrgDefaults()
-			});
-			Test.stopTest();
+		Test.startTest();
+		PostInstallResults result = PostInstall.initializeEnvelopeSettings();
+		Test.stopTest();
 
-			System.assertNotEquals(null, result);
-			System.assert(result.success);
-			List<PostInstallResults.Step> steps = result.getSteps();
-			System.assertNotEquals(null, steps);
-			System.assertEquals(1, steps.size());
-			System.assertNotEquals(null, steps[0]);
-			System.assertEquals(Label.InitializeEnvelopeSettings, steps[0].name);
-			System.assertEquals(PostInstallResults.StepStatus.SKIPPED, steps[0].status);
-		}
+		System.assertNotEquals(null, result);
+		System.assert(result.success);
+		List<PostInstallResults.Step> steps = result.getSteps();
+		System.assertNotEquals(null, steps);
+		System.assertEquals(1, steps.size());
+		System.assertNotEquals(null, steps[0]);
+		System.assertEquals(Label.InitializeEnvelopeSettings, steps[0].name);
+		System.assertEquals(PostInstallResults.StepStatus.SUCCESS, steps[0].status);
+		System.assertEquals(true, EnvelopeSettings__c.getOrgDefaults().AllowSequentialSignNow__c);
 	}
 
 	@IsTest
-	static void test_initializeSettings_Chatter_new() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
-				Label.InitializeChatterSettings => ChatterSettings__c.getOrgDefaults()
-			});
-			Test.stopTest();
+	static void test_initializeEnvelopeSettings_skip() {
+		EnvelopeSettings__c s = EnvelopeSettings__c.getOrgDefaults();
+		s.AllowSequentialSignNow__c = true;
+		insert s;
 
-			System.assertNotEquals(null, result);
-			System.assert(result.success);
-			List<PostInstallResults.Step> steps = result.getSteps();
-			System.assertNotEquals(null, steps);
-			System.assertEquals(1, steps.size());
-			System.assertNotEquals(null, steps[0]);
-			System.assertEquals(Label.InitializeChatterSettings, steps[0].name);
-			System.assertEquals(PostInstallResults.StepStatus.SUCCESS, steps[0].status);
-		}
+		Test.startTest();
+		PostInstallResults result = PostInstall.initializeEnvelopeSettings();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assert(result.success);
+		List<PostInstallResults.Step> steps = result.getSteps();
+		System.assertNotEquals(null, steps);
+		System.assertEquals(1, steps.size());
+		System.assertNotEquals(null, steps[0]);
+		System.assertEquals(Label.InitializeEnvelopeSettings, steps[0].name);
+		System.assertEquals(PostInstallResults.StepStatus.SKIPPED, steps[0].status);
+		System.assertEquals(true, EnvelopeSettings__c.getOrgDefaults().AllowSequentialSignNow__c);
 	}
 
 	@IsTest
-	static void test_initializeSettings_Chatter_upgrade() {
-		System.runAs(UserMock.createUser()) {
-			insert ChatterSettings__c.getOrgDefaults();
+	static void test_initializeChatterSettings_new() {
+		Test.startTest();
+		PostInstallResults result = PostInstall.initializeChatterSettings();
+		Test.stopTest();
 
-			Test.startTest();
-			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
-				Label.InitializeChatterSettings => ChatterSettings__c.getOrgDefaults()
-			});
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assert(result.success);
-			List<PostInstallResults.Step> steps = result.getSteps();
-			System.assertNotEquals(null, steps);
-			System.assertEquals(1, steps.size());
-			System.assertNotEquals(null, steps[0]);
-			System.assertEquals(Label.InitializeChatterSettings, steps[0].name);
-			System.assertEquals(PostInstallResults.StepStatus.SKIPPED, steps[0].status);
-		}
+		System.assertNotEquals(null, result);
+		System.assert(result.success);
+		List<PostInstallResults.Step> steps = result.getSteps();
+		System.assertNotEquals(null, steps);
+		System.assertEquals(1, steps.size());
+		System.assertNotEquals(null, steps[0]);
+		System.assertEquals(Label.InitializeChatterSettings, steps[0].name);
+		System.assertEquals(PostInstallResults.StepStatus.SUCCESS, steps[0].status);
+		System.assertNotEquals(null, ChatterSettings__c.getOrgDefaults().Id);
 	}
 
 	@IsTest
-	static void test_initializeSettings_bulk() {
-		System.runAs(UserMock.createUser()) {
-			insert ChatterSettings__c.getOrgDefaults();
+	static void test_initializeChatterSettings_upgrade() {
+		insert ChatterSettings__c.getOrgDefaults();
 
-			Test.startTest();
-			PostInstallResults result = PostInstall.initializeSettings(new Map<String, SObject> {
-				Label.InitializeEnvelopeSettings => EnvelopeSettings__c.getOrgDefaults(),
-				Label.InitializeChatterSettings => ChatterSettings__c.getOrgDefaults()
-			});
-			Test.stopTest();
+		Test.startTest();
+		PostInstallResults result = PostInstall.initializeChatterSettings();
+		Test.stopTest();
 
-			System.assertNotEquals(null, result);
-			System.assert(result.success);
-			List<PostInstallResults.Step> steps = result.getSteps();
-			System.assertEquals(2, Collection.size(steps));
-			System.assertNotEquals(null, steps[0]);
-			System.assertEquals(Label.InitializeEnvelopeSettings, steps[0].name);
-			System.assertEquals(PostInstallResults.StepStatus.SUCCESS, steps[0].status);
-			System.assertNotEquals(null, steps[1]);
-			System.assertEquals(Label.InitializeChatterSettings, steps[1].name);
-			System.assertEquals(PostInstallResults.StepStatus.SKIPPED, steps[1].status);
-		}
+		System.assertNotEquals(null, result);
+		System.assert(result.success);
+		List<PostInstallResults.Step> steps = result.getSteps();
+		System.assertNotEquals(null, steps);
+		System.assertEquals(1, steps.size());
+		System.assertNotEquals(null, steps[0]);
+		System.assertEquals(Label.InitializeChatterSettings, steps[0].name);
+		System.assertEquals(PostInstallResults.StepStatus.SKIPPED, steps[0].status);
 	}
 
 	@IsTest
@@ -386,7 +372,7 @@ private class PostInstallTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	static void test_createDefaultCLMObjMappings_mappings_do_not_exist() {
 		System.assertEquals(null, EOS_Type__c.getOrgDefaults().Name);
 
@@ -397,7 +383,7 @@ private class PostInstallTest {
 		System.assertNotEquals(null, result);
 	}
 
-	@isTest
+	@IsTest
 	static void test_createDefaultCLMObjMappings_mappings_exist() {
 		EOS_Type__c eos_1 = EOS_Type__c.getOrgDefaults();
 		eos_1.FolderName__c = UUID.randomUUID().toShortString();

@@ -141,22 +141,33 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 	}
 
 	@TestVisible
-	private static PostInstallResults initializeSettings(final Map<String, SObject> settingsMap) {
+	private static PostInstallResults initializeEnvelopeSettings() {
 		PostInstallResults result = new PostInstallResults();
-		if (Collection.isNotEmpty(settingsMap)) {
-			for (String stepName : settingsMap.keySet()) {
-				SObject settings = settingsMap.get(stepName);
-				if (settings.Id == null) {
-					try {
-						insert settings;
-						result.endStepSuccess(stepName);
-					} catch (Exception ex) {
-						result.endStepFailure(stepName, ex);
-					}
-				} else {
-					result.skipStep(stepName, Label.AlreadyComplete);
-				}
-			}
+		EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
+		if (settings.Id == null) {
+			insert settings;
+			result.endStepSuccess(Label.InitializeEnvelopeSettings);
+		} else if (settings.AllowSequentialSignNow__c != true) {
+			// Previous versions defaulted to false with no way for admin to toggle. Defaulting to true instead.
+			// TODO: Remove this if/when this setting is exposed to the admin.
+			settings.AllowSequentialSignNow__c = true;
+			update settings;
+			result.endStepSuccess(Label.InitializeEnvelopeSettings);
+		} else {
+			result.skipStep(Label.InitializeEnvelopeSettings, Label.AlreadyComplete);
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static PostInstallResults initializeChatterSettings() {
+		PostInstallResults result = new PostInstallResults();
+		ChatterSettings__c settings = ChatterSettings__c.getOrgDefaults();
+		if (settings.Id == null) {
+			insert settings;
+			result.endStepSuccess(Label.InitializeChatterSettings);
+		} else {
+			result.skipStep(Label.InitializeChatterSettings, Label.AlreadyComplete);
 		}
 		return result;
 	}
@@ -303,10 +314,8 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 
 		results.addResults(assignDocuSignAdministratorPermissionSet(installerId));
 		results.addResults(initializeAccountSettings());
-		results.addResults(initializeSettings(new Map<String, SObject> {
-			Label.InitializeEnvelopeSettings => EnvelopeSettings__c.getOrgDefaults(),
-			Label.InitializeChatterSettings => ChatterSettings__c.getOrgDefaults()
-		}));
+		results.addResults(initializeEnvelopeSettings());
+		results.addResults(initializeChatterSettings());
 		results.addResults(createDefaultRecipientRoles());
 		results.addResults(createDefaultCLMObjMappings());
 
