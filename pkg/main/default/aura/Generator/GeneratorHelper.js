@@ -165,7 +165,7 @@
       map[key] = fieldMapping;
     });
     var query = helper.traverseFieldMapping(fieldMappings[0], '', '', fieldMappings[0].key, map, isMultiCurrency);
-    return JSON.stringify(query);
+    return query;
   },
 
   traverseFieldMapping: function (fm, relationship, parentIdField, type, map, isMultiCurrency) {
@@ -258,10 +258,10 @@
         $A.getCallback(function (resolve, reject) {
           var action = component.get('c.getMergeData');
           var fieldMappings = config.objectMappings.fieldMappings;
-          var jsonString = helper.parseFieldMappings(fieldMappings, isMultiCurrency);
+          var query = helper.parseFieldMappings(fieldMappings, isMultiCurrency);
           action.setParams({
             sourceId: objIds[0],
-            queryJson: jsonString
+            queryJson: JSON.stringify(query)
           });
 
           action.setCallback(this, function (response) {
@@ -269,11 +269,11 @@
             if (state === 'SUCCESS') {
               var results = response.getReturnValue();
               var objXML = helper.generateXML(
-                xmlRoot,
-                results,
-                config.objectMappings.fieldMappings, // check whether to add objectMappings or fieldMappings
-                false,
-                component
+                query,
+                results.result,
+                results.children,
+                1,
+                xmlRoot
               );
               templateConfig.appendChild(objXML);
               resolve();
@@ -309,7 +309,7 @@
       );
   },
 
-  generateXML: function (xmlRoot, recordData, objMap, isChild, component) {
+  generateXMLOld: function (xmlRoot, recordData, objMap, isChild, component) {
     var helper = this;
     var objRoot = xmlRoot.createElement(isChild ? objMap.label.replace(/\s/g, '_') : objMap.apiName.replace(/\s/g, '_'));
     var unformattedDataTypes = ['DATE', 'DATETIME', 'TIME', 'DOUBLE', 'PERCENT', 'CURRENCY'];
@@ -373,7 +373,7 @@
           dateNode.appendChild(dateContent);
           objRoot.appendChild(dateNode);
         }
-        
+
         if (apiName === 'CurrentDate') {
           fieldVal = new Date();
         }
@@ -399,7 +399,7 @@
           var formats = fieldMap.format.split('|');
           if (formats[0] === 'default') {
             formats[0] = locale.dateFormat;
-          } 
+          }
           if (formats[1] === 'default') {
             formats[1] = locale.timeFormat;
           }
@@ -407,7 +407,7 @@
           $A.localizationService.UTCToWallTime(new Date(fieldVal), $A.get('$Locale.timezone'), function (offSetDateTime) {
             fieldVal = offSetDateTime;
           });
-          // FIXME: No hardcoded time format.         
+          // FIXME: No hardcoded time format.
           fieldVal = $A.localizationService.formatDateTimeUTC(
             fieldVal, stringUtils.format('{0}{1}{2}', formats[0], ' ', formats[1]));
         } else if (dataType === 'CURRENCY') {
@@ -463,6 +463,69 @@
     });
 
     return objRoot;
+  },
+
+  generateXML: function (query, result, children, depth, xmlRoot) {
+    var helper = this;
+    var objRoot = (depth === 1) ? xmlRoot.createElement(query.type) : xmlRoot.createElement(query.relationship);
+
+    query.fields.forEach(function (field) {
+      var fieldXml;
+      if(field.startsWith(query.type)) {
+        fieldXml = xmlRoot.createElement(field.replace(query.type + '.' , ''));
+      } else {
+        fieldXml = xmlRoot.createElement(field);
+      }
+
+      var filedValue;
+      var newFields = field.split('.');
+      if(depth <= 2) {
+        filedValue = helper.getFieldValue(newFields, result);
+      } else {
+        filedValue = helper.getFieldValue(newFields, children);
+      }
+      var nodeValue = xmlRoot.createTextNode(filedValue);
+      fieldXml.appendChild(nodeValue);
+      objRoot.appendChild(fieldXml);
+    });
+    var queryChildren = query.children;
+    for (var i = 0; i < queryChildren.length; i++) {
+      var childQuery = queryChildren[i];
+      var container = xmlRoot.createElement(childQuery.relationship + '_Container');
+      var childData = [];
+      var childXml;
+      if (depth < 2) {
+        childData = result[childQuery.relationship];
+        for (var j = 0; j < childData.length; j++) {
+          childXml = helper.generateXML(childQuery, childData[j], children, depth + 1, xmlRoot);
+          container.appendChild(childXml);
+          objRoot.appendChild(container);
+        }
+      } else {
+        childData = children[childQuery.relationship];
+        for (var k = 0; k < childData.length; k++) {
+          childXml = helper.generateXML(childQuery, result, childData[j], depth + 1, xmlRoot);
+          container.appendChild(childXml);
+          objRoot.appendChild(container);
+        }
+      }
+    }
+    return objRoot;
+  },
+
+  getFieldValue: function (fields, result) {
+    var helper = this;
+    var nodeValue = '';
+    if (fields.length === 1) {
+      nodeValue = result[fields[0]] === undefined ? '' : result[fields[0]] ;
+    } else if(fields.length === 2) {
+      nodeValue = result[fields[0]][fields[1]];
+    } else {
+      var newResult = result[fields[0]] === undefined ? result : result[fields[0]];
+      fields.shift();
+      nodeValue = helper.getFieldValue(fields, newResult);
+    }
+    return nodeValue;
   },
 
   setCurrencyFormat: function (getValue, getFieldData, getCurrencyCode) {
