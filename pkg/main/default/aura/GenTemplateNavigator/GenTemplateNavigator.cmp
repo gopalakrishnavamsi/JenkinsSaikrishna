@@ -32,7 +32,7 @@
                     showHeader="true"
                     showClose="true">
 
-        <aura:if isTrue="{!or(v.fetchingOAuthStatus, v.loading)}">
+        <aura:if isTrue="{!and(or(v.fetchingOAuthStatus, v.loading), empty(v.errMsg))}">
             <div class="ds-gen-templates-setup-spinner">
                 <c:BlueSpinner/>
             </div>
@@ -44,7 +44,7 @@
                                     products="{!v.products}"/>
         </aura:if>
 
-        <aura:if isTrue="{!and(v.isAuthorized, not(or(v.fetchingOAuthStatus, v.loading)))}">
+        <aura:if isTrue="{!or(and(v.isAuthorized, not(or(v.fetchingOAuthStatus, v.loading))), not(empty(v.errMsg)))}">
             <aura:if isTrue="{!not(empty(v.errMsg))}">
                 <div class="slds-m-around_large slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_error"
                      role="alert">
