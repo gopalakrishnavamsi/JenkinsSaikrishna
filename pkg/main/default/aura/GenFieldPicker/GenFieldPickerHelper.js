@@ -68,8 +68,8 @@
 
   doesFilterExist: function (objectInstance, filterValue) {
     return objectInstance.filter(function (obj) {
-      return obj.type === filterValue;
-    }).length > 1;
+      return obj.hasRelationship && obj.type === filterValue;
+    }).length > 0;
   },
 
   isNotUndefinedAndEmpty: function (objectInstance) {

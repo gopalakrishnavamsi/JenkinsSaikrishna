@@ -24,8 +24,8 @@
     <!-- end of attributes passed while creating the component -->
 
     <aura:attribute name="token" type="String"/>
-    <aura:attribute name="lookupFieldExists" type="Boolean" access="private"/>
-    <aura:attribute name="childFieldExists" type="Boolean" access="private"/>
+    <aura:attribute name="lookupFieldExists" type="Boolean" access="private" default="{!false}"/>
+    <aura:attribute name="childFieldExists" type="Boolean" access="private" default="{!false}"/>
     <aura:attribute name="currentFieldLookup" type="Boolean"/>
     <aura:attribute name="currentFieldChild" type="Boolean"/>
 
@@ -358,7 +358,7 @@
                                 </aura:if>
 
                                 <aura:if
-                                        isTrue="{!v.childFieldExists &amp;&amp; not(v.isLookupRelationShipPicker) &amp;&amp; not(v.isChildLookup) &amp;&amp; v.currentObjectFields.length gt 0}">
+                                        isTrue="{!v.childFieldExists &amp;&amp; not(v.isLookupRelationShipPicker) &amp;&amp; not(v.isChildLookup)}">
                                     <optgroup label="{!'Related Lists'}">
                                         <aura:iteration items="{!v.currentObjectFields}" var="field">
                                             <aura:if
