@@ -1,4 +1,8 @@
-public with sharing class WordTemplateUpdater implements Database.Batchable<SObject>, PostInstallScript {
+/**
+ * No sharing declaration here as it's run as part of post-install. "with sharing" or "inherited sharing" causes
+ * package installation to fail with "Insufficient Privileges" error.
+ */
+public class WordTemplateUpdater implements Database.Batchable<SObject>, PostInstallScript {
 
 	private static final Set<SObjectType> TYPE_BLACKLIST = new Set<SObjectType> { Schema.Group.getSObjectType() };
 	private static Integer templateCount = null;
@@ -297,7 +301,7 @@ public with sharing class WordTemplateUpdater implements Database.Batchable<SObj
 	}
 
 	@TestVisible
-	public static GenTemplate__c updateTemplate(final GenTemplate__c template) {
+	private static GenTemplate__c updateTemplate(final GenTemplate__c template) {
 		if (template != null) {
 			if (String.isNotBlank(template.ObjectMappings__c)) {
 				JSONParser p = JSON.createParser(template.ObjectMappings__c);
