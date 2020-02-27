@@ -1,20 +1,4 @@
 ({
-  init: function (component) {
-    var config = component.get('v.config');
-    if (!$A.util.isUndefinedOrNull(config.objectMappings)) {
-      var fieldMappingsString = '[{"type":"ROOT","path":[],"key":"Account","fields":[],"depth":1}]';
-      config.sourceObject = 'Account';
-      config.objectMappings = {
-        version: 2,
-        name: 'Account',
-        label: 'Account',
-        fieldMappings: JSON.parse(fieldMappingsString),
-      };
-
-      component.set('v.config', config);
-    }
-  },
-
   selectedPrimary: function (component) {
     var config = component.get('v.config');
     var labelByApiName = component.get('v.labelByApiName');
