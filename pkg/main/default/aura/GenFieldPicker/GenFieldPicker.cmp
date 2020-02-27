@@ -74,7 +74,7 @@
 
                             <aura:if
                                     isTrue="{!v.lookupFieldExists &amp;&amp; not(v.isChildRelationShipPicker)}">
-                                <optgroup label="{!'Lookup Relationships'}">
+                                <optgroup label="{!$Label.c.LookupRelationships}">
                                     <aura:iteration items="{!v.currentObjectFields}" var="field">
                                         <aura:if
                                                 isTrue="{!and(field.type == 'REFERENCE', field.hasRelationship == true)}">
@@ -87,7 +87,7 @@
 
                             <aura:if
                                     isTrue="{!v.childFieldExists &amp;&amp; not(v.isLookupRelationShipPicker)}">
-                                <optgroup label="{!'Related Lists'}">
+                                <optgroup label="{!$Label.c.ChildRelationships}">
                                     <aura:iteration items="{!v.currentObjectFields}" var="field">
                                         <aura:if
                                                 isTrue="{!and(field.type == 'CHILD_RELATIONSHIP', field.hasRelationship == true)}">
@@ -219,7 +219,7 @@
 
                                 <aura:if
                                         isTrue="{!v.lookupFieldExists &amp;&amp; not(v.isChildRelationShipPicker)}">
-                                    <optgroup label="{!'Lookup Relationships'}">
+                                    <optgroup label="{!$Label.c.LookupRelationships}">
                                         <aura:iteration items="{!v.currentObjectFields}" var="field">
                                             <aura:if
                                                     isTrue="{!and(field.type == 'REFERENCE', field.hasRelationship == true)}">
@@ -232,7 +232,7 @@
 
                                 <aura:if
                                         isTrue="{!v.childFieldExists &amp;&amp; not(v.isLookupRelationShipPicker)}">
-                                    <optgroup label="{!'Related Lists'}">
+                                    <optgroup label="{!$Label.c.ChildRelationships}">
                                         <aura:iteration items="{!v.currentObjectFields}" var="field">
                                             <aura:if
                                                     isTrue="{!and(field.type == 'CHILD_RELATIONSHIP', field.hasRelationship == true)}">
@@ -346,7 +346,7 @@
                                 </optgroup>
 
                                 <aura:if isTrue="{!v.lookupFieldExists &amp;&amp; not(v.currentDepth >= 4)}">
-                                    <optgroup label="{!'Lookup Relationships'}">
+                                    <optgroup label="{!$Label.c.LookupRelationships}">
                                         <aura:iteration items="{!v.currentObjectFields}" var="field">
                                             <aura:if
                                                     isTrue="{!field.type == 'REFERENCE' &amp;&amp; field.hasRelationship == true}">
@@ -359,7 +359,7 @@
 
                                 <aura:if
                                         isTrue="{!v.childFieldExists &amp;&amp; not(v.isLookupRelationShipPicker) &amp;&amp; not(v.isChildLookup)}">
-                                    <optgroup label="{!'Related Lists'}">
+                                    <optgroup label="{!$Label.c.ChildRelationships}">
                                         <aura:iteration items="{!v.currentObjectFields}" var="field">
                                             <aura:if
                                                     isTrue="{!and(field.type == 'CHILD_RELATIONSHIP', field.hasRelationship == true)}">

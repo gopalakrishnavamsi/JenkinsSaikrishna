@@ -1774,6 +1774,14 @@
 		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
+		<label>Lookup Relationships</label>
+		<name>LookupRelationships</name>
+	</customLabels>
+	<customLabels>
+		<label>Related Lists</label>
+		<name>ChildRelationships</name>
+	</customLabels>
+	<customLabels>
 		<label>Date Format</label>
 		<name>DateFormat</name>
 	</customLabels>

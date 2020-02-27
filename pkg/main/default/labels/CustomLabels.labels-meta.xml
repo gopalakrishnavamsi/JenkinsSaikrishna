@@ -3555,6 +3555,20 @@
 		<value>Data Field Options</value>
 	</labels>
 	<labels>
+		<fullName>LookupRelationships</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Lookup Relationships text in Merge Field Options</shortDescription>
+		<value>Lookup Relationships</value>
+	</labels>
+	<labels>
+		<fullName>ChildRelationships</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Child Relationships text in Merge Field Options</shortDescription>
+		<value>Related Lists</value>
+	</labels>
+	<labels>
 		<fullName>DateFormat</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
