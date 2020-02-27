@@ -7,6 +7,7 @@
     <aura:attribute name="recordId" type="Id"/>
     <aura:attribute name="renderOnlineEditorGenerator" type="Object"/>
     <aura:attribute name="sendForSignature" type="Object"/>
+    <aura:attribute name="onCancel" type="Object"/>
 
     <aura:attribute name="errMsg" type="String" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
@@ -18,7 +19,6 @@
     <aura:attribute name="loading" type="Boolean" default="false"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
-
 
     <div id="inputPanel">
         <div class="slds-page-header slds-border_bottom">

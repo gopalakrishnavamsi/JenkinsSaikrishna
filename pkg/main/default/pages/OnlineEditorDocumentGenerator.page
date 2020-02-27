@@ -4,6 +4,7 @@
     <apex:slds/>
     <apex:includeScript value="{!$Resource.jquery}"/>
     <apex:includeScript value="{!$Resource.navUtils}"/>
+    <apex:includeScript value="{!$Resource.userEvents}"/>
     <apex:includeScript value="{!$Resource.OnlineEditorJs}"/>
     <apex:includeScript value="{!$Resource.scmwidgetsjs}"/>
     <apex:includeScript value="{!URLFOR($Resource.ds_editor, '/ds-editor-salesforce.js')}"/>
@@ -14,6 +15,7 @@
       var initErrorMessage = '{!JSENCODE(errorMessage)}';
 
       RemoteActions = {
+        getUserProperties: '{!$RemoteAction.OnlineEditorController.getUserProperties}',
         generateDownloadToken: '{!$RemoteAction.OnlineEditorController.generateDownloadToken}',
         saveAttachments: '{!$RemoteAction.OnlineEditorController.saveAttachments}',
         getMergeData: '{!$RemoteAction.OnlineEditorController.getMergeData}',
@@ -50,6 +52,10 @@
         prepareSendForSignature();
       };
 
+      var onCancel = function () {
+        cancelGeneration();
+      };
+
       var ns = '{!JSENCODE(namespace)}';
       $Lightning.use(ns + ':LightningOutApp', function () {
         $Lightning.createComponent(ns + ':OnlineEditorDocumentGenerator', {
@@ -58,8 +64,9 @@
           title: '{!JSENCODE($CurrentPage.parameters.title)}',
           recordId: '{!JSENCODE($CurrentPage.parameters.recordId)}',
           renderOnlineEditorGenerator: renderOnlineEditorGenerator,
-          sendForSignature: sendForSignature
-        }, 'lightning', function (component, status, errorMessage) {
+          sendForSignature: sendForSignature,
+          onCancel: onCancel
+        }, 'lightning', function () {
         });
       });
 

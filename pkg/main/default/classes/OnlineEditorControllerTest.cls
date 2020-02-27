@@ -930,4 +930,29 @@ private class OnlineEditorControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_getUserProperties_failure() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Test.startTest();
+			try {
+				OnlineEditorController.getUserProperties();
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getUserProperties_success() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			UserEventsController.UserProperties result = OnlineEditorController.getUserProperties();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
 }

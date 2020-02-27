@@ -633,4 +633,11 @@ public with sharing class OnlineEditorController extends Controller {
 			return new OnlineEditorController.Query('', '', null, null);
 		}
 	}
+
+	@RemoteAction
+	public static UserEventsController.UserProperties getUserProperties() {
+		Permissions.verifyIsDocuSignUser();
+
+		return UserEventsController.getUserProperties();
+	}
 }

@@ -4,6 +4,7 @@
     var products = component.get('v.products');
     var isExpired = false;
     var isActive = false;
+    var self = this;
     if (!$A.util.isEmpty(products)) {
       for (var i = 0; i < products.length; i++) {
         var product = products[i];

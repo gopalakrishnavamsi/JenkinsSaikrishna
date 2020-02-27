@@ -1,9 +1,11 @@
 /* global jQuery, RemoteActions, Configuration, Labels, DSEditor, Visualforce, $Lightning  */
-/* exported prepareOnlineEditorDocumentGenerator ,prepareSendForSignature  */
+/* exported prepareOnlineEditorDocumentGenerator, prepareSendForSignature, cancelGeneration  */
 jQuery.noConflict();
 
 var prepareOnlineEditorDocumentGenerator;
 var prepareSendForSignature;
+var cancelGeneration;
+
 // FIXME: Split JS file between edit and generate VF pages. Can share common functions in 3rd JS file.
 // FIXME: Use consistent variable naming matching those in Apex layer.
 jQuery(document).ready(function ($) {
@@ -40,7 +42,6 @@ jQuery(document).ready(function ($) {
     if (Configuration.template.fileSuffix) $('#fileSuffix').val(Configuration.template.fileSuffix);
   }
 
-
   var _editor = navUtils.isIE() ? null : new DSEditor({
     api: {
       getMergeFields: getMergeFields,
@@ -56,16 +57,14 @@ jQuery(document).ready(function ($) {
   hideAll();
   hideAllButtons();
 
-  createUserEventsComponent()
-    .then(function (component) {
-      _userEvents = component;
+  initializeUserEvents(Configuration.template ? Configuration.template.sourceObject : undefined)
+    .then(function (userEvents) {
+      _userEvents = userEvents;
 
       if (Configuration.isGenerating) _sessionType = EventLabels.GENERATE_DOCUMENT;
       else _sessionType = Configuration.isEditing ? EventLabels.UPDATE_TEMPLATE : EventLabels.CREATE_TEMPLATE;
 
-
-      _userEvents.time(_sessionType);
-      _userEvents.addProperties(getBaseEventProps());
+      userEvents.time(_sessionType);
 
       if (navUtils.isIE()) $('#IEWarning').show();
       else if (Configuration.hasInitError) {
@@ -81,27 +80,9 @@ jQuery(document).ready(function ($) {
       createToastComponent(err, 'error');
     });
 
-
-  function getBaseEventProps() {
-
-    if (!Configuration || !Configuration.template) return {
-      'Product': 'Gen',
-      'Template Type': 'Online Editor'
-    };
-
-    return {
-      'Product': 'Gen',
-      'Template Type': 'Online Editor',
-      'Source Object': Configuration.template.sourceObject ? Configuration.template.sourceObject : undefined,
-      'Template Name': Configuration.template.name ? Configuration.template.name : undefined,
-      'Template Id': Configuration.template.id ? Configuration.template.id : undefined
-    };
-  }
-
   function getSpringTemplateIdToString(template) {
     return template && template.springTemplateId ? template.springTemplateId.value : null;
   }
-
 
   function getMessage(message) {
     // TODO: Check other types. Get response body or other error details.
@@ -137,18 +118,29 @@ jQuery(document).ready(function ($) {
     });
   }
 
-  function createUserEventsComponent() {
+  function initializeUserEvents(sourceObject) {
     return new Promise(function (resolve, reject) {
       try {
-        $Lightning.use(Configuration.namespace + ':LightningOutApp', function () {
-          $Lightning.createComponent(Configuration.namespace + ':UserEvents',
-            null,
-            'userEventsContainer',
-            function (cmp) {
-              resolve(cmp);
+        Visualforce.remoting.Manager.invokeAction(
+          RemoteActions.getUserProperties,
+          function (result, event) {
+            if (event && event.status) {
+              var userEvents = new UserEvents(
+                result.application,
+                result.version,
+                result.environment,
+                result.accountIdHash,
+                result.userIdHash);
+              userEvents.addProperties({
+                'Product': 'Gen',
+                'Template Type': 'Online Editor',
+                'Source Object': sourceObject
+              });
+              resolve(userEvents);
+            } else {
+              reject(event.message);
             }
-          );
-        });
+          });
       } catch (err) {
         reject(err);
       }
@@ -319,7 +311,6 @@ jQuery(document).ready(function ($) {
       }
     });
   }
-
 
   function generateUploadToken(entityId) {
     return new Promise(function (resolve, reject) {
@@ -659,9 +650,14 @@ jQuery(document).ready(function ($) {
     navStep.onStart();
   }
 
+  cancelGeneration = function () {
+    if (Configuration.isGenerating && _userEvents) _userEvents.cancel(EventLabels.GENERATE_DOCUMENT);
+  };
+
   Elements.buttons.cancelTemplate.click(function () {
     deleteTemplate(Configuration.template.id, Configuration.isEditing)
       .then(function () {
+        if (Configuration.isGenerating || !Configuration.isEditing) _userEvents.cancel(_sessionType);
         navUtils.navigateToUrlOnlineEditor(Configuration.templateListUrl, true);
       })
       .catch(function (error) {
@@ -669,7 +665,7 @@ jQuery(document).ready(function ($) {
         _userEvents.error(
           _sessionType,
           {},
-          error
+          error && error.message ? error.message : error
         );
       });
   });
@@ -753,10 +749,8 @@ jQuery(document).ready(function ($) {
         Elements.spinner1.hide();
         _userEvents.error(
           _sessionType,
-          {
-            springTemplateId: springTemplateId
-          },
-          error
+          {},
+          error && error.message ? error.message : error
         );
         createToastComponent(error, 'error');
       });
@@ -797,21 +791,7 @@ jQuery(document).ready(function ($) {
           return updateObjectLayouts(template.sourceObject, selectedLayouts, parameters);
         })
         .then(function () {
-          _userEvents.success(
-            EventLabels.PUBLISH_BUTTON,
-            {
-              buttonLabel: buttonLabel,
-              buttonApiName: buttonApiName,
-              layouts: selectedLayouts.map(function (layout) {
-                return {
-                  name: layout.name,
-                  id: layout.id
-                };
-              })
-            }
-          );
-
-          resolve(true);
+          resolve(selectedLayouts.length);
         });
     });
   }
@@ -819,13 +799,14 @@ jQuery(document).ready(function ($) {
   function onlineEditorPublishCancel(templateId, isEditing) {
     deleteTemplate(templateId, isEditing)
       .then(function () {
+        if (!isEditing) _userEvents.cancel(_sessionType);
         navUtils.navigateToUrlOnlineEditor(Configuration.templateListUrl, true);
       })
       .catch(function (error) {
         _userEvents.error(
           _sessionType,
           {},
-          error
+          error && error.message ? error.message : error
         );
         createToastComponent(error, 'error');
       });
@@ -841,21 +822,28 @@ jQuery(document).ready(function ($) {
   });
 
   Elements.buttons.publish.click(function () {
+    _userEvents.time(EventLabels.PUBLISH_BUTTON);
     onlineEditorPublish(Configuration.template, $('#onlineEditorButtonNameInput').val())
-      .then(function () {
+      .then(function (layoutCount) {
+        _userEvents.success(
+          EventLabels.PUBLISH_BUTTON,
+          {
+            Layouts: layoutCount
+          }
+        );
         createToastComponent(Labels.templatePublishedLabel.replace('{0}', Configuration.template.name), 'success');
         window.setTimeout(function () {
           if (_toastComponent) _toastComponent.destroy();
           navUtils.navigateToSObject(Configuration.template.id);
         }, 3000);
       })
-      .catch(function (err) {
+      .catch(function (error) {
         _userEvents.error(
           _sessionType,
           {},
-          err
+          error && error.message ? error.message : error
         );
-        createToastComponent(err, 'error');
+        createToastComponent(error, 'error');
       });
   });
 
@@ -900,7 +888,7 @@ jQuery(document).ready(function ($) {
             {
               layouts: Object.keys(_layoutMap)
             },
-            error
+            error && error.message ? error.message : error
           );
         });
     }
@@ -916,15 +904,15 @@ jQuery(document).ready(function ($) {
           generateDownloadToken(getSpringTemplateIdToString(Configuration.template))
             .then(function (accessToken) {
               resolve(renderEditor(accessToken, document.getElementById('onlineEditorGenerator'), Configuration.template.name, Configuration.sourceId, true));
-            }).catch(function (err) {
-            createToastComponent(err, 'error');
-            _userEvents.error(
-              _sessionType,
-              {},
-              err
-            );
-            reject(err);
-          });
+            })
+            .catch(function (err) {
+              createToastComponent(err, 'error');
+              _userEvents.error(
+                _sessionType,
+                {},
+                err && err.message ? err.message : err);
+              reject(err);
+            });
         } else {
           createToastComponent(Labels.templateUndefinedLabel, 'error');
           _userEvents.error(
@@ -983,9 +971,11 @@ jQuery(document).ready(function ($) {
   prepareSendForSignature = (function () {
     return function () {
       hideAll();
+      var size = 0;
       if (Configuration.template) {
         exportDocument('html')
           .then(function (htmlData) {
+            size = htmlData.length;
             return saveAttachments(Configuration.template.id, Configuration.sourceId, htmlData);
           })
           .then(function (attachmentId) {
@@ -1001,18 +991,16 @@ jQuery(document).ready(function ($) {
               + '&phrs=' + encodeURIComponent(JSON.stringify(getPlaceholderRecipients()))
               + '&lock=1'
               + '&sendNow=1';
+            _userEvents.success(_sessionType, {'Size': size});
             window.open(pageUrl, '_self');
-            _userEvents.success(
-              _sessionType,
-              {}
-            );
+
           })
-          .catch(function (err) {
-            createToastComponent(err, 'error');
+          .catch(function (error) {
+            createToastComponent(error, 'error');
             _userEvents.error(
               _sessionType,
               {},
-              err
+              error && error.message ? error.message : error
             );
           });
       } else {
@@ -1040,7 +1028,6 @@ jQuery(document).ready(function ($) {
         },
         'editModal',
         function () {
-
         }
       );
     });

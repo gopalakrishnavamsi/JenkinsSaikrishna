@@ -3,6 +3,8 @@
     helper.initDocumentGenerator(component);
   },
   cancelClicked: function (component) {
+    var onCancel = component.get('v.onCancel');
+    if (onCancel) onCancel();
     navUtils.navigateToSObject(component.get('v.recordId'));
   },
   sendForSignatureClicked: function (component) {

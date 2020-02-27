@@ -241,7 +241,7 @@ window.UserEvents = function (application, version, environment, accountIdHash, 
    * @returns {*} The wrapped function.
    */
   function wrapCallback(f) {
-    return $A && $A.getCallback ? $A.getCallback(f) : f;
+    return typeof $A !== 'undefined' && $A.getCallback ? $A.getCallback(f) : f;
   }
 
   /**

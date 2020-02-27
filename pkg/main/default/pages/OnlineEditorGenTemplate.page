@@ -7,6 +7,7 @@
     <apex:includeScript value="{!URLFOR($Resource.ds_editor, '/ds-editor-salesforce.js')}"/>
     <apex:includeScript value="{!$Resource.scmwidgetsjs}"/>
     <apex:includeScript value="{!$Resource.navUtils}"/>
+    <apex:includeScript value="{!$Resource.userEvents}"/>
     <apex:includeScript value="{!$Resource.OnlineEditorJs}"/>
 
     <script type="application/javascript">
@@ -16,6 +17,7 @@
       var initErrorMessage = '{!JSENCODE(errorMessage)}';
 
       RemoteActions = {
+        getUserProperties: '{!$RemoteAction.OnlineEditorController.getUserProperties}',
         deleteTemplate: '{!$RemoteAction.OnlineEditorController.deleteTemplate}',
         getLayouts: '{!$RemoteAction.OnlineEditorController.getLayouts}',
         getMergeFields: '{!$RemoteAction.OnlineEditorController.getMergeFields}',
