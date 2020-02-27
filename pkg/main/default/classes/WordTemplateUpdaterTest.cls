@@ -66,6 +66,17 @@ private class WordTemplateUpdaterTest {
 	}
 
 	@IsTest
+	static void test_describeSObject() {
+		Test.startTest();
+		System.assertEquals(null, WordTemplateUpdater.describeSObject(null));
+		System.assertEquals(null, WordTemplateUpdater.describeSObject('  '));
+		System.assertEquals(Schema.Account.getSObjectType().getDescribe(), WordTemplateUpdater.describeSObject('Account'));
+		System.assertEquals(Lead.getSObjectType().getDescribe(), WordTemplateUpdater.describeSObject('lead'));
+		System.assertEquals(Contact.getSObjectType().getDescribe(), WordTemplateUpdater.describeSObject('CONTACT'));
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_getLookupField_undefined_args() {
 		Test.startTest();
 		System.assertEquals(null, WordTemplateUpdater.getLookupField(null, 'Account'));
@@ -105,7 +116,7 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(Schema.User.getSObjectType().getDescribe().getName(), result.relatesTo);
 		System.assertEquals('OwnerId', result.parentIdField);
 	}
-	
+
 	@IsTest
 	static void test_getChildRelationship_undefined_args() {
 		Test.startTest();
@@ -546,19 +557,6 @@ private class WordTemplateUpdaterTest {
 	}
 
 	@IsTest
-	static void test_updateTemplates_unauthorized() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			Test.startTest();
-			try {
-				WordTemplateUpdater.updateTemplates();
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(UnauthorizedException.AccessRequirement.SecurityPermission, ex.requirement);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_updateTemplates_batch() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			WordTemplateUpdater.batchLimit = 4;
@@ -744,38 +742,7 @@ private class WordTemplateUpdaterTest {
 	}
 
 	@IsTest
-	static void test_execute_failure() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			createTemplates(null, 1);
-		}
-
-		System.runAs(UserMock.createDocuSignGenerator(false)) { // Unauthorized
-			Test.startTest();
-			PostInstallResults result = new WordTemplateUpdater().execute(
-				UserInfo.getOrganizationId(),
-				UserInfo.getUserId(),
-				new Version(2, 1),
-				false,
-				true);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assert(!result.success);
-			System.assertEquals(Label.UpgradeWordTemplates, result.getSteps()[0].name);
-			System.assertEquals(PostInstallResults.StepStatus.FAILURE, result.getSteps()[0].status);
-
-			// Should only run once successfully
-			System.assert(new WordTemplateUpdater().shouldExecute(
-				UserInfo.getOrganizationId(),
-				UserInfo.getUserId(),
-				new Version(2, 1),
-				false,
-				true));
-		}
-	}
-
-	@IsTest
-	static void test_execute_success() {
+	static void test_execute() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			createTemplates(null, 1);
 

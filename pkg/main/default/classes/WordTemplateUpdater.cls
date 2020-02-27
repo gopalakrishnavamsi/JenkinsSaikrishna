@@ -70,6 +70,16 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		}
 	}
 
+	@TestVisible
+	private static DescribeSObjectResult describeSObject(final String typeName) {
+		DescribeSObjectResult result = null;
+		if (String.isNotBlank(typeName)) {
+			SObjectType t = Schema.getGlobalDescribe().get(typeName.toLowerCase());
+			if (t != null) result = t.getDescribe();
+		}
+		return result;
+	}
+
 	// TODO: This is more solid than Salesforce.getParentObjectType. Replace with this.
 	@TestVisible
 	private static Relationship getLookupField(
@@ -221,12 +231,12 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 					v1.apiName,
 					new List<String> { v1.apiName },
 					null);
-				SObjectType childType = Salesforce.getSObjectType(v1.apiName);
-				if (childType != null && v1.childFieldMappings != null) {
+				DescribeSObjectResult childDesc = describeSObject(v1.apiName);
+				if (childDesc != null && v1.childFieldMappings != null) {
 					for (FieldV1 childFieldV1 : v1.childFieldMappings) {
 						convert(
 							childFieldV1,
-							childType.getDescribe(),
+							childDesc,
 							child,
 							lookups,
 							childRelationships);
@@ -287,15 +297,15 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		if (v1 == null) return null;
 
 		Gen.ObjectMapping result = null;
-		SObjectType t = Salesforce.getSObjectType(v1.apiName);
-		if (t != null) {
+		DescribeSObjectResult d = describeSObject(v1.apiName);
+		if (d != null) {
 			result = new Gen.ObjectMapping(
 				2,
 				v1.apiName,
 				v1.label,
 				convert(
 					v1.fieldMappings,
-					t.getDescribe()));
+					d));
 		}
 		return result;
 	}
@@ -406,12 +416,8 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		return templateCount;
 	}
 
-	public static UpdateResult updateTemplates() {
-		Permissions.verifyIsUpdateable(GenTemplate__c.getSObjectType(), new List<String> {
-			Application.namespacePrefix + 'TemplateType__c',
-			Application.namespacePrefix + 'ObjectMappings__c'
-		});
-
+	@TestVisible
+	private static UpdateResult updateTemplates() {
 		Id jobId = null;
 		AsyncApexJob job = getExistingJob();
 		Integer templates = getTemplateCount();
