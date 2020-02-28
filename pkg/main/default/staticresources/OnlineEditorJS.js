@@ -228,6 +228,23 @@ jQuery(document).ready(function ($) {
                   EventLabels.PREVIEW_DOCUMENT,
                   {}
                 );
+
+                // todo: remove this code after 2.2
+                var DisplayNameMap = {
+                  'Case': 'CaseNumber',
+                  'Contract': 'ContractNumber',
+                }
+
+                if (Configuration.template.sourceObject === 'Case' || Configuration.template.sourceObject === 'Contract') {
+                  var mappedResults = result.results.map(function(val) {
+                    return {
+                        Id: val.Id,
+                        Name: val[DisplayNameMap[Configuration.template.sourceObject]],
+                    };
+                  });
+                  result.results = mappedResults
+                }
+
                 resolve(result);
               } else {
                 _userEvents.error(
