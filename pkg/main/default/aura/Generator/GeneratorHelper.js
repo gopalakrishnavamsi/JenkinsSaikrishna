@@ -259,6 +259,7 @@
           var action = component.get('c.getMergeData');
           var fieldMappings = config.objectMappings.fieldMappings;
           var query = helper.parseFieldMappings(fieldMappings, isMultiCurrency);
+          var fieldMap = helper.getTypeMap(fieldMappings);
           action.setParams({
             sourceId: objIds[0],
             queryJson: JSON.stringify(query)
@@ -273,7 +274,9 @@
                 results.result,
                 results.children,
                 1,
-                xmlRoot
+                xmlRoot,
+                fieldMap,
+                isMultiCurrency
               );
               templateConfig.appendChild(objXML);
               resolve();
@@ -465,12 +468,35 @@
     return objRoot;
   },
 
-  generateXML: function (query, result, children, depth, xmlRoot) {
+  getTypeMap: function (fieldMappings) {
+    var map = {};
+    var key = '';
+    fieldMappings.forEach(function (fieldMapping) {
+      fieldMapping.fields.forEach(function (field) {
+        var value = {};
+        if(field.type !== 'REFERENCE' && field.type !== 'CHILD_RELATIONSHIP') {
+          if(fieldMapping.type === 'ROOT' || fieldMapping.type === 'CHILD_RELATIONSHIP') {
+            key = field.name.toLowerCase();
+          } else {
+            key = (fieldMapping.key + '.' + field.name).toLowerCase();
+          }
+          value.type = field.type;
+          value.format = field.format;
+          map[key] = value;
+        }
+      });
+    });
+    return map;
+  },
+
+  generateXML: function (query, result, children, depth, xmlRoot, fieldMap, isMultiCurrency) {
     var helper = this;
     var objRoot = (depth === 1) ? xmlRoot.createElement(query.type) : xmlRoot.createElement(query.relationship);
+    var format = '';
 
     query.fields.forEach(function (field) {
       var fieldXml;
+      format = fieldMap[field.toLowerCase()];
       if(field.startsWith(query.type)) {
         fieldXml = xmlRoot.createElement(field.replace(query.type + '.' , ''));
       } else {
@@ -480,9 +506,9 @@
       var filedValue;
       var newFields = field.split('.');
       if(depth <= 2) {
-        filedValue = helper.getFieldValue(newFields, result);
+        filedValue = helper.getFieldValue(newFields, result, format, isMultiCurrency);
       } else {
-        filedValue = helper.getFieldValue(newFields, children);
+        filedValue = helper.getFieldValue(newFields, children, format, isMultiCurrency);
       }
       var nodeValue = xmlRoot.createTextNode(filedValue);
       fieldXml.appendChild(nodeValue);
@@ -497,14 +523,14 @@
       if (depth < 2) {
         childData = result[childQuery.relationship];
         for (var j = 0; j < childData.length; j++) {
-          childXml = helper.generateXML(childQuery, childData[j], children, depth + 1, xmlRoot);
+          childXml = helper.generateXML(childQuery, childData[j], children, depth + 1, xmlRoot, fieldMap, isMultiCurrency);
           container.appendChild(childXml);
           objRoot.appendChild(container);
         }
       } else {
         childData = children[childQuery.relationship];
         for (var k = 0; k < childData.length; k++) {
-          childXml = helper.generateXML(childQuery, result, childData[j], depth + 1, xmlRoot);
+          childXml = helper.generateXML(childQuery, result, childData[k], depth + 1, xmlRoot, fieldMap, isMultiCurrency);
           container.appendChild(childXml);
           objRoot.appendChild(container);
         }
@@ -513,41 +539,117 @@
     return objRoot;
   },
 
-  getFieldValue: function (fields, result) {
+  getFieldValue: function (fields, result, format, isMultiCurrency) {
     var helper = this;
     var nodeValue = '';
     if (fields.length === 1) {
-      nodeValue = result[fields[0]] === undefined ? '' : result[fields[0]] ;
-    } else if(fields.length === 2) {
+      nodeValue = result[fields[0]] === undefined ? '' : result[fields[0]];
+    } else if (fields.length === 2) {
       nodeValue = result[fields[0]][fields[1]];
     } else {
       var newResult = result[fields[0]] === undefined ? result : result[fields[0]];
       fields.shift();
-      nodeValue = helper.getFieldValue(fields, newResult);
+      nodeValue = helper.getFieldValue(fields, newResult, format);
+    }
+    if (format !== undefined) {
+      var recordLevelCurrencyCode = '';
+      if (format.type === 'CURRENCY' && fields.length > 1) {
+        recordLevelCurrencyCode = result[fields.slice(0, fields.length-1).join('.')].CurrencyIsoCode;
+      } else if (result.CurrencyIsoCode !== undefined) {
+        recordLevelCurrencyCode = result.CurrencyIsoCode;
+      }
+      nodeValue = helper.getFormattedData(nodeValue, format.type, isMultiCurrency, recordLevelCurrencyCode, format.format);
     }
     return nodeValue;
   },
 
-  setCurrencyFormat: function (getValue, getFieldData, getCurrencyCode) {
+  // FIXME: get recordLevelCurrencyCode
+  getFormattedData: function (nodeValue, type, isMultiCurrency, recordLevelCurrencyCode, fieldFormat) {
+    var helper = this;
+    var decimal;
+    var locale = $A.get('$Locale');
+    if (type === 'PERCENT') {
+      decimal = nodeValue.toString().split('.')[1];
+      nodeValue = stringUtils.format('{0}{1}', helper.formatNumber(nodeValue, decimal === undefined ? 0 : decimal.length), '%');
+    } else if (type === 'DOUBLE') {
+      decimal = nodeValue.toString().split('.')[1];
+      nodeValue = helper.formatNumber(nodeValue, decimal === undefined ? 0 : decimal.length);
+    } else if (type === 'ADDRESS') {
+      var address = nodeValue;
+      nodeValue = '';
+
+      if (!$A.util.isEmpty(address.street)) {
+        nodeValue += address.street;
+      }
+      if (!$A.util.isEmpty(address.city)) {
+        nodeValue += ', ' + address.city;
+      }
+      if (!$A.util.isEmpty(address.state)) {
+        nodeValue += ', ' + address.state;
+      }
+      if (!$A.util.isEmpty(address.postal)) {
+        nodeValue += ' ' + address.postal;
+      }
+      if (!$A.util.isEmpty(address.country)) {
+        nodeValue += ' ' + address.country;
+      }
+    } else if (type === 'CURRENCY') {
+      var currencyCode = locale.fieldFormat;
+      if (isMultiCurrency) {
+        nodeValue = helper.setCurrencyFormat(nodeValue, fieldFormat, recordLevelCurrencyCode);
+      } else {
+        nodeValue = helper.setCurrencyFormat(nodeValue, fieldFormat, currencyCode);
+      }
+    } else if (type === 'DATE') {
+      if (fieldFormat === 'default') {
+        fieldFormat = locale.dateFormat;
+      }
+      nodeValue = $A.localizationService.formatDate(nodeValue, fieldFormat);
+    } else if (type === 'TIME') {
+      if (fieldFormat === 'default') {
+        fieldFormat = locale.timeFormat;
+      }
+      var date = new Date(nodeValue);
+      nodeValue = ($A.localizationService.formatDateTimeUTC(date, 'YYYY-MM-DD,' + fieldFormat)).split(',')[1];
+    } else if (type === 'DATETIME') {
+      var formats = fieldFormat.split('|');
+      if (formats[0] === 'default') {
+        formats[0] = locale.dateFormat;
+      }
+      if (formats[1] === 'default') {
+        formats[1] = locale.timeFormat;
+      }
+      //ADDING TIMEZONE OFFSET
+      $A.localizationService.UTCToWallTime(new Date(nodeValue), $A.get('$Locale.timezone'), function (offSetDateTime) {
+        nodeValue = offSetDateTime;
+      });
+      // FIXME: No hardcoded time format.
+      nodeValue = $A.localizationService.formatDateTimeUTC(
+        nodeValue, stringUtils.format('{0}{1}{2}', formats[0], ' ', formats[1]));
+    }
+    return nodeValue;
+  },
+
+  setCurrencyFormat: function (nodeValue, currencyFormat, currencyCode) {
     var helper = this;
     var sampleCurrency = 0;
-    var currencyFormat = getFieldData.format;
     if (currencyFormat.indexOf('NoDecimals') !== -1) {
-      getValue = $A.localizationService.formatNumber(Math.round(getValue));
+      nodeValue = $A.localizationService.formatNumber(Math.round(nodeValue));
     } else {
-      getValue = helper.formatNumber(getValue, getFieldData.decimalPlaces);
+      var decimal  = nodeValue.toString().split('.')[1];
+      nodeValue = helper.formatNumber(nodeValue, decimal === undefined ? 0 : decimal.length);
     }
     if (currencyFormat.indexOf('noSymbolNoCode') !== -1) {
-      return getValue;
+      return nodeValue;
     }
     // Using toLocalString() to get the currency symbol
     var getCurrencySymbol = sampleCurrency.toLocaleString($A.get('$Locale').userLocaleCountry, {
-      style: 'currency', currency: getCurrencyCode,
+      style: 'currency', currency: currencyCode,
       currencyDisplay: currencyFormat.indexOf('symbol') !== -1 ? 'symbol' : 'code',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     });
-    return getCurrencySymbol.replace('0', getValue);
+    return getCurrencySymbol.replace('0', nodeValue);
   },
 
   formatNumber: function (getNumberVal, decimalScale) {
