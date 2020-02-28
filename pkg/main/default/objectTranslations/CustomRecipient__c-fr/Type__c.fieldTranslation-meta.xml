@@ -6,30 +6,30 @@
     <name>Type__c</name>
     <picklistValues>
         <masterLabel>Allow to Edit</masterLabel>
-        <translation>Allow to Edit</translation>
+        <translation>Autorise à modifier</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>In Person Signer</masterLabel>
-        <translation>In Person Signer</translation>
+        <translation>Signataire en personne</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Needs to Sign</masterLabel>
-        <translation>Needs to Sign</translation>
+        <translation>Doit signer</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Needs to View</masterLabel>
-        <translation>Needs to View</translation>
+        <translation>Doit consulter</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Receives a Copy</masterLabel>
-        <translation>Receives a Copy</translation>
+        <translation>Reçoit une copie</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Specify Recipients</masterLabel>
-        <translation>Specify Recipients</translation>
+        <translation>Spécifie les destinataires</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Update Recipients</masterLabel>
-        <translation>Update Recipients</translation>
+        <translation>Met à jour les destinataires</translation>
     </picklistValues>
 </CustomFieldTranslation>

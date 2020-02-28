@@ -5,14 +5,14 @@
     <name>Status__c</name>
     <picklistValues>
         <masterLabel>Active</masterLabel>
-        <translation>Active</translation>
+        <translation>활성</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Inactive</masterLabel>
-        <translation>Inactive</translation>
+        <translation>비활성화</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Pending</masterLabel>
-        <translation>Pending</translation>
+        <translation>대기 중</translation>
     </picklistValues>
 </CustomFieldTranslation>

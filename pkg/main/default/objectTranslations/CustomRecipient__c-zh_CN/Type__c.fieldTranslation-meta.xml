@@ -6,30 +6,30 @@
     <name>Type__c</name>
     <picklistValues>
         <masterLabel>Allow to Edit</masterLabel>
-        <translation>Allow to Edit</translation>
+        <translation>允许编辑</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>In Person Signer</masterLabel>
-        <translation>In Person Signer</translation>
+        <translation>亲身签名者</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Needs to Sign</masterLabel>
-        <translation>Needs to Sign</translation>
+        <translation>需要签名</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Needs to View</masterLabel>
-        <translation>Needs to View</translation>
+        <translation>需要查看</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Receives a Copy</masterLabel>
-        <translation>Receives a Copy</translation>
+        <translation>接收副本</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Specify Recipients</masterLabel>
-        <translation>Specify Recipients</translation>
+        <translation>指定收件人</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Update Recipients</masterLabel>
-        <translation>Update Recipients</translation>
+        <translation>更新收件人</translation>
     </picklistValues>
 </CustomFieldTranslation>

@@ -38,6 +38,126 @@
 		<name>AddTemplate</name>
 	</customLabels>
 	<customLabels>
+		<label>Weergave zonder symbool en ISO-code</label>
+		<name>DisplayNoSymbolNoISO</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} Raadpleeg de &lt;a  style=&quot;color:{1}&quot; href=&quot;https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_cb_format_dates.htm&quot; target=&quot;_blank&quot;&gt; &lt;u&gt;helpgids &lt;/u&gt;&lt;/a&gt; voor hulp bij het formatteren</label>
+		<name>dateHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Indelingsfout.</label>
+		<name>dateTextError</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59</label>
+		<name>X18_Jan_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59 pm</label>
+		<name>X2_59_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23</label>
+		<name>X2_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23 pm</label>
+		<name>X2_59_23_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59</label>
+		<name>X14_59</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59:23</label>
+		<name>X14_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-2019</label>
+		<name>X2_59</name>
+	</customLabels>
+	<customLabels>
+		<label>Aangepast</label>
+		<name>Custom</name>
+	</customLabels>
+	<customLabels>
+		<label>2019/01/18</label>
+		<name>X20190118</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-Jan-18</label>
+		<name>X2019_Jan_18</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-01-18</label>
+		<name>X2019_01_18</name>
+	</customLabels>
+	<customLabels>
+		<label>January 18, 2019</label>
+		<name>January_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan 18, 2019</label>
+		<name>Jan182019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan-18-2019</label>
+		<name>Jan_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/19</label>
+		<name>X01_18_19</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/2019</label>
+		<name>X01182019</name>
+	</customLabels>
+	<customLabels>
+		<label>01-18-2019</label>
+		<name>X01_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>1/18/2019</label>
+		<name>X1_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18 januari 2019</label>
+		<name>X18_January_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18.01.2019</label>
+		<name>X18012019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-2019</label>
+		<name>X18_01_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-19</label>
+		<name>X18_Jan_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-19</label>
+		<name>X18_01_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18/1/2019</label>
+		<name>X18_1_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>Indelingsvoorbeeld: D, MMMM, JJJJ</label>
+		<name>dateFieldPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Tijdsindeling</label>
+		<name>TimeFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Indelingsvoorbeeld: uu:mm:ss a</label>
+		<name>timeFieldPlaceHolder</name>
+	</customLabels>
+	<customLabels>
 		<label>Gebruikers toevoegen</label>
 		<name>AddUser</name>
 	</customLabels>
@@ -156,6 +276,94 @@
 	<customLabels>
 		<label>Kan bron van ontvanger {0} niet oplossen.</label>
 		<name>CannotResolveRecipientSource_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Sjablonen migreren</label>
+		<name>MigrateTemplateButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Uw sjabloonconfiguraties bevinden zich nu in DocuSign Apps Launcher&lt;br/&gt;&lt;br/&gt; Gefeliciteerd! U hebt uw sjabloonconfiguraties met succes gemigreerd naar DocuSign Apps. Om aangepaste knoppen te gebruiken, moet u deze opnieuw aanmaken in DocuSign Apps Launcher.</label>
+		<name>MigrateTemplateEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;span class=&quot;slds-text-color_error&quot;&gt;We konden {0} niet migreren vanwege [{1}].&lt;/span &gt;</label>
+		<name>MigrateTemplateErrorText</name>
+	</customLabels>
+	<customLabels>
+		<label>U hebt uw sjabloonconfiguraties gemigreerd</label>
+		<name>MigrateTemplateSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>Alle sjabloonconfiguraties zijn succesvol gemigreerd.</label>
+		<name>MigrateTemplatesSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Gebruikers migreren</label>
+		<name>MigrateUserButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Uw gebruikers bevinden zich nu in DocuSign Apps Launcher&lt;br/&gt;&lt;br/&gt; Gefeliciteerd! U hebt uw gebruikers met succes gemigreerd naar DocuSign Apps Launcher.</label>
+		<name>MigrateUsersEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>U hebt uw gebruikers gemigreerd</label>
+		<name>MigrateUsersSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>Alle gebruikers zijn succesvol gemigreerd.</label>
+		<name>MigrateUsersSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Uw migratie is voltooid. Verwijder DocuSign Gen voor Salesforce om dit bericht te verbergen.</label>
+		<name>MigrationCompleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>U hoeft niets te migreren vanuit DocuSign Gen voor Salesforce. Verberg dit bericht door het te verwijderen.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Meer informatie.&lt;/a&gt;</label>
+		<name>MigrationHelpTextforUninstall</name>
+	</customLabels>
+	<customLabels>
+		<label>MIGRATIE</label>
+		<name>MigrationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>Bespaar tijd door uw DocuSign Gen voor Salesforce-gebruikers te migreren naar DocuSign Apps Launcher. &lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt;Meer informatie.&lt;/a&gt;</label>
+		<name>MigrationUsersHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Er zijn {0} gebruikers op DocuSign Gen voor Salesforce</label>
+		<name>NumberOfGenUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Uw migratie kan enkele minuten duren. Kom later terug voor bevestiging</label>
+		<name>OnLoadMigrationText</name>
+	</customLabels>
+	<customLabels>
+		<label>Er zijn {0} sjabloonconfiguraties op DocuSign Gen voor Salesforce.</label>
+		<name>OnLoadTemplateText</name>
+	</customLabels>
+	<customLabels>
+		<label>Gebruikers en sjablonen migreren vanuit DocuSign Gen</label>
+		<name>TabMigrationHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Verwijder DocuSign Gen voor Salesforce</label>
+		<name>TabMigrationHeaderUninstallText</name>
+	</customLabels>
+	<customLabels>
+		<label>Bespaar tijd door uw DocuSign Gen voor Salesforce-gebruikers te migreren naar DocuSign Apps Launcher.</label>
+		<name>UserManagementTabBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Gebruikers migreren vanuit DocuSign Gen</label>
+		<name>UserManagementTabHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Sjablonen migreren vanuit DocuSign Gen</label>
+		<name>DocumentGenerationTabText</name>
+	</customLabels>
+	<customLabels>
+		<label>Bespaar tijd door uw DocuSign Gen voor Salesforce-sjabloonconfiguratie hier te migreren. U kunt uw aangepaste knoppen niet migreren, dus u moet deze opnieuw aanmaken in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Meer informatie.&lt;/a&gt;</label>
+		<name>DocumentGenerationText</name>
 	</customLabels>
 	<customLabels>
 		<label>Bijwerken is niet geautoriseerd voor {0} velden: {1}</label>
@@ -288,6 +496,14 @@
 	<customLabels>
 		<label>DocuSign-sjabloon</label>
 		<name>DocuSignTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Percentagesymbool opnemen (%)</label>
+		<name>percentCheckboxonPreview</name>
+	</customLabels>
+	<customLabels>
+		<label>Voorbeeld van percentage-indeling (overgenomen van Salesforce)</label>
+		<name>percentageFormatPreviewText</name>
 	</customLabels>
 	<customLabels>
 		<label>Gereed</label>
@@ -1986,6 +2202,10 @@
 		<name>Download</name>
 	</customLabels>
 	<customLabels>
+		<label>Downloaden met rode lijnen</label>
+		<name>DownloadWithRedlines</name>
+	</customLabels>
+	<customLabels>
 		<label>Link delen</label>
 		<name>AgreementsShareLink</name>
 	</customLabels>
@@ -2026,8 +2246,12 @@
 		<name>SetApprovalOrder</name>
 	</customLabels>
 	<customLabels>
-		<label>Kies uit de Salesforce-gebruikers in uw organisatie.</label>
+		<label>Goedkeurders selecteren: alle gebruikers die u kiest uit de Salesforce-gebruikers van uw organisatie kunnen goedkeuren.</label>
 		<name>InternalApprovalChooseUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Goedkeurders selecteren: bepaal de volgorde waarin de Salesforce-gebruikers van uw organisatie uw documenten ontvangen en goedkeuren.</label>
+		<name>InternalApprovalChooseUsersSequential</name>
 	</customLabels>
 	<customLabels>
 		<label>Goedkeurders selecteren</label>
@@ -2042,8 +2266,12 @@
 		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Ongeldig Salesforce event target.</label>
+		<label>U moet een aangepast domein instellen voordat u zich aanmeldt bij DocuSign.</label>
 		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
+		<name>MyDomainHelpMessage</name>
+		<label>Ga daarvoor naar &apos;Mijn domeininstellingen&apos; in Salesforce. &lt;a href=&quot;https://developer.salesforce.com/docs/atlas.en-us.externalidentityImplGuide.meta/externalidentityImplGuide/external_identity_set_up_my_domain.htm&quot; target=&quot;_blank&quot;&gt;Meer informatie&lt;/a&gt;</label>
 	</customLabels>
 	<customLabels>
 		<label>Voordat u DocuSign kunt gebruiken, moet u toestemming geven voor deze toepassing om namens u verzoeken in te dienen.&lt;br/&gt;&lt;br/&gt;Klik op de knop &amp;quot;Autoriseren&amp;quot; om door te gaan.</label>
@@ -2730,6 +2958,10 @@
 		<name>CreatedBy</name>
 	</customLabels>
 	<customLabels>
+		<label>Huidige datum</label>
+		<name>CurrentDate</name>
+	</customLabels>
+	<customLabels>
 		<label>01</label>
 		<name>ZeroOne</name>
 	</customLabels>
@@ -3150,7 +3382,7 @@
 		<name>agreementHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Schakel de pop-upblokkering van uw browser uit voordat u zich aanmeldt.</label>
+		<label>Schakel de pop-upblokkering van uw browser uit voordat u zich aanmeldt. Zorg ervoor dat u een aangepast domein hebt ingesteld.</label>
 		<name>DisablePopUp</name>
 	</customLabels>
 	<customLabels>
@@ -3590,15 +3822,15 @@
 		<name>LearnEsignUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide</label>
 		<name>LearnGenAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-for-salesforce-user-guide</label>
 		<name>LearnGenUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-negotiate-for-salesforce-user-guide</label>
 		<name>LearnNegotiateUserURL</name>
 	</customLabels>
 	<customLabels>
@@ -3610,11 +3842,11 @@
 		<name>ComponentsEnvelopeStatusVideo</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnAppsLauncherAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnComponentsLayoutsURL</name>
 	</customLabels>
 	<customLabels>
@@ -4297,6 +4529,124 @@
 		<label>Autoriseren</label>
 		<name>Authorizing</name>
 	</customLabels>
+	<!-- Start of Chorus Gen Labels -->
+	<customLabels>
+		<label>Sjabloon &apos;{0}&apos; aangemaakt.</label>
+		<name>OnlineEditorTemplateCreated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Sjabloon &apos;{0}&apos; bijgewerkt.</label>
+		<name>OnlineEditorTemplateUpdated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Sjabloonknoppen &apos;{0}&apos; bijgewerkt.</label>
+		<name>OnlineEditorAfterPublish_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Nieuw sjabloon aanmaken</label>
+		<name>CreateNewTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Contractsjablonen aanmaken. Velden van Salesforce naar Word kopiëren en plakken.</label>
+		<name>MicrosoftWordDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Output format: DOCX, PDF</label>
+		<name>MicrosoftWordFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>Contractsjablonen bouwen in een paar klikken. Sleep velden gewoon naar onze webeditor.</label>
+		<name>OnlineEditorDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Output format: ADF, HTML</label>
+		<name>OnlineEditorFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>Selecteer gegevensbron</label>
+		<name>SelectDataSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Template Editor</label>
+		<name>SelectDocumentType</name>
+	</customLabels>
+	<customLabels>
+		<label>Sjabloonnaam toevoegen</label>
+		<name>AddTemplateName</name>
+	</customLabels>
+	<customLabels>
+		<label>Sjabloonbeschrijving toevoegen</label>
+		<name>AddTemplateDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Meer informatie over de online editor</label>
+		<name>OnlineEditorHelpLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
+	<customLabels>
+		<name>CreateLabel</name>
+		<label>Aanmaken</label>
+	</customLabels>
+	<customLabels>
+		<name>DeployLabel</name>
+		<label>Inzetten</label>
+	</customLabels>
+	<customLabels>
+		<name>PublishLabel</name>
+		<label>Publiceren</label>
+	</customLabels>
+	<customLabels>
+		<name>SetFileNameRules</name>
+		<label>Regels voor bestandsnaamgeving instellen</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorFileToolTip</name>
+		<label>Alle documenten die met dit sjabloon worden gegenereerd, krijgen de naam die u in de vakken invoert. Als de bestandsnaam bijvoorbeeld &apos;asdSales Order&apos;asd en het achtervoegsel &apos;asdDate&apos;asd is, zou een gegenereerd document de naam &apos;asdSales Order_3-06-2019&apos;asd kunnen krijgen</label>
+	</customLabels>
+	<customLabels>
+		<name>FileName</name>
+		<label>Bestandsnaam</label>
+	</customLabels>
+	<customLabels>
+		<name>AddCustomButton</name>
+		<label>Aangepaste knop toevoegen</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorButtonPublishPrompt</name>
+		<label>Voeg een nieuwe aangepaste knop toe zodat uw gebruikers documenten kunnen genereren van een of meer van de onderstaande paginalay-outs.</label>
+	</customLabels>
+	<customLabels>
+		<name>ShowButtonInPrompt</name>
+		<label>Knop weergeven in:</label>
+	</customLabels>
+	<customLabels>
+		<name>ExportDataIsUndefinedLabel</name>
+		<label>Gegevens exporteren is niet gedefinieerd</label>
+	</customLabels>
+	<customLabels>
+		<name>InvalidPathLabel</name>
+		<label>Ongeldig pad</label>
+	</customLabels>
+	<customLabels>
+		<name>UndefinedOnlineEditorTemplate</name>
+		<label>Niet gedefinieerd sjabloon voor de Online Editor</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorSaveValidation</name>
+		<label>U moet dit sjabloon opslaan voordat u naar deze stap navigeert</label>
+	</customLabels>
+	<customLabels>
+		<name>MostCommonlyUsed</name>
+		<label>MEEST GEBRUIKT</label>
+	</customLabels>
+	<customLabels>
+		<name>OtherItems</name>
+		<label>ANDERE ITEMS</label>
+	</customLabels>
+	<!-- End of Chorus Gen Labels -->
 	<customLabels>
 		<label>Andere bronnen</label>
 		<name>OtherSourcesText</name>
@@ -4338,8 +4688,100 @@
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
-		<name>OnlineEditorHelpUrl</name>
+		<label>Bespaar tijd door uw DocuSign Gen voor Salesforce-gebruikers en sjabloonconfiguratie hier te migreren. U kunt uw aangepaste knoppen niet migreren, dus u moet deze opnieuw aanmaken in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Meer informatie.&lt;/a&gt;</label>
+		<name>MigrationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Ongeldige omleiding-URL.</label>
+		<name>InvalidRedirectUrl</name>
+	</customLabels>
+	<customLabels>
+		<label>Gebruikers die zich als andere gebruikers voordoen, zijn niet gemachtigd om deze actie uit te voeren.</label>
+		<name>UnauthorizedImpersonation</name>
+	</customLabels>
+	<customLabels>
+		<label>Sjabloonnaam en -beschrijving bewerken</label>
+		<name>OnlineEditorTemplateEditTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Het lijkt erop dat u Internet Explorer gebruikt, wat niet wordt ondersteund door de Online Editor. Schakel over naar Chrome, Safari of Firefox.</label>
+		<name>IEValidationError</name>
+	</customLabels>
+	<customLabels>
+		<label>Online Editor van DocuSign biedt geen ondersteuning voor Internet Explorer. Schakel over naar een andere browser als u IE gebruikt.</label>
+		<name>IEValidationWarning</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}: {1}</label>
+		<name>QueryError_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Ongeldige SOQL: {0}\nDetails: {1}</label>
+		<name>InvalidSoql_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Kan resultaten van bronobject niet filteren.</label>
+		<name>CannotFilterSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>Kan resultaten van bronobject niet bestellen.</label>
+		<name>CannotOrderSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>Resultaten van bronobject zijn beperkt tot 1.</label>
+		<name>CannotLimitSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>Limiet moet groter zijn dan nul en kleiner dan {0}.</label>
+		<name>InvalidLimit_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Max. onderliggende diepte zoekopdrachten ({0}) overschreden.</label>
+		<name>MaxDescendantQueryDepthExceeded_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Onderliggende zoekopdrachten moeten een gedefinieerde relatienaam hebben.</label>
+		<name>UndefinedChildRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>Onderliggende zoekopdrachten moeten een gedefinieerd bovenliggend ID-veld hebben.</label>
+		<name>UndefinedParent</name>
+	</customLabels>
+	<customLabels>
+		<label>Ongeldige zoekopdracht</label>
+		<name>InvalidQuery</name>
+	</customLabels>
+	<customLabels>
+		<label>U moet DocuSign-beheerders- of generatorrechten hebben om deze bewerking uit te voeren.</label>
+		<name>MustBeAdministratorOrGenerator</name>
+	</customLabels>
+	<customLabels>
+		<label>Sjabloon verwijderen</label>
+		<name>DeleteTemplateTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Weet u zeker dat u deze sjabloon wilt verwijderen?</label>
+		<name>DeleteTemplateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Het sjabloon is verwijderd.</label>
+		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>Fout</label>
+		<name>Error</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgrade Microsoft Word Gen templates</label>
+		<name>UpgradeWordTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Queued {0} template(s) for upgrade with Apex job {1}.</label>
+		<name>UpgradeTemplatesQueued_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgraded {0} template(s).</label>
+		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-instellingen</label>

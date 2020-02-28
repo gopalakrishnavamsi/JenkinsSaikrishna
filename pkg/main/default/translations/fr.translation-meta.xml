@@ -26,10 +26,6 @@
 		<name>AccountNotConfigured</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/fr/articles/Agreement-Cloud-Editor-Template-Creation</label>
-		<name>OnlineEditorHelpUrl</name>
-	</customLabels>
-	<customLabels>
 		<label>Ajouter</label>
 		<name>Add</name>
 	</customLabels>
@@ -40,6 +36,126 @@
 	<customLabels>
 		<label>Ajouter un modèle</label>
 		<name>AddTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Afficher sans code ISO et sans symbole</label>
+		<name>DisplayNoSymbolNoISO</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} Pour obtenir de l’aide sur le formatage, consultez le &lt;a  style=&quot;color:{1}&quot; href=&quot;https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_cb_format_dates.htm&quot; target=&quot;_blank&quot;&gt; &lt;u&gt;guide d’aide &lt;/u&gt;&lt;/a&gt;</label>
+		<name>dateHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Erreur de format.</label>
+		<name>dateTextError</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59</label>
+		<name>X18_Jan_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59 pm</label>
+		<name>X2_59_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23</label>
+		<name>X2_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23 pm</label>
+		<name>X2_59_23_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59</label>
+		<name>X14_59</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59:23</label>
+		<name>X14_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-2019</label>
+		<name>X2_59</name>
+	</customLabels>
+	<customLabels>
+		<label>Autre serveur</label>
+		<name>Custom</name>
+	</customLabels>
+	<customLabels>
+		<label>2019/01/18</label>
+		<name>X20190118</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-Jan-18</label>
+		<name>X2019_Jan_18</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-01-18</label>
+		<name>X2019_01_18</name>
+	</customLabels>
+	<customLabels>
+		<label>January 18, 2019</label>
+		<name>January_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan 18, 2019</label>
+		<name>Jan182019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan-18-2019</label>
+		<name>Jan_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/19</label>
+		<name>X01_18_19</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/2019</label>
+		<name>X01182019</name>
+	</customLabels>
+	<customLabels>
+		<label>01-18-2019</label>
+		<name>X01_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>1/18/2019</label>
+		<name>X1_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18 janvier 2019</label>
+		<name>X18_January_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18.01.2019</label>
+		<name>X18012019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-2019</label>
+		<name>X18_01_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-19</label>
+		<name>X18_Jan_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-19</label>
+		<name>X18_01_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18/1/2019</label>
+		<name>X18_1_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>Exemple de format : MMMM, J, AAAA</label>
+		<name>dateFieldPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Format de l’heure</label>
+		<name>TimeFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>Exemple de format : hh:mm:ss a</label>
+		<name>timeFieldPlaceHolder</name>
 	</customLabels>
 	<customLabels>
 		<label>Ajouter des utilisateurs</label>
@@ -160,6 +276,94 @@
 	<customLabels>
 		<label>Impossible de résoudre la source du destinataire {0}.</label>
 		<name>CannotResolveRecipientSource_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Migrer les modèles</label>
+		<name>MigrateTemplateButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Vos configurations de modèles sont désormais dans le lanceur d’applications DocuSign&lt;br/&gt;&lt;br/&gt; Félicitations ! Vous avez migré avec succès vos configurations de modèles vers les applications DocuSign. Pour utiliser des boutons personnalisés, vous devrez les recréer dans le lanceur d’applications DocuSign.</label>
+		<name>MigrateTemplateEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;span class=&quot;slds-text-color_error&quot;&gt;Nous n’avons pas pu migrer {0} en raison de [{1}].&lt;/span &gt;</label>
+		<name>MigrateTemplateErrorText</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous avez migré vos configurations de modèles</label>
+		<name>MigrateTemplateSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>Toutes les configurations de modèles ont été migrées avec succès.</label>
+		<name>MigrateTemplatesSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Migrer les utilisateurs</label>
+		<name>MigrateUserButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Vos utilisateurs sont désormais dans le lanceur d’applications DocuSign&lt;br/&gt;&lt;br/&gt; Félicitations ! Vous avez migré avec succès vos utilisateurs vers le lanceur d’applications DocuSign.</label>
+		<name>MigrateUsersEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous avez migré vos utilisateurs</label>
+		<name>MigrateUsersSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>Tous les utilisateurs ont été migrés avec succès.</label>
+		<name>MigrateUsersSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre migration est terminée. Désinstallez DocuSign Gen pour Salesforce pour masquer ce message.</label>
+		<name>MigrationCompleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous n’avez rien à migrer de DocuSign Gen pour Salesforce. Masquez ce message en le désinstallant.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Pour en savoir plus.&lt;/a&gt;</label>
+		<name>MigrationHelpTextforUninstall</name>
+	</customLabels>
+	<customLabels>
+		<label>MIGRATION</label>
+		<name>MigrationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>Gagnez du temps en migrant vos utilisateurs DocuSign Gen pour Salesforce vers le lanceur d’applications DocuSign. &lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Pour en savoir plus.&lt;/a&gt;</label>
+		<name>MigrationUsersHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Il y a {0} utilisateur(s) de DocuSign Gen pour Salesforce</label>
+		<name>NumberOfGenUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Votre migration peut prendre quelques minutes. Veuillez revenir plus tard pour confirmation</label>
+		<name>OnLoadMigrationText</name>
+	</customLabels>
+	<customLabels>
+		<label>Il existe {0} configuration(s) de modèles dans DocuSign Gen pour Salesforce.</label>
+		<name>OnLoadTemplateText</name>
+	</customLabels>
+	<customLabels>
+		<label>Migrer des utilisateurs et des modèles de DocuSign Gen</label>
+		<name>TabMigrationHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Désinstaller DocuSign Gen pour Salesforce</label>
+		<name>TabMigrationHeaderUninstallText</name>
+	</customLabels>
+	<customLabels>
+		<label>Gagnez du temps en migrant vos utilisateurs DocuSign Gen pour Salesforce vers le lanceur d’applications DocuSign.</label>
+		<name>UserManagementTabBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Migrer les utilisateurs de DocuSign Gen</label>
+		<name>UserManagementTabHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Migrer les modèles de DocuSign Gen</label>
+		<name>DocumentGenerationTabText</name>
+	</customLabels>
+	<customLabels>
+		<label>Gagnez du temps en migrant votre configuration de modèle DocuSign Gen pour Salesforce ici. Vous ne pouvez pas migrer vos boutons personnalisés, vous devrez donc les recréer dans le lanceur d’applications DocuSign.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Pour en savoir plus.&lt;/a&gt;</label>
+		<name>DocumentGenerationText</name>
 	</customLabels>
 	<customLabels>
 		<label>La mise à jour est non autorisée pour les champs {0} : {1}</label>
@@ -292,6 +496,14 @@
 	<customLabels>
 		<label>Modèle DocuSign</label>
 		<name>DocuSignTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Inclure le symbole du pourcentage (%)</label>
+		<name>percentCheckboxonPreview</name>
+	</customLabels>
+	<customLabels>
+		<label>Aperçu du format de pourcentage (hérité de Salesforce)</label>
+		<name>percentageFormatPreviewText</name>
 	</customLabels>
 	<customLabels>
 		<label>Terminé</label>
@@ -510,7 +722,7 @@
 		<name>InvalidChatterText</name>
 	</customLabels>
 	<customLabels>
-		<label>L’autorisation de correction doit être activée et l’état de l’enveloppe doit \&apos;Envoyé\&apos; ou \&apos;Livré\&apos; pour que les corrections soient autorisées.</label>
+		<label>L’autorisation de correction doit être activée et l’état de l’enveloppe doit \&apos;Envoyé\&apos; ou \&apos;Remis\&apos; pour que les corrections soient autorisées.</label>
 		<name>InvalidCorrectionState</name>
 	</customLabels>
 	<customLabels>
@@ -534,7 +746,7 @@
 		<name>InvalidEnvironment</name>
 	</customLabels>
 	<customLabels>
-		<label>Impossible d’envoyer l’enveloppe. Il est probable qu&apos;il manque une extension à l’un des fichiers en cours d’envoi, ou que son extension ne soit pas reconnue par DocuSign.</label>
+		<label>Impossible d’envoyer l’enveloppe. Il est probable qu’il manque une extension à l’un des fichiers en cours d’envoi, ou que son extension ne soit pas reconnue par DocuSign.</label>
 		<name>InvalidFileExtension</name>
 	</customLabels>
 	<customLabels>
@@ -1510,7 +1722,7 @@
 		<name>StartingObjectMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Source de données principale</label>
+		<label>Source principale de données</label>
 		<name>MainDataSource</name>
 	</customLabels>
 	<customLabels>
@@ -1650,7 +1862,7 @@
 		<name>RetrievingFields</name>
 	</customLabels>
 	<customLabels>
-		<label>Source de données principale</label>
+		<label>Source principale de données</label>
 		<name>StartingObject</name>
 	</customLabels>
 	<customLabels>
@@ -1730,7 +1942,7 @@
 		<name>FileSuffix</name>
 	</customLabels>
 	<customLabels>
-		<label>Nom de la source de données principale</label>
+		<label>Nom de la source principale de données</label>
 		<name>StartingObjectName</name>
 	</customLabels>
 	<customLabels>
@@ -1738,7 +1950,7 @@
 		<name>Date</name>
 	</customLabels>
 	<customLabels>
-		<label>Nom et date de la source de données principale</label>
+		<label>Nom et date de la source principale de données</label>
 		<name>StartingObjectNameAndDate</name>
 	</customLabels>
 	<customLabels>
@@ -1798,7 +2010,7 @@
 		<name>GenerateFileFailMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Désolé, il n&apos;y a pas de modèle de documents pour cette configuration.</label>
+		<label>Désolé, il n’y a pas de modèle de documents pour cette configuration.</label>
 		<name>NoDocForTemplateMsg</name>
 	</customLabels>
 	<customLabels>
@@ -1826,7 +2038,7 @@
 		<name>PublishCustomButtons</name>
 	</customLabels>
 	<customLabels>
-		<label>Avec un bouton personnalisé et à partir de cette configuration de modèle, laissez les utilisateurs générer des documents. Vous pouvez aussi choisir de placer le bouton sur des présentations de page spécifiques à votre source de données principale. Si vous ajoutez un bouton personnalisé et si vous modifiez cette configuration de modèle, vous n’avez pas besoin d’ajouter à nouveau le bouton.</label>
+		<label>Avec un bouton personnalisé et à partir de cette configuration de modèle, laissez les utilisateurs générer des documents. Vous pouvez aussi choisir de placer le bouton sur des présentations de page spécifiques à votre source principale de données. Si vous ajoutez un bouton personnalisé et si vous modifiez cette configuration de modèle, vous n’avez pas besoin d’ajouter à nouveau le bouton.</label>
 		<name>PublishMsg</name>
 	</customLabels>
 	<customLabels>
@@ -1990,6 +2202,10 @@
 		<name>Download</name>
 	</customLabels>
 	<customLabels>
+		<label>Télécharger avec les ratures</label>
+		<name>DownloadWithRedlines</name>
+	</customLabels>
+	<customLabels>
 		<label>Lien de partage</label>
 		<name>AgreementsShareLink</name>
 	</customLabels>
@@ -2030,8 +2246,12 @@
 		<name>SetApprovalOrder</name>
 	</customLabels>
 	<customLabels>
-		<label>Choisissez parmi les utilisateurs Salesforce de votre organisation.</label>
+		<label>Sélectionner des décideurs : tout utilisateur que vous choisissez parmi les utilisateurs de Salesforce de votre organisation pourront approuver.</label>
 		<name>InternalApprovalChooseUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner des décideurs : contrôle l’ordre dans lequel les utilisateurs Salesforce de votre organisation recevront et approuveront vos documents.</label>
+		<name>InternalApprovalChooseUsersSequential</name>
 	</customLabels>
 	<customLabels>
 		<label>Sélectionner des décideurs</label>
@@ -2046,8 +2266,12 @@
 		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Cible de l’événement Salesforce non valide.</label>
+		<label>Vous devez configurer un domaine personnalisé avant de vous identifier sur DocuSign.</label>
 		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
+		<name>MyDomainHelpMessage</name>
+		<label>Pour ce faire, allez dans « Paramètres de Mon domaine » dans Salesforce. &lt;a href=&quot;https://developer.salesforce.com/docs/atlas.en-us.externalidentityImplGuide.meta/externalidentityImplGuide/external_identity_set_up_my_domain.htm&quot; target=&quot;_blank&quot;&gt;Pour en savoir plus&lt;/a&gt;</label>
 	</customLabels>
 	<customLabels>
 		<label>Avant de pouvoir utiliser DocuSign, vous devez autoriser cette application à formuler des demandes en votre nom.&lt;br/&gt;&lt;br/&gt;Cliquez sur le bouton « Autoriser » pour continuer.</label>
@@ -2734,6 +2958,10 @@
 		<name>CreatedBy</name>
 	</customLabels>
 	<customLabels>
+		<label>Date du jour</label>
+		<name>CurrentDate</name>
+	</customLabels>
+	<customLabels>
 		<label>01</label>
 		<name>ZeroOne</name>
 	</customLabels>
@@ -2986,7 +3214,7 @@
 		<name>AuthenticateAgreements</name>
 	</customLabels>
 	<customLabels>
-		<label>Après l&apos;installation, ouvrez dans Salesforce le lanceur d’applications DocuSign. Ouvrez ensuite une session avec vos identifiants DocuSign activés pour DocuSign CLM et suivez les instructions pour établir la connexion inverse avec vos identifiants Salesforce. Cela permet l’intégration entre les deux systèmes.</label>
+		<label>Après l’installation, ouvrez dans Salesforce le lanceur d’applications DocuSign. Ouvrez ensuite une session avec vos identifiants DocuSign activés pour DocuSign CLM et suivez les instructions pour établir la connexion inverse avec vos identifiants Salesforce. Cela permet l’intégration entre les deux systèmes.</label>
 		<name>AuthenticateAgreementsAns</name>
 	</customLabels>
 	<customLabels>
@@ -3106,7 +3334,7 @@
 		<name>TypeFolderName</name>
 	</customLabels>
 	<customLabels>
-		<label>Si vous saisissez un nom pour ces dossiers, chaque instance de cet objet aura le même nom de dossier. Salesforce n&apos;autorise pas les noms de dossier en double. C’est pourquoi nous vous recommandons de sélectionner un champ à la place.</label>
+		<label>Si vous saisissez un nom pour ces dossiers, chaque instance de cet objet aura le même nom de dossier. Salesforce n’autorise pas les noms de dossier en double. C’est pourquoi nous vous recommandons de sélectionner un champ à la place.</label>
 		<name>TypeFolderNameAns</name>
 	</customLabels>
 	<customLabels>
@@ -3142,7 +3370,7 @@
 		<name>VisitCommunityURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/knowledgeMarket</label>
+		<label>https://support.docusign.com/fr/knowledgemarket</label>
 		<name>ViewResourcesURL</name>
 	</customLabels>
 	<customLabels>
@@ -3154,7 +3382,7 @@
 		<name>agreementHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Désactivez le bloqueur de pop‑up de votre navigateur avant d’ouvrir une session.</label>
+		<label>Désactivez le bloqueur de pop‑up de votre navigateur avant d’ouvrir une session. Assurez‑vous que vous avez un domaine personnalisé.</label>
 		<name>DisablePopUp</name>
 	</customLabels>
 	<customLabels>
@@ -3482,7 +3710,7 @@
 		<name>GenMarketingBody2</name>
 	</customLabels>
 	<customLabels>
-		<label>https://www.docusign.com/products/gen</label>
+		<label>https://www.docusign.fr/produits/gen</label>
 		<name>GenMarketingLink</name>
 	</customLabels>
 	<customLabels>
@@ -3498,7 +3726,7 @@
 		<name>NegotiateMarketingBody2</name>
 	</customLabels>
 	<customLabels>
-		<label>https://www.docusign.com/products/negotiate</label>
+		<label>https://www.docusign.fr/produits/negotiate</label>
 		<name>NegotiateMarketingLink</name>
 	</customLabels>
 	<customLabels>
@@ -3590,19 +3818,19 @@
 		<name>LearnAddComponentsLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-esignature-user-guide</label>
+		<label>https://support.docusign.com/fr/guides/docusign-apps-launcher-esignature-user-guide</label>
 		<name>LearnEsignUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<label>https://support.docusign.com/fr/guides/docusign-gen-for-salesforce-admin-guide</label>
 		<name>LearnGenAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<label>https://support.docusign.com/fr/guides/docusign-for-salesforce-gen-user-guide</label>
 		<name>LearnGenUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<label>https://support.docusign.com/fr/guides/docusign-negotiate-for-salesforce-user-guide</label>
 		<name>LearnNegotiateUserURL</name>
 	</customLabels>
 	<customLabels>
@@ -3614,11 +3842,11 @@
 		<name>ComponentsEnvelopeStatusVideo</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/fr/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnAppsLauncherAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/fr/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnComponentsLayoutsURL</name>
 	</customLabels>
 	<customLabels>
@@ -4079,11 +4307,11 @@
 		<name>FAQ</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/Generate-a-Document-for-DocuSign-CLM</label>
+		<label>https://support.docusign.com/fr/guides/Generate-a-Document-for-DocuSign-CLM</label>
 		<name>LearnDocGenBasicsURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/Configure-Visualforce-Page-Layouts-Docusign-CLM</label>
+		<label>https://support.docusign.com/fr/guides/Configure-Visualforce-Page-Layouts-Docusign-CLM</label>
 		<name>AddCompToLayoutsURL</name>
 	</customLabels>
 	<customLabels>
@@ -4119,7 +4347,7 @@
 		<name>VisitSalesforceAdminGuide</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/SpringCM-for-Salesforce-Administrator-Guide</label>
+		<label>https://support.docusign.com/fr/guides/SpringCM-for-Salesforce-Administrator-Guide</label>
 		<name>SalesforceAdminGuideUrl</name>
 	</customLabels>
 	<customLabels>
@@ -4302,6 +4530,124 @@
 		<label>Autorisation…</label>
 		<name>Authorizing</name>
 	</customLabels>
+	<!-- Start of Chorus Gen Labels -->
+	<customLabels>
+		<label>Modèle « {0} » créé.</label>
+		<name>OnlineEditorTemplateCreated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Modèle « {0} » mis à jour.</label>
+		<name>OnlineEditorTemplateUpdated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Boutons du modèle « {0} » mis à jour.</label>
+		<name>OnlineEditorAfterPublish_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer un nouveau modèle</label>
+		<name>CreateNewTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Créer des modèles de contrat. Copier et coller des champs de Salesforce vers Word.</label>
+		<name>MicrosoftWordDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Output format: DOCX, PDF</label>
+		<name>MicrosoftWordFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>Construisez des modèles de contrats en quelques clics. Il suffit de glisser-déposer les champs dans notre éditeur web.</label>
+		<name>OnlineEditorDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Output format: ADF, HTML</label>
+		<name>OnlineEditorFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>Sélectionner la source de données</label>
+		<name>SelectDataSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Template Editor</label>
+		<name>SelectDocumentType</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter un nom du modèle</label>
+		<name>AddTemplateName</name>
+	</customLabels>
+	<customLabels>
+		<label>Ajouter une description pour le modèle</label>
+		<name>AddTemplateDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>En savoir plus sur l’éditeur en ligne</label>
+		<name>OnlineEditorHelpLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
+	<customLabels>
+		<name>CreateLabel</name>
+		<label>Créer</label>
+	</customLabels>
+	<customLabels>
+		<name>DeployLabel</name>
+		<label>Déployer</label>
+	</customLabels>
+	<customLabels>
+		<name>PublishLabel</name>
+		<label>Publier</label>
+	</customLabels>
+	<customLabels>
+		<name>SetFileNameRules</name>
+		<label>Définir les règles d’appellation des fichiers</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorFileToolTip</name>
+		<label>Tout document généré avec ce modèle prendra le nom que vous aurez saisi dans les cases. Par exemple, si le nom du fichier est « asdCommande »asd et le suffixe « asdDate »asd, un document généré peut être appelé « asdCommande_6-03-2019 »asd</label>
+	</customLabels>
+	<customLabels>
+		<name>FileName</name>
+		<label>Nom du fichier</label>
+	</customLabels>
+	<customLabels>
+		<name>AddCustomButton</name>
+		<label>Ajouter un bouton personnalisé</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorButtonPublishPrompt</name>
+		<label>Ajoutez un nouveau bouton personnalisé pour permettre à vos utilisateurs de générer des documents à partir d’une ou plusieurs des mises en page ci‑dessous.</label>
+	</customLabels>
+	<customLabels>
+		<name>ShowButtonInPrompt</name>
+		<label>Afficher le bouton dans :</label>
+	</customLabels>
+	<customLabels>
+		<name>ExportDataIsUndefinedLabel</name>
+		<label>Les données d’exportation ne sont pas définies</label>
+	</customLabels>
+	<customLabels>
+		<name>InvalidPathLabel</name>
+		<label>Chemin non valide</label>
+	</customLabels>
+	<customLabels>
+		<name>UndefinedOnlineEditorTemplate</name>
+		<label>Modèle de l’éditeur en ligne non défini</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorSaveValidation</name>
+		<label>Vous devez enregistrer ce modèle avant de passer à cette étape</label>
+	</customLabels>
+	<customLabels>
+		<name>MostCommonlyUsed</name>
+		<label>LES PLUS UTILISÉS</label>
+	</customLabels>
+	<customLabels>
+		<name>OtherItems</name>
+		<label>AUTRES ÉLÉMENTS</label>
+	</customLabels>
+	<!-- End of Chorus Gen Labels -->
 	<customLabels>
 		<label>Autres sources</label>
 		<name>OtherSourcesText</name>
@@ -4341,6 +4687,102 @@
 	<customLabels>
 		<label>Une fois que vous avez créé un workflow dans CLM, vous pouvez l’intégrer à Salesforce. Par exemple, la génération d’un document peut déclencher un workflow d’évaluation de documents.</label>
 		<name>KickoffWorkflowSummary</name>
+	</customLabels>
+	<customLabels>
+		<label>Gagnez du temps en migrant votre configuration de modèle et vos utilisateurs DocuSign Gen pour Salesforce ici. Vous ne pouvez pas migrer vos boutons personnalisés, vous devrez donc les recréer dans le lanceur d’applications DocuSign.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; Pour en savoir plus.&lt;/a&gt;</label>
+		<name>MigrationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>URL de redirection non valide.</label>
+		<name>InvalidRedirectUrl</name>
+	</customLabels>
+	<customLabels>
+		<label>Les utilisateurs dont l’identité a été empruntée ne sont pas autorisés à effectuer cette action.</label>
+		<name>UnauthorizedImpersonation</name>
+	</customLabels>
+	<customLabels>
+		<label>Modifier le nom et la description du modèle</label>
+		<name>OnlineEditorTemplateEditTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Il semble que vous utilisiez Internet Explorer, que l’éditeur en ligne ne prend pas en charge. Basculez vers Chrome, Safari ou FireFox.</label>
+		<name>IEValidationError</name>
+	</customLabels>
+	<customLabels>
+		<label>L’éditeur en ligne DocuSign ne prend pas en charge Internet Explorer. Basculez vers un autre navigateur si vous utilisez IE.</label>
+		<name>IEValidationWarning</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} : {1}</label>
+		<name>QueryError_2</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL invalide : {0}\nDétails : {1}</label>
+		<name>InvalidSoql_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Ne peut filtrer les résultats de l’objet source.</label>
+		<name>CannotFilterSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>Ne peut ordonner les résultats de l’objet source.</label>
+		<name>CannotOrderSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>Les résultats de l’objet source sont limités à 1.</label>
+		<name>CannotLimitSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>La limite doit être supérieure à zéro et inférieure à {0}.</label>
+		<name>InvalidLimit_1</name>
+	</customLabels>
+	<customLabels>
+		<label>La profondeur maximale de la requête descendante ({0}) est dépassée.</label>
+		<name>MaxDescendantQueryDepthExceeded_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Les requêtes enfants doivent avoir un nom de relation défini.</label>
+		<name>UndefinedChildRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>Les requêtes descendantes doivent avoir un champ d’identification parentale défini.</label>
+		<name>UndefinedParent</name>
+	</customLabels>
+	<customLabels>
+		<label>Requête non valide</label>
+		<name>InvalidQuery</name>
+	</customLabels>
+	<customLabels>
+		<label>Vous devez disposer des autorisations d’administrateur ou de producteur DocuSign pour effectuer cette opération.</label>
+		<name>MustBeAdministratorOrGenerator</name>
+	</customLabels>
+	<customLabels>
+		<label>Supprimer le modèle</label>
+		<name>DeleteTemplateTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Êtes-vous sûr de vouloir supprimer ce modèle ?</label>
+		<name>DeleteTemplateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Le modèle a été supprimé.</label>
+		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>Erreur</label>
+		<name>Error</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgrade Microsoft Word Gen templates</label>
+		<name>UpgradeWordTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Queued {0} template(s) for upgrade with Apex job {1}.</label>
+		<name>UpgradeTemplatesQueued_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgraded {0} template(s).</label>
+		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>Configuration DocuSign</label>

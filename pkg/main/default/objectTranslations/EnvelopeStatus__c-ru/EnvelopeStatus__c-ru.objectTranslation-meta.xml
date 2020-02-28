@@ -65,11 +65,11 @@
     <layouts>
         <layout>DocuSign Envelope Status Layout</layout>
         <sections>
-            <label>Information</label>
+            <label>Сведения</label>
             <section>Information</section>
         </sections>
         <sections>
-            <label>System Information</label>
+            <label>Сведения о системе</label>
             <section>System Information</section>
         </sections>
     </layouts>

@@ -8,11 +8,11 @@
     <layouts>
         <layout>DocuSign Envelope Status Layout</layout>
         <sections>
-            <label>Information</label>
+            <label>情報</label>
             <section>Information</section>
         </sections>
         <sections>
-            <label>System Information</label>
+            <label>システム情報</label>
             <section>System Information</section>
         </sections>
     </layouts>

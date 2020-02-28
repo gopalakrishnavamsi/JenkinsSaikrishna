@@ -38,6 +38,126 @@
 		<name>AddTemplate</name>
 	</customLabels>
 	<customLabels>
+		<label>不显示符号和 ISO 代码</label>
+		<name>DisplayNoSymbolNoISO</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}有关格式设置的帮助，请参阅&lt;a  style=&quot;color:{1}&quot; href=&quot;https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_cb_format_dates.htm&quot; target=&quot;_blank&quot;&gt; &lt;u&gt;帮助指南&lt;/u&gt;&lt;/a&gt;</label>
+		<name>dateHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>格式错误。</label>
+		<name>dateTextError</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59</label>
+		<name>X18_Jan_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59 pm</label>
+		<name>X2_59_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23</label>
+		<name>X2_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23 pm</label>
+		<name>X2_59_23_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59</label>
+		<name>X14_59</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59:23</label>
+		<name>X14_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-2019</label>
+		<name>X2_59</name>
+	</customLabels>
+	<customLabels>
+		<label>自定义</label>
+		<name>Custom</name>
+	</customLabels>
+	<customLabels>
+		<label>2019/01/18</label>
+		<name>X20190118</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-Jan-18</label>
+		<name>X2019_Jan_18</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-01-18</label>
+		<name>X2019_01_18</name>
+	</customLabels>
+	<customLabels>
+		<label>January 18, 2019</label>
+		<name>January_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan 18, 2019</label>
+		<name>Jan182019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan-18-2019</label>
+		<name>Jan_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/19</label>
+		<name>X01_18_19</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/2019</label>
+		<name>X01182019</name>
+	</customLabels>
+	<customLabels>
+		<label>01-18-2019</label>
+		<name>X01_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>1/18/2019</label>
+		<name>X1_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>2019年1月18日</label>
+		<name>X18_January_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18.01.2019</label>
+		<name>X18012019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-2019</label>
+		<name>X18_01_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-19</label>
+		<name>X18_Jan_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-19</label>
+		<name>X18_01_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18/1/2019</label>
+		<name>X18_1_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>格式范例：X年X月X日</label>
+		<name>dateFieldPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>时间格式</label>
+		<name>TimeFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>格式范例：小时:分钟:秒</label>
+		<name>timeFieldPlaceHolder</name>
+	</customLabels>
+	<customLabels>
 		<label>添加用户</label>
 		<name>AddUser</name>
 	</customLabels>
@@ -156,6 +276,94 @@
 	<customLabels>
 		<label>无法解析收件人源 {0}。</label>
 		<name>CannotResolveRecipientSource_1</name>
+	</customLabels>
+	<customLabels>
+		<label>迁移模板</label>
+		<name>MigrateTemplateButton</name>
+	</customLabels>
+	<customLabels>
+		<label>恭喜！您的模板配置已经在 DocuSign 应用程序启动器中&lt;br/&gt;&lt;br/&gt;。您已成功将模板配置迁移到 DocuSign 应用程序。要使用自定义按钮，需要在 DocuSign 应用程序启动器中重新进行创建。</label>
+		<name>MigrateTemplateEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;span class=&quot;slds-text-color_error&quot;&gt;由于 [{1}，我们无法迁移 {0}。&lt;/span &gt;</label>
+		<name>MigrateTemplateErrorText</name>
+	</customLabels>
+	<customLabels>
+		<label>您已迁移您的模板配置</label>
+		<name>MigrateTemplateSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>已成功迁移所有模板配置</label>
+		<name>MigrateTemplatesSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>迁移用户</label>
+		<name>MigrateUserButton</name>
+	</customLabels>
+	<customLabels>
+		<label>恭喜！您的用户已经在 DocuSign 应用程序启动器中&lt;br/&gt;&lt;br/&gt;。您已成功将用户迁移到 DocuSign 应用程序启动器。</label>
+		<name>MigrateUsersEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>您已迁移您的用户</label>
+		<name>MigrateUsersSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>已成功迁移所有用户。</label>
+		<name>MigrateUsersSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>迁移已完成。卸载 DocuSign Gen for Salesforce 以隐藏此消息。</label>
+		<name>MigrationCompleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>您没有任何要从 DocuSign Gen for Salesforce 迁移的内容。通过卸载隐藏此消息。&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; 了解详情。&lt;/a&gt;</label>
+		<name>MigrationHelpTextforUninstall</name>
+	</customLabels>
+	<customLabels>
+		<label>迁移</label>
+		<name>MigrationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>通过将您的 DocuSign Gen for Salesforce 用户迁移到 DocuSign 应用程序启动器，帮您节省时间。&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; 了解详情。&lt;/a&gt;</label>
+		<name>MigrationUsersHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen for Salesforce 上有 {0} 个用户</label>
+		<name>NumberOfGenUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>迁移可能需要几分钟。请稍后确认</label>
+		<name>OnLoadMigrationText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen for Salesforce 上有 {0} 个模板配置。</label>
+		<name>OnLoadTemplateText</name>
+	</customLabels>
+	<customLabels>
+		<label>从 DocuSign Gen 迁移用户和模板</label>
+		<name>TabMigrationHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>卸载 DocuSign Gen for Salesforce</label>
+		<name>TabMigrationHeaderUninstallText</name>
+	</customLabels>
+	<customLabels>
+		<label>通过将您的 DocuSign Gen for Salesforce 用户迁移到 DocuSign 应用程序启动器，帮您节省时间。</label>
+		<name>UserManagementTabBody</name>
+	</customLabels>
+	<customLabels>
+		<label>从 DocuSign Gen 迁移用户</label>
+		<name>UserManagementTabHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>从 DocuSign Gen 迁移模板</label>
+		<name>DocumentGenerationTabText</name>
+	</customLabels>
+	<customLabels>
+		<label>在这里迁移您的 DocuSign Gen for Salesforce 模板，为您节省时间。您无法迁移自定义按钮，因此，需要在 DocuSign 应用程序启动器重新进行创建。&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; 了解详情。&lt;/a&gt;</label>
+		<name>DocumentGenerationText</name>
 	</customLabels>
 	<customLabels>
 		<label>未授权更新{0}对象：{1}</label>
@@ -288,6 +496,14 @@
 	<customLabels>
 		<label>DocuSign 模板</label>
 		<name>DocuSignTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>包括百分比符号（%）</label>
+		<name>percentCheckboxonPreview</name>
+	</customLabels>
+	<customLabels>
+		<label>百分比格式预览（从 Salesforce 继承）</label>
+		<name>percentageFormatPreviewText</name>
 	</customLabels>
 	<customLabels>
 		<label>完成</label>
@@ -1986,6 +2202,10 @@
 		<name>Download</name>
 	</customLabels>
 	<customLabels>
+		<label>下载带标红版本</label>
+		<name>DownloadWithRedlines</name>
+	</customLabels>
+	<customLabels>
 		<label>共享链接</label>
 		<name>AgreementsShareLink</name>
 	</customLabels>
@@ -2026,8 +2246,12 @@
 		<name>SetApprovalOrder</name>
 	</customLabels>
 	<customLabels>
-		<label>从您组织的 Salesforce 用户中选择。</label>
+		<label>选择批准人：从您组织的 Salesforce 用户中选择的任何用户将有权进行批准。</label>
 		<name>InternalApprovalChooseUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>选择批准人：控制您组织的 Salesforce 用户接收和批准文档的先后顺序。</label>
+		<name>InternalApprovalChooseUsersSequential</name>
 	</customLabels>
 	<customLabels>
 		<label>选择批准人</label>
@@ -2042,8 +2266,12 @@
 		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforce 事件目标无效。</label>
+		<label>登录 DocuSign 前需要设置自定义域。</label>
 		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
+		<name>MyDomainHelpMessage</name>
+		<label>请前往 Salesforce 中的“我的域设置”进行设置。&lt;a href=&quot;https://developer.salesforce.com/docs/atlas.en-us.externalidentityImplGuide.meta/externalidentityImplGuide/external_identity_set_up_my_domain.htm&quot; target=&quot;_blank&quot;&gt;了解详情&lt;/a&gt;</label>
 	</customLabels>
 	<customLabels>
 		<label>在开始使用 DocuSign 之前，必须请求让应用程序代表您获得授权。&lt;br/&gt;&lt;br/&gt;单击“授权”按钮以继续。</label>
@@ -2730,6 +2958,10 @@
 		<name>CreatedBy</name>
 	</customLabels>
 	<customLabels>
+		<label>当前日期</label>
+		<name>CurrentDate</name>
+	</customLabels>
+	<customLabels>
 		<label>01</label>
 		<name>ZeroOne</name>
 	</customLabels>
@@ -3150,7 +3382,7 @@
 		<name>agreementHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>登录前禁用浏览器的弹窗阻止程序。</label>
+		<label>登录前禁用浏览器的弹窗阻止程序。确保您已设置自定义域。</label>
 		<name>DisablePopUp</name>
 	</customLabels>
 	<customLabels>
@@ -3590,15 +3822,15 @@
 		<name>LearnEsignUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide</label>
 		<name>LearnGenAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-for-salesforce-gen-user-guide</label>
 		<name>LearnGenUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-negotiate-for-salesforce-user-guide</label>
 		<name>LearnNegotiateUserURL</name>
 	</customLabels>
 	<customLabels>
@@ -3610,11 +3842,11 @@
 		<name>ComponentsEnvelopeStatusVideo</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnAppsLauncherAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnComponentsLayoutsURL</name>
 	</customLabels>
 	<customLabels>
@@ -4297,6 +4529,124 @@
 		<label>正在授权</label>
 		<name>Authorizing</name>
 	</customLabels>
+	<!-- Start of Chorus Gen Labels -->
+	<customLabels>
+		<label>已创建模板“{0}”。</label>
+		<name>OnlineEditorTemplateCreated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>已更新模板“{0}”。</label>
+		<name>OnlineEditorTemplateUpdated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>已更新模板“{0}”按钮。</label>
+		<name>OnlineEditorAfterPublish_1</name>
+	</customLabels>
+	<customLabels>
+		<label>创建模板</label>
+		<name>CreateNewTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>创建合同模板。从 Salesforce 复制、粘贴字段到 Word。</label>
+		<name>MicrosoftWordDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Output format: DOCX, PDF</label>
+		<name>MicrosoftWordFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>只需单击几下即可创建合同模板。只需在我们的 Web 编辑器中拖放字段。</label>
+		<name>OnlineEditorDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Output format: ADF, HTML</label>
+		<name>OnlineEditorFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>选择数据源</label>
+		<name>SelectDataSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Template Editor</label>
+		<name>SelectDocumentType</name>
+	</customLabels>
+	<customLabels>
+		<label>添加模板名称</label>
+		<name>AddTemplateName</name>
+	</customLabels>
+	<customLabels>
+		<label>添加模板描述</label>
+		<name>AddTemplateDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>了解有关“在线编辑器”的更多信息</label>
+		<name>OnlineEditorHelpLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
+	<customLabels>
+		<name>CreateLabel</name>
+		<label>创建</label>
+	</customLabels>
+	<customLabels>
+		<name>DeployLabel</name>
+		<label>部署</label>
+	</customLabels>
+	<customLabels>
+		<name>PublishLabel</name>
+		<label>發佈</label>
+	</customLabels>
+	<customLabels>
+		<name>SetFileNameRules</name>
+		<label>设置文档命名规则</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorFileToolTip</name>
+		<label>使用此模板生成的所有文档都将使用您在文本框中输入的名称。例如，如果文件名是“asdSales Order”asd，后缀是“asdDate”asd，则所生成的文档名将是“asdSales Order_3-06-2019”asd</label>
+	</customLabels>
+	<customLabels>
+		<name>FileName</name>
+		<label>檔案名稱</label>
+	</customLabels>
+	<customLabels>
+		<name>AddCustomButton</name>
+		<label>添加自定义按钮</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorButtonPublishPrompt</name>
+		<label>添加新的自定义按钮，可以让用户从以下的一个或多个页面布局生成文档。</label>
+	</customLabels>
+	<customLabels>
+		<name>ShowButtonInPrompt</name>
+		<label>在以下位置显示按钮：</label>
+	</customLabels>
+	<customLabels>
+		<name>ExportDataIsUndefinedLabel</name>
+		<label>导出数据未定义</label>
+	</customLabels>
+	<customLabels>
+		<name>InvalidPathLabel</name>
+		<label>无效路径</label>
+	</customLabels>
+	<customLabels>
+		<name>UndefinedOnlineEditorTemplate</name>
+		<label>未定义的在线编辑器模板</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorSaveValidation</name>
+		<label>前往此步骤前必须保存此模板</label>
+	</customLabels>
+	<customLabels>
+		<name>MostCommonlyUsed</name>
+		<label>最常用</label>
+	</customLabels>
+	<customLabels>
+		<name>OtherItems</name>
+		<label>其他项</label>
+	</customLabels>
+	<!-- End of Chorus Gen Labels -->
 	<customLabels>
 		<label>其他源</label>
 		<name>OtherSourcesText</name>
@@ -4338,8 +4688,100 @@
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
-		<name>OnlineEditorHelpUrl</name>
+		<label>在这里迁移您的 DocuSign Gen for Salesforce 用户和模板，为您节省时间。您无法迁移自定义按钮，因此，需要在 DocuSign 应用程序启动器重新创建它们。&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; 了解详情。&lt;/a&gt;</label>
+		<name>MigrationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>无效的重定向 URL。</label>
+		<name>InvalidRedirectUrl</name>
+	</customLabels>
+	<customLabels>
+		<label>模拟用户无权执行此操作。</label>
+		<name>UnauthorizedImpersonation</name>
+	</customLabels>
+	<customLabels>
+		<label>编辑模板名称和描述</label>
+		<name>OnlineEditorTemplateEditTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>看来您正在使用“在线编辑器”不支持的 Internet Explorer。请使用 Chrome、Safari 或火狐浏览器。</label>
+		<name>IEValidationError</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 在线编辑器不支持 Internet Explorer。如您正在使用 IE，请切换到其他浏览器。</label>
+		<name>IEValidationWarning</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}: {1}</label>
+		<name>QueryError_2</name>
+	</customLabels>
+	<customLabels>
+		<label>无效 SOQL：{0}\n详细信息：{1}</label>
+		<name>InvalidSoql_2</name>
+	</customLabels>
+	<customLabels>
+		<label>无法筛选源对象结果。</label>
+		<name>CannotFilterSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>无法排序源对象结果。</label>
+		<name>CannotOrderSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>源对象结果限制为 1。</label>
+		<name>CannotLimitSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>限制值必须大于 0 且小于 {0}。</label>
+		<name>InvalidLimit_1</name>
+	</customLabels>
+	<customLabels>
+		<label>超出最大子系查询深度 ({0})。</label>
+		<name>MaxDescendantQueryDepthExceeded_1</name>
+	</customLabels>
+	<customLabels>
+		<label>子系查询必须具有定义的关系名称。</label>
+		<name>UndefinedChildRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>子系查询必须具有定义的父代 ID 字段。</label>
+		<name>UndefinedParent</name>
+	</customLabels>
+	<customLabels>
+		<label>无效查询</label>
+		<name>InvalidQuery</name>
+	</customLabels>
+	<customLabels>
+		<label>您必须拥有 DocuSign 管理员权限或生成器权限才能执行此操作。</label>
+		<name>MustBeAdministratorOrGenerator</name>
+	</customLabels>
+	<customLabels>
+		<label>删除模板</label>
+		<name>DeleteTemplateTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>是否确定要删除该模板？</label>
+		<name>DeleteTemplateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>模板已删除。</label>
+		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>錯誤</label>
+		<name>Error</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgrade Microsoft Word Gen templates</label>
+		<name>UpgradeWordTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Queued {0} template(s) for upgrade with Apex job {1}.</label>
+		<name>UpgradeTemplatesQueued_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgraded {0} template(s).</label>
+		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 设置</label>

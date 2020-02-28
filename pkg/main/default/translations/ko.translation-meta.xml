@@ -38,6 +38,126 @@
 		<name>AddTemplate</name>
 	</customLabels>
 	<customLabels>
+		<label>기호 및 ISO 코드 없이 표시</label>
+		<name>DisplayNoSymbolNoISO</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} 형식 도움말은 &lt;a  style=&quot;color:{1}&quot; href=&quot;https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_cb_format_dates.htm&quot; target=&quot;_blank&quot;&gt; &lt;u&gt;도움말 가이드&lt;/u&gt;&lt;/a&gt;를 참조하십시오</label>
+		<name>dateHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>형식 오류.</label>
+		<name>dateTextError</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59</label>
+		<name>X18_Jan_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59 pm</label>
+		<name>X2_59_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23</label>
+		<name>X2_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23 pm</label>
+		<name>X2_59_23_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59</label>
+		<name>X14_59</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59:23</label>
+		<name>X14_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-2019</label>
+		<name>X2_59</name>
+	</customLabels>
+	<customLabels>
+		<label>사용자 지정</label>
+		<name>Custom</name>
+	</customLabels>
+	<customLabels>
+		<label>2019/01/18</label>
+		<name>X20190118</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-Jan-18</label>
+		<name>X2019_Jan_18</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-01-18</label>
+		<name>X2019_01_18</name>
+	</customLabels>
+	<customLabels>
+		<label>January 18, 2019</label>
+		<name>January_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan 18, 2019</label>
+		<name>Jan182019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan-18-2019</label>
+		<name>Jan_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/19</label>
+		<name>X01_18_19</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/2019</label>
+		<name>X01182019</name>
+	</customLabels>
+	<customLabels>
+		<label>01-18-2019</label>
+		<name>X01_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>1/18/2019</label>
+		<name>X1_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>2019년 1월 18일</label>
+		<name>X18_January_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18.01.2019</label>
+		<name>X18012019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-2019</label>
+		<name>X18_01_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-19</label>
+		<name>X18_Jan_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-19</label>
+		<name>X18_01_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18/1/2019</label>
+		<name>X18_1_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>형식 예시: 월, 일, 연도</label>
+		<name>dateFieldPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>시간 형식</label>
+		<name>TimeFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>형식 예시: hh:mm:ss a</label>
+		<name>timeFieldPlaceHolder</name>
+	</customLabels>
+	<customLabels>
 		<label>사용자 추가</label>
 		<name>AddUser</name>
 	</customLabels>
@@ -156,6 +276,94 @@
 	<customLabels>
 		<label>수신자 소스 {0}을(를) 해결할 수 없습니다.</label>
 		<name>CannotResolveRecipientSource_1</name>
+	</customLabels>
+	<customLabels>
+		<label>마이그레이션 템플릿</label>
+		<name>MigrateTemplateButton</name>
+	</customLabels>
+	<customLabels>
+		<label>귀하의 템플릿 구성이 이제 DocuSign Apps Launcher에 있습니다&lt;br/&gt;&lt;br/&gt; 축하합니다! 성공적으로 귀하의 템플릿 구성을 DocuSign Apps로 마이그레이션했습니다. 사용자 지정 버튼을 사용하려면 DocuSign Apps Launcher에서 다시 만들어야 합니다.</label>
+		<name>MigrateTemplateEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;span class=&quot;slds-text-color_error&quot;&gt;[{1}](으)로 인해 {0}(을)를 마이그레이션하지 못했습니다.&lt;/span &gt;</label>
+		<name>MigrateTemplateErrorText</name>
+	</customLabels>
+	<customLabels>
+		<label>귀하의 템플릿 구성을 마이그레이션하셨습니다</label>
+		<name>MigrateTemplateSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>모든 템플릿 구성이 성공적으로 마이그레이션되었습니다.</label>
+		<name>MigrateTemplatesSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>마이그레이션 사용자</label>
+		<name>MigrateUserButton</name>
+	</customLabels>
+	<customLabels>
+		<label>귀하의 사용자가 이제 DocuSign Apps Launcher에 있습니다&lt;br/&gt;&lt;br/&gt; 축하합니다! 성공적으로 귀하의 사용자를 DocuSign Apps Launcher로 마이그레이션했습니다.</label>
+		<name>MigrateUsersEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>귀하의 사용자를 마이그레이션하셨습니다</label>
+		<name>MigrateUsersSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>모든 사용자가 성공적으로 마이그레이션되었습니다.</label>
+		<name>MigrateUsersSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>마이그레이션이 완료되었습니다. 이 메시지를 숨기려면 Salesforce용 DocuSign Gen을 삭제하십시오.</label>
+		<name>MigrationCompleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce용 DocuSign Gen에서 마이그레이션할 것이 없습니다. 이것을 제거하여 이 메시지를 숨길 수 있습니다.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; 더 알아보기.&lt;/a&gt;</label>
+		<name>MigrationHelpTextforUninstall</name>
+	</customLabels>
+	<customLabels>
+		<label>마이그레이션</label>
+		<name>MigrationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce용 DocuSign Gen 사용자를 DocuSign Apps Launcher로 마이그레이션하여 시간을 절약하십시오.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; 더 알아보기.&lt;/a&gt;</label>
+		<name>MigrationUsersHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce용 DocuSign Gen에 사용자 {0}명이 있습니다</label>
+		<name>NumberOfGenUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>마이그레이션에는 몇 분이 소요될 수 있습니다. 잠시 후 다시 방문하여 확인해주십시오</label>
+		<name>OnLoadMigrationText</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce용 DocuSign Gen에 템플릿 구성 {0}개가 있습니다.</label>
+		<name>OnLoadTemplateText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen의 마이그레이션 사용자 및 템플릿</label>
+		<name>TabMigrationHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce용 DocuSign Gen 제거</label>
+		<name>TabMigrationHeaderUninstallText</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce용 DocuSign Gen 사용자를 DocuSign Apps Launcher로 마이그레이션하여 시간을 절약하십시오.</label>
+		<name>UserManagementTabBody</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen의 마이그레이션 사용자</label>
+		<name>UserManagementTabHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen의 마이그레이션 템플릿</label>
+		<name>DocumentGenerationTabText</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforce용 DocuSign Gen 템플릿 구성을 여기서 마이그레이션하여 시간을 절약하십시오. 사용자 지정 버튼을 마이그레이션할 수 없기 때문에 DocuSign Apps Launcher에서 다시 만들어야 합니다.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; 더 알아보기.&lt;/a&gt;</label>
+		<name>DocumentGenerationText</name>
 	</customLabels>
 	<customLabels>
 		<label>다음 {0}개의 필드는 업데이트가 승인되지 않았습니다: {1}</label>
@@ -288,6 +496,14 @@
 	<customLabels>
 		<label>DocuSign 템플릿</label>
 		<name>DocuSignTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>백분율 기호 포함(%)</label>
+		<name>percentCheckboxonPreview</name>
+	</customLabels>
+	<customLabels>
+		<label>백분율  미리보기(Salesforce에서 받음)</label>
+		<name>percentageFormatPreviewText</name>
 	</customLabels>
 	<customLabels>
 		<label>완료</label>
@@ -602,7 +818,7 @@
 		<name>Korean</name>
 	</customLabels>
 	<customLabels>
-		<label>Language</label>
+		<label>언어</label>
 		<name>Language</name>
 	</customLabels>
 	<customLabels>
@@ -1986,6 +2202,10 @@
 		<name>Download</name>
 	</customLabels>
 	<customLabels>
+		<label>Redlines로 다운로드</label>
+		<name>DownloadWithRedlines</name>
+	</customLabels>
+	<customLabels>
 		<label>링크 공유</label>
 		<name>AgreementsShareLink</name>
 	</customLabels>
@@ -2026,8 +2246,12 @@
 		<name>SetApprovalOrder</name>
 	</customLabels>
 	<customLabels>
-		<label>사용자 조직의 Salesforce 사용자 중에서 선택합니다.</label>
+		<label>승인자 선택: 회사의 Salesforce 사용자에서 귀하가 선택한 사용자는 누구나 승인할 수 있습니다.</label>
 		<name>InternalApprovalChooseUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>승인자 선택: 귀하의 회사의 Salesforce 사용자가 귀하의 문서를 받고 승인하는 순서를 제어하십시오.</label>
+		<name>InternalApprovalChooseUsersSequential</name>
 	</customLabels>
 	<customLabels>
 		<label>승인자 선택</label>
@@ -2042,8 +2266,12 @@
 		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<customLabels>
-		<label>유효하지 않은 Salesforce 이벤트 대상입니다.</label>
+		<label>DocuSign에 로그인하기 전 사용자 지정 도메인을 설정해야 합니다.</label>
 		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
+		<name>MyDomainHelpMessage</name>
+		<label>설정을 위해 Salesforce의 &amp;quot;내 도메인 설정&amp;quot;으로 이동하십시오. &lt;a href=&quot;https://developer.salesforce.com/docs/atlas.en-us.externalidentityImplGuide.meta/externalidentityImplGuide/external_identity_set_up_my_domain.htm&quot; target=&quot;_blank&quot;&gt;더 알아보기&lt;/a&gt;</label>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign을 사용하기 전, 귀하를 대신하여 요청을 할 수 있도록 이 애플리케이션을 위한 동의를 허용해야 합니다.&lt;br/&gt;&lt;br/&gt;계속하려면 &amp;quot;승인&amp;quot; 버튼을 클릭합니다.</label>
@@ -2730,6 +2958,10 @@
 		<name>CreatedBy</name>
 	</customLabels>
 	<customLabels>
+		<label>현재 날짜</label>
+		<name>CurrentDate</name>
+	</customLabels>
+	<customLabels>
 		<label>01</label>
 		<name>ZeroOne</name>
 	</customLabels>
@@ -3150,7 +3382,7 @@
 		<name>agreementHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>로그인하기 전에 브라우저의 팝업 차단 기능을 비활성화하십시오.</label>
+		<label>로그인하기 전에 브라우저의 팝업 차단 기능을 비활성화하십시오. 사용자 지정 도메인 설정이 되어 있는지 확인하십시오.</label>
 		<name>DisablePopUp</name>
 	</customLabels>
 	<customLabels>
@@ -3590,15 +3822,15 @@
 		<name>LearnEsignUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide</label>
 		<name>LearnGenAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-for-salesforce-gen-user-guide</label>
 		<name>LearnGenUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-negotiate-for-salesforce-user-guide</label>
 		<name>LearnNegotiateUserURL</name>
 	</customLabels>
 	<customLabels>
@@ -3610,11 +3842,11 @@
 		<name>ComponentsEnvelopeStatusVideo</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnAppsLauncherAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnComponentsLayoutsURL</name>
 	</customLabels>
 	<customLabels>
@@ -4297,6 +4529,124 @@
 		<label>승인 중</label>
 		<name>Authorizing</name>
 	</customLabels>
+	<!-- Start of Chorus Gen Labels -->
+	<customLabels>
+		<label>템플릿 &quot;{0}&quot;(이)가 생성되었습니다.</label>
+		<name>OnlineEditorTemplateCreated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 &quot;{0}&quot;(이)가 업데이트되었습니다.</label>
+		<name>OnlineEditorTemplateUpdated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Template &quot;{0}&quot; 버튼이 업데이트되었습니다.</label>
+		<name>OnlineEditorAfterPublish_1</name>
+	</customLabels>
+	<customLabels>
+		<label>새 템플릿 생성</label>
+		<name>CreateNewTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>계약 템플릿 생성. Salesforce에서 Word로 필드 복사 및 붙여넣기.</label>
+		<name>MicrosoftWordDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Output format: DOCX, PDF</label>
+		<name>MicrosoftWordFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>클릭 몇 번만으로 계약 템플릿을 작성하십시오. 웹 편집기에 필드를 끌어서 놓기만 하면 됩니다.</label>
+		<name>OnlineEditorDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Output format: ADF, HTML</label>
+		<name>OnlineEditorFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>데이터 소스 선택</label>
+		<name>SelectDataSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Template Editor</label>
+		<name>SelectDocumentType</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 이름 추가</label>
+		<name>AddTemplateName</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 설명 추가</label>
+		<name>AddTemplateDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>온라인 편집기에 대해 자세히 알아보기</label>
+		<name>OnlineEditorHelpLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
+	<customLabels>
+		<name>CreateLabel</name>
+		<label>만들기</label>
+	</customLabels>
+	<customLabels>
+		<name>DeployLabel</name>
+		<label>배포</label>
+	</customLabels>
+	<customLabels>
+		<name>PublishLabel</name>
+		<label>게시</label>
+	</customLabels>
+	<customLabels>
+		<name>SetFileNameRules</name>
+		<label>파일 이름 지정 규칙 설정</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorFileToolTip</name>
+		<label>이 템플릿으로 생성된 모든 문서는 상자에 입력한 이름을 사용합니다. 예를 들어 파일 이름이 &quot;asdSales Order&quot;asd이고 접미사가 &quot;asdDate&quot;asd라면, 생성된 문서의 이름은 &quot;asdSales Order_3-06-2019&quot;asd로 지정될 수 있습니다</label>
+	</customLabels>
+	<customLabels>
+		<name>FileName</name>
+		<label>파일 이름</label>
+	</customLabels>
+	<customLabels>
+		<name>AddCustomButton</name>
+		<label>사용자 지정 버튼 추가</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorButtonPublishPrompt</name>
+		<label>귀하의 사용자가 아래의 하나 이상의 페이지 레이아웃에서 문서를 생성할 수 있도록 새로운 사용자 지정 버튼을 추가하십시오.</label>
+	</customLabels>
+	<customLabels>
+		<name>ShowButtonInPrompt</name>
+		<label>다음에서 버튼 표시:</label>
+	</customLabels>
+	<customLabels>
+		<name>ExportDataIsUndefinedLabel</name>
+		<label>데이터 내보내기가 정의되지 않았습니다</label>
+	</customLabels>
+	<customLabels>
+		<name>InvalidPathLabel</name>
+		<label>유효하지 않은 </label>
+	</customLabels>
+	<customLabels>
+		<name>UndefinedOnlineEditorTemplate</name>
+		<label>정의되지 않은 온라인 편집기 템플릿</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorSaveValidation</name>
+		<label>이 단계를 탐색하기 전에 이 템플릿을 저장해야 합니다</label>
+	</customLabels>
+	<customLabels>
+		<name>MostCommonlyUsed</name>
+		<label>가장 일반적으로 사용되는</label>
+	</customLabels>
+	<customLabels>
+		<name>OtherItems</name>
+		<label>기타 항</label>
+	</customLabels>
+	<!-- End of Chorus Gen Labels -->
 	<customLabels>
 		<label>기타 소스</label>
 		<name>OtherSourcesText</name>
@@ -4338,8 +4688,100 @@
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
-		<name>OnlineEditorHelpUrl</name>
+		<label>Salesforce용 DocuSign Gen 사용와 템플릿 구성을 여기에 마이그레이션하여 시간을 절약하십시오. 사용자 지정 버튼을 마이그레이션할 수 없기 때문에 DocuSign Apps Launcher에서 다시 만들어야 합니다.&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt; 더 알아보기.&lt;/a&gt;</label>
+		<name>MigrationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 리디렉션 URL.</label>
+		<name>InvalidRedirectUrl</name>
+	</customLabels>
+	<customLabels>
+		<label>허가 받지 않은 사용자는 이 작업을 수행할 수 있는 권한이 없습니다.</label>
+		<name>UnauthorizedImpersonation</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 이름 및 설명 편집</label>
+		<name>OnlineEditorTemplateEditTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>귀하는 온라인 편집기가 지원하지 않는 Internet Explorer를 사용하고 있습니다. Chrome, Safari, 또는 Firefox로 전환하십시오.</label>
+		<name>IEValidationError</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign의 온라인 편집기는 Internet Explorer를 지원하지 않습니다. IE를 사용하는 경우 다른 브라우저로 전환하십시오.</label>
+		<name>IEValidationWarning</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}: {1}</label>
+		<name>QueryError_2</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 SOQL: {0}\nDetails: {1}</label>
+		<name>InvalidSoql_2</name>
+	</customLabels>
+	<customLabels>
+		<label>원본 개체 결과를 필터링할 수 없습니다.</label>
+		<name>CannotFilterSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>원본 개체 결과를 주문할 수 없습니다.</label>
+		<name>CannotOrderSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>원본 개체 결과는 1로 제한됩니다.</label>
+		<name>CannotLimitSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>제한은 0보다 크고 {0}보다는 작아야 합니다.</label>
+		<name>InvalidLimit_1</name>
+	</customLabels>
+	<customLabels>
+		<label>최대 내림차순 쿼리 깊이가 ({0}) 초과되었습니다.</label>
+		<name>MaxDescendantQueryDepthExceeded_1</name>
+	</customLabels>
+	<customLabels>
+		<label>하위 쿼리에는 정의된 관계 이름이 있어야 합니다.</label>
+		<name>UndefinedChildRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>내림차순 쿼리에는 정의된 상위 ID 필드가 있어야 합니다.</label>
+		<name>UndefinedParent</name>
+	</customLabels>
+	<customLabels>
+		<label>유효하지 않은 쿼리</label>
+		<name>InvalidQuery</name>
+	</customLabels>
+	<customLabels>
+		<label>이 작업을 수행하려면 DocuSign 관리자 또는 생성자 권한이 있어야 합니다.</label>
+		<name>MustBeAdministratorOrGenerator</name>
+	</customLabels>
+	<customLabels>
+		<label>템플릿 삭제</label>
+		<name>DeleteTemplateTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>이 템플릿을 삭제하시겠습니까?</label>
+		<name>DeleteTemplateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>해당 템플릿이 삭제되었습니다.</label>
+		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>오류</label>
+		<name>Error</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgrade Microsoft Word Gen templates</label>
+		<name>UpgradeWordTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Queued {0} template(s) for upgrade with Apex job {1}.</label>
+		<name>UpgradeTemplatesQueued_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Upgraded {0} template(s).</label>
+		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 설정</label>

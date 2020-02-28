@@ -5,5 +5,7 @@
         <plural>false</plural>
         <value>DocuSign 自定义参数映射</value>
     </caseValues>
-    <nameFieldLabel><!-- Name --></nameFieldLabel>
+    <nameFieldLabel>
+        <!-- Name -->
+    </nameFieldLabel>
 </CustomObjectTranslation>

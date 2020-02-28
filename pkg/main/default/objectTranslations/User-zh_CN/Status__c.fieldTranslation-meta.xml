@@ -5,14 +5,14 @@
     <name>Status__c</name>
     <picklistValues>
         <masterLabel>Active</masterLabel>
-        <translation>Active</translation>
+        <translation>活动</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Inactive</masterLabel>
-        <translation>Inactive</translation>
+        <translation>非活动状态</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Pending</masterLabel>
-        <translation>Pending</translation>
+        <translation>待定</translation>
     </picklistValues>
 </CustomFieldTranslation>

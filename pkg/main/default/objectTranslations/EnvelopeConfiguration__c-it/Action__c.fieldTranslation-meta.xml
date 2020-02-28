@@ -5,11 +5,11 @@
     <name>Action__c</name>
     <picklistValues>
         <masterLabel>Prepare</masterLabel>
-        <translation>Prepare</translation>
+        <translation>Prepara</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Send</masterLabel>
-        <translation>Send</translation>
+        <translation>Invia</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Tag</masterLabel>

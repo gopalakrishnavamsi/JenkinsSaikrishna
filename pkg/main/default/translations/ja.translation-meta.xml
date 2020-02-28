@@ -38,6 +38,126 @@
 		<name>AddTemplate</name>
 	</customLabels>
 	<customLabels>
+		<label>記号とISOコードなしで表示</label>
+		<name>DisplayNoSymbolNoISO</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}形式について詳しくは、&lt;a  style=&quot;color:{1}&quot; href=&quot;https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/js_cb_format_dates.htm&quot; target=&quot;_blank&quot;&gt;&lt;u&gt;Salesforceドキュメント&lt;/u&gt;&lt;/a&gt;を参照してください。</label>
+		<name>dateHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>形式エラー。</label>
+		<name>dateTextError</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59</label>
+		<name>X18_Jan_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59 pm</label>
+		<name>X2_59_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23</label>
+		<name>X2_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>2:59:23 pm</label>
+		<name>X2_59_23_pm</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59</label>
+		<name>X14_59</name>
+	</customLabels>
+	<customLabels>
+		<label>14:59:23</label>
+		<name>X14_59_23</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-2019</label>
+		<name>X2_59</name>
+	</customLabels>
+	<customLabels>
+		<label>カスタム</label>
+		<name>Custom</name>
+	</customLabels>
+	<customLabels>
+		<label>2019/01/18</label>
+		<name>X20190118</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-Jan-18</label>
+		<name>X2019_Jan_18</name>
+	</customLabels>
+	<customLabels>
+		<label>2019-01-18</label>
+		<name>X2019_01_18</name>
+	</customLabels>
+	<customLabels>
+		<label>January 18, 2019</label>
+		<name>January_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan 18, 2019</label>
+		<name>Jan182019</name>
+	</customLabels>
+	<customLabels>
+		<label>Jan-18-2019</label>
+		<name>Jan_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/19</label>
+		<name>X01_18_19</name>
+	</customLabels>
+	<customLabels>
+		<label>01/18/2019</label>
+		<name>X01182019</name>
+	</customLabels>
+	<customLabels>
+		<label>01-18-2019</label>
+		<name>X01_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>1/18/2019</label>
+		<name>X1_18_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>2019年1月18日</label>
+		<name>X18_January_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18.01.2019</label>
+		<name>X18012019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-2019</label>
+		<name>X18_01_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>18-Jan-19</label>
+		<name>X18_Jan_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18-01-19</label>
+		<name>X18_01_19</name>
+	</customLabels>
+	<customLabels>
+		<label>18/1/2019</label>
+		<name>X18_1_2019</name>
+	</customLabels>
+	<customLabels>
+		<label>例: YYYY年MM月DD日</label>
+		<name>dateFieldPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>時刻の形式</label>
+		<name>TimeFormat</name>
+	</customLabels>
+	<customLabels>
+		<label>例: hh:mm:ss</label>
+		<name>timeFieldPlaceHolder</name>
+	</customLabels>
+	<customLabels>
 		<label>ユーザーの追加</label>
 		<name>AddUser</name>
 	</customLabels>
@@ -156,6 +276,94 @@
 	<customLabels>
 		<label>受信者ソース{0}を解決できません。</label>
 		<name>CannotResolveRecipientSource_1</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートの移行</label>
+		<name>MigrateTemplateButton</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレート設定がDocuSignアプリケーションランチャーに移行されました。&lt;br/&gt;&lt;br/&gt;既存のテンプレート設定がDocuSignアプリ用に移行されました。カスタムボタンは、DocuSignアプリケーションランチャー内で作成し直す必要があります。</label>
+		<name>MigrateTemplateEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;span class=&quot;slds-text-color_error&quot;&gt;{0}を移行できません。原因: [{1}]。&lt;/span &gt;</label>
+		<name>MigrateTemplateErrorText</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレート設定が移行されました</label>
+		<name>MigrateTemplateSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>すべてのテンプレート設定が移行されました。</label>
+		<name>MigrateTemplatesSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>ユーザーの移行</label>
+		<name>MigrateUserButton</name>
+	</customLabels>
+	<customLabels>
+		<label>ユーザーがDocuSignアプリケーションランチャーに移行されました。&lt;br/&gt;&lt;br/&gt;既存のユーザーがDocuSignアプリケーションランチャーに移行されました。</label>
+		<name>MigrateUsersEmailBody</name>
+	</customLabels>
+	<customLabels>
+		<label>ユーザーが移行されました</label>
+		<name>MigrateUsersSubjectLine</name>
+	</customLabels>
+	<customLabels>
+		<label>すべてのユーザーが移行されました。</label>
+		<name>MigrateUsersSuccessMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>移行が完了しました。DocuSign Gen for Salesforceをアンインストールするとこのメッセージが表示されなくなります。</label>
+		<name>MigrationCompleteMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen for Salesforceから移行できるデータがありません。DocuSign Gen for Salesforceをアンインストールするとこのメッセージが表示されなくなります。&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt;詳細。&lt;/a&gt;</label>
+		<name>MigrationHelpTextforUninstall</name>
+	</customLabels>
+	<customLabels>
+		<label>移行</label>
+		<name>MigrationSection</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen for Salesforceの既存のユーザーデータをDocuSignアプリケーションランチャーに移行できます。&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt;詳細。&lt;/a&gt;</label>
+		<name>MigrationUsersHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen for Salesforceに{0}人のユーザーが登録されています。</label>
+		<name>NumberOfGenUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>移行には数分かかる場合があります。後でこのページに戻って確認できます</label>
+		<name>OnLoadMigrationText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen for Salesforceに{0}件のテンプレート設定が登録されています。</label>
+		<name>OnLoadTemplateText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Genからのユーザーとテンプレートの移行</label>
+		<name>TabMigrationHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen for Salesforceのアンインストール</label>
+		<name>TabMigrationHeaderUninstallText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen for Salesforceの既存のユーザーデータをDocuSignアプリケーションランチャーに移行できます。</label>
+		<name>UserManagementTabBody</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Genからのユーザーの移行</label>
+		<name>UserManagementTabHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Genからのテンプレートの移行</label>
+		<name>DocumentGenerationTabText</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Gen for Salesforceの既存のテンプレート設定を移行できます。カスタムボタンは移行されません。このため、DocuSignアプリケーションランチャー内で作成し直す必要があります。&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt;詳細。&lt;/a&gt;</label>
+		<name>DocumentGenerationText</name>
 	</customLabels>
 	<customLabels>
 		<label>Updateは{0}の以下の項目に使用できません。{1}</label>
@@ -288,6 +496,14 @@
 	<customLabels>
 		<label>DocuSignテンプレート</label>
 		<name>DocuSignTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>パーセント記号（%）を含める</label>
+		<name>percentCheckboxonPreview</name>
+	</customLabels>
+	<customLabels>
+		<label>パーセンテージ形式のプレビュー（Salesforceから継承）</label>
+		<name>percentageFormatPreviewText</name>
 	</customLabels>
 	<customLabels>
 		<label>完了</label>
@@ -1114,7 +1330,7 @@
 		<name>SuccessDownloadingFile</name>
 	</customLabels>
 	<customLabels>
-		<label>有効にすると、DocuSignアカウントのメンバー以外のユーザーがエンベロープを送信したり文書に署名したりできるようになります。設定済みのDocuSign管理者のアカウントが差出人として使用されます。</label>
+		<label>有効にすると、DocuSignアカウントのメンバー以外のユーザーがエンベロープを送信したり文書に署名したりできるようになります。この場合、DocuSign管理者のアカウントが差出人として使用されます。</label>
 		<name>UseSystemSenderHelp</name>
 	</customLabels>
 	<customLabels>
@@ -1943,7 +2159,7 @@
 		<name>ExternalReviewEmailSubject</name>
 	</customLabels>
 	<customLabels>
-		<label>この文章の内容を早急にご確認ください。</label>
+		<label>この文書の内容を早急にご確認ください。</label>
 		<name>ExternalReviewEmailBody</name>
 	</customLabels>
 	<customLabels>
@@ -1987,6 +2203,10 @@
 		<name>Download</name>
 	</customLabels>
 	<customLabels>
+		<label>修正内容付きでダウロード</label>
+		<name>DownloadWithRedlines</name>
+	</customLabels>
+	<customLabels>
 		<label>リンクの共有</label>
 		<name>AgreementsShareLink</name>
 	</customLabels>
@@ -2027,8 +2247,12 @@
 		<name>SetApprovalOrder</name>
 	</customLabels>
 	<customLabels>
-		<label>組織内のSalesforceユーザーから選択します。</label>
+		<label>承認者の選択: 承認者として、組織内のSalesforceユーザーを選択できます。</label>
 		<name>InternalApprovalChooseUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>承認者の選択: 組織内のSalesforceユーザーが文書を受信および承認する順序を制御できます。</label>
+		<name>InternalApprovalChooseUsersSequential</name>
 	</customLabels>
 	<customLabels>
 		<label>承認担当者の選択</label>
@@ -2043,8 +2267,12 @@
 		<name>InternalApprovalEmailBody</name>
 	</customLabels>
 	<customLabels>
-		<label>無効なSalesforceイベントターゲット</label>
+		<label>DocuSignにログインするには、カスタムドメインをセットアップしておく必要があります。</label>
 		<name>InvalidTarget</name>
+	</customLabels>
+	<customLabels>
+		<name>MyDomainHelpMessage</name>
+		<label>これを行うには、Salesforceの［私のドメインの設定］を開きます。&lt;a href=&quot;https://developer.salesforce.com/docs/atlas.en-us.externalidentityImplGuide.meta/externalidentityImplGuide/external_identity_set_up_my_domain.htm&quot; target=&quot;_blank&quot;&gt;詳細&lt;/a&gt;</label>
 	</customLabels>
 	<customLabels>
 		<label>DocuSignを使用するには、DocuSignアプリが要求を代理送信することを承認する必要があります。続行するには、［認証］をクリックします。</label>
@@ -2731,6 +2959,10 @@
 		<name>CreatedBy</name>
 	</customLabels>
 	<customLabels>
+		<label>今日</label>
+		<name>CurrentDate</name>
+	</customLabels>
+	<customLabels>
 		<label>01</label>
 		<name>ZeroOne</name>
 	</customLabels>
@@ -3151,7 +3383,7 @@
 		<name>agreementHelp</name>
 	</customLabels>
 	<customLabels>
-		<label>Webブラウザーのポップアップブロッカーを無効にしてからログインしてください。</label>
+		<label>Webブラウザーのポップアップブロッカーを無効にしてからログインしてください。また、カスタムドメインがセットアップ済みであることを確認してください。</label>
 		<name>DisablePopUp</name>
 	</customLabels>
 	<customLabels>
@@ -3477,7 +3709,7 @@
 		<name>GenMarketingBody2</name>
 	</customLabels>
 	<customLabels>
-		<label>https://www.docusign.com/products/gen</label>
+		<label>https://www.docusign.jp/products/gen</label>
 		<name>GenMarketingLink</name>
 	</customLabels>
 	<customLabels>
@@ -3589,15 +3821,15 @@
 		<name>LearnEsignUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-administrator-guide</label>
+		<label>https://support.docusign.com/jp/guides/docusign-gen-for-salesforce-admin-guide</label>
 		<name>LearnGenAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-gen-user-guide</label>
+		<label>https://support.docusign.com/jp/guides/docusign-gen-for-salesforce-user-guide</label>
 		<name>LearnGenUserURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-negotiate-user-guide</label>
+		<label>https://support.docusign.com/jp/guides/docusign-negotiate-for-salesforce-user-guide</label>
 		<name>LearnNegotiateUserURL</name>
 	</customLabels>
 	<customLabels>
@@ -3609,11 +3841,11 @@
 		<name>ComponentsEnvelopeStatusVideo</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/jp/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnAppsLauncherAdminURL</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/en/guides/docusign-apps-launcher-administrator-guide</label>
+		<label>https://support.docusign.com/jp/guides/docusign-apps-launcher-for-salesforce-admin-guide</label>
 		<name>LearnComponentsLayoutsURL</name>
 	</customLabels>
 	<customLabels>
@@ -3677,7 +3909,7 @@
 		<name>NegotiateHelpGettingStarted</name>
 	</customLabels>
 	<customLabels>
-		<label>文書生成機能を使用してテンプレートを作成するか既存のものを使用します</label>
+		<label>文書生成機能を使用してテンプレートを作成するか既存のものを選択する</label>
 		<name>NegotiateHelpText1</name>
 	</customLabels>
 	<customLabels>
@@ -3689,7 +3921,7 @@
 		<name>NegotiateHelpText3</name>
 	</customLabels>
 	<customLabels>
-		<label>文書のステータスを追跡するには［DocuSignファイル］コンポーネントを追加します</label>
+		<label>文書のステータスを追跡するための［DocuSignファイル］コンポーネントを追加する</label>
 		<name>NegotiateHelpText4</name>
 	</customLabels>
 	<customLabels>
@@ -3701,7 +3933,7 @@
 		<name>NegotiateHelpImageBody</name>
 	</customLabels>
 	<customLabels>
-		<label>文書に移動</label>
+		<label>ガイドの参照</label>
 		<name>GoToDocumentation</name>
 	</customLabels>
 	<customLabels>
@@ -3781,7 +4013,7 @@
 		<name>CLMRole</name>
 	</customLabels>
 	<customLabels>
-		<label>プロフィール</label>
+		<label>プロファイル</label>
 		<name>ProfileLabel</name>
 	</customLabels>
 	<customLabels>
@@ -4296,6 +4528,124 @@
 		<label>認証しています</label>
 		<name>Authorizing</name>
 	</customLabels>
+	<!-- Start of Chorus Gen Labels -->
+	<customLabels>
+		<label>テンプレート「{0}」が作成されました。</label>
+		<name>OnlineEditorTemplateCreated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレート「{0}」が更新されました。</label>
+		<name>OnlineEditorTemplateUpdated_1</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレート「{0}」のボタンが更新されました。</label>
+		<name>OnlineEditorAfterPublish_1</name>
+	</customLabels>
+	<customLabels>
+		<label>新しいテンプレートの作成</label>
+		<name>CreateNewTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>契約書のテンプレートを作成します。SalesforceからWord上にフィールドをコピーして貼り付けます。</label>
+		<name>MicrosoftWordDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>出力形式: DOCX、PDF</label>
+		<name>MicrosoftWordFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>数回のクリックで契約書のテンプレートを作成できます。Webブラウザー上のエディータでフィールドをドラッグ＆ドロップします。</label>
+		<name>OnlineEditorDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>出力形式: ADF、HTML</label>
+		<name>OnlineEditorFormats</name>
+	</customLabels>
+	<customLabels>
+		<label>データソースの選択</label>
+		<name>SelectDataSource</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートエディターの選択</label>
+		<name>SelectDocumentType</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレート名の追加</label>
+		<name>AddTemplateName</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートの説明を追加</label>
+		<name>AddTemplateDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>オンラインエディターについて</label>
+		<name>OnlineEditorHelpLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Agreement-Cloud-Editor-Template-Creation</label>
+		<name>OnlineEditorHelpUrl</name>
+	</customLabels>
+	<customLabels>
+		<name>CreateLabel</name>
+		<label>作成</label>
+	</customLabels>
+	<customLabels>
+		<name>DeployLabel</name>
+		<label>デプロイ</label>
+	</customLabels>
+	<customLabels>
+		<name>PublishLabel</name>
+		<label>発行</label>
+	</customLabels>
+	<customLabels>
+		<name>SetFileNameRules</name>
+		<label>ファイル命名規則の設定</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorFileToolTip</name>
+		<label>このテンプレートを使って生成した文書には、このボックスに入力した名前が適用されます。たとえば、ファイル名が「Sales Order」でサフィックスが「Date」の場合、生成された文書の名前は「Sales Order_3-06-2019」などになります。</label>
+	</customLabels>
+	<customLabels>
+		<name>FileName</name>
+		<label>ファイル名</label>
+	</customLabels>
+	<customLabels>
+		<name>AddCustomButton</name>
+		<label>カスタムボタンの追加</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorButtonPublishPrompt</name>
+		<label>以下のページレイアウトに新しいカスタムボタンを追加します。これにより、これらのページからユーザーが文書を生成できるようになります。</label>
+	</customLabels>
+	<customLabels>
+		<name>ShowButtonInPrompt</name>
+		<label>ボタンの追加先:</label>
+	</customLabels>
+	<customLabels>
+		<name>ExportDataIsUndefinedLabel</name>
+		<label>エクスポートデータが未定義です</label>
+	</customLabels>
+	<customLabels>
+		<name>InvalidPathLabel</name>
+		<label>無効なパスです</label>
+	</customLabels>
+	<customLabels>
+		<name>UndefinedOnlineEditorTemplate</name>
+		<label>オンラインエディターテンプレートが未定義です</label>
+	</customLabels>
+	<customLabels>
+		<name>OnlineEditorSaveValidation</name>
+		<label>このステップに進む前にこのテンプレートを保存してください</label>
+	</customLabels>
+	<customLabels>
+		<name>MostCommonlyUsed</name>
+		<label>使用頻度の高い項目</label>
+	</customLabels>
+	<customLabels>
+		<name>OtherItems</name>
+		<label>そのほかの項目</label>
+	</customLabels>
+	<!-- End of Chorus Gen Labels -->
 	<customLabels>
 		<label>ほかのソース</label>
 		<name>OtherSourcesText</name>
@@ -4337,8 +4687,100 @@
 		<name>KickoffWorkflowSummary</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/jp/articles/Agreement-Cloud-Editor-Template-Creation</label>
-		<name>OnlineEditorHelpUrl</name>
+		<label>DocuSign Gen for Salesforceの既存のユーザーとテンプレート設定を移行できます。カスタムボタンは移行されません。このため、DocuSignアプリケーションランチャー内で作成し直す必要があります。&lt;a href=&quot;https://support.docusign.com/articles/Transitioning-to-the-new-Docusign-Gen-for-Salesforce-app&quot;&gt;詳細。&lt;/a&gt;</label>
+		<name>MigrationHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>リダイレクトURLが無効です。</label>
+		<name>InvalidRedirectUrl</name>
+	</customLabels>
+	<customLabels>
+		<label>偽装ユーザーには、この操作を実行する権限がありません。</label>
+		<name>UnauthorizedImpersonation</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートの名前と説明を編集</label>
+		<name>OnlineEditorTemplateEditTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>お使いのInternet Explorerではオンラインエディターを使用できません。Chrome、Safari、またはFirefoxを使用してください。</label>
+		<name>IEValidationError</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSignオンラインエディターはInternet Explorerをサポートしていません。ほかのWebブラウザーを使用してください。</label>
+		<name>IEValidationWarning</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}: {1}</label>
+		<name>QueryError_2</name>
+	</customLabels>
+	<customLabels>
+		<label>無効なSOQL: {0}\n詳細: {1}</label>
+		<name>InvalidSoql_2</name>
+	</customLabels>
+	<customLabels>
+		<label>ソースオブジェクトの結果をフィルターできません。</label>
+		<name>CannotFilterSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>ソースオブジェクトの結果を並べ替えできません。</label>
+		<name>CannotOrderSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>ソースオブジェクトの結果は1つに限定されています。</label>
+		<name>CannotLimitSourceObjectResults</name>
+	</customLabels>
+	<customLabels>
+		<label>制限値は1以上{0}未満である必要があります。</label>
+		<name>InvalidLimit_1</name>
+	</customLabels>
+	<customLabels>
+		<label>子孫クエリの最大階層（{0}）を超えました。</label>
+		<name>MaxDescendantQueryDepthExceeded_1</name>
+	</customLabels>
+	<customLabels>
+		<label>子クエリには定義済みのリレーションシップ名が必要です。</label>
+		<name>UndefinedChildRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>子孫クエリには定義済みの親IDフィールドが必要です。</label>
+		<name>UndefinedParent</name>
+	</customLabels>
+	<customLabels>
+		<label>無効なクエリです</label>
+		<name>InvalidQuery</name>
+	</customLabels>
+	<customLabels>
+		<label>この操作を行うには、DocuSign管理者または文書生成者の権限が必要です。</label>
+		<name>MustBeAdministratorOrGenerator</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートの削除</label>
+		<name>DeleteTemplateTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>このテンプレートを削除してもよろしいですか?</label>
+		<name>DeleteTemplateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートが削除されました。</label>
+		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>エラー</label>
+		<name>Error</name>
+	</customLabels>
+	<customLabels>
+		<label>Microsoft Word Genテンプレートのアップグレード</label>
+		<name>UpgradeWordTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}件のテンプレートがApexジョブ{1}でのアップグレードキューに追加されました。</label>
+		<name>UpgradeTemplatesQueued_2</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}件のテンプレートがアップグレードされました。</label>
+		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSignセットアップ</label>

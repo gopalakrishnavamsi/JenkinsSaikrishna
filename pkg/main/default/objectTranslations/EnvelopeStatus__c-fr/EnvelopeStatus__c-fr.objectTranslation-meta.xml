@@ -13,11 +13,11 @@
     <layouts>
         <layout>DocuSign Envelope Status Layout</layout>
         <sections>
-            <label>Information</label>
+            <label>Informations</label>
             <section>Information</section>
         </sections>
         <sections>
-            <label>System Information</label>
+            <label>Informations système</label>
             <section>System Information</section>
         </sections>
     </layouts>

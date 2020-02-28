@@ -5,14 +5,14 @@
     <name>Status__c</name>
     <picklistValues>
         <masterLabel>Active</masterLabel>
-        <translation>Active</translation>
+        <translation>Ativado</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Inactive</masterLabel>
-        <translation>Inactive</translation>
+        <translation>Inativo</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Pending</masterLabel>
-        <translation>Pending</translation>
+        <translation>Pendente</translation>
     </picklistValues>
 </CustomFieldTranslation>

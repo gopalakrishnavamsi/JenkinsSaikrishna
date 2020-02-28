@@ -5,14 +5,14 @@
     <name>Action__c</name>
     <picklistValues>
         <masterLabel>Prepare</masterLabel>
-        <translation>Prepare</translation>
+        <translation>準備</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Send</masterLabel>
-        <translation>Send</translation>
+        <translation>送信</translation>
     </picklistValues>
     <picklistValues>
         <masterLabel>Tag</masterLabel>
-        <translation>Tag</translation>
+        <translation>フィールドの追加</translation>
     </picklistValues>
 </CustomFieldTranslation>
