@@ -4,8 +4,10 @@ public class MergeField implements Comparable {
 	public static final Integer MAX_CHILD_DEPTH = 2;
 	@TestVisible
 	private static final String TYPE_CHILD_RELATIONSHIP = 'CHILD_RELATIONSHIP';
-	// removing OwnerId to show on UI
+	// updating the list of blocked fields
 	private static final List<String> BLACKLIST = new List<String> {
+		'LastModifiedDate', 'LastReferencedDate', 'SystemModstamp',
+		'LastViewedDate', 'CreatedDate', 'IsArchived', 'IsDeleted',
 		'CreatedById', 'LastModifiedById'
 	};
 

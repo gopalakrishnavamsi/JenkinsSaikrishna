@@ -4,7 +4,10 @@ public class OnlineEditorMergeObject implements Comparable {
 		Schema.Task.sObjectType
 	};
 
+	// updating the list of blocked fields
 	private static final List<String> FIELD_BLACKLIST = new List<String> {
+		'LastModifiedDate', 'LastReferencedDate', 'SystemModstamp',
+		'LastViewedDate', 'CreatedDate', 'IsArchived', 'IsDeleted',
 		'CreatedById', 'LastModifiedById'
 	};
 
