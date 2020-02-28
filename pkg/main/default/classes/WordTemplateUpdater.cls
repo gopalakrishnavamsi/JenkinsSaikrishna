@@ -38,13 +38,16 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		Boolean isDateFormatDefined = String.isNotBlank(v1.dateFormat) && v1.dateFormat != 'default';
 		Boolean isCurrencyFormatDefined = String.isNotBlank(v1.currencyFormat) && v1.currencyFormat != 'default';
 		if (isDateFormatDefined &&
-			(v1.dataType == 'DATE'
-				|| v1.dataType == 'TIME'
-				|| v1.dataType == 'DATETIME'
+			(v1.dataType == Schema.DisplayType.DATE.name()
+				|| v1.dataType == Schema.DisplayType.TIME.name()
+				|| v1.dataType == Schema.DisplayType.DATETIME.name()
 				|| v1.apiName == 'CurrentDate')) {
 
 			result = v1.dateFormat;
-		} else if (isCurrencyFormatDefined && v1.dataType == 'CURRENCY') {
+		} else if (isCurrencyFormatDefined
+			&& (v1.dataType == Schema.DisplayType.CURRENCY.name()
+			|| v1.dataType == Schema.DisplayType.DOUBLE.name())) {
+
 			result = v1.currencyFormat;
 		}
 		return result;
@@ -278,6 +281,7 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		List<Gen.FieldMapping> result = new List<Gen.FieldMapping> { root };
 		Map<String, Gen.FieldMapping> lookups = new Map<String, Gen.FieldMapping>();
 		Map<String, Relationship> childRelationships = new Map<String, Relationship>();
+		Set<String> alreadyAdded = new Set<String>();
 		for (FieldV1 f : v1) {
 			Gen.FieldMapping v2 = convert(
 				f,
@@ -285,8 +289,9 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 				root,
 				lookups,
 				childRelationships);
-			if (v2 != null && !v2.isRoot) { // Root is already added
+			if (v2 != null && !v2.isRoot && !alreadyAdded.contains(v2.key)) { // Root is already added
 				result.add(v2);
+				alreadyAdded.add(v2.key);
 			}
 		}
 		return result;
