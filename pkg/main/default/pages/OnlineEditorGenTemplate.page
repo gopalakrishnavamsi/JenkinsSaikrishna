@@ -78,9 +78,10 @@
 
         .slds-page-header__title {
             font-weight: 600;
-            height:16px;
+            height: 16px;
+            width: fit-content;
         }
-
+        
         .slds-scope .slds-page-header {
             font-size: 15px;
         }
