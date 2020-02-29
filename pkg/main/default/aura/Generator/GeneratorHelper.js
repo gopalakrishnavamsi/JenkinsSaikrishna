@@ -178,26 +178,31 @@
     query.relationship = relationship;
     query.parentIdField = parentIdField;
     fm.fields.forEach(function (field) {
-      var childKey = '';
-      if (fm.depth === 1) {
-        childKey = helper.getChildKey(field.name, fm.depth, field.type);
-      } else {
-        childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
-      }
-      var child = map[childKey];
-      if (field.type === 'CHILD_RELATIONSHIP') {
-        children.push(helper.traverseFieldMapping(child, field.relationship, field.parentIdField, field.name, map, isMultiCurrency));
-      } else if (field.type === 'REFERENCE') {
-        helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
-          fields.push(f);
-        });
-      } else if (isMultiCurrency && field.type === 'CURRENCY') {
-        fields.push('CurrencyIsoCode');
-        fields.push(field.name);
-      } else if (field.name !== 'CurrentDate') {
-        fields.push(field.name);
+      if (field !== undefined && field.name !== undefined && field.name !== '') {
+        var childKey = '';
+        if (fm.depth === 1) {
+          childKey = helper.getChildKey(field.name, fm.depth, field.type);
+        } else {
+          childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
+        }
+        var child = map[childKey];
+        if (field.type === 'CHILD_RELATIONSHIP') {
+          children.push(helper.traverseFieldMapping(child, field.relationship, field.parentIdField, field.name, map, isMultiCurrency));
+        } else if (field.type === 'REFERENCE') {
+          helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
+            fields.push(f);
+          });
+        } else if (isMultiCurrency && field.type === 'CURRENCY') {
+          fields.push('CurrencyIsoCode');
+          fields.push(field.name);
+        } else if (field.name !== 'CurrentDate') {
+          fields.push(field.name);
+        }
       }
     });
+    if(fields.length === 0) {
+      fields.push('Id');
+    }
     query.fields = fields;
     query.children = children;
     return query;
@@ -312,162 +317,6 @@
       );
   },
 
-  generateXMLOld: function (xmlRoot, recordData, objMap, isChild, component) {
-    var helper = this;
-    var objRoot = xmlRoot.createElement(isChild ? objMap.label.replace(/\s/g, '_') : objMap.apiName.replace(/\s/g, '_'));
-    var unformattedDataTypes = ['DATE', 'DATETIME', 'TIME', 'DOUBLE', 'PERCENT', 'CURRENCY'];
-    var fieldMappings = isChild
-      ? objMap.childFieldMappings
-      : objMap.fieldMappings;
-    var seenFields = []; //prevent duplicate node names;
-
-    fieldMappings.forEach(function (fieldMap) {
-      var apiName = fieldMap.apiName;
-      var fieldNode = null;
-      var dateFormat = null;
-      var timeFormat = null;
-
-
-      if (fieldMap.isChildRelation) {
-        fieldNode = xmlRoot.createElement(fieldMap.label + '_Container');
-        //label is childRelationName
-        if (recordData[fieldMap.label]) {
-          var childRecords = recordData[fieldMap.label];
-          childRecords.forEach(function (childRecord) {
-            var childXML = helper.generateXML(
-              xmlRoot,
-              childRecord,
-              fieldMap,
-              true,
-              component
-            );
-            fieldNode.appendChild(childXML);
-          });
-        }
-
-        objRoot.appendChild(fieldNode);
-      } else if (seenFields.indexOf(apiName) === -1) {
-        seenFields.push(apiName);
-
-        var dataType = fieldMap.dataType;
-        fieldNode = xmlRoot.createElement(apiName);
-        var locale = $A.get('$Locale');
-        var fieldVal;
-
-        if (apiName.indexOf('.') !== -1) {
-          var lookupParts = apiName.split('.');
-          var parent = recordData[lookupParts[0]];
-
-          if ($A.util.isEmpty(parent)) {
-            fieldVal = '';
-          } else {
-            fieldVal = parent[lookupParts[1]];
-          }
-        } else {
-          fieldVal = recordData[apiName];
-        }
-
-        //Spring requested any date or datetime be put in in an unformatted state
-        //for further processing on their side.
-        // for dataTypes: date, datetime, time, currency, percent, number
-        if (unformattedDataTypes.includes(dataType)) {
-          var dateNode = xmlRoot.createElement(apiName + 'Unformatted');
-          var dateContent = xmlRoot.createTextNode(fieldVal);
-          dateNode.appendChild(dateContent);
-          objRoot.appendChild(dateNode);
-        }
-
-        if (apiName === 'CurrentDate') {
-          fieldVal = new Date();
-        }
-        if ($A.util.isEmpty(fieldVal)) {
-          fieldVal = '';
-        } else if (dataType === 'DATE') {
-          dateFormat = fieldMap.format;
-
-          if (dateFormat === 'default') {
-            dateFormat = locale.dateFormat;
-          }
-
-          fieldVal = $A.localizationService.formatDate(fieldVal, dateFormat);
-        } else if (dataType === 'TIME') {
-          timeFormat = fieldMap.format;
-          if (timeFormat === 'default') {
-            timeFormat = locale.timeFormat;
-          }
-
-          var date = new Date(fieldVal);
-          fieldVal = ($A.localizationService.formatDateTimeUTC(date, 'YYYY-MM-DD,' + timeFormat)).split(',')[1];
-        } else if (dataType === 'DATETIME') {
-          var formats = fieldMap.format.split('|');
-          if (formats[0] === 'default') {
-            formats[0] = locale.dateFormat;
-          }
-          if (formats[1] === 'default') {
-            formats[1] = locale.timeFormat;
-          }
-          //ADDING TIMEZONE OFFSET
-          $A.localizationService.UTCToWallTime(new Date(fieldVal), $A.get('$Locale.timezone'), function (offSetDateTime) {
-            fieldVal = offSetDateTime;
-          });
-          // FIXME: No hardcoded time format.
-          fieldVal = $A.localizationService.formatDateTimeUTC(
-            fieldVal, stringUtils.format('{0}{1}{2}', formats[0], ' ', formats[1]));
-        } else if (dataType === 'CURRENCY') {
-          var isMultiCurrency = component.get('v.isMultiCurrency');
-          var currencyCode = locale.currencyCode;
-          if (isMultiCurrency) {
-            if (apiName.indexOf('.') !== -1) {
-              var parentObject = recordData[apiName.split('.')[0]];
-              if (!$A.util.isEmpty(parentObject) && parentObject['CurrencyIsoCode']) {
-                currencyCode = parentObject['CurrencyIsoCode'];
-              }
-            } else {
-              currencyCode = recordData['CurrencyIsoCode'];
-            }
-          }
-          fieldVal = helper.setCurrencyFormat(fieldVal, fieldMap, currencyCode);
-        } else if (dataType === 'ADDRESS') {
-          var address = fieldVal;
-          fieldVal = '';
-
-          if (!$A.util.isEmpty(address.street)) {
-            fieldVal += address.street;
-          }
-
-          if (!$A.util.isEmpty(address.city)) {
-            fieldVal += ', ' + address.city;
-          }
-
-          if (!$A.util.isEmpty(address.state)) {
-            fieldVal += ', ' + address.state;
-          }
-
-          if (!$A.util.isEmpty(address.postal)) {
-            fieldVal += ' ' + address.postal;
-          }
-
-          if (!$A.util.isEmpty(address.country)) {
-            fieldVal += ' ' + address.country;
-          }
-        } else if (dataType === 'PERCENT') {
-          var percentSymbol =  $A.util.getBooleanValue(fieldMap.format) ? '%' : '';
-          fieldVal = stringUtils.format('{0}{1}',helper.formatNumber(fieldVal, fieldMap.decimalPlaces), percentSymbol);
-        } else if (dataType === 'DOUBLE') {
-          fieldVal = helper.formatNumber(fieldVal, fieldMap.decimalPlaces);
-        }
-        //ignore object fields that aren't type Address
-        if (typeof fieldVal !== 'object') {
-          var content = xmlRoot.createTextNode(fieldVal);
-          fieldNode.appendChild(content);
-          objRoot.appendChild(fieldNode);
-        }
-      }
-    });
-
-    return objRoot;
-  },
-
   getTypeMap: function (fieldMappings) {
     var map = {};
     var key = '';
@@ -520,15 +369,17 @@
       var container = xmlRoot.createElement(childQuery.relationship + '_Container');
       var childData = [];
       var childXml;
+      childData = children[childQuery.relationship];
+      if ($A.util.isUndefinedOrNull(childData)) {
+        return objRoot;
+      }
       if (depth < 2) {
-        childData = result[childQuery.relationship];
         for (var j = 0; j < childData.length; j++) {
           childXml = helper.generateXML(childQuery, childData[j], children, depth + 1, xmlRoot, fieldMap, isMultiCurrency);
           container.appendChild(childXml);
           objRoot.appendChild(container);
         }
       } else {
-        childData = children[childQuery.relationship];
         for (var k = 0; k < childData.length; k++) {
           childXml = helper.generateXML(childQuery, result, childData[k], depth + 1, xmlRoot, fieldMap, isMultiCurrency);
           container.appendChild(childXml);
@@ -543,9 +394,9 @@
     var helper = this;
     var nodeValue = '';
     if (fields.length === 1) {
-      nodeValue = result[fields[0]] === undefined ? '' : result[fields[0]];
+      nodeValue = (result === undefined || result[fields[0]] === undefined) ? '' : result[fields[0]];
     } else if (fields.length === 2) {
-      nodeValue = result[fields[0]][fields[1]];
+      nodeValue = (result === undefined || result[fields[0]] === undefined || result[fields[0]][fields[1]] === undefined) ? '' : result[fields[0]][fields[1]];
     } else {
       var newResult = result[fields[0]] === undefined ? result : result[fields[0]];
       fields.shift();
