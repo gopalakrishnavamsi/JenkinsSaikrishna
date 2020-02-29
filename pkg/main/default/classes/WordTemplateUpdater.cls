@@ -35,19 +35,17 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		if (v1 == null) return null;
 
 		String result = null;
-		Boolean isDateFormatDefined = String.isNotBlank(v1.dateFormat) && v1.dateFormat != 'default';
+		Boolean isDateOrTimeType = v1.dataType == Schema.DisplayType.DATE.name()
+			|| v1.dataType == Schema.DisplayType.TIME.name()
+			|| v1.dataType == Schema.DisplayType.DATETIME.name()
+			|| v1.apiName == 'CurrentDate';
 		Boolean isCurrencyFormatDefined = String.isNotBlank(v1.currencyFormat) && v1.currencyFormat != 'default';
-		if (isDateFormatDefined &&
-			(v1.dataType == Schema.DisplayType.DATE.name()
-				|| v1.dataType == Schema.DisplayType.TIME.name()
-				|| v1.dataType == Schema.DisplayType.DATETIME.name()
-				|| v1.apiName == 'CurrentDate')) {
+		Boolean isCurrencyType = v1.dataType == Schema.DisplayType.CURRENCY.name()
+			|| v1.dataType == Schema.DisplayType.DOUBLE.name();
 
+		if (isDateOrTimeType) {
 			result = v1.dateFormat;
-		} else if (isCurrencyFormatDefined
-			&& (v1.dataType == Schema.DisplayType.CURRENCY.name()
-			|| v1.dataType == Schema.DisplayType.DOUBLE.name())) {
-
+		} else if (isCurrencyFormatDefined && isCurrencyType) {
 			result = v1.currencyFormat;
 		}
 		return result;
