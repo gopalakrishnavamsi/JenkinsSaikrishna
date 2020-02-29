@@ -133,6 +133,13 @@ global with sharing class AuthService {
 			this.baseUrl = baseUrl;
 		}
 
+		private String getErrorMessage(final Map<String, Object> errorResponse) {
+			if (errorResponse == null) return null;
+
+			return errorResponse.containsKey('error_description')
+				? (String)errorResponse.get('error_description') : (String)errorResponse.get('error_message');
+		}
+
 		@TestVisible
 		override protected virtual APIError getError(final HttpResponse response) {
 			APIError e = super.getError(response);
@@ -144,15 +151,21 @@ global with sharing class AuthService {
 				} else {
 					try {
 						Map<String, Object> errResp = (Map<String, Object>)JSON.deserializeUntyped(body);
+						String errMsg = getErrorMessage(errResp);
 						switch on (String)errResp.get('error') {
 							when 'consent_required' {
 								e = new APIError(APIErrorCode.CONSENT_REQUIRED, Label.ConsentRequired);
 							} when 'invalid_grant' {
-								e = new APIError(APIErrorCode.INVALID_GRANT, Label.InvalidGrant);
+								if (errMsg == 'user_not_found') {
+									e = new APIError(APIErrorCode.UNKNOWN_USER, Label.MustBeActivated);
+								} else {
+									e = new APIError(APIErrorCode.INVALID_GRANT, String.isBlank(errMsg)
+										? Label.InvalidGrant : errMsg);
+								}
 							} when else {
 								this.log.warn('Unknown auth error');
-								e = new APIError(APIErrorCode.UNAUTHORIZED, errResp.containsKey('error_message')
-									? (String)errResp.get('error_message') : response.getStatus());
+								e = new APIError(APIErrorCode.UNAUTHORIZED, String.isBlank(errMsg)
+									? response.getStatus() : errMsg);
 							}
 						}
 					} catch (Exception ex) {

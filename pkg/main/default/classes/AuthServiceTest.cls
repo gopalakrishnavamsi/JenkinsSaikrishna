@@ -93,6 +93,54 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_AuthAPI_getError_invalid_grant_generic() {
+		HttpResponse resp = new HttpResponse();
+		resp.setStatusCode(400);
+		resp.setHeader('Content-Type', 'application/json');
+		resp.setBody('{"error":"invalid_grant"}');
+
+		Test.startTest();
+		APIError result = getAuthClient().getError(resp);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(APIErrorCode.INVALID_GRANT, result.code);
+		System.assertEquals(Label.InvalidGrant, result.description);
+	}
+
+	@IsTest
+	static void test_AuthAPI_getError_invalid_grant_with_message() {
+		HttpResponse resp = new HttpResponse();
+		resp.setStatusCode(400);
+		resp.setHeader('Content-Type', 'application/json');
+		resp.setBody('{"error":"invalid_grant","error_message":"unit test"}');
+
+		Test.startTest();
+		APIError result = getAuthClient().getError(resp);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(APIErrorCode.INVALID_GRANT, result.code);
+		System.assertEquals('unit test', result.description);
+	}
+
+	@IsTest
+	static void test_AuthAPI_getError_invalid_grant_user_not_found() {
+		HttpResponse resp = new HttpResponse();
+		resp.setStatusCode(400);
+		resp.setHeader('Content-Type', 'application/json');
+		resp.setBody('{"error":"invalid_grant","error_description":"user_not_found"}');
+
+		Test.startTest();
+		APIError result = getAuthClient().getError(resp);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(APIErrorCode.UNKNOWN_USER, result.code);
+		System.assertEquals(Label.MustBeActivated, result.description);
+	}
+
+	@IsTest
 	static void test_AuthAPI_getBasicAuthHeader() {
 		System.assertEquals(
 			'Basic ' + EncodingUtil.base64Encode(Blob.valueOf('username:password')),

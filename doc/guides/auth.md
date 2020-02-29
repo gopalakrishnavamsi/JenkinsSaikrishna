@@ -44,9 +44,12 @@ The newly-added users begin in the Pending state. They will switch to Active onc
 ![New User](../img/add_user_3.png)
 
 ## Obtain user consent
-Users of your application must grant their consent for the API to act on their behalf. There are two methods to accomplish this. If you are using Organization Admin, you can grant consent on behalf of your users following the steps outlined [here](/esign-rest-api/guides/authentication/obtaining-consent#admin-consent-for-external-applications). If this is not an option for your integration, you must obtain individual consent from each user. 
+Users of your application must grant their consent for the API to act on their behalf. There are two methods to accomplish this. If you are using Organization Admin, you can grant consent on behalf of your users following the steps outlined [here](/esign-rest-api/guides/authentication/obtaining-consent#admin-consent-for-internal-applications). If you have claimed a domain you can authorize the "DocuSign" connected app for the following scopes:
+```text
+signature impersonation account_product_read account_product_activate spring_write spring_read manage_app_keys spring_content group_management_read group_management_write clm_ui
+``` 
 
-Obtaining individual consent requires your application to redirect users to DocuSign’s OAuth service. The easiest option is to add the DocuSign Envelope Status component to your page. When a user has not yet granted consent, a button will be displayed on this component. When clicked, a pop-up window is launched where the user can enter their credentials and grant consent via the DocuSign authentication service. Upon granting consent, the user is returned to the Salesforce record.
+If this is not an option for your integration, you must obtain individual consent from each user. Obtaining individual consent requires your application to redirect users to DocuSign’s OAuth service. The easiest option is to add the DocuSign Envelope Status component to your page. When a user has not yet granted consent, a button will be displayed on this component. When clicked, a pop-up window is launched where the user can enter their credentials and grant consent via the DocuSign authentication service. Upon granting consent, the user is returned to the Salesforce record.
 
 1. From a Salesforce record page, click the gear icon in the upper left and click Edit Page.
 ![Edit Salesforce page](../img/consent_1.png)
