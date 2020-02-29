@@ -160,7 +160,7 @@
                               disabled="{!(v.loading || v.fetchingOAuthStatus)}">
             </lightning:button>
             <lightning:button class="slds-button slds-button_brand"
-                              label="Create"
+                              label="{!$Label.c.CreateLabel}"
                               disabled="{!empty(v.template.name) || empty(v.selectedType) || empty(v.template.sourceObject)}"
                               onclick="{!c.createTemplate}"></lightning:button>
         </aura:set>
