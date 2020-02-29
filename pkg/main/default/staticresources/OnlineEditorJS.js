@@ -51,9 +51,6 @@ jQuery(document).ready(function ($) {
   });
 
   displayStartupElements();
-
-  Elements.spinner1.hide();
-
   hideAll();
   hideAllButtons();
 
@@ -233,16 +230,16 @@ jQuery(document).ready(function ($) {
                 var DisplayNameMap = {
                   'Case': 'CaseNumber',
                   'Contract': 'ContractNumber',
-                }
+                };
 
                 if (Configuration.template.sourceObject === 'Case' || Configuration.template.sourceObject === 'Contract') {
-                  var mappedResults = result.results.map(function(val) {
+                  var mappedResults = result.results.map(function (val) {
                     return {
-                        Id: val.Id,
-                        Name: val[DisplayNameMap[Configuration.template.sourceObject]],
+                      Id: val.Id,
+                      Name: val[DisplayNameMap[Configuration.template.sourceObject]],
                     };
                   });
-                  result.results = mappedResults
+                  result.results = mappedResults;
                 }
 
                 resolve(result);
@@ -577,17 +574,20 @@ jQuery(document).ready(function ($) {
         return {
           onStart: function () {
             hideAll();
-            $('#onlineEditorToolBar').show();
-            $('#topPanel').show();
-            $('#onlineEditor').show();
-            renderOnlineEditor();
-            //Buttons
-            //Step 1
-            Elements.buttons.cancelTemplate.show();
-            Elements.buttons.saveClose.show();
-            //Step 2
-            Elements.buttons.cancelPublish.hide();
-            Elements.buttons.publish.hide();
+            showSpinner();
+            renderOnlineEditor().then(function () {
+              $('#onlineEditorToolBar').show();
+              $('#topPanel').show();
+              $('#onlineEditor').show();
+              Elements.spinner1.hide();
+              //Buttons
+              //Step 1
+              Elements.buttons.cancelTemplate.show();
+              Elements.buttons.saveClose.show();
+              //Step 2
+              Elements.buttons.cancelPublish.hide();
+              Elements.buttons.publish.hide();
+            });
           }
         };
       case 2:
@@ -613,7 +613,7 @@ jQuery(document).ready(function ($) {
   }
 
   function renderOnlineEditor() {
-    launchOnlineEditor(document.getElementById('onlineEditor'), Configuration.template, Configuration.isEditing);
+    return launchOnlineEditor(document.getElementById('onlineEditor'), Configuration.template, Configuration.isEditing);
   }
 
   function hideAllButtons() {
