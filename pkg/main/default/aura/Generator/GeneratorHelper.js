@@ -369,17 +369,21 @@
       var container = xmlRoot.createElement(childQuery.relationship + '_Container');
       var childData = [];
       var childXml;
-      childData = children[childQuery.relationship];
-      if ($A.util.isUndefinedOrNull(childData)) {
-        return objRoot;
-      }
       if (depth < 2) {
+        childData = result[childQuery.relationship];
+        if ($A.util.isUndefinedOrNull(childData)) {
+          return objRoot;
+        }
         for (var j = 0; j < childData.length; j++) {
           childXml = helper.generateXML(childQuery, childData[j], children, depth + 1, xmlRoot, fieldMap, isMultiCurrency);
           container.appendChild(childXml);
           objRoot.appendChild(container);
         }
       } else {
+        childData = children[childQuery.relationship];
+        if ($A.util.isUndefinedOrNull(childData)) {
+          return objRoot;
+        }
         for (var k = 0; k < childData.length; k++) {
           childXml = helper.generateXML(childQuery, result, childData[k], depth + 1, xmlRoot, fieldMap, isMultiCurrency);
           container.appendChild(childXml);
