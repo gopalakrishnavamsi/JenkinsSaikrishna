@@ -1,5 +1,6 @@
 ({
   init: function (component, event, helper) {
+    helper.loadUserLocaleDateFormat(component);
     helper.loadConditionalOptions(component);
   },
   validate: function (component) {
@@ -20,31 +21,13 @@
     var fieldMapping = helper.getMergeFieldMapping(component, optionModalParams);
     var clonedFieldMapping = Object.assign({}, fieldMapping);
 
-    if (fieldMapping.type === 'DATE' || fieldMapping.type === 'DATETIME') {
-      component.set('v.userLocaleDateFormat', $A.localizationService.formatDate(new Date($A.get('$Label.c.X2019_01_18'))));
-      var dateFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[0] : fieldMapping.format;
-      if (!component.get('v.definedDateFormats').includes(dateFormat)) {
-        component.set('v.dateDropDown', $A.get('$Label.c.Custom'));
-        component.set('v.customDateInput', dateFormat);
-        helper.formatDate(component);
-      } else {
-        component.set('v.datePreview', '');
-        component.set('v.customDateInput', '');
-        component.set('v.dateDropDown', dateFormat);
-      }
-    }
-
-    if (fieldMapping.type === 'TIME' || fieldMapping.type === 'DATETIME') {
-      var timeFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[1] : fieldMapping.format;
-      if (!component.get('v.definedTimeFormats').includes(timeFormat)) {
-        component.set('v.timeDropDown', $A.get('$Label.c.Custom'));
-        component.set('v.customTimeInput', timeFormat);
-        helper.formatTime(component);
-      } else {
-        component.set('v.customTimeInput', '');
-        component.set('v.timePreview', '');
-        component.set('v.timeDropDown', timeFormat);
-      }
+    if (fieldMapping.type === 'DATETIME') {
+      helper.setDateFormatOnOptionsModal(component, fieldMapping);
+      helper.setTimeFormatOnOptionsModal(component, fieldMapping);
+    } else if (fieldMapping.type === 'DATE') {
+      helper.setDateFormatOnOptionsModal(component, fieldMapping);
+    } else if (fieldMapping.type === 'TIME') {
+      helper.setTimeFormatOnOptionsModal(component, fieldMapping);
     }
 
     if (fieldMapping.type === 'CURRENCY') {
