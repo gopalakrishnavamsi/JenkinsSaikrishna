@@ -30,27 +30,29 @@
             </div>
 
             <!-- Depth = 1 -->
-            <aura:if isTrue="{!not(empty(v.mergeFieldTree))}">
-                <aura:iteration items="{!v.mergeFieldTree}" var="mergeFieldTreeInstance">
-                    <aura:if isTrue="{!mergeFieldTreeInstance.type == 'ROOT'}">
-                        <aura:iteration items="{!mergeFieldTreeInstance.fields}" var="field" indexVar="index">
-                            <c:GenFieldPicker isParentObjectPicker="{!true}"
-                                              currentObjectLabel="{!v.objMappings.label}"
-                                              currentObjectName="{!v.objMappings.name}"
-                                              currentDepth="1"
-                                              fieldIndex="{!index}"
-                                              parentObjectName="{!v.objMappings.name}"
-                                              currentObjectFields="{!v.topLevelMergeFields[0].fields}"
-                                              selectedMergeField="{!field}"
-                                              changeFieldSelection="{!c.changeMergeFieldSelection}"
-                                              removeField="{!c.removeField}"
-                                              mergeFieldTree="{!v.mergeFieldTree}"
-                                              addLookupField="{!c.addLookupField}"
-                                              addChildField="{!c.addChildField}"
-                                              zIndex="{!mergeFieldTreeInstance.fields.length - index}"/>
-                        </aura:iteration>
-                    </aura:if>
-                </aura:iteration>
+            <aura:if isTrue="{!!v.isLoading}">
+                <aura:if isTrue="{!not(empty(v.mergeFieldTree))}">
+                    <aura:iteration items="{!v.mergeFieldTree}" var="mergeFieldTreeInstance">
+                        <aura:if isTrue="{!mergeFieldTreeInstance.type == 'ROOT'}">
+                            <aura:iteration items="{!mergeFieldTreeInstance.fields}" var="field" indexVar="index">
+                                <c:GenFieldPicker isParentObjectPicker="{!true}"
+                                                  currentObjectLabel="{!v.objMappings.label}"
+                                                  currentObjectName="{!v.objMappings.name}"
+                                                  currentDepth="1"
+                                                  fieldIndex="{!index}"
+                                                  parentObjectName="{!v.objMappings.name}"
+                                                  currentObjectFields="{!v.topLevelMergeFields[0].fields}"
+                                                  selectedMergeField="{!field}"
+                                                  changeFieldSelection="{!c.changeMergeFieldSelection}"
+                                                  removeField="{!c.removeField}"
+                                                  mergeFieldTree="{!v.mergeFieldTree}"
+                                                  addLookupField="{!c.addLookupField}"
+                                                  addChildField="{!c.addChildField}"
+                                                  zIndex="{!mergeFieldTreeInstance.fields.length - index}"/>
+                            </aura:iteration>
+                        </aura:if>
+                    </aura:iteration>
+                </aura:if>
             </aura:if>
 
             <lightning:button iconName="utility:add" label="{!$Label.c.Add}"

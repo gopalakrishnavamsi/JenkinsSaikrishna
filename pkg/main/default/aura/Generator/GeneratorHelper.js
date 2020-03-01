@@ -173,6 +173,7 @@
     var query = {};
     var fields = [];
     var children = [];
+    var addCurrencyFields = [];
 
     query.type = type;
     query.relationship = relationship;
@@ -192,25 +193,42 @@
           helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
             fields.push(f);
           });
-        } else if (isMultiCurrency && field.type === 'CURRENCY') {
-          fields.push('CurrencyIsoCode');
-          fields.push(field.name);
         } else if (field.name !== 'CurrentDate') {
+          if (field.type === 'CURRENCY' && isMultiCurrency) {
+            addCurrencyFields.push(field.name);
+          }
           fields.push(field.name);
+
         }
       }
     });
-    if(fields.length === 0) {
+
+    if (fields.length === 0) {
       fields.push('Id');
     }
+    helper.setCurrencyIsoCode(fields, addCurrencyFields);
     query.fields = fields;
     query.children = children;
     return query;
+  },
+  setCurrencyIsoCode: function (fields, addCurrencyFields) {
+    if (!$A.util.isEmpty(addCurrencyFields) && !$A.util.isEmpty(fields)) {
+      addCurrencyFields.forEach(function (obj) {
+        var parentObj = obj.substring(0, obj.indexOf('.'));
+        if (obj.includes('.') && !fields.includes(stringUtils.format('{0}{1}', parentObj, '.CurrencyIsoCode'))) {
+          fields.push(stringUtils.format('{0}{1}', parentObj, '.CurrencyIsoCode'));
+        } else if (!obj.includes('.') && !fields.includes('CurrencyIsoCode')) {
+          fields.push('CurrencyIsoCode');
+        }
+      });
+    }
+    return fields;
   },
 
   traverseLookUp: function (fm, map, isMultiCurrency) {
     var helper = this;
     var fields = [];
+    var addLookUpCurrencyFields = [];
     fm.fields.forEach(function (field) {
       if (field.type === 'REFERENCE') {
         var childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
@@ -218,13 +236,14 @@
         helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
           fields.push(f);
         });
-      } else if (isMultiCurrency && field.type === 'CURRENCY') {
-        fields.push(fm.key + '.CurrencyIsoCode');
-        fields.push(fm.key + '.' + field.name);
       } else if (field.name !== 'CurrentDate') {
+        if (field.type === 'CURRENCY' && isMultiCurrency) {
+          addLookUpCurrencyFields.push(fm.key + '.' + field.name);
+        }
         fields.push(fm.key + '.' + field.name);
       }
     });
+    helper.setCurrencyIsoCode(fields, addLookUpCurrencyFields);
     return fields;
   },
 
@@ -274,6 +293,13 @@
             var state = response.getState();
             if (state === 'SUCCESS') {
               var results = response.getReturnValue();
+              fieldMappings.forEach(function (objMap) {
+                objMap.fields.forEach(function (field) {
+                  if (field.name === 'CurrentDate') {
+                    query['fields'].push('CurrentDate');
+                  }
+                });
+              });
               var objXML = helper.generateXML(
                 query,
                 results.result,
@@ -323,14 +349,15 @@
     fieldMappings.forEach(function (fieldMapping) {
       fieldMapping.fields.forEach(function (field) {
         var value = {};
-        if(field.type !== 'REFERENCE' && field.type !== 'CHILD_RELATIONSHIP') {
-          if(fieldMapping.type === 'ROOT' || fieldMapping.type === 'CHILD_RELATIONSHIP') {
+        if (field.type !== 'REFERENCE' && field.type !== 'CHILD_RELATIONSHIP') {
+          if (fieldMapping.type === 'ROOT' || fieldMapping.type === 'CHILD_RELATIONSHIP') {
             key = field.name.toLowerCase();
           } else {
             key = (fieldMapping.key + '.' + field.name).toLowerCase();
           }
           value.type = field.type;
           value.format = field.format;
+          value.scale = field.scale;
           map[key] = value;
         }
       });
@@ -346,15 +373,17 @@
     query.fields.forEach(function (field) {
       var fieldXml;
       format = fieldMap[field.toLowerCase()];
-      if(field.startsWith(query.type)) {
-        fieldXml = xmlRoot.createElement(field.replace(query.type + '.' , ''));
+      if (field.startsWith(query.type)) {
+        fieldXml = xmlRoot.createElement(field.replace(query.type + '.', ''));
       } else {
         fieldXml = xmlRoot.createElement(field);
       }
 
       var filedValue;
       var newFields = field.split('.');
-      if(depth <= 2) {
+      if (field === 'CurrentDate') {
+        filedValue = $A.localizationService.formatDate(new Date());
+      } else if (depth <= 2) {
         filedValue = helper.getFieldValue(newFields, result, format, isMultiCurrency);
       } else {
         filedValue = helper.getFieldValue(newFields, children, format, isMultiCurrency);
@@ -409,26 +438,26 @@
     if (format !== undefined) {
       var recordLevelCurrencyCode = '';
       if (format.type === 'CURRENCY' && fields.length > 1) {
-        recordLevelCurrencyCode = result[fields.slice(0, fields.length-1).join('.')].CurrencyIsoCode;
+        recordLevelCurrencyCode = result[fields.slice(0, fields.length - 1).join('.')].CurrencyIsoCode;
       } else if (result.CurrencyIsoCode !== undefined) {
         recordLevelCurrencyCode = result.CurrencyIsoCode;
       }
-      nodeValue = helper.getFormattedData(nodeValue, format.type, isMultiCurrency, recordLevelCurrencyCode, format.format);
+      nodeValue = helper.getFormattedData(nodeValue, format, isMultiCurrency, recordLevelCurrencyCode);
     }
     return nodeValue;
   },
 
   // FIXME: get recordLevelCurrencyCode
-  getFormattedData: function (nodeValue, type, isMultiCurrency, recordLevelCurrencyCode, fieldFormat) {
+  getFormattedData: function (nodeValue, format, isMultiCurrency, recordLevelCurrencyCode) {
     var helper = this;
-    var decimal;
+    var type = format.type;
+    var fieldFormat = format.format;
     var locale = $A.get('$Locale');
     if (type === 'PERCENT') {
-      decimal = nodeValue.toString().split('.')[1];
-      nodeValue = stringUtils.format('{0}{1}', helper.formatNumber(nodeValue, decimal === undefined ? 0 : decimal.length), '%');
+      var percentSymbol = $A.util.getBooleanValue(fieldFormat) ? '%' : '';
+      nodeValue = stringUtils.format('{0}{1}', helper.formatNumber(nodeValue, format.scale), percentSymbol);
     } else if (type === 'DOUBLE') {
-      decimal = nodeValue.toString().split('.')[1];
-      nodeValue = helper.formatNumber(nodeValue, decimal === undefined ? 0 : decimal.length);
+      nodeValue = helper.formatNumber(nodeValue, format.scale);
     } else if (type === 'ADDRESS') {
       var address = nodeValue;
       nodeValue = '';
@@ -449,12 +478,11 @@
         nodeValue += ' ' + address.country;
       }
     } else if (type === 'CURRENCY') {
-      var currencyCode = locale.fieldFormat;
+      var currencyCode = locale.currencyCode;
       if (isMultiCurrency) {
-        nodeValue = helper.setCurrencyFormat(nodeValue, fieldFormat, recordLevelCurrencyCode);
-      } else {
-        nodeValue = helper.setCurrencyFormat(nodeValue, fieldFormat, currencyCode);
+        currencyCode = recordLevelCurrencyCode;
       }
+      nodeValue = helper.setCurrencyFormat(nodeValue, format, currencyCode);
     } else if (type === 'DATE') {
       if (fieldFormat === 'default') {
         fieldFormat = locale.dateFormat;
@@ -485,14 +513,14 @@
     return nodeValue;
   },
 
-  setCurrencyFormat: function (nodeValue, currencyFormat, currencyCode) {
+  setCurrencyFormat: function (nodeValue, fieldData, currencyCode) {
     var helper = this;
     var sampleCurrency = 0;
+    var currencyFormat = fieldData.format;
     if (currencyFormat.indexOf('NoDecimals') !== -1) {
       nodeValue = $A.localizationService.formatNumber(Math.round(nodeValue));
     } else {
-      var decimal  = nodeValue.toString().split('.')[1];
-      nodeValue = helper.formatNumber(nodeValue, decimal === undefined ? 0 : decimal.length);
+      nodeValue = helper.formatNumber(nodeValue, fieldData.scale);
     }
     if (currencyFormat.indexOf('noSymbolNoCode') !== -1) {
       return nodeValue;
@@ -509,10 +537,10 @@
 
   formatNumber: function (getNumberVal, decimalScale) {
     var getIntegerVal = getNumberVal.toString();
-    var getTrailingZeros = (decimalScale > 0) ? stringUtils.format('{0}{1}',$A.get('$Locale').decimal ,parseFloat(getNumberVal).toFixed(decimalScale).split('.')[1]) : '';
+    var getTrailingZeros = (decimalScale > 0) ? stringUtils.format('{0}{1}', $A.get('$Locale').decimal, parseFloat(getNumberVal).toFixed(decimalScale).split('.')[1]) : '';
     if (getIntegerVal.indexOf('.') !== -1)
       getIntegerVal = getIntegerVal.split('.')[0];
-    return stringUtils.format('{0}{1}',$A.localizationService.formatNumber(getIntegerVal, $A.get('$Locale').numberFormat) , getTrailingZeros);
+    return stringUtils.format('{0}{1}', $A.localizationService.formatNumber(getIntegerVal, $A.get('$Locale').numberFormat), getTrailingZeros);
   },
 
   generateDocuments: function (component, startingRecordId, xmlRoot) {
