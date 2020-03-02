@@ -5,7 +5,7 @@ public class MergeField implements Comparable {
 	@TestVisible
 	private static final String TYPE_CHILD_RELATIONSHIP = 'CHILD_RELATIONSHIP';
 	// updating the list of blocked fields
-	private static final List<String> BLACKLIST = new List<String> {
+	private static final Set<String> BLACKLIST = new Set<String> {
 		'LastModifiedDate', 'LastReferencedDate', 'SystemModstamp',
 		'LastViewedDate', 'CreatedDate', 'IsArchived', 'IsDeleted',
 		'CreatedById', 'LastModifiedById'

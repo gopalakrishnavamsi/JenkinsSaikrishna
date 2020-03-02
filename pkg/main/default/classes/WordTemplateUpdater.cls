@@ -5,6 +5,7 @@
 public class WordTemplateUpdater implements Database.Batchable<SObject>, PostInstallScript {
 
 	private static final Set<SObjectType> TYPE_BLACKLIST = new Set<SObjectType> { Schema.Group.getSObjectType() };
+	private static final String CURRENT_DATE = 'CurrentDate';
 	private static Integer templateCount = null;
 	@TestVisible
 	private static Integer batchLimit = 200;
@@ -38,7 +39,7 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		Boolean isDateOrTimeType = v1.dataType == Schema.DisplayType.DATE.name()
 			|| v1.dataType == Schema.DisplayType.TIME.name()
 			|| v1.dataType == Schema.DisplayType.DATETIME.name()
-			|| v1.apiName == 'CurrentDate';
+			|| v1.apiName == CURRENT_DATE;
 		Boolean isCurrencyFormatDefined = String.isNotBlank(v1.currencyFormat) && v1.currencyFormat != 'default';
 		Boolean isCurrencyType = v1.dataType == Schema.DisplayType.CURRENCY.name()
 			|| v1.dataType == Schema.DisplayType.DOUBLE.name();
@@ -131,6 +132,19 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		return result;
 	}
 
+
+	private static Boolean isValid(
+		final DescribeSObjectResult objectDescribe,
+		final String fieldName) {
+
+		if (objectDescribe == null || String.isBlank(fieldName)) return false;
+
+		if (fieldName == CURRENT_DATE) return true;
+
+		SObjectField field = objectDescribe.fields.getMap().get(fieldName);
+		return field != null && MergeField.isValid(field.getDescribe());
+	}
+
 	@TestVisible
 	private static Gen.FieldMapping convert(
 		final FieldV1 v1,
@@ -153,7 +167,7 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		List<String> path = v1.apiName.split('\\.');
 		String type = path.size() > 1 ? 'REFERENCE' : v1.dataType;
 		if (String.isBlank(type)) {
-			type = v1.apiName == 'CurrentDate' ? 'DATE' : 'CHILD_RELATIONSHIP';
+			type = v1.apiName == CURRENT_DATE ? 'DATE' : 'CHILD_RELATIONSHIP';
 		}
 
 		Gen.FieldMapping result;
@@ -245,20 +259,22 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 				}
 				result = child;
 			} when else { // use type as-is
-				root.fields.add(new Gen.Field(
-					type,
-					v1.apiName,
-					v1.label,
-					null,
-					null,
-					null,
-					convertFormat(v1),
-					v1.decimalPlaces,
-					false,
-					v1.isConditional,
-					v1.matchType,
-					v1.conditionalValue));
-				result = root;
+				if (isValid(objectDescribe, v1.apiName)) {
+					root.fields.add(new Gen.Field(
+						type,
+						v1.apiName,
+						v1.label,
+						null,
+						null,
+						null,
+						convertFormat(v1),
+						v1.decimalPlaces,
+						false,
+						v1.isConditional,
+						v1.matchType,
+						v1.conditionalValue));
+					result = root;
+				}
 			}
 		}
 		return result;
