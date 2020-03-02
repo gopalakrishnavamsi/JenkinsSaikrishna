@@ -366,7 +366,7 @@ private class WordTemplateUpdaterTest {
 	static void test_convert_field_child_relationship() {
 		WordTemplateUpdater.FieldV1 v1 = new WordTemplateUpdater.FieldV1();
 		v1.apiName = 'OpportunityLineItem';
-		v1.dataType = '';
+		v1.dataType = 'ID'; // DFS-6962: V1 sometimes has invalid type
 		v1.isConditional = false;
 		v1.dateFormat = 'df';
 		v1.currencyFormat = 'cf';

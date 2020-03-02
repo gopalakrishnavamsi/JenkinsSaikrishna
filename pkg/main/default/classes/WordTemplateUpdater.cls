@@ -132,7 +132,6 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		return result;
 	}
 
-
 	private static Boolean isValid(
 		final DescribeSObjectResult objectDescribe,
 		final String fieldName) {
@@ -166,8 +165,10 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 
 		List<String> path = v1.apiName.split('\\.');
 		String type = path.size() > 1 ? 'REFERENCE' : v1.dataType;
-		if (String.isBlank(type)) {
-			type = v1.apiName == CURRENT_DATE ? 'DATE' : 'CHILD_RELATIONSHIP';
+		if (v1.apiName == CURRENT_DATE) {
+			type = 'DATE';
+		} else if (String.isBlank(type) || Collection.isNotEmpty(v1.childFieldMappings)) {
+			type = 'CHILD_RELATIONSHIP';
 		}
 
 		Gen.FieldMapping result;
