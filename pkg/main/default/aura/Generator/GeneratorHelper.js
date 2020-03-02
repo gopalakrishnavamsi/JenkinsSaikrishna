@@ -179,7 +179,7 @@
     query.relationship = relationship;
     query.parentIdField = parentIdField;
     fm.fields.forEach(function (field) {
-      if (field !== undefined && field.name !== undefined && field.name !== '') {
+      if (!$A.util.isUndefinedOrNull(field) && !$A.util.isUndefinedOrNull(field.name) && field.name !== '') {
         var childKey = '';
         if (fm.depth === 1) {
           childKey = helper.getChildKey(field.name, fm.depth, field.type);
@@ -414,9 +414,11 @@
           return objRoot;
         }
         for (var k = 0; k < childData.length; k++) {
-          childXml = helper.generateXML(childQuery, result, childData[k], depth + 1, xmlRoot, fieldMap, isMultiCurrency);
-          container.appendChild(childXml);
-          objRoot.appendChild(container);
+          if (result['Id'] ===  childData[k][childQuery.parentIdField]) {
+            childXml = helper.generateXML(childQuery, result, childData[k], depth + 1, xmlRoot, fieldMap, isMultiCurrency);
+            container.appendChild(childXml);
+            objRoot.appendChild(container);
+          }
         }
       }
     }
@@ -427,19 +429,19 @@
     var helper = this;
     var nodeValue = '';
     if (fields.length === 1) {
-      nodeValue = (result === undefined || result[fields[0]] === undefined) ? '' : result[fields[0]];
+      nodeValue = ($A.util.isUndefinedOrNull(result) || $A.util.isUndefinedOrNull(result[fields[0]])) ? '' : result[fields[0]];
     } else if (fields.length === 2) {
-      nodeValue = (result === undefined || result[fields[0]] === undefined || result[fields[0]][fields[1]] === undefined) ? '' : result[fields[0]][fields[1]];
+      nodeValue = ($A.util.isUndefinedOrNull(result) || $A.util.isUndefinedOrNull(result[fields[0]]) || $A.util.isUndefinedOrNull(result[fields[0]][fields[1]])) ? '' : result[fields[0]][fields[1]];
     } else {
-      var newResult = result[fields[0]] === undefined ? result : result[fields[0]];
+      var newResult = $A.util.isUndefinedOrNull(result[fields[0]]) ? result : result[fields[0]];
       fields.shift();
       nodeValue = helper.getFieldValue(fields, newResult, format);
     }
-    if (format !== undefined) {
+    if (!$A.util.isUndefinedOrNull(format)) {
       var recordLevelCurrencyCode = '';
       if (format.type === 'CURRENCY' && fields.length > 1) {
         recordLevelCurrencyCode = result[fields.slice(0, fields.length - 1).join('.')].CurrencyIsoCode;
-      } else if (result.CurrencyIsoCode !== undefined) {
+      } else if (!$A.util.isUndefinedOrNull(result.CurrencyIsoCode)) {
         recordLevelCurrencyCode = result.CurrencyIsoCode;
       }
       nodeValue = helper.getFormattedData(nodeValue, format, isMultiCurrency, recordLevelCurrencyCode);
