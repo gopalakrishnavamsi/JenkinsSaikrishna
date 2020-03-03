@@ -212,6 +212,7 @@
   traverseLookUp: function (fm, map, isMultiCurrency) {
     var helper = this;
     var fields = [];
+    var path = fm.path.join('.');
     fm.fields.forEach(function (field) {
       if (field.type === 'REFERENCE') {
         var childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
@@ -220,10 +221,10 @@
           fields.push(f);
         });
       } else if (isMultiCurrency && field.type === 'CURRENCY') {
-        fields.push(fm.key + '.CurrencyIsoCode');
-        fields.push(fm.key + '.' + field.name);
+        fields.push(path + '.CurrencyIsoCode');
+        fields.push(path + '.' + field.name);
       } else if (field.name !== 'CurrentDate') {
-        fields.push(fm.key + '.' + field.name);
+        fields.push(path + '.' + field.name);
       }
     });
     return fields;
