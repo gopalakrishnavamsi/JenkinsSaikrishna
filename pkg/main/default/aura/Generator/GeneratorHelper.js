@@ -173,7 +173,6 @@
     var query = {};
     var fields = [];
     var children = [];
-    var addCurrencyFields = [];
 
     query.type = type;
     query.relationship = relationship;
@@ -193,12 +192,11 @@
           helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
             fields.push(f);
           });
-        } else if (field.name !== 'CurrentDate') {
-          if (field.type === 'CURRENCY' && isMultiCurrency) {
-            addCurrencyFields.push(field.name);
-          }
+        } else if (isMultiCurrency && field.type === 'CURRENCY' && (fields.indexOf('CurrencyIsoCode') === -1 )) {
+          fields.push('CurrencyIsoCode');
           fields.push(field.name);
-
+        } else if (field.name !== 'CurrentDate') {
+          fields.push(field.name);
         }
       }
     });
@@ -206,29 +204,14 @@
     if (fields.length === 0) {
       fields.push('Id');
     }
-    helper.setCurrencyIsoCode(fields, addCurrencyFields);
     query.fields = fields;
     query.children = children;
     return query;
-  },
-  setCurrencyIsoCode: function (fields, addCurrencyFields) {
-    if (!$A.util.isEmpty(addCurrencyFields) && !$A.util.isEmpty(fields)) {
-      addCurrencyFields.forEach(function (obj) {
-        var parentObj = obj.substring(0, obj.indexOf('.'));
-        if (obj.includes('.') && !fields.includes(stringUtils.format('{0}{1}', parentObj, '.CurrencyIsoCode'))) {
-          fields.push(stringUtils.format('{0}{1}', parentObj, '.CurrencyIsoCode'));
-        } else if (!obj.includes('.') && !fields.includes('CurrencyIsoCode')) {
-          fields.push('CurrencyIsoCode');
-        }
-      });
-    }
-    return fields;
   },
 
   traverseLookUp: function (fm, map, isMultiCurrency) {
     var helper = this;
     var fields = [];
-    var addLookUpCurrencyFields = [];
     fm.fields.forEach(function (field) {
       if (field.type === 'REFERENCE') {
         var childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
@@ -236,14 +219,13 @@
         helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
           fields.push(f);
         });
+      } else if (isMultiCurrency && field.type === 'CURRENCY') {
+        fields.push(fm.key + '.CurrencyIsoCode');
+        fields.push(fm.key + '.' + field.name);
       } else if (field.name !== 'CurrentDate') {
-        if (field.type === 'CURRENCY' && isMultiCurrency) {
-          addLookUpCurrencyFields.push(fm.key + '.' + field.name);
-        }
         fields.push(fm.key + '.' + field.name);
       }
     });
-    helper.setCurrencyIsoCode(fields, addLookUpCurrencyFields);
     return fields;
   },
 
@@ -435,7 +417,8 @@
     } else {
       var newResult = $A.util.isUndefinedOrNull(result[fields[0]]) ? result : result[fields[0]];
       fields.shift();
-      nodeValue = helper.getFieldValue(fields, newResult, format);
+      nodeValue = helper.getFieldValue(fields, newResult, format, isMultiCurrency);
+      return nodeValue;
     }
     if (!$A.util.isUndefinedOrNull(format)) {
       var recordLevelCurrencyCode = '';

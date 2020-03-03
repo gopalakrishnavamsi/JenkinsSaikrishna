@@ -8,7 +8,7 @@ public class MergeField implements Comparable {
 	private static final Set<String> BLACKLIST = new Set<String> {
 		'LastModifiedDate', 'LastReferencedDate', 'SystemModstamp',
 		'LastViewedDate', 'CreatedDate', 'IsArchived', 'IsDeleted',
-		'CreatedById', 'LastModifiedById'
+		'CreatedById', 'LastModifiedById', 'CurrencyIsoCode'
 	};
 
 	transient public DescribeFieldResult field { get; private set; }
