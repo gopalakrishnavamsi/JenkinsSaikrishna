@@ -127,7 +127,7 @@
         return mergeFieldTreeNode.type === type;
       case 'REFERENCE':
       case 'CHILD_RELATIONSHIP':
-        return mergeFieldTreeNode.key === pathToParent;
+        return mergeFieldTreeNode.type === type && mergeFieldTreeNode.key === pathToParent;
       default:
         return false;
     }
@@ -138,7 +138,7 @@
     if (selectedMergeField.name !== '' &&
       (selectedMergeField.type === 'CHILD_RELATIONSHIP' || selectedMergeField.type === 'REFERENCE')) {
       var nextMergeTreePath = helper.isNotUndefinedAndEmpty(component.get('v.currentMergeTreePath')) ? component.get('v.currentMergeTreePath').slice() : [];
-      nextMergeTreePath.push(selectedMergeField.name);
+      nextMergeTreePath.push(selectedMergeField.relationship);
       component.set('v.nextMergeTreePath', nextMergeTreePath);
       component.set('v.nextMergeTreeKey', nextMergeTreePath.join('.'));
     }
@@ -151,15 +151,23 @@
 
   checkDuplicateField: function (component, event, helper, parentNodeOfField) {
     var duplicateFieldFound = false;
-    var selectedFieldName = event.getSource().get('v.value');
+    var selectedFieldValue = event.getSource().get('v.value');
     if (helper.isNotUndefinedAndEmpty(parentNodeOfField)) {
       parentNodeOfField.fields.forEach(function (field) {
-        if (field.name === selectedFieldName) {
+        if (helper.isDuplicateField(field, selectedFieldValue)) {
           duplicateFieldFound = true;
         }
       });
     }
     return duplicateFieldFound;
+  },
+
+  isDuplicateField: function (field, selectedFieldValue) {
+    if (field.type === 'CHILD_RELATIONSHIP') {
+      return field.relationship === selectedFieldValue;
+    } else {
+      return field.name === selectedFieldValue;
+    }
   },
 
   trackCurrentFieldType: function (component) {
@@ -184,7 +192,7 @@
     var evt = component.getEvent('changeFieldSelection');
     var selectedFieldValue = event.getSource().get('v.value');
     var type = helper.getParentTypeOfField(component);
-    var propertySearchNames = ['name', 'relatesTo', 'relationship'];
+    var propertySearchNames = ['name', 'relationship'];
     var selectedFieldFromOptions;
 
     for (var index in propertySearchNames) {
@@ -194,6 +202,9 @@
         break;
       }
     }
+
+    // explicit update to render non-lookup/non-child field selections
+    component.set('v.selectedMergeField', selectedFieldFromOptions);
 
     evt.setParams({
       data: {

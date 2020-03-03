@@ -91,8 +91,8 @@
                                     <aura:iteration items="{!v.currentObjectFields}" var="field">
                                         <aura:if
                                                 isTrue="{!and(field.type == 'CHILD_RELATIONSHIP', field.hasRelationship == true)}">
-                                            <option value="{!field.relatesTo}"
-                                                    selected="{!field.relatesTo == v.selectedMergeField.name}">{!field.label}</option>
+                                            <option value="{!field.relationship}"
+                                                    selected="{!field.relationship == v.selectedMergeField.relationship}">{!format($Label.c.AccountDisplay_2, field.relationship, field.label)}</option>
                                         </aura:if>
                                     </aura:iteration>
                                 </optgroup>
@@ -236,8 +236,8 @@
                                         <aura:iteration items="{!v.currentObjectFields}" var="field">
                                             <aura:if
                                                     isTrue="{!and(field.type == 'CHILD_RELATIONSHIP', field.hasRelationship == true)}">
-                                                <option value="{!field.relatesTo}"
-                                                        selected="{!field.relatesTo == v.selectedMergeField.name}">{!field.label}</option>
+                                                <option value="{!field.relationship}"
+                                                        selected="{!field.relationship == v.selectedMergeField.relationship}">{!format($Label.c.AccountDisplay_2, field.relationship, field.label)}</option>
                                             </aura:if>
                                         </aura:iteration>
                                     </optgroup>
@@ -363,8 +363,8 @@
                                         <aura:iteration items="{!v.currentObjectFields}" var="field">
                                             <aura:if
                                                     isTrue="{!and(field.type == 'CHILD_RELATIONSHIP', field.hasRelationship == true)}">
-                                                <option value="{!field.relatesTo}"
-                                                        selected="{!field.relatesTo == v.selectedMergeField.name}">{!field.label}</option>
+                                                <option value="{!field.relationship}"
+                                                        selected="{!field.relationship == v.selectedMergeField.relationship}">{!format($Label.c.AccountDisplay_2, field.relationship, field.label)}</option>
                                             </aura:if>
                                         </aura:iteration>
                                     </optgroup>
