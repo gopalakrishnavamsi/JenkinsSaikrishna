@@ -10,7 +10,6 @@ var cancelGeneration;
 // FIXME: Use consistent variable naming matching those in Apex layer.
 jQuery(document).ready(function ($) {
 
-  var _toolTip = false;
   var _currentProgressStep = null;
   var _toastComponent;
   var _userEvents;
@@ -685,16 +684,6 @@ jQuery(document).ready(function ($) {
           error && error.message ? error.message : error
         );
       });
-  });
-
-  $('#fileNamingRules').hover(function () {
-    if (_toolTip) {
-      $('#namingHelp').hide();
-      _toolTip = false;
-    } else {
-      $('#namingHelp').show();
-      _toolTip = true;
-    }
   });
 
   function getUploadEntityId(templateId) {
