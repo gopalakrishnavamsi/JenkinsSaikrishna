@@ -227,7 +227,7 @@
         helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
           fields.push(f);
         });
-      } else if (isMultiCurrency && field.type === 'CURRENCY') {
+      } else if (isMultiCurrency && field.type === 'CURRENCY' && (fields.indexOf(fm.key + '.CurrencyIsoCode') === -1)) {
         fields.push(path + '.CurrencyIsoCode');
         fields.push(path + '.' + field.name);
       } else if (field.name !== 'CurrentDate') {
