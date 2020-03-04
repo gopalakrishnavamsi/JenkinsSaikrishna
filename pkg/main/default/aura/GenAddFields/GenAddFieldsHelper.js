@@ -9,7 +9,7 @@
         {
           type: optionModalParams.type,
           depth: optionModalParams.depth,
-          path: optionModalParams.path
+          key: optionModalParams.key
         });
     });
 
@@ -18,14 +18,14 @@
 
   isParentOfField: function (mergeFieldTreeNode, parentData) {
     var type = parentData.type;
-    var pathToParent = parentData.path.join('.');
+    var key = parentData.key;
 
     switch (type) {
       case 'ROOT':
         return mergeFieldTreeNode.type === type;
       case 'REFERENCE':
       case 'CHILD_RELATIONSHIP':
-        return mergeFieldTreeNode.key === pathToParent;
+        return mergeFieldTreeNode.type === type && mergeFieldTreeNode.key === key;
       default:
         return false;
     }

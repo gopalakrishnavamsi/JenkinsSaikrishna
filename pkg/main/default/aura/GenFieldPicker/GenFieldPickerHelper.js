@@ -93,7 +93,7 @@
 
   fieldSelectionChange: function (component, event, helper) {
     var type = helper.getParentTypeOfField(component);
-    var currentPath = component.get('v.currentMergeTreePath');
+    var currentKey = component.get('v.currentMergeTreeKey');
     var currentDepth = component.get('v.currentDepth');
     var fieldIndex = component.get('v.fieldIndex');
 
@@ -103,7 +103,7 @@
         {
           type: type,
           depth: currentDepth,
-          path: currentPath
+          key: currentKey
         });
     });
 
@@ -120,14 +120,14 @@
 
   isParentOfField: function (mergeFieldTreeNode, parentData) {
     var type = parentData.type;
-    var pathToParent = parentData.path.join('.');
+    var key = parentData.key;
 
     switch (type) {
       case 'ROOT':
         return mergeFieldTreeNode.type === type;
       case 'REFERENCE':
       case 'CHILD_RELATIONSHIP':
-        return mergeFieldTreeNode.type === type && mergeFieldTreeNode.key === pathToParent;
+        return mergeFieldTreeNode.type === type && mergeFieldTreeNode.key === key;
       default:
         return false;
     }
@@ -138,9 +138,13 @@
     if (selectedMergeField.name !== '' &&
       (selectedMergeField.type === 'CHILD_RELATIONSHIP' || selectedMergeField.type === 'REFERENCE')) {
       var nextMergeTreePath = helper.isNotUndefinedAndEmpty(component.get('v.currentMergeTreePath')) ? component.get('v.currentMergeTreePath').slice() : [];
-      nextMergeTreePath.push(selectedMergeField.relationship);
+      var nextMergeTreeKey = helper.isNotUndefinedAndEmpty(component.get('v.currentMergeTreeKey')) ? component.get('v.currentMergeTreeKey') : '';
+      if (selectedMergeField.type === 'REFERENCE') {
+        nextMergeTreePath.push(selectedMergeField.relationship);
+      }
+      nextMergeTreeKey = nextMergeTreeKey.length > 0 ? nextMergeTreeKey.concat('.', selectedMergeField.relationship) : selectedMergeField.relationship;
       component.set('v.nextMergeTreePath', nextMergeTreePath);
-      component.set('v.nextMergeTreeKey', nextMergeTreePath.join('.'));
+      component.set('v.nextMergeTreeKey', nextMergeTreeKey);
     }
   },
 
@@ -212,6 +216,7 @@
         depth: component.get('v.currentDepth'),
         fieldIndex: component.get('v.fieldIndex'),
         path: component.get('v.currentMergeTreePath'),
+        key: component.get('v.currentMergeTreeKey'),
         type: type
       }
     });
@@ -270,7 +275,7 @@
       else if (component.get('v.isLookupRelationShipPicker') === true) {
         //if selected field is not a lookup field
         if (selectedMergeField.type !== 'REFERENCE') {
-          var lookupPath = component.get('v.currentMergeTreePath').join('.');
+          var lookupPath = component.get('v.currentMergeTreeKey');
           var resolvedLookupName = stringUtils.format('{0}{1}{2}', lookupPath, '.', selectedMergeField.name);
           if (selectedMergeField.isConditional) {
             token = '<# <Conditional Select="/' + parentObjectName + '/' + resolvedLookupName + '" ' + selectedMergeField.matchType + '="' + selectedMergeField.conditionalValue +
@@ -295,35 +300,9 @@
         //if selected mergefield is not a child or lookup
         if (selectedMergeField.type !== 'CHILD_RELATIONSHIP' && selectedMergeField.type !== 'REFERENCE') {
           var selectedMergeFieldName;
-          //if we are depth 4 and current mergeFieldPicker corresponds to child lookup
-          if (component.get('v.currentDepth') === 4 && component.get('v.isChildLookup')) {
-            var currentMergeTreePath = component.get('v.currentMergeTreePath').slice();
-            currentMergeTreePath.pop();
-            var multiChildLookupPathName = currentMergeTreePath.join('.');
-            var multiChildLookupPathFound = false;
-            component.get('v.mergeFieldTree').forEach(function (treeInstance) {
-              if (treeInstance.type === 'CHILD_RELATIONSHIP' && treeInstance.key === multiChildLookupPathName) {
-                multiChildLookupPathFound = true;
-              }
-            });
-            //if child lookup Path found that means this is a lookup picker of the children of children relationship
-            if (multiChildLookupPathFound) {
-              selectedMergeFieldName = stringUtils.format('{0}{1}{2}', component.get('v.currentMergeTreePath')[2], '.', selectedMergeField.name);
-            }
-            //if child lookup Path is not found that means this is a lookup picker of a single child
-            else {
-              var singleChildLookupPath = component.get('v.currentMergeTreePath').slice();
-              singleChildLookupPath.shift();
-              var singleChildLookupPathName = singleChildLookupPath.join('.');
-              selectedMergeFieldName = stringUtils.format('{0}{1}{2}', singleChildLookupPathName, '.', selectedMergeField.name);
-            }
-          }
-          //if we are depth 3 and current mergeFieldPicker corresponds to child lookup
-          else if ((component.get('v.currentDepth') === 3 && component.get('v.isChildLookup'))) {
-            var treePath = component.get('v.currentMergeTreePath').slice();
-            treePath.shift();
-            var pathName = treePath.join('.');
-            selectedMergeFieldName = stringUtils.format('{0}{1}{2}', pathName, '.', selectedMergeField.name);
+          if (component.get('v.isChildLookup')) {
+            var multiChildLookupPathName = component.get('v.currentMergeTreePath').join('.');
+            selectedMergeFieldName = stringUtils.format('{0}{1}{2}', multiChildLookupPathName, '.', selectedMergeField.name);
           } else {
             selectedMergeFieldName = selectedMergeField.name;
           }
@@ -391,6 +370,7 @@
         depth: component.get('v.currentDepth'),
         fieldIndex: component.get('v.fieldIndex'),
         path: component.get('v.currentMergeTreePath'),
+        key: component.get('v.currentMergeTreeKey'),
         type: type
       }
     });
@@ -406,6 +386,7 @@
         depth: component.get('v.currentDepth'),
         fieldIndex: component.get('v.fieldIndex'),
         path: component.get('v.currentMergeTreePath'),
+        key: component.get('v.currentMergeTreeKey'),
         type: type
       }
     });

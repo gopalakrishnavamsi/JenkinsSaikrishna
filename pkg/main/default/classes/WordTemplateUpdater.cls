@@ -245,7 +245,7 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 					type,
 					2,
 					v1.label,
-					new List<String> { v1.label },
+					new List<String>(),
 					null);
 				DescribeSObjectResult childDesc = describeSObject(v1.apiName);
 				if (childDesc != null && v1.childFieldMappings != null) {

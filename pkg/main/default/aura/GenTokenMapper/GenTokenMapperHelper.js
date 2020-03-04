@@ -150,7 +150,7 @@
 
   removeStaleNodesFromMergeTree: function (component, fieldChangeData, previousMergeFieldMapping) {
     var wasInternalNode = previousMergeFieldMapping.type === 'REFERENCE' || previousMergeFieldMapping.type === 'CHILD_RELATIONSHIP';
-    var fullPathToMergeField = fieldChangeData.path.concat([previousMergeFieldMapping.name]).join('.');
+    var fullPathToMergeField = fieldChangeData.key.length > 0 ? fieldChangeData.key.concat('.', previousMergeFieldMapping.relationship) : previousMergeFieldMapping.relationship;
     if (wasInternalNode) {
       var updatedMergeFieldTree = component.get('v.mergeFieldTree').filter(function (node) {
         if (node.type === previousMergeFieldMapping.type && node.key.startsWith(fullPathToMergeField)) {
@@ -162,9 +162,9 @@
     }
   },
 
-  leafExists: function (component, depth, path, type, helper) {
+  leafExists: function (component, depth, key, type) {
     return component.get('v.mergeFieldTree').filter(function (t) {
-      return t.depth === depth && helper.checkPath(path, t.path) && t.type === type
+      return t.depth === depth && key === t.key && t.type === type;
     }).length > 1;
   },
 
@@ -173,13 +173,17 @@
     if (updatedMergeFieldMapping.type === 'CHILD_RELATIONSHIP' ||
       updatedMergeFieldMapping.type === 'REFERENCE') {
       var newLeafPath = $A.util.isUndefinedOrNull(fieldChangeData.path) ? [] : fieldChangeData.path;
-      newLeafPath.push(updatedMergeFieldMapping.relationship);
-      if (!helper.leafExists(component, fieldChangeData.depth + 1 , newLeafPath, updatedMergeFieldMapping.type, helper)) {
+      var newLeafKey = $A.util.isUndefinedOrNull(fieldChangeData.key) ? '' : fieldChangeData.key;
+      if (updatedMergeFieldMapping.type === 'REFERENCE') {
+        newLeafPath.push(updatedMergeFieldMapping.relationship);
+      }
+      newLeafKey = newLeafKey.length > 0 ? newLeafKey.concat('.', updatedMergeFieldMapping.relationship) : updatedMergeFieldMapping.relationship;
+      if (!helper.leafExists(component, fieldChangeData.depth + 1 , newLeafKey, updatedMergeFieldMapping.type, helper)) {
         newLeaf = {
           type: updatedMergeFieldMapping.type,
           depth: fieldChangeData.depth + 1,
           path: newLeafPath,
-          key: newLeafPath.join('.'),
+          key: newLeafKey,
           fields: []
         };
         newLeaf.fields.push(helper.fieldMappingStub());
@@ -230,12 +234,10 @@
 
   removeField: function (component, event, helper) {
     var fieldChangeData = event.getParam('data');
-    var mergeFieldTreeParentOfField = component.get('v.mergeFieldTree').find(function (treeInstance) {
-      return treeInstance.type === fieldChangeData.type &&
-        treeInstance.depth === fieldChangeData.depth &&
-        helper.checkPath(fieldChangeData.path, treeInstance.path);
+    var parentNodeOfField = component.get('v.mergeFieldTree').find(function (node) {
+      return helper.isParentOfField(node, fieldChangeData);
     });
-    var previousMergeFieldMapping = mergeFieldTreeParentOfField.fields[fieldChangeData.fieldIndex];
+    var previousMergeFieldMapping = parentNodeOfField.fields[fieldChangeData.fieldIndex];
     helper.removeStaleNodesFromMergeTree(component, fieldChangeData, previousMergeFieldMapping);
     helper.removeFieldFromParent(component, fieldChangeData);
   },
@@ -261,14 +263,14 @@
 
   isParentOfField: function (mergeFieldTreeNode, parentData) {
     var type = parentData.type;
-    var pathToParent = parentData.path.join('.');
+    var key = parentData.key;
 
     switch (type) {
       case 'ROOT':
         return mergeFieldTreeNode.type === type;
       case 'REFERENCE':
       case 'CHILD_RELATIONSHIP':
-        return mergeFieldTreeNode.type === type && mergeFieldTreeNode.key === pathToParent;
+        return mergeFieldTreeNode.type === type && mergeFieldTreeNode.key === key;
       default:
         return false;
     }
