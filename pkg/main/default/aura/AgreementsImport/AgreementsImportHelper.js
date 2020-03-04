@@ -281,7 +281,7 @@
     var sourceId = component.get('v.recordId');
     sendingAction.setParams({
       sourceId: sourceId,
-      fileIdsInCommaSeparated: selectedFileId
+      fileIds: $A.util.isUndefinedOrNull(selectedFileId) ? [] : [selectedFileId]
     });
     sendingAction.setCallback(this, function (response) {
       var state = response.getState();

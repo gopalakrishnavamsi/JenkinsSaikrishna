@@ -80,15 +80,14 @@
 
     <script type="text/javascript">
       var navigateToURL = function (event) {
-        var url = event.getParam('url');
-        window.open(url, '_blank');
+        window.location.replace(event.getParam('url'));
       };
       var navigateToSObject = function (event) {
         var recordId = event.getParam('recordId');
         if (typeof sforce != 'undefined') {
           sforce.one.navigateToSObject(recordId);
         } else {
-          window.open('/' + recordId, '_blank');
+          window.location.replace('/' + recordId);
         }
       };
 

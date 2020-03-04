@@ -736,7 +736,7 @@
         var sourceId = component.get('v.recordId');
         sendingAction.setParams({
           sourceId: sourceId,
-          fileIdsInCommaSeparated: !$A.util.isEmpty(fileIds) ? fileIds.join(',') : ''
+          fileIds: fileIds
         });
         sendingAction.setCallback(this, function (response) {
           var state = response.getState();

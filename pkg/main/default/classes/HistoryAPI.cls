@@ -140,8 +140,8 @@ public with sharing class HistoryAPI extends ScmAPI {
 		private String getAgreementPreviewLink(final String agreementId) {
 			UUID agreementUId = UUID.parse(agreementId);
 			PageReference agreementView = Page.AgreementPreview;
-			agreementView.getParameters().put('sourceId', EncodingUtil.urlEncode(UserInfo.getUserId(), StringUtils.ENCODING));
-			agreementView.getParameters().put('agreementId', EncodingUtil.urlEncode(agreementUId.value, StringUtils.ENCODING));
+			agreementView.getParameters().put('sourceId', UserInfo.getUserId());
+			agreementView.getParameters().put('agreementId', agreementUId.value);
 			return agreementView.getUrl();
 		}
 

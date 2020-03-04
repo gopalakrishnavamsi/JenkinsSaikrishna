@@ -73,13 +73,12 @@
     <script>
       var _namespace = '{!JSENCODE(namespace)}';
       var _navigateToURL = function (event) {
-        var url = event.getParam('url');
-        window.open(url, '_blank');
+        window.location.replace(event.getParam('url'));
       };
       $Lightning.use(_namespace + ':AgreementsApp', function () {
         $Lightning.createComponent(_namespace + ':Agreements', {
           visualforce: true, recordId: '{!JSENCODE($CurrentPage.parameters.sId)}'
-        }, 'ds-agreementspage', function (cmp) {
+        }, 'ds-agreementspage', function () {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': _navigateToURL});
         });
       });

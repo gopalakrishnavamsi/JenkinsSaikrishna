@@ -214,9 +214,13 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
-	public static String getSendingDeepLink(final Id sourceId, final String fileIdsInCommaSeparated) {
+	public static String getSendingDeepLink(
+		final Id sourceId,
+		final List<Id> fileIds) {
+
 		try {
-			return FileService.getSendingDeepLink(sourceId, fileIdsInCommaSeparated).toExternalForm();
+			PageReference pg = FileService.getSendingDeepLink(sourceId, fileIds);
+			return pg == null ? null : pg.getUrl();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get deep link');
 		}

@@ -9,6 +9,7 @@ public with sharing class AgreementsController extends Controller {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public AgreementsController(final ApexPages.StandardController c) {
 	}
 
@@ -271,9 +272,13 @@ public with sharing class AgreementsController extends Controller {
 	}
 
 	@AuraEnabled
-	public static String getSendingDeepLink(final Id sourceId, String fileIdsInCommaSeparated) {
+	public static String getSendingDeepLink(
+		final Id sourceId,
+		List<Id> fileIds) {
+
 		try {
-			return FileService.getSendingDeepLink(sourceId, fileIdsInCommaSeparated).toExternalForm();
+			PageReference pg = FileService.getSendingDeepLink(sourceId, fileIds);
+			return pg == null ? null : pg.getUrl();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get deep link');
 		}

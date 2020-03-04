@@ -294,7 +294,6 @@ private class GenControllerTest {
 						})
 				});
 
-
 			Test.startTest();
 			Query.Result result = GenController.getMergeData(a.Id, JSON.serialize(q));
 			Test.stopTest();
@@ -472,7 +471,7 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_getSendingDeepLink() {
+	static void test_getSendingDeepLink_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			String title = UUID.randomUUID().toString();
@@ -484,14 +483,16 @@ private class GenControllerTest {
 			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
 			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
 
-			String fileIdsInCommaSeparated = String.join(new List<String> { result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId }, ',');
+			List<Id> fileIds = new List<Id> {
+				result1.ContentDocumentId, result2.ContentDocumentId,
+				result3.ContentDocumentId
+			};
 
 			Test.startTest();
-			PageReference ref = new PageReference(GenController.getSendingDeepLink(a.Id, fileIdsInCommaSeparated));
+			String result = GenController.getSendingDeepLink(a.Id, fileIds);
 			Test.stopTest();
 
-			System.assertEquals((Id)ref.getParameters().get('sid'), a.Id);
-			System.assertEquals(EncodingUtil.urlDecode(ref.getParameters().get('files'), StringUtils.ENCODING), fileIdsInCommaSeparated);
+			System.assert(String.isNotBlank(result));
 		}
 	}
 
@@ -794,7 +795,7 @@ private class GenControllerTest {
 	static void test_verifyDocuSignGenerator() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
-			System.assert(Gencontroller.verifyDocuSignGenerator());
+			System.assert(GenController.verifyDocuSignGenerator());
 			Test.stopTest();
 		}
 	}
@@ -804,7 +805,7 @@ private class GenControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				Gencontroller.verifyDocuSignGenerator();
+				GenController.verifyDocuSignGenerator();
 				throw new AssertException('Expected verify DocuSignGeneratore to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());

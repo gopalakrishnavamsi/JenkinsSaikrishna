@@ -583,8 +583,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		if (sourceId == null || documentId == null) return null;
 		try {
 			PageReference previewPath = Page.AgreementPreview;
-			previewPath.getParameters().put('sourceId', EncodingUtil.urlEncode(sourceId, StringUtils.ENCODING));
-			previewPath.getParameters().put('agreementId', EncodingUtil.urlEncode(documentId.value, StringUtils.ENCODING));
+			previewPath.getParameters().put('sourceId', sourceId);
+			previewPath.getParameters().put('agreementId', documentId.value);
 
 			return new Url(Salesforce.baseUrl, previewPath.getUrl()).toExternalForm().replace('&', '&amp;');
 		} catch (Exception ex) {

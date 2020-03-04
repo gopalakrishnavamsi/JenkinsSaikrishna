@@ -666,7 +666,7 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
-	static void test_getSendingDeepLink() {
+	static void test_getSendingDeepLink_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a = TestUtils.createAccount();
 			String title = UUID.randomUUID().toString();
@@ -678,14 +678,28 @@ private class AgreementsControllerTest {
 			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
 			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
 
-			String fileIdsInCommaSeparated = String.join(new List<String> { result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId }, ',');
+			List<Id> fileIds = new List<Id> { result1.ContentDocumentId, result2.ContentDocumentId,
+				result3.ContentDocumentId };
 
 			Test.startTest();
-			PageReference ref = new PageReference(AgreementsController.getSendingDeepLink(a.Id, fileIdsInCommaSeparated));
+			String result = AgreementsController.getSendingDeepLink(a.Id, fileIds);
 			Test.stopTest();
 
-			System.assertEquals((Id)ref.getParameters().get('sid'), a.Id);
-			System.assertEquals(EncodingUtil.urlDecode(ref.getParameters().get('files'), StringUtils.ENCODING), fileIdsInCommaSeparated);
+			System.assert(String.isNotBlank(result));
+		}
+	}
+
+	@IsTest
+	static void test_getSendingDeepLink_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				AgreementsController.getSendingDeepLink(null, null);
+				throw new AssertException('Expected getSendingDeepLink to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 }
