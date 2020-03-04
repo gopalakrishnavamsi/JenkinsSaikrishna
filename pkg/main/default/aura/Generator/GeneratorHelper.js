@@ -180,15 +180,22 @@
     fm.fields.forEach(function (field) {
       if (!$A.util.isUndefinedOrNull(field) && !$A.util.isUndefinedOrNull(field.name) && field.name !== '') {
         var childKey = '';
-        if (fm.depth === 1) {
-          childKey = helper.getChildKey(field.name, fm.depth, field.type);
-        } else {
-          childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
-        }
-        var child = map[childKey];
+        var child;
         if (field.type === 'CHILD_RELATIONSHIP') {
+          if (fm.depth === 1) {
+            childKey = helper.getChildKey(field.relationship, fm.depth, field.type);
+          } else {
+            childKey = helper.getChildKey(relationship + '.' + field.relationship, fm.depth, field.type);
+          }
+          child = map[childKey];
           children.push(helper.traverseFieldMapping(child, field.relationship, field.parentIdField, field.name, map, isMultiCurrency));
         } else if (field.type === 'REFERENCE') {
+          if (fm.depth === 1) {
+            childKey = helper.getChildKey(field.relationship, fm.depth, field.type);
+          } else {
+            childKey = helper.getChildKey(fm.key + '.' + field.relationship, fm.depth, field.type);
+          }
+          child = map[childKey];
           helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
             fields.push(f);
           });
