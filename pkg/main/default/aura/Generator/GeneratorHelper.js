@@ -199,7 +199,7 @@
           helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
             fields.push(f);
           });
-        } else if (isMultiCurrency && field.type === 'CURRENCY' && (fields.indexOf('CurrencyIsoCode') === -1 )) {
+        } else if (isMultiCurrency && field.type === 'CURRENCY' && (fields.indexOf('CurrencyIsoCode') === -1)) {
           fields.push('CurrencyIsoCode');
           fields.push(field.name);
         } else if (field.name !== 'CurrentDate') {
@@ -369,16 +369,16 @@
         fieldXml = xmlRoot.createElement(field);
       }
 
-      var filedValue;
+      var fieldValue;
       var newFields = field.split('.');
       if (field === 'CurrentDate') {
-        filedValue = $A.localizationService.formatDate(new Date());
+        fieldValue = $A.localizationService.formatDate(new Date(), format.format === 'default' ? '' : format.format);
       } else if (depth <= 2) {
-        filedValue = helper.getFieldValue(newFields, result, format, isMultiCurrency);
+        fieldValue = helper.getFieldValue(newFields, result, format, isMultiCurrency);
       } else {
-        filedValue = helper.getFieldValue(newFields, children, format, isMultiCurrency);
+        fieldValue = helper.getFieldValue(newFields, children, format, isMultiCurrency);
       }
-      var nodeValue = xmlRoot.createTextNode(filedValue);
+      var nodeValue = xmlRoot.createTextNode(fieldValue);
       fieldXml.appendChild(nodeValue);
       objRoot.appendChild(fieldXml);
     });
@@ -404,7 +404,7 @@
           return objRoot;
         }
         for (var k = 0; k < childData.length; k++) {
-          if (result['Id'] ===  childData[k][childQuery.parentIdField]) {
+          if (result['Id'] === childData[k][childQuery.parentIdField]) {
             childXml = helper.generateXML(childQuery, result, childData[k], depth + 1, xmlRoot, fieldMap, isMultiCurrency);
             container.appendChild(childXml);
             objRoot.appendChild(container);
@@ -446,7 +446,9 @@
     var type = format.type;
     var fieldFormat = format.format;
     var locale = $A.get('$Locale');
-    if (type === 'PERCENT') {
+    if ($A.util.isEmpty(nodeValue)) {
+      nodeValue = '';
+    } else if (type === 'PERCENT') {
       var percentSymbol = $A.util.getBooleanValue(fieldFormat) ? '%' : '';
       nodeValue = stringUtils.format('{0}{1}', helper.formatNumber(nodeValue, format.scale), percentSymbol);
     } else if (type === 'DOUBLE') {

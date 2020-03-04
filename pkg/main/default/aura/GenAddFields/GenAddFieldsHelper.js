@@ -64,26 +64,17 @@
   setDateFormatOnOptionsModal: function (component, fieldMapping) {
     var self = this;
     var dateFormat;
+    dateFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[0] : fieldMapping.format;
 
-    if ($A.util.isUndefinedOrNull(fieldMapping.format)) {
-      component.set('v.dateDropDown', 'default');
+    // If Date format is not in list of defined time formats, designate it as Custom
+    if (!component.get('v.definedDateFormats').includes(dateFormat)) {
+      component.set('v.dateDropDown', $A.get('$Label.c.Custom'));
+      component.set('v.customDateInput', dateFormat);
+      self.formatDate(component);
     } else {
-      dateFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[0] : fieldMapping.format;
-
-      // If Date format is not in list of defined time formats, designate it as Custom
-      if (!component.get('v.definedDateFormats').includes(dateFormat)) {
-        component.set('v.dateDropDown', $A.get('$Label.c.Custom'));
-        component.set('v.customDateInput', dateFormat);
-        self.formatDate(component);
-        // If Custom designation fails, convert the format to default
-        if (self.isCustomDateFormatInvalid(component)) {
-          component.set('v.dateDropDown', 'default');
-          component.set('v.datePreview', '');
-          component.set('v.customDateInput', '');
-        }
-      } else {
-        component.set('v.dateDropDown', dateFormat);
-      }
+      component.set('v.dateDropDown', dateFormat);
+      component.set('v.datePreview', '');
+      component.set('v.customDateInput', '');
     }
   },
 
@@ -91,25 +82,19 @@
     var self = this;
     var timeFormat;
 
-    if ($A.util.isUndefinedOrNull(fieldMapping.format)) {
-      component.set('v.timeDropDown', 'default');
-    } else {
-      timeFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[1] : fieldMapping.format;
+    timeFormat = fieldMapping.format.includes('|') ? fieldMapping.format.split('|')[1] : fieldMapping.format;
 
-      // If Time format is not in list of defined time formats, designate it as Custom
-      if (!component.get('v.definedTimeFormats').includes(timeFormat)) {
-        component.set('v.timeDropDown', $A.get('$Label.c.Custom'));
-        component.set('v.customTimeInput', timeFormat);
-        self.formatTime(component);
-        // If Custom designation fails, convert the format to default
-        if (self.isCustomTimeFormatInvalid(component)) {
-          component.set('v.timeDropDown', 'default');
-          component.set('v.timePreview', '');
-          component.set('v.customTimeInput', '');
-        }
-      } else {
-        component.set('v.timeDropDown', timeFormat);
-      }
+    // If Time format is not in list of defined time formats, designate it as Custom
+    if (!component.get('v.definedTimeFormats').includes(timeFormat)) {
+      component.set('v.timeDropDown', $A.get('$Label.c.Custom'));
+      component.set('v.customTimeInput', timeFormat);
+      self.formatTime(component);
+      // If Custom designation fails, convert the format to default
+
+    } else {
+      component.set('v.timeDropDown', timeFormat);
+      component.set('v.timePreview', '');
+      component.set('v.customTimeInput', '');
     }
   },
 
