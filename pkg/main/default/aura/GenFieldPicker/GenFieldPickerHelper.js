@@ -108,9 +108,11 @@
     });
 
     if (helper.checkDuplicateField(component, event, helper, parentNodeOfField)) {
+      var currentFieldMapping = parentNodeOfField.fields[fieldIndex];
+      var currentMappingValue = currentFieldMapping.type === 'REFERENCE' || currentFieldMapping.type === 'CHILD_RELATIONSHIP' ? currentFieldMapping.relationship : currentFieldMapping.name;
       helper.showToast(component, 'warning', stringUtils.format($A.get('$Label.c.FieldPickerFieldExists_1'), event.getSource().get('v.value')));
-      component.set('v.selectedMergeField', parentNodeOfField.fields[fieldIndex]);
-      component.set('v.selectedMergeFieldName', parentNodeOfField.fields[fieldIndex].name);
+      component.set('v.selectedMergeField', currentFieldMapping);
+      component.set('v.selectedMergeFieldName', currentMappingValue);
       return;
     } else {
       helper.fireChangeFieldSelection(component, event, helper);
