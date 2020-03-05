@@ -1774,6 +1774,14 @@
 		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
+		<label>Lookup Relationships</label>
+		<name>LookupRelationships</name>
+	</customLabels>
+	<customLabels>
+		<label>Related Lists</label>
+		<name>ChildRelationships</name>
+	</customLabels>
+	<customLabels>
 		<label>日期格式</label>
 		<name>DateFormat</name>
 	</customLabels>
@@ -4551,7 +4559,7 @@
 		<name>MicrosoftWordDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Output format: DOCX, PDF</label>
+		<label>輸出格式：DOCX、PDF</label>
 		<name>MicrosoftWordFormats</name>
 	</customLabels>
 	<customLabels>
@@ -4559,7 +4567,7 @@
 		<name>OnlineEditorDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Output format: ADF, HTML</label>
+		<label>輸出格式：ADF、HTML</label>
 		<name>OnlineEditorFormats</name>
 	</customLabels>
 	<customLabels>
@@ -4567,7 +4575,7 @@
 		<name>SelectDataSource</name>
 	</customLabels>
 	<customLabels>
-		<label>Select Template Editor</label>
+		<label>選取範本編輯工具</label>
 		<name>SelectDocumentType</name>
 	</customLabels>
 	<customLabels>
@@ -4772,15 +4780,15 @@
 		<name>Error</name>
 	</customLabels>
 	<customLabels>
-		<label>Upgrade Microsoft Word Gen templates</label>
+		<label>升級 Microsoft Word Gen 範本</label>
 		<name>UpgradeWordTemplates</name>
 	</customLabels>
 	<customLabels>
-		<label>Queued {0} template(s) for upgrade with Apex job {1}.</label>
+		<label>系統已將 {0} 個使用 Apex 作業 {1} 升級的範本排入佇列。</label>
 		<name>UpgradeTemplatesQueued_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Upgraded {0} template(s).</label>
+		<label>系統已升級 {0} 個範本。</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
 	<customPageWebLinks>

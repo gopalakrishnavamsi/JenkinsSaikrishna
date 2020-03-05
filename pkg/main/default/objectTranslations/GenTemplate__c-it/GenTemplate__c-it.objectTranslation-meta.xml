@@ -13,7 +13,7 @@
     <layouts>
         <layout>Gen Template Layout</layout>
         <sections>
-            <label>Custom Links</label>
+            <label>Collegamento personalizzati</label>
             <section>Custom Links</section>
         </sections>
     </layouts>

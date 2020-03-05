@@ -65,7 +65,7 @@
     <layouts>
         <layout>Gen Template Layout</layout>
         <sections>
-            <label>Custom Links</label>
+            <label>Настраиваемые ссылки</label>
             <section>Custom Links</section>
         </sections>
     </layouts>

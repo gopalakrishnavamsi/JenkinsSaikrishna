@@ -1774,6 +1774,14 @@
 		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
+		<label>Lookup Relationships</label>
+		<name>LookupRelationships</name>
+	</customLabels>
+	<customLabels>
+		<label>Related Lists</label>
+		<name>ChildRelationships</name>
+	</customLabels>
+	<customLabels>
 		<label>날짜 포맷</label>
 		<name>DateFormat</name>
 	</customLabels>
@@ -4551,7 +4559,7 @@
 		<name>MicrosoftWordDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Output format: DOCX, PDF</label>
+		<label>출력 형식: DOCX, PDF</label>
 		<name>MicrosoftWordFormats</name>
 	</customLabels>
 	<customLabels>
@@ -4559,7 +4567,7 @@
 		<name>OnlineEditorDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Output format: ADF, HTML</label>
+		<label>출력 형식: ADF, HTML</label>
 		<name>OnlineEditorFormats</name>
 	</customLabels>
 	<customLabels>
@@ -4567,7 +4575,7 @@
 		<name>SelectDataSource</name>
 	</customLabels>
 	<customLabels>
-		<label>Select Template Editor</label>
+		<label>템플릿 에디터 선택</label>
 		<name>SelectDocumentType</name>
 	</customLabels>
 	<customLabels>
@@ -4772,15 +4780,15 @@
 		<name>Error</name>
 	</customLabels>
 	<customLabels>
-		<label>Upgrade Microsoft Word Gen templates</label>
+		<label>Microsoft Word 세대 템플릿 업그레이드</label>
 		<name>UpgradeWordTemplates</name>
 	</customLabels>
 	<customLabels>
-		<label>Queued {0} template(s) for upgrade with Apex job {1}.</label>
+		<label>Apex 작업 {1}으로 업그레이드하기 위해 대기 중인 {0}개 템플릿.</label>
 		<name>UpgradeTemplatesQueued_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Upgraded {0} template(s).</label>
+		<label>{0}개 템플릿이 업그레이드되었습니다.</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
 	<customPageWebLinks>

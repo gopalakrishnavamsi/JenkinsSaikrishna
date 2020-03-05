@@ -1774,6 +1774,14 @@
 		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
+		<label>Lookup Relationships</label>
+		<name>LookupRelationships</name>
+	</customLabels>
+	<customLabels>
+		<label>Related Lists</label>
+		<name>ChildRelationships</name>
+	</customLabels>
+	<customLabels>
 		<label>Formato da data</label>
 		<name>DateFormat</name>
 	</customLabels>
@@ -4551,7 +4559,7 @@
 		<name>MicrosoftWordDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Output format: DOCX, PDF</label>
+		<label>Formato de saída: DOCX, PDF</label>
 		<name>MicrosoftWordFormats</name>
 	</customLabels>
 	<customLabels>
@@ -4559,7 +4567,7 @@
 		<name>OnlineEditorDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Output format: ADF, HTML</label>
+		<label>Formato de saída: ADF, HTML</label>
 		<name>OnlineEditorFormats</name>
 	</customLabels>
 	<customLabels>
@@ -4567,7 +4575,7 @@
 		<name>SelectDataSource</name>
 	</customLabels>
 	<customLabels>
-		<label>Select Template Editor</label>
+		<label>Selecionar Editor de modelos</label>
 		<name>SelectDocumentType</name>
 	</customLabels>
 	<customLabels>
@@ -4772,15 +4780,15 @@
 		<name>Error</name>
 	</customLabels>
 	<customLabels>
-		<label>Upgrade Microsoft Word Gen templates</label>
+		<label>Atualizar modelos do Microsoft Word Gen</label>
 		<name>UpgradeWordTemplates</name>
 	</customLabels>
 	<customLabels>
-		<label>Queued {0} template(s) for upgrade with Apex job {1}.</label>
+		<label>{0} modelo(s) enfileirado(s) para atualização com o trabalho {1} do Apex.</label>
 		<name>UpgradeTemplatesQueued_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Upgraded {0} template(s).</label>
+		<label>{0} modelo(s) atualizado(s).</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
 	<customPageWebLinks>

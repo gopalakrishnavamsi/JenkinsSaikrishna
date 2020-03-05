@@ -45,7 +45,7 @@
     <layouts>
         <layout>Gen Template Layout</layout>
         <sections>
-            <label>Custom Links</label>
+            <label>Benutzerdefinierte Links</label>
             <section>Custom Links</section>
         </sections>
     </layouts>

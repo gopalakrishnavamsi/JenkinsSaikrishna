@@ -1774,6 +1774,14 @@
 		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
+		<label>Lookup Relationships</label>
+		<name>LookupRelationships</name>
+	</customLabels>
+	<customLabels>
+		<label>Related Lists</label>
+		<name>ChildRelationships</name>
+	</customLabels>
+	<customLabels>
 		<label>Datumindeling</label>
 		<name>DateFormat</name>
 	</customLabels>
@@ -4551,7 +4559,7 @@
 		<name>MicrosoftWordDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Output format: DOCX, PDF</label>
+		<label>Indeling uitvoer: DOCX, PDF</label>
 		<name>MicrosoftWordFormats</name>
 	</customLabels>
 	<customLabels>
@@ -4559,7 +4567,7 @@
 		<name>OnlineEditorDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Output format: ADF, HTML</label>
+		<label>Indeling uitvoer: ADF, HTML</label>
 		<name>OnlineEditorFormats</name>
 	</customLabels>
 	<customLabels>
@@ -4567,7 +4575,7 @@
 		<name>SelectDataSource</name>
 	</customLabels>
 	<customLabels>
-		<label>Select Template Editor</label>
+		<label>Sjabloonbewerker selecteren</label>
 		<name>SelectDocumentType</name>
 	</customLabels>
 	<customLabels>
@@ -4772,15 +4780,15 @@
 		<name>Error</name>
 	</customLabels>
 	<customLabels>
-		<label>Upgrade Microsoft Word Gen templates</label>
+		<label>Microsoft Word Gen-sjablonen upgraden</label>
 		<name>UpgradeWordTemplates</name>
 	</customLabels>
 	<customLabels>
-		<label>Queued {0} template(s) for upgrade with Apex job {1}.</label>
+		<label>{0} sjabloon/sjablonen in de wachtrij geplaatst voor upgrade met Apex-taak {1}.</label>
 		<name>UpgradeTemplatesQueued_2</name>
 	</customLabels>
 	<customLabels>
-		<label>Upgraded {0} template(s).</label>
+		<label>{0} sjabloon/sjablonen geüpgraded.</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
 	<customPageWebLinks>

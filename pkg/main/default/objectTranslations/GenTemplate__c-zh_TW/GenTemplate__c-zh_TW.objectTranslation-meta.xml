@@ -8,7 +8,7 @@
     <layouts>
         <layout>Gen Template Layout</layout>
         <sections>
-            <label>Custom Links</label>
+            <label>自訂連結</label>
             <section>Custom Links</section>
         </sections>
     </layouts>
