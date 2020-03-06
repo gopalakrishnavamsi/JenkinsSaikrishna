@@ -7,6 +7,14 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 	private static final Set<SObjectType> TYPE_BLACKLIST = new Set<SObjectType> { Schema.Group.getSObjectType() };
 	private static final String CURRENT_DATE = 'CurrentDate';
 	private static Integer templateCount = null;
+	private static final Map<String, String> V1_TO_V2_DATE_MAPPINGS = new Map<String, String> {
+		'default' => 'default',
+		'MM/dd/yyyy' => 'MM/dd/yyyy',
+		'yyyy-MM-dd' => 'YYYY-MM-DD',
+		'dd.MM.yyyy' => 'D.MM.YYYY',
+		'MMMM dd, yyyy' => 'MMMM D, YYYY'
+	};
+
 	@TestVisible
 	private static Integer batchLimit = 200;
 
@@ -36,16 +44,26 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 		if (v1 == null) return null;
 
 		String result = null;
-		Boolean isDateOrTimeType = v1.dataType == Schema.DisplayType.DATE.name()
-			|| v1.dataType == Schema.DisplayType.TIME.name()
-			|| v1.dataType == Schema.DisplayType.DATETIME.name()
-			|| v1.apiName == CURRENT_DATE;
+
+		Boolean isDateTimeType = v1.dataType == Schema.DisplayType.DATETIME.name();
+		Boolean isDateType = v1.dataType == Schema.DisplayType.DATE.name() || v1.apiName == CURRENT_DATE;
+		Boolean isTimeType = v1.dataType == Schema.DisplayType.TIME.name();
+		Boolean isDateOrTimeType = isDateTimeType || isDateType || isTimeType;
+
 		Boolean isCurrencyFormatDefined = String.isNotBlank(v1.currencyFormat) && v1.currencyFormat != 'default';
 		Boolean isCurrencyType = v1.dataType == Schema.DisplayType.CURRENCY.name()
 			|| v1.dataType == Schema.DisplayType.DOUBLE.name();
 
 		if (isDateOrTimeType) {
-			result = v1.dateFormat;
+			String dateFormat = V1_TO_V2_DATE_MAPPINGS.containsKey(v1.dateFormat) ? V1_TO_V2_DATE_MAPPINGS.get(v1.dateFormat) : 'default';
+			String timeFormat = 'default';
+			if (isDateTimeType) {
+				result = String.format('{0}{1}{2}', new List<String> { dateFormat, '|', timeFormat });
+			} else if (isDateType) {
+				result = dateFormat;
+			} else if (isTimeType) {
+				result = timeFormat;
+			}
 		} else if (isCurrencyFormatDefined && isCurrencyType) {
 			result = v1.currencyFormat;
 		}
