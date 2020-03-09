@@ -247,11 +247,11 @@
                                                                 title="Preview">
                                                                 <a href="javascript:void(0)"
                                                                    data-fileId="{!file.contentDocumentId}"
-                                                                   onclick="{!c.previewFile}">Preview</a>
-                                                                <span class="slds-tile__detail slds-truncate ds-genFileText"> or </span>
+                                                                   onclick="{!c.previewFile}">{!$Label.c.PreviewStep}</a>
+                                                                <span class="slds-tile__detail slds-truncate ds-genFileText"> {!$Label.c.or} </span>
                                                                 <a href="javascript:void(0)"
                                                                    data-fileId="{!file.contentDocumentId}"
-                                                                   onclick="{!c.downloadFile}">Download</a>
+                                                                   onclick="{!c.downloadFile}">{!$Label.c.Download}</a>
                                                             </h3>
                                                         </div>
                                                     </article>

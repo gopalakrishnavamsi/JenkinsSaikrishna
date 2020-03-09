@@ -9225,4 +9225,11 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Upgrade templates complete</shortDescription>
 		<value>Upgraded {0} template(s).</value>
 	</labels>
+	<labels>
+		<fullName>or</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>or</shortDescription>
+		<value>or</value>
+	</labels>
 </CustomLabels>
