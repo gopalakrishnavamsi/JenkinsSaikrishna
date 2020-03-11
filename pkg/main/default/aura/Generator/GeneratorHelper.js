@@ -297,7 +297,8 @@
                 1,
                 xmlRoot,
                 fieldMap,
-                isMultiCurrency
+                isMultiCurrency,
+                ''
               );
               templateConfig.appendChild(objXML);
               resolve();
@@ -340,7 +341,7 @@
       fieldMapping.fields.forEach(function (field) {
         var value = {};
         if (field.type !== 'REFERENCE' && field.type !== 'CHILD_RELATIONSHIP') {
-          if (fieldMapping.type === 'ROOT' || fieldMapping.type === 'CHILD_RELATIONSHIP') {
+          if(fieldMapping.type === 'ROOT') {
             key = field.name.toLowerCase();
           } else {
             key = (fieldMapping.key + '.' + field.name).toLowerCase();
@@ -355,14 +356,18 @@
     return map;
   },
 
-  generateXML: function (query, result, children, depth, xmlRoot, fieldMap, isMultiCurrency) {
+  generateXML: function (query, result, children, depth, xmlRoot, fieldMap, isMultiCurrency, previousRelationship) {
     var helper = this;
     var objRoot = (depth === 1) ? xmlRoot.createElement(query.type) : xmlRoot.createElement(query.relationship);
     var format = '';
 
     query.fields.forEach(function (field) {
       var fieldXml;
-      format = fieldMap[field.toLowerCase()];
+      var fieldMapKey = query.relationship === '' ? field : query.relationship +'.'+ field;
+      if(depth > 2) {
+        fieldMapKey = previousRelationship + '.' + fieldMapKey;
+      }
+      format = fieldMap[fieldMapKey.toLowerCase()];
       if (field.startsWith(query.type)) {
         fieldXml = xmlRoot.createElement(field.replace(query.type + '.', ''));
       } else {
@@ -394,7 +399,7 @@
           return objRoot;
         }
         for (var j = 0; j < childData.length; j++) {
-          childXml = helper.generateXML(childQuery, childData[j], children, depth + 1, xmlRoot, fieldMap, isMultiCurrency);
+          childXml = helper.generateXML(childQuery, childData[j], children, depth + 1, xmlRoot, fieldMap, isMultiCurrency, query.relationship);
           container.appendChild(childXml);
           objRoot.appendChild(container);
         }
@@ -405,7 +410,7 @@
         }
         for (var k = 0; k < childData.length; k++) {
           if (result['Id'] === childData[k][childQuery.parentIdField]) {
-            childXml = helper.generateXML(childQuery, result, childData[k], depth + 1, xmlRoot, fieldMap, isMultiCurrency);
+            childXml = helper.generateXML(childQuery, result, childData[k], depth + 1, xmlRoot, fieldMap, isMultiCurrency, query.relationship);
             container.appendChild(childXml);
             objRoot.appendChild(container);
           }
