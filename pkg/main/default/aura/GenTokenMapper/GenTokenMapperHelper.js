@@ -124,7 +124,7 @@
     } else if (fieldMapping.type === 'DATETIME') {
       format = 'default|default';
     } else if (fieldMapping.type === 'PERCENT') {
-      format = false;
+      format = true;
     }
     return format;
   },
