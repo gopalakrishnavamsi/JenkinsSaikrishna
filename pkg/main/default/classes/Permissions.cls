@@ -7,7 +7,6 @@ public with sharing class Permissions {
 	private static final Permissions.Database DB = new Permissions.Database();
 	private static final SObjectType TYPE_PERMISSION_SET_ASSIGNMENT = PermissionSetAssignment.getSObjectType();
 	private static final Map<String, DescribeFieldResult> FIELD_DESCRIBE_MAP = new Map<String, DescribeFieldResult>();
-	private static final Set<String> SPECIAL_CASE_FIELDS = new Set<String> { 'Owner', 'MasterRecord', 'Parent' };
 	private static final Map<Id, Set<String>> ASSIGNMENTS = new Map<Id, Set<String>>();
 	@TestVisible
 	private static Boolean allowImpersonation = null;
@@ -942,6 +941,13 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
+	private static Boolean isSpecialCaseField(final String fieldName, final Map<String, SObjectField> fieldMap) {
+		if (String.isBlank(fieldName) || fieldMap.containsKey(fieldName)) return false;
+		String formmatedFieldName = formatIdPointingField(fieldName);
+		return fieldMap.containsKey(formmatedFieldName) && fieldMap.get(formmatedFieldName).getDescribe().getReferenceTo() != null;
+	}	
+
+	@TestVisible
 	private static FlsResults getFlsResults(
 		final FlsAccess requestedAccess,
 		final String objectName,
@@ -963,8 +969,7 @@ public with sharing class Permissions {
 					isAuthorized = false;
 					fieldResults.add(new FlsResult(Label.Unknown, FlsStatus.BadRequest));
 				} else {
-					// Using a value that is contained in SPECIAL_CASE_FIELDS, returns bad query, so we need to format it.
-					if (SPECIAL_CASE_FIELDS.contains(f)) f = formatIdPointingField(f);
+					if (isSpecialCaseField(f, fieldMap)) f = formatIdPointingField(f);
 					SObjectField sof = fieldMap.get(f);
 					if (sof == null && !objectDescribe.isCustom() && !f.endsWith('__c') && Salesforce.exists(f)) {
 						// In the event we have a lookup field with the same name as the master object.

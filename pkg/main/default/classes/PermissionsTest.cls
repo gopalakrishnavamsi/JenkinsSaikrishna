@@ -2090,6 +2090,8 @@ private class PermissionsTest {
 	static void test_getFlsResults_lookups() {
 		DescribeSObjectResult oppDesc = Opportunity.getSObjectType().getDescribe();
 		DescribeSObjectResult acctDesc = Schema.Account.getSObjectType().getDescribe();
+		DescribeSObjectResult userDesc = Schema.User.getSObjectType().getDescribe();
+
 
 		Test.startTest();
 		Permissions.FlsResults result1 = Permissions.getFlsResults(
@@ -2104,6 +2106,12 @@ private class PermissionsTest {
 			acctDesc,
 			new List<String> { 'Name', 'Parent', 'MasterRecord', 'Owner' },
 			acctDesc.fields.getMap());
+		Permissions.FlsResults result3 = Permissions.getFlsResults(
+			Permissions.FlsAccess.Queryable,
+			'User',
+			userDesc,
+			new List<String> { 'Name', 'Manager' },
+			userDesc.fields.getMap());		
 		Test.stopTest();
 
 		System.assertNotEquals(null, result1);
@@ -2111,5 +2119,24 @@ private class PermissionsTest {
 
 		System.assertNotEquals(null, result2);
 		System.assert(result2.isAuthorized);
+
+		System.assertNotEquals(null, result2);
+		System.assert(result3.isAuthorized);		
+	}
+
+	@IsTest
+	static void test_isSpecialCaseField() {
+		DescribeSObjectResult userDesc = Schema.User.getSObjectType().getDescribe();
+
+		Test.startTest();
+
+		Boolean result1 = Permissions.isSpecialCaseField('Manager', userDesc.fields.getMap());
+		Boolean result2 = Permissions.isSpecialCaseField('Name', userDesc.fields.getMap());
+
+		Test.stopTest();
+
+		System.assertEquals(result1, true);
+		System.assertEquals(result2, false);
+
 	}
 }
