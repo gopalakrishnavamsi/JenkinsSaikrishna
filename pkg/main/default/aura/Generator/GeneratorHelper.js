@@ -230,7 +230,7 @@
       } else if (isMultiCurrency && field.type === 'CURRENCY' && (fields.indexOf(fm.key + '.CurrencyIsoCode') === -1)) {
         fields.push(path + '.CurrencyIsoCode');
         fields.push(path + '.' + field.name);
-      } else if (field.name !== 'CurrentDate') {
+      } else if (field.name !== 'CurrentDate' && !$A.util.isEmpty(field.name)) {
         fields.push(path + '.' + field.name);
       }
     });
