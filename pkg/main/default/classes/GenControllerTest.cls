@@ -245,13 +245,13 @@ private class GenControllerTest {
 			Contact ct1 = TestUtils.createContact(a.Id);
 			Contact ct2 = TestUtils.createContact(a.Id);
 
-			Asset a1 = new Asset(Name = 'Asset 1 - Contact 1', AccountId = a.Id, ContactId = ct1.Id);
-			Asset a2 = new Asset(Name = 'Asset 1 - Contact 2', AccountId = a.Id, ContactId = ct2.Id);
-			Asset a3 = new Asset(Name = 'Asset 2 - Contact 2', AccountId = a.Id, ContactId = ct2.Id);
-			insert new List<Asset> { a1, a2, a3 };
+			Opportunity o1 = new Opportunity(AccountId = a.Id, Name = 'UNIT TEST 10', CloseDate = Date.today(), StageName = 'Negotiation/Review');
+			Opportunity o2 = new Opportunity(AccountId = a.Id, Name = 'UNIT TEST 11', CloseDate = Date.today(), StageName = 'Negotiation/Review');
+			Opportunity o3 = new Opportunity(AccountId = a.Id, Name = 'UNIT TEST 20', CloseDate = Date.today(), StageName = 'Negotiation/Review');
+			insert new List<Opportunity> { o1, o2, o3 };
 
-			Case cs1 = new Case(AccountId = a.Id, ContactId = ct1.Id, AssetId = a1.Id);
-			Case cs2 = new Case(AccountId = a.Id, ContactId = ct2.Id, AssetId = a2.Id);
+			Case cs1 = new Case(AccountId = a.Id, ContactId = ct1.Id);
+			Case cs2 = new Case(AccountId = a.Id, ContactId = ct2.Id);
 			insert new List<Case> { cs1, cs2 };
 
 			Query q = Query.newQuery(
@@ -276,22 +276,13 @@ private class GenControllerTest {
 								100)
 						}),
 					Query.newSubQuery(
-						'Asset',
+						'Opportunity',
 						new List<String> { 'Name' },
-						'Assets',
-						'Name LIKE \'Asset 1%\'',
+						'Opportunities',
+						'Name LIKE \'UNIT TEST 1%\'',
 						null,
 						null,
-						new List<Query> {
-							Query.newChildQuery(
-								'Case',
-								new List<String> { 'CaseNumber' },
-								'Cases',
-								'AssetId',
-								null,
-								null,
-								100)
-						})
+						null)
 				});
 
 			Test.startTest();
@@ -302,14 +293,14 @@ private class GenControllerTest {
 			System.assertNotEquals(null, result.result);
 			System.assert(result.result instanceof Schema.Account);
 			Schema.Account aa = (Schema.Account)result.result;
-			System.assertEquals(2, Collection.size(aa.Assets));
+			System.assertEquals(2, Collection.size(aa.Opportunities));
 			System.assertEquals(2, Collection.size(aa.Contacts));
 			System.assertNotEquals(null, aa.Owner);
 			System.assertEquals(UserInfo.getName(), aa.Owner.Name);
 
 			System.assertNotEquals(null, result.children);
 			System.assertEquals(1, result.children.size());
-			System.assertEquals(4, Collection.size(result.children.get('Cases')));
+			System.assertEquals(2, Collection.size(result.children.get('Cases')));
 		}
 	}
 

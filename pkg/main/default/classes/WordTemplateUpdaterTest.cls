@@ -178,8 +178,8 @@ private class WordTemplateUpdaterTest {
 
 	@IsTest
 	static void test_getChildRelationships_success() {
-		DescribeSObjectResult objDesc = Opportunity.getSObjectType().getDescribe();
-		String rn = 'OpportunityLineItems';
+		DescribeSObjectResult objDesc = Schema.Account.getSObjectType().getDescribe();
+		String rn = 'Contacts';
 
 		Test.startTest();
 		WordTemplateUpdater.Relationship result = WordTemplateUpdater.getChildRelationship(objDesc, rn);
@@ -187,9 +187,9 @@ private class WordTemplateUpdaterTest {
 
 		System.assertNotEquals(null, result);
 		System.assertEquals(rn, result.name);
-		System.assertEquals(OpportunityLineItem.getSObjectType().getDescribe().fields.getMap().get('OpportunityId').getDescribe().getLabel(), result.label);
-		System.assertEquals(Schema.OpportunityLineItem.getSObjectType().getDescribe().getName(), result.relatesTo);
-		System.assertEquals('OpportunityId', result.parentIdField);
+		System.assertEquals(Schema.Contact.getSObjectType().getDescribe().fields.getMap().get('AccountId').getDescribe().getLabel(), result.label);
+		System.assertEquals(Schema.Contact.getSObjectType().getDescribe().getName(), result.relatesTo);
+		System.assertEquals('AccountId', result.parentIdField);
 	}
 
 	@IsTest
@@ -405,13 +405,13 @@ private class WordTemplateUpdaterTest {
 	@IsTest
 	static void test_convert_field_child_relationship() {
 		WordTemplateUpdater.FieldV1 v1 = new WordTemplateUpdater.FieldV1();
-		v1.apiName = 'OpportunityLineItem';
+		v1.apiName = 'Contact';
 		v1.dataType = 'ID'; // DFS-6962: V1 sometimes has invalid type
 		v1.isConditional = false;
 		v1.dateFormat = 'df';
 		v1.currencyFormat = 'cf';
 		v1.decimalPlaces = 2;
-		v1.label = 'OpportunityLineItems';
+		v1.label = 'Contacts';
 		v1.matchType = 'mt';
 		v1.conditionalValue = 'cv';
 		WordTemplateUpdater.FieldV1 v1c1 = new WordTemplateUpdater.FieldV1();
@@ -421,21 +421,21 @@ private class WordTemplateUpdaterTest {
 		v1c1.dateFormat = 'df';
 		v1c1.currencyFormat = 'cf';
 		v1c1.decimalPlaces = 2;
-		v1c1.label = 'Opportunity Product Name';
+		v1c1.label = 'Name';
 		v1c1.matchType = 'mt';
 		v1c1.conditionalValue = 'cv';
 		WordTemplateUpdater.FieldV1 v1c2 = new WordTemplateUpdater.FieldV1();
-		v1c2.apiName = 'ProductCode';
+		v1c2.apiName = 'Description';
 		v1c2.dataType = 'STRING';
 		v1c2.isConditional = false;
 		v1c2.dateFormat = 'df';
 		v1c2.currencyFormat = 'cf';
 		v1c2.decimalPlaces = 2;
-		v1c2.label = 'Product Code';
+		v1c2.label = 'Description';
 		v1c2.matchType = 'mt';
 		v1c2.conditionalValue = 'cv';
 		v1.childFieldMappings = new List<WordTemplateUpdater.FieldV1> { v1c1, v1c2 };
-		DescribeSObjectResult objDesc = Opportunity.getSObjectType().getDescribe();
+		DescribeSObjectResult objDesc = Schema.Account.getSObjectType().getDescribe();
 		Gen.FieldMapping root = new Gen.FieldMapping(
 			'ROOT',
 			1,
@@ -453,13 +453,13 @@ private class WordTemplateUpdaterTest {
 		System.assert(!result.isRoot);
 		System.assertEquals('CHILD_RELATIONSHIP', result.type);
 		System.assertEquals(2, result.depth);
-		System.assertEquals('OpportunityLineItems', result.key);
+		System.assertEquals('Contacts', result.key);
 		System.assertEquals(new List<String>(), result.path);
 		System.assertEquals(2, Collection.size(result.fields));
 		System.assertNotEquals(null, result.fields[0]);
 		System.assertEquals('STRING', result.fields[0].type);
 		System.assertEquals('Name', result.fields[0].name);
-		System.assertEquals('Opportunity Product Name', result.fields[0].label);
+		System.assertEquals('Name', result.fields[0].label);
 		System.assertEquals(null, result.fields[0].relatesTo);
 		System.assertEquals(null, result.fields[0].relationship);
 		System.assertEquals(null, result.fields[0].parentIdField);
@@ -471,8 +471,8 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals('cv', result.fields[0].conditionalValue);
 		System.assertNotEquals(null, result.fields[1]);
 		System.assertEquals('STRING', result.fields[1].type);
-		System.assertEquals('ProductCode', result.fields[1].name);
-		System.assertEquals('Product Code', result.fields[1].label);
+		System.assertEquals('Description', result.fields[1].name);
+		System.assertEquals('Description', result.fields[1].label);
 		System.assertEquals(null, result.fields[1].relatesTo);
 		System.assertEquals(null, result.fields[1].relationship);
 		System.assertEquals(null, result.fields[1].parentIdField);
@@ -486,11 +486,11 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(1, Collection.size(root.fields));
 		System.assertNotEquals(null, root.fields[0]);
 		System.assertEquals('CHILD_RELATIONSHIP', root.fields[0].type);
-		System.assertEquals('OpportunityLineItem', root.fields[0].name);
+		System.assertEquals('Contact', root.fields[0].name);
 		System.assert(String.isNotBlank(root.fields[0].label));
-		System.assertEquals('OpportunityLineItem', root.fields[0].relatesTo);
-		System.assertEquals('OpportunityLineItems', root.fields[0].relationship);
-		System.assertEquals('OpportunityId', root.fields[0].parentIdField);
+		System.assertEquals('Contact', root.fields[0].relatesTo);
+		System.assertEquals('Contacts', root.fields[0].relationship);
+		System.assertEquals('AccountId', root.fields[0].parentIdField);
 		System.assertEquals(null, root.fields[0].format);
 		System.assertEquals(null, root.fields[0].scale);
 		System.assertEquals(true, root.fields[0].isChildRelation);
@@ -498,7 +498,7 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(null, root.fields[0].matchType);
 		System.assertEquals(null, root.fields[0].conditionalValue);
 
-		System.assertEquals(new Set<String> { 'OpportunityLineItem' }, children.keySet());
+		System.assertEquals(new Set<String> { 'Contact' }, children.keySet());
 	}
 
 	@IsTest
@@ -550,8 +550,8 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(null, result.ObjectMappings__c);
 	}
 
-	static final String v1json = '[{"objLabel":"Opportunity","label":"Opportunity","isPrimary":true,"fieldMappings":[{"matchType":null,"label":"Current Date","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":null,"currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[],"apiName":"CurrentDate"},{"matchType":null,"label":"Amount","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"CURRENCY","currencyFormat":"symbolNoDecimals","conditionalValue":null,"childFieldMappings":[],"apiName":"Amount"},{"matchType":null,"label":"Close Date","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"DATE","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[],"apiName":"CloseDate"},{"matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"EMAIL","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[],"apiName":"Owner.Email"},{"matchType":null,"label":"Account Name","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"STRING","currencyFormat":"symbol","conditionalValue":"","childFieldMappings":[],"apiName":"Account.Name"},{"matchType":null,"label":"Name","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"STRING","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[],"apiName":"Campaign.Name"},{"matchType":null,"label":"OpportunityContactRoles","isConditional":false,"isChildRelation":true,"dateFormat":"default","dataType":"","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[{"matchType":null,"label":"Primary","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"BOOLEAN","currencyFormat":"symbol","conditionalValue":null,"apiName":"IsPrimary"},{"matchType":null,"label":"Role","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"PICKLIST","currencyFormat":"symbol","conditionalValue":null,"apiName":"Role"}],"apiName":"OpportunityContactRole"},{"matchType":null,"label":"OpportunityLineItems","isConditional":false,"isChildRelation":true,"dateFormat":"default","dataType":"","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[{"matchType":null,"label":"Opportunity Product Name","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"STRING","currencyFormat":"symbol","conditionalValue":null,"apiName":"Name"},{"matchType":null,"label":"Product Code","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"STRING","currencyFormat":"symbol","conditionalValue":null,"apiName":"ProductCode"}],"apiName":"OpportunityLineItem"}],"apiName":"Opportunity"}]';
-	static final String v2json = '{"version":2,"name":"Opportunity","label":"Opportunity","fieldMappings":[{"type":"ROOT","path":[],"key":"Opportunity","fields":[{"type":"DATE","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"CurrentDate","matchType":null,"label":"Current Date","isConditional":false,"isChildRelation":false,"format":"default","conditionalValue":null},{"type":"CURRENCY","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Amount","matchType":null,"label":"Amount","isConditional":false,"isChildRelation":false,"format":"symbolNoDecimals","conditionalValue":null},{"type":"DATE","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"CloseDate","matchType":null,"label":"Close Date","isConditional":false,"isChildRelation":false,"format":"default","conditionalValue":null},{"type":"REFERENCE","scale":null,"relationship":"Owner","relatesTo":"User","parentIdField":"OwnerId","name":"Owner","matchType":null,"label":"Owner ID","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null},{"type":"REFERENCE","scale":null,"relationship":"Account","relatesTo":"Account","parentIdField":"AccountId","name":"Account","matchType":null,"label":"Account ID","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null},{"type":"REFERENCE","scale":null,"relationship":"Campaign","relatesTo":"Campaign","parentIdField":"CampaignId","name":"Campaign","matchType":null,"label":"Campaign ID","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null},{"type":"CHILD_RELATIONSHIP","scale":null,"relationship":"OpportunityContactRoles","relatesTo":"OpportunityContactRole","parentIdField":"OpportunityId","name":"OpportunityContactRole","matchType":null,"label":"Opportunity ID","isConditional":false,"isChildRelation":true,"format":null,"conditionalValue":null},{"type":"CHILD_RELATIONSHIP","scale":null,"relationship":"OpportunityLineItems","relatesTo":"OpportunityLineItem","parentIdField":"OpportunityId","name":"OpportunityLineItem","matchType":null,"label":"Opportunity ID","isConditional":false,"isChildRelation":true,"format":null,"conditionalValue":null}],"depth":1},{"type":"REFERENCE","path":["Owner"],"key":"Owner","fields":[{"type":"EMAIL","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Email","matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":2},{"type":"REFERENCE","path":["Account"],"key":"Account","fields":[{"type":"STRING","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Name","matchType":null,"label":"Account Name","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":""}],"depth":2},{"type":"REFERENCE","path":["Campaign"],"key":"Campaign","fields":[{"type":"STRING","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Name","matchType":null,"label":"Name","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":2},{"type":"CHILD_RELATIONSHIP","path":[],"key":"OpportunityContactRoles","fields":[{"type":"BOOLEAN","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"IsPrimary","matchType":null,"label":"Primary","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null},{"type":"PICKLIST","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Role","matchType":null,"label":"Role","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":2},{"type":"CHILD_RELATIONSHIP","path":[],"key":"OpportunityLineItems","fields":[{"type":"STRING","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Name","matchType":null,"label":"Opportunity Product Name","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null},{"type":"STRING","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"ProductCode","matchType":null,"label":"Product Code","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":2}]}';
+	static final String v1json = '[{"objLabel":"Account","label":"Account","isPrimary":true,"fieldMappings":[{"matchType":null,"label":"Current Date","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":null,"currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[],"apiName":"CurrentDate"},{"matchType":null,"label":"Annual Revenue","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"CURRENCY","currencyFormat":"symbolNoDecimals","conditionalValue":null,"childFieldMappings":[],"apiName":"AnnualRevenue"},{"matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"EMAIL","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[],"apiName":"Owner.Email"},{"matchType":null,"label":"Contacts","isConditional":false,"isChildRelation":true,"dateFormat":"default","dataType":"","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[{"matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"EMAIL","currencyFormat":"symbol","conditionalValue":null,"apiName":"Email"},{"matchType":null,"label":"Name","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"TEXT","currencyFormat":"symbol","conditionalValue":null,"apiName":"Name"}],"apiName":"Contact"}],"apiName":"Account"}]';
+	static final String v2json = '{"version":2,"name":"Account","label":"Account","fieldMappings":[{"type":"ROOT","path":[],"key":"Account","fields":[{"type":"DATE","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"CurrentDate","matchType":null,"label":"Current Date","isConditional":false,"isChildRelation":false,"format":"default","conditionalValue":null},{"type":"CURRENCY","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"AnnualRevenue","matchType":null,"label":"Annual Revenue","isConditional":false,"isChildRelation":false,"format":"symbolNoDecimals","conditionalValue":null},{"type":"REFERENCE","scale":null,"relationship":"Owner","relatesTo":"User","parentIdField":"OwnerId","name":"Owner","matchType":null,"label":"Owner ID","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null},{"type":"CHILD_RELATIONSHIP","scale":null,"relationship":"Contacts","relatesTo":"Contact","parentIdField":"AccountId","name":"Contact","matchType":null,"label":"Account ID","isConditional":false,"isChildRelation":true,"format":null,"conditionalValue":null}],"depth":1},{"type":"REFERENCE","path":["Owner"],"key":"Owner","fields":[{"type":"EMAIL","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Email","matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":2},{"type":"CHILD_RELATIONSHIP","path":[],"key":"Contacts","fields":[{"type":"EMAIL","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Email","matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null},{"type":"TEXT","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Name","matchType":null,"label":"Name","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":2}]}';
 
 	@IsTest
 	static void test_updateTemplate_v1() {

@@ -186,20 +186,18 @@ private class OnlineEditorControllerTest {
 			List<OnlineEditorController.Field> onlineEditorFields = new List<OnlineEditorController.Field>();
 			onlineEditorFields.add(new OnlineEditorController.Field('Id', 'val', 'String'));
 			onlineEditorFields.add(new OnlineEditorController.Field('Name', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditorController.Field('UnitPrice', 'val', 'String'));
 
 			List<OnlineEditorController.Field> onlineEditorFieldsChild1 = new List<OnlineEditorController.Field>();
 			onlineEditorFieldsChild1.add(new OnlineEditorController.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild1.add(new OnlineEditorController.Field('Quantity', 'val', 'String'));
+			onlineEditorFieldsChild1.add(new OnlineEditorController.Field('Name', 'val', 'String'));
 
 			List<OnlineEditorController.Field> onlineEditorFieldsChild2 = new List<OnlineEditorController.Field>();
 			onlineEditorFieldsChild2.add(new OnlineEditorController.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditorController.Field('UnitPrice', 'val', 'String'));
+			onlineEditorFieldsChild2.add(new OnlineEditorController.Field('Name', 'val', 'String'));
 
-			OnlineEditorController.Query onlineEditorQueryChild1 = new OnlineEditorController.Query('OpportunityLineItem', 'OpportunityLineItems', onlineEditorFieldsChild1, new List<OnlineEditorController.Query>());
-			OnlineEditorController.Query onlineEditorQueryChild2 = new OnlineEditorController.Query('OpportunityLineItem', 'OpportunityLineItems', onlineEditorFieldsChild2, new List<OnlineEditorController.Query>());
-			OnlineEditorController.Query onlineEditorQueryOpp = new OnlineEditorController.Query('Opportunity', '', onlineEditorFields, new List<OnlineEditorController.Query> { onlineEditorQueryChild1, onlineEditorQueryChild2 });
-			OnlineEditorController.Query onlineEditorQuery = new OnlineEditorController.Query('Account', '', onlineEditorFields, new List<OnlineEditorController.Query> { onlineEditorQueryOpp });
+			OnlineEditorController.Query onlineEditorQueryChild1 = new OnlineEditorController.Query('Opportunity', 'Opportunities', onlineEditorFieldsChild1, new List<OnlineEditorController.Query>());
+			OnlineEditorController.Query onlineEditorQueryChild2 = new OnlineEditorController.Query('Contact', 'Contacts', onlineEditorFieldsChild2, new List<OnlineEditorController.Query>());
+			OnlineEditorController.Query onlineEditorQuery = new OnlineEditorController.Query('Account', '', onlineEditorFields, new List<OnlineEditorController.Query> { onlineEditorQueryChild1, onlineEditorQueryChild2 });
 
 			Test.startTest();
 			Gen.Query result = OnlineEditorController.convertQuery(onlineEditorQuery);
@@ -210,18 +208,11 @@ private class OnlineEditorControllerTest {
 			System.assertEquals(onlineEditorQuery.relationship, result.relationship);
 			System.assertEquals(onlineEditorQuery.fields[0].name, result.fields[0]);
 			System.assertEquals(onlineEditorQuery.fields[1].name, result.fields[1]);
-			System.assertEquals(onlineEditorQuery.fields[2].name, result.fields[2]);
 			System.assert(Collection.isNotEmpty(result.children));
 			System.assertEquals(onlineEditorQuery.children[0].type, result.children[0].type);
 			System.assertEquals(onlineEditorQuery.children[0].relationship, result.children[0].relationship);
 			System.assertEquals(onlineEditorQuery.children[0].fields[0].name, result.children[0].fields[0]);
 			System.assertEquals(onlineEditorQuery.children[0].fields[1].name, result.children[0].fields[1]);
-			System.assert(Collection.isNotEmpty(result.children[0].children));
-			System.assertEquals(onlineEditorQuery.children[0].children[0].type, result.children[0].children[0].type);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].relationship, result.children[0].children[0].relationship);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].fields[0].name, result.children[0].children[0].fields[0]);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].fields[1].name, result.children[0].children[0].fields[1]);
-
 		}
 	}
 
@@ -234,20 +225,18 @@ private class OnlineEditorControllerTest {
 			List<OnlineEditorController.Field> onlineEditorFields = new List<OnlineEditorController.Field>();
 			onlineEditorFields.add(new OnlineEditorController.Field('Id', 'val', 'String'));
 			onlineEditorFields.add(new OnlineEditorController.Field('Name', 'val', 'String'));
-			onlineEditorFields.add(new OnlineEditorController.Field('UnitPrice', 'val', 'String'));
 
 			List<OnlineEditorController.Field> onlineEditorFieldsChild1 = new List<OnlineEditorController.Field>();
 			onlineEditorFieldsChild1.add(new OnlineEditorController.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild1.add(new OnlineEditorController.Field('Quantity', 'val', 'String'));
+			onlineEditorFieldsChild1.add(new OnlineEditorController.Field('Name', 'val', 'String'));
 
 			List<OnlineEditorController.Field> onlineEditorFieldsChild2 = new List<OnlineEditorController.Field>();
 			onlineEditorFieldsChild2.add(new OnlineEditorController.Field('Id', 'val', 'String'));
-			onlineEditorFieldsChild2.add(new OnlineEditorController.Field('UnitPrice', 'val', 'String'));
+			onlineEditorFieldsChild2.add(new OnlineEditorController.Field('Name', 'val', 'String'));
 
-			OnlineEditorController.Query onlineEditorQueryChild1 = new OnlineEditorController.Query('OpportunityLineItem', 'OpportunityLineItems', onlineEditorFieldsChild1, new List<OnlineEditorController.Query>());
-			OnlineEditorController.Query onlineEditorQueryChild2 = new OnlineEditorController.Query('OpportunityLineItem', 'OpportunityLineItems', onlineEditorFieldsChild2, new List<OnlineEditorController.Query>());
-			OnlineEditorController.Query onlineEditorQueryOpp = new OnlineEditorController.Query('Opportunity', '', onlineEditorFields, new List<OnlineEditorController.Query> { onlineEditorQueryChild1, onlineEditorQueryChild2 });
-			OnlineEditorController.Query onlineEditorQuery = new OnlineEditorController.Query('Account', '', onlineEditorFields, new List<OnlineEditorController.Query> { onlineEditorQueryOpp });
+			OnlineEditorController.Query onlineEditorQueryChild1 = new OnlineEditorController.Query('Opportunity', 'Opportunities', onlineEditorFieldsChild1, new List<OnlineEditorController.Query>());
+			OnlineEditorController.Query onlineEditorQueryChild2 = new OnlineEditorController.Query('Contact', 'Contacts', onlineEditorFieldsChild2, new List<OnlineEditorController.Query>());
+			OnlineEditorController.Query onlineEditorQuery = new OnlineEditorController.Query('Account', '', onlineEditorFields, new List<OnlineEditorController.Query> { onlineEditorQueryChild1, onlineEditorQueryChild2 });
 
 			Test.startTest();
 			Gen.Query result = OnlineEditorController.convertQuery(onlineEditorQuery);
@@ -258,18 +247,11 @@ private class OnlineEditorControllerTest {
 			System.assertEquals(onlineEditorQuery.relationship, result.relationship);
 			System.assertEquals(onlineEditorQuery.fields[0].name, result.fields[0]);
 			System.assertEquals(onlineEditorQuery.fields[1].name, result.fields[1]);
-			System.assertEquals(onlineEditorQuery.fields[2].name, result.fields[2]);
 			System.assert(Collection.isNotEmpty(result.children));
 			System.assertEquals(onlineEditorQuery.children[0].type, result.children[0].type);
 			System.assertEquals(onlineEditorQuery.children[0].relationship, result.children[0].relationship);
 			System.assertEquals(onlineEditorQuery.children[0].fields[0].name, result.children[0].fields[0]);
 			System.assertEquals(onlineEditorQuery.children[0].fields[1].name, result.children[0].fields[1]);
-			System.assert(Collection.isNotEmpty(result.children[0].children));
-			System.assertEquals(onlineEditorQuery.children[0].children[0].type, result.children[0].children[0].type);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].relationship, result.children[0].children[0].relationship);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].fields[0].name, result.children[0].children[0].fields[0]);
-			System.assertEquals(onlineEditorQuery.children[0].children[0].fields[1].name, result.children[0].children[0].fields[1]);
-
 		}
 	}
 
