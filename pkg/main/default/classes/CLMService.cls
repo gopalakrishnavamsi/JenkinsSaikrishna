@@ -32,7 +32,7 @@ public with sharing class CLMService {
 				Permissions.verifyIsQueryable(Schema.getGlobalDescribe().get(parentObjName), new List<String> {parentfieldName});
 			}
 			result = new List<SObject>();
-			field = field.replace('__c', '__r').trim();
+			field = field.trim();
 			if (String.isNotEmpty(field) && String.isNotEmpty(objectName) && String.isNotEmpty(recordId))
 				result =  Database.query('select ' + String.escapeSingleQuotes(field) + ' from  ' + String.escapeSingleQuotes(objectName.trim()) + ' where id = :recordId');
 		}
