@@ -4787,6 +4787,10 @@
 		<label>已升级 {0} 个模板。</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
+	<customLabels>
+		<label>或</label>
+		<name>or</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 设置</label>
 		<name>Setup</name>

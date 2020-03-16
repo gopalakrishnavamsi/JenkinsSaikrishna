@@ -4787,6 +4787,10 @@
 		<label>{0}개 템플릿이 업그레이드되었습니다.</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
+	<customLabels>
+		<label>또는</label>
+		<name>or</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 설정</label>
 		<name>Setup</name>

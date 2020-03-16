@@ -4787,6 +4787,10 @@
 		<label>Шаблоны ({0}) обновлены.</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
+	<customLabels>
+		<label>или</label>
+		<name>or</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>Настройка DocuSign</label>
 		<name>Setup</name>

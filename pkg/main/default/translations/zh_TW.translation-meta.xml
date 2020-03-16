@@ -4787,6 +4787,10 @@
 		<label>系統已升級 {0} 個範本。</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
+	<customLabels>
+		<label>或</label>
+		<name>or</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 設定</label>
 		<name>Setup</name>

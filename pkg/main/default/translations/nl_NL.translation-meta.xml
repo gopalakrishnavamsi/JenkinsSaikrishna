@@ -4787,6 +4787,10 @@
 		<label>{0} sjabloon/sjablonen geüpgraded.</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
+	<customLabels>
+		<label>of</label>
+		<name>or</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-instellingen</label>
 		<name>Setup</name>

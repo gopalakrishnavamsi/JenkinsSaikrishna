@@ -4785,6 +4785,10 @@
 		<label>{0} Vorlage(n) upgegradet.</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
+	<customLabels>
+		<label>oder</label>
+		<name>or</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>
 		<name>Setup</name>

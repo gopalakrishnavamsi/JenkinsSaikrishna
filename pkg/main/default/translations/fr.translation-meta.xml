@@ -4788,6 +4788,10 @@
 		<label>{0} modèle(s) mis à niveau.</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
+	<customLabels>
+		<label>ou</label>
+		<name>or</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>Configuration DocuSign</label>
 		<name>Setup</name>

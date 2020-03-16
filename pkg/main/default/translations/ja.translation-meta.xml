@@ -4786,6 +4786,10 @@
 		<label>{0}件のテンプレートがアップグレードされました。</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
+	<customLabels>
+		<label>または</label>
+		<name>or</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSignセットアップ</label>
 		<name>Setup</name>

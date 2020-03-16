@@ -4787,6 +4787,10 @@
 		<label>{0} modello/i aggiornato/i.</label>
 		<name>UpgradeTemplatesComplete_1</name>
 	</customLabels>
+	<customLabels>
+		<label>oppure</label>
+		<name>or</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>Configurazione DocuSign</label>
 		<name>Setup</name>
