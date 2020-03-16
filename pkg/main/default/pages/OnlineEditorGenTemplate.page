@@ -8,6 +8,7 @@
     <apex:includeScript value="{!$Resource.scmwidgetsjs}"/>
     <apex:includeScript value="{!$Resource.navUtils}"/>
     <apex:includeScript value="{!$Resource.userEvents}"/>
+    <apex:includeScript value="{!$Resource.stringUtils}"/>
     <apex:includeScript value="{!$Resource.OnlineEditorJs}"/>
 
     <script type="application/javascript">

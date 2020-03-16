@@ -218,30 +218,23 @@ jQuery(document).ready(function ($) {
             Configuration.template.sourceObject,
             pageIndex,
             searchValue || '',
-            function (result, event) {
+            function (entityRecords, event) {
               if (event.status) {
                 _userEvents.success(
                   EventLabels.PREVIEW_DOCUMENT,
                   {}
                 );
 
-                // todo: remove this code after 2.2
-                var DisplayNameMap = {
-                  'Case': 'CaseNumber',
-                  'Contract': 'ContractNumber',
-                };
-
-                if (Configuration.template.sourceObject === 'Case' || Configuration.template.sourceObject === 'Contract') {
-                  var mappedResults = result.results.map(function (val) {
+                if (entityRecords.filterBy !== 'Name') {
+                  entityRecords.results = entityRecords.results.map(function(record) {
                     return {
-                      Id: val.Id,
-                      Name: val[DisplayNameMap[Configuration.template.sourceObject]],
-                    };
-                  });
-                  result.results = mappedResults;
-                }
+                      Id: record.Id,
+                      Name: record[entityRecords.filterBy]
+                    }
+                  })
+                } 
 
-                resolve(result);
+                resolve(entityRecords);
               } else {
                 _userEvents.error(
                   EventLabels.PREVIEW_DOCUMENT,
@@ -250,6 +243,9 @@ jQuery(document).ready(function ($) {
                 );
                 reject(event.message);
               }
+            },
+            {  
+              escape: false
             });
         } catch (err) {
           _userEvents.error(
