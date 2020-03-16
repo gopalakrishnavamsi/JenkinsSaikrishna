@@ -9232,4 +9232,11 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>or</shortDescription>
 		<value>or</value>
 	</labels>
+	<labels>
+		<fullName>DownloadAsWordFile</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Download as Word File</shortDescription>
+		<value>Download as Word File</value>
+	</labels>
 </CustomLabels>

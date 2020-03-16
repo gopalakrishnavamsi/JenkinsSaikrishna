@@ -4791,6 +4791,10 @@
 		<label>or</label>
 		<name>or</name>
 	</customLabels>
+	<customLabels>
+		<label>Download as Word File</label>
+		<name>DownloadAsWordFile</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
