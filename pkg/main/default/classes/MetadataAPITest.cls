@@ -24,10 +24,9 @@
 *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 
-/**
-* This is a dummy test class to obtain 100% coverage for the generated WSDL2Apex code, it is not a funcitonal test class
-*   You should follow the usual practices to cover your other code, as shown in the MetadataCreateJobTest.cls
-**/
+/*
+ * This is a dummy test class to obtain 100% coverage for the generated WSDL2Apex code.
+ */
 @IsTest(IsParallel = true)
 public class MetadataAPITest {
 
@@ -36,7 +35,7 @@ public class MetadataAPITest {
 		// Null Web Service mock implementation
 		System.Test.setMock(WebServiceMock.class, new MetadataAPIMock(true));
 		// Only required to workaround a current code coverage bug in the platform
-		MetadataAPI mdService = new MetadataAPI();
+		new MetadataAPI();
 		// Invoke operations
 		MetadataAPI.Client metaDataPort = MetadataAPI.getInstance();
 
@@ -56,7 +55,7 @@ public class MetadataAPITest {
 		// Null Web Service mock implementation
 		System.Test.setMock(WebServiceMock.class, new MetadataAPIMock(true));
 		// Only required to workaround a current code coverage bug in the platform
-		MetadataAPI mdService = new MetadataAPI();
+		new MetadataAPI();
 		// Invoke operations
 		MetadataAPI.Client metaDataPort = MetadataAPI.getInstance();
 
@@ -81,26 +80,20 @@ public class MetadataAPITest {
 		new MetadataAPI.LogInfo();
 		new MetadataAPI.Layout();
 		new MetadataAPI.CallOptions_element();
-		new MetadataAPI.NetworkAccess();
-		new MetadataAPI.SecuritySettings();
-		new MetadataAPI.SingleSignOnSettings();
 		new MetadataAPI.LayoutColumn();
 		new MetadataAPI.FileProperties();
 		new MetadataAPI.RelatedListItem();
 		new MetadataAPI.ListMetadataQuery();
 		new MetadataAPI.DebuggingHeader_element();
-		new MetadataAPI.IpRange();
 		new MetadataAPI.CustomConsoleComponents();
 		new MetadataAPI.SubtabComponents();
 		new MetadataAPI.SummaryLayoutItem();
 		new MetadataAPI.LayoutSection();
 		new MetadataAPI.listMetadata_element();
-		new MetadataAPI.PasswordPolicies();
 		new MetadataAPI.SessionHeader_element();
 		new MetadataAPI.SummaryLayout();
 		new MetadataAPI.MiniLayout();
 		new MetadataAPI.DebuggingInfo_element();
-		new MetadataAPI.SessionSettings();
 		new MetadataAPI.LayoutItem();
 		new MetadataAPI.QuickActionList();
 		new MetadataAPI.QuickActionListItem();
@@ -117,8 +110,6 @@ public class MetadataAPITest {
 		new MetadataAPI.readLayoutResponse_element();
 		new MetadataAPI.ReadRemoteSiteSettingResult().getRecords();
 		new MetadataAPI.readRemoteSiteSettingResponse_element();
-		new MetadataAPI.ReadSecuritySettingsResult().getRecords();
-		new MetadataAPI.readSecuritySettingsResponse_element().getResult();
 		new MetadataAPI.FeedLayoutFilter();
 		new MetadataAPI.Container();
 		new MetadataAPI.RelatedList();
@@ -130,16 +121,9 @@ public class MetadataAPITest {
 		new MetadataAPI.DeleteResult();
 		new MetadataAPI.deleteMetadata_element();
 		new MetadataAPI.ReadWebLinkResult();
-		new MetadataAPI.WebLinkTranslation();
 		new MetadataAPI.WebLink();
 		new MetadataAPI.ReadWebLinkResult().getRecords();
 		new MetadataAPI.readWebLinkResponse_element().getResult();
-		new MetadataAPI.QuickAction();
-		new MetadataAPI.FieldOverride();
-		new MetadataAPI.QuickActionLayout();
-		new MetadataAPI.QuickActionLayoutColumn();
-		new MetadataAPI.QuickActionLayoutItem();
-		new MetadataAPI.QuickActionSendEmailOptions();
 		Test.stopTest();
 
 		System.assert(true);

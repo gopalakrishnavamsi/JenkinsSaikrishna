@@ -6,7 +6,7 @@ public with sharing class Salesforce {
 	private static List<String> visualforceOrigins;
 	private static List<String> lightningOrigins;
 
-	public static final Double API_VERSION = 47.0;
+	public static final Double API_VERSION = 48.0;
 
 	@TestVisible
 	public static String namespace { get; private set; }

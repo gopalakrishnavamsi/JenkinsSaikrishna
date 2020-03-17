@@ -13,8 +13,6 @@ public class MetadataAPIMock implements WebServiceMock {
 			result = ((MetadataAPI.RemoteSiteSetting)md).fullName;
 		} else if (md instanceof MetadataAPI.Layout) {
 			result = ((MetadataAPI.Layout)md).fullName;
-		} else if (md instanceof MetadataAPI.SecuritySettings) {
-			result = ((MetadataAPI.SecuritySettings)md).fullName;
 		} else if (md instanceof MetadataAPI.WebLink) {
 			result = ((MetadataAPI.WebLink)md).fullName;
 		} else {
@@ -107,19 +105,7 @@ public class MetadataAPIMock implements WebServiceMock {
 						MetadataAPI.readWebLinkResponse_element resp = new MetadataAPI.readWebLinkResponse_element();
 						resp.result = result;
 						response.put('response_x', resp);
-					} when 'QuickAction' {
-						List<MetadataAPI.QuickAction> records = new List<MetadataAPI.QuickAction>();
-						for (String fn : req.fullNames) {
-							MetadataAPI.QuickAction record = new MetadataAPI.QuickAction();
-							record.fullName = fn;
-							records.add(record);
-						}
-						MetadataAPI.ReadQuickActionResult result = new MetadataAPI.ReadQuickActionResult();
-						result.records = records;
-						MetadataAPI.readQuickActionResponse_element resp = new MetadataAPI.readQuickActionResponse_element();
-						resp.result = result;
-						response.put('response_x', resp);
-					} when 'RemoteSiteSetting' {
+					} when else { // RemoteSiteSetting
 						List<MetadataAPI.RemoteSiteSetting> records = new List<MetadataAPI.RemoteSiteSetting>();
 						for (String fn : req.fullNames) {
 							MetadataAPI.RemoteSiteSetting record = new MetadataAPI.RemoteSiteSetting();
@@ -131,18 +117,6 @@ public class MetadataAPIMock implements WebServiceMock {
 						MetadataAPI.ReadRemoteSiteSettingResult result = new MetadataAPI.ReadRemoteSiteSettingResult();
 						result.records = records;
 						MetadataAPI.readRemoteSiteSettingResponse_element resp = new MetadataAPI.readRemoteSiteSettingResponse_element();
-						resp.result = result;
-						response.put('response_x', resp);
-					} when else { // SecuritySettings
-						List<MetadataAPI.SecuritySettings> records = new List<MetadataAPI.SecuritySettings>();
-						for (String fn : req.fullNames) {
-							MetadataAPI.SecuritySettings record = new MetadataAPI.SecuritySettings();
-							record.fullName = fn;
-							records.add(record);
-						}
-						MetadataAPI.ReadSecuritySettingsResult result = new MetadataAPI.ReadSecuritySettingsResult();
-						result.records = records;
-						MetadataAPI.readSecuritySettingsResponse_element resp = new MetadataAPI.readSecuritySettingsResponse_element();
 						resp.result = result;
 						response.put('response_x', resp);
 					}
@@ -179,22 +153,10 @@ public class MetadataAPIMock implements WebServiceMock {
 					MetadataAPI.readWebLinkResponse_element resp = new MetadataAPI.readWebLinkResponse_element();
 					resp.result = result;
 					response.put('response_x', resp);
-				} when 'QuickAction' {
-					MetadataAPI.ReadQuickActionResult result = new MetadataAPI.ReadQuickActionResult();
-					result.records = new List<MetadataAPI.QuickAction>();
-					MetadataAPI.readQuickActionResponse_element resp = new MetadataAPI.readQuickActionResponse_element();
-					resp.result = result;
-					response.put('response_x', resp);
-				} when 'RemoteSiteSetting' {
+				} when else { // RemoteSiteSetting
 					MetadataAPI.ReadRemoteSiteSettingResult result = new MetadataAPI.ReadRemoteSiteSettingResult();
 					result.records = new List<MetadataAPI.RemoteSiteSetting>();
 					MetadataAPI.readRemoteSiteSettingResponse_element resp = new MetadataAPI.readRemoteSiteSettingResponse_element();
-					resp.result = result;
-					response.put('response_x', resp);
-				} when else { // SecuritySettings
-					MetadataAPI.ReadSecuritySettingsResult result = new MetadataAPI.ReadSecuritySettingsResult();
-					result.records = new List<MetadataAPI.SecuritySettings>();
-					MetadataAPI.readSecuritySettingsResponse_element resp = new MetadataAPI.readSecuritySettingsResponse_element();
 					resp.result = result;
 					response.put('response_x', resp);
 				}
