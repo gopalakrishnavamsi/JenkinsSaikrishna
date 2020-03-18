@@ -1,6 +1,7 @@
-@isTest
+@IsTest
 public class CLMChecklistTest {
-	@isTest
+
+	@IsTest
 	public static void getCurrentUserExperience() {
 		Test.startTest();
 		String result = CLMChecklist.getCurrentUserExperience();
@@ -8,8 +9,7 @@ public class CLMChecklistTest {
 		Test.stopTest();
 	}
 
-
-	@isTest
+	@IsTest
 	public static void getProgressStatus_Authorized() {
 		User clmAdmin = UserMock.createClmAdministrator(false);
 		System.runAs(clmAdmin) {
@@ -17,17 +17,17 @@ public class CLMChecklistTest {
 			User_Activity__c newState1 = new User_Activity__c();
 			newState1.Name = '1';
 			insert newState1;
-			User_Activity__c newState2=new User_Activity__c();
+			User_Activity__c newState2 = new User_Activity__c();
 			newState2.Name = '2';
 			insert newState2;
 			List<User_Activity__c> result = CLMChecklist.getProgressStatus();
-			system.assertEquals(2, result.size());
+			System.assertEquals(2, result.size());
 			Test.stopTest();
 		}
 	}
 
-	@isTest
-	public static void getProgressStatus_UnAuthorized() {
+	@IsTest
+	public static void getProgressStatus_Unauthorized() {
 		User nonDocuSignUser = UserMock.createUser();
 		System.runAs(nonDocuSignUser) {
 			Test.startTest();
@@ -41,23 +41,9 @@ public class CLMChecklistTest {
 		}
 	}
 
-	@isTest
-	public static void setProgressStatus_Authorized() {
-		User_Activity__c newState = new User_Activity__c();
-		newState.Name = '1';
-		insert newState;
-		Test.startTest();
-		User clmAdmin = UserMock.createClmAdministrator();
-		System.runAs(clmAdmin) {
-			CLMChecklist.setProgressStatus(newState.Name, true);
-		}
-		Test.stopTest();
-	}
-
-	@isTest
-	public static void setProgressStatus_UnAuthorized() {
-		User nonDocuSignUser = UserMock.createUser();
-		System.runAs(nonDocuSignUser) {
+	@IsTest
+	public static void test_setProgressStatus_unauthorized() {
+		System.runAs(UserMock.createClmUser()) {
 			Test.startTest();
 			try {
 				CLMChecklist.setProgressStatus('1', true);
@@ -69,38 +55,31 @@ public class CLMChecklistTest {
 		}
 	}
 
-	@isTest
-	public static void setProgressStatusWithInsert() {
-		User clmAdmin = UserMock.createClmAdministrator();
-		System.runAs(clmAdmin) {
-			Test.startTest();
-			User_Activity__c newState = new User_Activity__c();
-			newState.Name = '1';
-			insert newState;
-			CLMChecklist.setProgressStatus(newState.Name, true);
-			Test.stopTest();
-		}
-	}
-
-	@isTest
-	public static void setProgressStatusWithoutInsert() {
-		User clmAdmin = UserMock.createClmAdministrator();
-		System.runAs(clmAdmin) {
+	@IsTest
+	public static void test_setProgressStatus_insert() {
+		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();
 			CLMChecklist.setProgressStatus('1', true);
 			Test.stopTest();
+
+			User_Activity__c ua = User_Activity__c.getValues('1');
+			System.assertNotEquals(null, ua);
+			System.assertEquals('1', ua.Name);
 		}
 	}
 
-	@isTest
-	public static void setProgressStatusDeleteStep() {
+	@IsTest
+	public static void test_setProgressStatus_delete() {
 		System.runAs(UserMock.createClmAdministrator()) {
-			Test.startTest();
 			User_Activity__c newStep = new User_Activity__c();
 			newStep.Name = 'InstallChecklistStep1';
 			insert newStep;
+
+			Test.startTest();
 			CLMChecklist.setProgressStatus('InstallChecklistStep1', false);
 			Test.stopTest();
+
+			System.assertEquals(null, User_Activity__c.getValues('1'));
 		}
 	}
 }
