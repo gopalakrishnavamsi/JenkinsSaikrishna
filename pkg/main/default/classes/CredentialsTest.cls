@@ -3,7 +3,9 @@ private class CredentialsTest {
 
 	@IsTest
 	static void test_getInstance_unauthorized() {
-		Permissions.isImpersonating = true;
+		Permissions.sessionParameters = new Map<String, Boolean> {
+			Permissions.KEY_IMPERSONATING => true
+		};
 
 		Test.startTest();
 		try {

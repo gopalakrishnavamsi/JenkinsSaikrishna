@@ -75,13 +75,33 @@ global with sharing class AuthService {
 	}
 
 	@TestVisible
+	private class InstanceProperties {
+		public String clientId { get; private set; }
+		public String secret { get; private set; }
+		public Blob privateKey { get; private set; }
+
+		private InstanceProperties(
+			final String clientId,
+			final String secret,
+			final Blob privateKey) {
+
+			this.clientId = clientId;
+			this.secret = secret;
+			this.privateKey = privateKey;
+		}
+	}
+
+	@TestVisible
 	private class APIInstanceProperties {
 		public List<APISecrets> secrets;
 		public String client_id;
 		public String private_key;
 
-		public Credentials.InstanceProperties toExternalForm() {
-			return new Credentials.InstanceProperties(this.client_id, getInstanceClientSecret(this.secrets), getInstancePrivateKey(this.private_key));
+		public InstanceProperties toExternalForm() {
+			return new InstanceProperties(
+				this.client_id,
+				getInstanceClientSecret(this.secrets),
+				getInstancePrivateKey(this.private_key));
 		}
 	}
 
@@ -242,7 +262,7 @@ global with sharing class AuthService {
 		}
 
 		@TestVisible
-		public Credentials.InstanceProperties createInstance(
+		private InstanceProperties createInstance(
 			final String rootClientId,
 			final UUID accountId,
 			final List<Url> redirectUris,
@@ -282,7 +302,7 @@ global with sharing class AuthService {
 			final List<Url> redirectUris,
 			final String accessToken) {
 
-			Credentials.InstanceProperties instanceProperties = this.createInstance(rootClientId, accountId, redirectUris, accessToken);
+			InstanceProperties instanceProperties = this.createInstance(rootClientId, accountId, redirectUris, accessToken);
 			return new Credentials.ClientCredentials(
 				instanceProperties.clientId,
 				instanceProperties.secret,

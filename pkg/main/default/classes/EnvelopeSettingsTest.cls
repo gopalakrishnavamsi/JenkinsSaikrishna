@@ -71,7 +71,7 @@ private class EnvelopeSettingsTest {
 	}
 
 	@IsTest
-	static void test_getOptions_no_fetch_documents() {
+	static void test_getOptions_no_fetch_documents_setting() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
 			settings.AddAnchorTags__c = true;
@@ -79,6 +79,71 @@ private class EnvelopeSettingsTest {
 			settings.UseNotificationDefaults__c = false;
 			update settings;
 			Salesforce.isApiSupported = true;
+			Permissions.sessionParameters = new Map<String, Boolean> {
+				Permissions.KEY_API_ENABLED => true
+			};
+
+			Test.startTest();
+			Envelope.Options result = EnvelopeSettings.getOptions(true);
+			System.assertNotEquals(null, result);
+			System.assert(result.sendNow);
+			System.assert(result.includeDefaultAnchorTabs);
+			System.assert(!result.fetchDocuments);
+			System.assert(!result.useAccountNotificationDefaults);
+
+			result = EnvelopeSettings.getOptions(false);
+			System.assertNotEquals(null, result);
+			System.assert(!result.sendNow);
+			System.assert(result.includeDefaultAnchorTabs);
+			System.assert(!result.fetchDocuments);
+			System.assert(!result.useAccountNotificationDefaults);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getOptions_no_fetch_documents_org_edition() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
+			settings.AddAnchorTags__c = true;
+			settings.FetchDocuments__c = true;
+			settings.UseNotificationDefaults__c = false;
+			update settings;
+			Salesforce.isApiSupported = false;
+			Permissions.sessionParameters = new Map<String, Boolean> {
+				Permissions.KEY_API_ENABLED => true
+			};
+
+			Test.startTest();
+			Envelope.Options result = EnvelopeSettings.getOptions(true);
+			System.assertNotEquals(null, result);
+			System.assert(result.sendNow);
+			System.assert(result.includeDefaultAnchorTabs);
+			System.assert(!result.fetchDocuments);
+			System.assert(!result.useAccountNotificationDefaults);
+
+			result = EnvelopeSettings.getOptions(false);
+			System.assertNotEquals(null, result);
+			System.assert(!result.sendNow);
+			System.assert(result.includeDefaultAnchorTabs);
+			System.assert(!result.fetchDocuments);
+			System.assert(!result.useAccountNotificationDefaults);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getOptions_no_fetch_documents_permissions() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
+			settings.AddAnchorTags__c = true;
+			settings.FetchDocuments__c = true;
+			settings.UseNotificationDefaults__c = false;
+			update settings;
+			Salesforce.isApiSupported = true;
+			Permissions.sessionParameters = new Map<String, Boolean> {
+				Permissions.KEY_API_ENABLED => false
+			};
 
 			Test.startTest();
 			Envelope.Options result = EnvelopeSettings.getOptions(true);
@@ -107,6 +172,9 @@ private class EnvelopeSettingsTest {
 			settings.UseNotificationDefaults__c = false;
 			update settings;
 			Salesforce.isApiSupported = true;
+			Permissions.sessionParameters = new Map<String, Boolean> {
+				Permissions.KEY_API_ENABLED => true
+			};
 
 			Test.startTest();
 			Envelope.Options result = EnvelopeSettings.getOptions(true);
@@ -115,19 +183,7 @@ private class EnvelopeSettingsTest {
 			System.assert(result.includeDefaultAnchorTabs);
 			System.assert(result.fetchDocuments);
 			System.assert(!result.useAccountNotificationDefaults);
-
-			settings.FetchDocuments__c = false;
-			update settings;
-
-			result = EnvelopeSettings.getOptions(true);
-			System.assertNotEquals(null, result);
-			System.assert(result.sendNow);
-			System.assert(result.includeDefaultAnchorTabs);
-			System.assert(!result.fetchDocuments);
-			System.assert(!result.useAccountNotificationDefaults);
 			Test.stopTest();
-
-
 		}
 	}
 

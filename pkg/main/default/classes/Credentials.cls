@@ -88,22 +88,6 @@ public with sharing class Credentials {
 		}
 	}
 
-	public class InstanceProperties {
-		public String clientId { get; private set; }
-		public String secret { get; private set; }
-		public Blob privateKey { get; private set; }
-
-		public InstanceProperties(
-			final String clientId,
-			final String secret,
-			final Blob privateKey) {
-
-			this.clientId = clientId;
-			this.secret = secret;
-			this.privateKey = privateKey;
-		}
-	}
-
 	public class ClientCredentials {
 		public String id { get; private set; }
 		public String secret { get; private set; }

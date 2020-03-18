@@ -230,7 +230,8 @@ public with sharing class EnvelopeSettings {
 		return new Envelope.Options(
 			sendNow,
 			settings != null && settings.AddAnchorTags__c == true,
-			settings != null && settings.FetchDocuments__c == true && Salesforce.isApiSupported,
+			settings != null && settings.FetchDocuments__c
+				&& Salesforce.isApiSupported && Permissions.isApiEnabled(),
 			settings != null && settings.UseNotificationDefaults__c == true);
 	}
 }

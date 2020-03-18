@@ -11,7 +11,11 @@ public with sharing class Permissions {
 	@TestVisible
 	private static Boolean allowImpersonation = null;
 	@TestVisible
-	private static Boolean isImpersonating = null;
+	private static final String KEY_IMPERSONATING = 'isImpersonating';
+	@TestVisible
+	private static final String KEY_API_ENABLED = 'isApiEnabled';
+	@TestVisible
+	private static Map<String, Boolean> sessionParameters;
 
 	// Permission set names
 	public static final String DOCUSIGN_ADMINISTRATOR = 'docusign_administrator';
@@ -1325,27 +1329,40 @@ public with sharing class Permissions {
 		return DB.queryUserRoles(userIds);
 	}
 
-	public static Boolean isImpersonating() {
-		if (Test.isRunningTest()) {
-			// Auth.SessionManagement.getCurrentSession() fails in unit tests in some cases
-			isImpersonating = isImpersonating == null ? false : isImpersonating;
-		} else if (isImpersonating == null) {
-			Map<String, String> session = Auth.SessionManagement.getCurrentSession();
-			isImpersonating = session.get('SessionType') == 'SubstituteUser';
-			if (!isImpersonating) { // Fallback to parent session
-				String parentSessionId = session.get('ParentId');
-				if (String.isNotBlank(parentSessionId)) {
-					AuthSession parentSession = (AuthSession)Collection.head([
-						SELECT SessionType
-						FROM AuthSession
-						WHERE Id = :parentSessionId
-						LIMIT 1
-					]);
-					isImpersonating = parentSession != null && parentSession.SessionType == 'SubstituteUser';
+	private static Map<String, Boolean> getSessionParameters() {
+		if (sessionParameters == null) {
+			sessionParameters = new Map<String, Boolean> {
+				KEY_IMPERSONATING => false,
+				KEY_API_ENABLED => true
+			};
+			if (Auth.CommunitiesUtil.isGuestUser()) { // Cannot check session for guest users without an exception
+				sessionParameters.put(KEY_API_ENABLED, false);
+			} else if (!Test.isRunningTest()) { // Cannot check session in test context without an exception
+				Map<String, String> session = Auth.SessionManagement.getCurrentSession();
+				String sessionType = session.get('SessionType');
+				Boolean isImpersonating = sessionType == 'SubstituteUser';
+				if (!isImpersonating) { // Fallback to parent session
+					String parentSessionId = session.get('ParentId');
+					if (String.isNotBlank(parentSessionId)) {
+						AuthSession parentSession = (AuthSession)Collection.head([
+							SELECT SessionType
+							FROM AuthSession
+							WHERE Id = :parentSessionId
+							LIMIT 1
+						]);
+						isImpersonating = parentSession != null && parentSession.SessionType == 'SubstituteUser';
+					}
 				}
+				sessionParameters.put(KEY_IMPERSONATING, isImpersonating);
+				sessionParameters.put(KEY_API_ENABLED, // Lightning Aura sessions are not valid for API
+					String.isNotBlank(UserInfo.getSessionId()) && sessionType != 'Aura');
 			}
 		}
-		return isImpersonating;
+		return sessionParameters;
+	}
+
+	public static Boolean isImpersonating() {
+		return (Boolean)getSessionParameters().get(KEY_IMPERSONATING);
 	}
 
 	public static Boolean isImpersonationAllowed() {
@@ -1369,5 +1386,9 @@ public with sharing class Permissions {
 		if (isImpersonating() && !isImpersonationAllowed()) {
 			throw UnauthorizedException.impersonation();
 		}
+	}
+
+	public static Boolean isApiEnabled() {
+		return (Boolean)getSessionParameters().get(KEY_API_ENABLED);
 	}
 }

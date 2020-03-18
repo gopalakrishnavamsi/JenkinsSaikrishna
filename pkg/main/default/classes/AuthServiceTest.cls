@@ -593,15 +593,23 @@ private class AuthServiceTest {
 	static void test_AuthAPI_createInstance_success() {
 		ApplicationAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Credentials.InstanceProperties result;
-			Test.startTest();
 			List<Url> redirectUris = new List<Url> {
 				new Url('https://redirect1.unit.test'),
 				new Url('https://redirect2.unit.test')
 			};
-			result = getAuthClient().createInstance(UUID.randomUUID().toString(), UUID.randomUUID(), redirectUris, 'test');
+
+			Test.startTest();
+			AuthService.InstanceProperties result = getAuthClient().createInstance(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID(),
+				redirectUris,
+				'test');
 			Test.stopTest();
-			System.assert(result != null);
+
+			System.assertNotEquals(null, result);
+			System.assert(String.isNotBlank(result.clientId));
+			System.assert(String.isNotBlank(result.secret));
+			System.assertNotEquals(null, result.privateKey);
 		}
 	}
 

@@ -2046,10 +2046,12 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_isImpersonating() {
+		Permissions.sessionParameters = new Map<String, Boolean>();
+
 		Test.startTest();
-		Permissions.isImpersonating = true;
+		Permissions.sessionParameters.put(Permissions.KEY_IMPERSONATING, true);
 		System.assertEquals(true, Permissions.isImpersonating());
-		Permissions.isImpersonating = false;
+		Permissions.sessionParameters.put(Permissions.KEY_IMPERSONATING, false);
 		System.assertEquals(false, Permissions.isImpersonating());
 		Test.stopTest();
 	}
@@ -2070,7 +2072,8 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_verifyNotImpersonating() {
-		Permissions.isImpersonating = true;
+		Permissions.sessionParameters = new Map<String, Boolean>();
+		Permissions.sessionParameters.put(Permissions.KEY_IMPERSONATING, true);
 
 		Test.startTest();
 		Permissions.allowImpersonation = true;
@@ -2138,5 +2141,17 @@ private class PermissionsTest {
 		System.assertEquals(result1, true);
 		System.assertEquals(result2, false);
 
+	}
+
+	@IsTest
+	static void test_isApiEnabled() {
+		Permissions.sessionParameters = new Map<String, Boolean>();
+
+		Test.startTest();
+		Permissions.sessionParameters.put(Permissions.KEY_API_ENABLED, true);
+		System.assertEquals(true, Permissions.isApiEnabled());
+		Permissions.sessionParameters.put(Permissions.KEY_API_ENABLED, false);
+		System.assertEquals(false, Permissions.isApiEnabled());
+		Test.stopTest();
 	}
 }
