@@ -1094,6 +1094,10 @@ global with sharing class AuthService {
 	}
 
 	private static User activateUser(final Id userId) {
+		Permissions.verifyIsUpdateable(User.getSObjectType(), new List<String> {
+			Application.namespacePrefix + 'Status__c'
+		});
+
 		User user = (User)Collection.head([SELECT Status__c FROM User WHERE Id = :userId LIMIT 1]);
 		if (user == null) throw new DocuSignException(Label.UserNotFound);
 		if (user.Status__c != Account.USER_STATUS_ACTIVE) {
