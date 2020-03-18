@@ -344,12 +344,4 @@ public with sharing class NegotiateService {
 		Permissions.verifyIsDocuSignNegotiator();
 		return ScmTokenAPI.getInstance().getCompareUrl(compareTaskId);
 	}
-
-	public static void setRootLevelFolderSecurity() {
-		Permissions.verifyIsDocuSignAdministrator();
-		Url rootLevelFolderUrl = NegotiateAPI.getInstance().getRootLevelFolderUrl();
-		if (rootLevelFolderUrl != null) {
-			NegotiateAPI.getInstance().triggerChangeSecurityTask(rootLevelFolderUrl);
-		}
-	}
 }

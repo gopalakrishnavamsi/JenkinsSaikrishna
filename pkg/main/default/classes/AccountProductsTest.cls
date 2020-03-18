@@ -151,7 +151,7 @@ private class AccountProductsTest {
 	}
 
 	static AccountProducts newAccountProducts(final Map<String, Product> products) {
-		return new AccountProducts(DocuSign.Environment.Production, products, null, null, false);
+		return new AccountProducts(DocuSign.Environment.Production, products, null, null, false, false);
 	}
 
 	@IsTest
@@ -765,6 +765,7 @@ private class AccountProductsTest {
 			System.assertNotEquals(null, ap);
 			System.assert(ap === AccountProducts.self);
 			System.assert(ap.isDirty);
+			System.assert(!ap.productsChanged);
 			System.assert(AccountProducts.save());
 			Test.stopTest();
 
@@ -802,6 +803,40 @@ private class AccountProductsTest {
 					System.assertEquals(pr.RoleName__c, ClmProduct.ROLE_ADMINISTRATOR.toLowerCase());
 				}
 			}
+		}
+	}
+
+	@IsTest
+	static void test_save_setRootLevelFolderSecurity() {
+		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.ScmWebBaseUrl__c = null;
+			s.ScmApiBaseUrl__c = null;
+			s.ScmMergeBaseUrl__c = null;
+			s.ScmAuthBaseUrl__c = null;
+			s.ProductsLastChecked__c = null;
+			s.ProductsCheckFrequency__c = null;
+			update s;
+
+			ProductSettings__c ps = ProductSettings__c.getInstance(Product.NEGOTIATE);
+			if (ps != null) delete ps;
+
+			Test.startTest();
+			AccountProducts ap = AccountProducts.getInstance();
+			System.assertNotEquals(null, ap);
+			System.assert(ap === AccountProducts.self);
+			System.assert(ap.isDirty);
+			System.assert(ap.productsChanged);
+			System.assert(ap.isNegotiateEnabled());
+			System.assert(AccountProducts.save());
+			Test.stopTest();
+
+			System.assertEquals(4, ProductSettings__c.getAll().size());
+			System.assertNotEquals(null, AccountSettings__c.getInstance().ProductsLastChecked__c);
+			System.assertNotEquals(null, AccountSettings__c.getInstance().ProductsCheckFrequency__c);
 		}
 	}
 

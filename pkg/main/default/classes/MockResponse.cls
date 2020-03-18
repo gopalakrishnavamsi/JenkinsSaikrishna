@@ -40,6 +40,14 @@ public class MockResponse {
 			getJson(body));
 	}
 
+	public static MockResponse accepted(final Object body) {
+		return new MockResponse(
+			202,
+			'ACCEPTED',
+			'application/json; charset=utf-8',
+			getJson(body));
+	}
+
 	public static MockResponse badRequest(final Object body) {
 		return new MockResponse(
 			400,

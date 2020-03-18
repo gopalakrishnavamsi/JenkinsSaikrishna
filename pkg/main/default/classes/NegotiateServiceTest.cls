@@ -469,7 +469,7 @@ private class NegotiateServiceTest {
 			String errorMessage = '';
 			Test.startTest();
 			try {
-				 NegotiateService.approveOnBehalfOrRecipientResponse('this is the comment', true,
+				NegotiateService.approveOnBehalfOrRecipientResponse('this is the comment', true,
 					ScmAPIMock.WORKITEM_ID);
 			} catch (Exception ex) {
 				hasError = true;
@@ -527,41 +527,6 @@ private class NegotiateServiceTest {
 			}
 			Test.stopTest();
 			System.assert(hasError);
-		}
-	}
-
-	@IsTest
-	static void test_setRootLevelFolderSecurity_failure() {
-		ScmAPIMock.failure();
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-
-			Test.startTest();
-			Boolean hasError = false;
-			try {
-				NegotiateService.setRootLevelFolderSecurity();
-			} catch (APIException ex) {
-				hasError = true;
-			}
-			Test.stopTest();
-
-			System.assertEquals(hasError, true);
-		}
-	}
-
-	@IsTest
-	static void test_setRootLevelFolderSecurity_success() {
-		ScmAPIMock.success();
-		Boolean executedSuccessfully = false;
-
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-
-			Test.startTest();
-			NegotiateService.setRootLevelFolderSecurity();
-			executedSuccessfully = true;
-			Test.stopTest();
-
-			System.assertEquals(true, executedSuccessfully);
 		}
 	}
 }

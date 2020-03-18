@@ -343,7 +343,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
 			if (request.method == 'POST') {
-				response = MockResponse.created('{"Status" : "Waiting","Security" : {"Roles" : [{"Item" : "FullSubscriber","AccessType" : "ViewEditDelete"}]},"Folder" : {"Href" : "https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41"},"Href" : "https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/changesecuritytasks/a345e77d-b3bf-4541-be31-3e9c36861e6a}');
+				response = MockResponse.accepted('{"Status" : "Waiting","Security" : {"Roles" : [{"Item" : "FullSubscriber","AccessType" : "ViewEditDelete"}]},"Folder" : {"Href" : "https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41"},"Href" : "https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/changesecuritytasks/a345e77d-b3bf-4541-be31-3e9c36861e6a}');
 			}
 			return response;
 		}

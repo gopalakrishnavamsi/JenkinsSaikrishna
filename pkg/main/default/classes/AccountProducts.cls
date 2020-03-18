@@ -27,6 +27,8 @@ public with sharing class AccountProducts {
 	private final Integer checkFrequencyMinutes;
 	@TestVisible
 	private Boolean isDirty;
+	@TestVisible
+	private Boolean productsChanged;
 	private DocuSign.Environment environment;
 	@TestVisible
 	private static List<Product.Role> newRoles;
@@ -65,13 +67,15 @@ public with sharing class AccountProducts {
 		final Map<String, Product> products,
 		final Datetime lastChecked,
 		final Integer checkFrequencyMinutes,
-		final Boolean isDirty) {
+		final Boolean isDirty,
+		final Boolean productsChanged) {
 
 		this.environment = environment;
 		this.products = products == null ? new Map<String, Product>() : products;
 		this.lastChecked = lastChecked;
 		this.checkFrequencyMinutes = checkFrequencyMinutes;
 		this.isDirty = isDirty;
+		this.productsChanged = isDirty && productsChanged;
 	}
 
 	private class Database {
@@ -346,20 +350,6 @@ public with sharing class AccountProducts {
 	}
 
 	@TestVisible
-	private static AccountProducts refreshProducts() {
-		Credentials c = Credentials.getInstance();
-		return resolveProducts(
-			null,
-			null,
-			null,
-			c.environment.environment,
-			c.environment.provisioningBaseUrl,
-			c.environment.eSignatureBaseUrl,
-			c.account.id,
-			c.token.token);
-	}
-
-	@TestVisible
 	private static AccountProducts resolveProducts(
 		final Map<String, Product> configuredProducts,
 		final Datetime lastChecked,
@@ -393,9 +383,21 @@ public with sharing class AccountProducts {
 					products.put(pp.name, pp);
 				}
 			}
-			result = new AccountProducts(environment, products, Datetime.now(), checkFrequencyMinutes, true);
+			result = new AccountProducts(
+				environment,
+				products,
+				Datetime.now(),
+				checkFrequencyMinutes,
+				true,
+				configuredProducts == null || configuredProducts.keySet() != products.keySet());
 		} else {
-			result = new AccountProducts(environment, configuredProducts, lastChecked, checkFrequencyMinutes, false);
+			result = new AccountProducts(
+				environment,
+				configuredProducts,
+				lastChecked,
+				checkFrequencyMinutes,
+				false,
+				false);
 		}
 
 		return result;
@@ -492,9 +494,19 @@ public with sharing class AccountProducts {
 
 		if (activated) {
 			// Refresh products from API. There is logic there to extend trials that we should not replicate here.
-			AccountProducts aps = refreshProducts();
+			Credentials c = Credentials.getInstance();
+			AccountProducts aps = resolveProducts(
+				null,
+				null,
+				null,
+				c.environment.environment,
+				c.environment.provisioningBaseUrl,
+				c.environment.eSignatureBaseUrl,
+				c.account.id,
+				c.token.token);
 			if (Collection.isNotEmpty(aps.products)) this.products.putAll(aps.products);
 			this.isDirty = true;
+			this.productsChanged = true;
 		}
 
 		for (String pn : productNames) {
@@ -566,9 +578,10 @@ public with sharing class AccountProducts {
 	}
 
 	@Future(Callout = true)
-	private static void createRemoteSites(
+	private static void completeSave(
 		final String environment,
-		final Map<String, String> urls) {
+		final Map<String, String> urls,
+		final Boolean setRootLevelFolderSecurity) {
 
 		if (Collection.isNotEmpty(urls)) {
 			DocuSign.Environment dsEnv = DocuSign.parseEnvironment(environment);
@@ -610,6 +623,15 @@ public with sharing class AccountProducts {
 
 			if (Collection.isNotEmpty(sites)) MetadataService.createRemoteSites(sites);
 		}
+
+		// This is the only place this call works consistently. The products may include new remote sites necessary
+		// for this call.
+		if (setRootLevelFolderSecurity) {
+			//call the springCM API to set the security on root level folder
+			//this needs to happen in order to ensure that DocuSign Apps Launcher users other than the Setup User
+			//have appropriate access to SpringCM work items
+			NegotiateAPI.getInstance().setRootLevelFolderSecurity();
+		}
 	}
 
 	public static Boolean save() {
@@ -645,11 +667,13 @@ public with sharing class AccountProducts {
 			if (scmMergeBaseUrl != null) urls.put('scmMergeBaseUrl', scmMergeBaseUrl.toExternalForm());
 			if (scmAuthBaseUrl != null) urls.put('scmAuthBaseUrl', scmAuthBaseUrl.toExternalForm());
 
-			createRemoteSites(
+			completeSave(
 				String.valueOf(self.environment),
-				urls);
+				urls,
+				self.productsChanged && scmApiBaseUrl != null && self.isNegotiateEnabled());
 
 			self.isDirty = false;
+			self.productsChanged = false;
 			result = true;
 		}
 

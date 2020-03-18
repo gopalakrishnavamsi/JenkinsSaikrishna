@@ -1,6 +1,6 @@
 @IsTest
 public with sharing class NegotiateAPITest {
-	
+
 	// FIXME: Missing tests for some public methods.
 
 	@IsTest
@@ -488,11 +488,10 @@ public with sharing class NegotiateAPITest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 
 			Test.startTest();
-			Url result = NegotiateAPI.getInstance().getRootLevelFolderUrl();
+			String result = NegotiateAPI.getInstance().getRootLevelFolderUrl();
 			Test.stopTest();
 
-			System.assertNotEquals(null, result);
-			System.assertEquals('https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41', result.toExternalForm());
+			System.assertEquals('https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41', result);
 		}
 	}
 
@@ -518,15 +517,11 @@ public with sharing class NegotiateAPITest {
 	static void test_triggerChangeSecurityTask_success() {
 		ScmAPIMock.success();
 
-		Boolean executedSuccessfully = false;
 		System.runAs(UserMock.createDocuSignAdministrator()) {
-
 			Test.startTest();
-			NegotiateAPI.getInstance().triggerChangeSecurityTask(new Url('https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41'));
-			executedSuccessfully = true;
+			System.assert(NegotiateAPI.getInstance().triggerChangeSecurityTask(
+				'https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41'));
 			Test.stopTest();
-
-			System.assertEquals(true, executedSuccessfully);
 		}
 	}
 
@@ -536,15 +531,15 @@ public with sharing class NegotiateAPITest {
 
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			Boolean hasError = false;
 			try {
-				NegotiateAPI.getInstance().triggerChangeSecurityTask(new Url('https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41'));
+				NegotiateAPI.getInstance().triggerChangeSecurityTask(
+					'https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41');
+				throw new AssertException('Expected failure');
 			} catch (APIException ex) {
-				hasError = true;
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(1234, ex.error.code);
 			}
 			Test.stopTest();
-
-			System.assertEquals(hasError, true);
 		}
 	}
 
@@ -577,8 +572,34 @@ public with sharing class NegotiateAPITest {
 				System.assertNotEquals(null, ex.error.description);
 			}
 			Test.stopTest();
-
 		}
 	}
 
+	@IsTest
+	static void test_setRootLevelFolderSecurity_failure() {
+		ScmAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				NegotiateAPI.getInstance().setRootLevelFolderSecurity();
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(1234, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_setRootLevelFolderSecurity_success() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			System.assert(NegotiateAPI.getInstance().setRootLevelFolderSecurity());
+			Test.stopTest();
+		}
+	}
 }

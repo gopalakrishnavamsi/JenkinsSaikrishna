@@ -648,7 +648,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 
 		final RestAPI.Response response = put(
 			new List<Object> {
-				'v2', accountId, 'documents' , documentId
+				'v2', accountId, 'documents', documentId
 			},
 			JSON.serialize(new Map<String, Object> {
 				'Name' => documentName
@@ -850,8 +850,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		return workItems;
 	}
 
-	public String resolveApproverDetails(final UUID memberId) {
-
+	@TestVisible
+	private String resolveApproverDetails(final UUID memberId) {
 		final RestAPI.Response response = get(
 			getBaseUrl(),
 			new List<Object> {
@@ -975,31 +975,6 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
-	// Create Folder
-
-	public UUID createFolder(final String folderName, final UUID parentFolder) {
-
-		final RestAPI.Response response = post(
-			getBaseUrl(),
-			new List<Object> {
-				'v2', accountId, 'folders'
-			},
-			QueryString.empty,
-			getDefaultHeaders(),
-			JSON.serialize(new Map<String, Object> {
-				'Name' => folderName,
-				'ParentFolder' => new APIFolder(getBaseUrl() + '/folders/' + String.valueOf(parentFolder))
-			}),
-			RestAPI.defaultTimeout);
-		if (response.hasError) {
-			this.log.error('Failed to create folder: ' + response.error);
-			throw new APIException(response.error);
-		}
-
-		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
-		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
-	}
-
 	// Get template_html folder for an account
 	public UUID getTemplateHtmlFolder() {
 
@@ -1009,7 +984,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		final RestAPI.Response response = get(
 			getBaseUrl(),
 			new List<Object> {
-				'negotiate', 'api', 'v1', accountId ,'templates', 'root'
+				'negotiate', 'api', 'v1', accountId, 'templates', 'root'
 			},
 			new QueryString(queryStrings),
 			getDefaultHeaders(),
@@ -1024,7 +999,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	}
 
 	//Get the href for root level folder on the account
-	public Url getRootLevelFolderUrl() {
+	@TestVisible
+	private String getRootLevelFolderUrl() {
 		Map<String, String> queryStrings = new Map<String, String>();
 		queryStrings.put('SystemFolder', 'other sources');
 
@@ -1041,25 +1017,23 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		}
 
 		APIHref result = (APIHref)JSON.deserialize(response.body, APIHref.class);
-		if (String.isNotBlank(result.href)) {
-			return new Url(result.href);
-		} else {
-			return null;
-		}
+		return result == null || String.isBlank(result.href) ? null : result.href;
 	}
 
 	//Set the correct AccessType to move or delete documents on the root folder
 	//This call returns the Url of the asynchronous task that is queued in SpringCM for execution
 	//Currently there is no need to monitoring the task and checking for status
-	public void triggerChangeSecurityTask(final Url rootLevelFolderUrl) {
-		if (rootLevelFolderUrl != null) {
+	@TestVisible
+	private Boolean triggerChangeSecurityTask(final String rootLevelFolderUrl) {
+		Boolean result = false;
+		if (String.isNotBlank(rootLevelFolderUrl)) {
 			List<APIRoles> roles = new List<APIRoles>();
 			roles.add(new APIRoles(FULL_SUBSCRIBER, VIEW_EDIT_DELETE));
 
 			RestAPI.Response response = this.post(
 				new List<Object> { 'v2', accountId, 'changesecuritytasks' },
 				JSON.serialize(new Map<String, Object> {
-					'Folder' => new APIHref(rootLevelFolderUrl.toExternalForm()),
+					'Folder' => new APIHref(rootLevelFolderUrl),
 					'Security' => new APISecurity(roles)
 				}),
 				RestAPI.defaultTimeout);
@@ -1068,6 +1042,13 @@ public with sharing class NegotiateAPI extends ScmAPI {
 				this.log.error('Failed to trigger change security task: ' + response.error);
 				throw new APIException(response.error);
 			}
+
+			result = true;
 		}
+		return result;
+	}
+
+	public Boolean setRootLevelFolderSecurity() {
+		return triggerChangeSecurityTask(getRootLevelFolderUrl());
 	}
 }

@@ -1358,29 +1358,17 @@ global with sharing class AuthService {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		try {
-			SpringOAuthLoginInformation result = getSpringOAuthAPI(AccountProducts.getInstance().getScmWebBaseUrl())
+			AccountProducts products = AccountProducts.getInstance();
+			SpringOAuthLoginInformation result = getSpringOAuthAPI(products.getScmWebBaseUrl())
 				.completeSpringOAuth(authorizationCode);
 			if (result.success) {
 				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 				settings.IsPlatformAuthorized__c = true;
 				update settings;
-				//call the springCM API to set the security on root level folder in future context
-				//this needs to happen in order to ensure that DocuSign Apps Launcher users other than the Setup User
-				//have appropriate access to SpringCM work items
-				setRootLevelFolderSecurity();
 			}
 			return result;
 		} finally {
 			AccountProducts.save();
-		}
-	}
-
-	@Future(Callout = true)
-	public static void setRootLevelFolderSecurity() {
-		//Check if Negotiate is enabled on the account.
-		//If Negotiate is not enabled then do not make this API call.
-		if (AccountProducts.getInstance().isNegotiateEnabled()) {
-			NegotiateService.setRootLevelFolderSecurity();
 		}
 	}
 }
