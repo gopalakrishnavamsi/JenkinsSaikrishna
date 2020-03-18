@@ -103,12 +103,11 @@ public class OnlineEditorMergeObject implements Comparable {
 		DescribeSObjectResult describe = type.getDescribe();
 		String name = describe.getName();
 		String relationshipName = child.getRelationshipName();
-		String label = String.join(relationshipName.split('(?=[A-Z])'), ' ');
 		OnlineEditorMergeObject obj = new OnlineEditorMergeObject(
 			type,
 			describe,
 			name,
-			label,
+			relationshipName,
 			true);
 		obj.relationshipName = relationshipName;
 		return obj;
