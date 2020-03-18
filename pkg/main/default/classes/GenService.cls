@@ -839,7 +839,10 @@ public with sharing class GenService {
 		return result;
 	}
 
-	public static Url getTemplateUrl(final Gen.Template template, final Boolean isFromSetupWizard) {
+	public static PageReference getTemplatePage(
+		final Gen.Template template,
+		final Boolean isFromSetupWizard) {
+
 		Permissions.verifyIsDocuSignAdministrator();
 
 		Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
@@ -860,7 +863,7 @@ public with sharing class GenService {
 			? Page.OnlineEditorGenTemplate : Page.GenTemplate;
 		templatePage.getParameters().put('id', template.id);
 		templatePage.getParameters().put('isFromSetupWizard', String.valueOf(isFromSetupWizard));
-		return new Url(Salesforce.baseUrl, templatePage.getUrl());
+		return templatePage;
 	}
 
 	public static Boolean deleteTemplate(final Id templateId) {

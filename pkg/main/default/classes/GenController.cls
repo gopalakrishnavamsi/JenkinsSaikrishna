@@ -22,8 +22,7 @@ public with sharing class GenController extends Controller {
 			if (this.templateId != null) {
 				Gen.Template template = GenService.getTemplate(this.templateId);
 				Boolean editMode = template.templateType != Gen.TYPE_ONLINE || template.springTemplateId != null;
-				redirectPage = new PageReference(
-					GenService.getTemplateUrl(template, false).toExternalForm());
+				redirectPage = GenService.getTemplatePage(template, false);
 				redirectPage.getParameters().put('isEdit', String.valueOf(editMode));
 				redirectPage.setRedirect(true);
 			}
@@ -40,7 +39,7 @@ public with sharing class GenController extends Controller {
 			Permissions.verifyIsDocuSignAdministrator();
 			if (this.templateId != null) {
 				Gen.Template template = GenService.getTemplate(this.templateId);
-				redirectPage = new PageReference(GenService.getTemplateUrl(template, false).toExternalForm());
+				redirectPage = GenService.getTemplatePage(template, false);
 				redirectPage.getParameters().put('isEdit', 'false');
 				redirectPage.setRedirect(true);
 			}

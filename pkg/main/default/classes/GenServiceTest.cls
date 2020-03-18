@@ -995,7 +995,7 @@ private class GenServiceTest {
 			update gt;
 			Test.startTest();
 			try {
-				Boolean isDeleted = GenService.deleteTemplate(gt.Id);
+				GenService.deleteTemplate(gt.Id);
 				throw new AssertException('Expected delete template to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -1009,7 +1009,7 @@ private class GenServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			Test.startTest();
 			Map<String, String> templateTypesMap = GenService.getTemplateTypes();
-			system.assert(templateTypesMap.keySet().size() == 2);
+			System.assert(templateTypesMap.keySet().size() == 2);
 			Test.stopTest();
 		}
 	}
@@ -1019,7 +1019,7 @@ private class GenServiceTest {
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
 			Test.startTest();
 			try {
-				Map<String, String> templateTypesMap = GenService.getTemplateTypes();
+				GenService.getTemplateTypes();
 				throw new AssertException('Expected fetching template types to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -1029,59 +1029,57 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_getTemplateUrl_word_success() {
+	static void test_getTemplatePage_word_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			GenTemplate__c templateRecord = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			templateRecord.TemplateType__c = Gen.TYPE_WORD;
 			update templateRecord;
-			Gen.Template template = Genservice.getTemplate(templateRecord.Id);
+			Gen.Template template = GenService.getTemplate(templateRecord.Id);
 			Boolean isFromSetupWizard = true;
-			PageReference templatePage;
 
 			Test.startTest();
-			Url templateUrl = Genservice.getTemplateUrl(template, isFromSetupWizard);
-			templatePage = new Pagereference(templateUrl.toExternalForm());
+			PageReference result = GenService.getTemplatePage(template, isFromSetupWizard);
 			Test.stopTest();
 
-			System.assert(templatePage.getUrl().toLowerCase().contains(Application.namespacePrefix + 'gentemplate'));
-			System.assertEquals(templateRecord.Id, (Id)templatePage.getParameters().get('id'));
-			System.assertEquals('true', templatePage.getParameters().get('isFromSetupWizard'));
+			System.assertNotEquals(null, result);
+			System.assert(result.getUrl().toLowerCase().contains(Application.namespacePrefix + 'gentemplate'));
+			System.assertEquals(templateRecord.Id, (Id)result.getParameters().get('id'));
+			System.assertEquals('true', result.getParameters().get('isFromSetupWizard'));
 		}
 	}
 
 	@IsTest
-	static void test_getTemplateUrl_onlineEditor_success() {
+	static void test_getTemplatePage_onlineEditor_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			GenTemplate__c templateRecord = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			templateRecord.TemplateType__c = Gen.TYPE_ONLINE;
 			update templateRecord;
-			Gen.Template template = Genservice.getTemplate(templateRecord.Id);
+			Gen.Template template = GenService.getTemplate(templateRecord.Id);
 			Boolean isFromSetupWizard = false;
-			PageReference templatePage;
 
 			Test.startTest();
-			Url templateUrl = Genservice.getTemplateUrl(template, isFromSetupWizard);
-			templatePage = new Pagereference(templateUrl.toExternalForm());
+			PageReference result = GenService.getTemplatePage(template, isFromSetupWizard);
 			Test.stopTest();
 
-			System.assert(templatePage.getUrl().toLowerCase().contains(Application.namespacePrefix + 'onlineeditorgentemplate'));
-			System.assertEquals(templateRecord.Id, (Id)templatePage.getParameters().get('id'));
-			System.assertEquals('false', templatePage.getParameters().get('isFromSetupWizard'));
+			System.assertNotEquals(null, result);
+			System.assert(result.getUrl().toLowerCase().contains(Application.namespacePrefix + 'onlineeditorgentemplate'));
+			System.assertEquals(templateRecord.Id, (Id)result.getParameters().get('id'));
+			System.assertEquals('false', result.getParameters().get('isFromSetupWizard'));
 		}
 	}
 
 	@IsTest
-	static void test_getTemplateUrl_unauthorized() {
+	static void test_getTemplatePage_unauthorized() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			GenTemplate__c templateRecord = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			templateRecord.TemplateType__c = Gen.TYPE_ONLINE;
 			update templateRecord;
-			Gen.Template template = Genservice.getTemplate(templateRecord.Id);
+			Gen.Template template = GenService.getTemplate(templateRecord.Id);
 			Boolean isFromSetupWizard = false;
 
 			Test.startTest();
 			try {
-				Url templateUrl = Genservice.getTemplateUrl(template, isFromSetupWizard);
+				GenService.getTemplatePage(template, isFromSetupWizard);
 				throw new AssertException('Expected fetching template url to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -1101,7 +1099,7 @@ private class GenServiceTest {
 			Test.startTest();
 			try {
 				System.assert(GenService.deleteTemplate(gt.Id));
-				Genservice.getTemplate(gt.Id);
+				GenService.getTemplate(gt.Id);
 				throw new AssertException('Expected get template to fail');
 			} catch (Exception ex) {
 				System.assertEquals(Label.GenTemplateNotFound, ex.getMessage());

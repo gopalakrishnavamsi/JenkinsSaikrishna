@@ -357,7 +357,7 @@ public with sharing class SetupController extends Controller {
 		Id templateId = params.getId('id', params.getId('templateId', null));
 		if (templateId != null) {
 			Gen.Template template = GenService.getTemplate(templateId);
-			redirectPage = new PageReference(GenService.getTemplateUrl(template, true).toExternalForm());
+			redirectPage = GenService.getTemplatePage(template, true);
 			redirectPage.getParameters().put('isEdit', 'false');
 			redirectPage.setRedirect(true);
 		}
