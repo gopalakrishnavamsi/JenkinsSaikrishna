@@ -341,7 +341,7 @@
       fieldMapping.fields.forEach(function (field) {
         var value = {};
         if (field.type !== 'REFERENCE' && field.type !== 'CHILD_RELATIONSHIP') {
-          if(fieldMapping.type === 'ROOT') {
+          if (fieldMapping.type === 'ROOT') {
             key = field.name.toLowerCase();
           } else {
             key = (fieldMapping.key + '.' + field.name).toLowerCase();
@@ -363,8 +363,8 @@
 
     query.fields.forEach(function (field) {
       var fieldXml;
-      var fieldMapKey = query.relationship === '' ? field : query.relationship +'.'+ field;
-      if(depth > 2) {
+      var fieldMapKey = query.relationship === '' ? field : query.relationship + '.' + field;
+      if (depth > 2) {
         fieldMapKey = previousRelationship + '.' + fieldMapKey;
       }
       format = fieldMap[fieldMapKey.toLowerCase()];
@@ -435,8 +435,11 @@
     }
     if (!$A.util.isUndefinedOrNull(format)) {
       var recordLevelCurrencyCode = '';
-      if (format.type === 'CURRENCY' && fields.length > 1) {
-        recordLevelCurrencyCode = result[fields.slice(0, fields.length - 1).join('.')].CurrencyIsoCode;
+      if (isMultiCurrency && format.type === 'CURRENCY' && fields.length > 1) {
+        var getFieldIndex = result[fields.slice(0, fields.length - 1).join('.')];
+        if (!$A.util.isUndefinedOrNull(getFieldIndex)) {
+          recordLevelCurrencyCode = getFieldIndex.CurrencyIsoCode;
+        }
       } else if (!$A.util.isUndefinedOrNull(result.CurrencyIsoCode)) {
         recordLevelCurrencyCode = result.CurrencyIsoCode;
       }
