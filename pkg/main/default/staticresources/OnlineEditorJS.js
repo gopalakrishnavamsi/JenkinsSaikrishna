@@ -905,7 +905,10 @@ jQuery(document).ready(function ($) {
           $('#onlineEditorGenerator').show();
           generateDownloadToken(getSpringTemplateIdToString(Configuration.template))
             .then(function (accessToken) {
-              resolve(renderEditor(accessToken, document.getElementById('onlineEditorGenerator'), Configuration.template.name, Configuration.sourceId, true));
+              return renderEditor(accessToken, document.getElementById('onlineEditorGenerator'), Configuration.template.name, Configuration.sourceId, true);
+            })
+            .then(function (response) {
+              resolve(response);
             })
             .catch(function (err) {
               createToastComponent(err, 'error');
@@ -929,7 +932,7 @@ jQuery(document).ready(function ($) {
   })();
 
   function renderEditor(limitedAccessToken, element, templateName, sourceId, isGenerating) {
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
       new SpringCM.Widgets.Download.downloadDocument(
         limitedAccessToken.apiDownloadBaseUrl,
         limitedAccessToken.token,
@@ -947,6 +950,14 @@ jQuery(document).ready(function ($) {
             _editor.importDocument(fileBytes, sourceId);
             resolve(true);
           };
+        })
+        .catch(function(err) {
+          _userEvents.error(
+            _sessionType,
+            {},
+            err
+          );
+          reject(err && err.statusText ? err.statusText : Labels.templateExportDataIsUndefinedLabel);
         });
     });
   }

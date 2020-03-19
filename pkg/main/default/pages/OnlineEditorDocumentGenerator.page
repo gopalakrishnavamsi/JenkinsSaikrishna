@@ -40,7 +40,8 @@
       };
 
       Labels = {
-        templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}'
+        templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}',
+        templateExportDataIsUndefinedLabel: '{!$Label.ExportDataIsUndefinedLabel}'
       };
 
 
