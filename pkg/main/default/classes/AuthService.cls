@@ -308,6 +308,26 @@ global with sharing class AuthService {
 				instanceProperties.secret,
 				instanceProperties.privateKey);
 		}
+
+		public Boolean deleteInstance(
+			final String clientId,
+			final String accessToken) {
+
+			Boolean result = true;
+			RestAPI.Response response = this.del(
+				this.baseUrl,
+				new List<Object> { 'v1', 'applications', clientId },
+				QueryString.empty,
+				new Map<String, String> { 'Authorization' => 'Bearer ' + accessToken },
+				null,
+				AUTH_TIMEOUT);
+			if (response.hasError) {
+				// We get a weird error response when the instance app is not found. Just log and move on.
+				this.log.error('Failed to delete instance application: ' + response.error);
+				result = false;
+			}
+			return result;
+		}
 	}
 
 	@TestVisible
@@ -510,6 +530,20 @@ global with sharing class AuthService {
 	 */
 	public static Set<Id> resetAccount(final Boolean resetUsers) {
 		Permissions.verifyIsDocuSignAdministrator();
+
+		// delete instance application
+		if (Credentials.isAccountValid()) {
+			Credentials c = Credentials.getInstance();
+			getAuthAPI(c.environment.accountBaseUrl).deleteInstance(
+				c.client.id,
+				getAccessToken(
+					c.token,
+					c.environment.accountBaseUrl,
+					c.user.id,
+					true,
+					c.client.id,
+					c.client.privateKey).token);
+		}
 
 		Set<Id> result = Credentials.clear(resetUsers);
 		if (resetUsers) {

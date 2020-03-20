@@ -774,6 +774,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_resetAccount_success() {
+		ApplicationAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u1 = UserMock.createDocuSignUser(false);
 			// Senders are unique in that they do not have DS user credentials.
@@ -2149,6 +2150,44 @@ private class AuthServiceTest {
 				WHERE Id = :UserInfo.getUserId()
 				LIMIT 1
 			].Status__c);
+		}
+	}
+
+	@IsTest
+	static void test_AuthAPI_deleteInstanceApplication_success() {
+		ApplicationAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AuthService.AuthAPI client = new AuthService.AuthAPI(new Url('https://unit.test.docusign.com/'));
+
+			Test.startTest();
+			System.assert(client.deleteInstance(UUID.randomUUID().toString(), 'unit.test'));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_AuthAPI_deleteInstanceApplication_failure() {
+		ApplicationAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AuthService.AuthAPI client = new AuthService.AuthAPI(new Url('https://unit.test.docusign.com/'));
+
+			Test.startTest();
+			System.assert(!client.deleteInstance(UUID.randomUUID().toString(), 'unit.test'));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_resetAccount_invalid() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			User u = UserMock.createDocuSignUser(false);
+
+			Test.startTest();
+			Set<Id> result = AuthService.resetAccount(true);
+			Test.stopTest();
+
+			System.assert(Collection.isNotEmpty(result));
+
 		}
 	}
 }

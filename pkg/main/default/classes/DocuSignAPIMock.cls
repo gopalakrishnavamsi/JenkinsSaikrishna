@@ -76,7 +76,7 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 		String path = new Url(request.getEndpoint()).getPath();
 		if (path.startsWith('/oauth')) {
 			return this.getOAuthMock().getResponse(request);
-		} else if (path.startsWith('/v2/applications')) {
+		} else if (path.startsWith('/v1/applications') || path.startsWith('/v2/applications')) {
 			return this.getApplicationAPIMock().getResponse(request);
 		} else if (path.startsWith('/subscription')) {
 			return this.getProvisioningMock().getResponse(request);
