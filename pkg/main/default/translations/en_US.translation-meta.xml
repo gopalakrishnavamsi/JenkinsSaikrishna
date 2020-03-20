@@ -1154,6 +1154,14 @@
 		<name>TemplateRoles</name>
 	</customLabels>
 	<customLabels>
+		<label>Other Recipients</label>
+		<name>OtherRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Send a copy of this envelope to your Salesforce contacts or email it.</label>
+		<name>OtherRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>Text Field</label>
 		<name>TextField</name>
 	</customLabels>

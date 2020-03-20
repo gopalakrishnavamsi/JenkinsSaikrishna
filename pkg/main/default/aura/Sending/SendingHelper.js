@@ -235,7 +235,7 @@
     component.set('v.availableTemplates', availableTemplates);
   },
 
-  newRecipient: function (recipient) {
+  newRecipient: function (recipient, type) {
     // TODO: Override all properties with customizations
     var isDefined = !$A.util.isUndefinedOrNull(recipient);
     return {
@@ -246,7 +246,7 @@
       hostName: isDefined ? recipient.hostName : null,
       hostEmail: isDefined ? recipient.hostEmail : null,
       role: {},
-      type: 'Signer',
+      type: type,
       authentication: {},
       note: null,
       emailSettings: {}

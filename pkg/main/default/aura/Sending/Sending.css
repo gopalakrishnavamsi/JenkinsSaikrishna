@@ -171,6 +171,7 @@
 .THIS .ds-recipients .ds-recipients__recipient:only-child .ds-remove {
     pointer-events: none;
 }
+
 .THIS .ds-recipients .ds-recipients__recipient:first-child {
     margin-top: 0;
 }
@@ -187,3 +188,35 @@
 .THIS .slds-textarea {
     min-height: 116px;
 }
+
+.THIS .ds-other-recipients {
+    margin-left: 18px;
+}
+
+.THIS .ds-other-recipients-title {
+    color: rgb(62, 62, 60);
+    font-size: 13px;
+    font-weight: normal;
+    height: 30px;
+    letter-spacing: 1.3px;
+    line-height: 20px;
+
+}
+
+.THIS .ds-other-recipients-description {
+    color: rgb(62, 62, 60);
+    font-size: 12px;
+    font-weight: normal;
+    height: 18px;
+    letter-spacing: 0px;
+    line-height: 18px;
+}
+
+.THIS .ds-recipient-roles {
+    width: 668px;
+}
+
+.THIS .ds-other-recipients-button {
+    margin-top: 10px;
+}
+

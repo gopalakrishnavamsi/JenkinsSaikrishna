@@ -50,7 +50,13 @@
 
   addRecipient: function (component, event, helper) {
     var recipients = component.get('v.recipients');
-    recipients.push(helper.newRecipient());
+    recipients.push(helper.newRecipient(null, 'Signer'));
+    component.set('v.recipients', recipients);
+  },
+
+  addCarbonCopy: function (component, event, helper) {
+    var recipients = component.get('v.recipients');
+    recipients.push(helper.newRecipient(null, 'CarbonCopy'));
     component.set('v.recipients', recipients);
   },
 

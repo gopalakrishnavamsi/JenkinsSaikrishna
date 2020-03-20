@@ -2412,6 +2412,22 @@
 		<value>Template Roles</value>
 	</labels>
 	<labels>
+		<fullName>OtherRecipients</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Other recipients</shortDescription>
+		<value>Other Recipients</value>
+	</labels>
+	<labels>
+		<fullName>OtherRecipientsDescription</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Other recipients Description</shortDescription>
+		<value> Send a copy of this envelope to your Salesforce contacts or email it. </value>
+	</labels>
+	<labels>
 		<fullName>TextField</fullName>
 		<categories>CustomTab</categories>
 		<language>en_US</language>

@@ -4,6 +4,8 @@
     <aura:attribute name="recipient" type="Object" required="true"/>
     <aura:attribute name="sourceId" type="Id" required="true"/>
     <aura:attribute name="emailLocalizations" type="Object[]"/>
+    <aura:attribute name="lock" type="Boolean" default="false"/>
+
 
     <aura:attribute name="recordType" type="String" default="contact" access="private"/>
     <aura:attribute name="isEmailLocalizationEnabled" type="Boolean" access="private" default="{!false}"/>
@@ -30,7 +32,13 @@
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
             <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                 <div class="slds-col slds-has-flexi-truncate">
-                    <aura:if isTrue="{!and(empty(v.recipient.templateId), empty(v.recipient.envelopeRecipientId))}">
+                    <aura:if isTrue="{!v.lock &amp;&amp; empty(v.recipient.templateId) &amp;&amp; empty(v.recipient.envelopeRecipientId)}">
+                        <lightning:select value="{!v.recipient.type}" label="{!$Label.c.Type}" class="ds-no-label">
+                            <option value="CarbonCopy">{!$Label.c.CarbonCopy}</option>
+                        </lightning:select>
+                    </aura:if>
+                    <aura:if
+                            isTrue="{!empty(v.recipient.templateId) &amp;&amp; empty(v.recipient.envelopeRecipientId) &amp;&amp; not(v.lock)}">
                         <!-- Recipient Type -->
                         <lightning:select value="{!v.recipient.type}" label="{!$Label.c.Type}" class="ds-no-label">
                             <option value="Signer">{!$Label.c.Signer}</option>
@@ -44,12 +52,15 @@
 
                         <aura:set attribute="else">
                             <!-- Role -->
-                            <div class="slds-input slds-is-disabled slds-truncate" title="{!v.recipient.role.name}">
-                                {!v.recipient.role.name}
-                            </div>
+                            <aura:if isTrue="{!not(empty(v.recipient.role))}">
+                                <div class="slds-input slds-is-disabled slds-truncate" title="{!v.recipient.role.name}">
+                                    {!v.recipient.role.name}
+                                </div>
+                            </aura:if>
                             <!-- /Role -->
                         </aura:set>
                     </aura:if>
+
                 </div>
                 <div class="slds-col slds-no-flex">
                     <!-- Checkbox Button Group -->
