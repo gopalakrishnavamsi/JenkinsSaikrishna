@@ -4,6 +4,30 @@
         <application>DocuSignForSalesforceCore</application>
         <visible>false</visible>
     </applicationVisibilities>
+    <classAccesses>
+        <apexClass>FileController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>ReturnController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>SendingController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>StatusController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>strike_lookupController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>UserEventsController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <description>Enables users to send envelopes as the system sender in DocuSign Apps Launcher</description>
     <fieldPermissions>
         <editable>false</editable>

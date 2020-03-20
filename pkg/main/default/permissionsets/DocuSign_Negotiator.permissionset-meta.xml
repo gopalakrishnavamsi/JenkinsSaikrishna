@@ -4,6 +4,10 @@
 		<application>DocuSignForSalesforceCore</application>
 		<visible>false</visible>
 	</applicationVisibilities>
+	<classAccesses>
+		<apexClass>AgreementsController</apexClass>
+		<enabled>true</enabled>
+	</classAccesses>
 	<description>Provides access to document negotiation in DocuSign Apps Launcher</description>
 	<fieldPermissions>
 		<editable>false</editable>
