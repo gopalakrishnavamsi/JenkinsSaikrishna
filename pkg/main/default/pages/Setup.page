@@ -58,17 +58,19 @@
           show: true,
           mode: 'error'
         };
-        try {
-          var data = JSON.parse(payload);
-          parameters.toastPayload = data;
-          parameters.message = data.message;
-        } catch (err) {
-          parameters.toastPayload = {};
+        if (typeof payload === 'string') {
           parameters.message = payload;
-        } finally {
-          evt.setParams(parameters);
-          evt.fire();
+        } else {
+          try {
+            var data = JSON.parse(payload);
+            parameters.message = data.message;
+            parameters.detail = data;
+          } catch (err) {
+            parameters.message = payload;
+          }
         }
+        evt.setParams(parameters);
+        evt.fire();
       }
 
       function beginOAuth(component, environment, otherUrl) {

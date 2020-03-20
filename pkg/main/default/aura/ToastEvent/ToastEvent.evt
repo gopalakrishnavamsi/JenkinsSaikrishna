@@ -1,6 +1,6 @@
 <aura:event type="COMPONENT" description="ToastEvent">
     <aura:attribute name="show" type="Boolean" required="true"/>
-    <aura:attribute name="message" type="String"/>
     <aura:attribute name="mode" type="String"/>
-    <aura:attribute name="toastPayload" type="Map"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="detail" type="Object"/>
 </aura:event>

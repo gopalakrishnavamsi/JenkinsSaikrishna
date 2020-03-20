@@ -71,7 +71,7 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@RemoteAction
-	public static SpringOAuthLoginInformation completeSpringOAuth(final String authorizationCode) {
+	public static AuthService.PlatformAuthStatus completeSpringOAuth(final String authorizationCode) {
 		return AuthService.completeSpringOAuth(authorizationCode);
 	}
 

@@ -13,17 +13,10 @@
     return component.find('ds-toast') || component.getSuper().find('ds-toast');
   },
 
-  showToast: function (component, message, mode) {
+  showToast: function (component, message, mode, detail) {
     var toast = this._getToast(component);
     if (toast) {
-      toast.set('v.message', message);
-      toast.set('v.mode', mode);
-      toast.show();
-      if (mode === 'success') {
-        setTimeout($A.getCallback(function () {
-          toast.close();
-        }), 3000);
-      }
+      toast.show(mode, message, detail);
     }
   },
 

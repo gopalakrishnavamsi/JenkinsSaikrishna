@@ -53,7 +53,7 @@
           component.set('v.loading', false);
         }))
         .catch(function (error) {
-          helper.showToast(component, error, 'error');
+          helper.showToast(component, error, null, 'error');
           component.set('v.loading', false);
         });
     }
@@ -117,7 +117,7 @@
         }
       )
       .catch(function (error) {
-          helper.showToast(component, error, 'error');
+          helper.showToast(component, error, null, 'error');
           component.set('v.loading', false);
         }
       );
@@ -128,7 +128,7 @@
       helper.setLoggedIn(component, loginInformation);
       helper.gotoAccountSelectionStep(component, helper);
     } else {
-      helper.showToast(component, response.message, 'error');
+      helper.showToast(component, response.message, null, 'error');
     }
     component.set('v.loading', false);
   },
@@ -168,11 +168,12 @@
     }
   },
 
-  showToast: function (component, message, mode) {
+  showToast: function (component, message, detail, mode) {
     var fireToastEvent = component.getEvent('toastEvent');
     fireToastEvent.setParams({
       show: true,
       message: message,
+      detail: detail,
       mode: mode
     });
     fireToastEvent.fire();
@@ -198,7 +199,7 @@
           component.set('v.loading', false);
           helper.gotoAuthorizationStep(component, helper, true);
         } else {
-          helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
+          helper.showToast(component, stringUtils.getErrorMessage(response), null, 'error');
         }
       }));
       $A.enqueueAction(setAccountAction);
@@ -240,13 +241,13 @@
 
   endSpringOAuth: function (component, response, loginInformation, helper) {
     if (loginInformation && loginInformation.success) {
-      helper.showToast(component, loginInformation.message, 'success');
+      helper.showToast(component, loginInformation.message, loginInformation.detail, 'success');
       window.setTimeout($A.getCallback(function () {
         component.getEvent('reloadEvent').fire();
         component.destroy();
       }), 3000);
     } else {
-      helper.showToast(component, loginInformation.message, 'error');
+      helper.showToast(component, loginInformation.message, loginInformation.detail, 'error');
     }
     component.set('v.loading', false);
   }

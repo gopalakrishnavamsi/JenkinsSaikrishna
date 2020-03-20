@@ -1998,7 +1998,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_getSpringOAuthAPI() {
-		Url baseUrl = new Url('https://unit.test');
+		Url baseUrl = new Url('https://unit.test.springcm.com');
 
 		Test.startTest();
 		AuthService.SpringOAuthAPI result1 = AuthService.getSpringOAuthAPI(baseUrl);
@@ -2013,7 +2013,7 @@ private class AuthServiceTest {
 	static void test_SpringOAuthAPI_completeSpringOAuth_invalid_credentials() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			SpringOAuthLoginInformation result = new AuthService.SpringOAuthAPI(new Url('https://unit.test'))
+			AuthService.PlatformAuthStatus result = new AuthService.SpringOAuthAPI(new Url('https://unit.test.springcm.com'))
 				.completeSpringOAuth('test');
 			Test.stopTest();
 
@@ -2024,15 +2024,14 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_SpringOAuthAPI_completeSpringOAuth_missing_settings() {
+	static void test_completeSpringOAuth_missing_settings() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.ScmWebBaseUrl__c = null;
 			update s;
 
 			Test.startTest();
-			SpringOAuthLoginInformation result = new AuthService.SpringOAuthAPI(new Url('https://unit.test'))
-				.completeSpringOAuth('test');
+			AuthService.PlatformAuthStatus result = AuthService.completeSpringOAuth('unit.test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -2046,13 +2045,14 @@ private class AuthServiceTest {
 		Test.setMock(HttpCalloutMock.class, new SpringOAuthAPIMock(false));
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			SpringOAuthLoginInformation result = new AuthService.SpringOAuthAPI(new Url('https://unit.test'))
+			AuthService.PlatformAuthStatus result = new AuthService.SpringOAuthAPI(new Url('https://unit.test.springcm.com'))
 				.completeSpringOAuth('test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assert(!result.success);
 			System.assertEquals(Label.UnableToConnectDocuSignGen, result.message);
+			System.assert(String.isNotBlank(result.detail));
 		}
 	}
 
@@ -2061,7 +2061,7 @@ private class AuthServiceTest {
 		Test.setMock(HttpCalloutMock.class, new SpringOAuthAPIMock(true));
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			SpringOAuthLoginInformation result = new AuthService.SpringOAuthAPI(new Url('https://unit.test'))
+			AuthService.PlatformAuthStatus result = new AuthService.SpringOAuthAPI(new Url('https://unit.test.springcm.com'))
 				.completeSpringOAuth('test');
 			Test.stopTest();
 
@@ -2117,7 +2117,7 @@ private class AuthServiceTest {
 			System.assert(!AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
 
 			Test.startTest();
-			SpringOAuthLoginInformation result = AuthService.completeSpringOAuth('test');
+			AuthService.PlatformAuthStatus result = AuthService.completeSpringOAuth('test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

@@ -36,12 +36,16 @@ window.UIHelper = function (loadingEvent, toastEvent, userEvent) {
    * Displays a toast notification.
    * @param message {string} The message to display.
    * @param mode {ToastMode} The mode of the toast notification.
+   * @param detail {string|string[]} Additional context or detail.
    */
-  var showToast = function (message, mode) {
+  var showToast = function (message, mode, detail) {
     var event = toastEvent();
     if (event && event.setParams && event.fire) {
       event.setParams({
-        show: true, message: message, mode: mode
+        show: true,
+        mode: mode,
+        message: message,
+        detail: detail
       });
       event.fire();
     }

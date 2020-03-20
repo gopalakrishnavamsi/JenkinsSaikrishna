@@ -1,12 +1,23 @@
 <aura:component access="global">
-    <aura:attribute name="message" type="String"/>
-    <aura:attribute name="mode" type="String"/>
-    <aura:attribute name="toastPayload" type="Map" default="{}"/>
-    <aura:attribute name="showToast" type="Boolean" default="{!false}"/>
-    <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
 
-    <aura:method name="close" action="{!c.close}"/>
-    <aura:method name="show" action="{!c.show}"/>
+    <aura:attribute name="visualforce" type="Boolean" default="false"/>
+
+    <!-- TODO: Clean up toast notifications. Make attributes private. The only way to interact with this should      -->
+    <!-- be through public methods. This will result in better encapsulation and consistency. Also use               -->
+    <!-- RootComponent instead of constantly reinventing the wheel.                                                  -->
+    <aura:attribute name="showToast" type="Boolean" default="false"/>
+    <aura:attribute name="mode" type="String"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="detail" type="String"/>
+
+    <aura:method name="show" action="{!c.show}" access="public">
+        <aura:attribute name="mode" type="String" required="true"/>
+        <aura:attribute name="message" type="String" required="true"/>
+        <aura:attribute name="detail" type="String" required="false"/>
+    </aura:method>
+
+    <aura:method name="close" action="{!c.close}" access="public"/>
 
     <aura:if isTrue="{!v.showToast}">
         <div aura:id="toast"
@@ -23,9 +34,9 @@
                                       variant="bare"
                                       onclick="{!c.close}"/>
                 <div class="slds-notify__content">
-                    <h2 class="slds-text-heading_small slds-m-top_xxx-small">{!v.message}</h2>
-                    <aura:if isTrue="{!not(empty(v.toastPayload.footerText))}">
-                        <lightning:formattedRichText value="{!v.toastPayload.footerText}"/>
+                    <h2 class="slds-text-heading_small slds-m-top_xxx-small"><lightning:formattedRichText value="{!v.message}"/></h2>
+                    <aura:if isTrue="{!not(empty(v.detail))}">
+                        <lightning:formattedRichText value="{!v.detail}"/>
                     </aura:if>
                 </div>
             </div>

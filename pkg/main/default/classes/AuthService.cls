@@ -4,7 +4,7 @@ global with sharing class AuthService {
 	private static final String DOMAIN_ERROR_PAYLOAD = JSON.serialize(
 		new Map<String, String> {
 			'message' => Label.InvalidTarget,
-			'footerText' => Label.MyDomainHelpMessage
+			'detail' => Label.MyDomainHelpMessage
 		});
 
 	@TestVisible
@@ -1269,56 +1269,67 @@ global with sharing class AuthService {
 			new List<LoginInformation.Account> { selected });
 	}
 
+	public class PlatformAuthStatus {
+		@AuraEnabled
+		public Boolean success { get; private set; }
+		@AuraEnabled
+		public String message { get; private set; }
+		@AuraEnabled
+		public String detail { get; private set; }
+
+		private PlatformAuthStatus(
+			final Boolean success,
+			final String message,
+			final String detail) {
+
+			this.success = success;
+			this.message = message;
+			this.detail = detail;
+		}
+	}
+
 	@TestVisible
-	private class SpringOAuthAPI extends RestAPI {
-		private Url baseUrl;
+	private class SpringOAuthAPI extends ScmAPI {
 
 		public SpringOAuthAPI(final Url baseUrl) {
-			this.baseUrl = baseUrl;
+			super(baseUrl);
 		}
 
-		public SpringOAuthLoginInformation completeSpringOAuth(final String authorizationCode) {
-			SpringOAuthLoginInformation results;
+		public PlatformAuthStatus completeSpringOAuth(final String authorizationCode) {
+			PlatformAuthStatus result = new PlatformAuthStatus(
+				true,
+				Label.SuccessDocuSignAuthorization,
+				null);
 			try {
-				Url u = AccountProducts.getInstance().getScmWebBaseUrl();
 				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-				if (u != null) {
-					Map<String, Object> body = new Map<String, Object> {
-						'accountId' => settings.AccountId__c,
-						'code' => authorizationCode,
-						'orgUrl' => Salesforce.baseUrl.toExternalForm()
-					};
-					Response response = super.post(
-						this.baseUrl,
-						new List<Object> { 'SetupSalesforce', 'DALIntegration' },
-						QueryString.empty,
-						new Map<String, String> {
-							'Authorization' => 'Bearer ' + AuthService.getAccessToken(),
-							'Content-Type' => 'application/json'
-						},
-						JSON.serialize(body),
-						RestAPI.defaultTimeout);
+				Map<String, Object> body = new Map<String, Object> {
+					'accountId' => settings.AccountId__c,
+					'code' => authorizationCode,
+					'orgUrl' => Salesforce.baseUrl.toExternalForm()
+				};
+				RestAPI.Response response = this.post(
+					new List<Object> { 'SetupSalesforce', 'DALIntegration' },
+					JSON.serialize(body),
+					RestAPI.defaultTimeout);
 
-					if (response.hasError) {
-						this.log.error('Failed to setup SCM to Salesforce OAuth: ' + response.error);
-						results = SpringOAuthLoginInformation.failure(Label.UnableToConnectDocuSignGen);
-					} else {
-						results = SpringOAuthLoginInformation.success(Label.SuccessDocuSignAuthorization);
-					}
-				} else {
-					this.log.error('SCM web base URL is not configured');
-					results = SpringOAuthLoginInformation.failure(Label.MissingDocuSignGenAuthorizationSettings);
+				if (response.hasError) {
+					this.log.error('Failed to setup SCM to Salesforce OAuth: ' + response.error);
+					result = new PlatformAuthStatus(
+						false,
+						Label.UnableToConnectDocuSignGen,
+						String.valueOf(response.error));
 				}
-
 			} catch (Exception ex) {
 				LoggerService.getInstance().exception(ex, 'Failed to setup SCM to Salesforce OAuth');
-				results = SpringOAuthLoginInformation.failure(ex.getMessage());
+				result = new PlatformAuthStatus(
+					false,
+					ex.getMessage(),
+					null);
 			} finally {
 				AccountProducts.save();
 			}
-			return results;
+			return result;
 		}
-
 	}
 
 	@TestVisible
@@ -1354,13 +1365,20 @@ global with sharing class AuthService {
 		return new Url(pg.getUrl());
 	}
 
-	public static SpringOAuthLoginInformation completeSpringOAuth(final String authorizationCode) {
+	public static PlatformAuthStatus completeSpringOAuth(final String authorizationCode) {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		try {
-			AccountProducts products = AccountProducts.getInstance();
-			SpringOAuthLoginInformation result = getSpringOAuthAPI(products.getScmWebBaseUrl())
-				.completeSpringOAuth(authorizationCode);
+			Url baseUrl = AccountProducts.getInstance().getScmWebBaseUrl();
+			if (baseUrl == null) {
+				LoggerService.getInstance().error('SCM web base URL is not configured');
+				return new PlatformAuthStatus(
+					false,
+					Label.MissingDocuSignGenAuthorizationSettings,
+					null);
+			}
+
+			PlatformAuthStatus result = getSpringOAuthAPI(baseUrl).completeSpringOAuth(authorizationCode);
 			if (result.success) {
 				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 				settings.IsPlatformAuthorized__c = true;

@@ -54,9 +54,24 @@ window.stringUtils = (function () {
   };
 
   /**
-   *
-   * @param response {Response}
-   * @returns {string}
+   * Escapes HTML in a string.
+   * @param s {string} The string to HTML-escape.
+   * @returns {string} The escaped HTML.
+   */
+  var escapeHtml = function (s) {
+    if (!s) {
+      return '';
+    }
+    return s.replace(/&quot;/g, '"')
+      .replace('/&/g', '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  };
+
+  /**
+   * Formats an error message from an HTTP response.
+   * @param response {Response} The HTTP response.
+   * @returns {string} The formatted error message.
    */
   var getErrorMessage = function (response) {
     var message = '';
@@ -74,9 +89,32 @@ window.stringUtils = (function () {
     return message;
   };
 
+  /**
+   * Formats a message as HTML.
+   * @param message {string|string[]} The message to format.
+   * @returns {string} The HTML-formatted string.
+   */
+  var formatHtml = function (message) {
+    if ($A.util.isEmpty(message)) return '';
+
+    var result;
+    if (Array.isArray(message)) {
+      result = '<ul>';
+      for (var i = 0; i < message.length; i++) {
+        result += '<li>' + escapeHtml(message[i]).replace('\n', '<br/>') + '</li>'
+      }
+      result += '</ul>';
+    } else {
+      result = escapeHtml(message).replace('\n', '<br/>');
+    }
+    return result;
+  };
+
   return Object.freeze({
     format: format,
     formatSize: formatSize,
+    formatHtml: formatHtml,
+    escapeHtml: escapeHtml,
     unescapeHtml: unescapeHtml,
     getErrorMessage: getErrorMessage
   });

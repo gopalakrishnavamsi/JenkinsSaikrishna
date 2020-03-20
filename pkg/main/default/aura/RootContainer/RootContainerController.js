@@ -3,7 +3,7 @@
     event.stopPropagation();
     var params = event.getParams();
     if (params && params.show === true) {
-      helper.showToast(component, params.message, params.mode);
+      helper.showToast(component, params.message, params.mode, params.detail);
     } else {
       helper.hideToast(component);
     }

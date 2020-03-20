@@ -512,7 +512,7 @@ private class SetupControllerTest {
 		Test.setMock(HttpCalloutMock.class, new SpringOAuthSuccessMock());
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
+			AuthService.PlatformAuthStatus loginInformation = SetupController.completeSpringOAuth('1234556');
 			System.assertNotEquals(null, loginInformation);
 			System.assert(loginInformation.success);
 			System.assertEquals(Label.SuccessDocuSignAuthorization, loginInformation.message);
@@ -525,7 +525,7 @@ private class SetupControllerTest {
 		Test.setMock(HttpCalloutMock.class, new SpringOAuthFailureMock());
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
+			AuthService.PlatformAuthStatus loginInformation = SetupController.completeSpringOAuth('1234556');
 			System.assertNotEquals(null, loginInformation);
 			System.assert(!loginInformation.success);
 			System.assertEquals(Label.UnableToConnectDocuSignGen, loginInformation.message);
@@ -539,12 +539,14 @@ private class SetupControllerTest {
 			AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
 			accountSettings.ScmWebBaseUrl__c = '';
 			update accountSettings;
+
 			Test.startTest();
-			SpringOAuthLoginInformation loginInformation = SetupController.completeSpringOAuth('1234556');
+			AuthService.PlatformAuthStatus loginInformation = SetupController.completeSpringOAuth('1234556');
+			Test.stopTest();
+
 			System.assertNotEquals(null, loginInformation);
 			System.assert(!loginInformation.success);
 			System.assertEquals(Label.MissingDocuSignGenAuthorizationSettings, loginInformation.message);
-			Test.stopTest();
 		}
 	}
 

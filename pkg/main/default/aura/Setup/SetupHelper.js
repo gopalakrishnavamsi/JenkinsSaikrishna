@@ -140,20 +140,15 @@
       ));
   },
 
-  showToast: function (component, message, mode, payload) {
-    component.set('v.message', message);
-    component.set('v.mode', mode);
-    component.set('v.toastPayload', payload);
-    component.set('v.showToast', true);
-    if (mode === 'success') {
-      window.setTimeout($A.getCallback(function () {
-        component.set('v.showToast', false);
-      }), 5000);
+  showToast: function (component, message, mode, detail) {
+    var toast = component.find('ds-toast');
+    if (toast) {
+      toast.show(mode, message, detail);
     }
   },
 
   hideToast: function (component) {
-    component.find('toast').close();
+    component.find('ds-toast').close();
   },
 
   fetchAccountProducts: function (component) {
