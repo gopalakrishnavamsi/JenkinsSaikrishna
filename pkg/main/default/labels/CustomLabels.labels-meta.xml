@@ -3747,6 +3747,22 @@
 		<value>You&#39;ve Migrated Your Users</value>
 	</labels>
 	<labels>
+		<fullName>ErrorEmailBodyForMigrateTemplates</fullName>
+		<categories>Gen-Email Alert</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ErrorEmailBodyForMigrateTemplates</shortDescription>
+		<value>Error Email Body</value>
+	</labels>
+	<labels>
+		<fullName>ErrorSubjectForMigrateTemplate</fullName>
+		<categories>Gen-Email Alert</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ErrorSubjectForMigrateTemplate</shortDescription>
+		<value>Error Subject</value>
+	</labels>
+	<labels>
 		<fullName>MigrateUsersSuccessMsg</fullName>
 		<categories>Gen-UI message</categories>
 		<language>en_US</language>
