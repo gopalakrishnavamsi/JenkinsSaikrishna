@@ -1,5 +1,6 @@
 <apex:page id="OnlineEditorGenTemplate" sidebar="false" showHeader="false" standardController="GenTemplate__c"
-           title="{!$Label.DocuSign}" extensions="OnlineEditorController" standardStylesheets="false" applyHtmlTag="false">
+           title="{!$Label.DocuSign}" extensions="OnlineEditorController" standardStylesheets="false"
+           applyHtmlTag="false">
     <html>
     <apex:includeLightning/>
     <apex:slds/>
@@ -59,7 +60,8 @@
         templateExportDataIsUndefinedLabel: '{!$Label.ExportDataIsUndefinedLabel}',
         templateInvalidPathLabel: '{!$Label.InvalidPathLabel}',
         templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}',
-        templateSaveValidationLabel: '{!$Label.OnlineEditorSaveValidation}'
+        templateSaveValidationLabel: '{!$Label.OnlineEditorSaveValidation}',
+        templateSCMHrefUndefinedLabel: '{!$Label.SCMHrefUndefined}'
       };
 
     </script>
@@ -82,7 +84,7 @@
             height: 16px;
             width: fit-content;
         }
-        
+
         .slds-scope .slds-page-header {
             font-size: 15px;
         }
@@ -173,11 +175,12 @@
     </style>
 
     <div class="slds-scope">
-        <div id="IEWarning" class="slds-grid">           
+        <div id="IEWarning" class="slds-grid">
             <div class="slds-col slds-size_1-of-1">
-                <svg class="slds-align_absolute-center slds-icon_large slds-icon slds-icon-text-default slds-p-bottom_medium" aria-hidden="true">
+                <svg class="slds-align_absolute-center slds-icon_large slds-icon slds-icon-text-default slds-p-bottom_medium"
+                     aria-hidden="true">
                     <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                        xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#warning')}"/>
+                         xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#warning')}"/>
                 </svg>
                 <h3 class="slds-text-align_center">
                     {!$Label.IEValidationError}

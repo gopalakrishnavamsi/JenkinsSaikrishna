@@ -1,0 +1,16 @@
+.THIS .ds-onlineEditorGenButtonMenu > .slds-button {
+    background: #0070d2;
+    color: white;
+    border-right-color: #0070d2;
+    border-top-color: #0070d2;
+    border-bottom-color: #0070d2;
+}
+
+.THIS .ds-onlineEditorGenButtonMenu > .slds-button:hover {
+    background: #1B5297;
+}
+
+.THIS .ds-onlineEditorGenButtonMenuDisabled > .slds-button {
+    background: #C9C7C5;
+    color: white;
+}

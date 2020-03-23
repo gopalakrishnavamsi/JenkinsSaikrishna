@@ -1,10 +1,11 @@
 /* global jQuery, RemoteActions, Configuration, Labels, DSEditor, Visualforce, $Lightning  */
-/* exported prepareOnlineEditorDocumentGenerator, prepareSendForSignature, cancelGeneration  */
+/* exported prepareOnlineEditorDocumentGenerator, prepareSendForSignature, cancelGeneration, exportHtmlDocument  */
 jQuery.noConflict();
 
 var prepareOnlineEditorDocumentGenerator;
 var prepareSendForSignature;
 var cancelGeneration;
+var exportHtmlDocument;
 
 // FIXME: Split JS file between edit and generate VF pages. Can share common functions in 3rd JS file.
 // FIXME: Use consistent variable naming matching those in Apex layer.
@@ -226,13 +227,13 @@ jQuery(document).ready(function ($) {
                 );
 
                 if (entityRecords.filterBy !== 'Name') {
-                  entityRecords.results = entityRecords.results.map(function(record) {
+                  entityRecords.results = entityRecords.results.map(function (record) {
                     return {
                       Id: record.Id,
                       Name: record[entityRecords.filterBy]
-                    }
-                  })
-                } 
+                    };
+                  });
+                }
 
                 resolve(entityRecords);
               } else {
@@ -244,7 +245,7 @@ jQuery(document).ready(function ($) {
                 reject(event.message);
               }
             },
-            {  
+            {
               escape: false
             });
         } catch (err) {
@@ -719,7 +720,7 @@ jQuery(document).ready(function ($) {
             templateName + '.html');
       })
       .then(function (response) {
-        if (!response || !response.Href) throw 'SCM href undefined';
+        if (!response || !response.Href) throw Labels.templateSCMHrefUndefinedLabel;
         return response.Href.substring(response.Href.lastIndexOf('/') + 1);
       })
       .then(function (springTemplateGUID) {
@@ -951,7 +952,7 @@ jQuery(document).ready(function ($) {
             resolve(true);
           };
         })
-        .catch(function(err) {
+        .catch(function (err) {
           _userEvents.error(
             _sessionType,
             {},
@@ -1030,6 +1031,12 @@ jQuery(document).ready(function ($) {
   var renderTemplateDetails = function () {
     window.location.reload();
   };
+
+  exportHtmlDocument = (function () {
+    return function () {
+      return exportDocument('html');
+    };
+  })();
 
   $('#onlineEditorEdit').click(function () {
     $Lightning.use(Configuration.namespace + ':LightningOutApp', function () {

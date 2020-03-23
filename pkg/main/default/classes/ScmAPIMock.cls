@@ -43,7 +43,8 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		'documents' => Application.classNamespacePrefix + 'ScmAPIMock.DocumentMock',
 		'members' => Application.classNamespacePrefix + 'ScmAPIMock.MemberMock',
 		'changesecuritytasks' => Application.classNamespacePrefix + 'ScmAPIMock.ChangeSecurityTask',
-		'templates' => Application.classNamespacePrefix + 'ScmAPIMock.TemplateMock'
+		'templates' => Application.classNamespacePrefix + 'ScmAPIMock.TemplateMock',
+		'convert' => Application.classNamespacePrefix + 'ScmAPIMock.ConvertDocumentMock'
 	};
 	private static final Map<String, MockResource> MOCKS = new Map<String, MockResource>();
 
@@ -121,7 +122,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
 			if (request.method == 'GET') {
-				response = MockResponse.ok('{"name": "html_templates","id": "' + FOLDER_ID +'"}');
+				response = MockResponse.ok('{"name": "html_templates","id": "' + FOLDER_ID + '"}');
 			}
 			return response;
 		}
@@ -344,6 +345,17 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 			MockResponse response = null;
 			if (request.method == 'POST') {
 				response = MockResponse.accepted('{"Status" : "Waiting","Security" : {"Roles" : [{"Item" : "FullSubscriber","AccessType" : "ViewEditDelete"}]},"Folder" : {"Href" : "https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41"},"Href" : "https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/changesecuritytasks/a345e77d-b3bf-4541-be31-3e9c36861e6a}');
+			}
+			return response;
+		}
+	}
+
+	public class ConvertDocumentMock implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			if (request.method == 'POST') {
+				response = MockResponse.ok('{"Status" : "Success", "Message":""}');
 			}
 			return response;
 		}

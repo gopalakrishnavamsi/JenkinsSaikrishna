@@ -1051,4 +1051,24 @@ public with sharing class NegotiateAPI extends ScmAPI {
 	public Boolean setRootLevelFolderSecurity() {
 		return triggerChangeSecurityTask(getRootLevelFolderUrl());
 	}
+
+	public Boolean convertHtmlDocumentToWord(final UUID documentGuid) {
+
+		RestAPI.Response response = this.post(
+			getBaseUrl(),
+			new List<Object> { 'negotiate', 'api', 'v1', accountId, 'convert' },
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'documentUid' => String.valueOf(documentGuid),
+				'convertTo' => 'Docx'
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to covert document: ' + response.error);
+			throw new APIException(response.error);
+		}
+		return response.statusCode == 200;
+	}
+
 }

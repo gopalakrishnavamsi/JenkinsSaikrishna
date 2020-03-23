@@ -57,6 +57,10 @@
         cancelGeneration();
       };
 
+      var exportGeneratedDocument = function () {
+        return exportHtmlDocument();
+      };
+
       var ns = '{!JSENCODE(namespace)}';
       $Lightning.use(ns + ':LightningOutApp', function () {
         $Lightning.createComponent(ns + ':OnlineEditorDocumentGenerator', {
@@ -66,7 +70,8 @@
           recordId: '{!JSENCODE($CurrentPage.parameters.recordId)}',
           renderOnlineEditorGenerator: renderOnlineEditorGenerator,
           sendForSignature: sendForSignature,
-          onCancel: onCancel
+          onCancel: onCancel,
+          exportGeneratedDocument: exportGeneratedDocument
         }, 'lightning', function () {
         });
       });

@@ -602,4 +602,31 @@ public with sharing class NegotiateAPITest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_convertHtmlDocumentToWord_success() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Test.startTest();
+			System.assert(NegotiateAPI.getInstance().convertHtmlDocumentToWord(ScmAPIMock.DOCUMENT_ID));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_convertHtmlDocumentToWord_failure() {
+		ScmAPIMock.failure();
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Test.startTest();
+			try {
+				NegotiateAPI.getInstance().convertHtmlDocumentToWord(ScmAPIMock.DOCUMENT_ID);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(1234, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
 }

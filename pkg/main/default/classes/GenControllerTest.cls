@@ -804,4 +804,116 @@ private class GenControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_getEOSFolderId_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString());
+			Test.startTest();
+			UUID eosFolderId = GenController.getEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
+			System.assert(eosFolderId != null);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getEOSFolderId_unauthorized() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString());
+			Test.startTest();
+			try {
+				GenController.getEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
+				throw new AssertException('Expected get EOSFolderId to Fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_convertHtmlDocumentToWord_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			Test.startTest();
+			GenController.convertHtmlDocumentToWord(String.valueOf(ScmAPIMock.DOCUMENT_ID));
+			system.assert(true);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_convertHtmlDocumentToWord_unauthorized() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			Test.startTest();
+			try {
+				GenController.convertHtmlDocumentToWord(String.valueOf(ScmAPIMock.DOCUMENT_ID));
+				throw new AssertException('Expected convertHtmlDocumentToWord to Fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteDocument_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			Test.startTest();
+			GenController.deleteDocument(String.valueOf(ScmAPIMock.DOCUMENT_ID));
+			system.assert(true);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteScmDocument_unauthorized() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			Test.startTest();
+			try {
+				GenController.deleteDocument(String.valueOf(ScmAPIMock.DOCUMENT_ID));
+				throw new AssertException('Expected deleteScmDocument to Fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_generateLimitedAccessToken_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			UUID entityId = UUID.randomUUID();
+
+			Test.startTest();
+			LimitedAccessToken limitedAccessToken = GenController.generateLimitedAccessToken(String.valueOf(entityId));
+			Test.stopTest();
+			System.assertNotEquals(null, limitedAccessToken);
+
+		}
+	}
+
+	@IsTest
+	static void test_generateLimitedAccessToken_unauthorized() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser()) {
+			UUID entityId = UUID.randomUUID();
+
+			Test.startTest();
+			try {
+				GenController.generateLimitedAccessToken(String.valueOf(entityId));
+				throw new AssertException('Expected generateLimitedAccessToken to Fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 }

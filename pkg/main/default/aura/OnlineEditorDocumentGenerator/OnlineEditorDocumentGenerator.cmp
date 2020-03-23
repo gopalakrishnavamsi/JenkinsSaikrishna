@@ -1,5 +1,6 @@
 <aura:component description="OnlineEditorDocumentGenerator" controller="GenController" extends="c:RootContainer">
-    <ltng:require scripts="{!join(',',$Resource.stringUtils, $Resource.navUtils)}"/>
+    <ltng:require styles="{!$Resource.scmwidgetscss}"
+                  scripts="{!join(',',$Resource.stringUtils, $Resource.navUtils, $Resource.scmwidgetsjs)}"/>
 
     <aura:attribute name="templateId" type="Id"/>
     <aura:attribute name="recordName" type="String"/>
@@ -8,12 +9,13 @@
     <aura:attribute name="renderOnlineEditorGenerator" type="Object"/>
     <aura:attribute name="sendForSignature" type="Object"/>
     <aura:attribute name="onCancel" type="Object"/>
+    <aura:attribute name="exportGeneratedDocument" type="Object"/>
 
-    <aura:attribute name="errMsg" type="String" access="private"/>
+    <aura:attribute name="errMsg" type="String"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isGenEnabled" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="isSendForSignatureEnabled" type="Boolean" default="false"/>
+    <aura:attribute name="isButtonEnabled" type="Boolean" default="false"/>
     <aura:attribute name="isGenTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
@@ -44,17 +46,26 @@
                     </div>
                 </div>
                 <div class="slds-col slds-no-flex slds-align-top">
-                    <lightning:button class="slds-button slds-button_neutral"
-                                      label="{!$Label.c.Cancel}" onclick="{!c.cancelClicked}"/>
-                    <lightning:button class="slds-button slds-button_brand"
-                                      label="{!$Label.c.SendForSignature}" onclick="{!c.sendForSignatureClicked}"
-                                      disabled="{!!v.isSendForSignatureEnabled}"/>
+                    <lightning:button variant="neutral" label="{!$Label.c.Cancel}" onclick="{!c.cancelClicked}"/>
+                    <lightning:buttonGroup>
+                        <lightning:button variant="brand"
+                                          label="{!$Label.c.SendForSignature}"
+                                          onclick="{!c.sendForSignatureClicked}"
+                                          disabled="{!!v.isButtonEnabled}"/>
+                        <lightning:buttonMenu menuAlignment="right"
+                                              disabled="{!!v.isButtonEnabled}"
+                                              class="{!if(v.isButtonEnabled,'ds-onlineEditorGenButtonMenu','ds-onlineEditorGenButtonMenuDisabled')}">
+                            <lightning:menuItem label="{!$Label.c.DownloadAsWordFile}"
+                                                value="{!$Label.c.DownloadAsWordFile}"
+                                                onactive="{!c.downloadAsWordFileClicked}"/>
+                        </lightning:buttonMenu>
+                    </lightning:buttonGroup>
                 </div>
             </div>
         </div>
     </div>
     <aura:if isTrue="{!or(v.fetchingOAuthStatus, v.loading)}">
-        <div class="ds-gen-templates-setup-spinner">
+        <div class="ds-gen-templates-setup-spinner" aura:id="ds-spinner">
             <c:BlueSpinner/>
         </div>
     </aura:if>

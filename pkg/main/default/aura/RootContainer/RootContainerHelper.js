@@ -75,6 +75,21 @@
     }
   },
 
+  invokeChainAction: function (component, action, params, onSuccess, onError, onComplete) {
+    if (component && component.isValid()) {
+
+      var setError = function (error, message) {
+        if (onError) onError(error, message);
+      };
+
+      var setComplete = function (response) {
+        if (onComplete) onComplete(response);
+      };
+
+      this._invokeAction(action, params, onSuccess, setError, setComplete);
+    }
+  },
+
   _getUserEvents: function (component) {
     if (!component || !component.isValid()) return null;
     return component.find('ds-user-events') || component.getSuper().find('ds-user-events');

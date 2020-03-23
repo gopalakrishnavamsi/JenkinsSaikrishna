@@ -82,7 +82,7 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 			return this.getProvisioningMock().getResponse(request);
 		} else if (path.startsWith('/management')) {
 			return this.getRoleMock().getResponse(request);
-		} else if (path.startsWith('/gen') || path.startsWith('/v2')) {
+		} else if (path.startsWith('/gen') || path.startsWith('/v2') || path.startsWith('/negotiate/api/v1/')) {
 			return this.getScmMock().getResponse(request);
 		} else if (path.startsWith('/api/v1/')) {
 			return this.getClmMock().getResponse(request);

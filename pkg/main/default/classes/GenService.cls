@@ -565,6 +565,21 @@ public with sharing class GenService {
 			return result;
 		}
 
+		@TestVisible
+		private UUID getFolderId(final Id sourceObjectId) {
+			Permissions.verifyIsQueryable(AgreementConfiguration__c.getSObjectType(), new List<String> {
+				'Id', 'Name', 'FolderId__c', 'SourceObject__c'
+			});
+
+			List<AgreementConfiguration__c> agreementConfigurationList = new List<AgreementConfiguration__c>();
+			agreementConfigurationList = [SELECT Id, Name, FolderId__c, SourceObject__c FROM AgreementConfiguration__c WHERE SourceObject__c = :sourceObjectId];
+			if (!agreementConfigurationList.isEmpty()) {
+				return UUID.parse(agreementConfigurationList[0].FolderId__c);
+			} else {
+				return null;
+			}
+		}
+
 	}
 
 	public static Gen.Template clone(final Id templateId) {
@@ -876,4 +891,44 @@ public with sharing class GenService {
 		return DB.deleteTemplate(templateId);
 	}
 
+	public static UUID getEOSFolderId(final Id sourceObjectId) {
+		Permissions.verifyIsDocuSignGenerator();
+		UUID folderId = DB.getFolderId(sourceObjectId);
+		if (folderId == null) {
+			String sourceObjectType = sourceObjectId.getSobjectType().getDescribe().getName();
+			String sourceObjectName = sourceObjectId; //EOS folder name set as recordID since Name field can vary on all objects.
+			folderId = NegotiateAPI.getInstance().createEOSFolder(sourceObjectName, sourceObjectId, sourceObjectType);
+			setFolderId(sourceObjectId, folderId.toString());
+		}
+		return folderId;
+	}
+
+	private static void setFolderId(final Id sourceObjectId, final String folderId) {
+		Permissions.verifyIsCreateable(AgreementConfiguration__c.getSObjectType(), new List<String> {
+			'FolderId__c', 'SourceObject__c'
+		});
+
+		AgreementConfiguration__c configuration = new AgreementConfiguration__c();
+		configuration.FolderId__c = folderId;
+		configuration.SourceObject__c = sourceObjectId;
+		insert configuration;
+	}
+
+	public static void convertHtmlDocumentToWord(final UUID documentGuid) {
+		Permissions.verifyIsDocuSignGenerator();
+		NegotiateAPI.getInstance().convertHtmlDocumentToWord(documentGuid);
+	}
+
+	public static void deleteScmDocument(final UUID documentGuid) {
+		Permissions.verifyIsDocuSignGenerator();
+		NegotiateAPI.getInstance().deleteAgreement(documentGuid);
+	}
+
+	public static LimitedAccessToken generateLimitedAccessToken(final UUID documentId) {
+		Permissions.verifyIsDocuSignGenerator();
+
+		return ScmTokenAPI.getInstance().generateLimitedAccessToken(
+			documentId,
+			AuthService.getContentAccessToken());
+	}
 }

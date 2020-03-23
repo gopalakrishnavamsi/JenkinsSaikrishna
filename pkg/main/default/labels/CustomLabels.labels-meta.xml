@@ -9249,6 +9249,13 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>or</value>
 	</labels>
 	<labels>
+		<fullName>SCMHrefUndefined</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SCM href undefined</shortDescription>
+		<value>SCM href undefined</value>
+	</labels>
+	<labels>
 		<fullName>DownloadAsWordFile</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

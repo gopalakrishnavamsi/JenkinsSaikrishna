@@ -270,4 +270,40 @@ public with sharing class GenController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to validate.');
 		}
 	}
+
+	@AuraEnabled
+	public static UUID getEOSFolderId(final Id sourceId) {
+		try {
+			return GenService.getEOSFolderId(sourceId);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to fetch Eos Folder');
+		}
+	}
+
+	@AuraEnabled
+	public static LimitedAccessToken generateLimitedAccessToken(final String entityId) {
+		try {
+			return GenService.generateLimitedAccessToken(UUID.parse(entityId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to generate Limited Access Token');
+		}
+	}
+
+	@AuraEnabled
+	public static void convertHtmlDocumentToWord(final String documentId) {
+		try {
+			GenService.convertHtmlDocumentToWord(UUID.parse(documentId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to convert html document to word');
+		}
+	}
+
+	@AuraEnabled
+	public static void deleteDocument(final String documentId) {
+		try {
+			GenService.deleteScmDocument(UUID.parse(documentId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to delete document');
+		}
+	}
 }
