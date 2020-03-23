@@ -578,6 +578,7 @@
         var cvTitleByJobId = {};
         var failedJobs = [];
 
+        //iterate Gen.Job results object and set populate jobIds, cvTitleByJobId, failedJobs
         results.forEach(function (object) {
           if (object.status === $A.get('$Label.c.Failure')) {
             var failedJobDetail = {message: object.message, cv: object.file};
@@ -596,23 +597,40 @@
         helper.genFileCheckboxToggle(component);
         component.set('v.failedFiles', failedJobs);
         component.set('v.cvTitleByJobId', cvTitleByJobId);
-        helper.completionPoll(component, jobIds, remainingJobIds, 0);
-      } else {
-        var errorMessage = $A.get('$Label.c.FailedInitiateDocGeneration');
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
+
+        //completionPoll should only be called if remainingJobIds is defined
+        if (!$A.util.isUndefinedOrNull(remainingJobIds)) {
+          helper.completionPoll(component, jobIds, remainingJobIds, 0);
         }
-        component.set('v.errMsg', errorMessage);
-        component.set('v.errType', 'error');
-        component.set('v.isGenerating', false);
-        helper.endGenerationError(component, errorMessage);
+        //remainingJobIds is not defined indicates document generation job was not successfully triggered
+        else {
+          helper.handleUndefinedJobIdResponse(component, failedJobs);
+        }
+
+      } else {
+        helper.handleExceptionInQueueDocumentGeneration(component, response, helper);
       }
     });
 
     $A.enqueueAction(action);
+  },
+
+  handleExceptionInQueueDocumentGeneration: function (component, response, helper) {
+    var errorMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.FailedInitiateDocGeneration'), stringUtils.getErrorMessage(response));
+    component.set('v.errMsg', errorMessage);
+    component.set('v.errType', 'error');
+    component.set('v.isGenerating', false);
+    helper.endGenerationError(component, errorMessage);
+  },
+
+  handleUndefinedJobIdResponse: function (component, failedJobs) {
+    var errorMessage = $A.get('$Label.c.FailedInitiateDocGeneration');
+    failedJobs.forEach(function (job) {
+      errorMessage += job.message;
+    });
+    component.set('v.errMsg', errorMessage);
+    component.set('v.errType', 'error');
+    component.set('v.isGenerating', false);
   },
 
   completionPoll: function (component, jobIds, remainingJobIds, runCount) {
@@ -709,13 +727,7 @@
           }
         }
       } else {
-        var errorMessage = $A.get('$Label.c.GeneratorCompletionErrorMsg') + ' ';
-        var errors = response.getError();
-        if (errors) {
-          if (errors[0] && errors[0].message) {
-            errorMessage += errors[0].message;
-          }
-        }
+        var errorMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.GeneratorCompletionErrorMsg'), stringUtils.getErrorMessage(response));
         component.set('v.finishedGenerating', true);
         component.set('v.isGenerating', false);
         component.set('v.bannerState', 'error');
@@ -723,7 +735,6 @@
         helper.endGenerationError(component, errorMessage);
       }
     });
-
     $A.enqueueAction(action);
   },
 
