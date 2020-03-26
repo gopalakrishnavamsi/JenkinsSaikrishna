@@ -4222,7 +4222,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>GeneratorCompletionErrorMsg</shortDescription>
-		<value>Unable to check completion of document generation</value>
+		<value>Unable to check completion of document generation.</value>
 	</labels>
 	<labels>
 		<fullName>Publishing</fullName>
