@@ -121,7 +121,7 @@
                             <lightning:button class="slds-theme_brand" variant="neutral"
                                               label="{!$Label.c.AddAnotherApprover}" iconName="utility:add"
                                               onclick="{!c.addRecipient}"
-                                              disabled="{!if(v.recipients.length gt 15 , true, false)}"/>
+                                              disabled="{!if(v.recipients.length gt 14 , true, false)}"/>
                         </div>
 
                     </div>
