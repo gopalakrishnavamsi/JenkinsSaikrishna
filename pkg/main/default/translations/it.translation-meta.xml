@@ -30,6 +30,14 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
+		<label>Error Email Body</label>
+		<name>ErrorEmailBodyForMigrateTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Error Subject</label>
+		<name>ErrorSubjectForMigrateTemplate</name>
+	</customLabels>
+	<customLabels>
 		<label>Aggiungi modello</label>
 		<name>AddTemplate</name>
 	</customLabels>
@@ -1154,6 +1162,14 @@
 		<name>TemplateRoles</name>
 	</customLabels>
 	<customLabels>
+		<label>Altri destinatari</label>
+		<name>OtherRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Invia una copia della busta ai tuoi contatti Salesforce o inviala tramite e-mail.</label>
+		<name>OtherRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>Casella di testo</label>
 		<name>TextField</name>
 	</customLabels>
@@ -2030,7 +2046,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Impossibile controllare il completamento della generazione dei documenti</label>
+		<label>Unable to check completion of document generation.</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -4790,6 +4806,14 @@
 	<customLabels>
 		<label>oppure</label>
 		<name>or</name>
+	</customLabels>
+	<customLabels>
+		<label>Scarica come file Word</label>
+		<name>DownloadAsWordFile</name>
+	</customLabels>
+	<customLabels>
+		<label>href SCM non definito</label>
+		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>Configurazione DocuSign</label>

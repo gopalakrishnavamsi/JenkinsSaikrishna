@@ -30,6 +30,14 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
+		<label>Error Email Body</label>
+		<name>ErrorEmailBodyForMigrateTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Error Subject</label>
+		<name>ErrorSubjectForMigrateTemplate</name>
+	</customLabels>
+	<customLabels>
 		<label>新增範本</label>
 		<name>AddTemplate</name>
 	</customLabels>
@@ -1154,6 +1162,14 @@
 		<name>TemplateRoles</name>
 	</customLabels>
 	<customLabels>
+		<label>其他收件人</label>
+		<name>OtherRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>将此信封的副本发送给 Salesforce 联系人或通过电子邮件发送。</label>
+		<name>OtherRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>文本字段</label>
 		<name>TextField</name>
 	</customLabels>
@@ -2030,7 +2046,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>无法查看文档生成的完成</label>
+		<label>Unable to check completion of document generation.</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -4790,6 +4806,14 @@
 	<customLabels>
 		<label>或</label>
 		<name>or</name>
+	</customLabels>
+	<customLabels>
+		<label>下载为 Word 文件</label>
+		<name>DownloadAsWordFile</name>
+	</customLabels>
+	<customLabels>
+		<label>SCM href 未定义</label>
+		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 设置</label>

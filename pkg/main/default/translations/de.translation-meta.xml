@@ -30,6 +30,14 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
+		<label>E-Mail-Textkörper-Fehler</label>
+		<name>ErrorEmailBodyForMigrateTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Betrefffehler</label>
+		<name>ErrorSubjectForMigrateTemplate</name>
+	</customLabels>
+	<customLabels>
 		<label>Vorlage hinzufügen</label>
 		<name>AddTemplate</name>
 	</customLabels>
@@ -1154,6 +1162,14 @@
 		<name>TemplateRoles</name>
 	</customLabels>
 	<customLabels>
+		<label>Andere Empfänger</label>
+		<name>OtherRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Kopie des Umschlags an Salesforce-Kontakte senden oder e-mailen.</label>
+		<name>OtherRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>Textfeld</label>
 		<name>TextField</name>
 	</customLabels>
@@ -1822,11 +1838,11 @@
 		<name>CurrencyPreview</name>
 	</customLabels>
 	<customLabels>
-		<label>übereinstimmt</label>
+		<label>stimmt überein mit</label>
 		<name>MatchesLabel</name>
 	</customLabels>
 	<customLabels>
-		<label>nicht übereinstimmt</label>
+		<label>stimmt nicht überein mit</label>
 		<name>DoesNotMatch</name>
 	</customLabels>
 	<customLabels>
@@ -2030,7 +2046,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Fertigstellung der Dokumentenerstellung nicht prüfbar</label>
+		<label>Fertigstellung der Dokumentenerstellung nicht prüfbar.</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -4788,6 +4804,14 @@
 	<customLabels>
 		<label>oder</label>
 		<name>or</name>
+	</customLabels>
+	<customLabels>
+		<label>Als Word-Datei herunterladen</label>
+		<name>DownloadAsWordFile</name>
+	</customLabels>
+	<customLabels>
+		<label>SCM href nicht definiert</label>
+		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>

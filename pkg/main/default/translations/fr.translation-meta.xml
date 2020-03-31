@@ -30,6 +30,14 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
+		<label>Corps de l’e-mail de l’erreur</label>
+		<name>ErrorEmailBodyForMigrateTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Objet de l’erreur</label>
+		<name>ErrorSubjectForMigrateTemplate</name>
+	</customLabels>
+	<customLabels>
 		<label>Ajouter un modèle</label>
 		<name>AddTemplate</name>
 	</customLabels>
@@ -1154,6 +1162,14 @@
 		<name>TemplateRoles</name>
 	</customLabels>
 	<customLabels>
+		<label>Autres destinataires</label>
+		<name>OtherRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Envoyez une copie de cette enveloppe à vos contacts Salesforce ou envoyez-la par e-mail.</label>
+		<name>OtherRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>Champ de texte</label>
 		<name>TextField</name>
 	</customLabels>
@@ -2030,7 +2046,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Ne peut vérifier si la génération du document a été complétée</label>
+		<label>Ne peut vérifier si la génération du document a été complétée.</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -4791,6 +4807,14 @@
 	<customLabels>
 		<label>ou</label>
 		<name>or</name>
+	</customLabels>
+	<customLabels>
+		<label>Télécharger en fichier Word</label>
+		<name>DownloadAsWordFile</name>
+	</customLabels>
+	<customLabels>
+		<label>SCM href non définie</label>
+		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>Configuration DocuSign</label>

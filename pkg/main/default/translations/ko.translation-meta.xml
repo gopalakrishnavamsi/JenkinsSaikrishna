@@ -30,6 +30,14 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
+		<label>Error Email Body</label>
+		<name>ErrorEmailBodyForMigrateTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Error Subject</label>
+		<name>ErrorSubjectForMigrateTemplate</name>
+	</customLabels>
+	<customLabels>
 		<label>템플릿 추가</label>
 		<name>AddTemplate</name>
 	</customLabels>
@@ -1154,6 +1162,14 @@
 		<name>TemplateRoles</name>
 	</customLabels>
 	<customLabels>
+		<label>기타 수신인</label>
+		<name>OtherRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>이 봉투의 사본을 Salesforce 연락처 또는 이메일로 보내십시오.</label>
+		<name>OtherRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>텍스트 필드</label>
 		<name>TextField</name>
 	</customLabels>
@@ -2030,7 +2046,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>문서 생성 완료를 확인할 수 없음</label>
+		<label>Unable to check completion of document generation.</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -4790,6 +4806,14 @@
 	<customLabels>
 		<label>또는</label>
 		<name>or</name>
+	</customLabels>
+	<customLabels>
+		<label>Word File로 다운로드</label>
+		<name>DownloadAsWordFile</name>
+	</customLabels>
+	<customLabels>
+		<label>SCM href 정의되지 않음</label>
+		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 설정</label>

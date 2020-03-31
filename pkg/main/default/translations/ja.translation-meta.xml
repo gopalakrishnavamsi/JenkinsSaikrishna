@@ -30,6 +30,14 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
+		<label>エラーメールの本文</label>
+		<name>ErrorEmailBodyForMigrateTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>エラーの件名</label>
+		<name>ErrorSubjectForMigrateTemplate</name>
+	</customLabels>
+	<customLabels>
 		<label>テンプレートの追加</label>
 		<name>AddTemplate</name>
 	</customLabels>
@@ -1154,6 +1162,14 @@
 		<name>TemplateRoles</name>
 	</customLabels>
 	<customLabels>
+		<label>ほかの受信者</label>
+		<name>OtherRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>このエンベロープのコピーをSalesforceの取引先責任者に送信したりメールで送信したりします。</label>
+		<name>OtherRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>テキストフィールド</label>
 		<name>TextField</name>
 	</customLabels>
@@ -1735,11 +1751,11 @@
 		<name>SalesforceFields</name>
 	</customLabels>
 	<customLabels>
-		<label>Salesforceのデータ項目を選択し、対応するアンカーテキストをコピーしてWordテンプレートの適切な位置に貼り付けます。</label>
+		<label>Salesforceのデータフィールド（項目）を選択し、対応するアンカーテキストをコピーしてWordテンプレートの適切な位置に貼り付けます。</label>
 		<name>SalesforceFieldsMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>データ項目をWordテンプレートに追加</label>
+		<label>データフィールドをWordテンプレートに追加</label>
 		<name>AddMergeFields</name>
 	</customLabels>
 	<customLabels>
@@ -2031,7 +2047,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>文書生成の完了をチェックできません</label>
+		<label>文書生成の完了をチェックできません。</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -4789,6 +4805,14 @@
 	<customLabels>
 		<label>または</label>
 		<name>or</name>
+	</customLabels>
+	<customLabels>
+		<label>Wordファイルとしてダウンロード</label>
+		<name>DownloadAsWordFile</name>
+	</customLabels>
+	<customLabels>
+		<label>SCM hrefが未定義です</label>
+		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSignセットアップ</label>

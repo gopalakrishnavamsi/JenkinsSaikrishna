@@ -30,6 +30,14 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
+		<label>Error Email Body</label>
+		<name>ErrorEmailBodyForMigrateTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Error Subject</label>
+		<name>ErrorSubjectForMigrateTemplate</name>
+	</customLabels>
+	<customLabels>
 		<label>Sjabloon toevoegen</label>
 		<name>AddTemplate</name>
 	</customLabels>
@@ -1154,6 +1162,14 @@
 		<name>TemplateRoles</name>
 	</customLabels>
 	<customLabels>
+		<label>Andere ontvangers</label>
+		<name>OtherRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Stuur een kopie van deze envelop naar uw Salesforce-contacten of e-mail deze.</label>
+		<name>OtherRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>Tekstveld</label>
 		<name>TextField</name>
 	</customLabels>
@@ -2030,7 +2046,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Kan de voltooiing van het genereren van documenten niet controleren</label>
+		<label>Unable to check completion of document generation.</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -4790,6 +4806,14 @@
 	<customLabels>
 		<label>of</label>
 		<name>or</name>
+	</customLabels>
+	<customLabels>
+		<label>Downloaden als Word-bestand</label>
+		<name>DownloadAsWordFile</name>
+	</customLabels>
+	<customLabels>
+		<label>SCM href niet gedefinieerd</label>
+		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-instellingen</label>
