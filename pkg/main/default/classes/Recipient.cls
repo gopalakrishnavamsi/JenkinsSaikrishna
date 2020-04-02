@@ -787,8 +787,8 @@ global class Recipient implements Comparable {
 		 *
 		 * @param id The ID of the underlying dfsle__RecipientStatus__c record.
 		 * @param source The Salesforce source entity.
-		 * @param sequence The recipient sequence.
 		 * @param type The DocuSign recipient type.
+		 * @param sequence The recipient sequence.
 		 * @param status The current status.
 		 * @param name The name of the recipient.
 		 * @param email The email address of the recipient.
@@ -985,7 +985,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>routingOrder</code>.
 	 */
-	global Recipient withRoutingOrder(final Integer routingOrder) {
+	public Recipient withRoutingOrder(final Integer routingOrder) {
 		this.routingOrder = routingOrder < 1 ? 1 : routingOrder;
 		return this;
 	}
