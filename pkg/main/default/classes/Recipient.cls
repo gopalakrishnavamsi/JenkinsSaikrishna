@@ -213,7 +213,7 @@ global class Recipient implements Comparable {
 		this.id = id;
 		this.type = type;
 		this.sequence = sequence;
-		this.routingOrder = routingOrder == null || routingOrder <= 0 ? 1 : routingOrder;
+		this.routingOrder = routingOrder;
 		this.role = role;
 		this.name = name;
 		this.email = email;
@@ -985,8 +985,8 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>routingOrder</code>.
 	 */
-	public Recipient withRoutingOrder(final Integer routingOrder) {
-		this.routingOrder = routingOrder;
+	global Recipient withRoutingOrder(final Integer routingOrder) {
+		this.routingOrder = routingOrder < 1 ? 1 : routingOrder;
 		return this;
 	}
 

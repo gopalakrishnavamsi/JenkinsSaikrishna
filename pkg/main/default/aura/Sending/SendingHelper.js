@@ -364,10 +364,14 @@
     var rs = [];
     var sequence = 1;
     if (!$A.util.isEmpty(recipients)) {
+      var routingOrder = recipients.reduce(function (ro, r) {
+        return r && r.routingOrder > ro ? r.routingOrder : ro;
+      }, 0);
+
       recipients.forEach(function (r) {
         if (self.isValidRecipient(r) && (!$A.util.isEmpty(r.templateId) || hasDocuments)) {
           r.sequence = sequence++;
-          if ($A.util.isEmpty(r.routingOrder)) r.routingOrder = r.sequence;
+          if ($A.util.isEmpty(r.routingOrder)) r.routingOrder = ++routingOrder;
           r.role = self.isRoleDefined(r.role)
             ? r.role
             : self.getNextRole(defaultRoles);
