@@ -86,7 +86,7 @@ public with sharing class GenMigrationController {
 			Permissions.verifyIsDocuSignAdministrator();
 			Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
 				'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c'
+				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'TemplateType__c'
 			});
 			Permissions.verifyIsCreateable(ContentDocumentLink.getSObjectType(), new List<String> {
 				'ContentDocumentId', 'LinkedEntityId', 'ShareType'

@@ -5,8 +5,6 @@ public class GenMigrationBatch implements Database.Batchable<sObject>, Database.
 	private Map<String, Id> permissionMap = GenMigrationController.getAllPermissionSets();
 	private String query;
 	private String objectName;
-	private static final String userStatusAsActive = 'Active';
-	private static final String userStatusAsPending = 'Pending';
 	private static final String TEMPLATE_OBJECT_NAME = 'dsgen__Template_Configuration__c';
 	private static final String USER_OBJECT_NAME = 'User';
 	private static final String ERROR_EMAIL_BODY = 'Could not migrate Template attachments to DocuSign Apps Launcher, due to following error:{0}';
@@ -66,6 +64,7 @@ public class GenMigrationBatch implements Database.Batchable<sObject>, Database.
 				UseCurrentRecord__c = Boolean.valueof(genTemplConfig.get(GenMigrationApplication.namespacePrefix + 'Use_Current_Record__c')),
 				HasPreviewedDocuments__c = Boolean.valueof(genTemplConfig.get(GenMigrationApplication.namespacePrefix + 'Previewed_Documents__c')),
 				StepsCompleted__c = (Decimal)genTemplConfig.get(GenMigrationApplication.namespacePrefix + 'Steps_Completed__c'),
+				TemplateType__c = Gen.TYPE_WORD,
 				IsSample__c = Boolean.valueof(genTemplConfig.get(GenMigrationApplication.namespacePrefix + 'Sample__c'))));
 		}
 		if (Collection.isNotEmpty(migrateGenTemplateResults.values())) {
@@ -164,9 +163,9 @@ public class GenMigrationBatch implements Database.Batchable<sObject>, Database.
 			user.CanManageAccount__c = Boolean.valueof(user.get(GenMigrationApplication.namespacePrefix + 'Docusign_Admin__c'));
 			user.Provisioned__c = Date.valueof(user.get(GenMigrationApplication.namespacePrefix + 'DocuSign_Invitation_Date__c'));
 
-			if (String.valueof(user.get(GenMigrationApplication.namespacePrefix + 'Docusign_Status__c')) == userStatusAsActive) {
-				user.Status__c = userStatusAsPending;
-			} else if (user.Status__c != userStatusAsActive) {
+			if (String.valueof(user.get(GenMigrationApplication.namespacePrefix + 'Docusign_Status__c')) == Account.USER_STATUS_ACTIVE) {
+				user.Status__c = Account.USER_STATUS_PENDING;
+			} else if (user.Status__c != Account.USER_STATUS_ACTIVE) {
 				user.Status__c = String.valueof(user.get(GenMigrationApplication.namespacePrefix + 'Docusign_Status__c'));
 			}
 			user.Username__c = String.valueof(user.get(GenMigrationApplication.namespacePrefix + 'Docusign_User_Id__c'));
