@@ -215,6 +215,9 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 						false,
 						false,
 						null,
+						null,
+						null,
+						null,
 						null));
 					// Cache relationship for later
 					lookup = new Gen.FieldMapping(
@@ -237,7 +240,10 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 					false,
 					v1.isConditional,
 					v1.matchType,
-					v1.conditionalValue));
+					v1.conditionalValue,
+					null,
+					null,
+					null));
 				result = lookup;
 			} when 'CHILD_RELATIONSHIP' {
 				Relationship childRelationship = childRelationships.get(v1.apiName);
@@ -255,6 +261,9 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 						null,
 						true,
 						false,
+						null,
+						null,
+						null,
 						null,
 						null));
 					childRelationships.put(v1.apiName, childRelationship);
@@ -291,7 +300,10 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 						false,
 						v1.isConditional,
 						v1.matchType,
-						v1.conditionalValue));
+						v1.conditionalValue,
+						null,
+						null,
+						null));
 					result = root;
 				}
 			}

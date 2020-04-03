@@ -46,7 +46,7 @@
   saveMergeOptions: function (component, event, helper) {
     var optionModalParams = component.get('v.optionModalParams');
     // eslint-disable-next-line no-unused-vars
-    var fieldMapping = helper.getMergeFieldMapping(component, optionModalParams);
+    var fieldMapping = Object.assign({}, helper.getMergeFieldMapping(component, optionModalParams));
     var clonedFieldMapping = component.get('v.clonedFieldMapping');
     var timeFormat = '';
     var dateFormat = '';
@@ -80,9 +80,21 @@
       return;
     }
 
+    clonedFieldMapping.filterBy = typeof clonedFieldMapping.filterBy === 'string' ? clonedFieldMapping.filterBy.trim() : null;
+    clonedFieldMapping.orderBy = typeof clonedFieldMapping.orderBy === 'string' ? clonedFieldMapping.orderBy.trim() : null;
+    clonedFieldMapping.maximumRecords = $A.util.isEmpty(clonedFieldMapping.maximumRecords) ? clonedFieldMapping.maximumRecords : parseInt(clonedFieldMapping.maximumRecords);
+    if (typeof clonedFieldMapping.maximumRecords === 'number' &&
+      !isNaN(clonedFieldMapping.maximumRecords) &&
+      !helper.validateLimitByValue(clonedFieldMapping.maximumRecords)) {
+      return;
+    }
+
     fieldMapping = Object.assign(fieldMapping, clonedFieldMapping);
     helper.updateFieldMappingInConfig(component, fieldMapping);
-    component.find('merge-token-options').hide();
+  },
+
+  closeMergeOptionsModal: function (component, event, helper) {
+    helper.closeMergeOptionsModal(component);
   },
 
   formatDate: function (component, event, helper) {
@@ -175,5 +187,9 @@
         }
       });
     }
+  },
+
+  onFieldLimitChange: function (component, event, helper) {
+    helper.onFieldLimitChange(component, event, helper);
   }
 });

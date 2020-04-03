@@ -188,6 +188,72 @@ private class QueryTest {
 		Test.stopTest();
 	}
 
+	@IsTest 
+	static void test_validate_multidepth() {
+
+		Query validChildQuery = Query.newSubQuery(
+		'Contact',
+		new List<String> { 'Name' },
+		'Contacts',
+		'Name != null',
+		'Name DESC',
+		100,
+		new List<Query> {
+			Query.newChildQuery(
+				'Case',
+				new List<String> { 'CaseNumber' },
+				'Cases',
+				'ContactId',
+				null,
+				null,
+				100
+			)
+		});
+
+		Query invalidChildQuery = Query.newSubQuery(
+		'Contact',
+		new List<String> { 'Name' },
+		'Contacts',
+		'BAD SOQL VALUE',
+		'Name DESC',
+		100,
+		new List<Query> {
+			Query.newChildQuery(
+				'Case',
+				new List<String> { 'CaseNumber' },
+				'Cases',
+				'ContactId',
+				null,
+				null,
+				100
+			)
+		});
+
+		ValidationException ex1, ex2;
+		
+			
+		Test.startTest();
+		try {
+			Query.validate(validChildQuery, 2);
+		} catch (ValidationException ex) {
+			ex1 = ex;
+			System.assert(ex.getMessage().startsWith(Label.InvalidQuery));
+		}
+
+
+		try {
+			Query.validate(invalidChildQuery, 2);
+		} catch (ValidationException ex) {
+			ex2 = ex;
+		}
+
+		Test.stopTest();	
+
+		System.assertEquals(ex1, null);
+		System.assert(ex2.getMessage().startsWith(Label.InvalidQuery));
+	
+	}
+
 	@IsTest
 	static void test_execute() {
 		Schema.Account a = TestUtils.createAccount();

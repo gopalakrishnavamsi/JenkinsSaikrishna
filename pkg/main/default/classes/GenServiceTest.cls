@@ -1291,4 +1291,123 @@ private class GenServiceTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_validateChildRelationshipField() {
+
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+
+			String sourceObject = 'Account';
+
+			ValidationException ex1, ex2, ex3, ex4;
+
+			Gen.Field successField = new Gen.Field(
+				'CHILD_RELATIONSHIP',
+				'Opportunity',
+				'Opportunities',
+				'Opportunity',
+				'Opportunities',
+				'AccountId',
+				'',
+				0,
+				true,
+				false,
+				null,
+				null,
+				'StageName != \'Closed Won\' ',
+				'Name ASC',			
+				1
+			);
+
+			Gen.Field invalidOrderField = new Gen.Field(
+				'CHILD_RELATIONSHIP',
+				'Opportunity',
+				'Opportunities',
+				'Opportunity',
+				'Opportunities',
+				'AccountId',
+				'',
+				0,
+				true,
+				false,
+				null,
+				null,
+				'StageName != \'Closed Won\' ',
+				'BAD SOQL VALUE',			
+				1
+			);
+
+			Gen.Field invalidFilterField = new Gen.Field(
+				'CHILD_RELATIONSHIP',
+				'Opportunity',
+				'Opportunities',
+				'Opportunity',
+				'Opportunities',			
+				'AccountId',
+				'',
+				0,
+				true,
+				false,
+				null,
+				null,
+				'BAD SOQL VALUE',
+				'Name ASC',			
+				1
+			);
+
+			Gen.Field successDepth3Field = new Gen.Field(
+				'CHILD_RELATIONSHIP',
+				'OpportunityContactRole',
+				'OpportunityContactRoles',
+				'OpportunityContactRole',
+				'OpportunityContactRoles',
+				'OpportunityId',
+				'',
+				0,
+				true,
+				false,
+				null,
+				null,
+				'Role != \'Business User\'',
+				'Role ASC',			
+				1
+			);				
+
+			Test.startTest();
+			try {
+				GenService.validateChildRelationshipField(successField, 2);
+			} catch(ValidationException err) {
+				ex1 = err;
+			}
+
+			try {
+				GenService.validateChildRelationshipField(invalidOrderField, 2);
+			} catch(ValidationException err) {
+				ex2 = err;
+			}
+
+			try {
+				GenService.validateChildRelationshipField(invalidFilterField, 2);
+			} catch(ValidationException err) {
+				ex3 = err;
+			}
+
+			try {
+				GenService.validateChildRelationshipField(successDepth3Field, 3);
+			} catch(ValidationException err) {
+				ex4 = err;
+			}
+
+			Test.stopTest();
+
+			System.assertEquals(ex1, null);
+			System.assertNotEquals(ex2, null);
+			System.assert(ex2.getMessage().startsWith(Label.InvalidQuery));
+			System.assertNotEquals(ex3, null);
+			System.assert(ex2.getMessage().startsWith(Label.InvalidQuery));
+			System.assertEquals(ex4, null);
+
+		}
+
+	}	
 }

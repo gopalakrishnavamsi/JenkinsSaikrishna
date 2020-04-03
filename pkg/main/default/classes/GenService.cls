@@ -881,6 +881,27 @@ public with sharing class GenService {
 		return templatePage;
 	}
 
+	public static Boolean validateChildRelationshipField(
+		 final Gen.Field field,
+		 final Integer depth) {
+
+		Permissions.verifyIsDocuSignAdministrator();
+
+		Query validationQuery = Query.newChildQuery(
+			field.relatesTo, 
+			new List<String> { 'Id' },
+			field.relationship,
+			field.parentIdField,
+			field.filterBy,
+			field.orderBy,
+			field.maximumRecords
+		);
+
+		Query.validate(validationQuery, depth);
+		
+		return true;
+	}	
+
 	public static Boolean deleteTemplate(final Id templateId) {
 		Permissions.verifyIsDocuSignAdministrator();
 		Gen.Template templateRecord = getTemplate(templateId);

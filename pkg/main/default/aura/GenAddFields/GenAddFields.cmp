@@ -1,11 +1,12 @@
-<aura:component>
+<aura:component controller="GenController">
     <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}"/>
     <aura:attribute name="config" type="Object"/>
     <aura:attribute name="optionModalParams" type="Object" access="private"/>
     <aura:attribute name="clonedFieldMapping" type="Object" access="private"/>
     <aura:attribute name="mergeFieldDisplayOptions" type="Object[]" access="private"/>
     <aura:attribute name="conditionalTypes" type="Object[]" access="private"/>
-
+    <aura:attribute name="soqlValidationErrorMessage" type="String" access="private"/>
+    <aura:attribute name="hasSoqlValidationError" type="Boolean" default="false" access="private"/>
     <!-- Date Attributes -->
     <aura:attribute name="userLocaleDateFormat" type="String" access="private"/>
     <aura:attribute name="customDateInput" type="String" access="private"/>
@@ -105,8 +106,56 @@
     <!-- /AutoPlace Fields -->
 
     <!-- Merge Field Options Modal -->
-    <c:strike_modal aura:id="merge-token-options" title="{!$Label.c.MergeFieldOptions}"
-                    primaryButtonLabel="{!$Label.c.save}" strike_evt_modalPrimaryButtonClicked="{!c.saveMergeOptions}">
+    <c:strike_modal aura:id="merge-token-options"
+                    title="{!if(not(v.clonedFieldMapping.type == 'CHILD_RELATIONSHIP'), $Label.c.MergeFieldOptions, $Label.c.TableRowOptions)}"
+                    primaryButtonLabel="{!$Label.c.save}"
+                    strike_evt_modalPrimaryButtonClicked="{!c.saveMergeOptions}"
+                    strike_evt_modalCloseButtonClicked="{!c.closeMergeOptionsModal}"
+                    strike_evt_modalSecondaryButtonClicked="{!c.closeMergeOptionsModal}">
+        <aura:if isTrue="{!v.clonedFieldMapping.type == 'CHILD_RELATIONSHIP'}">
+            <aura:if isTrue="{!v.hasSoqlValidationError}">
+                <div class="slds-m-around_large slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_error"
+                     role="alert">
+                    <lightning:icon iconName="utility:error" variant="inverse" size="small"
+                                    class="slds-m-right_small slds-no-flex slds-align-top"/>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small">{!v.soqlValidationErrorMessage}</h2>
+                    </div>
+                </div>
+            </aura:if>
+            <div class="slds-m-top--small slds-m-bottom--x-large">
+                <div class="soql-text-header slds-m-bottom--xx-small">{!$Label.c.FilterByOption}</div>
+                <lightning:textarea class="slds-form-element"
+                                    value="{!v.clonedFieldMapping.filterBy}"
+                                    name="filterByInput"/>
+                <p class="slds-p-top_small">
+                    <lightning:formattedUrl
+                            label="{!$Label.c.LearnMoreAboutFiltering}"
+                            value="{!$Label.c.LearnMoreAboutFilteringURL}"
+                            target="_blank"/>
+                </p>
+            </div>
+            <div class="slds-m-top--medium slds-m-bottom--medium">
+                <div class="soql-text-header slds-m-bottom--xx-small">{!$Label.c.OrderByOption}</div>
+                <lightning:textarea class="slds-form-element"
+                                    value="{!v.clonedFieldMapping.orderBy}"
+                                    name="orderByInput"/>
+                <p class="slds-p-top_small">
+                    <lightning:formattedUrl
+                            label="{!$Label.c.LearnMoreAboutOrdering}"
+                            value="{!$Label.c.LearnMoreAboutOrderingURL}"
+                            target="_blank"/>
+                </p>
+            </div>
+            <div class="slds-show_inline-block slds-m-top--medium slds-m-bottom--medium">
+                <div class="soql-text-header slds-m-bottom--xx-small">{!$Label.c.LimitByOption}</div>
+                <lightning:input aura:id="limitByInput"
+                                 type="text"
+                                 class="slds-form-element"
+                                 onchange="{!c.onFieldLimitChange}"
+                                 value="{!v.clonedFieldMapping.maximumRecords}"/>
+            </div>
+        </aura:if>
         <aura:if isTrue="{!or(v.clonedFieldMapping.type == 'DATE' , v.clonedFieldMapping.type == 'DATETIME')}">
             <div class="slds-grid slds-gutters_x-small">
                 <div class="slds-col slds-size_1-of-1">
@@ -245,34 +294,36 @@
             </div>
         </aura:if>
 
-        <div class="slds-m-top_small">
-            <lightning:radioGroup name="mergeFieldDisplayOption" label="{!$Label.c.DisplaysOptions}"
-                                  options="{!v.mergeFieldDisplayOptions}" type="radio"
-                                  value="{!v.clonedFieldMapping.isConditional}" class="slds-m-top_small"
-                                  onchange="{!c.setConditionalProperties}"/>
+        <aura:if isTrue="{!not(v.clonedFieldMapping.type == 'CHILD_RELATIONSHIP')}">
+            <div class="slds-m-top_small">
+                <lightning:radioGroup name="mergeFieldDisplayOption" label="{!$Label.c.DisplaysOptions}"
+                                      options="{!v.mergeFieldDisplayOptions}" type="radio"
+                                      value="{!v.clonedFieldMapping.isConditional}" class="slds-m-top_small"
+                                      onchange="{!c.setConditionalProperties}"/>
 
-            <aura:if isTrue="{!v.clonedFieldMapping.isConditional}">
-                <div class="slds-m-top_x-small slds-m-left_large slds-border_left slds-p-left_small">
+                <aura:if isTrue="{!v.clonedFieldMapping.isConditional}">
+                    <div class="slds-m-top_x-small slds-m-left_large slds-border_left slds-p-left_small">
 
-                    <p>{!$Label.c.DisplaysOptionsMsg}</p>
+                        <p>{!$Label.c.DisplaysOptionsMsg}</p>
 
-                    <div class="slds-show_inline-block ds-align-top">
-                        <lightning:select class="ds-no-label" value="{!v.clonedFieldMapping.matchType}">
-                            <aura:iteration items="{!v.conditionalTypes}" var="conditionalType">
-                                <option value="{!conditionalType.value}">{!conditionalType.label}</option>
-                            </aura:iteration>
-                        </lightning:select>
+                        <div class="slds-show_inline-block ds-align-top">
+                            <lightning:select class="ds-no-label" value="{!v.clonedFieldMapping.matchType}">
+                                <aura:iteration items="{!v.conditionalTypes}" var="conditionalType">
+                                    <option value="{!conditionalType.value}">{!conditionalType.label}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+
+                        <div class="slds-show_inline-block slds-m-left_x-small">
+                            <lightning:input aura:id="conditionalValue" type="text" label="{!$Label.c.value}"
+                                             class="ds-no-label" required="true"
+                                             placeholder="{!$Label.c.ExampleCalifornia}"
+                                             value="{!v.clonedFieldMapping.conditionalValue}"/>
+                        </div>
                     </div>
-
-                    <div class="slds-show_inline-block slds-m-left_x-small">
-                        <lightning:input aura:id="conditionalValue" type="text" label="{!$Label.c.value}"
-                                         class="ds-no-label" required="true"
-                                         placeholder="{!$Label.c.ExampleCalifornia}"
-                                         value="{!v.clonedFieldMapping.conditionalValue}"/>
-                    </div>
-                </div>
-            </aura:if>
-        </div>
+                </aura:if>
+            </div>
+        </aura:if>
     </c:strike_modal>
     <!-- /Merge Field Options Modal -->
 </aura:component>

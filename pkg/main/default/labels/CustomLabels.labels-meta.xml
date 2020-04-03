@@ -3571,6 +3571,41 @@
 		<value>Data Field Options</value>
 	</labels>
 	<labels>
+		<fullName>TableRowOptions</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Header title for Table Row fields</shortDescription>
+		<value>Table Options</value>
+	</labels>
+	<labels>
+		<fullName>FilterByOption</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Title for filter query option</shortDescription>
+		<value>SOQL Filtering (WHERE):</value>
+	</labels>
+	<labels>
+		<fullName>OrderByOption</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Title for sorting query option</shortDescription>
+		<value>SOQL Sorting (ORDER BY):</value>
+	</labels>
+	<labels>
+		<fullName>LimitByOption</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Title for limiting query option</shortDescription>
+		<value>SOQL Limiting (LIMIT):</value>
+	</labels>
+	<labels>
+		<fullName>LimitByErrorMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Error message for limiting query option</shortDescription>
+		<value>Value must be between 1 and 2000.</value>
+	</labels>
+	<labels>
 		<fullName>LookupRelationships</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -9262,4 +9297,32 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Download as Word File</shortDescription>
 		<value>Download as Word File</value>
 	</labels>
+	<labels>
+		<fullName>LearnMoreAboutFiltering</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Learn more about filtering records</shortDescription>
+		<value>Learn more about filtering records</value>
+	</labels>	
+	<labels>
+		<fullName>LearnMoreAboutOrdering</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Learn more about ordering records</shortDescription>
+		<value>Learn more about ordering records</value>
+	</labels>	
+	<labels>
+		<fullName>LearnMoreAboutFilteringURL</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Learn more about filtering records url</shortDescription>
+		<value>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_conditionexpression.htm</value>
+	</labels>	
+	<labels>
+		<fullName>LearnMoreAboutOrderingURL</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Learn more about ordering records url</shortDescription>
+		<value>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_orderby.htm</value>
+	</labels>		
 </CustomLabels>

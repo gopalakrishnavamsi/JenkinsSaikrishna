@@ -203,11 +203,38 @@
     }
   },
 
+  resetValidationErrors: function (component) {
+    component.set('v.soqlValidationErrorMessage', null);
+    component.set('v.hasSoqlValidationError', false);
+  },
+
+  validateChildQuery: function (component, depth, fieldMapping) {
+    return new Promise(function (resolve, reject) {
+      var action = component.get('c.validateChildRelationshipField');
+      action.setParams({
+        fieldJSON: JSON.stringify(fieldMapping),
+        depth: depth
+      });
+
+      action.setCallback(this, function (response) {
+        var state = response.getState();
+        if (state === 'SUCCESS') {
+          resolve(true);
+        } else {
+          reject(stringUtils.getErrorMessage(response));
+        }
+      });
+
+      $A.enqueueAction(action);
+    });
+  },
+
   updateFieldMappingInConfig: function (component, fieldMapping) {
     var self = this;
     var parentIndexInTree;
     var mergeFieldTree = component.get('v.config').objectMappings.fieldMappings.slice();
     var optionModalParams = component.get('v.optionModalParams');
+    self.resetValidationErrors(component);
 
     var parentNodeOfField = mergeFieldTree.find(function (node, index) {
       if (self.isParentOfField(node, optionModalParams)) {
@@ -217,10 +244,57 @@
       return false;
     });
 
-    if (!$A.util.isUndefinedOrNull(parentIndexInTree)) {
+    if (fieldMapping.isChildRelation && self.requiresQueryValidation(fieldMapping) && !$A.util.isUndefinedOrNull(parentIndexInTree)) {
+      self.validateChildQuery(component, parentNodeOfField.depth + 1, fieldMapping)
+        .then(function () {
+          parentNodeOfField.fields[optionModalParams.fieldIndex] = fieldMapping;
+          mergeFieldTree[parentIndexInTree] = parentNodeOfField;
+          component.set('v.config.objectMappings.fieldMappings', mergeFieldTree);
+          component.find('merge-token-options').hide();
+        })
+        .catch($A.getCallback(function (err) {
+          component.set('v.soqlValidationErrorMessage', err);
+          component.set('v.hasSoqlValidationError', true);
+        }));
+    } else if (!$A.util.isUndefinedOrNull(parentIndexInTree)) {
       parentNodeOfField.fields[optionModalParams.fieldIndex] = fieldMapping;
       mergeFieldTree[parentIndexInTree] = parentNodeOfField;
       component.set('v.config.objectMappings.fieldMappings', mergeFieldTree);
+      component.find('merge-token-options').hide();
     }
+  },
+
+  requiresQueryValidation: function (fieldMapping) {
+    return !$A.util.isEmpty(fieldMapping.filterBy) || !$A.util.isEmpty(fieldMapping.orderBy);
+  },
+
+  onFieldLimitChange: function (component, event, helper) {
+    var limitByInputCmp = component.find('limitByInput');
+    var value = component.get('v.clonedFieldMapping.maximumRecords');
+    var filteredValue = value.replace(/[^0-9]/g, '');
+    var numericalValue = parseInt(filteredValue);
+    var errorMessage = '';
+    if (typeof numericalValue === 'number' &&
+      !isNaN(numericalValue) &&
+      !helper.validateLimitByValue(numericalValue)) {
+      errorMessage = $A.get('$Label.c.LimitByErrorMessage');
+    }
+    limitByInputCmp.setCustomValidity(errorMessage);
+    limitByInputCmp.reportValidity();
+    component.set('v.clonedFieldMapping.maximumRecords', $A.util.isEmpty(filteredValue) ? null : filteredValue);
+  },
+
+  closeMergeOptionsModal: function (component) {
+    var clonedFieldMapping = component.get('v.clonedFieldMapping');
+    if (clonedFieldMapping.type === 'CHILD_RELATIONSHIP') {
+      var limitByInputCmp = component.find('limitByInput');
+      limitByInputCmp.setCustomValidity('');
+      limitByInputCmp.reportValidity();
+    }
+    this.resetValidationErrors(component);
+  },
+
+  validateLimitByValue: function (limit) {
+    return limit >= 1 && limit <= 2000;
   }
 });

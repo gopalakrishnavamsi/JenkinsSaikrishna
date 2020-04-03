@@ -334,6 +334,11 @@ public with sharing class Query {
 		if (!result.isValid) throw new ValidationException(Label.InvalidQuery, result);
 	}
 
+	public static void validate(final Query query, final Integer depth) {
+		ValidationResult result = validate(query, null, depth);
+		if (!result.isValid) throw new ValidationException(Label.InvalidQuery, result);		
+	}	
+
 	private List<SObject> queryChildren(
 		final SObject root,
 		final String rootRelationship,

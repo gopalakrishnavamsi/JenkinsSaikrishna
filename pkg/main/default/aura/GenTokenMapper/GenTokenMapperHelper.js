@@ -39,6 +39,9 @@
       parentIdField: '',
       format: null,
       scale: 0,
+      filterBy: null,
+      orderBy: null,
+      maximumRecords: null
     };
   },
 
@@ -94,7 +97,10 @@
       relationship: '',
       parentIdField: '',
       format: null,
-      scale: 0
+      scale: 0,
+      filterBy: null,
+      orderBy: null,
+      maximumRecords: null
     };
   },
 
@@ -111,7 +117,10 @@
       relationship: fieldMapping.relationship,
       parentIdField: fieldMapping.name,
       format: helper.resolveFormat(fieldMapping),
-      scale: fieldMapping.scale
+      scale: fieldMapping.scale,
+      filterBy: fieldMapping.filterBy ? fieldMapping.filterBy : null,
+      orderBy: fieldMapping.orderBy ? fieldMapping.orderBy : null,
+      maximumRecords: fieldMapping.maximumRecords ? fieldMapping.maximumRecords : null
     };
   },
 

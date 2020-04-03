@@ -1778,6 +1778,26 @@
 		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
+		<label>Table Options</label>
+		<name>TableRowOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL Filtering (WHERE):</label>
+		<name>FilterByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL Sorting (ORDER BY):</label>
+		<name>OrderByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL Limiting (LIMIT):</label>
+		<name>LimitByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>Value must be between 1 and 2000.</label>
+		<name>LimitByErrorMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>Lookup Relationships</label>
 		<name>LookupRelationships</name>
 	</customLabels>
@@ -4807,6 +4827,22 @@
 		<label>SCM href undefined</label>
 		<name>SCMHrefUndefined</name>
 	</customLabels>
+	<customLabels>
+		<label>Learn more about filtering records</label>
+		<name>LearnMoreAboutFiltering</name>	
+	</customLabels>	
+	<customLabels>
+		<label>Learn more about ordering records</label>
+		<name>LearnMoreAboutOrdering</name>
+	</customLabels>	
+	<customLabels>
+		<label>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_conditionexpression.htm</label>
+		<name>LearnMoreAboutFilteringURL</name>	
+	</customLabels>	
+	<customLabels>
+		<label>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_orderby.htm</label>
+		<name>LearnMoreAboutOrderingURL</name>
+	</customLabels>			
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

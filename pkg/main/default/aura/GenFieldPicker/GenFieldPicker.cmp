@@ -123,9 +123,7 @@
                                                       onclick="{!c.copyToken}"/>
                                     <lightning:buttonMenu menuAlignment="right" onselect="{!c.selectedButtonMenuItem}"
                                                           variant="border-filled">
-                                        <aura:if isTrue="{!not(v.currentFieldChild)}">
-                                            <lightning:menuItem label="{!$Label.c.Options}" value="options"/>
-                                        </aura:if>
+                                        <lightning:menuItem label="{!$Label.c.Options}" value="options"/>
                                         <lightning:menuItem label="{!$Label.c.Remove}" value="remove"/>
                                     </lightning:buttonMenu>
                                     <aura:set attribute="else">
@@ -273,9 +271,7 @@
                                         <lightning:buttonMenu menuAlignment="right"
                                                               onselect="{!c.selectedButtonMenuItem}"
                                                               variant="border-filled">
-                                            <aura:if isTrue="{!not(v.currentFieldChild)}">
-                                                <lightning:menuItem label="{!$Label.c.Options}" value="options"/>
-                                            </aura:if>
+                                            <lightning:menuItem label="{!$Label.c.Options}" value="options"/>
                                             <lightning:menuItem label="{!$Label.c.Remove}" value="remove"/>
                                         </lightning:buttonMenu>
                                         <aura:set attribute="else">
@@ -403,9 +399,7 @@
                                         <lightning:buttonMenu menuAlignment="right"
                                                               onselect="{!c.selectedButtonMenuItem}"
                                                               variant="border-filled">
-                                            <aura:if isTrue="{!not(v.currentFieldChild)}">
-                                                <lightning:menuItem label="{!$Label.c.Options}" value="options"/>
-                                            </aura:if>
+                                            <lightning:menuItem label="{!$Label.c.Options}" value="options"/>
                                             <lightning:menuItem label="{!$Label.c.Remove}" value="remove"/>
                                         </lightning:buttonMenu>
                                         <aura:set attribute="else">

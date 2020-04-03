@@ -160,6 +160,18 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
+	public static Boolean validateChildRelationshipField(
+		final String fieldJSON,
+		final Integer depth) {
+		
+		try {
+			return GenService.validateChildRelationshipField((Gen.Field) JSON.deserialize(fieldJSON, Gen.Field.class), depth);
+		} catch(Exception ex) {
+			throw Controller.wrapException(ex, 'Add error here.');
+		}
+	}	
+
+	@AuraEnabled
 	public static Gen.File saveChunk(
 		final Id contentVersionId,
 		final Id linkedEntityId,

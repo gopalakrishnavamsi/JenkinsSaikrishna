@@ -240,6 +240,13 @@ public class Gen {
 		public String matchType { get; private set; }
 		@AuraEnabled
 		public String conditionalValue { get; private set; }
+		@AuraEnabled
+		public String filterBy { get; private set; }
+		@AuraEnabled
+		public String orderBy { get; private set; }
+		@AuraEnabled
+		public Integer maximumRecords { get; private set; }
+
 
 		public Field(
 			final String type,
@@ -253,7 +260,10 @@ public class Gen {
 			final Boolean isChildRelation,
 			final Boolean isConditional,
 			final String matchType,
-			final String conditionalValue) {
+			final String conditionalValue,
+			final String filterBy,
+			final String orderBy,
+			final Integer maximumRecords) {
 
 			this.type = type;
 			this.name = name;
@@ -267,6 +277,9 @@ public class Gen {
 			this.isConditional = isConditional;
 			this.matchType = matchType;
 			this.conditionalValue = conditionalValue;
+			this.orderBy = orderBy;
+			this.filterBy = filterBy;
+			this.maximumRecords = maximumRecords;
 		}
 	}
 

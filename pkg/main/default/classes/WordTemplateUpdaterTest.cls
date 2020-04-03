@@ -260,6 +260,9 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(false, result.fields[0].isConditional);
 		System.assertEquals('mt', result.fields[0].matchType);
 		System.assertEquals('cv', result.fields[0].conditionalValue);
+		System.assertEquals(null, result.fields[0].filterBy);
+		System.assertEquals(null, result.fields[0].orderBy);
+		System.assertEquals(null, result.fields[0].maximumRecords);
 	}
 
 	@IsTest
@@ -308,6 +311,9 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(false, result.fields[0].isConditional);
 		System.assertEquals('mt', result.fields[0].matchType);
 		System.assertEquals('cv', result.fields[0].conditionalValue);
+		System.assertEquals(null, result.fields[0].filterBy);
+		System.assertEquals(null, result.fields[0].orderBy);
+		System.assertEquals(null, result.fields[0].maximumRecords);
 	}
 
 	@IsTest
@@ -383,6 +389,9 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(false, result.fields[0].isConditional);
 		System.assertEquals('mt', result.fields[0].matchType);
 		System.assertEquals('cv', result.fields[0].conditionalValue);
+		System.assertEquals(null, result.fields[0].filterBy);
+		System.assertEquals(null, result.fields[0].orderBy);
+		System.assertEquals(null, result.fields[0].maximumRecords);
 
 		System.assertEquals(1, Collection.size(root.fields));
 		System.assertNotEquals(null, root.fields[0]);
@@ -398,6 +407,9 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(false, root.fields[0].isConditional);
 		System.assertEquals(null, root.fields[0].matchType);
 		System.assertEquals(null, root.fields[0].conditionalValue);
+		System.assertEquals(null, root.fields[0].filterBy);
+		System.assertEquals(null, root.fields[0].orderBy);
+		System.assertEquals(null, root.fields[0].maximumRecords);
 
 		System.assertEquals(result, lookups.get('Owner'));
 	}
@@ -469,6 +481,9 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(false, result.fields[0].isConditional);
 		System.assertEquals('mt', result.fields[0].matchType);
 		System.assertEquals('cv', result.fields[0].conditionalValue);
+		System.assertEquals(null, result.fields[0].filterBy);
+		System.assertEquals(null, result.fields[0].orderBy);
+		System.assertEquals(null, result.fields[0].maximumRecords);
 		System.assertNotEquals(null, result.fields[1]);
 		System.assertEquals('STRING', result.fields[1].type);
 		System.assertEquals('Description', result.fields[1].name);
@@ -482,6 +497,9 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(false, result.fields[1].isConditional);
 		System.assertEquals('mt', result.fields[1].matchType);
 		System.assertEquals('cv', result.fields[1].conditionalValue);
+		System.assertEquals(null, result.fields[1].filterBy);
+		System.assertEquals(null, result.fields[1].orderBy);
+		System.assertEquals(null, result.fields[1].maximumRecords);
 
 		System.assertEquals(1, Collection.size(root.fields));
 		System.assertNotEquals(null, root.fields[0]);
@@ -497,6 +515,9 @@ private class WordTemplateUpdaterTest {
 		System.assertEquals(false, root.fields[0].isConditional);
 		System.assertEquals(null, root.fields[0].matchType);
 		System.assertEquals(null, root.fields[0].conditionalValue);
+		System.assertEquals(null, root.fields[0].filterBy);
+		System.assertEquals(null, root.fields[0].orderBy);
+		System.assertEquals(null, root.fields[0].maximumRecords);
 
 		System.assertEquals(new Set<String> { 'Contact' }, children.keySet());
 	}
@@ -551,7 +572,7 @@ private class WordTemplateUpdaterTest {
 	}
 
 	static final String v1json = '[{"objLabel":"Account","label":"Account","isPrimary":true,"fieldMappings":[{"matchType":null,"label":"Current Date","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":null,"currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[],"apiName":"CurrentDate"},{"matchType":null,"label":"Annual Revenue","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"CURRENCY","currencyFormat":"symbolNoDecimals","conditionalValue":null,"childFieldMappings":[],"apiName":"AnnualRevenue"},{"matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"EMAIL","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[],"apiName":"Owner.Email"},{"matchType":null,"label":"Contacts","isConditional":false,"isChildRelation":true,"dateFormat":"default","dataType":"","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[{"matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"EMAIL","currencyFormat":"symbol","conditionalValue":null,"apiName":"Email"},{"matchType":null,"label":"Name","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"TEXT","currencyFormat":"symbol","conditionalValue":null,"apiName":"Name"}],"apiName":"Contact"}],"apiName":"Account"}]';
-	static final String v2json = '{"version":2,"name":"Account","label":"Account","fieldMappings":[{"type":"ROOT","path":[],"key":"Account","fields":[{"type":"DATE","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"CurrentDate","matchType":null,"label":"Current Date","isConditional":false,"isChildRelation":false,"format":"default","conditionalValue":null},{"type":"CURRENCY","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"AnnualRevenue","matchType":null,"label":"Annual Revenue","isConditional":false,"isChildRelation":false,"format":"symbolNoDecimals","conditionalValue":null},{"type":"REFERENCE","scale":null,"relationship":"Owner","relatesTo":"User","parentIdField":"OwnerId","name":"Owner","matchType":null,"label":"Owner ID","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null},{"type":"CHILD_RELATIONSHIP","scale":null,"relationship":"Contacts","relatesTo":"Contact","parentIdField":"AccountId","name":"Contact","matchType":null,"label":"Account ID","isConditional":false,"isChildRelation":true,"format":null,"conditionalValue":null}],"depth":1},{"type":"REFERENCE","path":["Owner"],"key":"Owner","fields":[{"type":"EMAIL","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Email","matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":2},{"type":"CHILD_RELATIONSHIP","path":[],"key":"Contacts","fields":[{"type":"EMAIL","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Email","matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null},{"type":"TEXT","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Name","matchType":null,"label":"Name","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":2}]}';
+	static final String v2json = '{"version":2,"name":"Account","label":"Account","fieldMappings":[{"type":"ROOT","path":[],"key":"Account","fields":[{"type":"DATE","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"orderBy":null,"name":"CurrentDate","maximumRecords":null,"matchType":null,"label":"Current Date","isConditional":false,"isChildRelation":false,"format":"default","filterBy":null,"conditionalValue":null},{"type":"CURRENCY","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"orderBy":null,"name":"AnnualRevenue","maximumRecords":null,"matchType":null,"label":"Annual Revenue","isConditional":false,"isChildRelation":false,"format":"symbolNoDecimals","filterBy":null,"conditionalValue":null},{"type":"REFERENCE","scale":null,"relationship":"Owner","relatesTo":"User","parentIdField":"OwnerId","orderBy":null,"name":"Owner","maximumRecords":null,"matchType":null,"label":"Owner ID","isConditional":false,"isChildRelation":false,"format":null,"filterBy":null,"conditionalValue":null},{"type":"CHILD_RELATIONSHIP","scale":null,"relationship":"Contacts","relatesTo":"Contact","parentIdField":"AccountId","orderBy":null,"name":"Contact","maximumRecords":null,"matchType":null,"label":"Account ID","isConditional":false,"isChildRelation":true,"format":null,"filterBy":null,"conditionalValue":null}],"depth":1},{"type":"REFERENCE","path":["Owner"],"key":"Owner","fields":[{"type":"EMAIL","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"orderBy":null,"name":"Email","maximumRecords":null,"matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"format":null,"filterBy":null,"conditionalValue":null}],"depth":2},{"type":"CHILD_RELATIONSHIP","path":[],"key":"Contacts","fields":[{"type":"EMAIL","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"orderBy":null,"name":"Email","maximumRecords":null,"matchType":null,"label":"Email","isConditional":false,"isChildRelation":false,"format":null,"filterBy":null,"conditionalValue":null},{"type":"TEXT","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"orderBy":null,"name":"Name","maximumRecords":null,"matchType":null,"label":"Name","isConditional":false,"isChildRelation":false,"format":null,"filterBy":null,"conditionalValue":null}],"depth":2}]}';
 
 	@IsTest
 	static void test_updateTemplate_v1() {
@@ -822,7 +843,8 @@ private class WordTemplateUpdaterTest {
 
 	@IsTest
 	static void test_updateTemplate_blacklisted_fields() {
-		String expected = '{"version":2,"name":"Account","label":"Account","fieldMappings":[{"type":"ROOT","path":[],"key":"Account","fields":[{"type":"CHILD_RELATIONSHIP","scale":null,"relationship":"RecordActions","relatesTo":"RecordAction","parentIdField":"RecordId","name":"RecordAction","matchType":null,"label":"Parent Record ID","isConditional":false,"isChildRelation":true,"format":null,"conditionalValue":null},{"type":"CURRENCY","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"AnnualRevenue","matchType":"Match","label":"Annual Revenue","isConditional":true,"isChildRelation":false,"format":"symbol","conditionalValue":"20"},{"type":"REFERENCE","scale":null,"relationship":"Owner","relatesTo":"User","parentIdField":"OwnerId","name":"Owner","matchType":null,"label":"Owner ID","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":1},{"type":"CHILD_RELATIONSHIP","path":[],"key":"RecordActions","fields":[{"type":"INTEGER","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Order","matchType":"Match","label":"Order","isConditional":true,"isChildRelation":false,"format":null,"conditionalValue":"orders"}],"depth":2},{"type":"REFERENCE","path":["Owner"],"key":"Owner","fields":[{"type":"STRING","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Country","matchType":"NotMatch","label":"Country","isConditional":true,"isChildRelation":false,"format":null,"conditionalValue":"Russia"},{"type":"ADDRESS","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"name":"Address","matchType":null,"label":"Address","isConditional":false,"isChildRelation":false,"format":null,"conditionalValue":null}],"depth":2}]}';
+		String expected = '{"version":2,"name":"Account","label":"Account","fieldMappings":[{"type":"ROOT","path":[],"key":"Account","fields":[{"type":"CHILD_RELATIONSHIP","scale":null,"relationship":"RecordActions","relatesTo":"RecordAction","parentIdField":"RecordId","orderBy":null,"name":"RecordAction","maximumRecords":null,"matchType":null,"label":"Parent Record ID","isConditional":false,"isChildRelation":true,"format":null,"filterBy":null,"conditionalValue":null},{"type":"CURRENCY","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"orderBy":null,"name":"AnnualRevenue","maximumRecords":null,"matchType":"Match","label":"Annual Revenue","isConditional":true,"isChildRelation":false,"format":"symbol","filterBy":null,"conditionalValue":"20"},{"type":"REFERENCE","scale":null,"relationship":"Owner","relatesTo":"User","parentIdField":"OwnerId","orderBy":null,"name":"Owner","maximumRecords":null,"matchType":null,"label":"Owner ID","isConditional":false,"isChildRelation":false,"format":null,"filterBy":null,"conditionalValue":null}],"depth":1},{"type":"CHILD_RELATIONSHIP","path":[],"key":"RecordActions","fields":[{"type":"INTEGER","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"orderBy":null,"name":"Order","maximumRecords":null,"matchType":"Match","label":"Order","isConditional":true,"isChildRelation":false,"format":null,"filterBy":null,"conditionalValue":"orders"}],"depth":2},{"type":"REFERENCE","path":["Owner"],"key":"Owner","fields":[{"type":"STRING","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"orderBy":null,"name":"Country","maximumRecords":null,"matchType":"NotMatch","label":"Country","isConditional":true,"isChildRelation":false,"format":null,"filterBy":null,"conditionalValue":"Russia"},{"type":"ADDRESS","scale":null,"relationship":null,"relatesTo":null,"parentIdField":null,"orderBy":null,"name":"Address","maximumRecords":null,"matchType":null,"label":"Address","isConditional":false,"isChildRelation":false,"format":null,"filterBy":null,"conditionalValue":null}],"depth":2}]}';
+
 		GenTemplate__c t = new GenTemplate__c(
 			ObjectMappings__c = '[{"objLabel":"Account","label":"Account","isPrimary":true,"fieldMappings":[{"matchType":null,"label":"RecordActions","isConditional":false,"isChildRelation":true,"dateFormat":"default","dataType":"","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[{"matchType":"Match","label":"Order","isConditional":true,"isChildRelation":false,"dateFormat":"default","dataType":"INTEGER","currencyFormat":"symbol","conditionalValue":"orders","apiName":"Order"}],"apiName":"RecordAction"},{"matchType":"Match","label":"Annual Revenue","isConditional":true,"isChildRelation":false,"dateFormat":"default","dataType":"CURRENCY","currencyFormat":"symbol","conditionalValue":"20","childFieldMappings":[],"apiName":"AnnualRevenue"},{"matchType":"NotMatch","label":"Country","isConditional":true,"isChildRelation":false,"dateFormat":"default","dataType":"STRING","currencyFormat":"symbol","conditionalValue":"Russia","childFieldMappings":[],"apiName":"Owner.Country"},{"matchType":null,"label":"Address","isConditional":false,"isChildRelation":false,"dateFormat":"default","dataType":"ADDRESS","currencyFormat":"symbol","conditionalValue":null,"childFieldMappings":[],"apiName":"Owner.Address"},{"matchType":"NotMatch","label":"Last Viewed Date","isConditional":true,"isChildRelation":false,"dateFormat":"MMMM dd, yyyy","dataType":"DATETIME","currencyFormat":"symbol","conditionalValue":"March 28, 2020","childFieldMappings":[],"apiName":"LastViewedDate"}],"apiName":"Account"}]',
 			TemplateType__c = null);

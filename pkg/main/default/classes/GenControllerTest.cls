@@ -900,6 +900,46 @@ private class GenControllerTest {
 	}
 
 	@IsTest
+	static void test_validateChildRelationshipField_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			String fieldJSON = '{"type":"CHILD_RELATIONSHIP","scale":0,"relationship":"Opportunities","relatesTo":"Opportunity","parentIdField":"AccountId","orderBy":"Name ASC","name":"Opportunity","matchType":null,"label":"Opportunities","isConditional":false,"isChildRelation":true,"format":null,"filterBy":"StageName != \'Closed Won\'","conditionalValue":null}';
+			String sourceObject = 'Account';
+
+			AuraHandledException expMessage;
+
+			Test.startTest();
+			try {
+				GenController.validateChildRelationshipField(fieldJSON, 2);
+			} catch(AuraHandledException exp) {
+				expMessage = exp;
+			}
+			Test.stopTest();
+
+			System.assertEquals(expMessage, null);
+		}
+	}	
+
+	@IsTest
+	static void test_validateChildRelationshipField_failure() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			String fieldJSON = '{"type":"CHILD_RELATIONSHIP","scale":0,"relationship":"Opportunities","relatesTo":"Opportunity","parentIdField":"AccountId","orderBy":"Name ASC","name":"Opportunity","matchType":null,"label":"Opportunities","isConditional":false,"isChildRelation":true,"format":null,"filterBy":"BAD SOQL VALUE","conditionalValue":null}';
+			String sourceObject = 'Account';
+
+			AuraHandledException expMessage;
+
+			Test.startTest();
+			try {
+				GenController.validateChildRelationshipField(fieldJSON, 2);
+			} catch(AuraHandledException exp) {
+				expMessage = exp;
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(expMessage, null);
+		}
+	}		
+
+	@IsTest
 	static void test_generateLimitedAccessToken_unauthorized() {
 		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {

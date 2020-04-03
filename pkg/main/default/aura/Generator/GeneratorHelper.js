@@ -164,11 +164,11 @@
       var key = fieldMapping.key + '_' + fieldMapping.depth + '_' + fieldMapping.type;
       map[key] = fieldMapping;
     });
-    var query = helper.traverseFieldMapping(fieldMappings[0], '', '', fieldMappings[0].key, map, isMultiCurrency);
+    var query = helper.traverseFieldMapping(fieldMappings[0], '', '', fieldMappings[0].key, map, isMultiCurrency, null, null, null);
     return query;
   },
 
-  traverseFieldMapping: function (fm, relationship, parentIdField, type, map, isMultiCurrency) {
+  traverseFieldMapping: function (fm, relationship, parentIdField, type, map, isMultiCurrency, filterBy, orderBy, maximumRecords) {
     var helper = this;
     var query = {};
     var fields = [];
@@ -178,6 +178,9 @@
     query.type = type;
     query.relationship = relationship;
     query.parentIdField = parentIdField;
+    query.filterBy = filterBy;
+    query.orderBy = orderBy;
+    query.maximumRecords = maximumRecords;
     fm.fields.forEach(function (field) {
       if (!$A.util.isUndefinedOrNull(field) && !$A.util.isUndefinedOrNull(field.name) && field.name !== '') {
         var childKey = '';
@@ -189,7 +192,7 @@
             childKey = helper.getChildKey(relationship + '.' + field.relationship, fm.depth, field.type);
           }
           child = map[childKey];
-          children.push(helper.traverseFieldMapping(child, field.relationship, field.parentIdField, field.name, map, isMultiCurrency));
+          children.push(helper.traverseFieldMapping(child, field.relationship, field.parentIdField, field.name, map, isMultiCurrency, field.filterBy, field.orderBy, field.maximumRecords));
         } else if (field.type === 'REFERENCE') {
           if (fm.depth === 1) {
             childKey = helper.getChildKey(field.relationship, fm.depth, field.type);
