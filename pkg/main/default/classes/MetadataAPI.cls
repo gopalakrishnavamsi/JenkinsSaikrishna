@@ -552,19 +552,21 @@ public class MetadataAPI {
 	}
 	public class Container {
 		public Integer height;
+		public Boolean isContainerAutoSizeEnabled;
 		public String region;
 		public MetadataAPI.SidebarComponent[] sidebarComponents;
 		public String style;
 		public String unit;
 		public Integer width;
 		private String[] height_type_info = new String[] { 'height', SOAP_M_URI, null, '0', '1', 'false' };
+		private String[] isContainerAutoSizeEnabled_type_info = new String[] { 'isContainerAutoSizeEnabled', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] region_type_info = new String[] { 'region', SOAP_M_URI, null, '1', '1', 'false' };
 		private String[] sidebarComponents_type_info = new String[] { 'sidebarComponents', SOAP_M_URI, null, '0', '-1', 'false' };
 		private String[] style_type_info = new String[] { 'style', SOAP_M_URI, null, '1', '1', 'false' };
 		private String[] unit_type_info = new String[] { 'unit', SOAP_M_URI, null, '1', '1', 'false' };
 		private String[] width_type_info = new String[] { 'width', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] apex_schema_type_info = new String[] { SOAP_M_URI, 'true', 'false' };
-		private String[] field_order_type_info = new String[] { 'height', 'region', 'sidebarComponents', 'style', 'unit', 'width' };
+		private String[] field_order_type_info = new String[] { 'height', 'isContainerAutoSizeEnabled', 'region', 'sidebarComponents', 'style', 'unit', 'width' };
 	}
 	public class LayoutItem {
 		public String behavior;

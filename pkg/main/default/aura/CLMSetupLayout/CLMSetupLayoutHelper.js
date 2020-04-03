@@ -15,9 +15,7 @@
         }
         else {
           var toast = component.find('toast');
-          component.set('v.toastTitle', stringUtils.format($A.get('$Label.c.ComponentCreationFailed'), componentName));
-          component.set('v.toastVariantType', 'error');
-          toast.show();
+          toast.show('error', stringUtils.format($A.get('$Label.c.ComponentCreationFailed'), componentName));
         }
       }
     );
@@ -25,9 +23,7 @@
   showtoast: function (component, title, variant) {
     var toast = component.find('toast');
     if (toast) {
-      component.set('v.toastTitle', title);
-      component.set('v.toastVariantType', variant);
-      toast.show();
+      toast.show(variant, title);
       if (variant === 'success') {
         setTimeout($A.getCallback(function () {
           toast.close();

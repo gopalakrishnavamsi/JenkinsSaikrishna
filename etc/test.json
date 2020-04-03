@@ -3,8 +3,8 @@
   "edition": "Developer",
   "features": ["AuthorApex", "API", "ForceComPlatform"],
   "settings": {
-    "orgPreferenceSettings": {
-      "translation": true
+    "languageSettings": {
+      "enableTranslationWorkbench": true
     }
   }
 }

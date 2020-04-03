@@ -30,14 +30,6 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
-		<label>エラーメールの本文</label>
-		<name>ErrorEmailBodyForMigrateTemplates</name>
-	</customLabels>
-	<customLabels>
-		<label>エラーの件名</label>
-		<name>ErrorSubjectForMigrateTemplate</name>
-	</customLabels>
-	<customLabels>
 		<label>テンプレートの追加</label>
 		<name>AddTemplate</name>
 	</customLabels>

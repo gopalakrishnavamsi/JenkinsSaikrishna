@@ -9,6 +9,7 @@ License: BSD 3-Clause License
 public with sharing class strike_lookupController {
 	private static final Set<String> VALID_SEARCH_OBJECTS = new Set<String>();
 	private static final String CUSTOM_METADATA_SUFFIX = 'mdt';
+	private static final Integer DEFAULT_QUERY_LIMIT = 25;
 
 	private static String safeGetObjectType(final String s) {
 		getAllSobject();
@@ -205,9 +206,7 @@ public with sharing class strike_lookupController {
 			query += ' ORDER BY ' + String.join(orders, ', ');
 		}
 
-		if (strike_lookupController.fieldNotEmpty(jsonMap, 'limit')) {
-			query += ' LIMIT ' + String.escapeSingleQuotes((String)jsonMap.get('limit'));
-		}
+		query += ' LIMIT ' + (strike_lookupController.fieldNotEmpty(jsonMap, 'limit') ? String.escapeSingleQuotes((String)jsonMap.get('limit')) : ':DEFAULT_QUERY_LIMIT');
 
 		return query;
 	}
@@ -218,8 +217,7 @@ public with sharing class strike_lookupController {
 
 	private static List<List<SObject>> soslQuery(Map<String, Object> jsonMap) {
 		String searchTerm = String.escapeSingleQuotes((String)jsonMap.get('searchTerm'));
-		List<List<SObject>> searchList = [FIND :searchTerm IN ALL FIELDS RETURNING Contact (Name, Email), Lead(Name, Email), User(Name, Email)];
-
+		List<List<SObject>> searchList = [FIND :searchTerm IN ALL FIELDS RETURNING Contact (Name, Email), Lead(Name, Email), User(Name, Email) limit :DEFAULT_QUERY_LIMIT];
 		return searchList;
 	}
 

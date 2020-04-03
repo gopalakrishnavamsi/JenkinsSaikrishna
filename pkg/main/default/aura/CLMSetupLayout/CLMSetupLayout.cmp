@@ -6,8 +6,6 @@
     <aura:attribute name="header" type="Aura.Component[]"/>
     <aura:attribute name="main" type="Aura.Component[]"/>
     <aura:attribute name="fullLayout" type="Boolean" default="false"/>
-    <aura:attribute name="toastTitle" type="String" access="private"/>
-    <aura:attribute name="toastVariantType" type="String" access="private"/>
     <aura:attribute name="isCenter" type="Boolean" default="true" access="private"/>
     <aura:attribute name="isSidebar" type="Boolean" default="true" access="private"/>
     <aura:attribute name="login" type="Object"/>
@@ -24,7 +22,7 @@
     <!--register events -->
     <aura:handler name="logoutEvent" event="c:ReloadEvent" action="{!c.triggerLogout}"/>
 
-    <c:Toast aura:id="toast" message="{!v.toastTitle}" mode="{!v.toastVariantType}"/>
+    <c:Toast aura:id="toast"/>
 
     <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}" fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
                             products="{!v.products}"/>

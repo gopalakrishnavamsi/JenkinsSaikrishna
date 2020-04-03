@@ -365,15 +365,12 @@
     var sequence = 1;
     if (!$A.util.isEmpty(recipients)) {
       recipients.forEach(function (r) {
-        var resolvedRole = self.isRoleDefined(r.role)
-          ? r.role
-          : self.getNextRole(defaultRoles);
-        if (
-          self.isValidRecipient(r) &&
-          (!$A.util.isEmpty(r.templateId) || hasDocuments)
-        ) {
-          r.routingOrder = r.sequence = sequence++;
-          r.role = resolvedRole;
+        if (self.isValidRecipient(r) && (!$A.util.isEmpty(r.templateId) || hasDocuments)) {
+          r.sequence = sequence++;
+          if ($A.util.isEmpty(r.routingOrder)) r.routingOrder = r.sequence;
+          r.role = self.isRoleDefined(r.role)
+            ? r.role
+            : self.getNextRole(defaultRoles);
           delete r.templateId;
           delete r.original;
           rs.push(r);

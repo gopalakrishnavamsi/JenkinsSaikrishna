@@ -181,7 +181,7 @@ public with sharing class OnlineEditorController extends Controller {
 
 		return result;
 	}
-	
+
 	@TestVisible
 	private static Map<String, Object> queryEntityRecords(final SObjectType objectType, final String searchValue, final String filterBy, final Integer pageIndex) {
 		Permissions.verifyIsDocuSignAdministrator();
@@ -244,7 +244,7 @@ public with sharing class OnlineEditorController extends Controller {
 			'totalPages' => totalPageIndexes + 1
 		};
 	}
-	
+
 	@TestVisible
 	private static Map<String, Object> queryEntityRecords(final SObjectType objectType, final String searchValue, final String filterBy, final String orderBy, final Integer recordsPerPage, final Integer pageIndex) {
 		Permissions.verifyIsDocuSignGenerator();
@@ -304,7 +304,7 @@ public with sharing class OnlineEditorController extends Controller {
 			'totalRecords' => entityRecordCount,
 			'totalPages' => totalPageIndexes + 1
 		};
-	}	
+	}
 
 	@TestVisible
 	private static OnlineEditorController.Query convertData(
@@ -372,9 +372,9 @@ public with sharing class OnlineEditorController extends Controller {
 		if (fileSuffix == 'Main Data Source Name') {
 			formattedFileName = String.format('{0} {1}', new List<String> { fileName, dataSource });
 		} else if (fileSuffix == 'Date') {
-			formattedFileName = String.format('{0} {1}', new List<String> { fileName, StringUtils.formatDatetime(Datetime.now()) });
+			formattedFileName = String.format('{0} {1}', new List<String> { fileName, Datetime.now().format() });
 		} else if (fileSuffix == 'Main Data Source Name and Date') {
-			formattedFileName = String.format('{0} {1} {2}', new List<String> { fileName, dataSource, StringUtils.formatDatetime(Datetime.now()) });
+			formattedFileName = String.format('{0} {1} {2}', new List<String> { fileName, dataSource, Datetime.now().format() });
 		} else if (String.isBlank(fileName)) {
 			formattedFileName = Label.Untitled;
 		} else {
@@ -490,13 +490,13 @@ public with sharing class OnlineEditorController extends Controller {
 	public static Map<String, Object> getEntityRecords(final String sourceObject, final Integer pageIndex, final String searchValue) {
 		SObjectType type = Salesforce.getSObjectType(sourceObject);
 		return queryEntityRecords(type, searchValue, Salesforce.getNameField(type), pageIndex);
-	}	
+	}
 
 	@RemoteAction
 	public static Map<String, Object> getEntityRecordsWithSearch(final String sourceObject, final Integer pageIndex, final String searchValue) {
 		SObjectType type = Salesforce.getSObjectType(sourceObject);
 		return queryEntityRecords(type, searchValue, Salesforce.getNameField(type), 'LastModifiedDate', 25, pageIndex);
-	}		
+	}
 
 	@RemoteAction
 	public static String getTemplateFolderId() {

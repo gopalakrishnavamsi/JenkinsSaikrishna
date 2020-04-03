@@ -173,6 +173,7 @@
     var query = {};
     var fields = [];
     var children = [];
+    var doesCurrencyFieldExist = false;
 
     query.type = type;
     query.relationship = relationship;
@@ -199,15 +200,18 @@
           helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
             fields.push(f);
           });
-        } else if (isMultiCurrency && field.type === 'CURRENCY' && (fields.indexOf('CurrencyIsoCode') === -1)) {
-          fields.push('CurrencyIsoCode');
-          fields.push(field.name);
         } else if (field.name !== 'CurrentDate') {
           fields.push(field.name);
+          if (isMultiCurrency && field.type === 'CURRENCY') {
+            doesCurrencyFieldExist = true;
+          }
         }
       }
     });
 
+    if (doesCurrencyFieldExist && (fields.indexOf('CurrencyIsoCode') === -1)) {
+      fields.push('CurrencyIsoCode');
+    }
     if (fields.length === 0) {
       fields.push('Id');
     }
@@ -220,6 +224,7 @@
     var helper = this;
     var fields = [];
     var path = fm.path.join('.');
+    var doesCurrencyFieldExist = false;
     fm.fields.forEach(function (field) {
       if (field.type === 'REFERENCE') {
         var childKey = helper.getChildKey(fm.key + '.' + field.name, fm.depth, field.type);
@@ -227,13 +232,16 @@
         helper.traverseLookUp(child, map, isMultiCurrency).forEach(function (f) {
           fields.push(f);
         });
-      } else if (isMultiCurrency && field.type === 'CURRENCY' && (fields.indexOf(fm.key + '.CurrencyIsoCode') === -1)) {
-        fields.push(path + '.CurrencyIsoCode');
-        fields.push(path + '.' + field.name);
       } else if (field.name !== 'CurrentDate' && !$A.util.isEmpty(field.name)) {
         fields.push(path + '.' + field.name);
+        if (isMultiCurrency && field.type === 'CURRENCY') {
+          doesCurrencyFieldExist = true;
+        }
       }
     });
+    if (doesCurrencyFieldExist && (fields.indexOf(path + '.CurrencyIsoCode') === -1)) {
+      fields.push(path + '.CurrencyIsoCode');
+    }
     return fields;
   },
 
@@ -356,8 +364,31 @@
     return map;
   },
 
+  addUnformattedXML: function(query, result, children, field, xmlRoot, depth) {
+    var helper = this;
+    var fieldXmlUnformatted;
+    if (field.startsWith(query.type)) {
+      fieldXmlUnformatted = xmlRoot.createElement(field.replace(query.type + '.', '')+'Unformatted');
+    } else {
+      fieldXmlUnformatted = xmlRoot.createElement(field+'Unformatted');
+    }
+    var fieldValue;
+    var newFields = field.split('.');
+    if (field === 'CurrentDate') {
+      fieldValue = $A.localizationService.formatDate(new Date(), '');
+    } else if (depth <= 2) {
+      fieldValue = helper.getFieldValue(newFields, result, null, false);
+    } else {
+      fieldValue = helper.getFieldValue(newFields, children, null, false);
+    }
+    var nodeValue = xmlRoot.createTextNode(fieldValue);
+    fieldXmlUnformatted.appendChild(nodeValue);
+    return fieldXmlUnformatted;
+  },
+
   generateXML: function (query, result, children, depth, xmlRoot, fieldMap, isMultiCurrency, previousRelationship) {
     var helper = this;
+    var unformattedDataTypes = ['DATE', 'DATETIME', 'TIME', 'DOUBLE', 'PERCENT', 'CURRENCY'];
     var objRoot = (depth === 1) ? xmlRoot.createElement(query.type) : xmlRoot.createElement(query.relationship);
     var format = '';
 
@@ -385,6 +416,10 @@
       }
       var nodeValue = xmlRoot.createTextNode(fieldValue);
       fieldXml.appendChild(nodeValue);
+
+      if (!$A.util.isUndefinedOrNull(format) && unformattedDataTypes.includes(format.type)) {
+        objRoot.appendChild(helper.addUnformattedXML(query, result, children, field, xmlRoot, depth));
+      }
       objRoot.appendChild(fieldXml);
     });
     var queryChildren = query.children;

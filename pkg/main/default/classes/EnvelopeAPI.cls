@@ -374,7 +374,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		RestAPI.Response response = this.put(
 			new List<Object> { 'envelopes', envelopeId, 'recipients' },
 			new QueryString('resend_envelope', 'true'),
-			JSON.serialize(new Recipients(recipients, null, false, false)),
+			JSON.serialize(new Recipients(recipients, null, false)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to resend envelope: ' + response.error.toString());
@@ -625,8 +625,10 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public String declinedReason;
 		public String clientUserId;
 
-		public APIRecipient(final Recipient r, final String documentId, final Boolean includeDefaultAnchorTags,
-			final Boolean hasTemplates) {
+		public APIRecipient(
+			final Recipient r,
+			final String documentId,
+			final Boolean includeDefaultAnchorTags) {
 
 			if (r != null) {
 				this.recipientId = String.isBlank(r.envelopeRecipientId)
@@ -642,8 +644,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				}
 				// API requires a defined value for roleName when templates are used. Empty strings are OK.
 				this.roleName = r.role == null || String.isBlank(r.role.name) ? '' : r.role.name;
-				// Don't set routing order if these recipients are added to a template envelope
-				this.routingOrder = hasTemplates ? '' : String.valueOf(r.routingOrder);
+				this.routingOrder = r.routingOrder == null ? '' : String.valueOf(r.routingOrder);
 				this.signingGroupId = r.isSigningGroup ? String.valueOf(r.signingGroup.id) : null;
 				this.customFields = getRecipientCustomFields(r);
 				this.emailNotification = r.emailSettings == null
@@ -717,8 +718,10 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public List<APIRecipient> intermediaries;
 		public List<APIRecipient> signers;
 
-		public Recipients(final List<Recipient> rs, final String documentId, final Boolean includeDefaultAnchorTags,
-			final Boolean hasTemplates) {
+		public Recipients(
+			final List<Recipient> rs,
+			final String documentId,
+			final Boolean includeDefaultAnchorTags) {
 
 			if (rs != null) {
 				this.agents = new List<APIRecipient>();
@@ -730,19 +733,19 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.signers = new List<APIRecipient>();
 				for (Recipient r : rs) {
 					if (r.type == Recipient.TYPE_AGENT) {
-						this.agents.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
+						this.agents.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					} else if (r.type == Recipient.TYPE_CARBON_COPY) {
-						this.carbonCopies.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
+						this.carbonCopies.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					} else if (r.type == Recipient.TYPE_CERTIFIED_DELIVERY) {
-						this.certifiedDeliveries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
+						this.certifiedDeliveries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					} else if (r.type == Recipient.TYPE_EDITOR) {
-						this.editors.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
+						this.editors.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					} else if (r.type == Recipient.TYPE_INTERMEDIARY) {
-						this.intermediaries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
+						this.intermediaries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					} else if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
-						this.inPersonSigners.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
+						this.inPersonSigners.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					} else { // Recipient.TYPE_SIGNER and Recipient.TYPE_EMBEDDED_SIGNER
-						this.signers.add(new APIRecipient(r, documentId, includeDefaultAnchorTags, hasTemplates));
+						this.signers.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					}
 				}
 			}
@@ -888,8 +891,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					this.recipients = new Recipients(
 						recipients,
 						this.sequence,
-						includeDefaultAnchorTags,
-						true);
+						includeDefaultAnchorTags);
 				}
 				this.customFields = buildCustomFields(customFields, source);
 			}
@@ -1148,7 +1150,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 						}
 					}
 					if (e.recipients != null) {
-						this.recipients = new Recipients(e.recipients, null, includeDefaultAnchorTags, false);
+						this.recipients = new Recipients(e.recipients, null, includeDefaultAnchorTags);
 					}
 					this.customFields = buildCustomFields(e.customFields, e.source);
 				}

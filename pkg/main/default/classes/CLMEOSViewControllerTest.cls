@@ -139,4 +139,57 @@ private class CLMEOSViewControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	// CLM service test
+	@IsTest
+	static void test_substituteConfigValuesInTemplate_success() {
+
+		Schema.Account a = TestUtils.createAccount();
+		Opportunity o1 = new Opportunity(AccountId = a.Id, Name = 'UNIT TEST 10', CloseDate = Date.today(), StageName = 'Negotiation/Review');
+		EOS_Type__c config = new EOS_Type__c(
+			FolderNameFormat__c = '{0}',
+			PathFormat__c = 'Salesforce/Opportunity/',
+			Path__c = '/Salesforce/Opportunity/',
+			Name = 'Opportunity',
+			FolderName__c = '{!Opportunity.Name}_{!Opportunity.Id}_{!Account.Name}'
+		);
+		insert config;
+		insert o1;
+
+		System.runAs(UserMock.createClmAdministrator()) {
+			Test.startTest();
+			Test.setCurrentPageReference(new PageReference('Page.CLMEOSView'));
+			System.currentPageReference().getParameters().put('sid', a.Id);
+			CLMService.SubstitutedParams substitutedParams = CLMService.substituteConfigValuesInTemplate(config, o1.Id);
+			Test.stopTest();
+			System.assertNotEquals(null, substitutedParams);
+			System.assertEquals(o1.Name+'_'+o1.Id+'_'+a.Name, substitutedParams.salesforceFolderName);
+		}
+	}
+
+	@IsTest
+	static void test_substituteConfigValuesInTemplate_success2() {
+
+		Schema.Account a = TestUtils.createAccount();
+		Opportunity o1 = new Opportunity(AccountId = a.Id, Name = 'UNIT TEST 10', CloseDate = Date.today(), StageName = 'Negotiation/Review');
+		EOS_Type__c config = new EOS_Type__c(
+			FolderNameFormat__c = '{0}',
+			PathFormat__c = 'Salesforce/Opportunity/',
+			Path__c = '/Salesforce/Opportunity/',
+			Name = 'Opportunity',
+			FolderName__c = '_{!Opportunity.Description}'
+		);
+		insert config;
+		insert o1;
+
+		System.runAs(UserMock.createClmAdministrator()) {
+			Test.startTest();
+			Test.setCurrentPageReference(new PageReference('Page.CLMEOSView'));
+			System.currentPageReference().getParameters().put('sid', a.Id);
+			CLMService.SubstitutedParams substitutedParams = CLMService.substituteConfigValuesInTemplate(config, o1.Id);
+			Test.stopTest();
+			System.assertNotEquals(null, substitutedParams);
+			System.assertEquals('_', substitutedParams.salesforceFolderName);
+		}
+	}
 }

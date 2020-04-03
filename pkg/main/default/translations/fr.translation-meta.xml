@@ -30,14 +30,6 @@
 		<name>AddRecipient</name>
 	</customLabels>
 	<customLabels>
-		<label>Corps de l’e-mail de l’erreur</label>
-		<name>ErrorEmailBodyForMigrateTemplates</name>
-	</customLabels>
-	<customLabels>
-		<label>Objet de l’erreur</label>
-		<name>ErrorSubjectForMigrateTemplate</name>
-	</customLabels>
-	<customLabels>
 		<label>Ajouter un modèle</label>
 		<name>AddTemplate</name>
 	</customLabels>

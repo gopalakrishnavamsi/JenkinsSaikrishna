@@ -7,6 +7,7 @@
     <apex:includeScript value="{!$Resource.userEvents}"/>
     <apex:includeScript value="{!$Resource.OnlineEditorJs}"/>
     <apex:includeScript value="{!$Resource.scmwidgetsjs}"/>
+    <apex:includeScript value="{!$Resource.stringUtils}"/>
     <apex:includeScript value="{!URLFOR($Resource.ds_editor, '/ds-editor-salesforce-1.1.2.js')}"/>
 
     <script type="application/javascript">
@@ -41,7 +42,8 @@
 
       Labels = {
         templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}',
-        templateExportDataIsUndefinedLabel: '{!$Label.ExportDataIsUndefinedLabel}'
+        templateExportDataIsUndefinedLabel: '{!$Label.ExportDataIsUndefinedLabel}',
+        apiError_3: '{!$Label.ApiError_3}'
       };
 
 

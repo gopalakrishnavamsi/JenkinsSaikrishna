@@ -1,6 +1,6 @@
 public with sharing class CLMService {
 
-	private string getValue(String fieldName, List<SObject> record) {
+	private static string getValue(final String fieldName, final List<SObject> record) {
 		String value = '';
 		if (Collection.isNotEmpty(record)) {
 			if (!fieldName.contains('.')) {
@@ -17,10 +17,10 @@ public with sharing class CLMService {
 				}
 			}
 		}
-		return value;
+		return String.isBlank(value) ? '' : value;
 	}
 
-	private List<SObject> query(String field,String objectName,Id recordId) {
+	private static List<SObject> query(final String field, final String objectName, final Id recordId) {
 		List<SObject> result = new List<SObject>();
 		DescribeSObjectResult objDetails = MetadataService.describeSObject(recordId);
 		if (objDetails != null) {
@@ -32,14 +32,13 @@ public with sharing class CLMService {
 				Permissions.verifyIsQueryable(Schema.getGlobalDescribe().get(parentObjName), new List<String> {parentfieldName});
 			}
 			result = new List<SObject>();
-			field = field.trim();
-			if (String.isNotEmpty(field) && String.isNotEmpty(objectName) && String.isNotEmpty(recordId))
-				result =  Database.query('select ' + String.escapeSingleQuotes(field) + ' from  ' + String.escapeSingleQuotes(objectName.trim()) + ' where id = :recordId');
+			if (String.isNotEmpty(field.trim()) && String.isNotEmpty(objectName) && String.isNotEmpty(recordId))
+				result =  Database.query('select ' + String.escapeSingleQuotes(field.trim()) + ' from  ' + String.escapeSingleQuotes(objectName.trim()) + ' where id = :recordId');
 		}
 		return result;
 	}
 
-	public static EOS_Type__c getCurrentMappingConfig(String recordId) {
+	public static EOS_Type__c getCurrentMappingConfig(final String recordId) {
 		DescribeSObjectResult objectType = MetadataService.describeSObject(recordId);
 		return EOS_Type__c.getInstance(objectType.getName());
 	}
@@ -49,7 +48,7 @@ public with sharing class CLMService {
 		public final String salesforceFolderName;
 		public final String salesforceObjectType;
 		public final String externalObjectStoragePath;
-		SubstitutedParams(String salesforceObjectId, String salesforceFolderName, String salesforceObjectType, String externalObjectStoragePath) {
+		SubstitutedParams(final String salesforceObjectId, final String salesforceFolderName, final String salesforceObjectType, final String externalObjectStoragePath) {
 			this.salesforceObjectId = salesforceObjectId;
 			this.salesforceFolderName = salesforceFolderName;
 			this.salesforceObjectType = salesforceObjectType;
@@ -57,12 +56,11 @@ public with sharing class CLMService {
 		}
 	}
 
-	public static SubstitutedParams substituteConfigValuesInTemplate(EOS_Type__c config, Id recordId) {
+	public static SubstitutedParams substituteConfigValuesInTemplate(final EOS_Type__c config, final Id recordId) {
 		SubstitutedParams subParams;
 		String pathFormatConfig;
 		List<String> folderConfig;
 		List<String> variablesConfig = new List<String>();
-		CLMService serviceInstance = new CLMService();
 		if (Application.namespace.equals('c')) {
 			folderConfig = config.FolderName__c.split('\\.');
 			variablesConfig = config.Variables__c.split(',');
@@ -75,24 +73,37 @@ public with sharing class CLMService {
 			pathFormatConfig = String.valueOf(config.get(Application.namespacePrefix + 'PathFormat__c')).trim();
 		}
 		String parentObject = folderConfig.get(0).substringAfter('{!');
-		String folderApiName = folderConfig.get(1).substringBefore('}');
-		String folderName = serviceInstance.getValue(folderApiName.trim(),serviceInstance.query(folderApiName.trim(),parentObject.trim(),recordId));
+		String folderName = getFolderName(config.FolderName__c.trim(), parentObject.trim(), recordId);
 		List<String> variables = new List<String>();
 		for (String variable:variablesConfig) {
 			List<String> variableConfigList = variable.split('\\.');
 			String referenceObjectName = variableConfigList.get(0);
 			String referenceFieldName = variableConfigList.get(1);
 			if (referenceObjectName == parentObject) {
-				variables.add(serviceInstance.getValue(referenceFieldName,serviceInstance.query(referenceFieldName,parentObject,recordId)));
+				variables.add(getValue(referenceFieldName, query(referenceFieldName,parentObject,recordId)));
 			} else {
-				variables.add(serviceInstance.getValue(variable,serviceInstance.query(variable,parentObject,recordId)));
+				variables.add(getValue(variable, query(variable,parentObject,recordId)));
 			}
 		}
 		subParams = new SubstitutedParams(recordId, folderName, parentObject, String.format(pathFormatConfig,variables));
 		return subParams;
 	}
 
-	public static Url getHostingUrl(EOS_Type__c config, Id recordId) {
+	private static String getFolderName(final String folderName, final String parentObject, final Id recordId) {
+		String valueFolderName = folderName;
+		String tempFolderName = folderName;
+		while (tempFolderName.indexOf('{!') > -1) {
+			String fn = tempFolderName.substringAfter('{!').substringBefore('}');
+			String v = fn.startsWith(parentObject) ?
+				getValue(fn.substringAfter('.'), query(fn.substringAfter('.'), parentObject, recordId)) :
+				getValue(fn, query(fn, parentObject, recordId));
+			valueFolderName = valueFolderName.replace('{!' + fn + '}', v);
+			tempFolderName = tempFolderName.substringAfter('}');
+		}
+		return valueFolderName;
+	}
+
+	public static Url getHostingUrl(final EOS_Type__c config, final Id recordId) {
 		CLMService.SubstitutedParams eosValues = substituteConfigValuesInTemplate(config, recordId);
 		Url redirectionUrl = CLMAPI.getInstance().getClmUrl(eosValues);
 		return redirectionUrl;

@@ -1,11 +1,12 @@
 ({
   getAuthStatus: function (component) {
     var uiHelper = component.get('v.uiHelper');
-    var onSuccess = function (authStatus) {
+    var onSuccess = $A.getCallback(function (authStatus) {
       if (authStatus) {
         component.set('v.fetchingOAuthStatus', false);
         if (authStatus.isAuthorized) {
           component.set('v.products', authStatus.products);
+          component.set('v.permission', authStatus.permission);
         }
         component.set('v.isAuthorized', authStatus.isAuthorized);
         component.set('v.isConsentRequired', authStatus.isConsentRequired);
@@ -19,7 +20,7 @@
       loadingEvent.setParam('isLoading', authStatus.isAuthorized);
       loadingEvent.setParam('isAuthorizeEvent', true);
       loadingEvent.fire();
-    };
+    });
 
     uiHelper.invokeAction(component.get('c.getAuthStatus'), null, onSuccess);
   },
@@ -27,7 +28,7 @@
   beginOAuth: function (component) {
     var uiHelper = component.get('v.uiHelper');
     var helper = this;
-    var openOAuthWindow = function (loginUrl) {
+    var openOAuthWindow = $A.getCallback(function (loginUrl) {
       var width = 600;
       var height = 600;
       var left = screen.width / 2 - width / 2;
@@ -39,9 +40,10 @@
           if (component.get('v.eventOrigins').indexOf(event.origin) !== -1) {
             window.removeEventListener('message', onMessage);
             var success = event.data.loginInformation && event.data.loginInformation.status === 'Success';
-            helper.getProductsOnAccount(component, success).then(
-              $A.getCallback(function (products) {
-                component.set('v.products', products);
+            helper.getConfigAfterAuthorization(component, success).then(
+              $A.getCallback(function (config) {
+                component.set('v.products', config.products);
+                component.set('v.permission', config.permission);
                 component.set('v.isAuthorized', success);
                 component.set('v.isConsentRequired', !success);
                 if (success) {
@@ -63,16 +65,16 @@
       var oauthWindow = window.open(stringUtils.unescapeHtml(loginUrl), 'ds-oauth', 'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
       window.addEventListener('message', $A.getCallback(onMessage));
       oauthWindow.focus();
-    };
+    });
 
     uiHelper.invokeAction(component.get('c.beginOAuth'), {target: window.location.origin}, openOAuthWindow);
   },
 
-  getProductsOnAccount: function (component, isAuthorized) {
+  getConfigAfterAuthorization: function (component, isAuthorized) {
     return new Promise(
       $A.getCallback(function (resolve, reject) {
         if (isAuthorized) {
-          var getProductsAction = component.get('c.getProductsOnAccount');
+          var getProductsAction = component.get('c.getConfigAfterAuthorization');
           getProductsAction.setCallback(this, $A.getCallback(function (response) {
             var state = response.getState();
             if (state === 'SUCCESS') {

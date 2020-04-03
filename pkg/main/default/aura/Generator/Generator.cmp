@@ -38,6 +38,7 @@
     <aura:attribute name="isGenEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isGenTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
+    <aura:attribute name="permission" type="Object" access="private"/>
 
     <aura:registerEvent name="generatedDocs" type="c:strike_evt"/>
 
@@ -78,7 +79,7 @@
         <aura:if isTrue="{!not(v.isAuthorized)}">
             <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
                                     fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
-                                    products="{!v.products}"/>
+                                    products="{!v.products}" permission="{!v.permission}"/>
 
         </aura:if>
         <div aura:id="genSendingModal"/>
@@ -288,7 +289,7 @@
                                         label="{!$Label.c.SendForSignature}"
                                         onclick="{!c.sendForSignature}"
                                         disabled="{!v.disableSendForSignature}"/>
-                                <div class="{!'slds-button-group slds-p-left_xx-small'+if(not(v.isNegotiateEnabled), ' slds-hide', '')}"
+                                <div class="{!if(and(v.isNegotiateEnabled,v.permission.isDocuSignNegotiator),'slds-button-group slds-p-left_xx-small','slds-hide')}"
                                      disabled="{!v.disableGenFileReview}">
                                     <lightning:buttonMenu
                                             class="{!if(v.disableGenFileReview,'ds-genNegotiateButtonDisabled','ds-genNegotiateButtonMenu')}"

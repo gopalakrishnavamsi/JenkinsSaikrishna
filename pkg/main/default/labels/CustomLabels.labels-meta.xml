@@ -2425,7 +2425,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Other recipients Description</shortDescription>
-		<value> Send a copy of this envelope to your Salesforce contacts or email it. </value>
+		<value>Send a copy of this envelope to your Salesforce contacts.</value>
 	</labels>
 	<labels>
 		<fullName>TextField</fullName>
@@ -3745,22 +3745,6 @@
 		<protected>true</protected>
 		<shortDescription>MigrateUsersSubjectLine</shortDescription>
 		<value>You&#39;ve Migrated Your Users</value>
-	</labels>
-	<labels>
-		<fullName>ErrorEmailBodyForMigrateTemplates</fullName>
-		<categories>Gen-Email Alert</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ErrorEmailBodyForMigrateTemplates</shortDescription>
-		<value>Error Email Body</value>
-	</labels>
-	<labels>
-		<fullName>ErrorSubjectForMigrateTemplate</fullName>
-		<categories>Gen-Email Alert</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>ErrorSubjectForMigrateTemplate</shortDescription>
-		<value>Error Subject</value>
 	</labels>
 	<labels>
 		<fullName>MigrateUsersSuccessMsg</fullName>

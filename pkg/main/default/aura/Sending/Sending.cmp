@@ -242,9 +242,7 @@
                                                         emailLocalizations="{!v.emailLocalizations}"
                                                         onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
                                                         onEditPrivateMessage="{!c.handleEditPrivateMessage}"
-                                                        onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
-
-                                                />
+                                                        onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"/>
                                             </div>
                                         </aura:if>
                                     </aura:iteration>
@@ -263,8 +261,7 @@
                                                             onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
                                                             onEditPrivateMessage="{!c.handleEditPrivateMessage}"
                                                             onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
-                                                            lock="{!v.lock}"
-                                                    />
+                                                            lock="true"/>
                                                 </div>
                                                 <div class=" slds-col slds-no-flex">
                                                     <lightning:buttonIcon iconName="utility:close"
@@ -315,41 +312,6 @@
                                             </div>
                                         </aura:if>
                                     </aura:iteration>
-                                </div>
-                                <div class="ds-other-recipients slds-box_x-small slds-theme_default slds-m-top_small">
-                                    <div class="ds-other-recipients-title slds-text-heading_small slds-text-title_caps">{!$Label.c.OtherRecipients}</div>
-                                    <div class="ds-other-recipients-description slds-text-heading_small">{!$Label.c.OtherRecipientsDescription}</div>
-
-                                    <aura:iteration items="{!v.recipients}" var="recipient" indexVar="recipientIndex">
-                                        <aura:if isTrue="{!recipient.type == 'CarbonCopy'}">
-                                            <div class=" ds-recipient-roles slds-m-top_small slds-is-relative slds-grid">
-                                                <div class="slds-col">
-                                                    <c:Recipient
-                                                            recipient="{!recipient}"
-                                                            sourceId="{#recipient.source.id}"
-                                                            emailLocalizations="{!v.emailLocalizations}"
-                                                            onEditAccessAuthentication="{!c.handleEditAccessAuthentication}"
-                                                            onEditPrivateMessage="{!c.handleEditPrivateMessage}"
-                                                            onEditCustomEmailMessage="{!c.handleEditCustomEmailMessage}"
-                                                            lock="{!v.lock}"
-                                                    />
-                                                </div>
-                                                <div class="slds-col slds-no-flex">
-                                                    <lightning:buttonIcon iconName="utility:close"
-                                                                          variant="container"
-                                                                          alternativeText="{!$Label.c.Remove}"
-                                                                          class="slds-button ds-remove slds-m-top_x-small slds-m-right_xx-small"
-                                                                          onclick="{!c.removeRecipient}"
-                                                                          value="{!recipientIndex}"/>
-                                                </div>
-                                            </div>
-                                        </aura:if>
-                                    </aura:iteration>
-                                    <div class="ds-other-recipients-button">
-                                        <lightning:button variant="brand-outline" class="slds-m-top_small"
-                                                          label="{!$Label.c.AddRecipient}"
-                                                          onclick="{!c.addCarbonCopy}"/>
-                                    </div>
                                 </div>
                             </aura:if>
                         </div>

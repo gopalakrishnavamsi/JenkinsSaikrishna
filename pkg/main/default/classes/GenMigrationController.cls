@@ -64,7 +64,8 @@ public with sharing class GenMigrationController {
 				'CanManageAccount__c',
 				'Provisioned__c',
 				'Status__c',
-				'Username__c'
+				'Username__c',
+				'IsActive'
 			});
 
 			Permissions.verifyIsCreateable(PermissionSetAssignment.getSObjectType(), new List<String> { 'AssigneeId', 'PermissionSetId' });
@@ -86,6 +87,21 @@ public with sharing class GenMigrationController {
 			Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
 				'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
 				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c'
+			});
+			Permissions.verifyIsCreateable(ContentDocumentLink.getSObjectType(), new List<String> {
+				'ContentDocumentId', 'LinkedEntityId', 'ShareType'
+			});
+			Permissions.verifyIsQueryable(ContentDocumentLink.getSObjectType(), new List<String> {
+				'ContentDocumentId', 'LinkedEntityId'
+			});
+			Permissions.verifyIsCreateable(ContentVersion.getSObjectType(), new List<String> {
+				'ExternalDocumentInfo2', 'GeneratedFileFormat__c', 'GeneratedFileName__c', 'GeneratedFileSuffix__c', 'ContentDocumentId', 'Title', 'VersionData', 'PathOnClient'
+			});
+			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
+				'ContentDocumentId', 'Title', 'PathOnClient', 'VersionData',
+				GenMigrationApplication.namespacePrefix + 'Generated_File_Format__c',
+				GenMigrationApplication.namespacePrefix + 'Generated_File_Name__c',
+				GenMigrationApplication.namespacePrefix + 'Generated_File_Suffix__c'
 			});
 			Schema.DescribeSobjectResult[] getGenTemplateSobject = Schema.describeSObjects(new List<String> { GenMigrationApplication.namespacePrefix + 'template_configuration__C' });
 
@@ -116,31 +132,36 @@ public with sharing class GenMigrationController {
 		}
 	}
 
-	// Calling this method FROM Batch class finish method to update custom setting
-	public static voId updateGenCustomSettings() {
-		GenMigrationSettings__c genSetting = GenMigrationSettings__c.getOrgDefaults();
+	// Calling this method FROM Batch class finish method to update custom setting for user migration
+	public static void updateUserGenCustomSettings() {
+		GenMigrationSettings__c genSetting = GenMigrationApplication.getGenSettings();
 		if (genSetting.UserMigrationBatchId__c != null) {
 			genSetting.GenUsersMigrated__c = true;
 			genSetting.UserMigrationBatchStatus__c = '';
 		}
+		update genSetting;
+	}
+
+	// Calling this method FROM Batch class finish method to update custom setting for template migration
+	public static void updateTemplateGenCustomSettings() {
+		GenMigrationSettings__c genSetting = GenMigrationApplication.getGenSettings();
 		if (genSetting.templateMigrationBatchId__c != null) {
 			genSetting.GenTemplatesMigrated__c = true;
 			genSetting.TemplateMigrationBatchStatus__c = '';
 		}
-		upsert genSetting;
+		update genSetting;
 	}
 
 	// On Template or User migration sucess,sending Email to logged in user
-	public static Boolean generateEmail(final String getEmailSubject, final String getEmailBody) {
-		Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-		email.setToAddresses(new List<String> { UserInfo.getUserEmail() });
-		email.setSubject(getEmailSubject);
-		email.setHTMLBody(getEmailBody);
-		Messaging.SingleEmailMessage[] messages = new List <Messaging.SingleEmailMessage> { email };
-		Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
-		for (Messaging.SendEmailResult getEmailSuccessResponse : results) {
-			if (!getEmailSuccessResponse.success) return false;
+	public static void generateEmail(final String getEmailSubject, final String getEmailBody) {
+		try {
+			Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+			email.setToAddresses(new List<String> { UserInfo.getUserEmail() });
+			email.setSubject(getEmailSubject);
+			email.setHTMLBody(getEmailBody);
+			Messaging.SingleEmailMessage[] messages = new List <Messaging.SingleEmailMessage> { email };
+			Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
+		} catch (Exception ex) {
 		}
-		return true;
 	}
 }

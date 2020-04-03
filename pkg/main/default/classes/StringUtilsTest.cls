@@ -212,4 +212,13 @@ private class StringUtilsTest {
 		System.assert(String.isNotBlank(StringUtils.hash('test')));
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_replaceSpecialCharacter() {
+		Test.startTest();
+		System.assertEquals(null, StringUtils.replaceSpecialCharacter(null, null));
+		System.assertEquals(StringUtils.replaceSpecialCharacter('tes:t / , char', '_'), 'tes_t _ _ char');
+		System.assertEquals(StringUtils.replaceSpecialCharacter('tes:t / , char', null), 'test   char');
+		Test.stopTest();
+	}
 }

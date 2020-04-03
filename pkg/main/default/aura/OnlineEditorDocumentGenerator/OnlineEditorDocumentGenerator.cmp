@@ -11,14 +11,15 @@
     <aura:attribute name="onCancel" type="Object"/>
     <aura:attribute name="exportGeneratedDocument" type="Object"/>
 
-    <aura:attribute name="errMsg" type="String"/>
-    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true"/>
+    <aura:attribute name="fileName" type="String" access="private"/>
+    <aura:attribute name="errMsg" type="String" access="private"/>
+    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isGenEnabled" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="isButtonEnabled" type="Boolean" default="false"/>
+    <aura:attribute name="isButtonEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isGenTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
-    <aura:attribute name="loading" type="Boolean" default="false"/>
+    <aura:attribute name="loading" type="Boolean" default="false" access="private"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
 

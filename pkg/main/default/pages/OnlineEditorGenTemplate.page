@@ -61,9 +61,9 @@
         templateInvalidPathLabel: '{!$Label.InvalidPathLabel}',
         templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}',
         templateSaveValidationLabel: '{!$Label.OnlineEditorSaveValidation}',
-        templateSCMHrefUndefinedLabel: '{!$Label.SCMHrefUndefined}'
+        templateSCMHrefUndefinedLabel: '{!$Label.SCMHrefUndefined}',
+        apiError_3: '{!$Label.ApiError_3}'
       };
-
     </script>
 
     <style type="text/css">

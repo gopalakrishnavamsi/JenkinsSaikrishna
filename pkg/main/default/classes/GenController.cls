@@ -306,4 +306,32 @@ public with sharing class GenController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to delete document');
 		}
 	}
+
+	@AuraEnabled
+	public static String getFileName(final Id templateId, final String recordName) {
+		try {
+			Gen.Template template = GenService.getTemplate(templateId);
+			return getFileName(template.fileName, template.fileSuffix, recordName);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get  file name');
+		}
+	}
+
+	@TestVisible
+	private static String getFileName(final String fileName, final String fileSuffix, final String recordName) {
+		String formattedFileName;
+		if (fileSuffix == 'Main Data Source Name') {
+			formattedFileName = String.format('{0} {1}', new List<String> { fileName, recordName });
+		} else if (fileSuffix == 'Date') {
+			formattedFileName = String.format('{0} {1}', new List<String> { fileName, Datetime.now().format() });
+		} else if (fileSuffix == 'Main Data Source Name and Date') {
+			formattedFileName = String.format('{0} {1} {2}', new List<String> { fileName, recordName, Datetime.now().format() });
+		} else if (String.isBlank(fileName)) {
+			formattedFileName = Label.Untitled;
+		} else {
+			formattedFileName = fileName;
+		}
+		formattedFileName = StringUtils.replaceSpecialCharacter(formattedFileName.trim(), '_');
+		return formattedFileName.length() > 75 ? formattedFileName.substring(0, 75) : formattedFileName;
+	}
 }

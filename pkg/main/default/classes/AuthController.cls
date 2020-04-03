@@ -11,19 +11,35 @@ public with sharing class AuthController {
 		public List<String> eventOrigins { get; private set; }
 		@AuraEnabled
 		public List<Product> products { get; private set; }
+		@AuraEnabled
+		public Permission permission { get; private set; }
 
 		public AuthStatus(
 			final Boolean isAuthorized,
 			final Boolean isConsentRequired,
 			final String message,
 			final List<String> eventOrigins,
-			final List<Product> products) {
+			final List<Product> products,
+			final Permission permission) {
 
 			this.isAuthorized = isAuthorized;
 			this.isConsentRequired = isConsentRequired;
 			this.message = message;
 			this.eventOrigins = eventOrigins;
 			this.products = products;
+			this.permission = permission;
+		}
+	}
+
+	public Class Permission {
+		@AuraEnabled
+		public Boolean isDocuSignNegotiator { get; private set; }
+		@AuraEnabled
+		public Boolean isDocuSignGenerator { get; private set; }
+
+		public Permission() {
+			this.isDocuSignNegotiator = Permissions.isDocuSignNegotiator();
+			this.isDocuSignGenerator = Permissions.isDocuSignGenerator();
 		}
 	}
 
@@ -65,7 +81,7 @@ public with sharing class AuthController {
 			isConsentRequired,
 			message,
 			Salesforce.getVisualforceOrigins(),
-			products);
+			products, new Permission());
 	}
 
 	@AuraEnabled
@@ -78,13 +94,18 @@ public with sharing class AuthController {
 	}
 
 	@AuraEnabled
-	public static List<Product> getProductsOnAccount() {
+	public static AuthStatus getConfigAfterAuthorization() {
 		try {
-			List<Product> result = processProductCheckInAccountSetting(AccountProducts.getProducts());
+			List<Product> products = processProductCheckInAccountSetting(AccountProducts.getProducts());
 			AccountProducts.save();
-			return result;
+			return new AuthStatus(
+				true,
+				false,
+				null,
+				null,
+				products, new Permission());
 		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check Products on account.');
+			throw Controller.wrapException(ex, 'Failed to get config.');
 		}
 	}
 

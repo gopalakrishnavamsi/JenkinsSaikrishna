@@ -225,16 +225,6 @@ jQuery(document).ready(function ($) {
                   EventLabels.PREVIEW_DOCUMENT,
                   {}
                 );
-
-                if (entityRecords.filterBy !== 'Name') {
-                  entityRecords.results = entityRecords.results.map(function (record) {
-                    return {
-                      Id: record.Id,
-                      Name: record[entityRecords.filterBy]
-                    };
-                  });
-                }
-
                 resolve(entityRecords);
               } else {
                 _userEvents.error(
@@ -932,6 +922,24 @@ jQuery(document).ready(function ($) {
     };
   })();
 
+  function parseError(response) {
+    if (!response || !response.json) return Promise.resolve('');
+
+    return new Promise(function (resolve, reject) {
+      response.json()
+        .then(function (body) {
+          var hasError = body && body.Error;
+          resolve(stringUtils.format(Labels.apiError_3,
+            hasError && body.Error.HttpStatusCode ? body.Error.HttpStatusCode : 0,
+            hasError && body.Error.UserMessage ? body.Error.UserMessage : Labels.templateExportDataIsUndefinedLabel,
+            hasError && body.Error.ReferenceId ? body.Error.ReferenceId : ''));
+        })
+        .catch(function () {
+          reject(Labels.templateExportDataIsUndefinedLabel);
+        });
+    });
+  }
+
   function renderEditor(limitedAccessToken, element, templateName, sourceId, isGenerating) {
     return new Promise(function (resolve, reject) {
       new SpringCM.Widgets.Download.downloadDocument(
@@ -953,12 +961,9 @@ jQuery(document).ready(function ($) {
           };
         })
         .catch(function (err) {
-          _userEvents.error(
-            _sessionType,
-            {},
-            err
-          );
-          reject(err && err.statusText ? err.statusText : Labels.templateExportDataIsUndefinedLabel);
+          return parseError(err).then(function (msg) {
+            reject(msg);
+          });
         });
     });
   }

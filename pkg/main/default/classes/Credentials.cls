@@ -320,12 +320,32 @@ public with sharing class Credentials {
 
 		public Credentials queryCredentials(final Id userId) {
 			AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
+			UserCredentials userCredentials = queryUser(userId, UUID.tryParse(accountSettings.SystemSenderId__c));
 			return new Credentials(
 				getEnvironment(accountSettings),
 				getClient(accountSettings),
 				getAccount(accountSettings),
-				queryUser(userId, UUID.tryParse(accountSettings.SystemSenderId__c)),
-				queryToken(userId));
+				userCredentials,
+				queryToken(userCredentials.id));
+		}
+
+		public AccessToken queryToken(final UUID docusignUserId) {
+			Permissions.verifyIsQueryable(Schema.User.getSObjectType(), new List<String> {
+				'Id', Application.namespacePrefix + 'Username__c'
+			});
+
+			User user = (User)Collection.head([
+				SELECT Id
+				FROM User
+				WHERE Username__c = :UUID.toString(docusignUserId)
+				LIMIT 1
+			]);
+
+			if (user != null && user.Id != null) {
+				return queryToken(user.Id);
+			} else {
+				return new AccessToken(null, null);
+			}
 		}
 
 		public AccessToken queryToken(final Id userId) {

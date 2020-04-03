@@ -102,25 +102,55 @@ private class CredentialsTest {
 	static void test_getInstance_system_sender() {
 		User u1 = UserMock.createUser();
 		User u2 = UserMock.createUser();
+		User admin1 = UserMock.createDocuSignAdministrator();
+		User admin2 = UserMock.createDocuSignAdministrator(false);
 
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			UUID ssId = UUID.tryParse(AccountSettings__c.getOrgDefaults().SystemSenderId__c);
-			System.assertNotEquals(null, ssId);
+		System.runAs(admin1) {
+
+			//update UserName__c on admin1 so that it matches the current SystemSenderId
+			User u = [SELECT Id, UserName__c from User WHERE Id = :admin1.Id];
+			System.assertNotEquals(null, u);
+			u.Username__c = AccountSettings__c.getOrgDefaults().SystemSenderId__c;
+			update u;
 
 			Test.startTest();
+			//System Sender as admin1
 			Credentials result1 = Credentials.getInstance(u1.Id, true);
 			Credentials result2 = Credentials.getInstance(u2.Id, true);
+
+			//update System Sender to admin2
+			AccountSettings__c accountSettingsInstance = AccountSettings__c.getOrgDefaults();
+			accountSettingsInstance.SystemSenderId__c = [SELECT Id, UserName__c FROM User WHERE Id = :admin2.Id].Username__c;
+			upsert accountSettingsInstance;
+
+			//System Sender as admin2
+			Credentials result3 = Credentials.getInstance(u1.Id, true);
+			Credentials result4 = Credentials.getInstance(u2.Id, true);
+
 			Test.stopTest();
+
+			User adminUser1 = [SELECT Id, UserName__c from User WHERE Id = :admin1.Id];
+			User adminUser2 = [SELECT Id, UserName__c from User WHERE Id = :admin2.Id];
 
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
 			System.assertNotEquals(null, result1.user);
-			System.assertEquals(ssId, result1.user.id);
+			System.assertEquals(UUID.tryParse(adminUser1.Username__c), result1.user.id);
 
 			System.assertNotEquals(null, result2);
 			System.assert(result2.isValid);
 			System.assertNotEquals(null, result2.user);
-			System.assertEquals(ssId, result2.user.id);
+			System.assertEquals(UUID.tryParse(adminUser1.Username__c), result2.user.id);
+
+			System.assertNotEquals(null, result3);
+			System.assert(result3.isValid);
+			System.assertNotEquals(null, result3.user);
+			System.assertEquals(UUID.tryParse(adminUser2.Username__c), result3.user.id);
+
+			System.assertNotEquals(null, result4);
+			System.assert(result4.isValid);
+			System.assertNotEquals(null, result4.user);
+			System.assertEquals(UUID.tryParse(adminUser2.Username__c), result4.user.id);
 		}
 	}
 

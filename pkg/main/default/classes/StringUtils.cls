@@ -225,4 +225,18 @@ public class StringUtils {
 				'SHA256',
 				Blob.valueOf(String.isBlank(s) ? '' : s)));
 	}
+
+	/**
+	 * Replaces special character
+	 *
+	 * @param s The input string
+	 * @param replacedBy replaced by string
+	 *
+	 * @return The string with all special character replaced with string.
+	 */
+	public static String replaceSpecialCharacter(final String s, final String replacedBy) {
+		if (String.isBlank(s)) return null;
+		if (replacedBy == null) replacedBy = '';
+		return s.replaceAll('[^a-zA-Z0-9\\s+]', replacedBy);
+	}
 }

@@ -1,5 +1,5 @@
 ({
-  DOWNLOAD_AS_WORD: 'Agreement Cloud Editor Download as Word',
+  EXPORT_DOCUMENT: 'Export Gen Document',
 
   initDocumentGenerator: function (component) {
     component.set('v.loading', true);
@@ -30,16 +30,38 @@
         function (isGenerator) {
           if (isGenerator === true) {
             var renderOnlineEditorGenerator = component.get('v.renderOnlineEditorGenerator');
-            renderOnlineEditorGenerator().then(function (isGenerated) {
+            renderOnlineEditorGenerator().then($A.getCallback(function (isGenerated) {
               component.set('v.loading', false);
               component.set('v.isButtonEnabled', isGenerated);
-            }).catch(function (err) {
+            })).catch($A.getCallback(function (err) {
               component.set('v.loading', false);
               component.set('v.errMsg', err);
-            });
+            }));
           }
         }
       );
+    }
+  },
+
+  parseError: function (response) {
+    if (!response) return Promise.resolve($A.get('$Label.c.UnknownError'));
+
+    if (response.json) {
+      return new Promise(function (resolve, reject) {
+        response.json()
+          .then(function (body) {
+            var hasError = body && body.Error;
+            resolve(stringUtils.format($A.get('$Label.c.ApiError_3'),
+              hasError && body.Error.HttpStatusCode ? body.Error.HttpStatusCode : 0,
+              hasError && body.Error.UserMessage ? body.Error.UserMessage : $A.get('$Label.c.UnknownError'),
+              hasError && body.Error.ReferenceId ? body.Error.ReferenceId : ''));
+          })
+          .catch(function (err) {
+            reject(err);
+          });
+      });
+    } else {
+      return Promise.resolve(response);
     }
   },
 
@@ -48,60 +70,62 @@
     var fileBytes;
     var scmDocGuid;
     var exportGeneratedDocument = component.get('v.exportGeneratedDocument');
-    var fileName = stringUtils.format('{0}{1}{2}', component.get('v.title'), '_', component.get('v.recordName'));
-    fileName = fileName.substring(0, 80);
-    var eventParams = {
+    self.timeEvent(component, self.EXPORT_DOCUMENT);
+    self.addEventProperties(component, {
       'Product': 'Gen',
-      'Template Type': 'Online Editor'
-    };
-    self.timeEvent(component, self.DOWNLOAD_AS_WORD);
-    self.addEventProperties(component, eventParams);
+      'Template Type': 'Online Editor',
+      'Format': 'docx',
+      'Location': 'download'
+    });
 
     self.hideToast(component);
     self.setLoading(component, true);
     component.set('v.isButtonEnabled', false);
+    self.getFileName(component);
     exportGeneratedDocument().then(function (htmlData) {
       fileBytes = htmlData;
       return self.getEOSFolderId(component);
-    }).then(function (folderId) {
+    }).then($A.getCallback(function (folderId) {
       return self.getLimitedAccessToken(component, folderId.value);
-    }).then(function (uploadToken) {
+    })).then($A.getCallback(function (uploadToken) {
       return SpringCM.Methods.Upload.uploadNewDocumentBytes(
         uploadToken.apiUploadBaseUrl,
         uploadToken.token,
         uploadToken.accountId.value,
         uploadToken.entityId.value,
         fileBytes,
-        stringUtils.format('{0}{1}', fileName, '.html')
+        component.get('v.fileName') + '.html'
       );
-    }).then(function (response) {
+    })).then(function (response) {
       if (!response || !response.Href) throw $A.get('$Label.c.SCMHrefUndefined');
       scmDocGuid = response.Href.substring(response.Href.lastIndexOf('/') + 1);
       return self.convertDocument(component, scmDocGuid);
-    }).then(function () {
+    }).then($A.getCallback(function () {
       return self.getLimitedAccessToken(component, scmDocGuid);
-    }).then(function (downloadToken) {
+    })).then($A.getCallback(function (downloadToken) {
       return SpringCM.Widgets.Download.downloadDocument(
         downloadToken.apiDownloadBaseUrl,
         downloadToken.token,
         downloadToken.accountId.value,
         scmDocGuid,
-        stringUtils.format('{0}{1}', fileName, '.docx'),
+        component.get('v.fileName') + '.docx',
         true,
         'Docx'
       );
-    }).then(function () {
-      self.trackSuccess(component, self.DOWNLOAD_AS_WORD, eventParams);
-    }).catch(function (err) {
-      self.showToast(component, err, 'error');
-      self.trackError(component, self.DOWNLOAD_AS_WORD, eventParams, err);
-    }).finally(function () {
+    })).then(function () {
+      self.trackSuccess(component, self.EXPORT_DOCUMENT);
+    }).catch($A.getCallback(function (err) {
+      self.parseError(err).then($A.getCallback(function (msg) {
+        self.showToast(component, msg, 'error');
+        self.trackError(component, self.EXPORT_DOCUMENT, {}, msg);
+      }));
+    })).finally($A.getCallback(function () {
       if (scmDocGuid) {
         self.deleteDocument(component, scmDocGuid);
       }
       component.set('v.isButtonEnabled', true);
       self.setLoading(component, false);
-    });
+    }));
   },
 
   getEOSFolderId: function (component) {
@@ -109,7 +133,7 @@
     return new Promise($A.getCallback(function (resolve, reject) {
       self.invokeChainAction(component, component.get('c.getEOSFolderId'),
         {
-          sourceId: component.get('v.recordId'),
+          sourceId: component.get('v.recordId')
         },
         function (folderId) {
           resolve(folderId);
@@ -162,4 +186,20 @@
       }
     );
   },
+
+  getFileName: function (component) {
+    var self = this;
+    self.invokeChainAction(component, component.get('c.getFileName'),
+      {
+        templateId: component.get('v.templateId'),
+        recordName: component.get('v.recordName')
+      },
+      function (fileName) {
+        component.set('v.fileName', fileName.substring(0, 80));
+      },
+      function (err) {
+        self.showToast(component, err[0].message, 'error');
+      }
+    );
+  }
 });

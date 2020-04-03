@@ -916,4 +916,73 @@ private class GenControllerTest {
 		}
 	}
 
+	@IsTest
+	static void test_getFileName_mainDataSource_success() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			GenTemplate__c gtx = TestUtils.createGenTemplate(Opportunity.getSObjectType());
+			gtx.FileName__c = 'Test,File:Name';
+			gtx.FileSuffix__c = 'Main Data Source Name';
+			update gtx;
+
+			Test.startTest();
+			String fileName = GenController.getFileName(gtx.Id, 'Test/Opportunity');
+			Test.stopTest();
+
+			System.assert(fileName.contains('Test_Opportunity'));
+			System.assertEquals('Test_File_Name Test_Opportunity', fileName);
+
+		}
+	}
+
+	@IsTest
+	static void test_getFileName_date_success() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			GenTemplate__c gtx = TestUtils.createGenTemplate(Opportunity.getSObjectType());
+			gtx.FileName__c = 'Test,File:Name';
+			gtx.FileSuffix__c = 'Date';
+			update gtx;
+
+			Test.startTest();
+			String fileName = GenController.getFileName(gtx.Id, 'Test/Opportunity');
+			Test.stopTest();
+
+			System.assert(!fileName.contains('Test_Opportunity'));
+		}
+	}
+
+	@IsTest
+	static void test_getFileName_mainDataSourceAndDate_success() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			GenTemplate__c gtx = TestUtils.createGenTemplate(Opportunity.getSObjectType());
+			gtx.FileName__c = 'Test,File:Name';
+			gtx.FileSuffix__c = 'Main Data Source Name and Date';
+			update gtx;
+
+			Test.startTest();
+			String fileName = GenController.getFileName(gtx.Id, 'Test/Opportunity');
+			Test.stopTest();
+
+			System.assert(fileName.contains('Test_Opportunity'));
+		}
+	}
+
+	@IsTest
+	static void test_getFileName_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			GenTemplate__c gtx = TestUtils.createGenTemplate(Opportunity.getSObjectType());
+			gtx.FileName__c = 'Test,File:Name';
+			gtx.FileSuffix__c = 'Main Data Source Name';
+			update gtx;
+
+			Test.startTest();
+			try {
+				GenController.getFileName(gtx.Id, 'Test/Opportunity');
+				throw new AssertException('Expected getFileName to Fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
 }

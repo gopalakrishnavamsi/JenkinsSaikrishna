@@ -124,6 +124,27 @@ private class AuthControllerTest {
 	}
 
 	@IsTest
+	static void test_getAuthStatusWithPermissions_success() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Permissions.assignPermissionSets(
+				new Set<Id> { UserInfo.getUserId() },
+				new Set<String> { Permissions.DOCUSIGN_GENERATOR, Permissions.DOCUSIGN_NEGOTIATOR });
+
+			Test.startTest();
+			AuthController.AuthStatus result = AuthController.getAuthStatus();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.isAuthorized);
+			System.assert(!result.isConsentRequired);
+			System.assertEquals(null, result.message);
+			System.assertEquals(4, result.products.size());
+			System.assertEquals(true, result.permission.isDocuSignGenerator);
+			System.assertEquals(true, result.permission.isDocuSignNegotiator);
+		}
+	}
+
+	@IsTest
 	static void test_beginOAuth_failure() {
 		System.runAs(UserMock.createDocuSignSender(false)) {
 			Test.startTest();
@@ -150,23 +171,30 @@ private class AuthControllerTest {
 	}
 
 	@IsTest
-	static void test_getProductsOnAccount() {
-		System.runAs(UserMock.createDocuSignUser(true)) {
+	static void test_getConfigAfterAuthorization() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Permissions.assignPermissionSets(
+				new Set<Id> { UserInfo.getUserId() },
+				new Set<String> { Permissions.DOCUSIGN_GENERATOR, Permissions.DOCUSIGN_NEGOTIATOR });
+
 			Test.startTest();
-			List<Product> products = AuthController.getProductsOnAccount();
+			AuthController.AuthStatus config = AuthController.getConfigAfterAuthorization();
+			system.assertNotEquals(config, null);
 			Test.stopTest();
 
-			System.assertEquals(4, products.size());
+			System.assertEquals(4, config.products.size());
+			System.assertEquals(true, config.permission.isDocuSignGenerator);
+			System.assertEquals(true, config.permission.isDocuSignNegotiator);
 		}
 	}
 
 	@IsTest
-	static void test_getProductsOnAccountFailure() {
+	static void test_getConfigAfterAuthorizationFailure() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				AuthController.getProductsOnAccount();
-				throw new AssertException('Expected getProducts to fail');
+				AuthController.getConfigAfterAuthorization();
+				throw new AssertException('Expected getConfigAfterAuthorization to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
@@ -182,10 +210,10 @@ private class AuthControllerTest {
 			update s;
 
 			Test.startTest();
-			List<Product> products = AuthController.getProductsOnAccount();
+			AuthController.AuthStatus config = AuthController.getConfigAfterAuthorization();
 			Test.stopTest();
 
-			System.assertEquals(3, products.size());
+			System.assertEquals(3, config.products.size());
 		}
 	}
 }

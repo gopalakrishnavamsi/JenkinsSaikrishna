@@ -58,7 +58,14 @@
   },
 
   loadUserLocaleDateFormat: function (component) {
-    component.set('v.userLocaleDateFormat', $A.localizationService.formatDate(new Date($A.get('$Label.c.X2019_01_18'))));
+    var defaultDate = $A.localizationService.formatDate($A.get('$Label.c.X2019_01_18'));
+    // If the locale Default has a timezone offset, update the default date to 18
+    if (defaultDate.includes(17)) {
+          defaultDate.replace(17,18);
+      } else if (defaultDate.includes(19)) {
+          defaultDate.replace(19,18); 
+      }      
+          component.set('v.userLocaleDateFormat', defaultDate );
   },
 
   setDateFormatOnOptionsModal: function (component, fieldMapping) {
@@ -71,6 +78,7 @@
       component.set('v.dateDropDown', $A.get('$Label.c.Custom'));
       component.set('v.customDateInput', dateFormat);
       self.formatDate(component);
+      
     } else {
       component.set('v.dateDropDown', dateFormat);
       component.set('v.datePreview', '');

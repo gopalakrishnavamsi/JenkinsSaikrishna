@@ -1015,7 +1015,7 @@ private class EnvelopeAPITest {
 			System.assertEquals(2, compositeTemplatesList.size());
 			System.assertEquals(1, compositeTemplatesList[0].serverTemplates.size());
 			System.assertEquals(1, compositeTemplatesList[1].inlineTemplates.size());
-			System.assertEquals('', compositeTemplatesList[1].inlineTemplates[0].recipients.signers[0].routingOrder);
+			System.assertEquals('2', compositeTemplatesList[1].inlineTemplates[0].recipients.signers[0].routingOrder);
 			System.assertNotEquals(null, compositeTemplatesList[0].inlineTemplates[0].customFields);
 			System.assertNotEquals(null, compositeTemplatesList[0].inlineTemplates[0].customFields.listCustomFields);
 			System.assertNotEquals(null, compositeTemplatesList[0].inlineTemplates[0].customFields.textCustomFields);
@@ -1755,10 +1755,10 @@ private class EnvelopeAPITest {
 			Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', null, null, null);
 
 			Test.startTest();
-			EnvelopeAPI.APIRecipient result1 = new EnvelopeAPI.APIRecipient(r1, '1', false, false); // no auto anchor tags
-			EnvelopeAPI.APIRecipient result2 = new EnvelopeAPI.APIRecipient(r1, '1', true, false); // with auto anchor tags, with role value
-			EnvelopeAPI.APIRecipient result3 = new EnvelopeAPI.APIRecipient(r2, '1', true, false); // with auto anchor tags, with no role value
-			EnvelopeAPI.APIRecipient result4 = new EnvelopeAPI.APIRecipient(r3, '1', true, false); // with auto anchor tags, with null role
+			EnvelopeAPI.APIRecipient result1 = new EnvelopeAPI.APIRecipient(r1, '1', false); // no auto anchor tags
+			EnvelopeAPI.APIRecipient result2 = new EnvelopeAPI.APIRecipient(r1, '1', true); // with auto anchor tags, with role value
+			EnvelopeAPI.APIRecipient result3 = new EnvelopeAPI.APIRecipient(r2, '1', true); // with auto anchor tags, with no role value
+			EnvelopeAPI.APIRecipient result4 = new EnvelopeAPI.APIRecipient(r3, '1', true); // with auto anchor tags, with null role
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
@@ -1782,10 +1782,8 @@ private class EnvelopeAPITest {
 			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', null, null, null).withRoutingOrder(2);
 
 			Test.startTest();
-			EnvelopeAPI.APIRecipient result1 = new EnvelopeAPI.APIRecipient(r1, '1', false, false); // no template, has role
-			EnvelopeAPI.APIRecipient result2 = new EnvelopeAPI.APIRecipient(r2, '1', false, false); // no template, no role
-			EnvelopeAPI.APIRecipient result3 = new EnvelopeAPI.APIRecipient(r1, '1', false, true); // has template, has role
-			EnvelopeAPI.APIRecipient result4 = new EnvelopeAPI.APIRecipient(r2, '1', false, true); // has template, no role
+			EnvelopeAPI.APIRecipient result1 = new EnvelopeAPI.APIRecipient(r1, '1', false); // no template, has role
+			EnvelopeAPI.APIRecipient result2 = new EnvelopeAPI.APIRecipient(r2, '1', false); // no template, no role
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
@@ -1795,14 +1793,6 @@ private class EnvelopeAPITest {
 			System.assertNotEquals(null, result2);
 			System.assertEquals('', result2.roleName);
 			System.assertEquals('2', result2.routingOrder);
-
-			System.assertNotEquals(null, result3);
-			System.assertEquals('TemplateRole', result3.roleName);
-			System.assertEquals('', result3.routingOrder);
-
-			System.assertNotEquals(null, result4);
-			System.assertEquals('', result4.roleName);
-			System.assertEquals('', result4.routingOrder);
 		}
 	}
 
@@ -1876,5 +1866,48 @@ private class EnvelopeAPITest {
 		System.assertEquals(null, result.documents[1].documentBase64);
 		System.assertNotEquals(null, result.documents[1].htmlDefinition);
 		System.assertEquals('<html/>', result.documents[1].htmlDefinition.source);
+	}
+
+	@IsTest
+	static void test_APIEnvelope_template_roles() {
+		Envelope e = new Envelope(null, 's', 'm', null)
+			.withDocuments(new List<Document> {
+				Document.fromTemplate(UUID.randomUUID(), 't')
+			})
+			.withRecipients(new List<Recipient> {
+				Recipient.fromSource('r1', 'r1@unit.test', null, 'r1', null)
+					.withRoutingOrder(1),
+				Recipient.fromSource('r2', 'r2@unit.test', null, 'r2', null)
+					.withRoutingOrder(2),
+				Recipient.fromSource('r3', 'r3@unit.test', null, 'r3', null)
+					.withRoutingOrder(2)
+			});
+
+		Test.startTest();
+		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(
+			e,
+			true,
+			true,
+			true,
+			true);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(1, Collection.size(result.compositeTemplates));
+		System.assertNotEquals(null, result.compositeTemplates[0]);
+		System.assertEquals(1, Collection.size(result.compositeTemplates[0].inlineTemplates));
+		System.assertNotEquals(null, result.compositeTemplates[0].inlineTemplates[0]);
+		System.assertNotEquals(null, result.compositeTemplates[0].inlineTemplates[0].recipients);
+		List<EnvelopeAPI.APIRecipient> recipients = result.compositeTemplates[0].inlineTemplates[0].recipients.signers;
+		System.assertEquals(3, Collection.size(recipients));
+		System.assertNotEquals(null, recipients[0]);
+		System.assertEquals('1', recipients[0].recipientId);
+		System.assertEquals('1', recipients[0].routingOrder);
+		System.assertNotEquals(null, recipients[1]);
+		System.assertEquals('2', recipients[1].recipientId);
+		System.assertEquals('2', recipients[1].routingOrder);
+		System.assertNotEquals(null, recipients[2]);
+		System.assertEquals('3', recipients[2].recipientId);
+		System.assertEquals('2', recipients[2].routingOrder);
 	}
 }

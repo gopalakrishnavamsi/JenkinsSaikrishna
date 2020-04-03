@@ -39,6 +39,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 	private static final Map<String, MockResource> MOCKS = new Map<String, MockResource>();
 
 	// Capture group 1 = API version, group 2 = account ID, group 3 = ignore, group 4 = path
+	//noinspection RegExpRedundantEscape
 	private static final Pattern BASE_PATH_PATTERN = Pattern.compile(
 		'\\/restapi\\/([^\\/]+)\\/(accounts|login_information)(\\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|\\d+)(\\/?(.+))?)?');
 
@@ -101,10 +102,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 			request.getBody());
 	}
 
-	private static String randomPassword() {
-		return EncodingUtil.base64Encode(Blob.valueOf(TestUtils.randomString(32)));
-	}
-
+	//noinspection ApexUnusedDeclaration
 	public class AccountsMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -133,6 +131,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class BillingPlanMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -148,6 +147,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class BulkEnvelopesMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -177,6 +177,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class BulkSendListsMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -201,6 +202,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class CustomFieldsMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -232,6 +234,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class EnvelopesMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -239,7 +242,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 			if (request.method == 'GET') {
 				UUID id = UUID.tryParse((String)Collection.last(request.path));
 				if (id != null) { // get status
-					EnvelopeAPI.APIRecipient r1 = new EnvelopeAPI.APIRecipient(null, null, false, false);
+					EnvelopeAPI.APIRecipient r1 = new EnvelopeAPI.APIRecipient(null, null, false);
 					r1.name = UUID.randomUUID().toString();
 					r1.email = UUID.randomUUID() + '@unit.test';
 					r1.recipientId = '1';
@@ -249,7 +252,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					r1.declinedDateTime = '';
 					r1.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-10).addMinutes(30));
 					r1.declinedReason = '';
-					EnvelopeAPI.APIRecipient r2 = new EnvelopeAPI.APIRecipient(null, null, false, false);
+					EnvelopeAPI.APIRecipient r2 = new EnvelopeAPI.APIRecipient(null, null, false);
 					r2.name = UUID.randomUUID().toString();
 					r2.email = UUID.randomUUID() + '@unit.test';
 					r2.recipientId = '2';
@@ -259,7 +262,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					r2.declinedDateTime = '';
 					r2.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-9).addMinutes(30));
 					r2.declinedReason = '';
-					EnvelopeAPI.APIRecipient r3 = new EnvelopeAPI.APIRecipient(null, null, false, false);
+					EnvelopeAPI.APIRecipient r3 = new EnvelopeAPI.APIRecipient(null, null, false);
 					r3.name = UUID.randomUUID().toString();
 					r3.email = UUID.randomUUID() + '@unit.test';
 					r3.recipientId = '3';
@@ -269,7 +272,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					r3.declinedDateTime = '';
 					r3.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-8).addMinutes(30));
 					r3.declinedReason = '';
-					EnvelopeAPI.APIRecipient r4 = new EnvelopeAPI.APIRecipient(null, null, false, false);
+					EnvelopeAPI.APIRecipient r4 = new EnvelopeAPI.APIRecipient(null, null, false);
 					r4.name = UUID.randomUUID().toString();
 					r4.email = UUID.randomUUID() + '@unit.test';
 					r4.recipientId = '4';
@@ -279,7 +282,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					r4.declinedDateTime = '';
 					r4.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-7).addMinutes(30));
 					r4.declinedReason = '';
-					EnvelopeAPI.APIRecipient r5 = new EnvelopeAPI.APIRecipient(null, null, false, false);
+					EnvelopeAPI.APIRecipient r5 = new EnvelopeAPI.APIRecipient(null, null, false);
 					r5.name = UUID.randomUUID().toString();
 					r5.email = UUID.randomUUID() + '@unit.test';
 					r5.recipientId = '5';
@@ -289,7 +292,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					r5.declinedDateTime = '';
 					r5.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-6).addMinutes(30));
 					r5.declinedReason = '';
-					EnvelopeAPI.APIRecipient r6 = new EnvelopeAPI.APIRecipient(null, null, false, false);
+					EnvelopeAPI.APIRecipient r6 = new EnvelopeAPI.APIRecipient(null, null, false);
 					r6.name = UUID.randomUUID().toString();
 					r6.email = UUID.randomUUID() + '@unit.test';
 					r6.recipientId = '6';
@@ -299,7 +302,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					r6.declinedDateTime = '';
 					r6.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-5).addMinutes(30));
 					r6.declinedReason = '';
-					EnvelopeAPI.APIRecipient r7 = new EnvelopeAPI.APIRecipient(null, null, false, false);
+					EnvelopeAPI.APIRecipient r7 = new EnvelopeAPI.APIRecipient(null, null, false);
 					r7.signerName = UUID.randomUUID().toString();
 					r7.signerEmail = UUID.randomUUID() + '@unit.test';
 					r7.hostName = UUID.randomUUID().toString();
@@ -311,7 +314,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					r7.declinedDateTime = '';
 					r7.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-4).addMinutes(30));
 					r7.declinedReason = '';
-					EnvelopeAPI.Recipients rs = new EnvelopeAPI.Recipients(null, null, false, false);
+					EnvelopeAPI.Recipients rs = new EnvelopeAPI.Recipients(null, null, false);
 					rs.signers = new List<EnvelopeAPI.APIRecipient> { r1 };
 					rs.agents = new List<EnvelopeAPI.APIRecipient> { r2 };
 					rs.editors = new List<EnvelopeAPI.APIRecipient> { r3 };
@@ -419,6 +422,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class PermissionProfilesMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -438,6 +442,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class ServiceInformationMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -449,6 +454,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class SettingsMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -474,6 +480,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class SigningGroupsMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -507,6 +514,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class TabDefinitionsMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -615,6 +623,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class TemplatesMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -796,6 +805,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class UsersMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -833,6 +843,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class ViewsMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
