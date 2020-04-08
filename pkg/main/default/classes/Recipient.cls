@@ -985,7 +985,7 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient with updated <code>routingOrder</code>.
 	 */
-	public Recipient withRoutingOrder(final Integer routingOrder) {
+	global Recipient withRoutingOrder(final Integer routingOrder) {
 		this.routingOrder = routingOrder < 1 ? 1 : routingOrder;
 		return this;
 	}
