@@ -8,39 +8,38 @@
         <div class="slds-m-bottom_large ds-text-color">{!$Label.c.HelpGuidesSummary}</div>
 
         <div class="slds-grid slds-gutters">
-            <div class="slds-box slds-align_absolute-center ds-medium-fonts-size slds-m-around_small slds-col ds-box-border"
-                onclick="{!c.showFAQs}">
-                <ul>
-                    <li class="slds-align_absolute-center ds-havingTrouble-img-size">
+            <div class="slds-box slds-col ds-box-border slds-m-around_small ds-medium-fonts-size" onclick="{!c.showFAQs}">
+                <div class="slds-grid slds-grid_vertical slds-grid_align-center slds-gutters slds-m-around_medium">
+                    <div class="slds-col slds-align_absolute-center ds-havingTrouble-img-size ">
                         <img src="{!($Resource.HavingTroubleOnHome4x)}"
                             alt="{!$Label.c.agreementHelp}"/>
-                    </li>
-                    <li class="ds-text-color ds-not-selectable">
+                    </div>
+                    <div class="slds-col slds-align_absolute-center ds-text-color ds-not-selectable ds-width">
                         <center><strong>{!$Label.c.FrequentlyAskedQuestionsInHelp}</strong></center>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
-            <div class="slds-box ds-medium-fonts-size slds-m-around_small slds-col ds-box-border" onclick="{!c.goToUrl}" id="docGenBasics">
-                <ul>
-                    <li class="slds-align_absolute-center ds-helpBasics-img-size">
+            <div class="slds-box slds-col ds-box-border slds-m-around_small ds-medium-fonts-size"  onclick="{!c.goToUrl}" id="docGenBasics">
+                <div class="slds-grid slds-grid_vertical slds-grid_align-center slds-gutters slds-m-around_medium">
+                    <div class="slds-col slds-align_absolute-center ds-helpBasics-img-size">
                         <img src="{!($Resource.CLMHelpBasics)}"
                             alt="{!$Label.c.agreementHelp}"/>
-                    </li>
-                    <li class="ds-text-color ds-not-selectable">
+                    </div>
+                    <div class="slds-col slds-align_absolute-center ds-text-color ds-not-selectable ds-width">
                         <center><strong>{!$Label.c.BasicsOfDocGen}</strong></center>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
-            <div class="slds-box slds-align_absolute-center ds-medium-fonts-size slds-m-around_small slds-col ds-box-border" onclick="{!c.goToUrl}" id="addCompToLayouts">
-                <ul>
-                    <li class="slds-align_absolute-center ds-helpLayouts-img-size">
+            <div class="slds-box slds-col ds-box-border slds-m-around_small ds-medium-fonts-size" onclick="{!c.goToUrl}" id="addCompToLayouts">
+                <div class="slds-grid slds-grid_vertical slds-grid_align-center slds-gutters slds-m-around_medium">
+                    <div class="slds-col slds-align_absolute-center ds-helpLayouts-img-size">
                         <img src="{!($Resource.CLMHelpLayouts)}"
                             alt="{!$Label.c.agreementHelp}"/>
-                    </li>
-                    <li class="ds-text-color ds-not-selectable">
+                    </div>
+                    <div class="slds-col slds-align_absolute-center ds-text-color ds-not-selectable ds-width">
                         <center><strong>{!$Label.c.AddComponentsToLayouts}</strong></center>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
 

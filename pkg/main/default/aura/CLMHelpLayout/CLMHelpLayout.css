@@ -8,12 +8,12 @@
 }
 
 .THIS .ds-fonts-color {
-  color: #0070d2;
+  color: #006DCC;
   font-size: 1rem;
 }
 
 .THIS.ds-icon-color svg {
-  fill: #0070d2;
+  fill: #006DCC;
 }
 
 .THIS .ds-box-border{
@@ -35,7 +35,7 @@
 
 .THIS .ds-havingTrouble-img-size {
     height: 10rem;
-    width: 10rem;
+    width: 8rem;
 }
 
 .THIS .ds-helpBasics-img-size {
@@ -45,5 +45,9 @@
 
 .THIS .ds-helpLayouts-img-size {
     height: 10rem;
-    width: 14rem;
+    width: 12rem;
+}
+
+.THIS .ds-width {
+    width: 220px;
 }
