@@ -268,6 +268,41 @@ public with sharing class Permissions {
 	}
 
 	/**
+	 * Checks whether the current user is the Integration Admin for connecting Docusign and Salesforce.
+	 *
+	 * @return <code>true</code> if the current user is an Integration Admin, <code>false</code>
+	 * otherwise.
+	 */
+	public static Boolean isDocuSignIntegrationUser() {
+		return isDocuSignIntegrationUser(UserInfo.getUserId());
+	}
+
+	private static Boolean isDocuSignIntegrationUser(final Id userId) {
+		return String.isNotBlank(userId)
+			&& isDocuSignAdministrator(userId)
+			&& validateDocuSignIntegrationUser(userId);
+	}
+
+	private static Boolean validateDocuSignIntegrationUser(final Id userId) {
+		Boolean result = false;
+		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
+		if (String.isNotBlank(userId) && accountSettings != null) {
+			User user = (User)Collection.head([
+				SELECT Id, Username__c, Name, Email, CanManageAccount__c, Status__c
+				FROM User
+				WHERE Id = :userId AND IsActive = true
+				AND Username__c != null AND CanManageAccount__c = true
+				AND Email = :String.valueOf(accountSettings.Email__c)
+				LIMIT 1
+			]);
+			if (user != null) {
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * Checks whether the current user is assigned the <code>DocuSign Administrator</code> permission set.
 	 *
 	 * @return <code>true</code> if the current user is a DocuSign eSignature administrator, <code>false</code>

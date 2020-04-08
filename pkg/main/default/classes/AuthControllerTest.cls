@@ -139,6 +139,8 @@ private class AuthControllerTest {
 			System.assert(!result.isConsentRequired);
 			System.assertEquals(null, result.message);
 			System.assertEquals(4, result.products.size());
+			System.assertEquals(true, result.permission.isDocuSignAdministrator);
+			System.assertEquals(true, result.permission.isDocuSignIntegrationUser);
 			System.assertEquals(true, result.permission.isDocuSignGenerator);
 			System.assertEquals(true, result.permission.isDocuSignNegotiator);
 		}
@@ -183,6 +185,8 @@ private class AuthControllerTest {
 			Test.stopTest();
 
 			System.assertEquals(4, config.products.size());
+			System.assertEquals(true, config.permission.isDocuSignAdministrator);
+			System.assertEquals(true, config.permission.isDocuSignIntegrationUser);
 			System.assertEquals(true, config.permission.isDocuSignGenerator);
 			System.assertEquals(true, config.permission.isDocuSignNegotiator);
 		}

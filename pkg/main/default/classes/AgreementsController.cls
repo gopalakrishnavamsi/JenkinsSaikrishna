@@ -13,10 +13,6 @@ public with sharing class AgreementsController extends Controller {
 	public AgreementsController(final ApexPages.StandardController c) {
 	}
 
-	public static Boolean getIsCurrentUserDocuSignAdmin() {
-		return Permissions.isDocuSignAdministrator();
-	}
-
 	@AuraEnabled(Cacheable = true)
 	public static String getNameSpace() {
 		try {

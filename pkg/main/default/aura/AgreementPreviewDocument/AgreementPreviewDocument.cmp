@@ -6,6 +6,7 @@
     <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="currentUserEmail" type="String" access="public"/>
     <aura:attribute name="currentUserDocuSignAdmin" type="Boolean" access="public"/>
+    <aura:attribute name="currentUserDocuSignIntegrationUser" type="Boolean" access="public"/>
     <aura:attribute name="approvalWorkItems" type="AgreementApprovalWorkItem"/>
     <aura:attribute name="agreementVersions" type="Object[]" access="private"/>
     <aura:attribute name="widget" type="Object"/>

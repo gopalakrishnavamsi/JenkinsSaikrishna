@@ -3,7 +3,6 @@
     <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="agreementId" type="Id" access="public"/>
     <aura:attribute name="currentUserEmail" type="String" access="public"/>
-    <aura:attribute name="currentUserDocuSignAdmin" type="Boolean" access="public"/>
     <aura:attribute name="isAgreementDeleted" type="Boolean" access="public" default="false"/>
     <!-- end of attributes passed from Lightning out VF page -->
 
@@ -24,6 +23,7 @@
     <aura:attribute name="isNegotiateEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isNegotiateTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
+    <aura:attribute name="permission" type="Object" access="private"/>
 
     <ltng:require styles="{!$Resource.scmwidgetscss}"
                   scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper)}"/>
@@ -40,7 +40,7 @@
             <aura:set attribute="else">
                 <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
                                         fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
-                                        products="{!v.products}"/>
+                                        products="{!v.products}" permission="{!v.permission}"/>
             </aura:set>
             <aura:if isTrue="{!not(v.isNegotiateEnabled)}">
                 <aura:if isTrue="{!v.isNegotiateTrialExpired}">
@@ -66,7 +66,8 @@
                         <c:AgreementPreviewDocument agreement="{!v.agreement}" sourceId="{!v.sourceId}"
                                                     uiHelper="{!v.uiHelper}"
                                                     currentUserEmail="{!v.currentUserEmail}"
-                                                    currentUserDocuSignAdmin="{!v.currentUserDocuSignAdmin}"/>
+                                                    currentUserDocuSignAdmin="{!v.permission.isDocuSignAdministrator}"
+                                                    currentUserDocuSignIntegrationUser="{!v.permission.isDocuSignIntegrationUser}"/>
                     </div>
                 </aura:if>
             </div>

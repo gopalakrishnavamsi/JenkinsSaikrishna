@@ -1187,6 +1187,39 @@ private class PermissionsTest {
 	}
 
 	@IsTest
+	static void test_getIsCurrentUserDocuSignIntegrationAdmin_positive() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			Boolean result = Permissions.isDocuSignIntegrationUser();
+			Test.stopTest();
+			System.assertEquals(result, true);
+		}
+	}
+
+	@IsTest
+	static void test_getIsCurrentUserDocuSignIntegrationAdmin_negative() {
+		User u1 = UserMock.createDocuSignAdministrator(true);
+		User u2 = UserMock.createDocuSignAdministrator(false);
+		System.runAs(u2) {
+			Test.startTest();
+			Boolean result = Permissions.isDocuSignIntegrationUser();
+			Test.stopTest();
+			System.assertEquals(result, false);
+		}
+	}
+
+	@IsTest
+	static void test_getIsCurrentUserDocuSignIntegrationAdmin_noAccountSettings() {
+		User u1 = UserMock.createDocuSignAdministrator(false);
+		System.runAs(u1) {
+			Test.startTest();
+			Boolean result = Permissions.isDocuSignIntegrationUser();
+			Test.stopTest();
+			System.assertEquals(result, false);
+		}
+	}
+
+	@IsTest
 	static void test_isDocuSignGenerator() {
 		final User nonDocuSignUser = UserMock.createUser();
 		final User dsGenerator = UserMock.createDocuSignGenerator(false);

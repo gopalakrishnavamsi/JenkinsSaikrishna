@@ -413,7 +413,7 @@ global class UserMock {
 		accountSettings.AccountId__c = String.valueOf(accountId);
 		accountSettings.AccountNumber__c = TestUtils.randomInteger(1000000);
 		accountSettings.AccountName__c = TestUtils.randomString(20);
-		accountSettings.Email__c = (accountId == null ? UUID.randomUUID().toString() : accountId.toString()) + '@unit.test';
+		accountSettings.Email__c = UserInfo.getUserEmail();
 		accountSettings.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
 		accountSettings.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
 		accountSettings.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';

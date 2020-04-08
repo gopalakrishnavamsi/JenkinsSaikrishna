@@ -60,14 +60,12 @@
         var url = event.getParam('url');
         window.open(url, '_blank');
       };
-      var docuSignAdmin = {!IsCurrentUserDocuSignAdmin};
       $Lightning.use(namespace + ':AgreementPreviewApp', function () {
         $Lightning.createComponent(namespace + ':AgreementPreview',
           {
             sourceId: '{!JSENCODE($CurrentPage.parameters.sourceId)}',
             agreementId: '{!JSENCODE($CurrentPage.parameters.agreementId)}',
             currentUserEmail: '{!JSENCODE($User.email)}',
-            currentUserDocuSignAdmin: docuSignAdmin,
             showSetupComponent: showSetupComponent,
             showSetupSpinner: showSetupSpinner
           },

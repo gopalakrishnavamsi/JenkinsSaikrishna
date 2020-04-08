@@ -433,26 +433,6 @@ private class AgreementsControllerTest {
 	}
 
 	@IsTest
-	static void test_getIsCurrentUserDocuSignAdmin_positive() {
-		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			Test.startTest();
-			Boolean result = AgreementsController.getIsCurrentUserDocuSignAdmin();
-			Test.stopTest();
-			System.assertEquals(result, true);
-		}
-	}
-
-	@IsTest
-	static void test_getIsCurrentUserDocuSignAdmin_negative() {
-		System.runAs(UserMock.createDocuSignNegotiator(true)) {
-			Test.startTest();
-			Boolean result = AgreementsController.getIsCurrentUserDocuSignAdmin();
-			Test.stopTest();
-			System.assertEquals(result, false);
-		}
-	}
-
-	@IsTest
 	static void test_resendRequest_failure() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();

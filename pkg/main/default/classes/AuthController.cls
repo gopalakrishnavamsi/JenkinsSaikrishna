@@ -33,11 +33,17 @@ public with sharing class AuthController {
 
 	public Class Permission {
 		@AuraEnabled
+		public Boolean isDocuSignAdministrator { get; private set; }
+		@AuraEnabled
+		public Boolean isDocuSignIntegrationUser { get; private set; }
+		@AuraEnabled
 		public Boolean isDocuSignNegotiator { get; private set; }
 		@AuraEnabled
 		public Boolean isDocuSignGenerator { get; private set; }
 
 		public Permission() {
+			this.isDocuSignAdministrator = Permissions.isDocuSignAdministrator();
+			this.isDocuSignIntegrationUser = Permissions.isDocuSignIntegrationUser();
 			this.isDocuSignNegotiator = Permissions.isDocuSignNegotiator();
 			this.isDocuSignGenerator = Permissions.isDocuSignGenerator();
 		}
