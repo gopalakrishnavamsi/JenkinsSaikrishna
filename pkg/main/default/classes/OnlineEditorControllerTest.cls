@@ -903,12 +903,11 @@ private class OnlineEditorControllerTest {
 			});
 			OnlineEditorController.Query result;
 			Test.startTest();
-			result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q));
-			System.assertNotEquals(null, result);
-			System.assertEquals('', result.type);
-			System.assertEquals('', result.relationship);
-			System.assertEquals(0, result.fields.size());
-			System.assertEquals(0, result.children.size());
+			try {
+				result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q));
+			} catch(UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
+			}
 			Test.stopTest();
 		}
 	}

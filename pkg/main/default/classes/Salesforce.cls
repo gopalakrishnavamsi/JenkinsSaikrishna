@@ -98,10 +98,22 @@ public with sharing class Salesforce {
 	}
 
 	public static SObjectType getSObjectType(final String typeName) {
-		if (String.isBlank(typeName)) throw new DocuSignException(Label.InvalidType);
+		if (String.isBlank(typeName)) throw new DocuSignException(
+			String.format(Label.InvalidSObjectType_1, 
+			new List<String> {
+				typeName
+			})
+		);
+
+		//Could not resolve object type X. Verify the object exists and you have access to it
 
 		SObjectType result = GLOBAL_DESCRIBE.get(Application.resolveType(typeName).toLowerCase());
-		if (result == null) throw new DocuSignException(Label.InvalidType);
+		if (result == null) throw new DocuSignException(
+			String.format(Label.InvalidSObjectType_1, 
+			new List<String> {
+				typeName
+			})
+		);
 
 		return result;
 	}

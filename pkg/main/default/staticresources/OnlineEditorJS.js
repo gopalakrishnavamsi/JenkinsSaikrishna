@@ -161,6 +161,7 @@ jQuery(document).ready(function ($) {
                   {},
                   event.message
                 );
+                createToastComponent(event.message, 'error');
                 reject(event.message);
               }
             });
@@ -170,6 +171,7 @@ jQuery(document).ready(function ($) {
             {},
             err
           );
+          createToastComponent(err, 'error');
           reject(err);
         }
       }
@@ -194,6 +196,7 @@ jQuery(document).ready(function ($) {
                   {},
                   event.message
                 );
+                createToastComponent(event.message, 'error');
                 reject(event.message);
               }
             });
@@ -203,6 +206,7 @@ jQuery(document).ready(function ($) {
             {},
             err
           );
+          createToastComponent(err, 'error');
           reject(err);
         }
       }
@@ -232,6 +236,7 @@ jQuery(document).ready(function ($) {
                   {},
                   event.message
                 );
+                createToastComponent(event.message, 'error');
                 reject(event.message);
               }
             },
@@ -244,6 +249,7 @@ jQuery(document).ready(function ($) {
             {},
             err
           );
+          createToastComponent(err, 'error');
           reject(err);
         }
       }

@@ -105,24 +105,52 @@ private class SalesforceTest {
 
 	@IsTest
 	static void test_getSObjectType() {
+		String testInput1 = null;
+		String testInput2 = '  ';
+		String testInput3 = UUID.randomUUID().toString();
+
 		Test.startTest();
 		try {
-			Salesforce.getSObjectType(null);
+			Salesforce.getSObjectType(testInput1);
 			throw new AssertException('Expected getSObjectType to fail');
 		} catch (DocuSignException ex) {
-			System.assertEquals(Label.InvalidType, ex.getMessage());
+			System.assertEquals(
+				String.format(
+					Label.InvalidSObjectType_1,
+					new List<String> { 
+						testInput1
+					}
+				), 
+				ex.getMessage()
+			);
 		}
 		try {
-			Salesforce.getSObjectType('  ');
+			Salesforce.getSObjectType(testInput2);
 			throw new AssertException('Expected getSObjectType to fail');
 		} catch (DocuSignException ex) {
-			System.assertEquals(Label.InvalidType, ex.getMessage());
+			System.assertEquals(
+				String.format(
+					Label.InvalidSObjectType_1,
+					new List<String> { 
+						testInput2
+					}
+				), 
+				ex.getMessage()
+			);			
 		}
 		try {
-			Salesforce.getSObjectType(UUID.randomUUID().toString());
+			Salesforce.getSObjectType(testInput3);
 			throw new AssertException('Expected getSObjectType to fail');
 		} catch (DocuSignException ex) {
-			System.assertEquals(Label.InvalidType, ex.getMessage());
+			System.assertEquals(
+				String.format(
+					Label.InvalidSObjectType_1,
+					new List<String> { 
+						testInput3
+					}
+				), 
+				ex.getMessage()
+			);			
 		}
 		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getSObjectType('Account'));
 		System.assertEquals(Lead.getSObjectType(), Salesforce.getSObjectType('lead'));

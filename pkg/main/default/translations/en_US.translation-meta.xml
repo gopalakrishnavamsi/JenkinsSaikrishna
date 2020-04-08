@@ -4842,7 +4842,11 @@
 	<customLabels>
 		<label>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_orderby.htm</label>
 		<name>LearnMoreAboutOrderingURL</name>
-	</customLabels>			
+	</customLabels>	
+	<customLabels>
+		<label>Could not resolve object type {0}. Verify the object exists and you have access to it.</label>
+		<name>InvalidSObjectType_1</name>	
+	</customLabels>	
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

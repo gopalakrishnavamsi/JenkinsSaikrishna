@@ -9324,5 +9324,12 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Learn more about ordering records url</shortDescription>
 		<value>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_orderby.htm</value>
+	</labels>
+	<labels>
+		<fullName>InvalidSObjectType_1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid sObject Type</shortDescription>		
+		<value>Could not resolve object type {0}. Verify the object exists and you have access to it.</value>
 	</labels>		
 </CustomLabels>

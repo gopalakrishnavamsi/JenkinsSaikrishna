@@ -630,7 +630,7 @@ public with sharing class OnlineEditorController extends Controller {
 			return convertData(onlineEditorQuery, result);
 		} catch (Exception ex) {
 			LoggerService.getInstance().exception(ex, 'Failed to get online editor merge data');
-			return new OnlineEditorController.Query('', '', null, null);
+			throw ex;
 		}
 	}
 
