@@ -57,6 +57,8 @@
     <aura:token name="colorBrandDarker" value="#005fb2"/>
     <!-- color background approver icon -->
     <aura:token name="colorBackgroundApproverIcon" value="#14A9DA"/>
+    <!-- disabled background color -->
+    <aura:token name="colorBackgroundDisabled" value="#e9eaec"/>
 
 
     <!-- Colors -->

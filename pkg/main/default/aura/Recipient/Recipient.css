@@ -102,6 +102,20 @@
     padding-left: t(spacingXxSmall);
 }
 
+.THIS .slds-form-element.slds-is-disabled .slds-pill_container {
+    border-color: t(colorBorderInputDisabled);
+    background-color: t(colorBackgroundDisabled);
+}
+
+.THIS .slds-form-element.slds-is-disabled .slds-pill {
+    border-color: transparent;
+    background-color: t(colorBackgroundDisabled);
+}
+
+.THIS .ds-pill-label {
+    margin-right: auto;
+}
+
 .THIS .ds-button-icon_has-value,
 .THIS .ds-button-icon_has-value:hover,
 .THIS .ds-button-icon_has-value:active,

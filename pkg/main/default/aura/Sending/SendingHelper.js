@@ -376,6 +376,7 @@
             ? r.role
             : self.getNextRole(defaultRoles);
           delete r.templateId;
+          delete r.locked;
           delete r.original;
           rs.push(r);
         }
@@ -503,6 +504,7 @@
     var self = this;
     return {
       templateId: templateRecipient.templateId,
+      locked: false,
       original: recipient,
       envelopeRecipientId: recipient.envelopeRecipientId,
       type: templateRecipient.type,
@@ -601,6 +603,7 @@
           rs.push(self.mergeTemplateRecipient(tr, recipients[ri++], defaultRoles));
         } else {
           tr.role = self.resolveRole(tr.role, defaultRoles);
+          tr.locked = true;
           rs.push(tr);
         }
       });

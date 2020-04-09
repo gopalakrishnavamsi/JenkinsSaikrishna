@@ -21,18 +21,30 @@
 
     <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-gutters_xx-small">
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
-            <c:strike_lookup placeholder="{!$Label.c.SearchByName}"
-                             object="{!v.recordType}"
-                             restrictType="false"
-                             iconName="{!'standard:' + v.recordType}"
-                             searchField="Name"
-                             value="{!v.sourceId}"
-                             subtitleField="Email" valueLabel="{#v.recipient.name}"/>
+            <aura:if isTrue="{#v.recipient.locked}">
+                <div class="slds-form-element slds-input-has-icon slds-input-has-icon_right slds-pill_container slds-is-disabled">
+                    <span class="slds-pill slds-size_1-of-1">
+                        <lightning:icon class="slds-pill__icon_container" iconName="standard:people" size="small"/>
+                        <span class="ds-pill-label" title="{#v.recipient.email}">{#v.recipient.name}</span>
+                    </span>
+                </div>
+                <aura:set attribute="else">
+                    <c:strike_lookup placeholder="{!$Label.c.SearchByName}"
+                                     object="{!v.recordType}"
+                                     restrictType="false"
+                                     iconName="{!'standard:' + v.recordType}"
+                                     searchField="Name"
+                                     value="{!v.sourceId}"
+                                     subtitleField="Email"
+                                     valueLabel="{#v.recipient.name}"/>
+                </aura:set>
+            </aura:if>
         </div>
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_x-small">
             <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
                 <div class="slds-col slds-has-flexi-truncate">
-                    <aura:if isTrue="{!v.lock &amp;&amp; empty(v.recipient.templateId) &amp;&amp; empty(v.recipient.envelopeRecipientId)}">
+                    <aura:if
+                            isTrue="{!v.lock &amp;&amp; empty(v.recipient.templateId) &amp;&amp; empty(v.recipient.envelopeRecipientId)}">
                         <lightning:select value="{!v.recipient.type}" label="{!$Label.c.Type}" class="ds-no-label">
                             <option value="CarbonCopy">{!$Label.c.CarbonCopy}</option>
                         </lightning:select>
