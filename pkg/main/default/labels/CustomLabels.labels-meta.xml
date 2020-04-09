@@ -4612,7 +4612,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>InternalApprovalSearchActorMessage</shortDescription>
-		<value>Search by name</value>
+		<value>Search by name or email</value>
 	</labels>
 	<labels>
 		<fullName>Approvers</fullName>

@@ -14,7 +14,7 @@
     <!-- component body -->
     <div class="slds-grid">
         <div class="slds-col slds-size_1-of-1 slds-small-size_2-of-2 slds-m-top_x-small">
-            <c:strike_lookup placeholder="{!$Label.c.InternalApprovalSearchActorMessage}"
+            <c:strike_lookup placeholder="{!$Label.c.SearchByName}"
                              object="User"
                              iconName="standard:avatar"
                              searchField="Name"

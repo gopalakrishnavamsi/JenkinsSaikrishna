@@ -2254,7 +2254,7 @@
 		<name>ExternalReviewSearchMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Search by name</label>
+		<label>Search by name or email</label>
 		<name>InternalApprovalSearchActorMessage</name>
 	</customLabels>
 	<customLabels>
