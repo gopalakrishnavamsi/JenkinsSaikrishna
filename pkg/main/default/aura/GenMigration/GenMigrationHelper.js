@@ -62,7 +62,10 @@
         component.set('v.migrationTemplateStatusMessage', stringUtils.format($A.get('$Label.c.MigrateTemplatesSuccessMsg')));
         component.set('v.migrationUserStatusMessage', stringUtils.format($A.get('$Label.c.MigrateUsersSuccessMsg')));
         component.set('v.showPackageUnInstallText', true);
-      }
+      } else if( (getResult.onLoadTemplateCount === 0 || getResult.getGenStatus.dfsle__GenTemplatesMigrated__c === true) &&
+                 (getResult.onLoadUserCount === 0 || getResult.getGenStatus.dfsle__GenUsersMigrated__c === true)) {
+        component.set('v.showPackageUnInstallText',true);
+        }
 
     }
 
