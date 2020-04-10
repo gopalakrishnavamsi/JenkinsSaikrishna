@@ -116,7 +116,6 @@
 }
 
 .THIS .ds-remove .slds-button__icon {
-    pointer-events: none;
     fill: t(colorTextError);
 }
 
@@ -168,16 +167,8 @@
     border-top: 1px solid t(colorBorder);
 }
 
-.THIS .ds-recipients .ds-recipients__recipient:only-child .ds-remove {
-    pointer-events: none;
-}
-
 .THIS .ds-recipients .ds-recipients__recipient:first-child {
     margin-top: 0;
-}
-
-.THIS .ds-recipients .ds-recipients__recipient:only-child .ds-remove .slds-button__icon {
-    fill: t(colorTextIconDefaultDisabled);
 }
 
 .THIS .ds-template-roles .ds-template-roles__title + .ds-template-roles__role {
@@ -219,4 +210,3 @@
 .THIS .ds-other-recipients-button {
     margin-top: 10px;
 }
-
