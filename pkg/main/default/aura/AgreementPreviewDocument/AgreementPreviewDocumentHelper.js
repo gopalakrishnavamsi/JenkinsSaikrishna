@@ -41,6 +41,7 @@
             agreement,
             documentUrl,
             component.get('v.currentUserDocuSignAdmin'),
+            component.get('v.currentUserDocuSignIntegrationUser'),
             isCurrentUserSender,
             isCurrentUserRecipientForApproval
           );
@@ -148,7 +149,7 @@
     });
   },
 
-  resolvePreview: function (component, auth, agreement, documentUrl, isAdmin, isSender, isApprover) {
+  resolvePreview: function (component, auth, agreement, documentUrl, isAdmin, isIntegrationUser, isSender, isApprover) {
     var agreementStatus = agreement.status.toUpperCase();
     var AgreementStatusTypes = component.get('v.AgreementStatusTypes');
     if (agreementStatus === AgreementStatusTypes.NEW_AGREEMENT ||
@@ -222,12 +223,13 @@
             auth
           ),
           true,
-          false
+          isIntegrationUser
         );
 
-      //If current user is the sender of the Approval request and also an Admin User
+      //If current user is the sender of the Approval request and also an Integration User
       //In this case the user should be presented with the options for resending, cancelling as well as approving on behalf of
-      if (isSender === true && isAdmin === true)
+      //The Integration User should be the only one with access to complete for
+      if (isSender === true && isIntegrationUser === true)
         return this.approvalSenderView(
           component,
           this.basePreview(
@@ -240,7 +242,7 @@
             auth
           ),
           true,
-          true
+          isIntegrationUser
         );
 
       //If the current user is the Approver for the Approval request
@@ -274,7 +276,7 @@
             auth
           ),
           true,
-          true
+          isIntegrationUser
         );
 
       //If current user is neither the sender , admin or recipient of the approval request
@@ -428,7 +430,7 @@
     return widget;
   },
 
-  approvalSenderView: function (component, widget, inProgress, isAdminUser) {
+  approvalSenderView: function (component, widget, inProgress, isIntegrationUser) {
     var thisComponent = component;
     var self = this;
     if (this.isValidWidget(widget) === false) throw 'Invalid Widget';
@@ -466,7 +468,7 @@
       subTitle: 'Document sent for Internal Approval',
       showCancel: inProgress,
       showResendRequest: inProgress,
-      showOnBehalf: isAdminUser,
+      showOnBehalf: isIntegrationUser,
       approvalUsers: agreementApprovalUsers
     });
     return widget;
