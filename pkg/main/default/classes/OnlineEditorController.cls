@@ -52,6 +52,12 @@ public with sharing class OnlineEditorController extends Controller {
 			this.fields = fields == null ? new List<OnlineEditorController.Field>() : fields;
 			this.children = children == null ? new List<OnlineEditorController.Query>() : children;
 		}
+
+		public Boolean isEmpty() {
+			return String.isEmpty(this.type) 
+			&& Collection.isEmpty(this.children) 
+			&& Collection.isEmpty(this.fields);
+		}
 	}
 
 	public class Field {
@@ -622,6 +628,9 @@ public with sharing class OnlineEditorController extends Controller {
 			OnlineEditorController.Query onlineEditorQuery = (OnlineEditorController.Query)JSON.deserialize(
 				queryJson,
 				OnlineEditorController.Query.class);
+
+			//Only convert queries with type && (fields || child queries)
+			if (onlineEditorQuery.isEmpty()) return onlineEditorQuery;
 
 			// TODO: Chorus should support Word query results
 			Gen.Query genQuery = convertQuery(onlineEditorQuery);

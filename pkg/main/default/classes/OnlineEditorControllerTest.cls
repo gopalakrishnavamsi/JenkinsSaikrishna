@@ -913,6 +913,27 @@ private class OnlineEditorControllerTest {
 	}
 
 	@IsTest
+	static void test_getMergeData_emptyQuery() {
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Schema.Account a = TestUtils.createAccount();
+			OnlineEditorController.Query q = new OnlineEditorController.Query(null, null, null, null);
+			OnlineEditorController.Query result;
+			Exception ex;
+			Test.startTest();
+			try {
+				result = OnlineEditorController.getMergeData(a.Id, JSON.serialize(q));
+			} catch(Exception error) {
+				ex = error;
+			}
+			Test.stopTest();
+			System.assertEquals(ex, null);
+			System.assertNotEquals(result, null);
+			System.assertEquals(result.isEmpty(), true);
+			System.assertEquals(q.isEmpty(), true);
+		}
+	}	
+
+	@IsTest
 	static void test_getUserProperties_failure() {
 		System.runAs(UserMock.createDocuSignSender(false)) {
 			Test.startTest();
