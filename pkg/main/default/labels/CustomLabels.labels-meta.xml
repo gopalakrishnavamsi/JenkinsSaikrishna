@@ -6483,7 +6483,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - SUPPORT</shortDescription>
-		<value>SUPPORT</value>
+		<value>Support</value>
 	</labels>
 	<labels>
 		<fullName>MORERESOURCES</fullName>
@@ -6491,7 +6491,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - MORE RESOURCES</shortDescription>
-		<value>MORE RESOURCES</value>
+		<value>More Resources</value>
 	</labels>
 	<labels>
 		<fullName>SupportCenterTitle</fullName>
