@@ -9331,5 +9331,19 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Invalid sObject Type</shortDescription>		
 		<value>Could not resolve object type {0}. Verify the object exists and you have access to it.</value>
-	</labels>		
+	</labels>
+	<labels>
+		<fullName>ExampleFilterByClause</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Example Filter By Clause</shortDescription>		
+		<value>Example: Owner.Name = 'John Smith'</value>
+	</labels>	
+	<labels>
+		<fullName>ExampleOrderByClause</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Example Filter By Clause</shortDescription>		
+		<value>Example: CreatedDate ASC</value>
+	</labels>			
 </CustomLabels>

@@ -126,6 +126,7 @@
             <div class="slds-m-top--small slds-m-bottom--x-large">
                 <div class="soql-text-header slds-m-bottom--xx-small">{!$Label.c.FilterByOption}</div>
                 <lightning:textarea class="slds-form-element"
+                                    placeholder="{!$Label.c.ExampleFilterByClause}"
                                     value="{!v.clonedFieldMapping.filterBy}"
                                     name="filterByInput"/>
                 <p class="slds-p-top_small">
@@ -138,6 +139,7 @@
             <div class="slds-m-top--medium slds-m-bottom--medium">
                 <div class="soql-text-header slds-m-bottom--xx-small">{!$Label.c.OrderByOption}</div>
                 <lightning:textarea class="slds-form-element"
+                                    placeholder="{!$Label.c.ExampleOrderByClause}"
                                     value="{!v.clonedFieldMapping.orderBy}"
                                     name="orderByInput"/>
                 <p class="slds-p-top_small">

@@ -4847,6 +4847,14 @@
 		<label>Could not resolve object type {0}. Verify the object exists and you have access to it.</label>
 		<name>InvalidSObjectType_1</name>	
 	</customLabels>	
+	<customLabels>
+		<label>Example: Owner.Name = 'John Smith'</label>
+		<name>ExampleFilterByClause</name>	
+	</customLabels>	
+	<customLabels>
+		<label>Example: CreatedDate ASC</label>
+		<name>ExampleOrderByClause</name>	
+	</customLabels>		
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
