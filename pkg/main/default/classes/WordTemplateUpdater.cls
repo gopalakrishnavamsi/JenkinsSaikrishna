@@ -250,6 +250,11 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 				if (childRelationship == null) {
 					// V1 stores relationship name in label field
 					childRelationship = getChildRelationship(objectDescribe, v1.label);
+					if (childRelationship == null) {
+						LoggerService.getInstance().warn('Invalid child relation ' +  v1.label
+										 + ' for object ' + objectDescribe.getName());
+						return null;
+					}
 					root.fields.add(new Gen.Field(
 						type,
 						childRelationship.relatesTo,
