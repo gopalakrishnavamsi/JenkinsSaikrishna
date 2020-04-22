@@ -474,13 +474,16 @@ private class GenControllerTest {
 			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
 			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
 
-			List<Id> fileIds = new List<Id> {
+			String scmFile1 = 'scm;' + UUID.randomUUID() + ';UnitTestScmFile1;html';
+			String scmFile2 = 'scm;' + UUID.randomUUID() + ';UnitTestScmFile2;html';
+
+			List<String> files = new List<String> {
 				result1.ContentDocumentId, result2.ContentDocumentId,
-				result3.ContentDocumentId
+				result3.ContentDocumentId, scmFile1, scmFile2
 			};
 
 			Test.startTest();
-			String result = GenController.getSendingDeepLink(a.Id, fileIds);
+			String result = GenController.getSendingDeepLink(a.Id, files);
 			Test.stopTest();
 
 			System.assert(String.isNotBlank(result));
@@ -783,48 +786,25 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_verifyDocuSignGenerator() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			Test.startTest();
-			System.assert(GenController.verifyDocuSignGenerator());
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_verifyDocuSignGenerator_Unauthorized() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			Test.startTest();
-			try {
-				GenController.verifyDocuSignGenerator();
-				throw new AssertException('Expected verify DocuSignGeneratore to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_getEOSFolderId_success() {
+	static void test_getTempEOSFolderId_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
-			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString());
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString(), null);
 			Test.startTest();
-			UUID eosFolderId = GenController.getEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
+			UUID eosFolderId = GenController.getTempEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
 			System.assert(eosFolderId != null);
 			Test.stopTest();
 		}
 	}
 
 	@IsTest
-	static void test_getEOSFolderId_unauthorized() {
+	static void test_getTempEOSFolderId_unauthorized() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser(true)) {
-			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString());
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString(), null);
 			Test.startTest();
 			try {
-				GenController.getEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
+				GenController.getTempEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
 				throw new AssertException('Expected get EOSFolderId to Fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
@@ -910,14 +890,14 @@ private class GenControllerTest {
 			Test.startTest();
 			try {
 				GenController.validateChildRelationshipField(fieldJSON, 2);
-			} catch(AuraHandledException exp) {
+			} catch (AuraHandledException exp) {
 				expMessage = exp;
 			}
 			Test.stopTest();
 
 			System.assertEquals(expMessage, null);
 		}
-	}	
+	}
 
 	@IsTest
 	static void test_validateChildRelationshipField_failure() {
@@ -930,14 +910,14 @@ private class GenControllerTest {
 			Test.startTest();
 			try {
 				GenController.validateChildRelationshipField(fieldJSON, 2);
-			} catch(AuraHandledException exp) {
+			} catch (AuraHandledException exp) {
 				expMessage = exp;
 			}
 			Test.stopTest();
 
 			System.assertNotEquals(expMessage, null);
 		}
-	}		
+	}
 
 	@IsTest
 	static void test_generateLimitedAccessToken_unauthorized() {

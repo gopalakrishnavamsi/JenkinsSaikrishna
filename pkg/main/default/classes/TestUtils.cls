@@ -215,10 +215,11 @@ global class TestUtils {
 		return createDocument(UserInfo.getUserId());
 	}
 
-	public static SObject createAgreementConfiguration(final Id sourceObjectId, final String folderId) {
+	public static SObject createAgreementConfiguration(final Id sourceObjectId, final String folderId,final String tempFolderId) {
 
 		AgreementConfiguration__c configuration = new AgreementConfiguration__c();
 		configuration.FolderId__c = folderId;
+		configuration.TempFolderId__c = tempFolderId;
 		configuration.SourceObject__c = sourceObjectId;
 		insert configuration;
 		return configuration;

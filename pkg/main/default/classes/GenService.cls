@@ -566,18 +566,12 @@ public with sharing class GenService {
 		}
 
 		@TestVisible
-		private UUID getFolderId(final Id sourceObjectId) {
+		private List<AgreementConfiguration__c> getTempEOSConfig(final Id sourceObjectId) {
 			Permissions.verifyIsQueryable(AgreementConfiguration__c.getSObjectType(), new List<String> {
-				'Id', 'Name', 'FolderId__c', 'SourceObject__c'
+				'Id', 'Name', 'FolderId__c', 'SourceObject__c', 'TempFolderId__c'
 			});
 
-			List<AgreementConfiguration__c> agreementConfigurationList = new List<AgreementConfiguration__c>();
-			agreementConfigurationList = [SELECT Id, Name, FolderId__c, SourceObject__c FROM AgreementConfiguration__c WHERE SourceObject__c = :sourceObjectId];
-			if (!agreementConfigurationList.isEmpty()) {
-				return UUID.parse(agreementConfigurationList[0].FolderId__c);
-			} else {
-				return null;
-			}
+			return [SELECT Id, Name, FolderId__c, SourceObject__c, TempFolderId__c FROM AgreementConfiguration__c WHERE SourceObject__c = :sourceObjectId];
 		}
 
 	}
@@ -882,13 +876,13 @@ public with sharing class GenService {
 	}
 
 	public static Boolean validateChildRelationshipField(
-		 final Gen.Field field,
-		 final Integer depth) {
+		final Gen.Field field,
+		final Integer depth) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
 		Query validationQuery = Query.newChildQuery(
-			field.relatesTo, 
+			field.relatesTo,
 			new List<String> { 'Id' },
 			field.relationship,
 			field.parentIdField,
@@ -898,9 +892,9 @@ public with sharing class GenService {
 		);
 
 		Query.validate(validationQuery, depth);
-		
+
 		return true;
-	}	
+	}
 
 	public static Boolean deleteTemplate(final Id templateId) {
 		Permissions.verifyIsDocuSignAdministrator();
@@ -912,27 +906,48 @@ public with sharing class GenService {
 		return DB.deleteTemplate(templateId);
 	}
 
-	public static UUID getEOSFolderId(final Id sourceObjectId) {
+	public static UUID getTempEOSFolderId(final Id sourceObjectId) {
 		Permissions.verifyIsDocuSignGenerator();
-		UUID folderId = DB.getFolderId(sourceObjectId);
-		if (folderId == null) {
-			String sourceObjectType = sourceObjectId.getSobjectType().getDescribe().getName();
-			String sourceObjectName = sourceObjectId; //EOS folder name set as recordID since Name field can vary on all objects.
-			folderId = NegotiateAPI.getInstance().createEOSFolder(sourceObjectName, sourceObjectId, sourceObjectType);
-			setFolderId(sourceObjectId, folderId.toString());
+		UUID eosObjectFolderId;
+		UUID tempSubFolderId;
+		List<AgreementConfiguration__c> config = DB.getTempEOSConfig(sourceObjectId);
+		Boolean isConfigAvailable = !config.isEmpty();
+		if (isConfigAvailable) {
+			eosObjectFolderId = config[0].FolderId__c != null ? UUID.parse(config[0].FolderId__c) : null;
+			tempSubFolderId = config[0].TempFolderId__c != null ? UUID.parse(config[0].TempFolderId__c) : null;
 		}
-		return folderId;
+		if (UUID.isEmpty(tempSubFolderId)) {
+			if (UUID.isEmpty(eosObjectFolderId)) {
+				String sourceObjectType = sourceObjectId.getSobjectType().getDescribe().getName();
+				String sourceObjectName = sourceObjectId;
+				eosObjectFolderId = NegotiateAPI.getInstance().createEOSFolder(sourceObjectName, sourceObjectId, sourceObjectType);
+			}
+			if (eosObjectFolderId != null) {
+				tempSubFolderId = NegotiateAPI.getInstance().getEOSSubFolderByName('_temp', eosObjectFolderId);
+				if (UUID.isEmpty(tempSubFolderId)) {
+					tempSubFolderId = NegotiateAPI.getInstance().createEOSSubFolder('_temp', eosObjectFolderId);
+				}
+			}
+			if (!UUID.isEmpty(tempSubFolderId) && !UUID.isEmpty(eosObjectFolderId)) {
+				setFolderId(sourceObjectId, eosObjectFolderId.toString(), tempSubFolderId.toString());
+			}
+		}
+		return tempSubFolderId;
 	}
 
-	private static void setFolderId(final Id sourceObjectId, final String folderId) {
+	private static void setFolderId(final Id sourceObjectId, final String folderId, final String tempFolderId) {
 		Permissions.verifyIsCreateable(AgreementConfiguration__c.getSObjectType(), new List<String> {
-			'FolderId__c', 'SourceObject__c'
+			'FolderId__c', 'SourceObject__c', 'TempFolderId__c'
+		});
+		Permissions.verifyIsUpdateable(AgreementConfiguration__c.getSObjectType(), new List<String> {
+			'FolderId__c', 'SourceObject__c', 'TempFolderId__c'
 		});
 
 		AgreementConfiguration__c configuration = new AgreementConfiguration__c();
 		configuration.FolderId__c = folderId;
 		configuration.SourceObject__c = sourceObjectId;
-		insert configuration;
+		configuration.TempFolderId__c = tempFolderId;
+		upsert configuration FolderId__c;
 	}
 
 	public static void convertHtmlDocumentToWord(final UUID documentGuid) {

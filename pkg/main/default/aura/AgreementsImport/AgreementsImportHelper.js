@@ -114,7 +114,8 @@
             var importedFile = {
               name: selectedFile.name + '.' + selectedFile.extension,
               formattedSize: selectedFile.formattedSize,
-              extension: selectedFile.extension
+              extension: selectedFile.extension,
+              agreementId: result.agreementId.value
             };
             helper.displayCreatedAgreement(component, importedFile);
             helper.getAgreementDetails(result.agreementId.value, component);
@@ -258,30 +259,14 @@
   },
 
   navigateToSendForSignature: function (component, event, helper) {
-    component.set('v.isSendingForSignature', true);
-    var salesforceFiles = component.get('v.salesforceFiles');
-    var selectedFileId;
-    salesforceFiles.forEach(function (file) {
-      if (file.selected) {
-        selectedFileId = file.sourceId;
-      }
-    });
-    var isSalesforceFileAvailable = !$A.util.isUndefinedOrNull(selectedFileId);
-    if (isSalesforceFileAvailable) {
-      helper.sendForSignature(component, selectedFileId);
-    } else {
-      helper.exportFileAndSend(component, event, helper);
-    }
-  },
-
-  sendForSignature: function (component, selectedFileId) {
-    var helper = this;
     component.set('v.loading', true);
+    component.set('v.isSendingForSignature', true);
     var sendingAction = component.get('c.getSendingDeepLink');
     var sourceId = component.get('v.recordId');
+    var importedFile = component.get('v.importedFile');
     sendingAction.setParams({
       sourceId: sourceId,
-      fileIds: $A.util.isEmpty(selectedFileId) ? null : [selectedFileId]
+      files: [stringUtils.formatSCMFile(importedFile.agreementId, importedFile.name, importedFile.extension, importedFile.formattedSize)]
     });
     sendingAction.setCallback(this, function (response) {
       var state = response.getState();
@@ -298,26 +283,6 @@
     document.addEventListener('springcm:upload:fileChange', function (event) {
       component.set('v.disableSalesforceFileImport', $A.util.isEmpty(event.detail.files));
     });
-  },
-
-  exportFileAndSend: function (component, event, helper) {
-    component.set('v.loading', true);
-    var agreementId = component.get('v.importedFile').agreementId;
-    var sourceId = component.get('v.recordId');
-    var exportSalesforceAction = component.get('c.exportAgreementToSalesforce');
-    exportSalesforceAction.setParams({
-      sourceId: sourceId,
-      agreementId: agreementId
-    });
-    exportSalesforceAction.setCallback(this, function (response) {
-      component.set('v.loading', false);
-      if (response.getState() === 'SUCCESS') {
-        helper.sendForSignature(component, '');
-      } else {
-        helper.showToast(component, stringUtils.getErrorMessage(response), 'error');
-      }
-    });
-    $A.enqueueAction(exportSalesforceAction);
   },
 
   createExternalReviewComponent: function (component) {

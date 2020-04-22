@@ -56,7 +56,7 @@ public with sharing class SendingController extends Controller {
 	@AuraEnabled
 	public static DraftEnvelope createDraftEnvelope(
 		final Id sourceId,
-		final List<Id> files) {
+		final List<String> files) {
 
 		try {
 			Permissions.verifyIsDocuSignUser();
@@ -81,8 +81,19 @@ public with sharing class SendingController extends Controller {
 				}
 				documents = DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), sourceIds, false);
 			} else {
+				Set<Id> sfContentIds = new Set<Id>();
 				templates = new List<Template>();
-				documents = DocumentService.getDocuments(ContentVersion.getSObjectType(), new Set<Id>(files));
+				documents = new List<Document>();
+				for (String file : files) {
+					if (file.containsIgnoreCase(Document.TYPE_SCM)) {
+						documents.add(processScmFile(file));
+					} else {
+						sfContentIds.add(file);
+					}
+				}
+				if (Collection.isNotEmpty(sfContentIds)) {
+					documents.addAll(DocumentService.getDocuments(ContentVersion.getSObjectType(), new Set<Id>(sfContentIds)));
+				}
 			}
 
 			List<Recipient> recipients = RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds);
@@ -206,6 +217,20 @@ public with sharing class SendingController extends Controller {
 			deleteContentDocument(fileId);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to delete document');
+		}
+	}
+
+	//scmFile input structure will be scm;[scm guid];[file name];[file extension]
+	private static Document processScmFile(String scmFile) {
+		List<String> scmFileDetails = scmFile.split(';');
+		Boolean isScmFile = Collection.isNotEmpty(scmFileDetails) && scmFileDetails.size() > 0 && scmFileDetails[0].equalsIgnoreCase(Document.TYPE_SCM);
+		if (isScmFile && scmFileDetails.size() > 1) {
+			UUID scmFileId = UUID.parse(scmFileDetails[1]) ;
+			String name = scmFileDetails.size() > 2 ? scmFileDetails[2] : '';
+			String extension = scmFileDetails.size() > 3 ? scmFileDetails[3] : '';
+			return Document.fromScmFile(scmFileId, name, extension);
+		} else {
+			return null;
 		}
 	}
 

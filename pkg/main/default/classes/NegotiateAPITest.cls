@@ -629,4 +629,76 @@ public with sharing class NegotiateAPITest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_createSubFolder_success() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Test.startTest();
+			UUID subFolderId = NegotiateAPI.getInstance().createEOSSubFolder('_temp', ScmAPIMock.FOLDER_ID);
+			Test.stopTest();
+			System.assertNotEquals(null, subFolderId);
+			System.assertEquals(ScmAPIMock.FOLDER_ID_2, subFolderId);
+		}
+	}
+
+	@IsTest
+	static void test_createSubFolder_failure() {
+		ScmAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignGenerator()) {
+
+			Test.startTest();
+			try {
+				NegotiateAPI.getInstance().createEOSSubFolder('_temp', ScmAPIMock.FOLDER_ID);
+				throw new AssertException('Expected createSubFolder to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertNotEquals(null, ex.error.code);
+				System.assertNotEquals(null, ex.error.description);
+				System.assert(ex.error instanceof ScmAPI.Error);
+				System.assert(UUID.isNotEmpty(((ScmAPI.Error)ex.error).referenceId));
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getEOSSubFolderByName_success() {
+		ScmAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignGenerator()) {
+
+			Test.startTest();
+			UUID result = NegotiateAPI.getInstance().getEOSSubFolderByName('_temp', ScmAPIMock.FOLDER_ID);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(ScmAPIMock.FOLDER_ID_3, result);
+
+		}
+	}
+
+	@IsTest
+	static void test_getEOSSubFolderByName_failure() {
+		ScmAPIMock.failure();
+
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Test.startTest();
+			try {
+				NegotiateAPI.getInstance().getEOSSubFolderByName('_temp', ScmAPIMock.FOLDER_ID);
+				throw new AssertException('Expected getEOSSubFolderByNam to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertNotEquals(null, ex.error.code);
+				System.assertNotEquals(null, ex.error.description);
+				System.assert(ex.error instanceof ScmAPI.Error);
+				System.assert(UUID.isNotEmpty(((ScmAPI.Error)ex.error).referenceId));
+			}
+			Test.stopTest();
+
+		}
+	}
+
 }

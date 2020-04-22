@@ -227,10 +227,10 @@ public with sharing class GenController extends Controller {
 	@AuraEnabled
 	public static String getSendingDeepLink(
 		final Id sourceId,
-		final List<Id> fileIds) {
+		final List<String> files) {
 
 		try {
-			PageReference pg = FileService.getSendingDeepLink(sourceId, fileIds);
+			PageReference pg = FileService.getSendingDeepLink(sourceId, files);
 			return pg == null ? null : pg.getUrl();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get deep link');
@@ -274,19 +274,9 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Boolean verifyDocuSignGenerator() {
+	public static UUID getTempEOSFolderId(final Id sourceId) {
 		try {
-			Permissions.verifyIsDocuSignGenerator();
-			return true;
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to validate.');
-		}
-	}
-
-	@AuraEnabled
-	public static UUID getEOSFolderId(final Id sourceId) {
-		try {
-			return GenService.getEOSFolderId(sourceId);
+			return GenService.getTempEOSFolderId(sourceId);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to fetch Eos Folder');
 		}

@@ -111,13 +111,13 @@ public with sharing class FileService {
 	 * The caller must be the a docusign user
 	 *
 	 * @param sourceId source record id
-	 * @param fileIds file/contentdocumentid list
+	 * @param files scm file/contentdocumentid list
 	 *
 	 * @return sending deeplink url
 	 */
 	public static PageReference getSendingDeepLink(
 		final Id sourceId,
-		final List<Id> fileIds) {
+		final List<String> files) {
 
 		Permissions.verifyIsDocuSignUser();
 
@@ -125,8 +125,8 @@ public with sharing class FileService {
 		if (String.isNotBlank(sourceId)) {
 			sendingPath.getParameters().put('sId', sourceId);
 		}
-		if (Collection.isNotEmpty(fileIds)) {
-			sendingPath.getParameters().put('files', String.join(fileIds, ','));
+		if (Collection.isNotEmpty(files)) {
+			sendingPath.getParameters().put('files', String.join(files, ','));
 		}
 		return sendingPath;
 	}

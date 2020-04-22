@@ -104,6 +104,11 @@
 		<field>User.Provisioned__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>AgreementConfiguration__c.TempFolderId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
 	<hasActivationRequired>false</hasActivationRequired>
 	<label>DocuSign Document Generator</label>
 	<objectPermissions>

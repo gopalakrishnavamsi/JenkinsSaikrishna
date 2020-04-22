@@ -270,10 +270,9 @@ public with sharing class AgreementsController extends Controller {
 	@AuraEnabled
 	public static String getSendingDeepLink(
 		final Id sourceId,
-		List<Id> fileIds) {
-
+		List<String> files) {
 		try {
-			PageReference pg = FileService.getSendingDeepLink(sourceId, fileIds);
+			PageReference pg = FileService.getSendingDeepLink(sourceId, files);
 			return pg == null ? null : pg.getUrl();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get deep link');

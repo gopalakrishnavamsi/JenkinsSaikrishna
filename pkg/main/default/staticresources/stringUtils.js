@@ -110,12 +110,22 @@ window.stringUtils = (function () {
     return result;
   };
 
+  /**
+   * Formats a message as HTML.
+   * @param agreement {agreement} agreement details
+   * @returns {string} The formatter SCM file string containing all information
+   */
+  var formatSCMFile = function (fileGuid, fileName, extension, size) {
+    return format('scm;{0};{1};{2};{3}', fileGuid || '', fileName || '', extension || '', size || '');
+  };
+
   return Object.freeze({
     format: format,
     formatSize: formatSize,
     formatHtml: formatHtml,
     escapeHtml: escapeHtml,
     unescapeHtml: unescapeHtml,
-    getErrorMessage: getErrorMessage
+    getErrorMessage: getErrorMessage,
+    formatSCMFile: formatSCMFile
   });
 }());

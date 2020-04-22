@@ -46,12 +46,10 @@
   },
 
   showAddToSalesforceModal: function (component, event, helper) {
-    var sendForEsign = false;
-    helper.exportAgreementToSalesforce(component, sendForEsign);
+    helper.exportAgreementToSalesforce(component);
   },
 
   sendForSignature: function (component, event, helper) {
-    var sendForEsign = true;
-    helper.exportAgreementToSalesforce(component, sendForEsign);
+    helper.navigateToSendingUrl(component);
   }
 });

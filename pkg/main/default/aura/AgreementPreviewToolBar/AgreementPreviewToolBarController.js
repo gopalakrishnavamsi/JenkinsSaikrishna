@@ -96,8 +96,7 @@
   },
 
   addToSalesforce: function (component, event, helper) {
-    var sendForEsign = false;
-    helper.exportAgreementToSalesforce(component, sendForEsign);
+    helper.exportAgreementToSalesforce(component);
   },
 
   backToSourceRecord: function (component) {
@@ -105,8 +104,7 @@
   },
 
   sendForSignature: function (component, event, helper) {
-    var sendForEsign = true;
-    helper.exportAgreementToSalesforce(component, sendForEsign);
+    helper.navigateToSendingUrl(component);
   },
 
   initializeResources: function (component, event, helper) {

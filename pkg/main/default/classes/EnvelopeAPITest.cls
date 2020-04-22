@@ -1827,7 +1827,7 @@ private class EnvelopeAPITest {
 	}
 
 	@IsTest
-	static void test_APIEnvelope_html() {
+	static void test_APIEnvelope_contentFile() {
 		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 		s.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
 		insert s;
@@ -1866,6 +1866,27 @@ private class EnvelopeAPITest {
 		System.assertEquals(null, result.documents[1].documentBase64);
 		System.assertNotEquals(null, result.documents[1].htmlDefinition);
 		System.assertEquals('<html/>', result.documents[1].htmlDefinition.source);
+	}
+
+	@IsTest
+	static void test_APIEnvelope_scmFile() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
+		Document d1 = Document.fromScmFile(UUID.randomUUID(), 'UnitTestScmFile1', 'doc');
+		Document d2 = Document.fromScmFile(UUID.randomUUID(), 'UnitTestScmFile2', 'html');
+		Envelope e2 = new Envelope(null, 'Envelope subject', 'Envelope message', null)
+			.withDocuments(new List<Document> { d1, d2 });
+
+		Test.startTest();
+		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(e2, false, false, true, true);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(2, Collection.size(result.documents));
+		System.assertNotEquals(null, result.documents[0]);
+		System.assertNotEquals(null, result.documents[0].documentBase64);
+		System.assertNotEquals(null, result.documents[1]);
+		System.assertNotEquals(null, result.documents[1].htmlDefinition);
 	}
 
 	@IsTest

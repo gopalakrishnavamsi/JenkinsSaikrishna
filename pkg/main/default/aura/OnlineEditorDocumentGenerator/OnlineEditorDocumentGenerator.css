@@ -14,3 +14,9 @@
     background: #C9C7C5;
     color: white;
 }
+
+.THIS .ds-buttonSpinner {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+}

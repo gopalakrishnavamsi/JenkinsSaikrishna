@@ -542,7 +542,6 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 	private static Boolean isHtml(final Document doc) {
 		return doc != null
-			&& doc.type != Document.TYPE_SCM
 			&& String.isNotBlank(doc.extension)
 			&& HTML_EXTENSIONS.contains(doc.extension.toLowerCase());
 	}

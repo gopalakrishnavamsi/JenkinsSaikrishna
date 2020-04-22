@@ -6,7 +6,7 @@ private class NegotiateServiceTest {
 		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
-			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID_2.toString());
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID_2.toString(), null);
 			Test.startTest();
 			List<Agreement> result = NegotiateService.getAgreements(ScmAPIMock.SOURCE_OBJECT_ID);
 			Test.stopTest();
@@ -46,7 +46,7 @@ private class NegotiateServiceTest {
 		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
-			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString());
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString(), null);
 			Test.startTest();
 			NegotiateAPI.TaskStatus result = NegotiateService.createAgreementInEOSFolder(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.SOURCE_OBJECT_ID_2, 'Test_DOC_Name');
 			Test.stopTest();
@@ -61,7 +61,7 @@ private class NegotiateServiceTest {
 		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
-			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString());
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString(), null);
 			Test.startTest();
 			NegotiateAPI.TaskStatus result = NegotiateService.exportAgreementToSalesforce(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.DOCUMENT_ID);
 			Test.stopTest();
@@ -370,7 +370,7 @@ private class NegotiateServiceTest {
 		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignNegotiator()) {
-			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString());
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString(), null);
 			Test.startTest();
 			LimitedAccessToken limitedAccessToken = NegotiateService.generateUploadToken(ScmAPIMock.SOURCE_OBJECT_ID_2);
 			Test.stopTest();

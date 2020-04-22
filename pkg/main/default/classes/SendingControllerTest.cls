@@ -70,18 +70,19 @@ private class SendingControllerTest {
 			Lead l = TestUtils.createLead();
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
-
+			String scmFile1 = 'scm;' + UUID.randomUUID() + ';UnitTestScmFile1;html';
+			String scmFile2 = 'scm;' + UUID.randomUUID() + ';UnitTestScmFile2;html';
 			Test.startTest();
 			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(
 				l.Id,
-				new List<Id> { cv1.Id, cv2.Id });
+				new List<String> { cv1.Id, cv2.Id, scmFile1, scmFile2 });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.envelope);
 			System.assertNotEquals(null, result.templates);
 			System.assertNotEquals(null, result.documents);
-			System.assertEquals(2, result.documents.size());
+			System.assertEquals(4, result.documents.size());
 			System.assertNotEquals(null, result.recipients);
 			System.assertEquals(1, result.recipients.size());
 			EnvelopeSettings es = EnvelopeSettings.getInstance();

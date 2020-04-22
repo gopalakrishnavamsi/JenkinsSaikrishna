@@ -2,11 +2,17 @@
   EXPORT_DOCUMENT: 'Export Gen Document',
 
   initDocumentGenerator: function (component) {
-    component.set('v.loading', true);
+    var permission = component.get('v.permission');
     var products = component.get('v.products');
     var isExpired = false;
     var isActive = false;
     var self = this;
+    if (!permission.isDocuSignGenerator) {
+      self.showToast(component, $A.get('$Label.c.MustBeDocuSignGenerator'), 'error');
+      component.set('v.loading', false);
+      return;
+    }
+    component.set('v.loading', true);
     if (!$A.util.isEmpty(products)) {
       for (var i = 0; i < products.length; i++) {
         var product = products[i];
@@ -21,25 +27,19 @@
     component.set('v.isGenEnabled', isActive);
     if (isExpired) {
       component.set('v.loading', false);
-      component.set('v.errMsg', $A.get('$Label.c.GenTrialExpired'));
+      self.showToast(component, $A.get('$Label.c.GenTrialExpired'), 'error');
     } else if (!isActive) {
       component.set('v.loading', false);
-      component.set('v.errMsg', $A.get('$Label.c.GenNotConfigured'));
-    } else {
-      self.invokeAction(component, component.get('c.verifyDocuSignGenerator'), {},
-        function (isGenerator) {
-          if (isGenerator === true) {
-            var renderOnlineEditorGenerator = component.get('v.renderOnlineEditorGenerator');
-            renderOnlineEditorGenerator().then($A.getCallback(function (isGenerated) {
-              component.set('v.loading', false);
-              component.set('v.isButtonEnabled', isGenerated);
-            })).catch($A.getCallback(function (err) {
-              component.set('v.loading', false);
-              component.set('v.errMsg', err);
-            }));
-          }
-        }
-      );
+      self.showToast(component, $A.get('$Label.c.GenNotConfigured'), 'error');
+    } else if (permission.isDocuSignGenerator) {
+      var renderOnlineEditorGenerator = component.get('v.renderOnlineEditorGenerator');
+      renderOnlineEditorGenerator().then($A.getCallback(function () {
+        self.uploadFileToSCM(component);
+      })).catch($A.getCallback(function (err) {
+        self.showToast(component, err, 'error');
+      })).finally($A.getCallback(function () {
+        component.set('v.loading', false);
+      }));
     }
   },
 
@@ -65,26 +65,16 @@
     }
   },
 
-  processDownloadAsWordFile: function (component) {
+  uploadFileToSCM: function (component) {
     var self = this;
     var fileBytes;
-    var scmDocGuid;
     var exportGeneratedDocument = component.get('v.exportGeneratedDocument');
-    self.timeEvent(component, self.EXPORT_DOCUMENT);
-    self.addEventProperties(component, {
-      'Product': 'Gen',
-      'Template Type': 'Online Editor',
-      'Format': 'docx',
-      'Location': 'download'
-    });
-
-    self.hideToast(component);
-    self.setLoading(component, true);
     component.set('v.isButtonEnabled', false);
+    component.set('v.showButtonSpinner', true);
     self.getFileName(component);
     exportGeneratedDocument().then(function (htmlData) {
       fileBytes = htmlData;
-      return self.getEOSFolderId(component);
+      return self.getTempEOSFolderId(component);
     }).then($A.getCallback(function (folderId) {
       return self.getLimitedAccessToken(component, folderId.value);
     })).then($A.getCallback(function (uploadToken) {
@@ -96,42 +86,65 @@
         fileBytes,
         component.get('v.fileName') + '.html'
       );
-    })).then(function (response) {
+    })).then($A.getCallback(function (response) {
       if (!response || !response.Href) throw $A.get('$Label.c.SCMHrefUndefined');
-      scmDocGuid = response.Href.substring(response.Href.lastIndexOf('/') + 1);
-      return self.convertDocument(component, scmDocGuid);
-    }).then($A.getCallback(function () {
-      return self.getLimitedAccessToken(component, scmDocGuid);
-    })).then($A.getCallback(function (downloadToken) {
-      return SpringCM.Widgets.Download.downloadDocument(
-        downloadToken.apiDownloadBaseUrl,
-        downloadToken.token,
-        downloadToken.accountId.value,
-        scmDocGuid,
-        component.get('v.fileName') + '.docx',
-        true,
-        'Docx'
-      );
-    })).then(function () {
-      self.trackSuccess(component, self.EXPORT_DOCUMENT);
-    }).catch($A.getCallback(function (err) {
+      var scmDocGuid = response.Href.substring(response.Href.lastIndexOf('/') + 1);
+      component.set('v.scmFileGuid', scmDocGuid);
+      component.set('v.isButtonEnabled', true);
+    })).catch($A.getCallback(function (err) {
       self.parseError(err).then($A.getCallback(function (msg) {
         self.showToast(component, msg, 'error');
-        self.trackError(component, self.EXPORT_DOCUMENT, {}, msg);
       }));
     })).finally($A.getCallback(function () {
-      if (scmDocGuid) {
-        self.deleteDocument(component, scmDocGuid);
-      }
-      component.set('v.isButtonEnabled', true);
-      self.setLoading(component, false);
+      component.set('v.showButtonSpinner', false);
     }));
   },
 
-  getEOSFolderId: function (component) {
+  processDownloadAsWordFile: function (component) {
+    var self = this;
+    var scmDocGuid = component.get('v.scmFileGuid');
+    self.timeEvent(component, self.EXPORT_DOCUMENT);
+    self.addEventProperties(component, {
+      'Product': 'Gen',
+      'Template Type': 'Online Editor',
+      'Format': 'docx',
+      'Location': 'download'
+    });
+    self.hideToast(component);
+    self.setLoading(component, true);
+    component.set('v.isButtonEnabled', false);
+
+    if (!$A.util.isUndefinedOrNull(scmDocGuid)) {
+      self.convertDocument(component, scmDocGuid).then($A.getCallback(function () {
+        return self.getLimitedAccessToken(component, scmDocGuid);
+      })).then($A.getCallback(function (downloadToken) {
+        return SpringCM.Widgets.Download.downloadDocument(
+          downloadToken.apiDownloadBaseUrl,
+          downloadToken.token,
+          downloadToken.accountId.value,
+          scmDocGuid,
+          component.get('v.fileName') + '.docx',
+          true,
+          'Docx'
+        );
+      })).then(function () {
+        self.trackSuccess(component, self.EXPORT_DOCUMENT);
+      }).catch($A.getCallback(function (err) {
+        self.parseError(err).then($A.getCallback(function (msg) {
+          self.showToast(component, msg, 'error');
+          self.trackError(component, self.EXPORT_DOCUMENT, {}, msg);
+        }));
+      })).finally($A.getCallback(function () {
+        component.set('v.isButtonEnabled', true);
+        self.setLoading(component, false);
+      }));
+    }
+  },
+
+  getTempEOSFolderId: function (component) {
     var self = this;
     return new Promise($A.getCallback(function (resolve, reject) {
-      self.invokeChainAction(component, component.get('c.getEOSFolderId'),
+      self.invokeChainAction(component, component.get('c.getTempEOSFolderId'),
         {
           sourceId: component.get('v.recordId')
         },
@@ -179,12 +192,15 @@
     }));
   },
 
-  deleteDocument: function (component, scmDocumentId) {
-    this.invokeChainAction(component, component.get('c.deleteDocument'),
-      {
-        documentId: scmDocumentId
-      }
-    );
+  deleteDocument: function (component) {
+    var scmFileGuid = component.get('v.scmFileGuid');
+    if (!$A.util.isUndefinedOrNull(scmFileGuid)) {
+      this.invokeChainAction(component, component.get('c.deleteDocument'),
+        {
+          documentId: scmFileGuid
+        }
+      );
+    }
   },
 
   getFileName: function (component) {

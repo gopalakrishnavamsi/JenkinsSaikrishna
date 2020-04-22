@@ -14,7 +14,7 @@
     <aura:attribute name="AgreementStatusTypes" type="Object"/>
 
     <ltng:require styles="{!$Resource.scmwidgetscss}"
-                  scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.navUtils)}"
+                  scripts="{!join(',',$Resource.AgreementActionManager, $Resource.scmwidgetsjs, $Resource.uiHelper, $Resource.navUtils, $Resource.stringUtils)}"
                   afterScriptsLoaded="{!c.onLoad}"/>
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>

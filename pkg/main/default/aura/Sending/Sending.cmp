@@ -4,7 +4,7 @@
 
     <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
 
-    <aura:attribute name="files" type="Id[]" default="[]"/>
+    <aura:attribute name="files" type="String[]" default="[]"/>
     <aura:attribute name="placeholderRecipients" type="Object"/>
     <aura:attribute name="sendNow" type="Boolean" default="false"/>
     <aura:attribute name="lock" type="Boolean" default="false"/>
@@ -125,8 +125,13 @@
                                                     {!doc.name}
                                                 </h3>
                                                 <div class="slds-tile__detail slds-truncate">
-                                                    {!doc.formattedLastModified} • {!doc.formattedSize}
-                                                    • {!doc.extension}
+                                                    <aura:if
+                                                            isTrue="{!doc.formattedLastModified != ''}">{!doc.formattedLastModified}
+                                                        •
+                                                    </aura:if>
+                                                    <aura:if isTrue="{!doc.formattedSize != ''}">{!doc.formattedSize}
+                                                        •
+                                                    </aura:if>{!doc.extension}
                                                 </div>
                                             </div>
                                         </article>

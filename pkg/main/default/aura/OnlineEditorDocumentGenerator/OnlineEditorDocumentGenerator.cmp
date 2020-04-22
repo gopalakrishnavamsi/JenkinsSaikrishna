@@ -11,15 +11,17 @@
     <aura:attribute name="onCancel" type="Object"/>
     <aura:attribute name="exportGeneratedDocument" type="Object"/>
 
+    <aura:attribute name="permission" type="Object" access="private"/>
     <aura:attribute name="fileName" type="String" access="private"/>
-    <aura:attribute name="errMsg" type="String" access="private"/>
+    <aura:attribute name="scmFileGuid" type="String" access="private"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isGenEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isButtonEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isGenTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
-    <aura:attribute name="loading" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="loading" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="showButtonSpinner" type="Boolean" default="false" access="private"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
 
@@ -30,8 +32,8 @@
                     <div class="slds-media slds-media_center">
                         <div class="slds-media__figure">
                             <span class="slds-icon_container slds-icon-standard-custom">
-                                                    <img src="{!($Resource.dsdxicon)}"
-                                                         class="slds-icon onlineEditorToolbarIcon" alt=""/>
+                                <img class="slds-is-relative slds-icon onlineEditorToolbarIcon"
+                                     src="{!$Resource.adflogo}" alt=""/>
                             </span>
                         </div>
                         <div class="slds-media__body">
@@ -46,21 +48,28 @@
                         </div>
                     </div>
                 </div>
-                <div class="slds-col slds-no-flex slds-align-top">
-                    <lightning:button variant="neutral" label="{!$Label.c.Cancel}" onclick="{!c.cancelClicked}"/>
-                    <lightning:buttonGroup>
-                        <lightning:button variant="brand"
-                                          label="{!$Label.c.SendForSignature}"
-                                          onclick="{!c.sendForSignatureClicked}"
-                                          disabled="{!!v.isButtonEnabled}"/>
-                        <lightning:buttonMenu menuAlignment="right"
-                                              disabled="{!!v.isButtonEnabled}"
-                                              class="{!if(v.isButtonEnabled,'ds-onlineEditorGenButtonMenu','ds-onlineEditorGenButtonMenuDisabled')}">
-                            <lightning:menuItem label="{!$Label.c.DownloadAsWordFile}"
-                                                value="{!$Label.c.DownloadAsWordFile}"
-                                                onactive="{!c.downloadAsWordFileClicked}"/>
-                        </lightning:buttonMenu>
-                    </lightning:buttonGroup>
+                <div class="{!if(v.loading,'slds-hide','slds-col slds-no-flex slds-align-top')}">
+                    <aura:if isTrue="{!v.showButtonSpinner}">
+                        <div class="ds-buttonSpinner">
+                            <c:BlueSpinner/>
+                        </div>
+                        <aura:set attribute="else">
+                            <lightning:button variant="neutral" label="{!$Label.c.Cancel}"
+                                              onclick="{!c.cancelClicked}"/>
+                            <lightning:buttonGroup class="{!if(v.isButtonEnabled,'','slds-hide')}">
+                                <lightning:button variant="brand"
+                                                  label="{!$Label.c.SendForSignature}"
+                                                  onclick="{!c.sendForSignatureClicked}"/>
+                                <lightning:buttonMenu menuAlignment="right"
+                                                      disabled="{!!v.isButtonEnabled}"
+                                                      class="{!if(v.isButtonEnabled,'ds-onlineEditorGenButtonMenu','ds-onlineEditorGenButtonMenuDisabled')}">
+                                    <lightning:menuItem label="{!$Label.c.DownloadAsWordFile}"
+                                                        value="{!$Label.c.DownloadAsWordFile}"
+                                                        onactive="{!c.downloadAsWordFileClicked}"/>
+                                </lightning:buttonMenu>
+                            </lightning:buttonGroup>
+                        </aura:set>
+                    </aura:if>
                 </div>
             </div>
         </div>
@@ -74,17 +83,8 @@
     <aura:if isTrue="{!not(v.isAuthorized)}">
         <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
                                 fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
-                                products="{!v.products}"/>
-    </aura:if>
-    <aura:if isTrue="{!not(empty(v.errMsg))}">
-        <div class="slds-m-around_large slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_error"
-             role="alert">
-            <lightning:icon iconName="utility:error" variant="inverse" size="small"
-                            class="slds-m-right_small slds-no-flex slds-align-top"/>
-            <div class="slds-notify__content">
-                <h2 class="slds-text-heading_small">{!v.errMsg}</h2>
-            </div>
-        </div>
+                                products="{!v.products}"
+                                permission="{!v.permission}"/>
     </aura:if>
     <div id="onlineEditorGenerator"></div>
 </aura:component>

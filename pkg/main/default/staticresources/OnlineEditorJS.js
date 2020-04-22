@@ -706,14 +706,14 @@ jQuery(document).ready(function ($) {
             token.accountId.value,
             token.entityId.value,
             editorData,
-            templateName + '.html')
+            templateName + '.adft')
           : SpringCM.Methods.Upload.uploadNewDocumentBytes(
             token.apiUploadBaseUrl,
             token.token,
             token.accountId.value,
             token.entityId.value,
             editorData,
-            templateName + '.html');
+            templateName + '.adft');
       })
       .then(function (response) {
         if (!response || !response.Href) throw Labels.templateSCMHrefUndefinedLabel;
@@ -953,7 +953,7 @@ jQuery(document).ready(function ($) {
         limitedAccessToken.token,
         limitedAccessToken.accountId.value,
         limitedAccessToken.entityId.value,
-        templateName + '.html',
+        templateName + '.adft',
         false)
         .then(function (data) {
           var reader = new FileReader();
@@ -962,8 +962,9 @@ jQuery(document).ready(function ($) {
             // FIXME: Typed arrays not available in ES5, but no good alternative here.
             var fileBytes = new Uint8Array(reader.result); // eslint-disable-line no-undef
             _editor.render(element, isGenerating);
-            _editor.importDocument(fileBytes, sourceId);
-            resolve(true);
+            _editor.importDocument(fileBytes, sourceId).then(function () {
+              resolve(true);
+            });
           };
         })
         .catch(function (err) {

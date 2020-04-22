@@ -1177,29 +1177,52 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_getEOSFolderId_success() {
+	static void test_getTempEOSFolderId_withConfig_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
-			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString());
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString(), ScmAPIMock.FOLDER_ID_3.toString());
 			Test.startTest();
-			UUID eosFolderId = GenService.getEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
+			UUID eosFolderId = GenService.getTempEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
 			System.assert(eosFolderId != null);
 			Test.stopTest();
 		}
 	}
 
 	@IsTest
-	static void test_getEOSFolderId_unauthorized() {
+	static void test_getTempEOSFolderId_withoutConfig_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			Test.startTest();
+			UUID eosFolderId = GenService.getTempEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
+			System.assert(eosFolderId != null);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getTempEOSFolderId_unauthorized() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser(true)) {
-			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString());
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString(), null);
 			Test.startTest();
 			try {
-				GenService.getEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
+				GenService.getTempEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
 				throw new AssertException('Expected get EOSFolderId to Fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getTempEOSFolderId_without_existing_subFolder_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID_2.toString(), null);
+			Test.startTest();
+			UUID eosFolderId = GenService.getTempEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
+			System.assert(eosFolderId != null);
 			Test.stopTest();
 		}
 	}
@@ -1315,7 +1338,7 @@ private class GenServiceTest {
 				null,
 				null,
 				'StageName != \'Closed Won\' ',
-				'Name ASC',			
+				'Name ASC',
 				1
 			);
 
@@ -1333,7 +1356,7 @@ private class GenServiceTest {
 				null,
 				null,
 				'StageName != \'Closed Won\' ',
-				'BAD SOQL VALUE',			
+				'BAD SOQL VALUE',
 				1
 			);
 
@@ -1342,7 +1365,7 @@ private class GenServiceTest {
 				'Opportunity',
 				'Opportunities',
 				'Opportunity',
-				'Opportunities',			
+				'Opportunities',
 				'AccountId',
 				'',
 				0,
@@ -1351,7 +1374,7 @@ private class GenServiceTest {
 				null,
 				null,
 				'BAD SOQL VALUE',
-				'Name ASC',			
+				'Name ASC',
 				1
 			);
 
@@ -1369,32 +1392,32 @@ private class GenServiceTest {
 				null,
 				null,
 				'Role != \'Business User\'',
-				'Role ASC',			
+				'Role ASC',
 				1
-			);				
+			);
 
 			Test.startTest();
 			try {
 				GenService.validateChildRelationshipField(successField, 2);
-			} catch(ValidationException err) {
+			} catch (ValidationException err) {
 				ex1 = err;
 			}
 
 			try {
 				GenService.validateChildRelationshipField(invalidOrderField, 2);
-			} catch(ValidationException err) {
+			} catch (ValidationException err) {
 				ex2 = err;
 			}
 
 			try {
 				GenService.validateChildRelationshipField(invalidFilterField, 2);
-			} catch(ValidationException err) {
+			} catch (ValidationException err) {
 				ex3 = err;
 			}
 
 			try {
 				GenService.validateChildRelationshipField(successDepth3Field, 3);
-			} catch(ValidationException err) {
+			} catch (ValidationException err) {
 				ex4 = err;
 			}
 
@@ -1409,5 +1432,5 @@ private class GenServiceTest {
 
 		}
 
-	}	
+	}
 }

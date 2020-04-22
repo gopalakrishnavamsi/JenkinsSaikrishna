@@ -2,9 +2,12 @@
     <!--attributes -->
     <aura:attribute name="extension" type="String"/>
     <aura:attribute name="size" type="String" default="medium"/>
-
-    <!--body -->
-    <lightning:icon iconName="{!
+    <aura:if isTrue="{!v.extension == 'htm'|| v.extension == 'html'|| v.extension =='adf'}">
+        <img class="slds-is-relative slds-icon"
+             src="{!$Resource.adflogo}" alt=""/>
+        <aura:set attribute="else">
+            <!--body -->
+            <lightning:icon iconName="{!
             'doctype:'
                     + if(v.extension == 'doc', 'word')
                     + if(v.extension == 'docm', 'gdoc')
@@ -12,8 +15,6 @@
                     + if(v.extension == 'dot', 'gdoc')
                     + if(v.extension == 'dotm', 'gdoc')
                     + if(v.extension == 'dotx', 'gdoc')
-                    + if(v.extension == 'htm', 'html')
-                    + if(v.extension == 'html', 'html')
                     + if(v.extension == 'msg', 'unknown')
                     + if(v.extension == 'pdf', 'pdf')
                     + if(v.extension == 'rtf', 'gdoc')
@@ -40,5 +41,6 @@
                     + if(v.extension == 'xml', 'xml')
                     + if(v.extension == '', 'unknown')
             }" size="{!v.size}"/>
-
+        </aura:set>
+    </aura:if>
 </aura:component>

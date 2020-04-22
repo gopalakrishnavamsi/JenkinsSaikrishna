@@ -104,19 +104,28 @@ private class FileServiceTest {
 			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
 			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
 
-			List<Id> fileIds = new List<Id> { result1.ContentDocumentId, result2.ContentDocumentId,
-				result3.ContentDocumentId };
+			UUID scmFileGuId1 = UUID.randomUUID();
+			UUID scmFileGuId2 = UUID.randomUUID();
+
+			String scmFile1 = 'scm;' + scmFileGuId1 + ';UnitTestScmFile1;html';
+			String scmFile2 = 'scm;' + scmFileGuId2 + ';UnitTestScmFile2;html';
+
+			List<String> filesInput = new List<String> {
+				result1.ContentDocumentId, result2.ContentDocumentId,
+				result3.ContentDocumentId, scmFile1, scmFile2
+			};
 
 			Test.startTest();
-			PageReference result = FileService.getSendingDeepLink(a.Id, fileIds);
+			PageReference result = FileService.getSendingDeepLink(a.Id, filesInput);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assert(result.getUrl().startsWith('/apex/' + Application.namespacePrefix + 'sending'));
 			System.assertEquals(a.Id, (Id)result.getParameters().get('sid'));
-			String files = result.getParameters().get('files');
-			System.assert(String.isNotBlank(files));
-			System.assertEquals(fileIds, files.split(','));
+			String fileParameter = result.getParameters().get('files');
+			System.assert(String.isNotBlank(fileParameter));
+			String[] files = fileParameter.split(',');
+			System.assertEquals(5, files.size());
 		}
 
 	}

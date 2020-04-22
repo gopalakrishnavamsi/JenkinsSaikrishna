@@ -1,4 +1,5 @@
 <aura:component controller="AgreementsController">
+    <ltng:require scripts="{!$Resource.navUtils}"/>
     <aura:attribute name="agreement" type="Agreement" access="public"/>
     <aura:attribute name="sourceId" type="Id" access="public"/>
     <aura:attribute name="agreementActionManager" type="Object" access="public"/>

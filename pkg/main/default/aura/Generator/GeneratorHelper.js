@@ -793,7 +793,7 @@
         var sourceId = component.get('v.recordId');
         sendingAction.setParams({
           sourceId: sourceId,
-          fileIds: fileIds
+          files: fileIds
         });
         sendingAction.setCallback(this, function (response) {
           var state = response.getState();

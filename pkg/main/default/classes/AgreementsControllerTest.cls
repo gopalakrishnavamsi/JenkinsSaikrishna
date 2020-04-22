@@ -328,7 +328,7 @@ private class AgreementsControllerTest {
 	@IsTest
 	static void test_generateUploadToken_success() {
 		ScmAPIMock.success();
-		TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString());
+		TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID_2, ScmAPIMock.FOLDER_ID_2.toString(), null);
 		System.runAs(UserMock.createDocuSignNegotiator(true)) {
 			Test.startTest();
 			LimitedAccessToken limitedAccessToken = AgreementsController.generateUploadToken(ScmAPIMock.SOURCE_OBJECT_ID_2);
@@ -657,12 +657,15 @@ private class AgreementsControllerTest {
 			ContentVersion result1 = FileService.saveFile(null, a.Id, title, base64Data1);
 			ContentVersion result2 = FileService.saveFile(null, a.Id, title, base64Data2);
 			ContentVersion result3 = FileService.saveFile(null, a.Id, title, base64Data3);
+			String scmFile1 = 'scm;' + UUID.randomUUID() + ';UnitTestScmFile1;html';
+			String scmFile2 = 'scm;' + UUID.randomUUID() + ';UnitTestScmFile2;html';
 
-			List<Id> fileIds = new List<Id> { result1.ContentDocumentId, result2.ContentDocumentId,
-				result3.ContentDocumentId };
+			List<String> files = new List<String> {
+				result1.ContentDocumentId, result2.ContentDocumentId, result3.ContentDocumentId, scmFile1, scmFile2
+			};
 
 			Test.startTest();
-			String result = AgreementsController.getSendingDeepLink(a.Id, fileIds);
+			String result = AgreementsController.getSendingDeepLink(a.Id, files);
 			Test.stopTest();
 
 			System.assert(String.isNotBlank(result));

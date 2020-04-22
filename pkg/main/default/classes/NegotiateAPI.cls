@@ -348,6 +348,42 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
 
+	public UUID getEOSSubFolderByName(
+		final String subFolderName,
+		final UUID parentEOSFolderId) {
+		UUID subFolderId ;
+		Map<String, String> queryStrings = new Map<String, String>();
+		queryStrings.put('filter', 'name=' + subFolderName);
+		RestAPI.Response response = this.get(
+			new List<Object> { 'v2', accountId, 'folders', parentEOSFolderId, 'folders' },
+			new QueryString(queryStrings),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to find EOS Subfolder by Name: ' + response.error);
+			throw new APIException(response.error);
+		}
+		EOSFolders result = (EOSFolders)JSON.deserialize(response.body, EOSFolders.class);
+		for (EOSFolder folder : result.items) {
+			if (folder != null && folder.Href != null) {
+				subFolderId = UUID.parse(folder.Href.substringAfterLast('/'));
+				break;
+			}
+		}
+		return subFolderId;
+	}
+
+	@TestVisible
+	private class EOSFolders {
+		public List<EOSFolder> items;
+		public String Href;
+	}
+
+	@TestVisible
+	private class EOSFolder {
+		public String Name;
+		public String Href;
+	}
+
 	@TestVisible
 	private class APIAgreements {
 
@@ -971,6 +1007,25 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			throw new APIException(response.error);
 		}
 
+		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
+	}
+
+	public UUID createEOSSubFolder(final String folderName, final UUID parentEOSFolderId) {
+		final RestAPI.Response response = post(
+			getBaseUrl(),
+			new List<Object> { 'v2', accountId, 'folders' },
+			QueryString.empty,
+			getDefaultHeaders(),
+			JSON.serialize(new Map<String, Object> {
+				'Name' => folderName,
+				'ParentFolder' => new APIFolder(getBaseUrl() + '/folders/' + String.valueOf(parentEOSFolderId))
+			}),
+			RestAPI.defaultTimeout);
+		if (response.hasError) {
+			this.log.error('Failed to create folder: ' + response.error);
+			throw new APIException(response.error);
+		}
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
 		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
 	}
