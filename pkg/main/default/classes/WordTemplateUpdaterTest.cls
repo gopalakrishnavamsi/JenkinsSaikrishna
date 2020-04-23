@@ -413,6 +413,44 @@ private class WordTemplateUpdaterTest {
 
 		System.assertEquals(result, lookups.get('Owner'));
 	}
+	
+	@IsTest
+	static void test_convert_field_child_relationship_invalid() {
+        	WordTemplateUpdater.FieldV1 v1 = new WordTemplateUpdater.FieldV1();
+		v1.apiName = 'Contact';
+		v1.dataType = 'ID';
+		v1.isConditional = false;
+		v1.dateFormat = 'df';
+		v1.currencyFormat = 'cf';
+		v1.decimalPlaces = 2;
+		v1.label = 'Invalid';
+		v1.matchType = 'mt';
+		v1.conditionalValue = 'cv';
+        	WordTemplateUpdater.FieldV1 v1c1 = new WordTemplateUpdater.FieldV1();
+		v1c1.apiName = 'Name';
+		v1c1.dataType = 'STRING';
+		v1c1.isConditional = false;
+		v1c1.dateFormat = 'df';
+		v1c1.currencyFormat = 'cf';
+		v1c1.decimalPlaces = 2;
+		v1c1.label = 'Name';
+		v1c1.matchType = 'mt';
+		v1c1.conditionalValue = 'cv';
+		v1.childFieldMappings = new List<WordTemplateUpdater.FieldV1> { v1c1 };
+		DescribeSObjectResult objDesc = Schema.Account.getSObjectType().getDescribe();
+		Gen.FieldMapping root = new Gen.FieldMapping(
+			'ROOT',
+			1,
+			'Opportunity',
+			null,
+			null);
+		Map<String, Gen.FieldMapping> lookups = new Map<String, Gen.FieldMapping>();
+		Map<String, WordTemplateUpdater.Relationship> children = new Map<String, WordTemplateUpdater.Relationship>();
+
+		Test.startTest();
+		System.assertEquals(null, WordTemplateUpdater.convert(v1, objDesc, root, lookups, children));
+		Test.stopTest();
+	}
 
 	@IsTest
 	static void test_convert_field_child_relationship() {

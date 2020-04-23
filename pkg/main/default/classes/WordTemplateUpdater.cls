@@ -194,8 +194,8 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 			when 'REFERENCE' { // Lookup path[0] objectType.
 				String relationshipName = path[0];
 				Gen.FieldMapping lookup = lookups.get(relationshipName);
+				Relationship lookupField = getLookupField(objectDescribe, relationshipName);
 				if (lookup == null) {
-					Relationship lookupField = getLookupField(objectDescribe, relationshipName);
 					if (lookupField == null) {
 						LoggerService.getInstance().warn('Invalid relationship ' + relationshipName
 							+ ' for object ' + objectDescribe.getName());
@@ -228,22 +228,24 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 						null);
 					lookups.put(relationshipName, lookup);
 				}
-				lookup.fields.add(new Gen.Field(
-					v1.dataType,
-					path[1],
-					v1.label,
-					null,
-					null,
-					null,
-					convertFormat(v1),
-					v1.decimalPlaces,
-					false,
-					v1.isConditional,
-					v1.matchType,
-					v1.conditionalValue,
-					null,
-					null,
-					null));
+				if (isValid(Schema.getGlobalDescribe().get(lookupField.relatesTo).getDescribe(), path[1])) {
+					lookup.fields.add(new Gen.Field(
+						v1.dataType,
+						path[1],
+						v1.label,
+						null,
+						null,
+						null,
+						convertFormat(v1),
+						v1.decimalPlaces,
+						false,
+						v1.isConditional,
+						v1.matchType,
+						v1.conditionalValue,
+						null,
+						null,
+						null));
+				}
 				result = lookup;
 			} when 'CHILD_RELATIONSHIP' {
 				Relationship childRelationship = childRelationships.get(v1.apiName);
