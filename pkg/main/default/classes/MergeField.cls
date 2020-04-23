@@ -7,7 +7,7 @@ public class MergeField implements Comparable {
 	// updating the list of blocked fields
 	private static final Set<String> BLACKLIST = new Set<String> {
 		'LastModifiedDate', 'LastReferencedDate', 'SystemModstamp',
-		'LastViewedDate', 'CreatedDate', 'IsArchived', 'IsDeleted',
+		'LastViewedDate', 'IsArchived', 'IsDeleted',
 		'CreatedById', 'LastModifiedById'
 	};
 
