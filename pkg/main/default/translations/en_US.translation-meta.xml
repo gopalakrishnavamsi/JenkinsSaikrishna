@@ -1930,6 +1930,70 @@
 		<name>ImportTemplatesDescription</name>
 	</customLabels>
 	<customLabels>
+		<label>Document Rule</label>
+		<name>DocumentRule</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Rule</label>
+		<name>AddRule</name>
+	</customLabels>
+	<customLabels>
+		<label>Enter rule name. Ex. North America Contract</label>
+		<name>DocumentRuleNamePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>of the following conditions:</label>
+		<name>OfRuleConditions</name>
+	</customLabels>
+	<customLabels>
+		<label>then</label>
+		<name>Then</name>
+	</customLabels>
+	<customLabels>
+		<label>generate this document.</label>
+		<name>RuleGenerateDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>if</label>
+		<name>IfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>or if</label>
+		<name>OrIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>and if</label>
+		<name>AndIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>Enter conditional value</label>
+		<name>EnterConditionalValue</name>
+	</customLabels>
+	<customLabels>
+		<label>Duplicate Row</label>
+		<name>DuplicateRow</name>
+	</customLabels>
+	<customLabels>
+		<label>Any</label>
+		<name>Any</name>
+	</customLabels>
+	<customLabels>
+		<label>All</label>
+		<name>All</name>
+	</customLabels>
+	<customLabels>
+		<label>equals</label>
+		<name>Equals</name>
+	</customLabels>
+	<customLabels>
+		<label>does not equal</label>
+		<name>DoesNotEqual</name>
+	</customLabels>
+	<customLabels>
+		<label>There aren't any available documents for you to generate.</label>
+		<name>NoDocumentsToGenerate</name>
+	</customLabels>
+	<customLabels>
 		<label>Bulk Document Creation</label>
 		<name>BulkDocumentCreation</name>
 	</customLabels>

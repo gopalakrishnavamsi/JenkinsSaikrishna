@@ -25,5 +25,14 @@
         fileName.focus();
       }
     }), 10);
-  }
+  },
+
+  fireEvent: function (component, event, eventName) {
+    var evt = component.getEvent(eventName);
+    var data = event.getParam('data');
+    evt.setParams({
+      data: data
+    });
+    evt.fire();
+  },
 });

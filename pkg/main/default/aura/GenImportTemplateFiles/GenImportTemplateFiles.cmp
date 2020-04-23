@@ -1,9 +1,10 @@
-<aura:component controller="GenController">
-
+<aura:component controller="GenController" extends="c:RootContainer">
     <aura:attribute name="config" type="Object"/>
     <aura:attribute name="files" type="Object[]"/>
     <aura:attribute name="currentAction" type="String"/>
+    <aura:attribute name="currentLevelFieldOptions" type="Object" access="private"/>
 
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
     <aura:method name="validate" action="{!c.validate}"/>
 
     <aura:registerEvent name="showToast" type="c:strike_evt"/>
@@ -30,7 +31,13 @@
 
     <aura:iteration items="{!v.files}" var="file" indexVar="fileIndex">
         <div class="ds-file-tile slds-is-relative slds-m-bottom_medium">
-            <c:GenFileTile file="{!file}" isClassic="{!true}"/>
+            <c:GenFileTile
+                    file="{!file}"
+                    fileIndex="{!fileIndex}"
+                    isClassic="{!true}"
+                    currentLevelFieldOptions="{!v.currentLevelFieldOptions}"
+                    saveDocumentRule="{!c.saveDocumentRule}"
+                    clearDocumentRule="{!c.clearDocumentRule}"/>
             <aura:if isTrue="{!not(v.config.isSample)}">
                 <lightning:buttonIcon class="ds-file-tile__remove slds-is-absolute" iconName="utility:close"
                                       variant="border-filled" alternativeText="Remove" value="{!fileIndex}"

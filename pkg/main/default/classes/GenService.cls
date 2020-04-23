@@ -5,6 +5,8 @@ public with sharing class GenService {
 	private static final SObjectType CONTENT_VERSION_TYPE = ContentVersion.getSObjectType();
 	private static final SObjectType CONTENT_DOCUMENT_LINK_TYPE = ContentDocumentLink.getSObjectType();
 	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
+	private static final SObjectType GEN_TEMPLATE_TYPE = GenTemplate__c.getSObjectType();
+	private static final SObjectType AGREEMENT_CONFIGURATION_TYPE = AgreementConfiguration__c.getSObjectType();
 
 	private class Database {
 
@@ -16,7 +18,8 @@ public with sharing class GenService {
 				Id = file.id,
 				GeneratedFileFormat__c = file.generatedFormat,
 				GeneratedFileName__c = file.generatedName,
-				GeneratedFileSuffix__c = file.generatedSuffix);
+				GeneratedFileSuffix__c = file.generatedSuffix,
+				Rule__c = file.rule != null ? JSON.serialize(file.rule) : null);
 		}
 
 		@TestVisible
@@ -57,7 +60,7 @@ public with sharing class GenService {
 		@TestVisible
 		private Gen.File convert(final ContentVersion cv) {
 			if (cv == null) return null;
-
+			String ruleJSON = cv.Rule__c;
 			return new Gen.File(
 				cv.Id,
 				cv.Title,
@@ -66,7 +69,8 @@ public with sharing class GenService {
 				cv.GeneratedFileFormat__c,
 				cv.GeneratedFileName__c,
 				cv.GeneratedFileSuffix__c,
-				cv.ContentDocumentId);
+				cv.ContentDocumentId,
+				String.isBlank(ruleJSON) ? null : (Gen.Rule)JSON.deserialize(ruleJSON, Gen.Rule.class));
 		}
 
 		@TestVisible
@@ -106,14 +110,17 @@ public with sharing class GenService {
 		}
 
 		private List<Gen.File> queryGeneratedFiles(final Id templateId) {
-			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
-				'Id', 'Title', 'FileExtension', 'ContentSize',
-				'GeneratedFileFormat__c', 'GeneratedFileName__c', 'GeneratedFileSuffix__c', 'ContentDocumentId'
+			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
+				'Id', 'Title', 'FileExtension', 'ContentSize', 'ContentDocumentId',
+				Application.namespacePrefix + 'GeneratedFileFormat__c',
+				Application.namespacePrefix + 'GeneratedFileName__c',
+				Application.namespacePrefix + 'GeneratedFileSuffix__c',
+				Application.namespacePrefix + 'Rule__c'
 			});
 
 			return convert([
 				SELECT Id, Title, ContentSize, FileExtension,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, ContentDocumentId
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, ContentDocumentId, Rule__c
 				FROM ContentVersion
 				WHERE ContentDocumentId IN :(queryLinkedDocumentIds(templateId))
 				AND IsLatest = TRUE
@@ -122,10 +129,21 @@ public with sharing class GenService {
 		}
 
 		public Gen.Template queryTemplate(final Id templateId) {
-			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Id', 'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c',
-				'TemplateType__c', 'TemplateId__c', 'FileName__c', 'FileSuffix__c'
+			Permissions.verifyIsQueryable(GEN_TEMPLATE_TYPE, new List<String> {
+				'Id', 'Name',
+				Application.namespacePrefix + 'SourceObject__c',
+				Application.namespacePrefix + 'ObjectMappings__c',
+				Application.namespacePrefix + 'SignerMappings__c',
+				Application.namespacePrefix + 'UseAllTemplates__c',
+				Application.namespacePrefix + 'UseCurrentRecord__c',
+				Application.namespacePrefix + 'HasPreviewedDocuments__c',
+				Application.namespacePrefix + 'StepsCompleted__c',
+				Application.namespacePrefix + 'IsSample__c',
+				Application.namespacePrefix + 'Description__c',
+				Application.namespacePrefix + 'TemplateType__c',
+				Application.namespacePrefix + 'TemplateId__c',
+				Application.namespacePrefix + 'FileName__c',
+				Application.namespacePrefix + 'FileSuffix__c'
 			});
 
 			return convert((GenTemplate__c)Collection.head([
@@ -139,8 +157,10 @@ public with sharing class GenService {
 		}
 
 		public List<Gen.GenTemplateDisplay> queryTemplates() {
-			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Id', 'Name', 'SourceObject__c', 'LastModifiedDate', 'TemplateType__c'
+			Permissions.verifyIsQueryable(GEN_TEMPLATE_TYPE, new List<String> {
+				'Id', 'Name', 'LastModifiedDate',
+				Application.namespacePrefix + 'SourceObject__c',
+				Application.namespacePrefix + 'TemplateType__c'
 			});
 			List<Gen.GenTemplateDisplay> templatesList = new List<Gen.GenTemplateDisplay>();
 			for (GenTemplate__c template : [
@@ -161,7 +181,7 @@ public with sharing class GenService {
 
 		@TestVisible
 		private Boolean deleteTemplate(final Id templateId) {
-			Permissions.verifyIsDeletable(GenTemplate__c.getSObjectType());
+			Permissions.verifyIsDeletable(GEN_TEMPLATE_TYPE);
 
 			Boolean result = false;
 			if (templateId != null) {
@@ -183,7 +203,7 @@ public with sharing class GenService {
 		}
 
 		private Set<Id> queryLinkedDocumentIds(final Id linkedEntityId) {
-			Permissions.verifyIsQueryable(ContentDocumentLink.getSObjectType(), new List<String> {
+			Permissions.verifyIsQueryable(CONTENT_DOCUMENT_LINK_TYPE, new List<String> {
 				'ContentDocumentId'
 			});
 
@@ -199,23 +219,25 @@ public with sharing class GenService {
 		}
 
 		private List<ContentVersion> cloneContentVersions(final Id templateId) {
-			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
+			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
 				'Id', 'Title', 'Description', 'PathOnClient', 'VersionData',
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
 				Application.namespacePrefix + 'GeneratedFileName__c',
-				Application.namespacePrefix + 'GeneratedFileSuffix__c'
+				Application.namespacePrefix + 'GeneratedFileSuffix__c',
+				Application.namespacePrefix + 'Rule__c'
 			});
-			Permissions.verifyIsCreateable(ContentVersion.getSObjectType(), new List<String> {
+			Permissions.verifyIsCreateable(CONTENT_VERSION_TYPE, new List<String> {
 				'Title', 'Description', 'PathOnClient', 'VersionData',
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
 				Application.namespacePrefix + 'GeneratedFileName__c',
-				Application.namespacePrefix + 'GeneratedFileSuffix__c'
+				Application.namespacePrefix + 'GeneratedFileSuffix__c',
+				Application.namespacePrefix + 'Rule__c'
 			});
 
 			List<ContentVersion> cvs = new List<ContentVersion>();
 			for (ContentVersion cv : [
 				SELECT Id, Title, Description, PathOnClient, VersionData,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, Rule__C
 				FROM ContentVersion
 				WHERE IsLatest = TRUE
 				AND ContentDocumentId IN :(queryLinkedDocumentIds(templateId))
@@ -229,12 +251,13 @@ public with sharing class GenService {
 					VersionData = cv.VersionData,
 					GeneratedFileFormat__c = cv.GeneratedFileFormat__c,
 					GeneratedFileName__c = cv.GeneratedFileName__c,
-					GeneratedFileSuffix__c = cv.GeneratedFileSuffix__c));
+					GeneratedFileSuffix__c = cv.GeneratedFileSuffix__c,
+					Rule__c = cv.Rule__c));
 			}
 			insert cvs;
 			return [
 				SELECT Id, Title, FileExtension, ContentSize,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, ContentDocumentId
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, ContentDocumentId, Rule__c
 				FROM ContentVersion
 				WHERE Id IN :cvs
 			];
@@ -244,7 +267,7 @@ public with sharing class GenService {
 			final Id linkedEntityId,
 			final List<ContentVersion> contentVersions) {
 
-			Permissions.verifyIsCreateable(ContentDocumentLink.getSObjectType(), new List<String> {
+			Permissions.verifyIsCreateable(CONTENT_DOCUMENT_LINK_TYPE, new List<String> {
 				'ContentDocumentId', 'LinkedEntityId', 'ShareType'
 			});
 
@@ -264,15 +287,36 @@ public with sharing class GenService {
 		}
 
 		public Gen.Template cloneTemplate(final Id templateId) {
-			Permissions.verifyIsQueryable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Id', 'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c', 'TemplateType__c',
-				'FileName__c', 'FileSuffix__c'
+			Permissions.verifyIsQueryable(GEN_TEMPLATE_TYPE, new List<String> {
+				'Id', 'Name',
+				Application.namespacePrefix + 'SourceObject__c',
+				Application.namespacePrefix + 'ObjectMappings__c',
+				Application.namespacePrefix + 'SignerMappings__c',
+				Application.namespacePrefix + 'UseAllTemplates__c',
+				Application.namespacePrefix + 'UseCurrentRecord__c',
+				Application.namespacePrefix + 'HasPreviewedDocuments__c',
+				Application.namespacePrefix + 'StepsCompleted__c',
+				Application.namespacePrefix + 'IsSample__c',
+				Application.namespacePrefix + 'Description__c',
+				Application.namespacePrefix + 'TemplateType__c',
+				Application.namespacePrefix + 'FileName__c',
+				Application.namespacePrefix + 'FileSuffix__c'
 			});
-			Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c', 'TemplateType__c',
-				'FileName__c', 'FileSuffix__c'
+
+			Permissions.verifyIsCreateable(GEN_TEMPLATE_TYPE, new List<String> {
+				'Name', 'SourceObject__c',
+				Application.namespacePrefix + 'SourceObject__c',
+				Application.namespacePrefix + 'ObjectMappings__c',
+				Application.namespacePrefix + 'SignerMappings__c',
+				Application.namespacePrefix + 'UseAllTemplates__c',
+				Application.namespacePrefix + 'UseCurrentRecord__c',
+				Application.namespacePrefix + 'HasPreviewedDocuments__c',
+				Application.namespacePrefix + 'StepsCompleted__c',
+				Application.namespacePrefix + 'IsSample__c',
+				Application.namespacePrefix + 'Description__c',
+				Application.namespacePrefix + 'TemplateType__c',
+				Application.namespacePrefix + 'FileName__c',
+				Application.namespacePrefix + 'FileSuffix__c'
 			});
 
 			GenTemplate__c original = (GenTemplate__c)Collection.head([
@@ -299,10 +343,20 @@ public with sharing class GenService {
 		}
 
 		public Gen.Template insertTemplate(final Gen.Template template) {
-			Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c', 'TemplateType__c',
-				'TemplateId__c', 'FileName__c', 'FileSuffix__c'
+			Permissions.verifyIsCreateable(GEN_TEMPLATE_TYPE, new List<String> {
+				'Name',
+				Application.namespacePrefix + 'SourceObject__c',
+				Application.namespacePrefix + 'ObjectMappings__c',
+				Application.namespacePrefix + 'SignerMappings__c',
+				Application.namespacePrefix + 'UseAllTemplates__c',
+				Application.namespacePrefix + 'UseCurrentRecord__c',
+				Application.namespacePrefix + 'HasPreviewedDocuments__c',
+				Application.namespacePrefix + 'StepsCompleted__c',
+				Application.namespacePrefix + 'IsSample__c',
+				Application.namespacePrefix + 'Description__c',
+				Application.namespacePrefix + 'TemplateType__c',
+				Application.namespacePrefix + 'FileName__c',
+				Application.namespacePrefix + 'FileSuffix__c'
 			});
 
 			if (template == null) return null;
@@ -314,16 +368,27 @@ public with sharing class GenService {
 		}
 
 		public Gen.Template updateTemplate(final Gen.Template template) {
-			Permissions.verifyIsUpdateable(GenTemplate__c.getSObjectType(), new List<String> {
-				'Name', 'SourceObject__c', 'ObjectMappings__c', 'SignerMappings__c', 'UseAllTemplates__c',
-				'UseCurrentRecord__c', 'HasPreviewedDocuments__c', 'StepsCompleted__c', 'IsSample__c', 'Description__c',
-				'TemplateId__c', 'FileName__c', 'FileSuffix__c'
-
+			Permissions.verifyIsUpdateable(GEN_TEMPLATE_TYPE, new List<String> {
+				'Name',
+				Application.namespacePrefix + 'SourceObject__c',
+				Application.namespacePrefix + 'ObjectMappings__c',
+				Application.namespacePrefix + 'SignerMappings__c',
+				Application.namespacePrefix + 'UseAllTemplates__c',
+				Application.namespacePrefix + 'UseCurrentRecord__c',
+				Application.namespacePrefix + 'HasPreviewedDocuments__c',
+				Application.namespacePrefix + 'StepsCompleted__c',
+				Application.namespacePrefix + 'IsSample__c',
+				Application.namespacePrefix + 'Description__c',
+				Application.namespacePrefix + 'TemplateType__c',
+				Application.namespacePrefix + 'FileName__c',
+				Application.namespacePrefix + 'FileSuffix__c'
 			});
-			Permissions.verifyIsUpdateable(ContentVersion.getSObjectType(), new List<String> {
+
+			Permissions.verifyIsUpdateable(CONTENT_VERSION_TYPE, new List<String> {
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
 				Application.namespacePrefix + 'GeneratedFileName__c',
-				Application.namespacePrefix + 'GeneratedFileSuffix__c'
+				Application.namespacePrefix + 'GeneratedFileSuffix__c',
+				Application.namespacePrefix + 'Rule__c'
 			});
 
 			if (template == null) return null;
@@ -335,16 +400,17 @@ public with sharing class GenService {
 		}
 
 		public List<Gen.File> queryFiles(final List<Id> contentDocumentIds) {
-			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
+			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
 				'Id', 'Title', 'FileExtension', 'ContentSize', 'ContentDocumentId',
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
 				Application.namespacePrefix + 'GeneratedFileName__c',
-				Application.namespacePrefix + 'GeneratedFileSuffix__c'
+				Application.namespacePrefix + 'GeneratedFileSuffix__c',
+				Application.namespacePrefix + 'Rule__c'
 			});
 
 			return convert([
 				SELECT Id, Title, FileExtension, ContentSize,
-					GeneratedFileName__c, GeneratedFileFormat__c, GeneratedFileSuffix__c, ContentDocumentId
+					GeneratedFileName__c, GeneratedFileFormat__c, GeneratedFileSuffix__c, ContentDocumentId, Rule__c
 				FROM ContentVersion
 				WHERE ContentDocumentId IN :contentDocumentIds
 				AND IsLatest = TRUE
@@ -437,16 +503,17 @@ public with sharing class GenService {
 		}
 
 		public List<Gen.File> queryFiles(final Set<Id> contentVersionIds) {
-			Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
+			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
 				'Id', 'Title', 'FileExtension', 'ContentSize', 'ContentDocumentId',
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
 				Application.namespacePrefix + 'GeneratedFileName__c',
-				Application.namespacePrefix + 'GeneratedFileSuffix__c'
+				Application.namespacePrefix + 'GeneratedFileSuffix__c',
+				Application.namespacePrefix + 'Rule__c'
 			});
 
 			return convert([
 				SELECT Id, Title, FileExtension, ContentSize,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c,ContentDocumentId
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c,ContentDocumentId, Rule__c
 				FROM ContentVersion
 				WHERE Id IN :contentVersionIds
 			]);
@@ -487,12 +554,22 @@ public with sharing class GenService {
 			final String base64Data) {
 
 			Permissions.verifyIsCreateable(CONTENT_VERSION_TYPE, new List<String> {
-				'ContentDocumentId', 'Title', 'VersionData', 'IsMajorVersion', 'GeneratedFileFormat__c', 'GeneratedFileSuffix__c', 'GeneratedFileName__c'
+				'ContentDocumentId', 'Title', 'VersionData', 'IsMajorVersion',
+				Application.namespacePrefix + 'GeneratedFileFormat__c',
+				Application.namespacePrefix + 'GeneratedFileName__c',
+				Application.namespacePrefix + 'GeneratedFileSuffix__c',
+				Application.namespacePrefix + 'Rule__c'
 			});
+
 			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
-				'ContentDocumentId', 'Title', 'PathOnClient', 'FileExtension', 'VersionData', 'ContentSize',
-				'LastModifiedDate', 'GeneratedFileFormat__c', 'GeneratedFileSuffix__c', 'GeneratedFileName__c'
+				'ContentDocumentId', 'Title', 'PathOnClient', 'FileExtension',
+				'VersionData', 'ContentSize', 'LastModifiedDate',
+				Application.namespacePrefix + 'GeneratedFileFormat__c',
+				Application.namespacePrefix + 'GeneratedFileName__c',
+				Application.namespacePrefix + 'GeneratedFileSuffix__c',
+				Application.namespacePrefix + 'Rule__c'
 			});
+
 			Permissions.verifyIsCreateable(CONTENT_DOCUMENT_LINK_TYPE, new List<String> {
 				'ContentDocumentId', 'LinkedEntityId', 'ShareType'
 			});
@@ -502,11 +579,12 @@ public with sharing class GenService {
 				VersionData = EncodingUtil.base64Decode(base64Data),
 				IsMajorVersion = false,
 				GeneratedFileFormat__c = 'Word',
-				GeneratedFileSuffix__c = 'name');
+				GeneratedFileSuffix__c = 'name',
+				Rule__c = null);
 			insert cv;
 
 			cv = [
-				SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate, GeneratedFileFormat__c, GeneratedFileSuffix__c, GeneratedFileName__c
+				SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate, GeneratedFileFormat__c, GeneratedFileSuffix__c, GeneratedFileName__c, Rule__c
 				FROM ContentVersion
 				WHERE Id = :cv.Id
 				LIMIT 1
@@ -528,9 +606,14 @@ public with sharing class GenService {
 			final String base64Data) {
 
 			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
-				'ContentDocumentId', 'Title', 'PathOnClient', 'FileExtension', 'VersionData', 'ContentSize',
-				'LastModifiedDate', 'GeneratedFileFormat__c', 'GeneratedFileSuffix__c', 'GeneratedFileName__c'
+				'ContentDocumentId', 'Title', 'PathOnClient', 'LastModifiedDate',
+				'FileExtension', 'VersionData', 'ContentSize',
+				Application.namespacePrefix + 'GeneratedFileFormat__c',
+				Application.namespacePrefix + 'GeneratedFileName__c',
+				Application.namespacePrefix + 'GeneratedFileSuffix__c',
+				Application.namespacePrefix + 'Rule__c'
 			});
+
 			Permissions.verifyIsUpdateable(CONTENT_VERSION_TYPE, new List<String> {
 				'VersionData'
 			});
@@ -545,7 +628,7 @@ public with sharing class GenService {
 			update cv;
 
 			return [
-				SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate, GeneratedFileFormat__c, GeneratedFileSuffix__c, GeneratedFileName__c
+				SELECT ContentDocumentId, Title, PathOnClient, FileExtension, VersionData, ContentSize, LastModifiedDate, GeneratedFileFormat__c, GeneratedFileSuffix__c, GeneratedFileName__c, Rule__c
 				FROM ContentVersion
 				WHERE Id = :contentVersionId
 				LIMIT 1
@@ -656,6 +739,57 @@ public with sharing class GenService {
 		Query.validate(q);
 
 		return q.execute(sourceId);
+	}
+
+	@TestVisible
+	public static Boolean checkDocumentRule(
+		final Id sourceId,
+		final String startingObject,
+		final Gen.Rule rule) {
+
+		Query q = new Query(
+			startingObject,
+			new List<String> { 'Id ' },
+			null,
+			null,
+			getRuleFilters(rule.ruleType == 'any' ? 'OR' : 'AND', rule.conditions),
+			null,
+			1,
+			null
+		);
+
+		return q.hasRecord(sourceId);
+	}
+
+	private static String getRuleFilters(final String conditionalType, List<Gen.RuleConditions> conditions) {
+		String result = '';
+		for (Integer index = 0; index < conditions.size(); index++) {
+			Gen.RuleConditions condition = conditions.get(index);
+			if (index == 0) {
+				result += '(';
+			}
+			String equalityOperator = condition.matchType == 'equals' ? ' = ' : ' != ';
+			result += condition.fieldName + equalityOperator + getProcessedMatchValue(condition.fieldType, condition.matchValue) + (index < conditions.size() - 1 ? ' ' + conditionalType + ' ' : ')');
+		}
+		return result;
+	}
+
+	private static String getProcessedMatchValue(final String fieldType, final String value) {
+		String returnValue = '';
+
+		switch on fieldType {
+			when 'STRING', 'EMAIL', 'PICKLIST', 'URL', 'PHONE' {
+				returnValue = '\'' + value + '\'';
+			}
+			when 'BOOLEAN', 'DATE', 'PERCENT', 'DOUBLE', 'CURRENCY' {
+				returnValue = value;
+			}
+			when else {
+				returnValue = value;
+			}
+		}
+
+		return String.isNotBlank(returnValue) ? returnValue : null;
 	}
 
 	@TestVisible
@@ -820,7 +954,7 @@ public with sharing class GenService {
 	public static Url getNewGenTemplateUrl() {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
+		Permissions.verifyIsCreateable(GEN_TEMPLATE_TYPE, new List<String> {
 			'Name',
 			Application.namespacePrefix + 'SourceObject__c',
 			Application.namespacePrefix + 'ObjectMappings__c',
@@ -854,7 +988,7 @@ public with sharing class GenService {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
-		Permissions.verifyIsCreateable(GenTemplate__c.getSObjectType(), new List<String> {
+		Permissions.verifyIsCreateable(GEN_TEMPLATE_TYPE, new List<String> {
 			'Name',
 			Application.namespacePrefix + 'SourceObject__c',
 			Application.namespacePrefix + 'ObjectMappings__c',

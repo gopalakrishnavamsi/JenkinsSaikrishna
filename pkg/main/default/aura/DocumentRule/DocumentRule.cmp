@@ -1,0 +1,136 @@
+<aura:component>
+    <!--    Attributes passed from parent   -->
+    <aura:attribute name="rule" type="Object"/>
+    <aura:attribute name="fileIndex" type="Integer"/>
+    <aura:attribute name="currentLevelFieldOptions" type="Object"/>
+
+    <!--    Private attributes   -->
+    <aura:attribute name="clonedRule" type="Object" access="private"/>
+    <aura:attribute name="showModal" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="ruleTypeOptions" type="Object" default="" access="private"/>
+    <aura:attribute name="maxConditionLimit" type="Integer" default="10" access="private"/>
+    <aura:attribute name="isRuleValid" type="Boolean" default="false" access="private"/>
+
+    <!--    Events   -->
+    <aura:registerEvent name="saveDocumentRule" type="c:strike_evt"/>
+    <aura:registerEvent name="clearDocumentRule" type="c:strike_evt"/>
+
+    <!--    Handlers   -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <div class="slds-m-top_medium">
+        <span class="slds-text-title_caps">{!$Label.c.DocumentRule}</span>
+        <!-- Comment out Help link until documentation is available -->
+<!--        <span class="slds-text-color_weak"> &bull; </span>-->
+<!--        <span class="slds-text-body_small">-->
+<!--            <a>{!$Label.c.Help}</a>-->
+<!--        </span>-->
+        <div class="slds-m-bottom_xxx-small">
+            <aura:if isTrue="{!empty(v.rule)}">
+                <lightning:button
+                        iconName="utility:add"
+                        label="{!$Label.c.AddRule}"
+                        class="slds-m-vertical_xx-small"
+                        onclick="{!c.showRuleModal}"/>
+                <aura:set attribute="else">
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right slds-p-bottom_xx-small">
+                            <lightning:input
+                                    type="text"
+                                    aura:id="rule-name-display"
+                                    onfocus="{!c.blurRuleInput}"
+                                    value="{!v.rule.name}"/>
+                            <lightning:buttonIcon
+                                    iconName="utility:edit"
+                                    variant="bare"
+                                    class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default"
+                                    onclick="{!c.showRuleModal}"/>
+                            <lightning:button
+                                    iconName="utility:clear"
+                                    class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                    onclick="{!c.clearRule}"/>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </div>
+    </div>
+    <c:strike_modal
+            title="{!$Label.c.DocumentRule}"
+            showModal="{!v.showModal}"
+            size="large"
+            width="64%"
+            primaryButtonLabel="{!$Label.c.Save}"
+            strike_evt_modalCloseButtonClicked="{!c.closeRuleModal}">
+        <div class="slds-m-vertical_small">
+            <lightning:input
+                    type="text"
+                    class="slds-form-element"
+                    maxlength="80"
+                    name="name"
+                    placeholder="{!$Label.c.DocumentRuleNamePlaceholder}"
+                    onchange="{!c.onRuleChange}"
+                    value="{!v.clonedRule.name}"/>
+        </div>
+
+        <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-8 slds-text-title_caps slds-p-top_small">
+                {!$Label.c.Apply}
+            </div>
+            <div class="slds-col slds-size_xx-small">
+                <lightning:select
+                        name="ruleType"
+                        onchange="{!c.onRuleChange}"
+                        value="{!v.clonedRule.ruleType}">
+                    <aura:iteration items="{!v.ruleTypeOptions}" var="option">
+                        <option
+                                value="{!option.value}"
+                                selected="{!option.value == v.clonedRule.ruleType}">
+                            {!option.label}
+                        </option>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+            <div class="slds-col slds-p-top_small slds-p-left_large slds-text-body__small slds-text-color_weak">
+                {!$Label.c.OfRuleConditions}
+            </div>
+        </div>
+        <aura:iteration items="{!v.clonedRule.conditions}"
+                        var="condition"
+                        indexVar="conditionIndex">
+            <c:RuleCondition
+                    condition="{!condition}"
+                    conditionIndex="{!conditionIndex}"
+                    maxLimitReached="{!greaterthanorequal(v.clonedRule.conditions.length, v.maxConditionLimit)}"
+                    ruleType="{!v.clonedRule.ruleType}"
+                    currentLevelFieldOptions="{!v.currentLevelFieldOptions}"
+                    isFirst="{!equals(conditionIndex, 0)}"
+                    isLast="{!equals(conditionIndex, v.clonedRule.conditions.length - 1)}"
+                    addCondition="{!c.addCondition}"
+                    removeCondition="{!c.removeCondition}"
+                    copyCondition="{!c.copyCondition}"
+                    onConditionChange="{!c.onConditionChange}"/>
+        </aura:iteration>
+        <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-8 slds-text-title_caps slds-p-top_small">
+                {!$Label.c.Then}
+            </div>
+            <div class="slds-col slds-p-top_small slds-text-body__small slds-text-color_weak">
+                {!$Label.c.RuleGenerateDocument}
+            </div>
+        </div>
+
+        <aura:set attribute="footerButtons">
+            <lightning:button
+                    label="{!$Label.c.Cancel}"
+                    class="slds-button slds-button_neutral"
+                    onclick="{!c.closeRuleModal}"/>
+            <lightning:button
+                    disabled="{!not(v.isRuleValid)}"
+                    class="slds-button slds-button_brand"
+                    onclick="{!c.saveRule}"
+                    label="{!$Label.c.Save}"/>
+        </aura:set>
+
+    </c:strike_modal>
+</aura:component>

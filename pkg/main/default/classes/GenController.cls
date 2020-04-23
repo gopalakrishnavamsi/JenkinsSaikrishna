@@ -163,13 +163,41 @@ public with sharing class GenController extends Controller {
 	public static Boolean validateChildRelationshipField(
 		final String fieldJSON,
 		final Integer depth) {
-		
+
 		try {
-			return GenService.validateChildRelationshipField((Gen.Field) JSON.deserialize(fieldJSON, Gen.Field.class), depth);
-		} catch(Exception ex) {
+			return GenService.validateChildRelationshipField((Gen.Field)JSON.deserialize(fieldJSON, Gen.Field.class), depth);
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Add error here.');
 		}
-	}	
+	}
+
+	@AuraEnabled
+	public static List<Gen.RuleEvaluation> checkDocumentRules(
+		final Id sourceId,
+		final String startingObject,
+		final String filesJson,
+		final Boolean isPreview) {
+
+		try {
+			if (isPreview) {
+				Permissions.verifyIsDocuSignAdministratorOrGenerator();
+			} else {
+				Permissions.verifyIsDocuSignGenerator();
+			}
+			if (sourceId == null || startingObject == null || filesJson == null) throw new DocuSignException(Label.UndefinedArgument);
+
+			List<Gen.File> files = (List<Gen.File>)JSON.deserialize(filesJson, List<Gen.File>.class);
+			List<Gen.RuleEvaluation> ruleEvaluations = new List<Gen.RuleEvaluation>();
+			for (Gen.File file : files) {
+				if (file.rule != null) {
+					ruleEvaluations.add(new Gen.RuleEvaluation(file.contentDocumentId, GenService.checkDocumentRule(sourceId, startingObject, file.rule)));
+				}
+			}
+			return ruleEvaluations;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to obtain rule evaluations.');
+		}
+	}
 
 	@AuraEnabled
 	public static Gen.File saveChunk(

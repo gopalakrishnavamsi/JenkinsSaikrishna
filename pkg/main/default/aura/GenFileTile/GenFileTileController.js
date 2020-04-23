@@ -24,5 +24,13 @@
         });
       }
     }
+  },
+
+  saveDocumentRule: function (component, event, helper) {
+    helper.fireEvent(component, event, 'saveDocumentRule');
+  },
+
+  clearDocumentRule: function (component, event, helper) {
+    helper.fireEvent(component, event, 'clearDocumentRule');
   }
 });

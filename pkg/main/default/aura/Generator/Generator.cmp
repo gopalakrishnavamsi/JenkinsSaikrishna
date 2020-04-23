@@ -75,6 +75,13 @@
                     <h2 class="slds-text-heading_small">{!v.errMsg}</h2>
                 </div>
             </div>
+            <aura:if isTrue="{!not(v.isPreview)}">
+                <div class="{!'slds-m-top_medium' + if(v.isClassic, ' slds-text-align_center')}">
+                    <lightning:button class="slds-button" variant="neutral"
+                                      label="{!$Label.c.Back}"
+                                      onclick="{!c.goBack}"/>
+                </div>
+            </aura:if>
         </aura:if>
         <aura:if isTrue="{!not(v.isAuthorized)}">
             <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
@@ -190,6 +197,13 @@
                     </div>
 
                     <aura:if isTrue="{!v.showGenerateButton}">
+                        <aura:if isTrue="{!not(v.isPreview)}">
+                            <div class="{!'slds-m-top_medium' + if(v.isClassic, ' slds-text-align_left')}">
+                                <lightning:button class="slds-float_left slds-button" variant="neutral"
+                                                  label="{!$Label.c.Back}"
+                                                  onclick="{!c.goBack}"/>
+                            </div>
+                        </aura:if>
                         <div class="{!'slds-m-top_medium' + if(v.isClassic, ' slds-text-align_right')}">
                             <lightning:button label="{!if(v.isPreview, $Label.c.PreviewStep, $Label.c.Generate)}"
                                               onclick="{!c.generateDocs}" disabled="{!v.disableGenerateButton}"/>

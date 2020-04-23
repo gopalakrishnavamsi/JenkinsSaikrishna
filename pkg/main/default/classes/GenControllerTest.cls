@@ -134,6 +134,90 @@ private class GenControllerTest {
 	}
 
 	@IsTest
+	static void test_checkDocumentRules_unauthorized_preview() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				GenController.checkDocumentRules(UserInfo.getUserId(), 'test', 'test', true);
+				throw new AssertException('Expected to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_checkDocumentRules_unauthorized_no_preview() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				GenController.checkDocumentRules(UserInfo.getUserId(), 'test', 'test', false);
+				throw new AssertException('Expected to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_checkDocumentRules_undefined_argument() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			try {
+				GenController.checkDocumentRules(null, 'test', 'test', true);
+				throw new AssertException('Expected to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_checkDocumentRules_matches_true() {
+		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
+			Schema.Account acc = TestUtils.createAccount();
+
+			Test.startTest();
+			Gen.Template result = GenService.getTemplate(gt.Id);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, Collection.size(result.generated));
+			String testFilesJson = String.valueOf(JSON.serialize(result.generated));
+			List<Gen.RuleEvaluation> testEvaluations = GenController.checkDocumentRules(acc.Id, 'Account', testFilesJson, false);
+			System.assertEquals(1, Collection.size(testEvaluations));
+			System.assertEquals(cv1.ContentDocumentId, testEvaluations.get(0).contentDocumentId);
+			System.assertEquals(true, testEvaluations.get(0).matches);
+		}
+	}
+
+	@IsTest
+	static void test_checkDocumentRules_matches_false() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
+			Schema.Account acc = TestUtils.createAccountWithName('ANOTHER UNIT TEST');
+
+			Test.startTest();
+			Gen.Template result = GenService.getTemplate(gt.Id);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, Collection.size(result.generated));
+			String testFilesJson = String.valueOf(JSON.serialize(result.generated));
+			List<Gen.RuleEvaluation> testEvaluations = GenController.checkDocumentRules(acc.Id, 'Account', testFilesJson, true);
+			System.assertEquals(1, Collection.size(testEvaluations));
+			System.assertEquals(cv1.ContentDocumentId, testEvaluations.get(0).contentDocumentId);
+			System.assertEquals(false, testEvaluations.get(0).matches);
+		}
+	}
+
+	@IsTest
 	static void test_saveTemplate_failure() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();

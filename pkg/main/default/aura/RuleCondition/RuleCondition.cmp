@@ -1,0 +1,96 @@
+<aura:component>
+    <!--    Attributes passed from parent   -->
+    <aura:attribute name="condition" type="Object"/>
+    <aura:attribute name="conditionIndex" type="Integer"/>
+    <aura:attribute name="ruleType" type="String"/>
+    <aura:attribute name="currentLevelFieldOptions" type="Object"/>
+    <aura:attribute name="isFirst" type="Boolean" default="false"/>
+    <aura:attribute name="isLast" type="Boolean" default="false"/>
+    <aura:attribute name="maxLimitReached" type="Boolean" default="false"/>
+
+    <!--    Private attributes   -->
+    <aura:attribute name="addFormat" type="String" default="{0}{1}" access="private"/>
+    <aura:attribute name="conditionTypeOptions" type="Object" access="private"/>
+
+    <!--    Events   -->
+    <aura:registerEvent name="addCondition" type="c:strike_evt"/>
+    <aura:registerEvent name="removeCondition" type="c:strike_evt"/>
+    <aura:registerEvent name="copyCondition" type="c:strike_evt"/>
+    <aura:registerEvent name="onConditionChange" type="c:strike_evt"/>
+
+    <!--    Handlers   -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <div class="slds-grid">
+        <div class="slds-col slds-size_1-of-8 slds-text-title_caps slds-p-top_small">
+            {!if(v.isFirst, $Label.c.IfStatement, if(v.ruleType == 'any', $Label.c.OrIfStatement, $Label.c.AndIfStatement))}
+        </div>
+        <div class="slds-col slds-size_small">
+            <lightning:select
+                    name="fieldName"
+                    value="{!v.condition.fieldName}"
+                    onchange="{!c.onConditionChange}">
+                <option value=""
+                        disabled="{!not(empty(v.condition.fieldName))}"
+                        selected="{!empty(v.condition.fieldName)}">
+                    {!$Label.c.SelectAnOption}
+                </option>
+                <aura:iteration items="{!v.currentLevelFieldOptions}" var="field">
+                    <option
+                            value="{!field.name}"
+                            selected="{!field.name == v.condition.fieldName}">
+                        {!field.label}
+                    </option>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_x-small slds-m-horizontal_small">
+            <lightning:select
+                    name="matchType"
+                    value="{!v.condition.matchType}"
+                    onchange="{!c.onConditionChange}">
+                <aura:iteration items="{!v.conditionTypeOptions}" var="option">
+                    <option
+                            value="{!option.value}"
+                            selected="{!option.name == v.condition.matchType}">
+                        {!option.label}
+                    </option>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col slds-size_1-of-5">
+            <div class="ds-condition-padding"/>
+            <lightning:input
+                    type="text"
+                    name="matchValue"
+                    placeholder="{!$Label.c.EnterConditionalValue}"
+                    maxlength="100"
+                    onchange="{!c.onConditionChange}"
+                    value="{!v.condition.matchValue}"/>
+        </div>
+        <div class="slds-col slds-size_xxx-small slds-p-top_xx-small slds-m-left_x-small">
+            <div class="ds-condition-padding"/>
+            <lightning:buttonIcon
+                    iconName="utility:copy"
+                    disabled="{!empty(v.condition.fieldName) || v.maxLimitReached}"
+                    onclick="{!c.copyCondition}"
+                    alternativeText="{!$Label.c.DuplicateRow}"
+                    title="{!$Label.c.DuplicateRow}"/>
+        </div>
+        <div class="slds-col slds-size_xxx-small slds-p-top_small slds-m-left_x-small slds-m-right_small">
+            <aura:if isTrue="{!and(v.isLast, not(v.maxLimitReached))}">
+                <a onclick="{!c.addCondition}">
+                    {!format(v.addFormat, '+', if(v.ruleType == 'any', $Label.c.OrIfStatement, $Label.c.AndIfStatement))}
+                </a>
+            </aura:if>
+        </div>
+        <div class="slds-col slds-input-has-icon slds-size_xxx-small slds-m-top_xx-small">
+            <aura:if isTrue="{!not(and(v.isFirst, v.isLast))}">
+                <lightning:button
+                        iconName="utility:clear"
+                        class="slds-button slds-button_icon slds-input__icon"
+                        onclick="{!c.removeCondition}"/>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

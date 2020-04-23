@@ -6,6 +6,10 @@
     var objLabel = labelByApiName[objectMappings.name];
     var fieldMappingsString = '[{"type":"ROOT","path":[],"key":"' + objectMappings.name + '","fields":[],"depth":1}]';
     config.sourceObject = objLabel;
+    config.generated = config.generated.map(function (file) {
+      file.rule = null;
+      return file;
+    });
     objectMappings.label = objLabel;
     objectMappings.fieldMappings = JSON.parse(fieldMappingsString);
 

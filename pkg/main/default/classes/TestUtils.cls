@@ -150,6 +150,16 @@ global class TestUtils {
 		return a;
 	}
 
+	public static Schema.Account createAccountWithName(final String name) {
+		String accountName = name;
+		if (accountName == null) {
+			accountName = 'UNIT TEST';
+		}
+		Schema.Account a = new Schema.Account(Name = accountName);
+		insert a;
+		return a;
+	}
+
 	public static Opportunity createOpportunity() {
 		return createOpportunity(createAccount().Id);
 	}
@@ -401,11 +411,12 @@ global class TestUtils {
 			IsMajorVersion = false,
 			GeneratedFileFormat__c = 'Word',
 			GeneratedFileName__c = title,
-			GeneratedFileSuffix__c = 'name');
+			GeneratedFileSuffix__c = 'name',
+			Rule__c = '{"name":"Test Rule","ruleType":"any","conditions":[{"fieldName":"Name","fieldType":"STRING","matchType":"equals","matchValue":"UNIT TEST"},{"fieldName":"Name","fieldType":"STRING","matchType":"equals","matchValue":"TEST UNIT"},{"fieldName":"AnnualRevenue","fieldType":"CURRENCY","matchType":"notEquals","matchValue":""}]}');
 		insert cv;
 		cv = [
 			SELECT Id, ContentDocumentId, Title, ContentSize, FileExtension,
-				GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c
+				GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, Rule__c
 			FROM ContentVersion
 			WHERE Id = :cv.Id
 			LIMIT 1

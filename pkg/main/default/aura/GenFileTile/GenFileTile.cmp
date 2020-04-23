@@ -1,9 +1,14 @@
 <aura:component>
 
     <aura:attribute name="file" type="Object"/>
+    <aura:attribute name="fileIndex" type="Integer"/>
     <aura:attribute name="fileSize" type="String"/>
+    <aura:attribute name="currentLevelFieldOptions" type="Object"/>
     <aura:attribute name="isClassic" type="Boolean" default="{!false}"/>
     <aura:attribute name="isEdit" type="Boolean" default="{!true}"/>
+
+    <aura:registerEvent name="saveDocumentRule" type="c:strike_evt"/>
+    <aura:registerEvent name="clearDocumentRule" type="c:strike_evt"/>
 
     <aura:handler name="init" value="{!this}" action="{!c.init}"/>
 
@@ -42,6 +47,12 @@
                 </div>
             </div>
         </aura:if>
+        <c:DocumentRule
+                rule="{!v.file.rule}"
+                fileIndex="{!v.fileIndex}"
+                currentLevelFieldOptions="{!v.currentLevelFieldOptions}"
+                saveDocumentRule="{!c.saveDocumentRule}"
+                clearDocumentRule="{!c.clearDocumentRule}"/>
     </div>
 
 </aura:component>

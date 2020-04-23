@@ -38,7 +38,7 @@ public with sharing class Query {
 	private String soql;
 
 	@TestVisible
-	private Query(
+	public Query(
 		final String type,
 		final List<String> fields,
 		final String relationship,
@@ -336,8 +336,8 @@ public with sharing class Query {
 
 	public static void validate(final Query query, final Integer depth) {
 		ValidationResult result = validate(query, null, depth);
-		if (!result.isValid) throw new ValidationException(Label.InvalidQuery, result);		
-	}	
+		if (!result.isValid) throw new ValidationException(Label.InvalidQuery, result);
+	}
 
 	private List<SObject> queryChildren(
 		final SObject root,
@@ -373,5 +373,10 @@ public with sharing class Query {
 		}
 
 		return new Result(result, children);
+	}
+
+	//noinspection ApexUnusedDeclaration // sourceId is SOQL variable
+	public Boolean hasRecord(final Id sourceId) {
+		return Database.query(this.getSoql()).size() > 0;
 	}
 }

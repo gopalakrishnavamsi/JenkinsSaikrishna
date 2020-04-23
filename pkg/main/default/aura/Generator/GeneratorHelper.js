@@ -274,6 +274,9 @@
     var config = component.get('v.config');
     var xmlRoot = document.implementation.createDocument('', '', null);
     var templateConfig = xmlRoot.createElement('Template_Config');
+    var selectedTemplateFiles = component.get('v.templateFiles').filter(function (t) {
+      return t.isChecked;
+    });
     var objPromises = [];
 
     xmlRoot.appendChild(templateConfig);
@@ -331,18 +334,65 @@
           //preview might hit the back button before we're done so
           //if its not valid just do nothing so an error message doesn't show up.
           if (component.isValid()) {
-            helper.generateDocuments(component, objIds[0], xmlRoot);
+            helper.checkDocumentRules(component, selectedTemplateFiles)
+              .then($A.getCallback(function (ruleEvaluations) {
+                var docsToGenerate = [];
+
+                selectedTemplateFiles.forEach(function (templateFile) {
+                  var ruleEvaluation = Array.isArray(ruleEvaluations) ? ruleEvaluations.find(function (re) {
+                    return re.contentDocumentId === templateFile.contentDocumentId;
+                  }) : null;
+                  if ($A.util.isEmpty(ruleEvaluation) || ruleEvaluation.matches) {
+                    docsToGenerate.push(templateFile.contentDocumentId);
+                  }
+                });
+
+                if (docsToGenerate.length > 0) {
+                  helper.generateDocuments(component, objIds[0], xmlRoot, docsToGenerate);
+                } else {
+                  helper.endGenerationWithErrorMessage(component, $A.get('$Label.c.NoDocumentsToGenerate'));
+                }
+              }))
+              .catch(function (error) {
+                helper.endGenerationWithErrorMessage(component, error);
+              });
           }
         })
       )
       .catch(
         $A.getCallback(function (error) {
-          component.set('v.errMsg', error);
-          component.set('v.errType', 'error');
-          component.set('v.isGenerating', false);
-          helper.endGenerationError(component, error);
+          helper.endGenerationWithErrorMessage(component, error);
         })
       );
+  },
+
+  checkDocumentRules: function (component, selectedTemplateFiles) {
+    var action = component.get('c.checkDocumentRules');
+    var templateFilesWithRules = selectedTemplateFiles.filter(function (t) {
+      return !$A.util.isEmpty(t.rule);
+    });
+    var containsRule = !$A.util.isEmpty(templateFilesWithRules);
+    action.setParams({
+      sourceId: component.get('v.recordId'),
+      startingObject: component.get('v.config').objectMappings.name,
+      filesJson: JSON.stringify(templateFilesWithRules),
+      isPreview: component.get('v.isPreview')
+    });
+    return new Promise($A.getCallback(function (resolve, reject) {
+      if (containsRule) {
+        action.setCallback(this, function (response) {
+          var state = response.getState();
+          if (state === 'SUCCESS') {
+            resolve(response.getReturnValue());
+          } else {
+            reject(stringUtils.getErrorMessage(response));
+          }
+        });
+        $A.enqueueAction(action);
+      } else {
+        resolve();
+      }
+    }));
   },
 
   getTypeMap: function (fieldMappings) {
@@ -367,13 +417,13 @@
     return map;
   },
 
-  addUnformattedXML: function(query, result, children, field, xmlRoot, depth) {
+  addUnformattedXML: function (query, result, children, field, xmlRoot, depth) {
     var helper = this;
     var fieldXmlUnformatted;
     if (field.startsWith(query.type)) {
-      fieldXmlUnformatted = xmlRoot.createElement(field.replace(query.type + '.', '')+'Unformatted');
+      fieldXmlUnformatted = xmlRoot.createElement(field.replace(query.type + '.', '') + 'Unformatted');
     } else {
-      fieldXmlUnformatted = xmlRoot.createElement(field+'Unformatted');
+      fieldXmlUnformatted = xmlRoot.createElement(field + 'Unformatted');
     }
     var fieldValue;
     var newFields = field.split('.');
@@ -584,20 +634,12 @@
     return stringUtils.format('{0}{1}', $A.localizationService.formatNumber(getIntegerVal, $A.get('$Locale').numberFormat), getTrailingZeros);
   },
 
-  generateDocuments: function (component, startingRecordId, xmlRoot) {
+  generateDocuments: function (component, startingRecordId, xmlRoot, templateFiles) {
     var config = component.get('v.config');
     var isPreview = component.get('v.isPreview');
     var serializer = new XMLSerializer();
     var xmlString = serializer.serializeToString(xmlRoot); //serializeToString escapes xml for us
     var helper = this;
-    var templateFiles = component.get('v.templateFiles');
-    var selectedTemplateFiles = [];
-
-    templateFiles.forEach(function (templateFile) {
-      if (templateFile.isChecked) {
-        selectedTemplateFiles.push(templateFile.contentDocumentId);
-      }
-    });
 
     var action = component.get('c.queueDocumentGeneration');
     action.setParams({
@@ -605,7 +647,7 @@
       sourceId: startingRecordId,
       xmlPayload: xmlString,
       isPreview: isPreview,
-      contentDocumentIds: selectedTemplateFiles
+      contentDocumentIds: templateFiles
     });
 
     action.setCallback(this, function (response) {
@@ -655,10 +697,14 @@
 
   handleExceptionInQueueDocumentGeneration: function (component, response, helper) {
     var errorMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.FailedInitiateDocGeneration'), stringUtils.getErrorMessage(response));
+    helper.endGenerationWithErrorMessage(component, errorMessage);
+  },
+
+  endGenerationWithErrorMessage: function (component, errorMessage) {
     component.set('v.errMsg', errorMessage);
     component.set('v.errType', 'error');
     component.set('v.isGenerating', false);
-    helper.endGenerationError(component, errorMessage);
+    this.endGenerationError(component, errorMessage);
   },
 
   handleUndefinedJobIdResponse: function (component, failedJobs) {

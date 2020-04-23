@@ -20,6 +20,8 @@ public class Gen {
 		public String generatedSuffix { get; private set; }
 		@AuraEnabled
 		public Id contentDocumentId { get; private set; }
+		@AuraEnabled
+		public Gen.Rule rule { get; private set; }
 
 		public File(
 			final Id id,
@@ -29,7 +31,8 @@ public class Gen {
 			final String generatedFormat,
 			final String generatedName,
 			final String generatedSuffix,
-			final Id contentDocumentId) {
+			final Id contentDocumentId,
+			final Gen.Rule rule) {
 
 			this.id = id;
 			this.title = title;
@@ -39,6 +42,64 @@ public class Gen {
 			this.generatedName = generatedName;
 			this.generatedSuffix = generatedSuffix;
 			this.contentDocumentId = contentDocumentId;
+			this.rule = rule;
+		}
+	}
+
+	public class Rule {
+		@AuraEnabled
+		public String name { get; private set; }
+		@AuraEnabled
+		public String ruleType { get; private set; }
+		@AuraEnabled
+		public List<RuleConditions> conditions { get; private set; }
+
+		public Rule(
+			final String name,
+			final String ruleType,
+			final List<RuleConditions> conditions) {
+
+			this.name = name;
+			this.ruleType = ruleType;
+			this.conditions = conditions == null ? new List<RuleConditions>() : conditions;
+		}
+	}
+
+	public class RuleConditions {
+		@AuraEnabled
+		public String fieldName { get; private set; }
+		@AuraEnabled
+		public String fieldType { get; private set; }
+		@AuraEnabled
+		public String matchType { get; private set; }
+		@AuraEnabled
+		public String matchValue { get; private set; }
+
+		public RuleConditions(
+			final String fieldName,
+			final String fieldType,
+			final String matchType,
+			final String matchValue) {
+
+			this.fieldName = fieldName;
+			this.fieldType = fieldType;
+			this.matchType = matchType;
+			this.matchValue = matchValue;
+		}
+	}
+
+	public class RuleEvaluation {
+		@AuraEnabled
+		public String contentDocumentId { get; private set; }
+		@AuraEnabled
+		public Boolean matches { get; private set; }
+
+		public RuleEvaluation(
+			final String contentDocumentId,
+			final Boolean matches) {
+
+			this.contentDocumentId = contentDocumentId;
+			this.matches = matches;
 		}
 	}
 
@@ -246,7 +307,6 @@ public class Gen {
 		public String orderBy { get; private set; }
 		@AuraEnabled
 		public Integer maximumRecords { get; private set; }
-
 
 		public Field(
 			final String type,

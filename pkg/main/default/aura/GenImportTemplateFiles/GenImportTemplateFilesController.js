@@ -1,17 +1,21 @@
 ({
-  validate: function() {
+  init: function (component, event, helper) {
+    helper.loadCurrentLevelFieldOptions(component, event, helper);
+  },
+
+  validate: function () {
     return new Promise(
-      $A.getCallback(function(resolve) {
+      $A.getCallback(function (resolve) {
         resolve();
       })
     );
   },
 
-  uploadStart: function(component) {
+  uploadStart: function (component) {
     component.set('v.currentAction', $A.get('$Label.c.Uploading'));
   },
 
-  uploadedFile: function(component, event, helper) {
+  uploadedFile: function (component, event, helper) {
     var data = event.getParam('data');
     var config = component.get('v.config');
 
@@ -45,7 +49,7 @@
     }
   },
 
-  removeFile: function(component, event, helper) {
+  removeFile: function (component, event, helper) {
     var files = component.get('v.files');
     var fileIndex = parseInt(event.getSource().get('v.value'), 10);
     var action = component.get('c.deleteContentDocument');
@@ -55,7 +59,7 @@
       contentVersionId: files.splice(fileIndex, 1)[0].id
     });
 
-    action.setCallback(this, function(response) {
+    action.setCallback(this, function (response) {
       component.set('v.currentAction', '');
       var state = response.getState();
       if (state === 'SUCCESS') {
@@ -80,5 +84,13 @@
     });
 
     $A.enqueueAction(action);
+  },
+
+  saveDocumentRule: function (component, event, helper) {
+    helper.saveDocumentRule(component, event);
+  },
+
+  clearDocumentRule: function (component, event, helper) {
+    helper.clearDocumentRule(component, event);
   }
 });

@@ -153,6 +153,11 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>ContentVersion.Rule__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>CustomParameterMap__c.Name__c</field>
 		<readable>true</readable>
 	</fieldPermissions>

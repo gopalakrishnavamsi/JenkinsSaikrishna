@@ -45,7 +45,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_clone_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			GenTemplate__c t = TestUtils.createGenTemplate(Contact.getSObjectType());
+			GenTemplate__c t = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(t.Id);
 			ContentVersion cv2 = TestUtils.createGenFile(t.Id);
 
@@ -85,6 +85,10 @@ private class GenServiceTest {
 				System.assertEquals(cv.GeneratedFileFormat__c, f.generatedFormat);
 				System.assertEquals(cv.GeneratedFileName__c, f.generatedName);
 				System.assertEquals(cv.GeneratedFileSuffix__c, f.generatedSuffix);
+				Gen.Rule testRule = (Gen.Rule)JSON.deserialize(cv.Rule__c, Gen.Rule.class);
+				System.assertEquals(testRule.name, f.rule.name);
+				System.assertEquals(testRule.ruleType, f.rule.ruleType);
+				System.assertEquals(testRule.conditions.size(), f.rule.conditions.size());
 			}
 			System.assertEquals(2, Collection.size([SELECT Id FROM ContentDocumentLink WHERE LinkedEntityId = :result.id LIMIT 10]));
 		}
@@ -171,7 +175,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getTemplate_success() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
 			ContentVersion cv2 = TestUtils.createGenFile(gt.Id);
 
@@ -200,6 +204,10 @@ private class GenServiceTest {
 					System.assertEquals(cv1.GeneratedFileFormat__c, f.generatedFormat);
 					System.assertEquals(cv1.GeneratedFileName__c, f.generatedName);
 					System.assertEquals(cv1.GeneratedFileSuffix__c, f.generatedSuffix);
+					Gen.Rule testRule = (Gen.Rule)JSON.deserialize(cv1.Rule__c, Gen.Rule.class);
+					System.assertEquals(testRule.name, f.rule.name);
+					System.assertEquals(testRule.ruleType, f.rule.ruleType);
+					System.assertEquals(testRule.conditions.size(), f.rule.conditions.size());
 				} else if (f.id == cv2.Id) {
 					foundCV2 = true;
 					System.assertEquals(cv2.Title, f.title);
@@ -208,11 +216,33 @@ private class GenServiceTest {
 					System.assertEquals(cv2.GeneratedFileFormat__c, f.generatedFormat);
 					System.assertEquals(cv2.GeneratedFileName__c, f.generatedName);
 					System.assertEquals(cv2.GeneratedFileSuffix__c, f.generatedSuffix);
+					Gen.Rule testRule = (Gen.Rule)JSON.deserialize(cv2.Rule__c, Gen.Rule.class);
+					System.assertEquals(testRule.name, f.rule.name);
+					System.assertEquals(testRule.ruleType, f.rule.ruleType);
+					System.assertEquals(testRule.conditions.size(), f.rule.conditions.size());
 				} else {
 					throw new AssertException('Unexpected generated file: ' + f.generatedName);
 				}
 			}
 			System.assert(foundCV1 && foundCV2);
+		}
+	}
+
+	@IsTest
+	static void test_checkDocumentRule_matches_true() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
+			Schema.Account acc = TestUtils.createAccount();
+
+			Test.startTest();
+			Gen.Template result = GenService.getTemplate(gt.Id);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, Collection.size(result.generated));
+			System.assertNotEquals(null, result.generated.get(0).rule);
+			System.assertEquals(true, GenService.checkDocumentRule(acc.Id, 'Account', result.generated.get(0).rule));
 		}
 	}
 
@@ -247,16 +277,18 @@ private class GenServiceTest {
 	@IsTest
 	static void test_saveTemplate_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			GenTemplate__c gtt = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			GenTemplate__c gtt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			gtt.Name = TestUtils.randomString(12);
 			gtt.SourceObject__c = 'Opportunity';
 			gtt.UseCurrentRecord__c = false;
 			gtt.UseAllTemplates__c = false;
 			ContentVersion cv1 = TestUtils.createGenFile(gtt.Id);
 			cv1.GeneratedFileName__c = TestUtils.randomString(20);
+			cv1.Rule__c = '{"name":"CV1 Rule","ruleType":"any","conditions":[{"fieldName":"BillingState","matchType":"equals","matchValue":"California"},{"fieldName":"BillingState","matchType":"equals","matchValue":"Washington"}]}';
 			ContentVersion cv2 = TestUtils.createGenFile(gtt.Id);
 			cv2.GeneratedFileSuffix__c = 'name_date';
 			cv2.GeneratedFileFormat__c = 'PDF';
+			cv2.Rule__c = '{"name":"CV2 Rule","ruleType":"any","conditions":[{"fieldName":"Name","matchType":"equals","matchValue":"UnitTest"},{"fieldName":"Name","matchType":"equals","matchValue":"California"}]}';
 			Gen.Template gt = GenService.DB.convert(gtt, new List<Gen.File> {
 				GenService.DB.convert(cv1),
 				GenService.DB.convert(cv2)
@@ -287,6 +319,10 @@ private class GenServiceTest {
 					System.assertEquals(cv1.GeneratedFileFormat__c, f.generatedFormat);
 					System.assertEquals(cv1.GeneratedFileName__c, f.generatedName);
 					System.assertEquals(cv1.GeneratedFileSuffix__c, f.generatedSuffix);
+					Gen.Rule testRule = (Gen.Rule)JSON.deserialize(cv1.Rule__c, Gen.Rule.class);
+					System.assertEquals(testRule.name, f.rule.name);
+					System.assertEquals(testRule.ruleType, f.rule.ruleType);
+					System.assertEquals(testRule.conditions.size(), f.rule.conditions.size());
 				} else if (f.id == cv2.Id) {
 					foundCV2 = true;
 					System.assertEquals(cv2.Title, f.title);
@@ -295,6 +331,10 @@ private class GenServiceTest {
 					System.assertEquals(cv2.GeneratedFileFormat__c, f.generatedFormat);
 					System.assertEquals(cv2.GeneratedFileName__c, f.generatedName);
 					System.assertEquals(cv2.GeneratedFileSuffix__c, f.generatedSuffix);
+					Gen.Rule testRule = (Gen.Rule)JSON.deserialize(cv2.Rule__c, Gen.Rule.class);
+					System.assertEquals(testRule.name, f.rule.name);
+					System.assertEquals(testRule.ruleType, f.rule.ruleType);
+					System.assertEquals(testRule.conditions.size(), f.rule.conditions.size());
 				} else {
 					throw new AssertException('Unexpected generated file: ' + f.generatedName);
 				}
@@ -465,7 +505,7 @@ private class GenServiceTest {
 	static void test_getOutputFileName_name() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			System.assertEquals(null, GenService.getOutputFileName(null, null, null));
-			Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name', null);
+			Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name', null, null);
 			System.assertEquals('a', GenService.getOutputFileName(f, null, null));
 			System.assertEquals('a_' + UserInfo.getName(), GenService.getOutputFileName(f,
 				new Entity(UserInfo.getUserId(), UserInfo.getName(), null), null));
@@ -476,7 +516,7 @@ private class GenServiceTest {
 	static void test_getOutputFileName_date() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			System.assertEquals(null, GenService.getOutputFileName(null, null, null));
-			Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'date', null);
+			Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'date', null, null);
 			Datetime dt = Datetime.now();
 			System.assertEquals('a_' + dt.format('YYYY-MM-dd'), GenService.getOutputFileName(f, null, dt));
 		}
@@ -486,7 +526,7 @@ private class GenServiceTest {
 	static void test_getOutputFileName_name_date() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			System.assertEquals(null, GenService.getOutputFileName(null, null, null));
-			Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name_date', null);
+			Gen.File f = new Gen.File(null, 'a', 'b', 3, 'docx', 'a', 'name_date', null, null);
 			Datetime dt = Datetime.now();
 			System.assertEquals('a_' + dt.format('YYYY-MM-dd'), GenService.getOutputFileName(f, null, dt));
 			System.assertEquals('a_' + UserInfo.getName() + '_' + dt.format('YYYY-MM-dd'), GenService.getOutputFileName(f,
@@ -579,7 +619,7 @@ private class GenServiceTest {
 		Test.setMock(HttpCalloutMock.class, new PartialSuccessMock(1));
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
-			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
 			ContentVersion cv2 = TestUtils.createGenFile(gt.Id);
 
@@ -611,7 +651,7 @@ private class GenServiceTest {
 		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
-			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
 			ContentVersion cv2 = TestUtils.createGenFile(gt.Id);
 
@@ -642,7 +682,7 @@ private class GenServiceTest {
 		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
-			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
 			ContentVersion cv2 = TestUtils.createGenFile(gt.Id);
 
@@ -706,7 +746,7 @@ private class GenServiceTest {
 	static void test_getJobStatus_success() {
 		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
-			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			ContentVersion cv = TestUtils.createGenFile(gt.Id);
 			UUID jobId1 = UUID.randomUUID();
 
@@ -735,7 +775,7 @@ private class GenServiceTest {
 	static void test_getJobStatus_success_partial() {
 		Test.setMock(HttpCalloutMock.class, new PartialSuccessMock(1));
 		System.runAs(UserMock.createDocuSignGenerator()) {
-			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			ContentVersion cv = TestUtils.createGenFile(gt.Id);
 			UUID jobId1 = UUID.randomUUID(), jobId2 = UUID.randomUUID();
 
@@ -974,7 +1014,7 @@ private class GenServiceTest {
 	static void test_deleteTemplate_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			gt.TemplateId__c = String.valueOf(ScmAPIMock.DOCUMENT_ID);
 			gt.TemplateType__c = Gen.TYPE_ONLINE;
 			update gt;
@@ -989,7 +1029,7 @@ private class GenServiceTest {
 	static void test_deleteTemplate_unauthorized() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
-			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			gt.TemplateId__c = String.valueOf(ScmAPIMock.DOCUMENT_ID);
 			gt.TemplateType__c = Gen.TYPE_ONLINE;
 			update gt;
@@ -1031,7 +1071,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getTemplatePage_word_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			GenTemplate__c templateRecord = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			GenTemplate__c templateRecord = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			templateRecord.TemplateType__c = Gen.TYPE_WORD;
 			update templateRecord;
 			Gen.Template template = GenService.getTemplate(templateRecord.Id);
@@ -1051,7 +1091,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getTemplatePage_onlineEditor_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			GenTemplate__c templateRecord = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			GenTemplate__c templateRecord = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			templateRecord.TemplateType__c = Gen.TYPE_ONLINE;
 			update templateRecord;
 			Gen.Template template = GenService.getTemplate(templateRecord.Id);
@@ -1071,7 +1111,7 @@ private class GenServiceTest {
 	@IsTest
 	static void test_getTemplatePage_unauthorized() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			GenTemplate__c templateRecord = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			GenTemplate__c templateRecord = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			templateRecord.TemplateType__c = Gen.TYPE_ONLINE;
 			update templateRecord;
 			Gen.Template template = GenService.getTemplate(templateRecord.Id);
@@ -1092,7 +1132,7 @@ private class GenServiceTest {
 	static void test_getTemplate_failureOnDelete() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			GenTemplate__c gt = TestUtils.createGenTemplate(Lead.getSObjectType());
+			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
 			gt.TemplateId__c = String.valueOf(ScmAPIMock.DOCUMENT_ID);
 			gt.TemplateType__c = Gen.TYPE_ONLINE;
 			update gt;
@@ -1192,6 +1232,7 @@ private class GenServiceTest {
 	static void test_getTempEOSFolderId_withoutConfig_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString(), ScmAPIMock.FOLDER_ID_3.toString());
 			Test.startTest();
 			UUID eosFolderId = GenService.getTempEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
 			System.assert(eosFolderId != null);
