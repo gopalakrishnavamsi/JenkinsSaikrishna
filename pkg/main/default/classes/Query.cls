@@ -87,7 +87,7 @@ public with sharing class Query {
 
 	private String getFilters() {
 		String result = String.isBlank(this.parentIdField) ? 'Id = :sourceId' : this.parentIdField + ' IN :parentIds';
-		if (String.isNotBlank(this.filterBy)) result += ' AND ' + this.filterBy;
+		if (String.isNotBlank(this.filterBy)) result += ' AND (' + this.filterBy + ' )';
 		return result;
 	}
 
