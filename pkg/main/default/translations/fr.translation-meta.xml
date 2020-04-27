@@ -1158,7 +1158,7 @@
 		<name>OtherRecipients</name>
 	</customLabels>
 	<customLabels>
-		<label>Envoyez une copie de cette enveloppe à vos contacts Salesforce ou envoyez-la par e-mail.</label>
+		<label>Envoyez une copie de cette enveloppe à vos contacts Salesforce.</label>
 		<name>OtherRecipientsDescription</name>
 	</customLabels>
 	<customLabels>
@@ -1776,6 +1776,26 @@
 	<customLabels>
 		<label>Options du champ de données</label>
 		<name>MergeFieldOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>Options de tableaux</label>
+		<name>TableRowOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>Filtrage SOQL (OÙ) :</label>
+		<name>FilterByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>Triage SOQL (TRIER PAR) :</label>
+		<name>OrderByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>Limitation SOQL (LIMITE) :</label>
+		<name>LimitByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>La valeur doit être comprise entre 1 et 2 000.</label>
+		<name>LimitByErrorMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>Relations de recherche</label>
@@ -4808,6 +4828,26 @@
 		<label>SCM href non définie</label>
 		<name>SCMHrefUndefined</name>
 	</customLabels>
+	<customLabels>
+		<label>En savoir plus sur le filtrage des enregistrements</label>
+		<name>LearnMoreAboutFiltering</name>	
+	</customLabels>	
+	<customLabels>
+		<label>En savoir plus sur l’ordonnancement des documents</label>
+		<name>LearnMoreAboutOrdering</name>
+	</customLabels>	
+	<customLabels>
+		<label>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_conditionexpression.htm</label>
+		<name>LearnMoreAboutFilteringURL</name>	
+	</customLabels>	
+	<customLabels>
+		<label>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_orderby.htm</label>
+		<name>LearnMoreAboutOrderingURL</name>
+	</customLabels>	
+	<customLabels>
+		<label>N’a pu résoudre le type d’objet {0}. Vérifiez que l’objet existe et que vous y avez bien accès.</label>
+		<name>InvalidSObjectType_1</name>	
+	</customLabels>	
 	<customPageWebLinks>
 		<label>Configuration DocuSign</label>
 		<name>Setup</name>

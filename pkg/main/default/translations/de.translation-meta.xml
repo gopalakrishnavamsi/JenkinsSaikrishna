@@ -850,39 +850,39 @@
 		<name>MustBeActivated</name>
 	</customLabels>
 	<customLabels>
-		<label>Dieser Vorgang ist nur mit Administratorrechten möglich.</label>
+		<label>Für diese Aktion sind Berechtigungen als Administrator erforderlich.</label>
 		<name>MustBeAdministrator</name>
 	</customLabels>
 	<customLabels>
-		<label>Dieser Vorgang ist nur mit DocuSign-Administratorrechten möglich</label>
+		<label>Für diese Aktion sind Berechtigungen als DocuSign-Administrator erforderlich</label>
 		<name>MustBeDocuSignAdministrator</name>
 	</customLabels>
 	<customLabels>
-		<label>Dieser Vorgang ist nur mit DocuSign-Absenderrechten möglich</label>
+		<label>Für diese Aktion sind Berechtigungen als DocuSign-Absender erforderlich</label>
 		<name>MustBeDocuSignSender</name>
 	</customLabels>
 	<customLabels>
-		<label>Dieser Vorgang ist nur mit DocuSign-Benutzerrechten möglich</label>
+		<label>Für diese Aktion sind Berechtigungen als DocuSign-Benutzer erforderlich</label>
 		<name>MustBeDocuSignUser</name>
 	</customLabels>
 	<customLabels>
-		<label>Dieser Vorgang ist nur mit DocuSign-Erstellungsrechten möglich</label>
+		<label>Für diese Aktion sind Berechtigungen als DocuSign-Ersteller erforderlich</label>
 		<name>MustBeDocuSignGenerator</name>
 	</customLabels>
 	<customLabels>
-		<label>Dieser Vorgang ist nur mit DocuSign-Verhandlungsrechten möglich</label>
+		<label>Für diese Aktion sind Berechtigungen als DocuSign-Verhandler erforderlich</label>
 		<name>MustBeDocuSignNegotiator</name>
 	</customLabels>
 	<customLabels>
-		<label>Dieser Vorgang ist nur mit DocuSign-CLM-Administratorrechten möglich.</label>
+		<label>Für diese Aktion sind Berechtigungen als DocuSign-CLM-Administrator erforderlich.</label>
 		<name>MustBeClmAdministrator</name>
 	</customLabels>
 	<customLabels>
-		<label>Dieser Vorgang ist nur mit DocuSign-CLM-Benutzerrechten möglich.</label>
+		<label>Für diese Aktion sind Berechtigungen als DocuSign-CLM-Benutzer erforderlich.</label>
 		<name>MustBeClmUser</name>
 	</customLabels>
 	<customLabels>
-		<label>Dieser Vorgang ist nur mit DocuSign-CLM-Betrachterrechten möglich.</label>
+		<label>Für diese Aktion sind Berechtigungen als DocuSign-CLM-Betrachter erforderlich.</label>
 		<name>MustBeClmViewer</name>
 	</customLabels>
 	<customLabels>
@@ -1158,7 +1158,7 @@
 		<name>OtherRecipients</name>
 	</customLabels>
 	<customLabels>
-		<label>Kopie des Umschlags an Salesforce-Kontakte senden oder e-mailen.</label>
+		<label>Kopie des Umschlags an Salesforce-Kontakte senden.</label>
 		<name>OtherRecipientsDescription</name>
 	</customLabels>
 	<customLabels>
@@ -1776,6 +1776,26 @@
 	<customLabels>
 		<label>Datenfeldoptionen</label>
 		<name>MergeFieldOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>Tabellenoptionen</label>
+		<name>TableRowOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL-Filterung (WHERE):</label>
+		<name>FilterByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL-Sortierung (ORDER BY):</label>
+		<name>OrderByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL-Einschränkung (LIMIT):</label>
+		<name>LimitByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>Wert muss zwischen 1 und 2.000 sein.</label>
+		<name>LimitByErrorMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>Nachschlagebeziehungen</label>
@@ -4754,7 +4774,7 @@
 		<name>UndefinedChildRelationship</name>
 	</customLabels>
 	<customLabels>
-		<label>Für Nachfrage-Abfragen muss ein Feld für eine untergeordnete ID definiert sein.</label>
+		<label>Für Nachfrage-Abfragen muss ein Feld für eine übergeordnete ID definiert sein.</label>
 		<name>UndefinedParent</name>
 	</customLabels>
 	<customLabels>
@@ -4805,6 +4825,26 @@
 		<label>SCM href nicht definiert</label>
 		<name>SCMHrefUndefined</name>
 	</customLabels>
+	<customLabels>
+		<label>Informationen zum Filtern von Datensätzen (in Englisch)</label>
+		<name>LearnMoreAboutFiltering</name>	
+	</customLabels>	
+	<customLabels>
+		<label>Informationen zum Sortieren von Datensätzen (in Englisch)</label>
+		<name>LearnMoreAboutOrdering</name>
+	</customLabels>	
+	<customLabels>
+		<label>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_conditionexpression.htm</label>
+		<name>LearnMoreAboutFilteringURL</name>	
+	</customLabels>	
+	<customLabels>
+		<label>https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_orderby.htm</label>
+		<name>LearnMoreAboutOrderingURL</name>
+	</customLabels>	
+	<customLabels>
+		<label>Objekttyp {0} konnte nicht aufgelöst werden. Prüfen Sie, ob das Objekt besteht und ob Sie Zugriff darauf haben.</label>
+		<name>InvalidSObjectType_1</name>	
+	</customLabels>	
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>
 		<name>Setup</name>

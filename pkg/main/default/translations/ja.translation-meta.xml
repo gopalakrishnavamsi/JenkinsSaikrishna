@@ -1158,7 +1158,7 @@
 		<name>OtherRecipients</name>
 	</customLabels>
 	<customLabels>
-		<label>このエンベロープのコピーをSalesforceの取引先責任者に送信したりメールで送信したりします。</label>
+		<label>このエンベロープのコピーをSalesforceの取引先責任者に送信します。</label>
 		<name>OtherRecipientsDescription</name>
 	</customLabels>
 	<customLabels>
@@ -1777,6 +1777,26 @@
 	<customLabels>
 		<label>データフィールドオプション</label>
 		<name>MergeFieldOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>テーブルオプション</label>
+		<name>TableRowOptions</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL絞り込み（WHERE）:</label>
+		<name>FilterByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL並べ替え（ORDER BY）:</label>
+		<name>OrderByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>SOQL制限（LIMIT）:</label>
+		<name>LimitByOption</name>
+	</customLabels>
+	<customLabels>
+		<label>値は1〜2000で指定してください。</label>
+		<name>LimitByErrorMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>参照関係</label>
@@ -4806,6 +4826,26 @@
 		<label>SCM hrefが未定義です</label>
 		<name>SCMHrefUndefined</name>
 	</customLabels>
+	<customLabels>
+		<label>レコードの絞り込みについて</label>
+		<name>LearnMoreAboutFiltering</name>	
+	</customLabels>	
+	<customLabels>
+		<label>レコードの並べ替えについて</label>
+		<name>LearnMoreAboutOrdering</name>
+	</customLabels>	
+	<customLabels>
+		<label>https://developer.salesforce.com/docs/atlas.ja-jp.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_conditionexpression.htm</label>
+		<name>LearnMoreAboutFilteringURL</name>	
+	</customLabels>	
+	<customLabels>
+		<label>https://developer.salesforce.com/docs/atlas.ja-jp.soql_sosl.meta/soql_sosl/sforce_api_calls_soql_select_orderby.htm</label>
+		<name>LearnMoreAboutOrderingURL</name>
+	</customLabels>	
+	<customLabels>
+		<label>オブジェクトタイプ{0}を解決できませんでした。オブジェクトが存在し、そのオブジェクトにアクセスできることを確認してください。</label>
+		<name>InvalidSObjectType_1</name>	
+	</customLabels>	
 	<customPageWebLinks>
 		<label>DocuSignセットアップ</label>
 		<name>Setup</name>
