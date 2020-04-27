@@ -81,16 +81,13 @@
       }
     });
     component.set('v.clonedRule', helper.newRule());
+    helper.updateRuleValidity(component);
   },
 
   fireEvent: function (component, eventName, parameters) {
     var event = component.getEvent(eventName);
     event.setParams(parameters);
     event.fire();
-  },
-
-  blurRuleInput: function (component) {
-    component.find('rule-name-display').blur();
   },
 
   addCondition: function (component, helper) {

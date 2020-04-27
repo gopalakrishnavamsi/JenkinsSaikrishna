@@ -18,37 +18,39 @@
     <!--    Handlers   -->
     <aura:handler name="init" value="{!this}" action="{!c.init}"/>
 
-    <div class="slds-m-top_medium">
-        <span class="slds-text-title_caps">{!$Label.c.DocumentRule}</span>
-        <!-- Comment out Help link until documentation is available -->
-<!--        <span class="slds-text-color_weak"> &bull; </span>-->
-<!--        <span class="slds-text-body_small">-->
-<!--            <a>{!$Label.c.Help}</a>-->
-<!--        </span>-->
+    <div class="slds-m-top_large">
         <div class="slds-m-bottom_xxx-small">
+            <span class="slds-text-title_caps">{!$Label.c.DocumentRule}</span>
+            <!-- Comment out Help link until documentation is available -->
+            <!--            <span class="slds-text-color_weak"> &bull; </span>-->
+            <!--            <span class="slds-text-body_small">-->
+            <!--                <a>{!$Label.c.Help}</a>-->
+            <!--            </span>-->
+        </div>
+        <div>
             <aura:if isTrue="{!empty(v.rule)}">
                 <lightning:button
                         iconName="utility:add"
                         label="{!$Label.c.AddRule}"
-                        class="slds-m-vertical_xx-small"
+                        class="slds-m-top_xxx-small"
                         onclick="{!c.showRuleModal}"/>
                 <aura:set attribute="else">
                     <div class="slds-form-element">
-                        <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right slds-p-bottom_xx-small">
-                            <lightning:input
-                                    type="text"
-                                    aura:id="rule-name-display"
-                                    onfocus="{!c.blurRuleInput}"
-                                    value="{!v.rule.name}"/>
-                            <lightning:buttonIcon
-                                    iconName="utility:edit"
-                                    variant="bare"
-                                    class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default"
-                                    onclick="{!c.showRuleModal}"/>
-                            <lightning:button
-                                    iconName="utility:clear"
-                                    class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
-                                    onclick="{!c.clearRule}"/>
+                        <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                            <div class="rule-display slds-m-top_xxx-small">
+                                <span class="slds-m-right_small">
+                                    <img src="{!$Resource.LogicBlockComposer}"/>
+                                </span>
+                                <span class="slds-m-right_xx-small">{!v.rule.name}</span>
+                                <lightning:buttonIcon
+                                        iconName="utility:edit"
+                                        variant="bare"
+                                        onclick="{!c.showRuleModal}"/>
+                                <lightning:button
+                                        iconName="utility:clear"
+                                        class="slds-button slds-button_icon slds-input__icon slds-input__icon_right slds-p-around_none"
+                                        onclick="{!c.clearRule}"/>
+                            </div>
                         </div>
                     </div>
                 </aura:set>
@@ -62,15 +64,22 @@
             width="64%"
             primaryButtonLabel="{!$Label.c.Save}"
             strike_evt_modalCloseButtonClicked="{!c.closeRuleModal}">
-        <div class="slds-m-vertical_small">
-            <lightning:input
-                    type="text"
-                    class="slds-form-element"
-                    maxlength="80"
-                    name="name"
-                    placeholder="{!$Label.c.DocumentRuleNamePlaceholder}"
-                    onchange="{!c.onRuleChange}"
-                    value="{!v.clonedRule.name}"/>
+        <div class="slds-grid">
+            <div class="slds-col slds-small-size_xxx-small slds-m-top_small rule-name-icon">
+                <span class="slds-m-right_medium">
+                    <img src="{!$Resource.LogicBlockComposer}"/>
+                </span>
+            </div>
+            <div class="slds-col">
+                <lightning:input
+                        type="text"
+                        class="slds-form-element"
+                        maxlength="80"
+                        name="name"
+                        placeholder="{!$Label.c.DocumentRuleNamePlaceholder}"
+                        onchange="{!c.onRuleChange}"
+                        value="{!v.clonedRule.name}"/>
+            </div>
         </div>
 
         <div class="slds-grid">

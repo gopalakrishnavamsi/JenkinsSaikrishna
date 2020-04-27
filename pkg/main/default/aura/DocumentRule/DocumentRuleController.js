@@ -24,10 +24,6 @@
     helper.clearRule(component, helper);
   },
 
-  blurRuleInput: function (component, event, helper) {
-    helper.blurRuleInput(component);
-  },
-
   addCondition: function (component, event, helper) {
     helper.addCondition(component, helper);
     helper.updateRuleValidity(component);
