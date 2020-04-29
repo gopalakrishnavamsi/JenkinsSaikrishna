@@ -1931,6 +1931,10 @@
 		<name>ImportTemplatesDescription</name>
 	</customLabels>
 	<customLabels>
+		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
+		<name>DocumentRuleHelpURL</name>
+	</customLabels>
+	<customLabels>
 		<label>Creación de documentos en lote</label>
 		<name>BulkDocumentCreation</name>
 	</customLabels>

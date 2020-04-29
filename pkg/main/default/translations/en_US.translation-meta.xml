@@ -1934,6 +1934,10 @@
 		<name>DocumentRule</name>
 	</customLabels>
 	<customLabels>
+		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
+		<name>DocumentRuleHelpURL</name>
+	</customLabels>
+	<customLabels>
 		<label>Add Rule</label>
 		<name>AddRule</name>
 	</customLabels>

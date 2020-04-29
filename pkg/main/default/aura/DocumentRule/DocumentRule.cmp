@@ -21,11 +21,10 @@
     <div class="slds-m-top_large">
         <div class="slds-m-bottom_xxx-small">
             <span class="slds-text-title_caps">{!$Label.c.DocumentRule}</span>
-            <!-- Comment out Help link until documentation is available -->
-            <!--            <span class="slds-text-color_weak"> &bull; </span>-->
-            <!--            <span class="slds-text-body_small">-->
-            <!--                <a>{!$Label.c.Help}</a>-->
-            <!--            </span>-->
+            <span class="slds-text-color_weak"> &bull; </span>
+            <span class="slds-text-body_small">
+                <a href="{!$Label.c.DocumentRuleHelpURL}" target="_blank">{!$Label.c.Help}</a>
+            </span>
         </div>
         <div>
             <aura:if isTrue="{!empty(v.rule)}">

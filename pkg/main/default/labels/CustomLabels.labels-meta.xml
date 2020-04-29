@@ -4020,6 +4020,13 @@
 		<value>Document Rule</value>
 	</labels>
 	<labels>
+		<fullName>DocumentRuleHelpURL</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Document Rule Help URL</shortDescription>
+		<value>https://docs.docusign.com/supportdocs/docusign-apps-launcher/Content/dal-admin-guide/gen-conditional-document-generation.htm</value>
+	</labels>
+	<labels>
 		<fullName>AddRule</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
