@@ -1,0 +1,32 @@
+library 'docusign-common'
+
+def installTasks = [
+  'Install JS Dependencies': {
+    nodejsInstall([
+      commitStatusContext: 'Install JS Dependencies',
+      nodejsInstallMethod: 'npm'
+    ])
+  }
+]
+
+def defaultSalesforceArgs = [
+  versionNumber: 'put version number here',
+  nightlyJwtKeyFileCredsId: 'salesforce-nightly-jwt-key-file',
+  nightlyConsumerKeyCredsId: 'salesforce-nightly-jwt-consumer-key',
+  packagingOrgUsername: 'vineet.puranik+dfsle@docusign.com',
+  orgAlias: 'PackagingOrg',
+  packageId: '0336A000000R2HG',
+  packageName: 'DocuSign Apps Launcher'
+]
+
+
+
+salesforcenightlyBuildPipeline(
+  appName: 'salesforce-dal-nightly-build',
+  installTasks: installTasks,
+  salesforceArgs: defaultSalesforceArgs,
+  doSonarQube: false,
+  slack: [
+    channel: 'eng-pipe-dfs-all'
+  ]
+)
