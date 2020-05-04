@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- smartling.translate_paths = CustomFieldTranslation/label -->
-    <label>リマインダーと有効期限の設定を表示する</label>
-    <name>ShowRemindExpire__c</name>
-</CustomFieldTranslation>

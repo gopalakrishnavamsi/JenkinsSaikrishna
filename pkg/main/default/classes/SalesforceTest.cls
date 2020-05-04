@@ -1,17 +1,6 @@
 @IsTest
 private class SalesforceTest {
 
-//	@IsTest(seeAllData = true) // Required for ConnectApi call.
-//	static void test_isChatterEnabled() {
-//		System.assertEquals(ConnectApi.Organization.getSettings().features.chatter, Salesforce.isChatterEnabled);
-//	}
-
-	@IsTest
-	static void test_isChatterEnabled() {
-		// HACK: Detecting whether Chatter enabled is wonky in unit tests. See above.
-		System.assert(Salesforce.isChatterEnabled || !Salesforce.isChatterEnabled);
-	}
-
 	@IsTest
 	static void test_namespace() {
 		System.assertEquals([SELECT NamespacePrefix FROM Organization LIMIT 1].NamespacePrefix, Salesforce.namespace);

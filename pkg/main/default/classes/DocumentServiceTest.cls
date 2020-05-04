@@ -63,9 +63,6 @@ private class DocumentServiceTest {
 		Test.startTest();
 		Document result1 = DocumentService.DB.convert(dsed1);
 		List<Document> result2 = DocumentService.convert(dseds);
-		Document result3 = DocumentService.convert(cv);
-		Document result4 = DocumentService.convert(d);
-		Document result5 = DocumentService.convert(t);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result1);
@@ -97,33 +94,6 @@ private class DocumentServiceTest {
 		System.assertEquals(dsed2.Size__c, Decimal.valueOf(result2[1].size));
 		System.assertEquals(dsed2.LastModified__c, result2[1].lastModified);
 		System.assertEquals(dsed2.SourceId__c, result2[1].sourceId);
-
-		System.assertEquals(null, result3.id);
-		System.assertEquals(Document.TYPE_FILE, result3.type);
-		System.assertEquals(null, result3.sequence);
-		System.assertEquals(cv.Title, result3.name);
-		System.assertEquals(cv.FileExtension, result3.extension);
-		System.assertEquals(cv.ContentSize, result3.size);
-		System.assertEquals(cv.LastModifiedDate, result3.lastModified);
-		System.assertEquals(cv.Id, result3.sourceId);
-
-		System.assertEquals(null, result4.id);
-		System.assertEquals(Document.TYPE_DOCUMENT, result4.type);
-		System.assertEquals(null, result4.sequence);
-		System.assertEquals(d.Name, result4.name);
-		System.assertEquals(DocumentService.getFileExtension(d.Name), result4.extension);
-		System.assertEquals(d.BodyLength, result4.size);
-		System.assertEquals(d.LastModifiedDate, result4.lastModified);
-		System.assertEquals(d.Id, result4.sourceId);
-
-		System.assertEquals(null, result5.id);
-		System.assertEquals(Document.TYPE_TEMPLATE, result5.type);
-		System.assertEquals(null, result5.sequence);
-		System.assertEquals(t.name, result5.name);
-		System.assertEquals(null, result5.extension);
-		System.assertEquals(null, result5.size);
-		System.assertEquals(t.lastModified, result5.lastModified);
-		System.assertEquals(String.valueOf(t.id), result5.sourceId);
 	}
 
 	@IsTest
@@ -189,8 +159,8 @@ private class DocumentServiceTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope__c e2 = TestUtils.createEnvelope();
-			Document__c d1 = TestUtils.createEnvelopeDocument(e1.Id, 1);
-			Document__c d2 = TestUtils.createEnvelopeDocument(e1.Id, 2);
+			TestUtils.createEnvelopeDocument(e1.Id, 1);
+			TestUtils.createEnvelopeDocument(e1.Id, 2);
 
 			Test.startTest();
 			Integer result1 = DocumentService.DB.queryMaxSequence(e1.Id);
@@ -243,13 +213,13 @@ private class DocumentServiceTest {
 	static void test_Database_insertDocuments() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c e = TestUtils.createEnvelope();
-			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
+			DocumentService.DB.convert(TestUtils.createEnvelopeDocument(e.Id));
 			Schema.Document d = TestUtils.createDocument();
 			Document d2 = new Document(null, Document.TYPE_DOCUMENT, null, d.Name, d.Type, d.BodyLength, d.LastModifiedDate, d.Id);
 			UUID tId = UUID.randomUUID();
 			Document d3 = Document.fromTemplate(tId, 'template1');
 			UUID scmId = UUID.randomUUID();
-			Document d4 = Document.fromScmFile(scmId, 'scm1', 'adf');
+			Document d4 = Document.fromFile(scmId, 'scm1', 'adf');
 
 			Test.startTest();
 			List<Document> result = DocumentService.DB.insertDocuments(e.Id, new List<Document> { d2, d3, d4 });
@@ -356,7 +326,7 @@ private class DocumentServiceTest {
 			Test.startTest();
 			List<Document> result = null;
 			if (DocumentService.DB.deleteDocuments(new Set<Id> { d2.id })) {
-				result = DocumentService.DB.queryDocuments(dse.id);
+				result = DocumentService.DB.queryDocuments(dse.Id);
 			}
 			Test.stopTest();
 
@@ -386,98 +356,15 @@ private class DocumentServiceTest {
 	}
 
 	@IsTest
-	static void test_Database_updateDocumentSequence() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
-			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 5));
-			Document d3 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 7));
-
-			Test.startTest();
-			List<Document> result1 = DocumentService.DB.updateDocumentSequence(dse.Id);
-			List<Document> result2 = DocumentService.DB.updateDocumentSequence(dse.Id, new Map<Id, Integer> {
-				d3.id => 1,
-				d2.id => 2,
-				d1.id => 3
-			});
-			Test.stopTest();
-
-			System.assertNotEquals(null, result1);
-			System.assertEquals(3, result1.size());
-
-			System.assertNotEquals(null, result1[0]);
-			System.assertEquals(d1.id, result1[0].id);
-			System.assertEquals(d1.type, result1[0].type);
-			System.assertEquals(1, result1[0].sequence);
-			System.assertEquals(d1.name, result1[0].name);
-			System.assertEquals(d1.extension, result1[0].extension);
-			System.assertEquals(d1.size, result1[0].size);
-			System.assertEquals(d1.lastModified, result1[0].lastModified);
-			System.assertEquals(d1.sourceId, result1[0].sourceId);
-
-			System.assertNotEquals(null, result1[1]);
-			System.assertEquals(d2.id, result1[1].id);
-			System.assertEquals(d2.type, result1[1].type);
-			System.assertEquals(2, result1[1].sequence);
-			System.assertEquals(d2.name, result1[1].name);
-			System.assertEquals(d2.extension, result1[1].extension);
-			System.assertEquals(d2.size, result1[1].size);
-			System.assertEquals(d2.lastModified, result1[1].lastModified);
-			System.assertEquals(d2.sourceId, result1[1].sourceId);
-
-			System.assertNotEquals(null, result1[2]);
-			System.assertEquals(d3.id, result1[2].id);
-			System.assertEquals(d3.type, result1[2].type);
-			System.assertEquals(3, result1[2].sequence);
-			System.assertEquals(d3.name, result1[2].name);
-			System.assertEquals(d3.extension, result1[2].extension);
-			System.assertEquals(d3.size, result1[2].size);
-			System.assertEquals(d3.lastModified, result1[2].lastModified);
-			System.assertEquals(d3.sourceId, result1[2].sourceId);
-
-			System.assertNotEquals(null, result2);
-			System.assertEquals(3, result2.size());
-
-			System.assertNotEquals(null, result2[0]);
-			System.assertEquals(d3.id, result2[0].id);
-			System.assertEquals(d3.type, result2[0].type);
-			System.assertEquals(1, result2[0].sequence);
-			System.assertEquals(d3.name, result2[0].name);
-			System.assertEquals(d3.extension, result2[0].extension);
-			System.assertEquals(d3.size, result2[0].size);
-			System.assertEquals(d3.lastModified, result2[0].lastModified);
-			System.assertEquals(d3.sourceId, result2[0].sourceId);
-
-			System.assertNotEquals(null, result2[1]);
-			System.assertEquals(d2.id, result2[1].id);
-			System.assertEquals(d2.type, result2[1].type);
-			System.assertEquals(2, result2[1].sequence);
-			System.assertEquals(d2.name, result2[1].name);
-			System.assertEquals(d2.extension, result2[1].extension);
-			System.assertEquals(d2.size, result2[1].size);
-			System.assertEquals(d2.lastModified, result2[1].lastModified);
-			System.assertEquals(d2.sourceId, result2[1].sourceId);
-
-			System.assertNotEquals(null, result2[2]);
-			System.assertEquals(d1.id, result2[2].id);
-			System.assertEquals(d1.type, result2[2].type);
-			System.assertEquals(3, result2[2].sequence);
-			System.assertEquals(d1.name, result2[2].name);
-			System.assertEquals(d1.extension, result2[2].extension);
-			System.assertEquals(d1.size, result2[2].size);
-			System.assertEquals(d1.lastModified, result2[2].lastModified);
-			System.assertEquals(d1.sourceId, result2[2].sourceId);
-		}
-	}
-
-	@IsTest
 	static void test_getDocuments_success() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			ContentVersion cv1 = TestUtils.createContentVersion();
 			ContentVersion cv2 = TestUtils.createContentVersion();
 
 			Test.startTest();
-			List<Document> result = DocumentService.getDocuments(ContentVersion.getSObjectType(), new Set<Id> { cv1.Id, cv2.Id });
+			List<Document> result = DocumentService.getDocuments(
+				ContentVersion.getSObjectType(),
+				new Set<Id> { cv1.Id, cv2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -498,9 +385,9 @@ private class DocumentServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Opportunity o1 = TestUtils.createOpportunity();
-			ContentVersion cv1 = TestUtils.createContentVersion(o1.Id);
-			ContentVersion cv2 = TestUtils.createContentVersion(o1.Id);
-			ContentVersion cv3 = TestUtils.createContentVersion(a1.Id);
+			TestUtils.createContentVersion(o1.Id);
+			TestUtils.createContentVersion(o1.Id);
+			TestUtils.createContentVersion(a1.Id);
 
 			Test.startTest();
 			List<Document> result = DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { o1.Id, a1.Id },
@@ -542,11 +429,11 @@ private class DocumentServiceTest {
 			System.assert(result.folders.size() >= 3);
 			Boolean foundPersonal = false, foundCW1 = false, foundCW2 = false;
 			for (Document.Folder f : result.folders) {
-				if (f.Id == UserInfo.getUserId()) {
+				if (f.id == UserInfo.getUserId()) {
 					foundPersonal = true;
-				} else if (f.Id == cw1.id) {
+				} else if (f.id == cw1.Id) {
 					foundCW1 = true;
-				} else if (f.Id == cw2.id) {
+				} else if (f.id == cw2.Id) {
 					foundCW2 = true;
 				}
 			}
@@ -585,7 +472,7 @@ private class DocumentServiceTest {
 			System.assert(result.folders.size() >= 1);
 			Boolean foundPersonal = false;
 			for (Document.Folder f : result.folders) {
-				if (f.Id == UserInfo.getUserId()) {
+				if (f.id == UserInfo.getUserId()) {
 					foundPersonal = true;
 					break;
 				}
@@ -615,8 +502,8 @@ private class DocumentServiceTest {
 			if (cw != null) {
 				ContentVersion cv1 = TestUtils.createContentVersion();
 				ContentVersion cv2 = TestUtils.createContentVersion();
-				ContentWorkspaceDoc cwd1 = TestUtils.createContentWorkspaceDoc(cw.Id, cv1.ContentDocumentId);
-				ContentWorkspaceDoc cwd2 = TestUtils.createContentWorkspaceDoc(cw.Id, cv2.ContentDocumentId);
+				TestUtils.createContentWorkspaceDoc(cw.Id, cv1.ContentDocumentId);
+				TestUtils.createContentWorkspaceDoc(cw.Id, cv2.ContentDocumentId);
 
 				Test.startTest();
 				List<Document> result = DocumentService.getFolderDocuments(ContentVersion.getSObjectType(), new Set<Id> { cw.Id });
@@ -631,8 +518,8 @@ private class DocumentServiceTest {
 	@IsTest
 	static void test_getFolderDocuments_Document() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			Schema.Document d1 = TestUtils.createDocument();
-			Schema.Document d2 = TestUtils.createDocument();
+			TestUtils.createDocument();
+			TestUtils.createDocument();
 
 			Test.startTest();
 			List<Document> result = DocumentService.getFolderDocuments(Schema.Document.getSObjectType(), new Set<Id> { UserInfo.getUserId() });
@@ -647,8 +534,8 @@ private class DocumentServiceTest {
 	static void test_getEnvelopeDocuments() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
-			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
+			DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
+			DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id));
 
 			Test.startTest();
 			List<Document> result = DocumentService.getEnvelopeDocuments(dse.Id);
@@ -691,89 +578,6 @@ private class DocumentServiceTest {
 
 			System.assertNotEquals(null, ex2);
 			System.assertEquals(Label.UndefinedDocument, ex2.getMessage());
-		}
-	}
-
-	@IsTest
-	static void test_removeEnvelopeDocuments() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 1));
-			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 2));
-			Exception ex1, ex2;
-
-			Test.startTest();
-			List<Document> result = DocumentService.removeEnvelopeDocuments(dse.Id, new Set<Id> { d1.Id });
-			try {
-				DocumentService.removeEnvelopeDocuments(null, new Set<Id> { d1.Id });
-				throw new AssertException('Expected removeEnvelopeDocuments to fail');
-			} catch (DocuSignException ex) {
-				ex1 = ex;
-			}
-			try {
-				DocumentService.removeEnvelopeDocuments(dse.Id, new Set<Id>());
-				throw new AssertException('Expected removeEnvelopeDocuments to fail');
-			} catch (DocuSignException ex) {
-				ex2 = ex;
-			}
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(1, result.size());
-			System.assertEquals(d2.id, result[0].id);
-			System.assertEquals(1, result[0].sequence);
-
-			System.assertNotEquals(null, ex1);
-			System.assertEquals(Label.UndefinedEnvelope, ex1.getMessage());
-
-			System.assertNotEquals(null, ex2);
-			System.assertEquals(Label.UndefinedDocument, ex2.getMessage());
-		}
-	}
-
-	@IsTest
-	static void test_reorderEnvelopeDocuments() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Envelope__c dse = TestUtils.createEnvelope();
-			Document d1 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 3));
-			Document d2 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 5));
-			Document d3 = DocumentService.DB.convert(TestUtils.createEnvelopeDocument(dse.Id, 7));
-			Exception ex1, ex2;
-
-			Test.startTest();
-			List<Document> result = DocumentService.reorderEnvelopeDocuments(dse.Id, new Map<Id, Integer> {
-				d3.id => 1,
-				d2.id => 2,
-				d1.id => 3
-			});
-			try {
-				DocumentService.reorderEnvelopeDocuments(null, new Map<Id, Integer> { d1.Id => 1 });
-				throw new AssertException('Expected reorderEnvelopeDocuments to fail');
-			} catch (DocuSignException ex) {
-				ex1 = ex;
-			}
-			try {
-				DocumentService.reorderEnvelopeDocuments(dse.Id, new Map<Id, Integer>());
-				throw new AssertException('Expected reorderEnvelopeDocuments to fail');
-			} catch (DocuSignException ex) {
-				ex2 = ex;
-			}
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(3, result.size());
-
-			System.assertNotEquals(null, result[0]);
-			System.assertEquals(d3.id, result[0].id);
-			System.assertEquals(1, result[0].sequence);
-
-			System.assertNotEquals(null, result[1]);
-			System.assertEquals(d2.id, result[1].id);
-			System.assertEquals(2, result[1].sequence);
-
-			System.assertNotEquals(null, result[2]);
-			System.assertEquals(d1.id, result[2].id);
-			System.assertEquals(3, result[2].sequence);
 		}
 	}
 
@@ -901,9 +705,9 @@ private class DocumentServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
-			ContentVersion cv1 = TestUtils.createContentVersion(a1.Id);
-			ContentVersion cv2 = TestUtils.createContentVersion(a1.Id);
-			ContentVersion cv3 = TestUtils.createContentVersion(a2.Id);
+			TestUtils.createContentVersion(a1.Id);
+			TestUtils.createContentVersion(a1.Id);
+			TestUtils.createContentVersion(a2.Id);
 
 			Test.startTest();
 			List<Document> result = DocumentService.resolveLinkedFiles(new Set<Id> { a1.Id, a2.Id }, false);
@@ -975,5 +779,17 @@ private class DocumentServiceTest {
 			System.assertNotEquals(null, result.get(e3.Id)[0]);
 			System.assertNotEquals(null, result.get(e3.Id)[0].id);
 		}
+	}
+
+	@IsTest
+	static void test_isValidFileType() {
+		Test.startTest();
+		System.assert(!DocumentService.isValidFileType(null));
+		System.assert(!DocumentService.isValidFileType('\t'));
+		System.assert(!DocumentService.isValidFileType('whatever'));
+		System.assert(DocumentService.isValidFileType('pdf'));
+		System.assert(DocumentService.isValidFileType('doc'));
+		System.assert(DocumentService.isValidFileType('docx'));
+		Test.stopTest();
 	}
 }

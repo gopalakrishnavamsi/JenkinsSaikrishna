@@ -3,13 +3,22 @@
  */
 public interface RecipientResolver {
 	/**
+	 * Tests whether recipients can be resolved by the target SObject type.
+	 *
+	 * @param type The SObject type.
+	 *
+	 * @return True if this implementation can resolve recipients from the target SObject type, false otherwise.
+	 */
+	Boolean canResolveRecipientType(SObjectType type);
+
+	/**
 	 * Tests whether recipients can be resolved by the source SObject type.
 	 *
 	 * @param type The SObject type.
 	 *
 	 * @return True if this implementation can resolve recipients from the source SObject type, false otherwise.
 	 */
-	Boolean canResolveRecipients(SObjectType type);
+	Boolean canResolveRecipientSource(SObjectType type);
 
 	/**
 	 * Tests whether recipient SObjects can be searched.
@@ -21,14 +30,32 @@ public interface RecipientResolver {
 	Boolean canSearchRecipients(SObjectType type);
 
 	/**
-	 * Reads recipients from SObjects.
+	 * Reads recipients from SObjects using default rules.
 	 *
 	 * @param type The SObject type.
 	 * @param ids The source SObject IDs.
 	 *
 	 * @return The resolved recipients.
 	 */
-	List<Recipient> getRecipients(SObjectType type, Set<Id> ids);
+	List<Recipient> getSourceRecipients(
+		SObjectType type,
+		Set<Id> ids);
+
+	/**
+	 * Reads recipients related to a type.
+	 *
+	 * @param type The source SObject type.
+	 * @param ids The source SObject IDs.
+	 * @param relationship The relationship to query.
+	 * @param filter Optional result filter.
+	 *
+	 * @return The resolved recipients.
+	 */
+	List<Recipient> getRelatedRecipients(
+		SObjectType type,
+		Set<Id> ids,
+		Query.Relationship relationship,
+		Query.Filter filter);
 
 	/**
 	 * Retrieves a list of recipients by name.
@@ -41,6 +68,9 @@ public interface RecipientResolver {
 	 *
 	 * @return The recipients matching the search criteria.
 	 */
-	List<Recipient> searchRecipients(SObjectType type, String firstName, String lastName,
+	List<Recipient> searchRecipients(
+		SObjectType type,
+		String firstName,
+		String lastName,
 		Recipient.SearchBehavior behavior);
 }

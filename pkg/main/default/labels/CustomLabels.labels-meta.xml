@@ -9452,6 +9452,209 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Could not resolve object type {0}. Verify the object exists and you have access to it.</value>
 	</labels>
 	<labels>
+		<fullName>InvalidEnvelopeConfiguration</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid envelope configuration</shortDescription>
+		<value>Invalid envelope configuration</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedEnvelopeConfiguration</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined envelope configuration</shortDescription>
+		<value>Envelope configuration is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedName</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined name</shortDescription>
+		<value>Name is blank.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedRelationship</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined relationship</shortDescription>
+		<value>Relationship is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedSourceObject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined source object</shortDescription>
+		<value>Source object is blank.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidSourceObject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid source object</shortDescription>
+		<value>Source object is invalid.</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeConfigurationNotFound</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope configuration not found</shortDescription>
+		<value>Envelope configuration not found.</value>
+	</labels>
+	<labels>
+		<fullName>SourceMismatch_2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Source mismatch</shortDescription>
+		<value>Source object {0} does not match the envelope configuration source {1}.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedTemplate</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined template</shortDescription>
+		<value>Template is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedDocuSignTemplateId</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined DocuSign template ID</shortDescription>
+		<value>DocuSign template ID is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>ArrayError_3</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Array error</shortDescription>
+		<value>{0}[{1}]: {2}</value>
+	</labels>
+	<labels>
+		<fullName>DocumentElements</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>documents</shortDescription>
+		<value>documents</value>
+	</labels>
+	<labels>
+		<fullName>InvalidContentDocumentSource</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid ContentDocument source</shortDescription>
+		<value>Source object type must be ContentDocument.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedExtension</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined extension</shortDescription>
+		<value>Extension is blank.</value>
+	</labels>
+	<labels>
+		<fullName>RecipientElements</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>recipients</shortDescription>
+		<value>recipients</value>
+	</labels>
+	<labels>
+		<fullName>InvalidRelationshipType</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid relationship type</shortDescription>
+		<value>Relationship type is invalid.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedRelationshipName</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined relationship name</shortDescription>
+		<value>Relationship name is blank.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedRelatedObject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined related object</shortDescription>
+		<value>Related object type is blank.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidRelatedObject_1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid related object</shortDescription>
+		<value>Related object type is invalid: {0}.</value>
+	</labels>
+	<labels>
+		<fullName>UnsupportedRelatedObject_1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unsupported related object</shortDescription>
+		<value>Related object type is unsupported: {0}.</value>
+	</labels>
+	<labels>
+		<fullName>InvalidRelationship_1</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Invalid relationship</shortDescription>
+		<value>Relationship is invalid: {0}.</value>
+	</labels>
+	<labels>
+		<fullName>CustomFieldElements</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Custom field elements</shortDescription>
+		<value>custom fields</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedCustomField</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined custom field</shortDescription>
+		<value>Custom field is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedCustomFieldValue</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined custom field value</shortDescription>
+		<value>Value is blank while required is true and show is false.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedList</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined custom field list</shortDescription>
+		<value>List is empty.</value>
+	</labels>
+	<labels>
+		<fullName>MergeFieldElements</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Merge field elements</shortDescription>
+		<value>merge fields</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedMergeField</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined merge field</shortDescription>
+		<value>Merge field is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedPath</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined path</shortDescription>
+		<value>Path is blank.</value>
+	</labels>
+	<labels>
+		<fullName>UnrelatedMergeField</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unrelated merge field</shortDescription>
+		<value>Merge field is unrelated to source object.</value>
+	</labels>
+	<labels>
 		<fullName>ExampleFilterByClause</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -9464,5 +9667,5 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Example Filter By Clause</shortDescription>		
 		<value>Example: CreatedDate ASC</value>
-	</labels>			
+	</labels>
 </CustomLabels>

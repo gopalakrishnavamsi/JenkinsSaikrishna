@@ -430,7 +430,7 @@ global with sharing class BulkSendService {
 				? envelope.docuSignId
 				: EnvelopeAPI.getInstance().createEnvelope(
 					envelope,
-					EnvelopeSettings.getOptions(false),
+					true,
 					SENDER_TOKEN);
 
 			BulkSendAPI api = BulkSendAPI.getInstance();
@@ -444,7 +444,7 @@ global with sharing class BulkSendService {
 				}
 				// TODO: Create envelope and status records for each bulk copy?
 				if (!sfdcEnvelopeCreated) {
-					EnvelopeService.saveEnvelope(envelope.withDocuSignId(docuSignId), null);
+					EnvelopeService.saveEnvelope(envelope.withDocuSignId(docuSignId));
 				}
 			}
 

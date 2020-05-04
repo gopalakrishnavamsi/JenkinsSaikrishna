@@ -48,72 +48,6 @@ global with sharing class DocumentService {
 	}
 
 	/**
-	 * Converts a Salesforce content version (file) into a DocuSign envelope document.
-	 *
-	 * @param contentVersion The content version from which to construct a document. This must have the
-	 * <code>Title</code>, <code>FileExtension</code>, <code>ContentSize</code>, and <code>LastModifiedDate</code>
-	 * fields defined.
-	 *
-	 * @return The DocuSign envelope document representation of the content version.
-	 */
-	public static Document convert(final ContentVersion contentVersion) {
-		if (contentVersion == null) return null;
-
-		return new Document(
-			null,
-			Document.TYPE_FILE,
-			null,
-			contentVersion == null ? null : contentVersion.Title,
-			contentVersion == null ? null : contentVersion.FileExtension,
-			contentVersion == null ? null : contentVersion.ContentSize,
-			contentVersion == null ? null : contentVersion.LastModifiedDate,
-			contentVersion == null ? null : contentVersion.Id);
-	}
-
-	/**
-	 * Converts a Salesforce document into a DocuSign envelope document.
-	 *
-	 * @param doc The Salesforce document from which to construct a document. This must have the <code>Name</code>,
-	 * <code>Type</code>, <code>BodyLength</code>, and <code>LastModifiedDate</code> fields defined.
-	 *
-	 * @return The DocuSign envelope document representation of the Salesforce document.
-	 */
-	public static Document convert(final Schema.Document doc) {
-		if (doc == null) return null;
-
-		return new Document(
-			null,
-			Document.TYPE_DOCUMENT,
-			null,
-			doc == null ? null : doc.Name,
-			doc == null ? null : doc.Type,
-			doc == null ? null : doc.BodyLength,
-			doc == null ? null : doc.LastModifiedDate,
-			doc == null ? null : doc.Id);
-	}
-
-	/**
-	 * Converts a DocuSign template into a DocuSign envelope document.
-	 *
-	 * @param template The DocuSign template from which to construct a document.
-	 *
-	 * @return The DocuSign envelope document representation of the DocuSign template.
-	 */
-	public static Document convert(final Template template) {
-		if (template == null) return null;
-
-		return new Document(
-			null,
-			Document.TYPE_TEMPLATE,
-			null,
-			template == null ? null : template.name,
-			null,
-			null,
-			template == null ? null : template.lastModified,
-			template == null ? null : String.valueOf(template.id));
-	}
-
-	/**
 	 * Converts a list of <code>dfsle__Document__c</code> objects to their domain object form.
 	 * <p>
 	 * <em>This method is intended for DocuSign internal use only.</em>
@@ -158,6 +92,10 @@ global with sharing class DocumentService {
 		return result;
 	}
 
+	public static Boolean isValidFileType(final String extension) {
+		return String.isNotBlank(extension) && VALID_EXTENSIONS.contains(extension);
+	}
+
 	@TestVisible
 	private static ValidationResult validate(final Document doc) {
 		if (doc == null) return new ValidationResult(Label.UndefinedDocument);
@@ -183,11 +121,17 @@ global with sharing class DocumentService {
 				String.isNotBlank(doc.Extension__c) ? doc.Extension__c : getFileExtension(doc.Name),
 				Integer.valueOf(doc.Size__c),
 				doc.LastModified__c,
-				doc.SourceId__c);
+				doc.SourceId__c,
+				doc.ReadOnly__c == true,
+				doc.Required__c == true);
 		}
 
 		@TestVisible
-		private Document__c convert(final Document doc, final Id envelopeId, final Integer sequence) {
+		private Document__c convert(
+			final Document doc,
+			final Id envelopeId,
+			final Integer sequence) {
+
 			if (doc == null) return null;
 
 			return new Document__c(
@@ -199,7 +143,9 @@ global with sharing class DocumentService {
 				Extension__c = doc.extension,
 				Size__c = doc.size,
 				SourceId__c = doc.sourceId,
-				LastModified__c = doc.lastModified);
+				LastModified__c = doc.lastModified,
+				ReadOnly__c = doc.readOnly == true,
+				Required__c = doc.required == true);
 		}
 
 		@TestVisible
@@ -220,7 +166,16 @@ global with sharing class DocumentService {
 		@TestVisible
 		private List<Document__c> queryDocumentsInternal(final Id envelopeId) {
 			Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
-				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
+				'Id',
+				'Name',
+				Application.namespacePrefix + 'Extension__c',
+				Application.namespacePrefix + 'LastModified__c',
+				Application.namespacePrefix + 'ReadOnly__c',
+				Application.namespacePrefix + 'Required__c',
+				Application.namespacePrefix + 'Sequence__c',
+				Application.namespacePrefix + 'Size__c',
+				Application.namespacePrefix + 'SourceId__c',
+				Application.namespacePrefix + 'Type__c'
 			});
 
 			return [
@@ -232,7 +187,9 @@ global with sharing class DocumentService {
 					Extension__c,
 					Size__c,
 					SourceId__c,
-					LastModified__c
+					LastModified__c,
+					ReadOnly__c,
+					Required__c
 				FROM Document__c
 				WHERE Envelope__c = :envelopeId
 				ORDER BY Sequence__c
@@ -243,9 +200,20 @@ global with sharing class DocumentService {
 			return convert(queryDocumentsInternal(envelopeId));
 		}
 
-		public List<Document> insertDocuments(final Id envelopeId, final List<Document> documents) {
+		public List<Document> insertDocuments(
+			final Id envelopeId,
+			final List<Document> documents) {
+
 			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
-				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
+				'Name',
+				Application.namespacePrefix + 'Extension__c',
+				Application.namespacePrefix + 'LastModified__c',
+				Application.namespacePrefix + 'ReadOnly__c',
+				Application.namespacePrefix + 'Required__c',
+				Application.namespacePrefix + 'Sequence__c',
+				Application.namespacePrefix + 'Size__c',
+				Application.namespacePrefix + 'SourceId__c',
+				Application.namespacePrefix + 'Type__c'
 			});
 
 			List<Document> result = new List<Document>();
@@ -264,7 +232,15 @@ global with sharing class DocumentService {
 
 		public Map<Id, List<Document>> insertDocuments(final Map<Id, List<Document>> documents) {
 			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
-				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
+				'Name',
+				Application.namespacePrefix + 'Extension__c',
+				Application.namespacePrefix + 'LastModified__c',
+				Application.namespacePrefix + 'ReadOnly__c',
+				Application.namespacePrefix + 'Required__c',
+				Application.namespacePrefix + 'Sequence__c',
+				Application.namespacePrefix + 'Size__c',
+				Application.namespacePrefix + 'SourceId__c',
+				Application.namespacePrefix + 'Type__c'
 			});
 
 			Map<Id, List<Document>> result = new Map<Id, List<Document>>();
@@ -295,12 +271,19 @@ global with sharing class DocumentService {
 		}
 
 		public List<Document> upsertDocuments(final Id envelopeId, final List<Document> documents) {
-			Permissions.verifyIsCreateable(TYPE_DOCUMENT, new List<String> {
-				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
-			});
-			Permissions.verifyIsUpdateable(TYPE_DOCUMENT, new List<String> {
-				'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
-			});
+			List<String> fields = new List<String> {
+				'Name',
+				Application.namespacePrefix + 'Extension__c',
+				Application.namespacePrefix + 'LastModified__c',
+				Application.namespacePrefix + 'ReadOnly__c',
+				Application.namespacePrefix + 'Required__c',
+				Application.namespacePrefix + 'Sequence__c',
+				Application.namespacePrefix + 'Size__c',
+				Application.namespacePrefix + 'SourceId__c',
+				Application.namespacePrefix + 'Type__c'
+			};
+			Permissions.verifyIsCreateable(TYPE_DOCUMENT, fields);
+			Permissions.verifyIsUpdateable(TYPE_DOCUMENT, fields);
 
 			List<Document> updatedDocuments = new List<Document>();
 			if (documents != null) {
@@ -328,43 +311,6 @@ global with sharing class DocumentService {
 				result = true;
 			}
 			return result;
-		}
-
-		public List<Document> updateDocumentSequence(final Id envelopeId) {
-			Permissions.verifyIsUpdateable(TYPE_DOCUMENT, new List<String> { 'Sequence__c' });
-
-			Boolean reordered = false;
-			Decimal sequence = 1;
-			List<Document__c> documents = queryDocumentsInternal(envelopeId);
-			for (Document__c d : documents) {
-				if (d.Sequence__c != sequence) {
-					d.Sequence__c = sequence;
-					reordered = true;
-				}
-				++sequence;
-			}
-
-			if (reordered) {
-				update documents;
-			}
-
-			return convert(documents);
-		}
-
-		public List<Document> updateDocumentSequence(final Id envelopeId, final Map<Id, Integer> newSequence) {
-			Permissions.verifyIsUpdateable(TYPE_DOCUMENT, new List<String> { 'Sequence__c' });
-
-			if (newSequence != null && !newSequence.isEmpty()) {
-				List<Document__c> docs = new List<Document__c>();
-				for (Id id : newSequence.keySet()) {
-					docs.add(new Document__c(
-						Id = id,
-						Sequence__c = newSequence.get(id)));
-				}
-				update docs;
-			}
-
-			return queryDocuments(envelopeId);
 		}
 	}
 
@@ -411,19 +357,53 @@ global with sharing class DocumentService {
 	 *
 	 * @return A list of DocuSign envelope documents.
 	 */
-	global static List<Document> getLinkedDocuments(final SObjectType type, final Set<Id> linkedEntityIds,
+	// TODO: Deprecate in favor of new version.
+	global static List<Document> getLinkedDocuments(
+		final SObjectType type,
+		final Set<Id> linkedEntityIds,
 		final Boolean getLastUpdatedOnly) {
+
+		return getLinkedDocuments(
+			type,
+			linkedEntityIds,
+			getLastUpdatedOnly ? new Query.Filter(null, null, 1) : null);
+	}
+
+	/**
+	 * Retrieves a list of Salesforce source documents by linked entity IDs.
+	 * <p>
+	 * For example, to pull in all of an Opportunity's Notes and Attachments related list:
+	 * <pre>
+	 * List<dfsle.Document> docs = dfsle.DocumentService.getLinkedDocuments(
+	 * 		ContentVersion.getSObjectType(),
+	 * 		new Set<Id> { myOpportunity.Id },
+	 * 		null);
+	 * </pre>
+	 * <p>
+	 * By default, only the <code>ContentDocument</code> and <code>ContentVersion</code> types are supported. More types
+	 * may be supported via plugins.
+	 *
+	 * @param type The Salesforce object type.
+	 * @param linkedEntityIds The Salesforce parent IDs.
+	 * @param filter Optional query filter to apply.
+	 *
+	 * @return A list of DocuSign envelope documents.
+	 */
+	public static List<Document> getLinkedDocuments(
+		final SObjectType type,
+		final Set<Id> linkedEntityIds,
+		final Query.Filter filter) {
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document> result = null;
 		for (DocumentResolver dr : DOCUMENT_RESOLVERS) {
 			if (dr.canResolveDocuments(type)) {
-				result = dr.getLinkedDocuments(type, linkedEntityIds, getLastUpdatedOnly);
+				result = dr.getLinkedDocuments(type, linkedEntityIds, filter);
 				break;
 			}
 		}
-		return result;
+		return result == null ? new List<Document>() : result;
 	}
 
 	/**
@@ -512,7 +492,10 @@ global with sharing class DocumentService {
 	 *
 	 * @return The updated envelope documents.
 	 */
-	public static List<Document> addEnvelopeDocuments(final Id envelopeId, final List<Document> documents) {
+	public static List<Document> addEnvelopeDocuments(
+		final Id envelopeId,
+		final List<Document> documents) {
+
 		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
 		if (Collection.isEmpty(documents)) throw new DocuSignException(Label.UndefinedDocument);
 
@@ -534,45 +517,6 @@ global with sharing class DocumentService {
 		Permissions.verifyIsOwner(documents.keySet());
 
 		return DB.insertDocuments(documents);
-	}
-
-	/**
-	 * Removes one or more documents from a DocuSign envelope.
-	 * <p>
-	 * The caller must be the owner of the envelope.
-	 *
-	 * @param envelopeId The envelope ID.
-	 * @param documentIds The IDs of documents to remove.
-	 *
-	 * @return The updated envelope documents.
-	 */
-	public static List<Document> removeEnvelopeDocuments(final Id envelopeId, final Set<Id> documentIds) {
-		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
-		if (Collection.isEmpty(documentIds)) throw new DocuSignException(Label.UndefinedDocument);
-
-		Permissions.verifyIsOwner(envelopeId);
-
-		DB.deleteDocuments(documentIds);
-		return DB.updateDocumentSequence(envelopeId);
-	}
-
-	/**
-	 * Reorders DocuSign envelope documents.
-	 * <p>
-	 * The caller must be the owner of the envelope.
-	 *
-	 * @param envelopeId The envelope ID.
-	 * @param newSequence A map of document ID to new sequence. This must be sequential starting at 1 with no gaps.
-	 *
-	 * @return The updated envelope documents.
-	 */
-	public static List<Document> reorderEnvelopeDocuments(final Id envelopeId, final Map<Id, Integer> newSequence) {
-		if (envelopeId == null) throw new DocuSignException(Label.UndefinedEnvelope);
-		if (newSequence == null || newSequence.isEmpty()) throw new DocuSignException(Label.UndefinedDocument);
-
-		Permissions.verifyIsOwner(envelopeId);
-
-		return DB.updateDocumentSequence(envelopeId, newSequence);
 	}
 
 	/**
@@ -648,10 +592,10 @@ global with sharing class DocumentService {
 
 		List<Document> templates = new List<Document>();
 		if (templateIds != null) {
-			TemplateAPI api = TemplateAPI.getInstance();
+			EnvelopeAPI api = EnvelopeAPI.getInstance();
 			try {
 				for (UUID templateId : templateIds) {
-					templates.add(convert(api.getTemplate(templateId)));
+					templates.add(Document.fromTemplate(api.getTemplate(templateId)));
 				}
 			} finally {
 				Credentials.save();

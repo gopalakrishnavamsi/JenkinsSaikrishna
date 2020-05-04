@@ -68,10 +68,19 @@ global class TestUtils {
 	}
 
 	public static ContentVersion createContentVersion() {
-		UUID id = UUID.randomUUID();
+		return createContentVersion(
+			UUID.randomUUID().toString(),
+			'pdf'
+		);
+	}
+
+	public static ContentVersion createContentVersion(
+		final String title,
+		final String fileExtension) {
+
 		ContentVersion cv = new ContentVersion(
-			Title = id.toString(),
-			PathOnClient = id.toString() + '.pdf',
+			Title = title,
+			PathOnClient = title + '.' + fileExtension,
 			VersionData = Blob.valueOf(UUID.randomUUID().toString()),
 			IsMajorVersion = false);
 		insert cv;
@@ -84,7 +93,18 @@ global class TestUtils {
 	}
 
 	public static ContentVersion createContentVersion(final Id sourceId) {
-		ContentVersion cv = createContentVersion();
+		return createContentVersion(
+			sourceId,
+			UUID.randomUUID().toString(),
+			'pdf');
+	}
+
+	public static ContentVersion createContentVersion(
+		final Id sourceId,
+		final String title,
+		final String fileExtension) {
+
+		ContentVersion cv = createContentVersion(title, fileExtension);
 		createContentDocumentLink(sourceId, cv);
 		return cv;
 	}
@@ -174,12 +194,33 @@ global class TestUtils {
 		return o;
 	}
 
-	public static OpportunityContactRole createOpportunityContactRole(final Id opportunityId, final Id contactId) {
+	public static OpportunityContactRole createOpportunityContactRole(
+		final Id opportunityId,
+		final Id contactId) {
+
+		return createOpportunityContactRole(
+			opportunityId,
+			contactId,
+			UUID.randomUUID().toString());
+	}
+
+	public static OpportunityContactRole createOpportunityContactRole(
+		final Id opportunityId,
+		final Id contactId,
+		final String role) {
+
 		OpportunityContactRole ocr = new OpportunityContactRole(
 			OpportunityId = opportunityId,
 			ContactId = contactId,
-			Role = UUID.randomUUID().toString());
+			Role = role);
 		insert ocr;
+		ocr = [
+			SELECT Id, ContactId, OpportunityId, Contact.Name, Contact.FirstName, Contact.LastName, Contact.Email,
+				Contact.Phone, Contact.MobilePhone, Role
+			FROM OpportunityContactRole
+			WHERE Id = :ocr.Id
+			LIMIT 1
+		];
 		return ocr;
 	}
 
@@ -195,17 +236,44 @@ global class TestUtils {
 		return c;
 	}
 
+	public static CaseContactRole createCaseContactRole(
+		final Id caseId,
+		final Id contactId) {
+
+		CaseContactRole ccr = new CaseContactRole(
+			CasesId = caseId,
+			ContactId = contactId,
+			Role = UUID.randomUUID().toString());
+		insert ccr;
+		return ccr;
+	}
+
 	public static Contact createContact() {
 		return createContact(createAccount().Id);
 	}
 
 	public static Contact createContact(final Id accountId) {
+		return createContact(
+			accountId,
+			UUID.randomUUID().toString(),
+			UUID.randomUUID().toString(),
+			UUID.randomUUID() + '@unit.test',
+			String.valueOf(randomInteger(10000000)));
+	}
+
+	public static Contact createContact(
+		final Id accountId,
+		final String firstName,
+		final String lastName,
+		final String email,
+		final String phone) {
+
 		Contact c = new Contact(
 			AccountId = accountId,
-			FirstName = UUID.randomUUID().toString(),
-			LastName = UUID.randomUUID().toString(),
-			Email = UUID.randomUUID().toString() + '@unit.test',
-			Phone = '5555555555');
+			FirstName = firstName,
+			LastName = lastName,
+			Email = email,
+			Phone = phone);
 		insert c;
 		return [SELECT AccountId, Name, FirstName, LastName, Email, Phone FROM Contact WHERE Id = :c.Id LIMIT 1];
 	}
@@ -435,4 +503,20 @@ global class TestUtils {
 			+ 'JKFj76Q8dimc07+ikfXxDkSi3YuquuLMkiYQEI7jNjk3LHjL506+Z3xd9rnQ6QRl0++aW1NIUPHmA2Fecur8bQMB48BO4Vjvb0CZlyj02KCmM8fJ65Ni4Fi4H1bpyOFw89gEVLssnTADkiuSkCgYB17u98imy/K/9hjIHE28n7ltacCpF47o2GXAyeZOD/EW68/l5HwyL8kgoFrFpfdp4ihyejVjcTsNw84SewDOstiAtrth2qQCYCBZJ97iIr'
 			+ 'XaJnU+zXzC1II4ZNpaUQjJZJ2wDppQnz4RPIueCBM5RwN8MvXBiZGGO7/UmcpcUkGA==';
 	public static final Blob TEST_RSA_PRIVATE_KEY = EncodingUtil.base64Decode(TEST_RSA_PRIVATE_KEY_BASE64);
+
+	public static EnvelopeConfiguration__c createEnvelopeConfiguration() {
+		return createEnvelopeConfiguration(UUID.randomUUID().toString(), 'Account');
+	}
+
+	public static EnvelopeConfiguration__c createEnvelopeConfiguration(
+		final String name,
+		final String sourceObject) {
+
+		EnvelopeConfiguration__c result = new EnvelopeConfiguration__c(
+			Name = name,
+			SourceObject__c = sourceObject,
+			DocuSignId__c = String.valueOf(UUID.randomUUID()));
+		insert result;
+		return result;
+	}
 }

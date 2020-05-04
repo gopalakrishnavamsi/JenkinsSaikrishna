@@ -65,8 +65,13 @@ global class CustomField {
 	 * @param required Whether a value is required for the custom field.
 	 * @param show Whether to display the custom field to recipients.
 	 */
-	global CustomField(final String type, final String name, final String value, final List<String> items,
-		final Boolean required, final Boolean show) {
+	global CustomField(
+		final String type,
+		final String name,
+		final String value,
+		final List<String> items,
+		final Boolean required,
+		final Boolean show) {
 
 		this.type = type;
 		this.name = name;
@@ -86,7 +91,10 @@ global class CustomField {
  	 *
  	 * @returns The new text custom field.
  	 */
-	public static CustomField newTextField(final String name, final String value, final Boolean required,
+	public static CustomField newTextField(
+		final String name,
+		final String value,
+		final Boolean required,
 		final Boolean show) {
 
 		return new CustomField(TYPE_TEXT, name, value, null, required, show);
@@ -103,8 +111,12 @@ global class CustomField {
 	 *
 	 * @return The new list custom field.
 	 */
-	public static CustomField newListField(final String name, final String value, final List<String> items,
-		final Boolean required, final Boolean show) {
+	public static CustomField newListField(
+		final String name,
+		final String value,
+		final List<String> items,
+		final Boolean required,
+		final Boolean show) {
 
 		return new CustomField(TYPE_LIST, name, value, items, required, show);
 	}
@@ -116,5 +128,10 @@ global class CustomField {
 	 */
 	public CustomField copy() {
 		return new CustomField(this.type, this.name, this.value, this.items.clone(), this.required, this.show);
+	}
+
+	public CustomField withValue(final String value) {
+		this.value = value;
+		return this;
 	}
 }

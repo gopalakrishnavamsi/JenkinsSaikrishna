@@ -77,8 +77,8 @@ public class MergeField implements Comparable {
 		return t == Schema.DisplayType.TEXTAREA && field.isHtmlFormatted() ? 'RICHTEXT' : String.valueOf(t);
 	}
 
-	public static MergeField forField(final DescribeFieldResult field, final String relationshipName) {
-		if (!isValid(field)) throw new DocuSignException(Label.InvalidType);
+	public static MergeField forField(final DescribeFieldResult field) {
+		if (!isValid(field)) throw new DocuSignException(System.Label.InvalidType);
 
 		return new MergeField(
 			field,

@@ -10,10 +10,10 @@ global with sharing class Entity {
 		if (String.isNotBlank(rs)) {
 			for (String r : rs.split(',')) {
 				try {
-					RESOLVERS.add((EntityResolver)Type.forName(r.trim()).newInstance());
+					RESOLVERS.add((EntityResolver)System.Type.forName(r.trim()).newInstance());
 				} catch (Exception ex) {
 					LoggerService.getInstance().exception(ex, 'Invalid entity resolver: ' + r.trim());
-					throw new DocuSignException(String.format(Label.InvalidEntityResolver_1, new List<String> {
+					throw new DocuSignException(String.format(System.Label.InvalidEntityResolver_1, new List<String> {
 						r.trim()
 					}));
 				}
@@ -146,7 +146,7 @@ global with sharing class Entity {
 	/**
 	 * Sets the <code>parent</code> property on an entity.
 	 *
-	 * @param name The Salesforce object parent entity.
+	 * @param parent The Salesforce object parent entity.
 	 *
 	 * @return The entity with the updated <code>parent</code> property.
 	 */
@@ -174,7 +174,7 @@ global with sharing class Entity {
 	 * @return The resolved entity or <code>null</code> if it cannot be resolved.
 	 */
 	global static Entity resolve(final Id id) {
-		if (id == null) throw new DocuSignException(Label.UndefinedId);
+		if (id == null) throw new DocuSignException(System.Label.UndefinedId);
 
 		SObjectType type = id.getSobjectType();
 		Entity result = null;

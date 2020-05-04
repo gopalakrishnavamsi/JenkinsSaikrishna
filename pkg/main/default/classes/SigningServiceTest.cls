@@ -23,12 +23,9 @@ private class SigningServiceTest {
 	}
 
 	@IsTest
-	static void test_getNextSignNowRecipient_allow_sequential() {
+	static void test_getNextSignNowRecipient_multiple() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c dse = TestUtils.createEnvelope();
-			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
-			es.AllowSequentialSignNow__c = true;
-			upsert es;
 
 			List<Recipient__c> dsers = new List<Recipient__c> {
 				new Recipient__c(
@@ -129,64 +126,6 @@ private class SigningServiceTest {
 	}
 
 	@IsTest
-	static void test_getNextSignNowRecipient_prohibit_sequential() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Envelope__c dse = TestUtils.createEnvelope();
-			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
-			es.AllowSequentialSignNow__c = false;
-			upsert es;
-
-			List<Recipient__c> dsers = new List<Recipient__c> {
-				new Recipient__c(
-					Envelope__c = dse.Id,
-					Sequence__c = 1,
-					Type__c = Recipient.TYPE_SIGNER,
-					Name = 'Unit Test1',
-					Email__c = 'r1@unit.test',
-					RoutingOrder__c = 1,
-					Role__c = 'Signer 1',
-					SignNow__c = false),
-				new Recipient__c(
-					Envelope__c = dse.Id,
-					Sequence__c = null,
-					Type__c = Recipient.TYPE_SIGNER,
-					Name = 'Unit Test2',
-					Email__c = 'r2@unit.test',
-					RoutingOrder__c = 2,
-					Role__c = 'Signer 2',
-					SignNow__c = false),
-				// Only third recipient is valid for sign now
-				new Recipient__c(
-					Envelope__c = dse.Id,
-					Sequence__c = 2,
-					Type__c = Recipient.TYPE_SIGNER,
-					Name = 'Unit Test3',
-					Email__c = 'r3@unit.test',
-					RoutingOrder__c = 3,
-					Role__c = 'Signer 3',
-					SignNow__c = true)
-			};
-			insert dsers;
-
-			List<Recipient> rs = RecipientService.convert(dsers);
-			System.assertNotEquals(null, rs);
-			System.assertEquals(3, rs.size());
-
-			Test.startTest();
-			Recipient result1 = SigningService.getNextSignNowRecipient(null, null, null, false);
-			Recipient result2 = SigningService.getNextSignNowRecipient(rs, 'Unit Test1', 'r1@unit.test', false);
-			Recipient result3 = SigningService.getNextSignNowRecipient(rs, 'Unit Test2', 'r2@unit.test', false);
-			Recipient result4 = SigningService.getNextSignNowRecipient(rs, 'Unit Test3', 'r3@unit.test', false);
-			Test.stopTest();
-
-			System.assertEquals(null, result1);
-			System.assertEquals(null, result2);
-			System.assertEquals(null, result3);
-			System.assertEquals(null, result4);
-		}
-	}
-
-	@IsTest
 	static void test_shouldSignNow() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
@@ -217,10 +156,6 @@ private class SigningServiceTest {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
 		System.runAs(UserMock.createDocuSignUser()) {
-			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
-			es.AllowSequentialSignNow__c = true;
-			upsert es;
-
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
 				new Recipient__c(
@@ -259,10 +194,10 @@ private class SigningServiceTest {
 			System.assertEquals(3, rs.size());
 
 			Envelope e1 = new Envelope(null, 'subject', 'message', null)
-				.withId(dse.id)
+				.withId(dse.Id)
 				.withRecipients(rs);
 			Envelope e2 = new Envelope(null, 'subject', 'message', null)
-				.withId(dse.id)
+				.withId(dse.Id)
 				.withDocuSignId(UUID.randomUUID())
 				.withRecipients(rs);
 			Url returnUrl = new Url('https://unit.test/return');
@@ -288,10 +223,6 @@ private class SigningServiceTest {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
 
 		System.runAs(UserMock.createDocuSignUser()) {
-			EnvelopeSettings__c es = EnvelopeSettings__c.getOrgDefaults();
-			es.AllowSequentialSignNow__c = true;
-			upsert es;
-
 			Envelope__c dse = TestUtils.createEnvelope();
 			List<Recipient__c> dsers = new List<Recipient__c> {
 				new Recipient__c(

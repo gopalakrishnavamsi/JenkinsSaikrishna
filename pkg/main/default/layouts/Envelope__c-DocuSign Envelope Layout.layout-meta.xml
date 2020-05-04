@@ -15,10 +15,6 @@
                 <behavior>Required</behavior>
                 <field>EmailSubject__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>UpdateChatter__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

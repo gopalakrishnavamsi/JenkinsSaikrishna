@@ -13,7 +13,7 @@ public with sharing class MobileConfiguration {
 	}
 	public Boolean showIFrameTagger {
 		get {
-			return (currentDevice.os == Device.OS.Other)
+			return currentDevice.os == Device.OS.Other
 				|| !currentDevice.isSalesforce1Native
 				|| (!isMobileTaggerEnabled
 				&& currentDevice.os == Device.OS.IOS
@@ -22,11 +22,9 @@ public with sharing class MobileConfiguration {
 	}
 	public Boolean allowInPersonSigning {
 		get {
-			Boolean result = false;
-			if (!this.isMobileTaggerEnabled) {
-				result = (this.currentDevice.os == Device.OS.IOS && this.currentDevice.type == Device.Type.Tablet);
-			}
-			return result;
+			return !this.isMobileTaggerEnabled
+				&& this.currentDevice.os == Device.OS.IOS
+				&& this.currentDevice.type == Device.Type.Tablet;
 		}
 	}
 	public String errorMessage { get; private set; }
@@ -57,12 +55,10 @@ public with sharing class MobileConfiguration {
 
 	public static MobileConfiguration getInstance(final String userAgent) {
 		if (self == null) {
-			String errorMessage = null;
-			Boolean isMobileTaggerEnabled = EnvelopeSettings__c.getInstance().UseMobileTagger__c == true;
 			self = new MobileConfiguration(
 				Device.fromUserAgent(userAgent),
-				isMobileTaggerEnabled,
-				errorMessage);
+				false,
+				null);
 		}
 		return self;
 	}

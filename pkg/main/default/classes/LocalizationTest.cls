@@ -288,7 +288,6 @@ private class LocalizationTest {
 			User u2 = getUser('IT');
 			User u3 = getUser('fi');
 			insert new List<User> { u1, u2, u3 };
-			Recipient.EmailSettings es1, es2;
 
 			Test.startTest();
 			System.runAs(u1) {
@@ -313,160 +312,12 @@ private class LocalizationTest {
 	}
 
 	@IsTest
-	static void test_getDefaultChatterText() {
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.EN));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.DE));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.ES));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.FR));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.IT));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.JA));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.KO));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.NL));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.PT_BR));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.RU));
-		System.assertNotEquals(null, Localization.getDefaultChatterText(Localization.ZH_CN));
-	}
-
-	@IsTest
-	static void test_getChatterText() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			System.assertNotEquals(null, Localization.getChatterText());
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_save_ChatterText() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Localization.ChatterText text = new Localization.ChatterText(
-				'a',
-				'b',
-				'c',
-				'd',
-				'e',
-				'f',
-				'g',
-				'h',
-				'i',
-				'j');
-			Localization.ChatterText text1 = new Localization.ChatterText(
-				'a',
-				null,
-				'c',
-				'd',
-				'e',
-				'f',
-				'g',
-				'h',
-				'i',
-				'j');
-
-			Test.startTest();
-			try {
-				Localization.save((Localization.ChatterText)null);
-				throw new AssertException('Expected save to fail with null input');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.UndefinedChatterText, ex.getMessage());
-			}
-			try {
-				Localization.save(text1);
-				throw new AssertException('Expected save to fail with invalid input');
-			} catch (ValidationException ex) {
-				System.assert(ex.getMessage().startsWith(Label.InvalidChatterText));
-			}
-			Localization.save(text);
-			Test.stopTest();
-
-			ChatterSettings__c c = ChatterSettings__c.getOrgDefaults();
-			System.assertEquals('a', c.EnvelopeSent__c);
-			System.assertEquals('b', c.EnvelopeDelivered__c);
-			System.assertEquals('c', c.EnvelopeCompleted__c);
-			System.assertEquals('d', c.EnvelopeDeclined__c);
-			System.assertEquals('e', c.EnvelopeVoided__c);
-			System.assertEquals('f', c.RecipientSent__c);
-			System.assertEquals('g', c.RecipientDelivered__c);
-			System.assertEquals('h', c.RecipientCompleted__c);
-			System.assertEquals('i', c.RecipientSigned__c);
-			System.assertEquals('j', c.RecipientDeclined__c);
-		}
-	}
-
-	@IsTest
-	static void test_getChatterSettings() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			final List<Localization.ChatterSettings> cs = Localization.getChatterSettings();
-			Test.stopTest();
-
-			System.assertNotEquals(null, cs);
-			System.assertEquals(12, cs.size());
-			System.assertEquals(Localization.CURRENT, cs[0].language);
-		}
-	}
-
-	@IsTest
-	static void test_ChatterText_getEnvelopeStatusText() {
-		Localization.ChatterText ct = new Localization.ChatterText(
-			'Envelope Sent',
-			'Envelope Delivered',
-			'Envelope Completed',
-			'Envelope Declined',
-			'Envelope Voided',
-			'Recipient Sent',
-			'Recipient Delivered',
-			'Recipient Completed',
-			'Recipient Signed',
-			'Recipient Declined');
-
-		Test.startTest();
-		System.assertEquals(null, ct.getEnvelopeStatusText(null));
-		System.assertEquals(null, ct.getEnvelopeStatusText(''));
-		System.assertEquals(null, ct.getEnvelopeStatusText('\t'));
-		System.assertEquals(null, ct.getEnvelopeStatusText('bad'));
-		System.assertEquals(ct.envelopeCompleted, ct.getEnvelopeStatusText(Envelope.STATUS_COMPLETED));
-		System.assertEquals(ct.envelopeDeclined, ct.getEnvelopeStatusText(Envelope.STATUS_DECLINED));
-		System.assertEquals(ct.envelopeDelivered, ct.getEnvelopeStatusText(Envelope.STATUS_DELIVERED));
-		System.assertEquals(ct.envelopeSent, ct.getEnvelopeStatusText(Envelope.STATUS_SENT));
-		System.assertEquals(ct.envelopeVoided, ct.getEnvelopeStatusText(Envelope.STATUS_VOIDED));
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_ChatterText_getRecipientStatusText() {
-		Localization.ChatterText ct = new Localization.ChatterText(
-			'Envelope Sent',
-			'Envelope Delivered',
-			'Envelope Completed',
-			'Envelope Declined',
-			'Envelope Voided',
-			'Recipient Sent',
-			'Recipient Delivered',
-			'Recipient Completed',
-			'Recipient Signed',
-			'Recipient Declined');
-
-		Test.startTest();
-		System.assertEquals(null, ct.getRecipientStatusText(null));
-		System.assertEquals(null, ct.getRecipientStatusText(''));
-		System.assertEquals(null, ct.getRecipientStatusText('\t'));
-		System.assertEquals(null, ct.getRecipientStatusText('bad'));
-		System.assertEquals(ct.recipientCompleted, ct.getRecipientStatusText(Recipient.STATUS_COMPLETED));
-		System.assertEquals(ct.recipientDeclined, ct.getRecipientStatusText(Recipient.STATUS_DECLINED));
-		System.assertEquals(ct.recipientDelivered, ct.getRecipientStatusText(Recipient.STATUS_DELIVERED));
-		System.assertEquals(ct.recipientSent, ct.getRecipientStatusText(Recipient.STATUS_SENT));
-		System.assertEquals(ct.recipientSigned, ct.getRecipientStatusText(Recipient.STATUS_SIGNED));
-		Test.stopTest();
-	}
-
-	@IsTest
 	static void test_validate_Recipient_EmailSettings() {
 		Recipient.EmailSettings es1 = new Recipient.EmailSettings(Localization.ES, '', 's', 'm');
 		Recipient.EmailSettings es2 = new Recipient.EmailSettings(null, '', 's', 'm');
 		Recipient.EmailSettings es3 = new Recipient.EmailSettings('l', '', '  \n', 'm');
 		Recipient.EmailSettings es4 = new Recipient.EmailSettings('l', '', 's', '');
 		Recipient.EmailSettings es5 = null;
-		Recipient.EmailSettings es6 = new Recipient.EmailSettings('l', '', 's', '');
 
 		Test.startTest();
 		System.assert(Localization.validate(es1).isValid);
@@ -474,51 +325,6 @@ private class LocalizationTest {
 		System.assert(!Localization.validate(es3).isValid);
 		System.assert(!Localization.validate(es4).isValid);
 		System.assert(!Localization.validate(es5).isValid);
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_validate_ChatterText() {
-		Localization.ChatterText ct1 = new Localization.ChatterText(
-			'Envelope Sent',
-			'Envelope Delivered',
-			'Envelope Completed',
-			'Envelope Declined',
-			'Envelope Voided',
-			'Recipient Sent',
-			'Recipient Delivered',
-			'Recipient Completed',
-			'Recipient Signed',
-			'Recipient Declined');
-		Localization.ChatterText ct2 = new Localization.ChatterText(
-			'Envelope Sent',
-			'Envelope Delivered',
-			'Envelope Completed',
-			' ',
-			'Envelope Voided',
-			'Recipient Sent',
-			'Recipient Delivered',
-			'Recipient Completed',
-			'Recipient Signed',
-			'Recipient Declined');
-		Localization.ChatterText ct3 = new Localization.ChatterText(
-			'Envelope Sent',
-			'Envelope Delivered',
-			'Envelope Completed',
-			'Envelope Declined',
-			null,
-			'Recipient Sent',
-			'Recipient Delivered',
-			'Recipient Completed',
-			'Recipient Signed',
-			'Recipient Declined');
-		Localization.ChatterText ct4 = null;
-
-		Test.startTest();
-		System.assert(Localization.validate(ct1).isValid);
-		System.assert(!Localization.validate(ct2).isValid);
-		System.assert(!Localization.validate(ct3).isValid);
-		System.assert(!Localization.validate(ct4).isValid);
 		Test.stopTest();
 	}
 }

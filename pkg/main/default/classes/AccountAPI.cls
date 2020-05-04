@@ -1,7 +1,9 @@
 public with sharing class AccountAPI extends ESignatureAPI {
 
 	private static AccountAPI self = null;
+	private static final String ACCOUNT_LACKS_PERMISSIONS = 'ACCOUNT_LACKS_PERMISSIONS';
 	private static List<CustomField> accountCustomFields = null;
+	private List<SigningGroup> sgs = null;
 
 	private AccountAPI(
 		final Url baseUrl,
@@ -19,7 +21,7 @@ public with sharing class AccountAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
-	private class ViewResponse {
+	private class APIViewResponse {
 		public String url;
 	}
 
@@ -28,7 +30,7 @@ public with sharing class AccountAPI extends ESignatureAPI {
 	}
 
 	public Url getConsoleViewUrl(final Integer timeout) {
-		final RestAPI.Response response = this.post(
+		RestAPI.Response response = this.post(
 			new List<Object> { 'views', 'console' },
 			'{"suppressNavigation":"true"}',
 			timeout);
@@ -37,54 +39,54 @@ public with sharing class AccountAPI extends ESignatureAPI {
 			throw new APIException(response.error);
 		}
 
-		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
 	}
 
 	// Serialization objects for custom fields
 	@TestVisible
-	private class ListCustomField {
+	private class APIListCustomField {
 		public String name;
 		public String required;
 		public String show;
 		public String value;
 		public List<String> listItems;
 
-		public CustomField toExternalForm() {
+		public CustomField toCustomField() {
 			return CustomField.newListField(name, value, listItems, StringUtils.parseBoolean(required),
 				StringUtils.parseBoolean(show));
 		}
 	}
 
 	@TestVisible
-	private class TextCustomField {
+	private class APITextCustomField {
 		public String name;
 		public String required;
 		public String show;
 		public String value;
 
-		public CustomField toExternalForm() {
+		public CustomField toCustomField() {
 			return CustomField.newTextField(name, value, StringUtils.parseBoolean(required),
 				StringUtils.parseBoolean(show));
 		}
 	}
 
 	@TestVisible
-	private class CustomFields {
-		public List<TextCustomField> textCustomFields;
-		public List<ListCustomField> listCustomFields;
+	private class APICustomFields {
+		public List<APITextCustomField> textCustomFields;
+		public List<APIListCustomField> listCustomFields;
 
-		public List<CustomField> toExternalForm() {
+		public List<CustomField> toCustomFields() {
 			final List<CustomField> cfs = new List<CustomField>();
 
 			if (this.textCustomFields != null) {
-				for (TextCustomField cf : this.textCustomFields) {
-					cfs.add(cf.toExternalForm());
+				for (APITextCustomField cf : this.textCustomFields) {
+					cfs.add(cf.toCustomField());
 				}
 			}
 
 			if (this.listCustomFields != null) {
-				for (ListCustomField cf : listCustomFields) {
-					cfs.add(cf.toExternalForm());
+				for (APIListCustomField cf : listCustomFields) {
+					cfs.add(cf.toCustomField());
 				}
 			}
 
@@ -98,7 +100,7 @@ public with sharing class AccountAPI extends ESignatureAPI {
 
 	public List<CustomField> getCustomFields(final Integer timeout) {
 		if (accountCustomFields == null) {
-			final RestAPI.Response response = this.get(
+			RestAPI.Response response = this.get(
 				'custom_fields',
 				timeout);
 			if (response.hasError) {
@@ -106,37 +108,102 @@ public with sharing class AccountAPI extends ESignatureAPI {
 				throw new APIException(response.error);
 			}
 
-			accountCustomFields = ((CustomFields)JSON.deserialize(response.body, CustomFields.class)).toExternalForm();
+			accountCustomFields = ((APICustomFields)JSON.deserialize(response.body, APICustomFields.class))
+				.toCustomFields();
 		}
 		return accountCustomFields;
 	}
 
 	@TestVisible
-	private class MergeField {
+	private class APISigningGroupMember {
+		public String userName;
+		public String email;
+
+		private SigningGroup.Member toMember() {
+			return new SigningGroup.Member(userName, email);
+		}
+	}
+
+	@TestVisible
+	private class APISigningGroup {
+		public String signingGroupId;
+		public String groupName;
+		public List<APISigningGroupMember> users;
+
+		private SigningGroup toSigningGroup() {
+			final List<SigningGroup.Member> members = new List<SigningGroup.Member>();
+			if (users != null) {
+				for (APISigningGroupMember u : users) {
+					members.add(u.toMember());
+				}
+			}
+			return new SigningGroup(Integer.valueOf(signingGroupId), groupName, members);
+		}
+	}
+
+	@TestVisible
+	private class APISigningGroups {
+		public List<APISigningGroup> groups;
+
+		private List<SigningGroup> toSigningGroups() {
+			final List<SigningGroup> sgs = new List<SigningGroup>();
+			if (groups != null) {
+				for (APISigningGroup sg : groups) {
+					sgs.add(sg.toSigningGroup());
+				}
+			}
+			return sgs;
+		}
+	}
+
+	public List<SigningGroup> getSigningGroups() {
+		return getSigningGroups(RestAPI.defaultTimeout);
+	}
+
+	public List<SigningGroup> getSigningGroups(final Integer timeout) {
+		if (this.sgs == null) {
+			RestAPI.Response response = this.get(
+				'signing_groups',
+				new QueryString('include_users', 'true'),
+				timeout);
+			if (response.hasError) {
+				final String body = response.body;
+				if (response.statusCode == APIErrorCode.BAD_REQUEST
+					&& body.containsIgnoreCase(ACCOUNT_LACKS_PERMISSIONS)) {
+
+					this.sgs = new List<SigningGroup>();
+					throw new APIException(new APIError(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS,
+						Label.SigningGroupsProhibited));
+				} else {
+					// TODO: Localize error description
+					throw new APIException(response.error);
+				}
+			}
+
+			this.sgs = ((APISigningGroups)JSON.deserialize(response.body, APISigningGroups.class)).toSigningGroups();
+		}
+		return this.sgs;
+	}
+
+	@TestVisible
+	private class APIMergeField {
 		public String configurationType;
 		public String path;
 		public String writeBack;
 		public String allowSenderToEdit;
 
-		public MergeField(final DocumentCustomField.MergeField dsMF) {
-			if (dsMF != null) {
+		public APIMergeField(final Tab tab) {
+			if (tab != null) {
 				this.configurationType = 'salesforce';
-				this.path = dsMF.path;
-				this.writeBack = String.valueOf(dsMF.writeBack);
-				this.allowSenderToEdit = String.valueOf(dsMF.editable);
+				this.path = tab.path;
+				this.writeBack = String.valueOf(tab.writeBack);
+				this.allowSenderToEdit = String.valueOf(tab.allowSenderToEdit);
 			}
-		}
-
-		public DocumentCustomField.MergeField toExternalForm() {
-			return new DocumentCustomField.MergeField(
-				path,
-				StringUtils.parseBoolean(writeBack),
-				StringUtils.parseBoolean(allowSenderToEdit));
 		}
 	}
 
 	@TestVisible
-	private class CustomTab {
+	private class APITab {
 		public String customTabId;
 		public String tabLabel;
 		public String type;
@@ -161,138 +228,86 @@ public with sharing class AccountAPI extends ESignatureAPI {
 		public String maximumLength;
 		public String validationPattern;
 		public String validationMessage;
-		public MergeField mergeField;
+		public APIMergeField mergeField;
 
-		public CustomTab(final DocumentCustomField dsCT) {
-			if (dsCT != null) {
-				this.customTabId = String.valueOf(dsCT.id);
-				this.tabLabel = StringUtils.fromString(dsCT.label);
-				this.type = dsCT.type;
-				this.anchor = StringUtils.fromString(dsCT.autoPlaceText);
-				this.items = dsCT.items != null ? dsCT.items : new List<String>();
-				this.initialValue = StringUtils.fromString(dsCT.initialValue);
-				if (dsCT.options != null) {
-					DocumentCustomField.Options dsOptions = dsCT.options;
-					this.shared = String.valueOf(dsOptions.shared);
-					this.required = String.valueOf(dsOptions.required);
-					this.locked = String.valueOf(dsOptions.readOnly);
-					this.editable = String.valueOf(dsOptions.editable);
-					this.includedInEmail = String.valueOf(dsOptions.includeInEmail);
-				}
-				if (dsCT.formatting != null) {
-					final DocumentCustomField.Formatting dsFormat = dsCT.formatting;
-					if (dsFormat.font != null) {
-						final DocumentCustomField.Font dsFont = dsFormat.font;
-						this.font = dsFont.family;
-						this.fontColor = dsFont.color;
-						this.fontSize = dsFont.size;
-						this.bold = String.valueOf(dsFont.bold);
-						this.italic = String.valueOf(dsFont.italic);
-						this.underline = String.valueOf(dsFont.underline);
-					}
-					this.concealValueOnDocument = String.valueOf(dsFormat.masked);
-					this.disableAutoSize = String.valueOf(dsFormat.fixedSize);
-				}
-				this.name = dsCT.tooltip;
-				if (dsCT.validation != null) {
-					final DocumentCustomField.Validation dsV = dsCT.validation;
-					this.maximumLength = String.valueOf(dsV.maximumCharacters);
-					this.validationPattern = StringUtils.fromString(dsV.regularExpression);
-					this.validationMessage = StringUtils.fromString(dsV.errorMessage);
-				}
-				if (dsCT.mergeField != null) {
-					this.mergeField = new MergeField(dsCT.mergeField);
-				}
+		public APITab(final Tab tab) {
+			if (tab != null) {
+				this.customTabId = String.valueOf(tab.id);
+				this.type = tab.type;
+				this.name = tab.name;
+				this.tabLabel = StringUtils.fromString(tab.path);
+				this.mergeField = new APIMergeField(tab);
+				this.anchor = StringUtils.fromString(tab.autoPlaceText);
 			}
 		}
 
-		public DocumentCustomField toExternalForm() {
-			return new DocumentCustomField(
-				UUID.tryParse(customTabId),
-				tabLabel,
-				type,
-				mergeField == null ? null : mergeField.toExternalForm(),
-				items,
-				initialValue,
-				new DocumentCustomField.Options(
-					StringUtils.parseBoolean(required),
-					StringUtils.parseBoolean(locked),
-					StringUtils.parseBoolean(shared),
-					StringUtils.parseBoolean(editable),
-					StringUtils.parseBoolean(includedInEmail)),
-				new DocumentCustomField.Formatting(
-					new DocumentCustomField.Font(
-						font,
-						fontColor,
-						fontSize,
-						StringUtils.parseBoolean(bold),
-						StringUtils.parseBoolean(italic),
-						StringUtils.parseBoolean(underline)
-					),
-					StringUtils.parseBoolean(concealValueOnDocument),
-					StringUtils.parseBoolean(disableAutoSize)),
-				new DocumentCustomField.Validation(
-					StringUtils.parseInteger(maximumLength),
-					validationPattern,
-					validationMessage),
-				name,
-				anchor,
-				StringUtils.parseDatetime(lastModified));
+		public Tab toTab() {
+			return new Tab(
+				UUID.tryParse(this.customTabId),
+				this.type,
+				this.name,
+				this.mergeField == null ? null : this.mergeField.path,
+				this.mergeField == null ? null : StringUtils.parseBoolean(this.mergeField.writeBack),
+				this.mergeField == null ? null : StringUtils.parseBoolean(this.mergeField.allowSenderToEdit),
+				this.anchor);
+
 		}
 	}
 
 	@TestVisible
-	private class CustomTabs {
-		public List<CustomTab> tabs;
+	private class APITabs {
+		public List<APITab> tabs;
 
-		public List<DocumentCustomField> toExternalForm() {
-			final List<DocumentCustomField> cts = new List<DocumentCustomField>();
-			if (tabs != null) {
-				for (CustomTab ct : tabs) {
-					cts.add(ct.toExternalForm());
+		public List<Tab> toTabs() {
+			List<Tab> result = new List<Tab>();
+			if (this.tabs != null) {
+				for (APITab t : this.tabs) {
+					if (t != null) result.add(t.toTab());
 				}
 			}
-			return cts;
+			return result;
 		}
 	}
 
-	public List<DocumentCustomField> getDocumentCustomFields() {
-		return this.getDocumentCustomFields(RestAPI.defaultTimeout);
+	public List<Tab> getTabs() {
+		return this.getTabs(RestAPI.defaultTimeout);
 	}
 
-	public List<DocumentCustomField> getDocumentCustomFields(final Integer timeout) {
-		final RestAPI.Response response = this.get(
+	public List<Tab> getTabs(final Integer timeout) {
+		RestAPI.Response response = this.get(
 			'tab_definitions',
+			new QueryString('custom_tab_only', 'true'),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get custom fields: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
 
-		return ((CustomTabs)JSON.deserialize(response.body, CustomTabs.class)).toExternalForm();
+		return ((APITabs)JSON.deserialize(response.body, APITabs.class)).toTabs();
 	}
 
-	public UUID saveDocumentCustomField(final DocumentCustomField customTab) {
-		return this.saveDocumentCustomField(customTab, RestAPI.defaultTimeout);
+	public Tab saveTab(final Tab tab) {
+		return this.saveTab(tab, RestAPI.defaultTimeout);
 	}
 
-	public UUID saveDocumentCustomField(final DocumentCustomField customTab, final Integer timeout) {
-		if (customTab == null) throw new DocuSignException(Label.UndefinedArgument);
+	public Tab saveTab(
+		final Tab tab,
+		final Integer timeout) {
 
-		final CustomTab apiCF = new CustomTab(customTab);
+		if (tab == null) throw new DocuSignException(Label.UndefinedArgument);
 
 		RestAPI.Response response;
-		if (UUID.isEmpty(customTab.id)) {
+		if (UUID.isEmpty(tab.id)) {
 			// Create new custom field
 			response = this.post(
 				'tab_definitions',
-				JSON.serialize(apiCF),
+				JSON.serialize(new APITab(tab)),
 				timeout);
 		} else {
 			// Update existing custom field
 			response = this.put(
-				new List<Object> { 'tab_definitions', customTab.id },
-				JSON.serialize(apiCF),
+				new List<Object> { 'tab_definitions', tab.id },
+				JSON.serialize(new APITab(tab)),
 				timeout);
 		}
 
@@ -301,25 +316,27 @@ public with sharing class AccountAPI extends ESignatureAPI {
 			throw new APIException(response.error);
 		}
 
-		final CustomTab result = (CustomTab)JSON.deserialize(response.body, CustomTab.class);
-		return UUID.parse(result.customTabId);
+		return ((APITab)JSON.deserialize(response.body, APITab.class)).toTab();
 	}
 
-	public Boolean deleteDocumentCustomField(final UUID customTabId) {
-		return deleteDocumentCustomField(customTabId, RestAPI.defaultTimeout);
+	public Boolean deleteTab(final UUID tabId) {
+		return deleteTab(tabId, RestAPI.defaultTimeout);
 	}
 
-	public Boolean deleteDocumentCustomField(final UUID customTabId, final Integer timeout) {
-		if (customTabId == null) throw new DocuSignException(Label.UndefinedArgument);
+	public Boolean deleteTab(
+		final UUID tabId,
+		final Integer timeout) {
 
-		final RestAPI.Response response = this.del(
-			new List<Object> { 'tab_definitions', customTabId },
+		if (tabId == null) throw new DocuSignException(Label.UndefinedArgument);
+
+		RestAPI.Response response = this.del(
+			new List<Object> { 'tab_definitions', tabId },
 			timeout);
-		if (response.hasError) {
-			this.log.error('Failed to delete custom tab: ' + response.error.toString());
+		if (response.hasError && response.error != APIError.notFound) {
+			this.log.error('Failed to delete custom tab: ' + response.error);
 			throw new APIException(response.error);
 		}
 
-		return true;
+		return response.error == APIError.none;
 	}
 }

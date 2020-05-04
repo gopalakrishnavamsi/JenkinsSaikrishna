@@ -6,11 +6,48 @@ private class DefaultDocumentResolverTest {
 		DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 		Test.startTest();
+		System.assert(dr.canResolveDocuments(Schema.ContentDocument.getSObjectType()));
 		System.assert(dr.canResolveDocuments(Schema.ContentVersion.getSObjectType()));
 		System.assert(dr.canResolveDocuments(Schema.Document.getSObjectType()));
 		System.assert(!dr.canResolveDocuments(Schema.Lead.getSObjectType()));
 		System.assert(!dr.canResolveDocuments(null));
 		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getDocuments_ContentDocument() {
+		System.runAs(UserMock.createUser()) {
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
+
+			Test.startTest();
+			List<Document> result = dr.getDocuments(
+				ContentDocument.getSObjectType(),
+				new Set<Id> { cv1.ContentDocumentId, cv2.ContentDocumentId });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(Document.TYPE_FILE, result[0].type);
+			System.assertEquals(null, result[0].sequence);
+			System.assertEquals(cv1.Title, result[0].name);
+			System.assertEquals(cv1.FileExtension, result[0].extension);
+			System.assertEquals(cv1.ContentSize, result[0].size);
+			System.assertNotEquals(null, result[0].lastModified);
+			System.assertEquals(cv1.ContentDocumentId, result[0].sourceId);
+
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(Document.TYPE_FILE, result[1].type);
+			System.assertEquals(null, result[1].sequence);
+			System.assertEquals(cv2.Title, result[1].name);
+			System.assertEquals(cv2.FileExtension, result[1].extension);
+			System.assertEquals(cv2.ContentSize, result[1].size);
+			System.assertNotEquals(null, result[1].lastModified);
+			System.assertEquals(cv2.ContentDocumentId, result[1].sourceId);
+		}
 	}
 
 	@IsTest
@@ -109,7 +146,10 @@ private class DefaultDocumentResolverTest {
 			ContentVersion cv3 = TestUtils.createContentVersion(o1.Id);
 
 			Test.startTest();
-			List<Document> result = dr.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { a1.Id, o1.Id, c1.Id }, false);
+			List<Document> result = dr.getLinkedDocuments(
+				ContentVersion.getSObjectType(),
+				new Set<Id> { a1.Id, o1.Id, c1.Id },
+				null);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -154,22 +194,35 @@ private class DefaultDocumentResolverTest {
 	}
 
 	@IsTest
-	static void test_getLinkedDocuments_ContentVersion_last_updated_only() {
+	static void test_getLinkedDocuments_ContentVersion_with_filter() {
 		System.runAs(UserMock.createUser()) {
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 			Schema.Account a1 = TestUtils.createAccount();
 			ContentVersion cv1 = TestUtils.createContentVersion(a1.Id);
+			cv1.Title = 'a';
+			cv1.Description = 'desc1';
 			ContentVersion cv2 = TestUtils.createContentVersion(a1.Id);
+			cv2.Title = 'b';
+			cv2.Description = 'desc2';
 			ContentVersion cv3 = TestUtils.createContentVersion(a1.Id);
+			cv3.Title = 'c';
+			cv3.Description = 'other';
+			update new List<ContentVersion> { cv1, cv2, cv3 };
 
 			Test.startTest();
-			List<Document> result = dr.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> { a1.Id }, true);
+			List<Document> result = dr.getLinkedDocuments(
+				ContentVersion.getSObjectType(),
+				new Set<Id> { a1.Id },
+				new Query.Filter(
+					'ContentDocument.LatestPublishedVersion.Description LIKE \'desc%\'',
+					'ContentDocument.LatestPublishedVersion.Title DESC',
+					1));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(1, result.size());
 			System.assertNotEquals(null, result[0]);
-			System.assertEquals(cv3.Id, result[0].sourceId);
+			System.assertEquals(cv2.Id, result[0].sourceId);
 		}
 	}
 
@@ -180,7 +233,10 @@ private class DefaultDocumentResolverTest {
 			Schema.Account a = TestUtils.createAccount();
 
 			Test.startTest();
-			List<Document> result = dr.getLinkedDocuments(Schema.Document.getSObjectType(), new Set<Id> { a.Id }, false);
+			List<Document> result = dr.getLinkedDocuments(
+				Schema.Document.getSObjectType(),
+				new Set<Id> { a.Id },
+				null);
 			Test.stopTest();
 
 			System.assert(Collection.isEmpty(result));
@@ -191,12 +247,33 @@ private class DefaultDocumentResolverTest {
 	static void test_getLinkedDocuments_invalid() {
 		Test.startTest();
 		try {
-			new DefaultDocumentResolver().getLinkedDocuments(User.getSObjectType(), null, false);
+			new DefaultDocumentResolver().getLinkedDocuments(User.getSObjectType(), null, null);
 			throw new AssertException('Expected getLinkedDocuments to fail');
 		} catch (DocuSignException ex) {
-			System.assertEquals(String.format(Label.CannotResolveDocumentType_1, new List<String> { 'User' }), ex.getMessage());
+			System.assertEquals(String.format(Label.CannotResolveDocumentType_1,
+				new List<String> { 'User' }), ex.getMessage());
 		}
 		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getDocumentContent_ContentDocument() {
+		System.runAs(UserMock.createUser()) {
+			DefaultDocumentResolver dr = new DefaultDocumentResolver();
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
+
+			Test.startTest();
+			Map<Id, Blob> result = dr.getDocumentContent(
+				ContentDocument.getSObjectType(),
+				new Set<Id> { cv1.ContentDocumentId, cv2.ContentDocumentId });
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, result.size());
+			System.assertEquals(cv1.VersionData.toString(), result.get(cv1.ContentDocumentId).toString());
+			System.assertEquals(cv2.VersionData.toString(), result.get(cv2.ContentDocumentId).toString());
+		}
 	}
 
 	@IsTest
@@ -373,12 +450,14 @@ private class DefaultDocumentResolverTest {
 	@IsTest
 	static void test_getFolderDocuments_Document() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
-			Schema.Document d1 = TestUtils.createDocument();
-			Schema.Document d2 = TestUtils.createDocument();
+			TestUtils.createDocument();
+			TestUtils.createDocument();
 			DefaultDocumentResolver dr = new DefaultDocumentResolver();
 
 			Test.startTest();
-			List<Document> result = dr.getFolderDocuments(Schema.Document.getSObjectType(), new Set<Id> { UserInfo.getUserId() });
+			List<Document> result = dr.getFolderDocuments(
+				Schema.Document.getSObjectType(),
+				new Set<Id> { UserInfo.getUserId() });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);

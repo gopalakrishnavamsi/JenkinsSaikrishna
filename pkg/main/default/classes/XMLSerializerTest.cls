@@ -1,5 +1,6 @@
-@isTest
+@IsTest
 public class XMLSerializerTest {
+
 	@IsTest
 	static void fromPrimitiveStringTest() {
 		String email = 'Test@TestEmail.com';
@@ -44,13 +45,14 @@ public class XMLSerializerTest {
 	
 	@IsTest
 	static void fromObjectTest() {
-		String email = 'Test@TestEmail.com';
+		Envelope.Options eos = new Envelope.Options(
+			false,
+			false);
 
 		Test.startTest();
-		//Using EnvelopeSettings class and the two properties on that object for this test.
-		EnvelopeSettings ec1 = EnvelopeSettings.getInstance();
-		String result = XMLSerializer.fromObject(new Set<String>{ 'showRemindAndExpireSettings', 'showTagButton' }, ec1, 'EnvelopeSettings', false);
-		
+		String result = XMLSerializer.fromObject(
+			new Set<String>{ 'includeDefaultAutoPlaceTags', 'writeBackCompletedEnvelope' },
+			eos, 'Envelope.Options', false);
 		Test.stopTest();
         
         System.assert(XMLSerializer.isValid(result));
@@ -59,13 +61,11 @@ public class XMLSerializerTest {
 	
 	
 	@IsTest
-	static void fromIteratableUUIDTest() {
-		String email = 'Test@TestEmail.com';
+	static void fromIterableUUIDTest() {
+		List<UUID> ids = new List<UUID>{ UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f41'), UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f42'), UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f45') };
 
 		Test.startTest();
-		
-		List<UUID> ids = new List<UUID>{ UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f41'), UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f42'), UUID.parse('382bd222-1536-e911-9c1d-3ca82a1e3f45') };
-		String result = XMLSerializer.fromIteratable(new Set<String>{ 'Value' } , ids, 'Documents', 'Document', false);
+		String result = XMLSerializer.fromIterable(new Set<String>{ 'Value' } , ids, 'Documents', 'Document', false);
 		Test.stopTest();
 
 		System.assert(XMLSerializer.isValid(result));

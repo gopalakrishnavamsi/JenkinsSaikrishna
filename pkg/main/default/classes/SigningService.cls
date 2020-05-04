@@ -36,12 +36,9 @@ global with sharing class SigningService {
 			if (checkFirstRecipientOnly) {
 				result = recipients[0].signNow ? recipients[0] : null;
 			} else {
-				Boolean allowSequentialSignNow = EnvelopeSettings__c.getOrgDefaults().AllowSequentialSignNow__c;
-				Boolean isFirst = true;
 				for (Recipient r : recipients) {
 					if (r.signNow == null ? false : r.signNow
 						&& r.id != null
-						&& (isFirst || allowSequentialSignNow)
 						&& ((r.name == name && r.email == email) || (r.hostName == name && r.hostEmail == email))
 						&& r.sequence > 0
 						&& SIGN_NOW_TYPES.contains(r.type)) {
@@ -49,7 +46,6 @@ global with sharing class SigningService {
 						result = r;
 						break;
 					}
-					isFirst = false;
 				}
 			}
 		}

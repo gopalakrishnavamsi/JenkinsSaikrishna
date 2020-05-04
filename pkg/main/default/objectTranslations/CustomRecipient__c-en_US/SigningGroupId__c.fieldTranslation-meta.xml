@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label -->
-    <help><!-- Signing Group ID --></help>
-    <label>Signing Group ID</label>
-    <name>SigningGroupId__c</name>
-</CustomFieldTranslation>

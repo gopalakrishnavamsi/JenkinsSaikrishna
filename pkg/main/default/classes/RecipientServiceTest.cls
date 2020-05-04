@@ -372,78 +372,6 @@ private class RecipientServiceTest {
 	}
 
 	@IsTest
-	static void test_Database_queryRoles() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Envelope__c e = TestUtils.createEnvelope();
-			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id);
-			r1.Role__c = 'r1';
-			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id);
-			r2.Role__c = 'r2';
-			update new List<Recipient__c> { r1, r2 };
-
-			Test.startTest();
-			Set<String> result = RecipientService.DB.queryRoles(e.Id);
-			Test.stopTest();
-
-			System.assertEquals(new Set<String> { r1.Role__c, r2.Role__c }, result);
-		}
-	}
-
-	@IsTest
-	static void test_Database_queryRecipients_by_sequence() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Envelope__c e = TestUtils.createEnvelope();
-			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
-			r1.RoutingOrder__c = 3;
-			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id, 2);
-			r2.RoutingOrder__c = 2;
-			Recipient__c r3 = TestUtils.createEnvelopeRecipient(e.Id, 3);
-			r3.RoutingOrder__c = 1;
-			update new List<Recipient__c> { r1, r2, r3 };
-			List<Id> rIds = new List<Id> { r1.Id, r2.Id, r3.Id };
-
-			Test.startTest();
-			List<Recipient> result = RecipientService.DB.queryRecipients(e.Id, true);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(3, result.size());
-			for (Integer i = 0; i < result.size(); i++) {
-				System.assertNotEquals(null, result[i]);
-				System.assertEquals(rIds[i], result[i].id);
-				System.assertEquals(i + 1, result[i].sequence);
-			}
-		}
-	}
-
-	@IsTest
-	static void test_Database_queryRecipients_by_routing_order() {
-		System.runAs(UserMock.createDocuSignUser()) {
-			Envelope__c e = TestUtils.createEnvelope();
-			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 3);
-			r1.RoutingOrder__c = 1;
-			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id, 2);
-			r2.RoutingOrder__c = 2;
-			Recipient__c r3 = TestUtils.createEnvelopeRecipient(e.Id, 1);
-			r3.RoutingOrder__c = 3;
-			update new List<Recipient__c> { r1, r2, r3 };
-			List<Id> rIds = new List<Id> { r1.Id, r2.Id, r3.Id };
-
-			Test.startTest();
-			List<Recipient> result = RecipientService.DB.queryRecipients(e.Id, false);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(3, result.size());
-			for (Integer i = 0; i < result.size(); i++) {
-				System.assertNotEquals(null, result[i]);
-				System.assertEquals(rIds[i], result[i].id);
-				System.assertEquals(i + 1, result[i].routingOrder);
-			}
-		}
-	}
-
-	@IsTest
 	static void test_Database_updateRecipientSequence_by_sequence() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e = TestUtils.createEnvelope();
@@ -527,224 +455,6 @@ private class RecipientServiceTest {
 				System.assertNotEquals(null, result[i].id);
 				System.assertEquals(i + 1, result[i].sequence);
 			}
-		}
-	}
-
-	@IsTest
-	static void test_Database_getRelatedObjectType() {
-		Test.startTest();
-		System.assertEquals(null, RecipientService.DB.getRelatedObjectType(null, null));
-		System.assertEquals(OpportunityContactRole.getSObjectType(),
-			RecipientService.DB.getRelatedObjectType(Opportunity.getSObjectType(), 'OpportunityContactRoles'));
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_Database_queryRelatedContacts_invalid() {
-		System.runAs(UserMock.createUser()) {
-			Schema.Account a = TestUtils.createAccount();
-			EnvelopeConfiguration.RelatedContacts rc = new EnvelopeConfiguration.RelatedContacts(
-				null,
-				null,
-				null);
-
-			Test.startTest();
-			try {
-				RecipientService.DB.queryRelatedContacts(new Entity(a.Id), rc, null);
-				throw new AssertException('Expected queryRelatedContacts to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidRelatedContact, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_Database_queryRelatedContacts_signing_group() {
-		System.runAs(UserMock.createUser()) {
-			Schema.Account a1 = TestUtils.createAccount();
-			Contact c1 = TestUtils.createContact(a1.Id);
-			Contact c2 = TestUtils.createContact(a1.Id);
-			// Valid signing group mapping
-			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
-				new Map<String, String> {
-					'signinggroup' => 'Name',
-					'smsauthphone' => 'Phone',
-					'role' => 'LastName'
-				},
-				'Contacts',
-				null); // parseErrors
-			// Invalid signing group mapping
-			EnvelopeConfiguration.RelatedContacts rc2 = new EnvelopeConfiguration.RelatedContacts(
-				new Map<String, String> {
-					'signinggroup' => 'Birthdate',
-					'role' => 'LastName'
-				},
-				'Contacts',
-				null); // parseErrors
-			// Valid - has all mappings
-			Map<String, SigningGroup> sgs1 = new Map<String, SigningGroup> {
-				c1.Name => new SigningGroup(1111, c1.Name),
-				c2.Name => new SigningGroup(2222, c2.Name)
-			};
-			// Invalid - missing mapping for c2
-			Map<String, SigningGroup> sgs2 = new Map<String, SigningGroup> {
-				c1.Name => new SigningGroup(1111, c1.Name)
-			};
-
-			Test.startTest();
-			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, sgs1);
-			try {
-				RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, sgs2);
-				throw new AssertException('Expected queryRelatedContacts to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.SigningGroupNotFound, ex.getMessage());
-			}
-			try {
-				RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc2, sgs1);
-				throw new AssertException('Expected queryRelatedContacts to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.UndefinedSigningGroup, ex.getMessage());
-			}
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
-
-			System.assertNotEquals(null, result[0]);
-			System.assertEquals(sgs1.get(c1.Name), result[0].signingGroup);
-			System.assertNotEquals(null, result[0].role);
-			System.assertEquals(c1.LastName, result[0].role.name);
-			System.assertNotEquals(null, result[0].authentication);
-			System.assertEquals(new List<String> { c1.Phone }, result[0].authentication.smsPhoneNumbers);
-			System.assertNotEquals(null, result[0].authentication);
-			System.assertNotEquals(null, result[0].source);
-			System.assertEquals(c1.Id, result[0].source.id);
-
-			System.assertNotEquals(null, result[1]);
-			System.assertEquals(sgs1.get(c2.Name), result[1].signingGroup);
-			System.assertNotEquals(null, result[1].role);
-			System.assertEquals(c2.LastName, result[1].role.name);
-			System.assertNotEquals(null, result[1].authentication);
-			System.assertEquals(new List<String> { c2.Phone }, result[1].authentication.smsPhoneNumbers);
-			System.assertNotEquals(null, result[1].source);
-			System.assertEquals(c2.Id, result[1].source.id);
-		}
-	}
-
-	@IsTest
-	static void test_Database_queryRelatedContacts_sign_in_person() {
-		System.runAs(UserMock.createUser()) {
-			Schema.Account a1 = TestUtils.createAccount();
-			Contact c1 = TestUtils.createContact(a1.Id);
-			Contact c2 = TestUtils.createContact(a1.Id);
-			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
-				new Map<String, String> {
-					'firstname' => 'FirstName',
-					'lastname' => 'LastName',
-					'email' => 'Email',
-					'signinpersonname' => 'Name',
-					'role' => 'Phone'
-				},
-				'Contacts',
-				null); // parseErrors
-
-			Test.startTest();
-			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, new Map<String, SigningGroup>());
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
-
-			System.assertNotEquals(null, result[0]);
-			System.assertEquals(c1.Name, result[0].name);
-			System.assertEquals(null, result[0].email);
-			System.assertEquals(c1.Name, result[0].hostName);
-			System.assertEquals(c1.Email, result[0].hostEmail);
-			System.assertNotEquals(null, result[0].role);
-			System.assertEquals(c1.Phone, result[0].role.name);
-			System.assertEquals(null, result[0].authentication);
-			System.assertNotEquals(null, result[0].source);
-			System.assertEquals(c1.Id, result[0].source.id);
-
-			System.assertNotEquals(null, result[1]);
-			System.assertEquals(c2.Name, result[1].name);
-			System.assertEquals(null, result[1].email);
-			System.assertEquals(c2.Name, result[1].hostName);
-			System.assertEquals(c2.Email, result[1].hostEmail);
-			System.assertNotEquals(null, result[1].role);
-			System.assertEquals(c2.Phone, result[1].role.name);
-			System.assertEquals(null, result[1].authentication);
-			System.assertNotEquals(null, result[1].source);
-			System.assertEquals(c2.Id, result[1].source.id);
-		}
-	}
-
-	@IsTest
-	static void test_Database_queryRelatedContacts_success() {
-		System.runAs(UserMock.createUser()) {
-			Schema.Account a1 = TestUtils.createAccount();
-			Contact c1 = TestUtils.createContact(a1.Id);
-			Contact c2 = TestUtils.createContact(a1.Id);
-			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
-				new Map<String, String> {
-					'firstname' => 'FirstName',
-					'lastname' => 'LastName',
-					'email' => 'Email',
-					'role' => 'Phone'
-				},
-				'Contacts',
-				null); // parseErrors
-
-			Test.startTest();
-			List<Recipient> result = RecipientService.DB.queryRelatedContacts(new Entity(a1.Id), rc1, new Map<String, SigningGroup>());
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
-
-			System.assertNotEquals(null, result[0]);
-			System.assertEquals(c1.Name, result[0].name);
-			System.assertEquals(c1.Email, result[0].email);
-			System.assertEquals(null, result[0].hostName);
-			System.assertEquals(null, result[0].hostEmail);
-			System.assertNotEquals(null, result[0].role);
-			System.assertEquals(c1.Phone, result[0].role.name);
-			System.assertEquals(null, result[0].authentication);
-			System.assertNotEquals(null, result[0].source);
-			System.assertEquals(c1.Id, result[0].source.id);
-
-			System.assertNotEquals(null, result[1]);
-			System.assertEquals(c2.Name, result[1].name);
-			System.assertEquals(c2.Email, result[1].email);
-			System.assertEquals(null, result[1].hostName);
-			System.assertEquals(null, result[1].hostEmail);
-			System.assertNotEquals(null, result[1].role);
-			System.assertEquals(c2.Phone, result[1].role.name);
-			System.assertEquals(null, result[1].authentication);
-			System.assertNotEquals(null, result[1].source);
-			System.assertEquals(c2.Id, result[1].source.id);
-		}
-	}
-
-	@IsTest
-	static void test_Database_querySigningGroups() {
-		System.runAs(UserMock.createUser()) {
-			Schema.Account a1 = TestUtils.createAccount();
-			Contact c1 = TestUtils.createContact(a1.Id);
-			Contact c2 = TestUtils.createContact(a1.Id);
-			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
-				new Map<String, String> {
-					'signinggroup' => 'Name'
-				},
-				'Contacts',
-				null); // parseErrors
-
-			Test.startTest();
-			Set<String> result = RecipientService.DB.querySigningGroups(new Entity(a1.Id), rc1);
-			Test.stopTest();
-
-			System.assertEquals(new Set<String> { c1.Name, c2.Name }, result);
 		}
 	}
 
@@ -977,315 +687,6 @@ private class RecipientServiceTest {
 	}
 
 	@IsTest
-	static void test_mergeEmailSettings() {
-		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '5555555555', 'r1', null);
-		Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5555555555', 'r2', null);
-		Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', '5555555555', 'r3', null);
-		Recipient r4 = Recipient.fromSource('r4', 'r4@unit.test', '5555555555', 'r4', null);
-		Recipient.EmailSettings defaultSettings = new Recipient.EmailSettings(
-			Localization.EN,
-			Localization.getLabel(Localization.EN),
-			'en default subject',
-			'en default message');
-		Recipient.EmailSettings customSettings1 = new Recipient.EmailSettings(
-			Localization.ES,
-			Localization.getLabel(Localization.ES),
-			'es custom subject',
-			'es custom message');
-		Recipient.EmailSettings customSettings2 = new Recipient.EmailSettings(
-			null,
-			null,
-			'en custom subject',
-			null);
-
-		Test.startTest();
-		RecipientService.MergeResult result1 = RecipientService.mergeEmailSettings(r1, customSettings1, defaultSettings);
-		RecipientService.MergeResult result2 = RecipientService.mergeEmailSettings(r2, null, defaultSettings);
-		RecipientService.MergeResult result3 = RecipientService.mergeEmailSettings(r3, null, null);
-		RecipientService.MergeResult result4 = RecipientService.mergeEmailSettings(r4, customSettings2, defaultSettings);
-		Test.stopTest();
-
-		// Full custom
-		System.assertNotEquals(null, result1);
-		System.assert(result1.isMerged);
-		System.assertNotEquals(null, result1.recipient);
-		System.assertNotEquals(null, result1.recipient.emailSettings);
-		System.assertEquals(customSettings1.language, result1.recipient.emailSettings.language);
-		System.assertEquals(customSettings1.languageLabel, result1.recipient.emailSettings.languageLabel);
-		System.assertEquals(customSettings1.subject, result1.recipient.emailSettings.subject);
-		System.assertEquals(customSettings1.message, result1.recipient.emailSettings.message);
-
-		// Full default
-		System.assertNotEquals(null, result2);
-		System.assert(result2.isMerged);
-		System.assertNotEquals(null, result2.recipient);
-		System.assertNotEquals(null, result2.recipient.emailSettings);
-		System.assertEquals(defaultSettings.language, result2.recipient.emailSettings.language);
-		System.assertEquals(defaultSettings.languageLabel, result2.recipient.emailSettings.languageLabel);
-		System.assertEquals(defaultSettings.subject, result2.recipient.emailSettings.subject);
-		System.assertEquals(defaultSettings.message, result2.recipient.emailSettings.message);
-
-		// Null: no custom or default
-		System.assertNotEquals(null, result3);
-		System.assert(!result3.isMerged);
-		System.assertNotEquals(null, result3.recipient);
-		System.assertEquals(null, result3.recipient.emailSettings);
-
-		// Custom email subject
-		System.assertNotEquals(null, result4);
-		System.assert(result4.isMerged);
-		System.assertNotEquals(null, result4.recipient);
-		System.assertNotEquals(null, result4.recipient.emailSettings);
-		System.assertEquals(defaultSettings.language, result4.recipient.emailSettings.language);
-		System.assertEquals(defaultSettings.languageLabel, result4.recipient.emailSettings.languageLabel);
-		System.assertEquals(customSettings2.subject, result4.recipient.emailSettings.subject);
-		System.assertEquals(defaultSettings.message, result4.recipient.emailSettings.message);
-	}
-
-	@IsTest
-	static void test_mergeTemplateRoleWithRole() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			insert new List<RoleSettings__c> {
-				new RoleSettings__c(Name = 'dr1', Value__c = 1),
-				new RoleSettings__c(Name = 'dr2', Value__c = 2),
-				new RoleSettings__c(Name = 'dr3', Value__c = 3)
-			};
-			Envelope__c e = TestUtils.createEnvelope();
-			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id));
-			Recipient r2 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id));
-			Recipient r3 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id));
-			Map<String, String> roleMap = new Map<String, String> {
-				'rr1' => 'tr1',
-				'rr2' => 'dr2',
-				'rr3' => ''
-			};
-
-			Test.startTest();
-			RecipientService.MergeResult result1 = RecipientService.mergeTemplateRoleWithRole(r1, 'rr1', roleMap);
-			RecipientService.MergeResult result2 = RecipientService.mergeTemplateRoleWithRole(r2, 'rr2', roleMap);
-			RecipientService.MergeResult result3 = RecipientService.mergeTemplateRoleWithRole(r3, 'rr3', roleMap);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result1);
-			System.assert(result1.isMerged);
-			System.assertNotEquals(null, result1.recipient);
-			System.assertNotEquals(null, result1.recipient.role);
-			System.assertEquals('tr1', result1.recipient.role.name);
-			System.assertEquals(null, result1.recipient.role.value);
-
-			System.assertNotEquals(null, result2);
-			System.assert(result2.isMerged);
-			System.assertNotEquals(null, result2.recipient);
-			System.assertNotEquals(null, result2.recipient.role);
-			System.assertEquals('dr2', result2.recipient.role.name);
-			System.assertEquals(2, result2.recipient.role.value);
-
-			System.assertNotEquals(null, result3);
-			System.assert(!result3.isMerged);
-		}
-	}
-
-	@IsTest
-	static void test_mergeNoteWithRole() {
-		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '555551111', 'rr1', null);
-		Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '555552222', 'rr2', null);
-		Map<String, String> noteMap = new Map<String, String> {
-			'rr1' => 'n1',
-			EnvelopeConfiguration.DEFAULT_NOTE => 'dn'
-		};
-
-		Test.startTest();
-		RecipientService.MergeResult result1 = RecipientService.mergeNoteWithRole(r1, 'rr1', noteMap);
-		RecipientService.MergeResult result2 = RecipientService.mergeNoteWithRole(r2, 'rr2', noteMap);
-		RecipientService.MergeResult result3 = RecipientService.mergeNoteWithRole(r2, 'rr2', new Map<String, String>());
-		Test.stopTest();
-
-		System.assertNotEquals(null, result1);
-		System.assert(result1.isMerged);
-		System.assertNotEquals(null, result1.recipient);
-		System.assertEquals(noteMap.get(r1.role.name), result1.recipient.note);
-
-		System.assertNotEquals(null, result2);
-		System.assert(result2.isMerged);
-		System.assertNotEquals(null, result2.recipient);
-		System.assertEquals(noteMap.get(EnvelopeConfiguration.DEFAULT_NOTE), result2.recipient.note);
-
-		System.assertNotEquals(null, result3);
-		System.assert(!result3.isMerged);
-	}
-
-	@IsTest
-	static void test_mergeTypeWithRole() {
-		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '555551111', 'rr1', null);
-		Map<String, EnvelopeConfiguration.RecipientType> typeMap = new Map<String, EnvelopeConfiguration.RecipientType> {
-			'rr1' => new EnvelopeConfiguration.RecipientType(Recipient.TYPE_IN_PERSON_SIGNER, true),
-			'rr2' => null
-		};
-
-		Test.startTest();
-		RecipientService.MergeResult result1 = RecipientService.mergeTypeWithRole(r1, 'rr1', typeMap);
-		RecipientService.MergeResult result2 = RecipientService.mergeTypeWithRole(r1, 'rr2', typeMap);
-		RecipientService.MergeResult result3 = RecipientService.mergeTypeWithRole(r1, '', typeMap);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result1);
-		System.assert(result1.isMerged);
-		System.assertNotEquals(null, result1.recipient);
-		System.assertEquals(Recipient.TYPE_IN_PERSON_SIGNER, result1.recipient.type);
-		System.assert(result1.recipient.signNow);
-
-		System.assertNotEquals(null, result2);
-		System.assert(!result2.isMerged);
-
-		System.assertNotEquals(null, result3);
-		System.assert(!result3.isMerged);
-	}
-
-	@IsTest
-	static void test_mergeRoleType() {
-		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '555551111', 'rr1', null);
-		Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '555552222', 'rr2', null);
-		Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', '555553333', 'rr3', null);
-		Recipient r4 = Recipient.fromSource('r4', 'r4@unit.test', '555554444', 'rr4', null);
-		Recipient r5 = Recipient.fromSource('r5', 'r5@unit.test', '555555555', 'rr5', null);
-		List<EnvelopeConfiguration.RecipientRoleType> roleTypes = new List<EnvelopeConfiguration.RecipientRoleType> {
-			new EnvelopeConfiguration.RecipientRoleType('rrt1', new EnvelopeConfiguration.RecipientType(Recipient.TYPE_IN_PERSON_SIGNER, true)),
-			new EnvelopeConfiguration.RecipientRoleType('rrt2', new EnvelopeConfiguration.RecipientType(Recipient.TYPE_CERTIFIED_DELIVERY, false)),
-			new EnvelopeConfiguration.RecipientRoleType(null, null)
-		};
-
-		Test.startTest();
-		RecipientService.MergeResult result1 = RecipientService.mergeRoleType(r1, 0, roleTypes);
-		RecipientService.MergeResult result2 = RecipientService.mergeRoleType(r2, 1, roleTypes);
-		RecipientService.MergeResult result3 = RecipientService.mergeRoleType(r3, 2, roleTypes);
-		RecipientService.MergeResult result4 = RecipientService.mergeRoleType(r4, 3, roleTypes);
-		RecipientService.MergeResult result5 = RecipientService.mergeRoleType(r5, 0, null);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result1);
-		System.assert(result1.isMerged);
-		System.assertNotEquals(null, result1.recipient);
-		System.assertNotEquals(null, result1.recipient.role);
-		System.assertEquals('rrt1', result1.recipient.role.name);
-		System.assertEquals(Recipient.TYPE_IN_PERSON_SIGNER, result1.recipient.type);
-		System.assert(result1.recipient.signNow);
-
-		System.assertNotEquals(null, result2);
-		System.assert(result2.isMerged);
-		System.assertNotEquals(null, result2.recipient);
-		System.assertNotEquals(null, result2.recipient.role);
-		System.assertEquals('rrt2', result2.recipient.role.name);
-		System.assertEquals(Recipient.TYPE_CERTIFIED_DELIVERY, result2.recipient.type);
-		System.assert(!result2.recipient.signNow);
-
-		System.assertNotEquals(null, result3);
-		System.assert(!result3.isMerged);
-
-		System.assertNotEquals(null, result4);
-		System.assert(!result4.isMerged);
-
-		System.assertNotEquals(null, result5);
-		System.assert(!result5.isMerged);
-	}
-
-	@IsTest
-	static void test_mergeCustomSettings() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Envelope__c e = TestUtils.createEnvelope();
-			Recipient r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e.Id, 1));
-			Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5555552222', 'rr2', null);
-			Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', '5555553333', 'rr3', null);
-			Recipient r4 = Recipient.fromSource('r4', 'r4@unit.test', '5555554444', '', null);
-			insert new List<RoleSettings__c> {
-				new RoleSettings__c(Name = 'Role1', Value__c = 1),
-				new RoleSettings__c(Name = 'Role2', Value__c = 2)
-			};
-			Recipient.EmailSettings es = new Recipient.EmailSettings(Localization.ZH_CN, Localization.getLabel(Localization.ZH_CN),
-				'zh-CN subject', 'zh-CN message');
-			EnvelopeConfiguration.RecipientSettings rs = new EnvelopeConfiguration.RecipientSettings(
-				new List<EnvelopeConfiguration.RelatedContacts>(),
-				new List<EnvelopeConfiguration.CustomRecipient>(),
-				false,
-				10,
-				true,
-				1,
-				new List<EnvelopeConfiguration.RecipientRoleType> {
-					new EnvelopeConfiguration.RecipientRoleType(
-						'Role1',
-						new EnvelopeConfiguration.RecipientType(Recipient.TYPE_IN_PERSON_SIGNER, true))
-				},
-				new Map<String, String> {
-					r1.role.name => '',
-					r2.role.name => 'tr2'
-				},
-				new Map<String, EnvelopeConfiguration.RecipientType> {
-					'Role2' => new EnvelopeConfiguration.RecipientType(Recipient.TYPE_CARBON_COPY, false)
-				},
-				new Map<String, String> {
-					'rr3' => 'n3'
-				});
-
-			Test.startTest();
-			List<Recipient> result1 = RecipientService.mergeCustomSettings(null, null, null, null);
-			List<Recipient> result2 = RecipientService.mergeCustomSettings(new List<Recipient> { r1, r2, r3, r4 }, null, es, rs);
-			Test.stopTest();
-
-			System.assertEquals(0, Collection.size(result1));
-
-			System.assertNotEquals(null, result2);
-			System.assertEquals(4, result2.size());
-
-			System.assertNotEquals(null, result2[0]);
-			System.assertEquals(Recipient.TYPE_IN_PERSON_SIGNER, result2[0].type);
-			System.assert(result2[0].signNow);
-			System.assertNotEquals(null, result2[0].role);
-			System.assertEquals('Role1', result2[0].role.name);
-			System.assertEquals(1, result2[0].role.value);
-			System.assertEquals(null, result2[0].note);
-			System.assertNotEquals(null, result2[0].emailSettings);
-			System.assertEquals(es.language, result2[0].emailSettings.language);
-			System.assertEquals(es.languageLabel, result2[0].emailSettings.languageLabel);
-			System.assertEquals(es.subject, result2[0].emailSettings.subject);
-			System.assertEquals(es.message, result2[0].emailSettings.message);
-
-			System.assertNotEquals(null, result2[1]);
-			System.assertEquals(Recipient.TYPE_SIGNER, result2[1].type);
-			System.assert(!result2[1].signNow);
-			System.assertNotEquals(null, result2[1].role);
-			System.assertEquals('tr2', result2[1].role.name);
-			System.assertEquals(null, result2[1].role.value);
-			System.assertEquals(null, result2[1].note);
-			System.assertEquals(es.language, result2[1].emailSettings.language);
-			System.assertEquals(es.languageLabel, result2[1].emailSettings.languageLabel);
-			System.assertEquals(es.subject, result2[1].emailSettings.subject);
-			System.assertEquals(es.message, result2[1].emailSettings.message);
-
-			System.assertNotEquals(null, result2[2]);
-			System.assertEquals(Recipient.TYPE_SIGNER, result2[2].type);
-			System.assert(!result2[2].signNow);
-			System.assertNotEquals(null, result2[2].role);
-			System.assertEquals('rr3', result2[2].role.name);
-			System.assertEquals(null, result2[2].role.value);
-			System.assertEquals('n3', result2[2].note);
-			System.assertEquals(es.language, result2[2].emailSettings.language);
-			System.assertEquals(es.languageLabel, result2[2].emailSettings.languageLabel);
-			System.assertEquals(es.subject, result2[2].emailSettings.subject);
-			System.assertEquals(es.message, result2[2].emailSettings.message);
-
-			System.assertNotEquals(null, result2[3]);
-			System.assertEquals(Recipient.TYPE_SIGNER, result2[3].type);
-			System.assert(!result2[3].signNow);
-			System.assertNotEquals(null, result2[3].role);
-			System.assertEquals('Role2', result2[3].role.name);
-			System.assertEquals(null, result2[3].note);
-			System.assertEquals(es.language, result2[2].emailSettings.language);
-			System.assertEquals(es.languageLabel, result2[2].emailSettings.languageLabel);
-			System.assertEquals(es.subject, result2[2].emailSettings.subject);
-			System.assertEquals(es.message, result2[2].emailSettings.message);
-		}
-	}
-
-	@IsTest
 	static void test_mergeUserTags() {
 		System.runAs(UserMock.createUser()) {
 			Recipient r1 = Recipient.newRecipient(1, Recipient.TYPE_SIGNER, null, 'r1', 'r1@unit.test', null, null, false)
@@ -1320,13 +721,13 @@ private class RecipientServiceTest {
 	static void test_prepareRecipients_invalid() {
 		Test.startTest();
 		try {
-			RecipientService.prepareRecipients(null, null, null);
+			RecipientService.prepareRecipients(null);
 			throw new AssertException('Expected prepareRecipients to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(Label.UndefinedRecipient, ex.getMessage());
 		}
 		try {
-			RecipientService.prepareRecipients(new List<Recipient>(), null, null);
+			RecipientService.prepareRecipients(new List<Recipient>());
 			throw new AssertException('Expected prepareRecipients to fail');
 		} catch (DocuSignException ex) {
 			System.assertEquals(Label.UndefinedRecipient, ex.getMessage());
@@ -1348,10 +749,7 @@ private class RecipientServiceTest {
 			Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', '5553333333', '', null);
 
 			Test.startTest();
-			List<Recipient> result = RecipientService.prepareRecipients(
-				new List<Recipient> { r1, r2, r3 },
-				null,
-				null);
+			List<Recipient> result = RecipientService.prepareRecipients(new List<Recipient> { r1, r2, r3 });
 			Test.stopTest();
 
 			System.assertEquals(3, Collection.size(result));
@@ -1373,104 +771,6 @@ private class RecipientServiceTest {
 			System.assertNotEquals(null, result[2]);
 			System.assertEquals(null, result[2].role);
 			System.assertEquals(null, result[2].emailSettings);
-		}
-	}
-
-	@IsTest
-	static void test_prepareRecipients_custom() {
-		insert new List<RoleSettings__c> {
-			new RoleSettings__c(Name = 'Role1', Value__c = 1),
-			new RoleSettings__c(Name = 'Role2', Value__c = 2)
-		};
-		Recipient r1 = Recipient.fromSource('r1', 'r1@unit.test', '5551111111', null, null);
-		Recipient r2 = Recipient.fromSource('r2', 'r2@unit.test', '5552222222', 'Role2', null)
-			.withEmailSettings(new Recipient.EmailSettings(
-				Localization.EN, Label.English, '[FirstName][LastName]', '[Email]'));
-		Recipient r3 = Recipient.fromSource('r3', 'r3@unit.test', '5553333333', '', null);
-		Recipient.EmailSettings es = new Recipient.EmailSettings(
-			Localization.FR, Label.French, 'FR:[FirstName][LastName]', 'FR:[Email]');
-		EnvelopeConfiguration.RecipientSettings rs = new EnvelopeConfiguration.RecipientSettings(
-			null, null, false, 3, true, 1, new List<EnvelopeConfiguration.RecipientRoleType> {
-				new EnvelopeConfiguration.RecipientRoleType(
-					'Role1', new EnvelopeConfiguration.RecipientType(Recipient.TYPE_IN_PERSON_SIGNER, true))
-			}, null, null, null);
-
-		Test.startTest();
-		List<Recipient> result = RecipientService.prepareRecipients(
-			new List<Recipient> { r1, r2, r3 },
-			es,
-			rs);
-		Test.stopTest();
-
-		System.assertEquals(3, Collection.size(result));
-
-		System.assertNotEquals(null, result[0]);
-		System.assertEquals(Recipient.TYPE_IN_PERSON_SIGNER, result[0].type);
-		System.assert(result[0].signNow);
-		System.assertNotEquals(null, result[0].role);
-		System.assertEquals('Role1', result[0].role.name);
-		System.assertEquals(1, result[0].role.value);
-		System.assertNotEquals(null, result[0].emailSettings);
-		System.assertEquals('FR:' + UserInfo.getFirstName() + UserInfo.getLastName(), result[0].emailSettings.subject);
-		System.assertEquals('FR:' + UserInfo.getUserEmail(), result[0].emailSettings.message);
-
-		System.assertNotEquals(null, result[1]);
-		System.assertEquals(Recipient.TYPE_SIGNER, result[1].type);
-		System.assert(!result[1].signNow);
-		System.assertNotEquals(null, result[1].role);
-		System.assertEquals('Role2', result[1].role.name);
-		System.assertEquals(2, result[1].role.value);
-		System.assertNotEquals(null, result[1].emailSettings);
-		System.assertEquals('FR:' + UserInfo.getFirstName() + UserInfo.getLastName(), result[1].emailSettings.subject);
-		System.assertEquals('FR:' + UserInfo.getUserEmail(), result[1].emailSettings.message);
-
-		System.assertNotEquals(null, result[2]);
-		System.assertEquals(Recipient.TYPE_SIGNER, result[2].type);
-		System.assert(!result[2].signNow);
-		System.assertEquals(null, result[2].role);
-		System.assertNotEquals(null, result[2].emailSettings);
-		System.assertEquals('FR:' + UserInfo.getFirstName() + UserInfo.getLastName(), result[2].emailSettings.subject);
-		System.assertEquals('FR:' + UserInfo.getUserEmail(), result[2].emailSettings.message);
-	}
-
-	@IsTest
-	static void test_getEnvelopeRecipients_unauthorized() {
-		Envelope__c e;
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			e = TestUtils.createEnvelope();
-		}
-
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				RecipientService.getEnvelopeRecipients(e.Id);
-				throw new AssertException('Expected getEnvelopeRecipients to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_getEnvelopeRecipients_success() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Envelope__c e = TestUtils.createEnvelope();
-			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id);
-			r1.Sequence__c = 2;
-			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id);
-			r2.Sequence__c = 1;
-			update new List<Recipient__c> { r1, r2 };
-
-			Test.startTest();
-			List<Recipient> result = RecipientService.getEnvelopeRecipients(e.Id);
-			Test.stopTest();
-
-			System.assertEquals(2, Collection.size(result));
-			System.assertNotEquals(null, result[0]);
-			System.assertEquals(r2.Id, result[0].id);
-			System.assertNotEquals(null, result[1]);
-			System.assertEquals(r1.Id, result[1].id);
 		}
 	}
 
@@ -1517,45 +817,6 @@ private class RecipientServiceTest {
 	}
 
 	@IsTest
-	static void test_removeEnvelopeRecipients_unauthorized() {
-		Envelope__c e;
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			e = TestUtils.createEnvelope();
-		}
-
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				RecipientService.removeEnvelopeRecipients(e.Id, null);
-				throw new AssertException('Expected removeEnvelopeRecipients to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_removeEnvelopeRecipients_success() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Envelope__c e = TestUtils.createEnvelope();
-			Recipient__c r1 = TestUtils.createEnvelopeRecipient(e.Id, 1);
-			Recipient__c r2 = TestUtils.createEnvelopeRecipient(e.Id, 2);
-			Recipient__c r3 = TestUtils.createEnvelopeRecipient(e.Id, 3);
-
-			Test.startTest();
-			List<Recipient> result = RecipientService.removeEnvelopeRecipients(e.Id, new Set<Id> { r1.Id, r2.Id });
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(1, result.size());
-			System.assertNotEquals(null, result[0]);
-			System.assertEquals(r3.Id, result[0].id);
-			System.assertEquals(1, result[0].sequence);
-		}
-	}
-
-	@IsTest
 	static void test_updateEnvelopeRecipients_unauthorized() {
 		Envelope__c e;
 		System.runAs(UserMock.createDocuSignUser(false)) {
@@ -1598,45 +859,6 @@ private class RecipientServiceTest {
 			System.assertNotEquals(null, result[1]);
 			System.assertEquals(r3.id, result[1].id);
 			System.assertEquals(2, result[1].sequence);
-		}
-	}
-
-	@IsTest
-	static void test_resolveRelatedContacts_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				RecipientService.resolveRelatedContacts(null, null, null);
-				throw new AssertException('Expected resolveRelatedContacts to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_resolveRelatedContacts_success() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Schema.Account a1 = TestUtils.createAccount();
-			TestUtils.createContact(a1.Id);
-			TestUtils.createContact(a1.Id);
-			EnvelopeConfiguration.RelatedContacts rc1 = new EnvelopeConfiguration.RelatedContacts(
-				new Map<String, String> {
-					'firstname' => 'FirstName',
-					'lastname' => 'LastName',
-					'email' => 'Email',
-					'role' => 'Phone'
-				},
-				'Contacts',
-				null); // parseErrors
-
-			Test.startTest();
-			List<Recipient> result = RecipientService.resolveRelatedContacts(new Entity(a1.Id), rc1, new Map<String, SigningGroup>());
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(2, result.size());
 		}
 	}
 
@@ -1693,157 +915,6 @@ private class RecipientServiceTest {
 			}
 			System.assert(foundC1);
 			System.assert(foundC2);
-		}
-	}
-
-	@IsTest
-	static void test_resolveCustomRecipients_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				RecipientService.resolveCustomRecipients(null, null, null);
-				throw new AssertException('Expected resolveCustomRecipients to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_resolveCustomRecipients_success() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			List<EnvelopeConfiguration.CustomRecipient> crs = new List<EnvelopeConfiguration.CustomRecipient> {
-				// Normal signer
-				new EnvelopeConfiguration.CustomRecipient('r1@unit.test', 'Recipient', 'One', Recipient.TYPE_SIGNER,
-					'r1', 1, '1111', '5551111', 'n1', null, null, false, null),
-				// In-person signer, sign now
-				new EnvelopeConfiguration.CustomRecipient('r2@unit.test', 'Recipient', 'Two', Recipient.TYPE_IN_PERSON_SIGNER,
-					'r2', 2, '2222', '5552222', 'n2', 'Signer One', null, true, null),
-				// Signing group
-				new EnvelopeConfiguration.CustomRecipient(null, null, null, Recipient.TYPE_SIGNER,
-					'r3', 3, '3333', '5553333', 'n3', null, 'sg3', false, null)
-			};
-			Map<String, SigningGroup> sgs = new Map<String, SigningGroup> {
-				'sg3' => new SigningGroup(3333, 'sg3')
-			};
-			Recipient.EmailSettings es = new Recipient.EmailSettings(
-				Localization.NL,
-				Localization.getLabel(Localization.NL),
-				'nl subject',
-				'nl message');
-
-			Test.startTest();
-			List<Recipient> result = RecipientService.resolveCustomRecipients(crs, sgs, es);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(3, result.size());
-
-			System.assertNotEquals(null, result[0]);
-			System.assertEquals(Recipient.TYPE_SIGNER, result[0].type);
-			System.assertEquals(es, result[0].emailSettings);
-
-			System.assertNotEquals(null, result[1]);
-			System.assertEquals(Recipient.TYPE_IN_PERSON_SIGNER, result[1].type);
-			System.assert(result[1].signNow);
-			System.assertEquals(es, result[1].emailSettings);
-
-			System.assertNotEquals(null, result[2]);
-			System.assertEquals(Recipient.TYPE_SIGNER, result[2].type);
-			System.assertNotEquals(null, result[2].signingGroup);
-			System.assertEquals('sg3', result[2].signingGroup.name);
-			System.assertEquals(es, result[2].emailSettings);
-		}
-	}
-
-	@IsTest
-	static void test_resolveSigningGroups_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				RecipientService.resolveSigningGroups(null, null);
-				throw new AssertException('Expected resolveCustomRecipients to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_resolveSigningGroups_not_found() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
-		System.runAs(UserMock.createDocuSignUser()) {
-			Schema.Account a = TestUtils.createAccount();
-			Contact c1 = TestUtils.createContact(a.Id);
-			c1.LastName = 'sg1x';
-			Contact c2 = TestUtils.createContact(a.Id);
-			c2.LastName = 'sg2x';
-			update new List<Contact> { c1, c2 };
-
-			EnvelopeConfiguration.RecipientSettings rs = new EnvelopeConfiguration.RecipientSettings(
-				new List<EnvelopeConfiguration.RelatedContacts> {
-					new EnvelopeConfiguration.RelatedContacts(
-						new Map<String, String> {
-							'role' => 'FirstName',
-							'signinggroup' => 'LastName'
-						},
-						'Contacts',
-						null)
-				},
-				new List<EnvelopeConfiguration.CustomRecipient> {
-					new EnvelopeConfiguration.CustomRecipient(null, null, null, null, null, 1, null, null, null, null,
-						'sg3x', false, null)
-				},
-				false, 0, true, 1, null, null, null, null);
-
-			Test.startTest();
-			try {
-				RecipientService.resolveSigningGroups(new Entity(a.Id), rs);
-				throw new AssertException('Expected resolveSigningGroups to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.SigningGroupNotFound, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_resolveSigningGroups_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
-		System.runAs(UserMock.createDocuSignUser()) {
-			Schema.Account a = TestUtils.createAccount();
-			Contact c1 = TestUtils.createContact(a.Id);
-			c1.LastName = 'sg1';
-			Contact c2 = TestUtils.createContact(a.Id);
-			c2.LastName = 'sg2';
-			update new List<Contact> { c1, c2 };
-
-			EnvelopeConfiguration.RecipientSettings rs = new EnvelopeConfiguration.RecipientSettings(
-				new List<EnvelopeConfiguration.RelatedContacts> {
-					new EnvelopeConfiguration.RelatedContacts(
-						new Map<String, String> {
-							'role' => 'FirstName',
-							'signinggroup' => 'LastName'
-						},
-						'Contacts',
-						null)
-				},
-				new List<EnvelopeConfiguration.CustomRecipient> {
-					new EnvelopeConfiguration.CustomRecipient(null, null, null, null, null, 1, null, null, null, null,
-						'sg3', false, null)
-				},
-				false, 0, true, 1, null, null, null, null);
-
-			Test.startTest();
-			Map<String, SigningGroup> result = RecipientService.resolveSigningGroups(new Entity(a.Id), rs);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(new Set<String> { 'sg1', 'sg2', 'sg3' }, result.keySet());
 		}
 	}
 
@@ -1907,6 +978,86 @@ private class RecipientServiceTest {
 			System.assertEquals(1, Collection.size(result.get(e3.Id)));
 			System.assertNotEquals(null, result.get(e3.Id)[0]);
 			System.assertNotEquals(null, result.get(e3.Id)[0].id);
+		}
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_invalid_arguments() {
+		Test.startTest();
+		try {
+			RecipientService.getRelatedRecipients(
+				null,
+				null,
+				null,
+				null);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.InvalidType, ex.getMessage());
+		}
+		try {
+			RecipientService.getRelatedRecipients(
+				Opportunity.getSObjectType(),
+				null,
+				null,
+				null);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedRelationship, ex.getMessage());
+		}
+		try {
+			RecipientService.getRelatedRecipients(
+				Opportunity.getSObjectType(),
+				null,
+				new Query.Relationship(
+					false,
+					' ',
+					'Opportunity Contact Roles',
+					'OpportunityContactRole'),
+				null);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedRelationship, ex.getMessage());
+		}
+		try {
+			RecipientService.getRelatedRecipients(
+				Opportunity.getSObjectType(),
+				null,
+				new Query.Relationship(
+					false,
+					'OpportunityContactRoles',
+					'Opportunity Contact Roles',
+					''),
+				null);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedRelationship, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_success() {
+		System.runAs(UserMock.createDocuSignSender()) {
+			Schema.Account a = TestUtils.createAccount();
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.getRelatedRecipients(
+				Schema.Account.getSObjectType(),
+				new Set<Id> { a.Id },
+				new Query.Relationship(
+					true,
+					'Owner',
+					'Owner',
+					'User'),
+				null);
+			Test.stopTest();
+
+			System.assertEquals(1, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(UserInfo.getName(), result[0].name);
+			System.assertEquals(UserInfo.getUserEmail(), result[0].email);
+			System.assertNotEquals(null, result[0].source);
+			System.assertEquals(UserInfo.getUserId(), result[0].source.id);
 		}
 	}
 }

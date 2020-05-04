@@ -16,29 +16,29 @@ public interface DocumentResolver {
 	 * Retrieves a list of documents by ID.
 	 *
 	 * @param type The document SObject type.
-	 * @param ids The document SObject IDs.
+	 * @param documentIds The document SObject IDs.
 	 *
 	 * @return The resolved documents.
 	 */
 	List<Document> getDocuments(SObjectType type, Set<Id> documentIds);
 
 	/**
-	 * Retrieves a list of linked documents by parent ID.
+	 *  Retrieves a filtered list of linked documents by parent ID.
 	 *
 	 * @param type The document SObject type.
 	 * @param linkedEntityIds The linked SObject IDs.
-	 * @param getLastUpdatedOnly Whether to load only the last updated document or all linked documents.
+	 * @param filter Optional query filter to apply.
 	 *
-	 * @return
+	 * @return The documents linked to the Salesforce entities.
 	 */
-	List<Document> getLinkedDocuments(SObjectType type, Set<Id> linkedEntityIds, Boolean getLastUpdatedOnly);
+	List<Document> getLinkedDocuments(SObjectType type, Set<Id> linkedEntityIds, Query.Filter filter);
 
 	/**
 	 * Retrieves document folders for the specified type.
 	 *
 	 * @param type The document SObject type.
 	 *
-	 * @return
+	 * @return The document folders.
 	 */
 	List<Document.Folder> getDocumentFolders(SObjectType type);
 

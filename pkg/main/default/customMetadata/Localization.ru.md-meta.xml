@@ -3,46 +3,6 @@
     <label>Russian</label>
     <protected>true</protected>
     <values>
-        <field>ChatterEnvelopeCompleted__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был подписан и завершен в DocuSign. Затраченное время: [TimeFromSent]</value>
-    </values>
-    <values>
-        <field>ChatterEnvelopeDeclined__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был отклонен в DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterEnvelopeDelivered__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был доставлен всем получателям в DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterEnvelopeSent__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был отправлен на подпись в DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterEnvelopeVoided__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был аннулирован в DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientCompleted__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был завершен получателем [Recipient] в DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientDeclined__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был отклонен получателем [Recipient] в DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientDelivered__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был просмотрен получателем [Recipient] в DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientSent__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был отправлен получателю [Recipient] в DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientSigned__c</field>
-        <value xsi:type="xsd:string">Конверт для [SourceType] &quot;[SourceName]&quot; был подписан получателем [Recipient] в DocuSign. Затраченное время: [TimeFromSent]</value>
-    </values>
-    <values>
         <field>EmailMessage__c</field>
         <value xsi:type="xsd:string">Я посылаю вам запрос на вашу электронную подпись, пожалуйста, осмотрите и подпишите, начиная с ссылке ниже.</value>
     </values>

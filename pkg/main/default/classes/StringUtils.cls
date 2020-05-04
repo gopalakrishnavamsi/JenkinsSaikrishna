@@ -8,8 +8,9 @@ untangle upstream, and the v2 DocuSign APIs serialize all primitive types as str
  */
 public class StringUtils {
 
-	private static final Pattern emailPattern = Pattern.compile(
-		'^(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])$');
+	private static final Pattern PATTERN_EMAIL = Pattern.compile(
+		'^(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])$');
+	private static final Pattern PATTERN_ID = Pattern.compile('^[a-zA-Z0-9]{15}|[a-zA-Z0-9]{18}$');
 	private static final String ENCODING = 'UTF-8';
 
 	/**
@@ -96,6 +97,7 @@ public class StringUtils {
 	 * Parses a string as an integer value with a default value to use if the string cannot be parsed.
 	 *
 	 * @param s The input string.
+	 * @param defaultValue The value to return if the input string cannot be parsed as a valid integer.
 	 *
 	 * @return The integer representation of the input string, or <code>defaultValue</code> if the input string is blank or otherwise invalid.
 	 */
@@ -164,7 +166,18 @@ public class StringUtils {
 	 * @return <code>true</code> if the input string is a valid email address, <code>false</code> otherwise.
 	 */
 	public static Boolean isValidEmail(final String s) {
-		return String.isNotBlank(s) && emailPattern.matcher(s.trim().toLowerCase()).matches();
+		return String.isNotBlank(s) && PATTERN_EMAIL.matcher(s.trim().toLowerCase()).matches();
+	}
+
+	/**
+	 * Tests whether an input string is a valid Salesforce ID.
+	 *
+	 * @param s The input string.
+	 *
+	 * @return <code>true</code> if the input string is a valid Salesforce ID, <code>false</code> otherwise.
+	 */
+	public static Boolean isValidId(final String s) {
+		return String.isNotBlank(s) && PATTERN_ID.matcher(s.trim().toLowerCase()).matches();
 	}
 
 	/**

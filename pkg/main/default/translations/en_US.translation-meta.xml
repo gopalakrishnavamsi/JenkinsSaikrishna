@@ -4913,8 +4913,124 @@
 	</customLabels>	
 	<customLabels>
 		<label>Could not resolve object type {0}. Verify the object exists and you have access to it.</label>
-		<name>InvalidSObjectType_1</name>	
-	</customLabels>	
+		<name>InvalidSObjectType_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Invalid envelope configuration</label>
+		<name>InvalidEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope configuration is undefined.</label>
+		<name>UndefinedEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Name is blank.</label>
+		<name>UndefinedName</name>
+	</customLabels>
+	<customLabels>
+		<label>Relationship is undefined.</label>
+		<name>UndefinedRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>Source object is blank.</label>
+		<name>UndefinedSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Source object is invalid.</label>
+		<name>InvalidSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope configuration not found.</label>
+		<name>EnvelopeConfigurationNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Source object {0} does not match the envelope configuration source {1}.</label>
+		<name>SourceMismatch_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Template is undefined.</label>
+		<name>UndefinedTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign template ID is undefined.</label>
+		<name>UndefinedDocuSignTemplateId</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}[{1}]: {2}</label>
+		<name>ArrayError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>documents</label>
+		<name>DocumentElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Source object type must be ContentDocument.</label>
+		<name>InvalidContentDocumentSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Extension is blank.</label>
+		<name>UndefinedExtension</name>
+	</customLabels>
+	<customLabels>
+		<label>recipients</label>
+		<name>RecipientElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Relationship type is invalid.</label>
+		<name>InvalidRelationshipType</name>
+	</customLabels>
+	<customLabels>
+		<label>Relationship name is blank.</label>
+		<name>UndefinedRelationshipName</name>
+	</customLabels>
+	<customLabels>
+		<label>Related object type is blank.</label>
+		<name>UndefinedRelatedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Related object type is invalid: {0}.</label>
+		<name>InvalidRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Related object type is unsupported: {0}.</label>
+		<name>UnsupportedRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Relationship is invalid: {0}.</label>
+		<name>InvalidRelationship_1</name>
+	</customLabels>
+	<customLabels>
+		<label>custom fields</label>
+		<name>CustomFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Custom field is undefined.</label>
+		<name>UndefinedCustomField</name>
+	</customLabels>
+	<customLabels>
+		<label>Value is blank while required is true and show is false.</label>
+		<name>UndefinedCustomFieldValue</name>
+	</customLabels>
+	<customLabels>
+		<label>List is empty.</label>
+		<name>UndefinedList</name>
+	</customLabels>
+	<customLabels>
+		<label>merge fields</label>
+		<name>MergeFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Merge field is undefined.</label>
+		<name>UndefinedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>Path is blank.</label>
+		<name>UndefinedPath</name>
+	</customLabels>
+	<customLabels>
+		<label>Merge field is unrelated to source object.</label>
+		<name>UnrelatedMergeField</name>
+	</customLabels>
 	<customLabels>
 		<label>Example: Owner.Name = 'John Smith'</label>
 		<name>ExampleFilterByClause</name>	
@@ -4922,7 +5038,7 @@
 	<customLabels>
 		<label>Example: CreatedDate ASC</label>
 		<name>ExampleOrderByClause</name>	
-	</customLabels>		
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

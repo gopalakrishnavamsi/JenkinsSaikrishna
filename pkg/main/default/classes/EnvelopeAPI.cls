@@ -1,3 +1,9 @@
+/*
+	Inner classes should ideally be protected so that derived classes can reuse the implementation without leaking
+	API implementation details. Unfortunately Apex doesn't allow this so some of the classes must be public to reuse
+	code or we have to structure our code less efficiently. In this case, TemplateAPI was merged here because it shared
+	much of the request/response structure as this.
+ */
 public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 	private static EnvelopeAPI self = null;
@@ -7,6 +13,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	private static final String USER_LACKS_PERMISSIONS = 'USER_LACKS_PERMISSIONS';
 	private static final List<DocumentResolver> DOCUMENT_RESOLVERS = new List<DocumentResolver>();
 	private static final Set<String> HTML_EXTENSIONS = new Set<String> { 'htm', 'html', 'adf' };
+	private final Map<UUID, Template> templateMap;
 
 	static {
 		String rs = AccountSettings__c.getOrgDefaults().DocumentResolvers__c;
@@ -24,19 +31,23 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		}
 	}
 
-	private List<SigningGroup> sgs = null;
-
 	private EnvelopeAPI(
 		final Url baseUrl,
+		final String apiVersion,
 		final UUID accountId) {
 
-		super(baseUrl, 'v2', accountId);
+		super(baseUrl, apiVersion, accountId);
+
+		this.templateMap = new Map<UUID, Template>();
 	}
 
 	public static EnvelopeAPI getInstance() {
 		if (self == null) {
 			Credentials c = Credentials.getInstance();
-			self = new EnvelopeAPI(c.environment.eSignatureBaseUrl, c.account.id);
+			self = new EnvelopeAPI(
+				c.environment.eSignatureBaseUrl,
+				'v2',
+				c.account.id);
 		}
 		return self;
 	}
@@ -63,89 +74,22 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		return e;
 	}
 
-	@TestVisible
-	private class SigningGroupMember {
-		public String userName;
-		public String email;
-
-		public SigningGroup.Member toExternalForm() {
-			return new SigningGroup.Member(userName, email);
-		}
-	}
-
-	@TestVisible
-	private class APISigningGroup {
-		public String signingGroupId;
-		public String groupName;
-		public List<SigningGroupMember> users;
-
-		public SigningGroup toExternalForm() {
-			final List<SigningGroup.Member> members = new List<SigningGroup.Member>();
-			if (users != null) {
-				for (SigningGroupMember u : users) {
-					members.add(u.toExternalForm());
-				}
-			}
-			return new SigningGroup(Integer.valueOf(signingGroupId), groupName, members);
-		}
-	}
-
-	@TestVisible
-	private class SigningGroups {
-		public List<APISigningGroup> groups;
-
-		public List<SigningGroup> toExternalForm() {
-			final List<SigningGroup> sgs = new List<SigningGroup>();
-			if (groups != null) {
-				for (APISigningGroup sg : groups) {
-					sgs.add(sg.toExternalForm());
-				}
-			}
-			return sgs;
-		}
-	}
-
-	public List<SigningGroup> getSigningGroups() {
-		return getSigningGroups(RestAPI.defaultTimeout);
-	}
-
-	public List<SigningGroup> getSigningGroups(final Integer timeout) {
-		if (this.sgs == null) {
-			final RestAPI.Response response = this.get(
-				'signing_groups',
-				new QueryString('include_users', 'true'),
-				timeout);
-			if (response.hasError) {
-				final String body = response.body;
-				if (response.statusCode == APIErrorCode.BAD_REQUEST
-					&& body.containsIgnoreCase(ACCOUNT_LACKS_PERMISSIONS)) {
-
-					this.sgs = new List<SigningGroup>();
-					throw new APIException(new APIError(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS,
-						Label.SigningGroupsProhibited));
-				} else {
-					// TODO: Localize error description
-					throw new APIException(response.error);
-				}
-			}
-
-			this.sgs = ((SigningGroups)JSON.deserialize(response.body, SigningGroups.class)).toExternalForm();
-		}
-		return this.sgs;
-	}
-
 	// get*View Url serialization objects
-	private class ViewRequest {
-		public String authenticationMethod { get; private set; }
-		public String email { get; private set; }
-		public String returnUrl { get; private set; }
-		public String userName { get; private set; }
-		public String recipientId { get; private set; }
-		public String envelopeId { get; private set; }
-		public String clientUserId { get; private set; }
-		public Boolean suppressNavigation { get; private set; }
+	@TestVisible
+	private class APIViewRequest {
+		public String authenticationMethod;
+		public String email;
+		public String returnUrl;
+		public String userName;
+		public String recipientId;
+		public String envelopeId;
+		public String clientUserId;
+		public Boolean suppressNavigation;
 
-		public ViewRequest(final UUID envelopeId, final Url returnUrl) {
+		public APIViewRequest(
+			final UUID envelopeId,
+			final Url returnUrl) {
+
 			this.authenticationMethod = null;
 			this.email = null;
 			this.returnUrl = returnUrl == null ? null : returnUrl.toExternalForm();
@@ -155,7 +99,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			this.suppressNavigation = true;
 		}
 
-		public ViewRequest(final Url returnUrl) {
+		public APIViewRequest(final Url returnUrl) {
 			this.authenticationMethod = null;
 			this.email = null;
 			this.returnUrl = returnUrl == null ? null : returnUrl.toExternalForm();
@@ -165,7 +109,8 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			this.suppressNavigation = true;
 		}
 
-		public ViewRequest(final String authenticationMethod,
+		public APIViewRequest(
+			final String authenticationMethod,
 			final String email,
 			final Url returnUrl,
 			final String userName,
@@ -181,7 +126,8 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		}
 
 		//Embedded Recipient constructor
-		public ViewRequest(final String authenticationMethod,
+		public APIViewRequest(
+			final String authenticationMethod,
 			final String clientUserId,
 			final Url returnUrl,
 			final String userName,
@@ -195,101 +141,133 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		}
 	}
 
-	private class ViewResponse {
+	@TestVisible
+	private class APIViewResponse {
 		public String url;
 	}
 
-	public Url getSenderViewUrl(final UUID envelopeId, final Url returnUrl) {
+	public Url getSenderViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl) {
+
 		return this.getSenderViewUrl(envelopeId, returnUrl, RestAPI.defaultTimeout);
 	}
 
-	public Url getSenderViewUrl(final UUID envelopeId, final Url returnUrl, final Integer timeout) {
-		final RestAPI.Response response = this.post(
+	public Url getSenderViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl,
+		final Integer timeout) {
+
+		RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'sender' },
-			JSON.serialize(new ViewRequest(returnUrl)),
+			JSON.serialize(new APIViewRequest(returnUrl), true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get sender view: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
 
-		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
 	}
 
-	/*
-	* Obtains recipient view for specified account envelope
-	* @param envelopeId
-	* @param email
-	* @param userName
-	*/
-	public Url getRecipientViewUrl(final UUID envelopeId, final Url returnUrl, final String email, final String userName,
+	public Url getRecipientViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl,
+		final String email,
+		final String userName,
 		final Integer recipientId) {
 
 		return this.getRecipientViewUrl(envelopeId, returnUrl, email, userName, recipientId, RestAPI.defaultTimeout);
 	}
 
-	public Url getRecipientViewUrl(final UUID envelopeId, final Url returnUrl, final String email, final String userName,
-		final Integer recipientId, final Integer timeout) {
+	public Url getRecipientViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl,
+		final String email,
+		final String userName,
+		final Integer recipientId,
+		final Integer timeout) {
 
-		final RestAPI.Response response = this.post(
+		RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'recipient' },
-			JSON.serialize(new ViewRequest('email', email, returnUrl, userName, recipientId)),
+			JSON.serialize(new APIViewRequest('email', email, returnUrl, userName, recipientId), true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get recipient view: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
 
-		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
 	}
 
 	//Embedded Recipient view request
-	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl,
-		final String email, final String userName) {
+	public Url getEmbeddedRecipientViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl,
+		final String email,
+		final String userName) {
 
 		return this.getEmbeddedRecipientViewUrl(envelopeId, returnUrl, email, userName, RestAPI.defaultTimeout);
 	}
 
-	public Url getEmbeddedRecipientViewUrl(final UUID envelopeId, final Url returnUrl,
-		final String email, final String userName, final Integer timeout) {
+	public Url getEmbeddedRecipientViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl,
+		final String email,
+		final String userName,
+		final Integer timeout) {
 
 		String clientUserId = UserInfo.getUserId();
-		final RestAPI.Response response = this.post(
+		RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'recipient' },
-			JSON.serialize(new ViewRequest('email', clientUserId, returnUrl, userName, email)),
+			JSON.serialize(new APIViewRequest('email', clientUserId, returnUrl, userName, email), true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get recipient view: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
 
-		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
 	}
 
-	public Url getConsoleViewUrl(final UUID envelopeId, final Url returnUrl) {
+	public Url getConsoleViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl) {
+
 		return this.getConsoleViewUrl(envelopeId, returnUrl, RestAPI.defaultTimeout);
 	}
 
-	public Url getConsoleViewUrl(final UUID envelopeId, final Url returnUrl, final Integer timeout) {
-		final RestAPI.Response response = this.post(
+	public Url getConsoleViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl,
+		final Integer timeout) {
+
+		RestAPI.Response response = this.post(
 			new List<Object> { 'views', 'console' },
-			JSON.serialize(new ViewRequest(envelopeId, returnUrl)),
+			JSON.serialize(new APIViewRequest(envelopeId, returnUrl), true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get console view: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
-		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
 	}
 
-	public Url getCorrectViewUrl(final UUID envelopeId, final Url returnUrl) {
+	public Url getCorrectViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl) {
+
 		return this.getCorrectViewUrl(envelopeId, returnUrl, RestAPI.defaultTimeout);
 	}
 
-	public Url getCorrectViewUrl(final UUID envelopeId, final Url returnUrl, final Integer timeout) {
-		final RestAPI.Response response = this.post(
+	public Url getCorrectViewUrl(
+		final UUID envelopeId,
+		final Url returnUrl,
+		final Integer timeout) {
+
+		RestAPI.Response response = this.post(
 			new List<Object> { 'envelopes', envelopeId, 'views', 'correct' },
-			JSON.serialize(new ViewRequest(returnUrl)),
+			JSON.serialize(new APIViewRequest(returnUrl), true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get correct view: ' + response.error.toString());
@@ -308,16 +286,44 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			throw new APIException(error);
 		}
 
-		return new Url(((ViewResponse)JSON.deserialize(response.body, ViewResponse.class)).url);
+		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
+	}
+
+	public Url getTemplateEditUrl(
+		final UUID templateId,
+		final Url returnUrl) {
+
+		return this.getTemplateEditUrl(templateId, returnUrl, RestAPI.defaultTimeout);
+	}
+
+	public Url getTemplateEditUrl(
+		final UUID templateId,
+		final Url returnUrl,
+		final Integer timeout) {
+
+		if (UUID.isEmpty(templateId)) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.post(
+			new List<Object> { 'templates', templateId, 'views', 'edit' },
+			JSON.serialize(new APIViewRequest(returnUrl), true),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to get template edit view: ' + response.error.toString());
+			throw new APIException(response.error);
+		}
+		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
 	}
 
 	public Boolean resendEnvelope(final UUID envelopeId) {
 		return this.resendEnvelope(envelopeId, RestAPI.defaultTimeout);
 	}
 
-	public Boolean resendEnvelope(final UUID envelopeId, final Integer timeout) {
+	public Boolean resendEnvelope(
+		final UUID envelopeId,
+		final Integer timeout) {
+
 		Boolean isResent = false;
-		final RestAPI.Response response = this.put(
+		RestAPI.Response response = this.put(
 			new List<Object> { 'envelopes', envelopeId },
 			new QueryString('resend_envelope', 'true'),
 			'{}',
@@ -333,11 +339,11 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 	// Serialization objects for resendRecipients
 	@TestVisible
-	private class ResendResult {
+	private class APIResendResult {
 		public ESignatureAPI.ErrorDetails errorDetails;
 		public String recipientId;
 
-		public Recipient.ResendResult toExternalForm(final Recipient r) {
+		public Recipient.ResendResult toResendResult(final Recipient r) {
 			return new Recipient.ResendResult(
 				StringUtils.parseInteger(this.recipientId, null),
 				r == null ? null : r.email,
@@ -347,25 +353,30 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
-	private class ResendResults {
-		public List<ResendResult> recipientUpdateResults;
+	private class APIResendResults {
+		public List<APIResendResult> recipientUpdateResults;
 
-		public List<Recipient.ResendResult> toExternalForm(final Map<String, Recipient> recipients) {
+		public List<Recipient.ResendResult> toResendResults(final Map<String, Recipient> recipients) {
 			List<Recipient.ResendResult> result = new List<Recipient.ResendResult>();
 			if (this.recipientUpdateResults != null) {
-				for (ResendResult rr : this.recipientUpdateResults) {
-					result.add(rr.toExternalForm(recipients.get(rr.recipientId)));
+				for (APIResendResult rr : this.recipientUpdateResults) {
+					result.add(rr.toResendResult(recipients.get(rr.recipientId)));
 				}
 			}
 			return result;
 		}
 	}
 
-	public List<Recipient.ResendResult> resendRecipients(final UUID envelopeId, final List<Recipient> recipients) {
+	public List<Recipient.ResendResult> resendRecipients(
+		final UUID envelopeId,
+		final List<Recipient> recipients) {
+
 		return this.resendRecipients(envelopeId, recipients, RestAPI.defaultTimeout);
 	}
 
-	public List<Recipient.ResendResult> resendRecipients(final UUID envelopeId, final List<Recipient> recipients,
+	public List<Recipient.ResendResult> resendRecipients(
+		final UUID envelopeId,
+		final List<Recipient> recipients,
 		final Integer timeout) {
 
 		if (envelopeId == null) throw new DocuSignException(Label.InvalidEnvelope);
@@ -374,7 +385,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		RestAPI.Response response = this.put(
 			new List<Object> { 'envelopes', envelopeId, 'recipients' },
 			new QueryString('resend_envelope', 'true'),
-			JSON.serialize(new Recipients(recipients, null, false)),
+			JSON.serialize(new APIRecipients(recipients, null, false)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to resend envelope: ' + response.error.toString());
@@ -385,19 +396,19 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		for (Recipient r : recipients) {
 			rMap.put(String.valueOf(r.sequence), r);
 		}
-		return ((ResendResults)JSON.deserialize(response.body, ResendResults.class)).toExternalForm(rMap);
+		return ((APIResendResults)JSON.deserialize(response.body, APIResendResults.class)).toResendResults(rMap);
 	}
 
-	// Serialization objects for templates
+	// Serialization objects for envelopes and templates
 	@TestVisible
-	private class ListCustomField {
+	private class APIListCustomField {
 		public String name;
 		public String required;
 		public String show;
 		public String value;
 		public List<String> listItems;
 
-		public ListCustomField(final CustomField cf) {
+		public APIListCustomField(final CustomField cf) {
 			if (cf != null) {
 				this.name = cf.name;
 				this.required = String.valueOf(cf.required);
@@ -406,23 +417,37 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.listItems = cf.items;
 			}
 		}
+
+		public CustomField toCustomField() {
+			return CustomField.newListField(
+				this.name,
+				nullIfBlank(this.value),
+				this.listItems,
+				StringUtils.parseBoolean(this.required),
+				StringUtils.parseBoolean(this.show));
+		}
 	}
 
 	@TestVisible
-	private class TextCustomField {
+	private class APITextCustomField {
 		public String name;
 		public String required;
 		public String show;
 		public String value;
 
-		public TextCustomField(final String name, final String value, final Boolean required, final Boolean show) {
+		public APITextCustomField(
+			final String name,
+			final String value,
+			final Boolean required,
+			final Boolean show) {
+
 			this.name = name;
 			this.value = value;
 			this.required = String.valueOf(required);
 			this.show = String.valueOf(show);
 		}
 
-		public TextCustomField(final CustomField cf) {
+		public APITextCustomField(final CustomField cf) {
 			if (cf != null) {
 				this.name = cf.name;
 				this.required = String.valueOf(cf.required);
@@ -430,37 +455,57 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.value = cf.value;
 			}
 		}
+
+		public CustomField toCustomField() {
+			return CustomField.newTextField(
+				this.name,
+				nullIfBlank(this.value),
+				StringUtils.parseBoolean(this.required),
+				StringUtils.parseBoolean(this.show));
+		}
 	}
 
 	@TestVisible
-	private class CustomFields {
-		public List<TextCustomField> textCustomFields;
-		public List<ListCustomField> listCustomFields;
+	private class APICustomFields {
+		public List<APITextCustomField> textCustomFields;
+		public List<APIListCustomField> listCustomFields;
 
-		public CustomFields(final List<TextCustomField> textCustomFields, final List<ListCustomField> listCustomFields) {
+		public APICustomFields(
+			final List<APITextCustomField> textCustomFields,
+			final List<APIListCustomField> listCustomFields) {
+
 			this.textCustomFields = textCustomFields;
 			this.listCustomFields = listCustomFields;
+		}
+
+		public List<CustomField> toCustomFields() {
+			final List<CustomField> cfs = new List<CustomField>();
+
+			if (this.textCustomFields != null) {
+				for (APITextCustomField cf : this.textCustomFields) {
+					cfs.add(cf.toCustomField());
+				}
+			}
+
+			if (this.listCustomFields != null) {
+				for (APIListCustomField cf : listCustomFields) {
+					cfs.add(cf.toCustomField());
+				}
+			}
+
+			return cfs;
 		}
 	}
 
 	// Serialization objects for update in-person signer
 	@TestVisible
-	private class InPersonSigners {
-		public List<InPersonSigner> inPersonSigners { get; private set; }
-
-		public InPersonSigners(final String signerEmail) {
-			this.inPersonSigners = new List<InPersonSigner> { new InPersonSigner(signerEmail) };
-		}
-	}
-
-	@TestVisible
-	private class InPersonSigner {
+	private class APIInPersonSigner {
 		public String hostName;
 		public String hostEmail;
 		public String signerEmail;
 		public String recipientId;
 
-		public InPersonSigner(final String signerEmail) {
+		public APIInPersonSigner(final String signerEmail) {
 			this.recipientId = '1';
 			this.hostName = UserInfo.getName();
 			this.hostEmail = UserInfo.getUserEmail();
@@ -468,17 +513,31 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		}
 	}
 
-	/**
-	 Special case of update recipients API assuming current user is host, and the first recipient is in-person.
-	 */
-	public Boolean updateInPersonSigner(final UUID envelopeId, final String signerEmail) {
+	@TestVisible
+	private class APIInPersonSigners {
+		public List<APIInPersonSigner> inPersonSigners { get; private set; }
+
+		public APIInPersonSigners(final String signerEmail) {
+			this.inPersonSigners = new List<APIInPersonSigner> { new APIInPersonSigner(signerEmail) };
+		}
+	}
+
+	// Special case of update recipients API assuming current user is host, and the first recipient is in-person.
+	public Boolean updateInPersonSigner(
+		final UUID envelopeId,
+		final String signerEmail) {
+
 		return updateInPersonSigner(envelopeId, signerEmail, RestAPI.defaultTimeout);
 	}
 
-	public Boolean updateInPersonSigner(final UUID envelopeId, final String signerEmail, final Integer timeout) {
-		final RestAPI.Response response = this.put(
+	public Boolean updateInPersonSigner(
+		final UUID envelopeId,
+		final String signerEmail,
+		final Integer timeout) {
+
+		RestAPI.Response response = this.put(
 			new List<Object> { 'envelopes', envelopeId, 'recipients' },
-			JSON.serialize(new InPersonSigners(signerEmail)),
+			JSON.serialize(new APIInPersonSigners(signerEmail)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to update in-person signer: ' + response.error.toString());
@@ -489,45 +548,71 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 	// Serialization objects for createEnvelope
 	@TestVisible
-	private class Expirations {
+	private class APIExpirations {
 		public String expireEnabled;
 		public String expireAfter;
 		public String expireWarn;
 
-		public Expirations(final Notifications o) {
-			if (o != null) {
-				this.expireEnabled = String.valueOf(o.expires);
-				this.expireAfter = String.valueOf(o.expireAfterDays);
-				this.expireWarn = String.valueOf(o.expireWarnDays);
-			}
+		public APIExpirations(
+			final Boolean expires,
+			final Integer expireAfterDays,
+			final Integer expireWarnDays) {
+
+			this.expireEnabled = String.valueOf(expires);
+			this.expireAfter = String.valueOf(expireAfterDays);
+			this.expireWarn = String.valueOf(expireWarnDays);
 		}
 	}
 
 	@TestVisible
-	private class Reminders {
+	private class APIReminders {
 		public String reminderEnabled;
 		public String reminderDelay;
 		public String reminderFrequency;
 
-		public Reminders(final Notifications o) {
-			if (o != null) {
-				this.reminderEnabled = String.valueOf(o.remind);
-				this.reminderDelay = String.valueOf(o.remindAfterDays);
-				this.reminderFrequency = String.valueOf(o.remindFrequencyDays);
-			}
+		public APIReminders(
+			final Boolean remind,
+			final Integer remindAfterDays,
+			final Integer remindFrequencyDays) {
+
+			this.reminderEnabled = String.valueOf(remind);
+			this.reminderDelay = String.valueOf(remindAfterDays);
+			this.reminderFrequency = String.valueOf(remindFrequencyDays);
 		}
 	}
 
 	@TestVisible
-	private class EnvelopeNotification {
-		public Reminders reminders;
-		public Expirations expirations;
+	private class APINotifications {
+		public APIReminders reminders;
+		public APIExpirations expirations;
 		public String useAccountDefaults;
 
-		public EnvelopeNotification(final Notifications o, final Boolean useAccountDefaults) {
-			this.reminders = new Reminders(o);
-			this.expirations = new Expirations(o);
-			this.useAccountDefaults = String.valueOf(useAccountDefaults);
+		public APINotifications(final Notifications notifications) {
+			if (notifications == null) {
+				this.useAccountDefaults = 'true';
+			} else {
+				this.reminders = new APIReminders(
+					notifications.remind,
+					notifications.remindAfterDays,
+					notifications.remindFrequencyDays);
+				this.expirations = new APIExpirations(
+					notifications.expires,
+					notifications.expireAfterDays,
+					notifications.expireWarnDays);
+				this.useAccountDefaults = 'false';
+			}
+		}
+
+		public Notifications toNotifications() {
+			Boolean isRemindDefined = this.reminders != null;
+			Boolean isExpireDefined = this.expirations != null;
+			return new Notifications(
+				isRemindDefined ? Boolean.valueOf(this.reminders.reminderEnabled) : false,
+				isRemindDefined ? Integer.valueOf(this.reminders.reminderDelay) : null,
+				isRemindDefined ? Integer.valueOf(this.reminders.reminderFrequency) : null,
+				isExpireDefined ? Boolean.valueOf(this.expirations.expireEnabled) : false,
+				isExpireDefined ? Integer.valueOf(this.expirations.expireAfter) : null,
+				isExpireDefined ? Integer.valueOf(this.expirations.expireWarn) : null);
 		}
 	}
 
@@ -553,6 +638,8 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public String fileExtension;
 		public String documentBase64;
 		public APIHtmlDefinition htmlDefinition;
+		public String templateLocked;
+		public String templateRequired;
 
 		public APIDocument(
 			final Document doc,
@@ -569,26 +656,40 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 						this.documentBase64 = EncodingUtil.base64Encode(content);
 					}
 				}
+				this.templateLocked = String.valueOf(doc.readOnly);
+				this.templateRequired = String.valueOf(doc.required);
 			}
+		}
+
+		public Document toDocument() {
+			return new Document(
+				null,
+				Document.TYPE_FILE,
+				Integer.valueOf(this.documentId),
+				this.name,
+				nullIfBlank(this.fileExtension),
+				null,
+				StringUtils.parseBoolean(this.templateLocked),
+				StringUtils.parseBoolean(this.templateRequired));
 		}
 	}
 
 	@TestVisible
-	private class SmsAuthentication {
+	private class APISmsAuthentication {
 		public List<String> senderProvidedNumbers;
 
-		public SmsAuthentication(final List<String> ns) {
+		public APISmsAuthentication(final List<String> ns) {
 			this.senderProvidedNumbers = ns;
 		}
 	}
 
 	@TestVisible
-	private class RecipientNotification {
+	private class APIEmailSettings {
 		public String supportedLanguage;
 		public String emailSubject;
 		public String emailBody;
 
-		public RecipientNotification(final Recipient.EmailSettings es) {
+		public APIEmailSettings(final Recipient.EmailSettings es) {
 			if (es != null) {
 				this.supportedLanguage = es.language;
 				this.emailSubject = es.subject;
@@ -605,24 +706,27 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public String roleName;
 		public String routingOrder;
 		public String signingGroupId;
+		public String signingGroupName;
 		public String hostEmail;
 		public String hostName;
 		public String signerEmail;
 		public String signerName;
 		public List<String> customFields;
-		public EnvelopeAPI.RecipientNotification emailNotification;
+		public APIEmailSettings emailNotification;
 		public String accessCode;
 		public String requireIdLookup;
 		public String idCheckConfigurationName;
-		public EnvelopeAPI.SmsAuthentication smsAuthentication;
+		public APISmsAuthentication smsAuthentication;
 		public String note;
-		public DefaultAnchorTags tabs;
+		public APITabs tabs;
 		public String status;
 		public String deliveredDateTime;
 		public String signedDateTime;
 		public String declinedDateTime;
 		public String declinedReason;
 		public String clientUserId;
+		public String templateLocked;
+		public String templateRequired;
 
 		public APIRecipient(
 			final Recipient r,
@@ -648,36 +752,77 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.customFields = getRecipientCustomFields(r);
 				this.emailNotification = r.emailSettings == null
 					|| (String.isBlank(r.emailSettings.subject) && String.isBlank(r.emailSettings.message))
-					? null : new EnvelopeAPI.RecipientNotification(r.emailSettings);
+					? null : new APIEmailSettings(r.emailSettings);
 				if (r.authentication != null) {
 					this.accessCode = r.authentication.accessCode;
 					this.requireIdLookup = String.valueOf(r.authentication.idCheckRequired);
 					if (Collection.isNotEmpty(r.authentication.smsPhoneNumbers)) {
 						this.requireIdLookup = 'true';
 						this.idCheckConfigurationName = 'SMS Auth $';
-						this.smsAuthentication = new EnvelopeAPI.SmsAuthentication(r.authentication.smsPhoneNumbers);
+						this.smsAuthentication = new APISmsAuthentication(r.authentication.smsPhoneNumbers);
 					}
 				}
 				this.note = r.note;
-				if (includeDefaultAnchorTags
-					&& String.isBlank(r.envelopeRecipientId)
-					&& r.role != null
-					&& r.role.hasValue) {
 
-					// Only add default anchor tags if role is defined and has a valid (> 0) value.
-					this.tabs = new EnvelopeAPI.DefaultAnchorTags(documentId, this.recipientId,
-						String.valueOf(r.role.value));
-				}
+				// Only add default anchor tags if role is defined and has a valid (> 0) value.
+				this.tabs = new APITabs(
+					documentId,
+					this.recipientId,
+					r.tabs,
+					includeDefaultAnchorTags
+						&& String.isBlank(r.envelopeRecipientId)
+						&& r.role != null
+						&& r.role.hasValue,
+					r.role == null ? null : r.role.value);
+
 				//setting the clientUserId property for embedded recipients
 				//setting this to the Salesforce user id of the recipient
-				//this will be set only for embedded recipients. If this property is set for other recipients the envelope is not sent
+				//this will be set only for embedded recipients. If this property is set for other recipients the
+				//envelope is not sent
 				if (r.type == Recipient.TYPE_EMBEDDED_SIGNER) {
 					this.clientUserId = Entity.isValid(r.source) ? r.source.id : null;
 				}
+				this.templateLocked = String.valueOf(r.readOnly);
+				this.templateRequired = String.valueOf(r.required);
 			}
 		}
 
-		public Recipient.Status toExternalForm(final String type) {
+		public Recipient toRecipient(final String type) {
+			return new Recipient(
+				null,
+				nullIfBlank(this.recipientId),
+				type,
+				StringUtils.parseInteger(this.recipientId),
+				StringUtils.parseInteger(this.routingOrder),
+				String.isBlank(this.roleName) ? null : new Recipient.Role(this.roleName),
+				type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.signerName) : nullIfBlank(this.name),
+				type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.signerEmail) : nullIfBlank(this.email),
+				String.isBlank(this.signingGroupId) ? null
+					: new SigningGroup(
+					Integer.valueOf(this.signingGroupId),
+					nullIfBlank(this.signingGroupName)),
+				null,
+				String.isBlank(this.accessCode) && !StringUtils.parseBoolean(this.requireIdLookup) ? null
+					: new Recipient.Authentication(
+					nullIfBlank(this.accessCode),
+					StringUtils.parseBoolean(this.requireIdLookup),
+					this.smsAuthentication == null ? null : this.smsAuthentication.senderProvidedNumbers),
+				nullIfBlank(this.note),
+				this.emailNotification == null ? null : new Recipient.EmailSettings(
+					nullIfBlank(this.emailNotification.supportedLanguage),
+					Localization.getLabel(this.emailNotification.supportedLanguage),
+					nullIfBlank(this.emailNotification.emailSubject),
+					nullIfBlank(this.emailNotification.emailBody)),
+				type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.hostName) : null,
+				type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.hostEmail) : null,
+				false,
+				this.tabs == null ? null : this.tabs.toTabs(),
+				null,
+				StringUtils.parseBoolean(this.templateLocked),
+				StringUtils.parseBoolean(this.templateRequired));
+		}
+
+		public Recipient.Status toStatus(final String type) {
 			Boolean inPersonSigner = type == Recipient.TYPE_IN_PERSON_SIGNER;
 			return new Recipient.Status(
 				null, // id
@@ -685,13 +830,13 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				type,
 				null,
 				this.status,
-				inPersonSigner ? this.signerName : this.name,
-				inPersonSigner ? this.signerEmail : this.email,
-				Integer.valueOf(this.routingOrder),
+				inPersonSigner ? nullIfBlank(this.signerName) : nullIfBlank(this.name),
+				inPersonSigner ? nullIfBlank(this.signerEmail) : nullIfBlank(this.email),
+				String.isBlank(this.routingOrder) ? null : Integer.valueOf(this.routingOrder),
 				StringUtils.parseDatetime(this.deliveredDateTime),
 				String.isNotBlank(this.declinedDateTime) ? StringUtils.parseDatetime(this.declinedDateTime)
 					: StringUtils.parseDatetime(this.signedDateTime),
-				this.declinedReason,
+				nullIfBlank(this.declinedReason),
 				Datetime.now());
 		}
 	}
@@ -708,7 +853,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
-	private class Recipients {
+	private class APIRecipients {
 		public List<APIRecipient> agents;
 		public List<APIRecipient> carbonCopies;
 		public List<APIRecipient> certifiedDeliveries;
@@ -716,8 +861,10 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public List<APIRecipient> inPersonSigners;
 		public List<APIRecipient> intermediaries;
 		public List<APIRecipient> signers;
+		public List<APIRecipient> seals;
+		public List<APIRecipient> witnesses;
 
-		public Recipients(
+		public APIRecipients(
 			final List<Recipient> rs,
 			final String documentId,
 			final Boolean includeDefaultAnchorTags) {
@@ -729,7 +876,9 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.editors = new List<APIRecipient>();
 				this.inPersonSigners = new List<APIRecipient>();
 				this.intermediaries = new List<APIRecipient>();
+				this.seals = new List<APIRecipient>();
 				this.signers = new List<APIRecipient>();
+				this.witnesses = new List<APIRecipient>();
 				for (Recipient r : rs) {
 					if (r.type == Recipient.TYPE_AGENT) {
 						this.agents.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
@@ -743,6 +892,10 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 						this.intermediaries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					} else if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
 						this.inPersonSigners.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+					} else if (r.type == Recipient.TYPE_SEAL) {
+						this.seals.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+					} else if (r.type == Recipient.TYPE_WITNESS) {
+						this.witnesses.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					} else { // Recipient.TYPE_SIGNER and Recipient.TYPE_EMBEDDED_SIGNER
 						this.signers.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
 					}
@@ -750,41 +903,106 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			}
 		}
 
-		public List<Recipient.Status> toExternalForm() {
-			List<Recipient.Status> result = new List<Recipient.Status>();
+		public List<Recipient> toRecipients() {
+			List<Recipient> result = new List<Recipient>();
 			if (this.agents != null) {
 				for (EnvelopeAPI.APIRecipient r : this.agents) {
-					result.add(r.toExternalForm(Recipient.TYPE_AGENT));
+					result.add(r.toRecipient(Recipient.TYPE_AGENT));
 				}
 			}
 			if (this.carbonCopies != null) {
 				for (EnvelopeAPI.APIRecipient r : this.carbonCopies) {
-					result.add(r.toExternalForm(Recipient.TYPE_CARBON_COPY));
+					result.add(r.toRecipient(Recipient.TYPE_CARBON_COPY));
 				}
 			}
 			if (this.certifiedDeliveries != null) {
 				for (EnvelopeAPI.APIRecipient r : this.certifiedDeliveries) {
-					result.add(r.toExternalForm(Recipient.TYPE_CERTIFIED_DELIVERY));
+					result.add(r.toRecipient(Recipient.TYPE_CERTIFIED_DELIVERY));
 				}
 			}
 			if (this.editors != null) {
 				for (EnvelopeAPI.APIRecipient r : this.editors) {
-					result.add(r.toExternalForm(Recipient.TYPE_EDITOR));
+					result.add(r.toRecipient(Recipient.TYPE_EDITOR));
 				}
 			}
 			if (this.intermediaries != null) {
 				for (EnvelopeAPI.APIRecipient r : this.intermediaries) {
-					result.add(r.toExternalForm(Recipient.TYPE_INTERMEDIARY));
+					result.add(r.toRecipient(Recipient.TYPE_INTERMEDIARY));
 				}
 			}
 			if (this.inPersonSigners != null) {
 				for (EnvelopeAPI.APIRecipient r : this.inPersonSigners) {
-					result.add(r.toExternalForm(Recipient.TYPE_IN_PERSON_SIGNER));
+					result.add(r.toRecipient(Recipient.TYPE_IN_PERSON_SIGNER));
 				}
 			}
 			if (this.signers != null) {
 				for (EnvelopeAPI.APIRecipient r : this.signers) {
-					result.add(r.toExternalForm(Recipient.TYPE_SIGNER));
+					result.add(r.toRecipient(Recipient.TYPE_SIGNER));
+				}
+			}
+			if (this.seals != null) {
+				for (EnvelopeAPI.APIRecipient r : this.seals) {
+					result.add(r.toRecipient(Recipient.TYPE_SEAL));
+				}
+			}
+			if (this.witnesses != null) {
+				for (EnvelopeAPI.APIRecipient r : this.witnesses) {
+					result.add(r.toRecipient(Recipient.TYPE_WITNESS));
+				}
+			}
+			result.sort();
+			Integer sequence = 0;
+			for (Recipient r : result) {
+				r = r.withSequence(++sequence);
+			}
+			return result;
+		}
+
+		public List<Recipient.Status> toStatus() {
+			List<Recipient.Status> result = new List<Recipient.Status>();
+			if (this.agents != null) {
+				for (EnvelopeAPI.APIRecipient r : this.agents) {
+					result.add(r.toStatus(Recipient.TYPE_AGENT));
+				}
+			}
+			if (this.carbonCopies != null) {
+				for (EnvelopeAPI.APIRecipient r : this.carbonCopies) {
+					result.add(r.toStatus(Recipient.TYPE_CARBON_COPY));
+				}
+			}
+			if (this.certifiedDeliveries != null) {
+				for (EnvelopeAPI.APIRecipient r : this.certifiedDeliveries) {
+					result.add(r.toStatus(Recipient.TYPE_CERTIFIED_DELIVERY));
+				}
+			}
+			if (this.editors != null) {
+				for (EnvelopeAPI.APIRecipient r : this.editors) {
+					result.add(r.toStatus(Recipient.TYPE_EDITOR));
+				}
+			}
+			if (this.intermediaries != null) {
+				for (EnvelopeAPI.APIRecipient r : this.intermediaries) {
+					result.add(r.toStatus(Recipient.TYPE_INTERMEDIARY));
+				}
+			}
+			if (this.inPersonSigners != null) {
+				for (EnvelopeAPI.APIRecipient r : this.inPersonSigners) {
+					result.add(r.toStatus(Recipient.TYPE_IN_PERSON_SIGNER));
+				}
+			}
+			if (this.signers != null) {
+				for (EnvelopeAPI.APIRecipient r : this.signers) {
+					result.add(r.toStatus(Recipient.TYPE_SIGNER));
+				}
+			}
+			if (this.seals != null) {
+				for (EnvelopeAPI.APIRecipient r : this.seals) {
+					result.add(r.toStatus(Recipient.TYPE_SEAL));
+				}
+			}
+			if (this.witnesses != null) {
+				for (EnvelopeAPI.APIRecipient r : this.witnesses) {
+					result.add(r.toStatus(Recipient.TYPE_WITNESS));
 				}
 			}
 			result.sort();
@@ -797,85 +1015,407 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
-	private class AnchorTag {
+	private class APIMergeField {
+		public String allowSenderToEdit;
+		public String configurationType;
+		public String path;
+		//public String row; // TODO: Enable merge field rows.
+		public String writeBack;
+
+		public APIMergeField(final Tab tab) {
+			if (tab != null) {
+				this.allowSenderToEdit = String.valueOf(tab.allowSenderToEdit);
+				this.configurationType = 'salesforce';
+				this.path = tab.path;
+				this.writeBack = String.valueOf(tab.writeBack);
+			}
+		}
+	}
+
+	// TODO: Fix and surface more tab properties.
+	@TestVisible
+	private class APITab {
+		public String customTabId;
 		public String documentId;
 		public String recipientId;
 		public String name;
 		public String tabLabel;
 		public String anchorIgnoreIfNotPresent;
-		public String required;
 		public String anchorString;
+		public APIMergeField mergeField;
 		public String optional;
 
-		public AnchorTag(final String documentId, final String recipientId, final String roleValue, final String name,
-			final String anchor, final Boolean required, final String optional) {
+		public APITab(
+			final String documentId,
+			final String recipientId,
+			final Integer roleValue,
+			final String name,
+			final String anchor,
+			final Boolean required) {
 
-			this.recipientId = recipientId;
-			this.documentId = documentId;
+			this.documentId = String.valueOf(documentId);
+			this.recipientId = String.valueOf(recipientId);
 			if (this.documentId == null) {
 				this.name = name;
 			} else {
 				this.name = name + documentId;
 			}
-			this.tabLabel = '_DFS_' + name;
+			this.tabLabel = '_DAL_' + name;
 			this.anchorIgnoreIfNotPresent = 'true';
-			this.anchorString = String.isNotBlank(roleValue) ? '\\' + anchor + roleValue + '\\' : '\\' + anchor + '\\';
-			this.required = String.valueOf(required);
-			this.optional = optional;
+			if (String.isNotBlank(anchor)) {
+				this.anchorString = roleValue != null ? '\\' + anchor + roleValue + '\\' : '\\' + anchor + '\\';
+			}
+			this.optional = String.valueOf(!required);
+		}
+
+		public APITab(
+			final String documentId,
+			final String recipientId,
+			final Tab tab) {
+
+			this.documentId = documentId;
+			this.recipientId = recipientId;
+			if (tab != null) {
+				this.name = String.isBlank(documentId) ? tab.name : (tab.name + documentId);
+				this.tabLabel = '_DAL_' + this.name;
+				if (String.isNotBlank(tab.path)) {
+					this.mergeField = new APIMergeField(tab);
+				}
+				if (String.isNotBlank(tab.autoPlaceText)) {
+					this.anchorString = tab.autoPlaceText;
+					this.anchorIgnoreIfNotPresent = 'true';
+				}
+			}
+		}
+
+		public Tab toTab(final String type) {
+			return new Tab(
+				UUID.tryParse(this.customTabId),
+				type,
+				nullIfBlank(this.name),
+				this.mergeField == null ? null : nullIfBlank(this.mergeField.path),
+				this.mergeField == null ? null : StringUtils.parseBoolean(this.mergeField.writeBack),
+				this.mergeField == null ? null : StringUtils.parseBoolean(this.mergeField.allowSenderToEdit),
+				this.anchorString);
+		}
+	}
+
+	private static APITabs addTabs(
+		final APITabs apiTabs,
+		final String documentId,
+		final String recipientId,
+		final List<Tab> tabs) {
+
+		for (Tab t : tabs) {
+			if (t == null) continue;
+
+			if (t.type == Tab.TYPE_APPROVE) {
+				apiTabs.approveTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_CHECKBOX) {
+				apiTabs.checkboxTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_COMPANY) {
+				apiTabs.companyTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_DATE_SIGNED) {
+				apiTabs.dateSignedTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_DATE) {
+				apiTabs.dateTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_DECLINE) {
+				apiTabs.declineTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_EMAIL_ADDRESS) {
+				apiTabs.emailAddressTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_EMAIL) {
+				apiTabs.emailTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_ENVELOPE_ID) {
+				apiTabs.envelopeIdTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_FIRST_NAME) {
+				apiTabs.firstNameTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_FORMULA) {
+				apiTabs.formulaTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_FULL_NAME) {
+				apiTabs.fullNameTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_INITIAL_HERE) {
+				apiTabs.initialHereTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_LAST_NAME) {
+				apiTabs.lastNameTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_LIST) {
+				apiTabs.listTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_NOTARIZE) {
+				apiTabs.notarizeTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_NOTE) {
+				apiTabs.noteTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_NUMBER) {
+				apiTabs.numberTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_RADIO_GROUP) {
+				apiTabs.radioGroupTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_SIGNER_ATTACHMENT) {
+				apiTabs.signerAttachmentTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_SIGN_HERE) {
+				apiTabs.signHereTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_SMART_SECTION) {
+				apiTabs.smartSectionTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_SSN) {
+				apiTabs.ssnTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_TITLE) {
+				apiTabs.titleTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_VIEW) {
+				apiTabs.viewTabs.add(new APITab(documentId, recipientId, t));
+			} else if (t.type == Tab.TYPE_ZIP) {
+				apiTabs.zipTabs.add(new APITab(documentId, recipientId, t));
+			} else { // Text
+				apiTabs.textTabs.add(new APITab(documentId, recipientId, t));
+			}
+		}
+
+		return apiTabs;
+	}
+
+	private static APITabs addDefaultTabs(
+		final APITabs apiTabs,
+		final String documentId,
+		final String recipientId,
+		final Integer roleValue) {
+
+		apiTabs.companyTabs.add(new APITab(documentId, recipientId, roleValue, 'Company', 'co', true));
+		apiTabs.dateSignedTabs.add(new APITab(documentId, recipientId, roleValue, 'DateSigned', 'd', true));
+		apiTabs.fullNameTabs.add(new APITab(documentId, recipientId, roleValue, 'FullName', 'n', true));
+		apiTabs.initialHereTabs.add(new APITab(documentId, recipientId, roleValue, 'InitialHere', 'i', true));
+		apiTabs.initialHereTabs.add(new APITab(documentId, recipientId, roleValue, 'InitialHereOptional', 'oi', false));
+		apiTabs.signHereTabs.add(new APITab(documentId, recipientId, roleValue, 'SignHere', 's', true));
+		apiTabs.textTabs.add(new APITab(documentId, recipientId, roleValue, 'Text', 'txr', true));
+		apiTabs.textTabs.add(new APITab(documentId, recipientId, roleValue, 'Text', 'txo', false));
+		apiTabs.titleTabs.add(new APITab(documentId, recipientId, roleValue, 'Title', 't', true));
+
+		return apiTabs;
+	}
+
+	@TestVisible
+	private class APITabs {
+		public List<APITab> approveTabs;
+		public List<APITab> checkboxTabs;
+		public List<APITab> companyTabs;
+		public List<APITab> dateSignedTabs;
+		public List<APITab> dateTabs;
+		public List<APITab> declineTabs;
+		public List<APITab> emailAddressTabs;
+		public List<APITab> emailTabs;
+		public List<APITab> envelopeIdTabs;
+		public List<APITab> firstNameTabs;
+		public List<APITab> formulaTabs;
+		public List<APITab> fullNameTabs;
+		public List<APITab> initialHereTabs;
+		public List<APITab> lastNameTabs;
+		public List<APITab> listTabs;
+		public List<APITab> notarizeTabs;
+		public List<APITab> noteTabs;
+		public List<APITab> numberTabs;
+		public List<APITab> radioGroupTabs;
+		public List<APITab> signerAttachmentTabs;
+		public List<APITab> signHereTabs;
+		public List<APITab> smartSectionTabs;
+		public List<APITab> ssnTabs;
+		public List<APITab> textTabs;
+		public List<APITab> titleTabs;
+		public List<APITab> viewTabs;
+		public List<APITab> zipTabs;
+
+		public APITabs() {
+			this.approveTabs = new List<APITab>();
+			this.checkboxTabs = new List<APITab>();
+			this.companyTabs = new List<APITab>();
+			this.dateSignedTabs = new List<APITab>();
+			this.dateTabs = new List<APITab>();
+			this.declineTabs = new List<APITab>();
+			this.emailAddressTabs = new List<APITab>();
+			this.emailTabs = new List<APITab>();
+			this.envelopeIdTabs = new List<APITab>();
+			this.firstNameTabs = new List<APITab>();
+			this.formulaTabs = new List<APITab>();
+			this.fullNameTabs = new List<APITab>();
+			this.initialHereTabs = new List<APITab>();
+			this.lastNameTabs = new List<APITab>();
+			this.listTabs = new List<APITab>();
+			this.notarizeTabs = new List<APITab>();
+			this.noteTabs = new List<APITab>();
+			this.numberTabs = new List<APITab>();
+			this.radioGroupTabs = new List<APITab>();
+			this.signerAttachmentTabs = new List<APITab>();
+			this.signHereTabs = new List<APITab>();
+			this.smartSectionTabs = new List<APITab>();
+			this.ssnTabs = new List<APITab>();
+			this.textTabs = new List<APITab>();
+			this.titleTabs = new List<APITab>();
+			this.viewTabs = new List<APITab>();
+			this.zipTabs = new List<APITab>();
+		}
+
+		public APITabs(
+			final String documentId,
+			final String recipientId,
+			final List<Tab> tabs,
+			final Boolean addDefault,
+			final Integer roleValue) {
+
+			this();
+
+			if (tabs != null) addTabs(this, documentId, recipientId, tabs);
+			if (addDefault) addDefaultTabs(this, documentId, recipientId, roleValue);
+		}
+
+		public List<Tab> toTabs() {
+			List<Tab> result = new List<Tab>();
+			if (this.approveTabs != null) {
+				for (APITab t : this.approveTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_APPROVE));
+				}
+			}
+			if (this.checkboxTabs != null) {
+				for (APITab t : this.checkboxTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_CHECKBOX));
+				}
+			}
+			if (this.companyTabs != null) {
+				for (APITab t : this.companyTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_COMPANY));
+				}
+			}
+			if (this.dateSignedTabs != null) {
+				for (APITab t : this.dateSignedTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_DATE_SIGNED));
+				}
+			}
+			if (this.dateTabs != null) {
+				for (APITab t : this.dateTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_DATE));
+				}
+			}
+			if (this.declineTabs != null) {
+				for (APITab t : this.declineTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_DECLINE));
+				}
+			}
+			if (this.emailAddressTabs != null) {
+				for (APITab t : this.emailAddressTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_EMAIL_ADDRESS));
+				}
+			}
+			if (this.emailTabs != null) {
+				for (APITab t : this.emailTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_EMAIL));
+				}
+			}
+			if (this.envelopeIdTabs != null) {
+				for (APITab t : this.envelopeIdTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_ENVELOPE_ID));
+				}
+			}
+			if (this.firstNameTabs != null) {
+				for (APITab t : this.firstNameTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_FIRST_NAME));
+				}
+			}
+			if (this.formulaTabs != null) {
+				for (APITab t : this.formulaTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_FORMULA));
+				}
+			}
+			if (this.fullNameTabs != null) {
+				for (APITab t : this.fullNameTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_FULL_NAME));
+				}
+			}
+			if (this.initialHereTabs != null) {
+				for (APITab t : this.initialHereTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_INITIAL_HERE));
+				}
+			}
+			if (this.lastNameTabs != null) {
+				for (APITab t : this.lastNameTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_LAST_NAME));
+				}
+			}
+			if (this.listTabs != null) {
+				for (APITab t : this.listTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_LIST));
+				}
+			}
+			if (this.notarizeTabs != null) {
+				for (APITab t : this.notarizeTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_NOTARIZE));
+				}
+			}
+			if (this.noteTabs != null) {
+				for (APITab t : this.noteTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_NOTE));
+				}
+			}
+			if (this.numberTabs != null) {
+				for (APITab t : this.numberTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_NUMBER));
+				}
+			}
+			if (this.radioGroupTabs != null) {
+				for (APITab t : this.radioGroupTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_RADIO_GROUP));
+				}
+			}
+			if (this.signerAttachmentTabs != null) {
+				for (APITab t : this.signerAttachmentTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_SIGNER_ATTACHMENT));
+				}
+			}
+			if (this.signHereTabs != null) {
+				for (APITab t : this.signHereTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_SIGN_HERE));
+				}
+			}
+			if (this.smartSectionTabs != null) {
+				for (APITab t : this.smartSectionTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_SMART_SECTION));
+				}
+			}
+			if (this.ssnTabs != null) {
+				for (APITab t : this.ssnTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_SSN));
+				}
+			}
+			if (this.textTabs != null) {
+				for (APITab t : this.textTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_TEXT));
+				}
+			}
+			if (this.titleTabs != null) {
+				for (APITab t : this.titleTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_TITLE));
+				}
+			}
+			if (this.viewTabs != null) {
+				for (APITab t : this.viewTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_VIEW));
+				}
+			}
+			if (this.zipTabs != null) {
+				for (APITab t : this.zipTabs) {
+					if (t != null) result.add(t.toTab(Tab.TYPE_ZIP));
+				}
+			}
+			return result;
 		}
 	}
 
 	@TestVisible
-	private class DefaultAnchorTags {
-		public List<AnchorTag> signHereTabs;
-		public List<AnchorTag> initialHereTabs;
-		public List<AnchorTag> fullNameTabs;
-		public List<AnchorTag> companyTabs;
-		public List<AnchorTag> titleTabs;
-		public List<AnchorTag> dateSignedTabs;
-		public List<AnchorTag> textTabs;
-
-		public DefaultAnchorTags(final String documentId, final String recipientId, final String roleValue) {
-			this.signHereTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'SignHere', 's', false, null)
-			};
-			this.initialHereTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'InitialHere', 'i', false, null),
-				new AnchorTag(documentId, recipientId, roleValue, 'InitialHereOptional', 'oi', false, 'true')
-			};
-			this.fullNameTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'FullName', 'n', false, null)
-			};
-			this.companyTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'Company', 'co', true, null)
-			};
-			this.titleTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'Title', 't', true, null)
-			};
-			this.dateSignedTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'DateSigned', 'd', false, null)
-			};
-			this.textTabs = new List<AnchorTag> {
-				new AnchorTag(documentId, recipientId, roleValue, 'Text', 'txr', true, null),
-				new AnchorTag(documentId, recipientId, roleValue, 'Text', 'txo', false, null)
-			};
-		}
-	}
-
-	@TestVisible
-	private class InlineTemplate {
+	private class APIInlineTemplate {
 		public String sequence;
 		public List<APIDocument> documents;
-		public Recipients recipients;
-		public EnvelopeAPI.CustomFields customFields;
+		public APIRecipients recipients;
+		public APICustomFields customFields;
 
-		public InlineTemplate(
+		public APIInlineTemplate(
 			final Document doc,
 			final Integer sequence,
 			final List<Recipient> recipients,
-			final Boolean includeDefaultAnchorTags,
 			final Map<String, Blob> documentContent,
 			final List<CustomField> customFields,
+			final Envelope.Options options,
 			final Entity source) {
 
 			if (doc != null) {
@@ -887,57 +1427,64 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					};
 				}
 				if (recipients != null) {
-					this.recipients = new Recipients(
+					this.recipients = new APIRecipients(
 						recipients,
 						this.sequence,
-						includeDefaultAnchorTags);
+						options != null && options.includeDefaultAutoPlaceTags);
 				}
-				this.customFields = buildCustomFields(customFields, source);
+				this.customFields = buildCustomFields(
+					customFields,
+					options,
+					source);
 			}
 		}
 	}
 
-	private class ServerTemplate {
+	@TestVisible
+	private class APIServerTemplate {
 		public String templateId;
 		public String sequence;
 
-		public ServerTemplate(final UUID templateId, final Integer sequence) {
+		public APIServerTemplate(
+			final UUID templateId,
+			final Integer sequence) {
+
 			this.templateId = String.valueOf(templateId);
 			this.sequence = String.valueOf(sequence);
 		}
 	}
 
 	@TestVisible
-	private class CompositeTemplate {
+	private class APICompositeTemplate {
 		public APIDocument document;
-		public List<InlineTemplate> inlineTemplates;
-		public List<ServerTemplate> serverTemplates;
+		public List<APIInlineTemplate> inlineTemplates;
+		public List<APIServerTemplate> serverTemplates;
 
-		public CompositeTemplate(
+		public APICompositeTemplate(
 			final Document document,
 			final Integer sequence,
 			final List<Recipient> recipients,
-			final Boolean includeDefaultAnchorTags,
 			final Map<String, Blob> documentContent,
 			final List<CustomField> customFields,
+			final Envelope.Options options,
 			final Entity source) {
 
 			if (document != null) {
 				if (document.templateId != null) {
-					this.serverTemplates = new List<ServerTemplate> {
-						new ServerTemplate(
+					this.serverTemplates = new List<APIServerTemplate> {
+						new APIServerTemplate(
 							document.templateId,
 							sequence)
 					};
 				}
-				this.inlineTemplates = new List<InlineTemplate> {
-					new InlineTemplate(
+				this.inlineTemplates = new List<APIInlineTemplate> {
+					new APIInlineTemplate(
 						document,
 						sequence,
 						recipients,
-						includeDefaultAnchorTags,
 						documentContent,
 						customFields,
+						options,
 						source)
 				};
 			}
@@ -945,86 +1492,90 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
-	private static EnvelopeAPI.CustomFields buildCustomFields(
+	private static APICustomFields buildCustomFields(
 		final List<CustomField> customFields,
+		final Envelope.Options options,
 		final Entity source) {
 
 		// add our custom fields that identifies the sending app
 		// TODO: Determine if all these are really required or used by anyone.
-		final List<EnvelopeAPI.ListCustomField> listCustomFields = new List<EnvelopeAPI.ListCustomField>();
-		final List<EnvelopeAPI.TextCustomField> textCustomFields = new List<EnvelopeAPI.TextCustomField> {
-			new EnvelopeAPI.TextCustomField('Company', UserInfo.getOrganizationName(), false, false),
-			new EnvelopeAPI.TextCustomField('DSXPartnerApplication', Application.name + ' '
+		final List<APIListCustomField> listCustomFields = new List<APIListCustomField>();
+		final List<APITextCustomField> textCustomFields = new List<APITextCustomField> {
+			new APITextCustomField('Company', UserInfo.getOrganizationName(), false, false),
+			new APITextCustomField('DSXPartnerApplication', Application.name + ' '
 				+ String.valueOf(Application.version), false, false),
-			new EnvelopeAPI.TextCustomField('PlatformName', 'Salesforce', false, false),
-			new EnvelopeAPI.TextCustomField('AppName', 'DocuSignForSalesforce', false, false)
+			new APITextCustomField('PlatformName', 'Salesforce', false, false),
+			new APITextCustomField('AppName', 'DocuSignForSalesforce', false, false)
 		};
 
 		if (customFields != null) {
 			for (CustomField cf : customFields) {
 				if (cf != null) {
 					if (cf.type == 'text') {
-						textCustomFields.add(new EnvelopeAPI.TextCustomField(cf));
+						textCustomFields.add(new APITextCustomField(cf));
 					} else {
-						listCustomFields.add(new EnvelopeAPI.ListCustomField(cf));
+						listCustomFields.add(new APIListCustomField(cf));
 					}
 				}
 			}
 		}
 
 		if (Entity.isValid(source)) {
-			// add our customfield to identify the object we started with so we can attach docs there via connect
-			textCustomFields.add(new EnvelopeAPI.TextCustomField(
+			// add our custom field to identify the object we started with so we can attach docs there via connect
+			textCustomFields.add(new APITextCustomField(
 				'DSFSSourceObjectId',
 				source.id + '~' + source.typeName,
 				false,
 				false));
 
 			// Add related object custom fields
-			textCustomFields.add(new EnvelopeAPI.TextCustomField(
+			textCustomFields.add(new APITextCustomField(
 				'##SF' + source.typeName,
 				source.id,
 				false,
 				false));
 
 			if (Entity.isValid(source.parent)) {
-				textCustomFields.add(new EnvelopeAPI.TextCustomField(
+				textCustomFields.add(new APITextCustomField(
 					'##SF' + source.parent.typeName,
 					source.parent.id,
 					false,
 					false));
 			}
+
+			// FIXME: Create custom fields for document write-back
 		}
 
-		return new EnvelopeAPI.CustomFields(textCustomFields, listCustomFields);
+		return new APICustomFields(textCustomFields, listCustomFields);
 	}
 
 	@TestVisible
 	// FIXME. Don't think this logic is entirely correct. Copied from DocuSignCreateAndSendEnvelope.
 	// FIXME? Why are default anchor tags added to each envelope recipient, and only once for the first composite template? Confusing!
-	private static List<CompositeTemplate> buildCompositeTemplates(
+	private static List<APICompositeTemplate> buildCompositeTemplates(
 		final List<Document> documents,
 		final List<Recipient> recipients,
-		final Boolean includeDefaultAnchorTags,
 		final Map<String, Blob> documentContent,
 		final List<CustomField> customFields,
+		final Envelope.Options options,
 		final Entity source) {
 
-		List<CompositeTemplate> compositeTemplates = null;
+		List<APICompositeTemplate> compositeTemplates = null;
 		if (documents != null) {
-			compositeTemplates = new List<CompositeTemplate>();
+			compositeTemplates = new List<APICompositeTemplate>();
+			Envelope.Options os = options;
 			Integer sequence = 1;
-			Boolean addTags = includeDefaultAnchorTags;
 			for (Document d : documents) {
 				// FIXME: All recipients should not be added to every document in every case.
-				compositeTemplates.add(new CompositeTemplate(
+				compositeTemplates.add(new APICompositeTemplate(
 					d,
 					sequence++,
 					recipients,
-					addTags,
 					documentContent,
-					customFields, source));
-				addTags = false;
+					customFields,
+					os,
+					source));
+				os = new Envelope.Options(false, options.writeBackCompletedEnvelope);
 			}
 		}
 		return compositeTemplates;
@@ -1051,6 +1602,24 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
+	private static Id getDocumentSourceId(final Entity source) {
+		if (source == null || source.id == null) return null;
+
+		Id result = source.id;
+		if (source.type == ContentDocument.getSObjectType()) { // Get latest published content version ID
+			ContentDocument cd = (ContentDocument)Collection.head([
+				SELECT LatestPublishedVersionId
+				FROM ContentDocument
+				WHERE Id = :source.id
+				ORDER BY Id
+				LIMIT 1
+			]);
+			if (cd != null) result = cd.LatestPublishedVersionId;
+		}
+		return result;
+	}
+
+	@TestVisible
 	private static Map<String, Blob> getDocumentContent(
 		final List<Document> documents,
 		final Boolean fetchDocuments) {
@@ -1065,11 +1634,11 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			// TODO: Verify non-Community restriction on document fetch.
 			if (d.type == Document.TYPE_SCM) { // content is SCM file ID
 				result.put(d.sourceId, Blob.valueOf('scm:' + d.sourceId));
-			} else if (!isHtml(d) && fetchDocuments && !Salesforce.isCommunitySite) { // content is SFDC document ID
-				result.put(d.sourceId, Blob.valueOf(d.sourceId));
-			} else { // content is SFDC document bytes -- build source map for later
+			} else { // Salesforce document source
 				Entity source = new Entity(d.sourceId);
-				if (sourceMap.containsKey(source.type)) {
+				if (!isHtml(d) && fetchDocuments && !Salesforce.isCommunitySite) { // content is SFDC document ID
+					result.put(source.id, Blob.valueOf(getDocumentSourceId(source)));
+				} else if (sourceMap.containsKey(source.type)) { // content is SFDC document bytes
 					sourceMap.get(source.type).add(source.id);
 				} else {
 					sourceMap.put(source.type, new Set<Id> { source.id });
@@ -1102,18 +1671,18 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
-	private class APIEnvelope {
+	private virtual class APIEnvelope {
 		public String envelopeId;
 		public String status;
 		public String transactionId;
-		public EnvelopeAPI.CustomFields customFields;
-		public List<EnvelopeAPI.APIDocument> documents;
-		public EnvelopeAPI.Recipients recipients;
-		public List<EnvelopeAPI.CompositeTemplate> compositeTemplates;
+		public APICustomFields customFields;
+		public List<APIDocument> documents;
+		public APIRecipients recipients;
+		public List<APICompositeTemplate> compositeTemplates;
 		public String emailBlurb;
 		public String emailSubject;
-		public EnvelopeAPI.EnvelopeNotification notification;
-		public EnvelopeAPI.DefaultAnchorTags tabs;
+		public APINotifications notification;
+		public APITabs tabs;
 		public String completedDateTime;
 		public String declinedDateTime;
 		public String sentDateTime;
@@ -1123,22 +1692,25 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public APIEnvelope(
 			final Envelope e,
 			final Boolean send,
-			final Boolean includeDefaultAnchorTags,
-			final Boolean fetchDocuments,
-			final Boolean useAccountNotificationDefaults) {
+			final Boolean fetchDocuments) {
 
 			if (e != null) {
 				this.status = send ? 'sent' : 'created';
 				this.transactionId = e.id;
 				this.emailBlurb = e.emailMessage;
 				this.emailSubject = e.emailSubject;
-				this.notification = new EnvelopeNotification(e.notifications, useAccountNotificationDefaults);
+				this.notification = new APINotifications(e.notifications);
 
 				Map<String, Blob> documentContent =
 					e.hasDocuments ? getDocumentContent(e.documents, fetchDocuments) : null;
 				if (e.hasTemplates) {
-					this.compositeTemplates = buildCompositeTemplates(e.documents, e.recipients,
-						includeDefaultAnchorTags, documentContent, e.customFields, e.source);
+					this.compositeTemplates = buildCompositeTemplates(
+						e.documents,
+						e.recipients,
+						documentContent,
+						e.customFields,
+						e.options,
+						e.source);
 				} else {
 					if (e.documents != null) {
 						this.documents = new List<EnvelopeAPI.APIDocument>();
@@ -1149,9 +1721,15 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 						}
 					}
 					if (e.recipients != null) {
-						this.recipients = new Recipients(e.recipients, null, includeDefaultAnchorTags);
+						this.recipients = new APIRecipients(
+							e.recipients,
+							null,
+							e.options != null && e.options.includeDefaultAutoPlaceTags);
 					}
-					this.customFields = buildCustomFields(e.customFields, e.source);
+					this.customFields = buildCustomFields(
+						e.customFields,
+						e.options,
+						e.source);
 				}
 			}
 		}
@@ -1168,7 +1746,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			return result;
 		}
 
-		public Envelope.Status toExternalForm() {
+		public Envelope.Status toStatus() {
 			Datetime sent = StringUtils.parseDatetime(this.sentDateTime);
 			return new Envelope.Status(
 				null, // id
@@ -1177,7 +1755,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.status == null ? null : this.status.toLowerCase(),
 				UserInfo.getName(),
 				UserInfo.getUserEmail(),
-				this.recipients == null ? null : this.recipients.toExternalForm(),
+				this.recipients == null ? null : this.recipients.toStatus(),
 				sent,
 				sent != null
 					&& this.notification != null
@@ -1185,13 +1763,14 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					&& String.isNotBlank(this.notification.expirations.expireAfter)
 					? sent.addDays(Integer.valueOf(this.notification.expirations.expireAfter)) : null,
 				getCompletedDatetime(),
-				this.emailSubject,
-				this.voidedReason,
+				nullIfBlank(this.emailSubject),
+				nullIfBlank(this.voidedReason),
 				Datetime.now());
 		}
 	}
 
-	private class EnvelopeResponse {
+	@TestVisible
+	private class APIEnvelopeResponse {
 		public String envelopeId;
 	}
 
@@ -1216,15 +1795,15 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 	public UUID createEnvelope(
 		final Envelope envelope,
-		final Envelope.Options options,
+		final Boolean sendNow,
 		final String senderToken) {
 
-		return this.createEnvelope(envelope, options, senderToken, RestAPI.defaultTimeout);
+		return this.createEnvelope(envelope, sendNow, senderToken, RestAPI.defaultTimeout);
 	}
 
 	public UUID createEnvelope(
 		final Envelope envelope,
-		final Envelope.Options options,
+		final Boolean sendNow,
 		final String senderToken,
 		final Integer timeout) {
 
@@ -1233,14 +1812,12 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		RestAPI.Response response = this.post(
 			getBaseUrl(),
 			new List<Object> { 'envelopes' },
-			options == null || !options.sendNow ? new QueryString('merge_roles_on_draft', 'true') : QueryString.empty,
+			sendNow ? new QueryString('merge_roles_on_draft', 'true') : QueryString.empty,
 			getCreateHeaders(senderToken),
 			JSON.serialize(new EnvelopeAPI.APIEnvelope(
 				envelope,
-				options != null && options.sendNow,
-				options != null && options.includeDefaultAnchorTabs,
-				options != null && options.fetchDocuments,
-				options != null && options.useAccountNotificationDefaults),
+				sendNow,
+				Salesforce.isApiSupported && Permissions.isApiEnabled()),
 				true),
 			timeout);
 		if (response.hasError) {
@@ -1266,28 +1843,35 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			}
 			throw new APIException(error);
 		}
-		return UUID.parse(((EnvelopeResponse)JSON.deserialize(response.body, EnvelopeResponse.class)).envelopeId);
+		return UUID.parse(((APIEnvelopeResponse)JSON.deserialize(response.body, APIEnvelopeResponse.class)).envelopeId);
 	}
 
 	@TestVisible
-	private class VoidRequest {
+	private class APIVoidRequest {
 		public String status;
 		public String voidedReason;
 
-		public VoidRequest(final String reason) {
+		public APIVoidRequest(final String reason) {
 			this.status = 'voided';
 			this.voidedReason = reason;
 		}
 	}
 
-	public Boolean voidEnvelope(final UUID envelopeId, final String reason) {
+	public Boolean voidEnvelope(
+		final UUID envelopeId,
+		final String reason) {
+
 		return this.voidEnvelope(envelopeId, reason, RestAPI.defaultTimeout);
 	}
 
-	public Boolean voidEnvelope(final UUID envelopeId, final String reason, final Integer timeout) {
-		final RestAPI.Response response = this.put(
+	public Boolean voidEnvelope(
+		final UUID envelopeId,
+		final String reason,
+		final Integer timeout) {
+
+		RestAPI.Response response = this.put(
 			new List<Object> { 'envelopes', envelopeId },
-			JSON.serialize(new VoidRequest(reason)),
+			JSON.serialize(new APIVoidRequest(reason)),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to void envelope: ' + response.error.toString());
@@ -1302,11 +1886,16 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		return true;
 	}
 
-	public Envelope.Status getEnvelopeStatus(final UUID envelopeId, final Boolean includeRecipients) {
+	public Envelope.Status getEnvelopeStatus(
+		final UUID envelopeId,
+		final Boolean includeRecipients) {
+
 		return getEnvelopeStatus(envelopeId, includeRecipients, RestAPI.defaultTimeout);
 	}
 
-	public Envelope.Status getEnvelopeStatus(final UUID envelopeId, final Boolean includeRecipients,
+	public Envelope.Status getEnvelopeStatus(
+		final UUID envelopeId,
+		final Boolean includeRecipients,
 		final Integer timeout) {
 
 		RestAPI.Response response = this.get(
@@ -1320,6 +1909,249 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			this.log.error('Failed to retrieve envelope: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
-		return ((APIEnvelope)JSON.deserialize(response.body, APIEnvelope.class)).toExternalForm();
+		return ((APIEnvelope)JSON.deserialize(response.body, APIEnvelope.class)).toStatus();
+	}
+
+	@TestVisible
+	private class APITemplateId {
+		public String templateId;
+		public String name;
+		public String lastModified;
+
+		public APITemplateId(
+			final UUID id,
+			final String name) {
+
+			this.templateId = String.valueOf(id);
+			this.name = name;
+		}
+	}
+
+	private static Envelope templateToEnvelope(final Template template) {
+		if (template == null) return null;
+
+		return new Envelope(
+			null,
+			template.name,
+			template.id,
+			null,
+			template.documents,
+			template.recipients,
+			template.customFields,
+			template.notifications,
+			template.emailSubject,
+			template.emailMessage,
+			null,
+			new Envelope.Options(false, true),
+			null,
+			null);
+	}
+
+	private static String nullIfBlank(final String s) {
+		return String.isBlank(s) ? null : s;
+	}
+
+	@TestVisible
+	private class APITemplate extends APIEnvelope {
+		public APITemplateId envelopeTemplateDefinition;
+
+		public APITemplate(final Template template) {
+			super(
+				templateToEnvelope(template),
+				false, // send now?
+				false); // TODO: Enable document fetch for templates. Requires platform change.
+
+			if (template != null) {
+				this.envelopeTemplateDefinition = new APITemplateId(template.id, template.name);
+			}
+		}
+
+		public Template toTemplate() {
+			List<Document> docs = new List<Document>();
+			if (this.documents != null) {
+				for (EnvelopeAPI.APIDocument d : this.documents) {
+					docs.add(d.toDocument());
+				}
+			}
+
+			return new Template(
+				this.envelopeTemplateDefinition == null ? null : UUID.parse(envelopeTemplateDefinition.templateId),
+				this.envelopeTemplateDefinition == null ? null : nullIfBlank(envelopeTemplateDefinition.name),
+				this.customFields == null ? new List<CustomField>() : this.customFields.toCustomFields(),
+				this.notification == null ? null : this.notification.toNotifications(),
+				nullIfBlank(this.emailSubject),
+				nullIfBlank(this.emailBlurb),
+				docs,
+				this.recipients == null ? new List<Recipient>() : this.recipients.toRecipients(),
+				this.envelopeTemplateDefinition == null
+					? null : StringUtils.parseDatetime(this.envelopeTemplateDefinition.lastModified));
+		}
+	}
+
+	@TestVisible
+	private class APITemplateListResult {
+		public String templateId;
+		public String name;
+		public APICustomFields customFields;
+		public APINotifications notification;
+		public String emailSubject;
+		public String emailBlurb;
+		public APIRecipients recipients;
+		public String lastModified;
+
+		public Template toTemplate() {
+			return new Template(
+				UUID.parse(this.templateId),
+				nullIfBlank(this.name),
+				this.customFields == null ? new List<CustomField>() : this.customFields.toCustomFields(),
+				this.notification == null ? null : this.notification.toNotifications(),
+				nullIfBlank(this.emailSubject),
+				nullIfBlank(this.emailBlurb),
+				this.recipients == null ? new List<Recipient>() : this.recipients.toRecipients(),
+				StringUtils.parseDatetime(this.lastModified));
+		}
+	}
+
+	@TestVisible
+	private class APITemplates {
+		public String resultSetSize;
+		public String startPosition;
+		public String endPosition;
+		public String totalSetSize;
+		public List<APITemplateListResult> envelopeTemplates;
+
+		public List<Template> toTemplates() {
+			final List<Template> templates = new List<Template>();
+			if (this.envelopeTemplates != null) {
+				for (APITemplateListResult t : this.envelopeTemplates) {
+					templates.add(t.toTemplate());
+				}
+			}
+			return templates;
+		}
+	}
+
+	public List<Template> getTemplates() {
+		return this.getTemplates(RestAPI.defaultTimeout);
+	}
+
+	// TODO: Refactor to only search templates by partial name.
+	// TODO: This API supports paging, but unclear what is default or max limit.
+	public List<Template> getTemplates(final Integer timeout) {
+		RestAPI.Response response = this.get(
+			'templates',
+			new QueryString(new Map<String, String> {
+				'include' => 'custom_fields,shared_template_folders,notifications,recipients',
+				'order_by' => 'name',
+				'order' => 'asc'
+			}),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to get templates: ' + response.error.toString());
+			throw new APIException(response.error);
+		}
+
+		List<Template> templates = ((APITemplates)JSON.deserialize(response.body, APITemplates.class)).toTemplates();
+		for (Template t : templates) {
+			templateMap.put(t.id, t);
+		}
+		return templates;
+	}
+
+	public Template getTemplate(final UUID templateId) {
+		return this.getTemplate(templateId, RestAPI.defaultTimeout);
+	}
+
+	public Template getTemplate(
+		final UUID templateId,
+		final Integer timeout) {
+
+		if (templateMap.containsKey(templateId)) return templateMap.get(templateId);
+
+		RestAPI.Response response = this.get(
+			new List<Object> { 'templates', templateId },
+			new QueryString('include', 'custom_fields,notifications,recipients'),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to get template: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Template template = ((APITemplate)JSON.deserialize(response.body,
+			APITemplate.class)).toTemplate();
+		templateMap.put(template.id, template);
+		return template;
+	}
+
+	public Template createTemplate(final Template template) {
+		return this.createTemplate(template, RestAPI.defaultTimeout);
+	}
+
+	public Template createTemplate(
+		final Template template,
+		final Integer timeout) {
+
+		if (template == null) throw new DocuSignException(Label.UndefinedTemplate);
+
+		RestAPI.Response response = this.post(
+			'templates',
+			JSON.serialize(new APITemplate(template)),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to create templates: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Map<String, Object> resp = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		return template.withId(UUID.tryParse((String)resp.get('templateId'))).withLastModified(Datetime.now());
+	}
+
+	public Template updateTemplate(final Template template) {
+		return this.updateTemplate(template, RestAPI.defaultTimeout);
+	}
+
+	public Template updateTemplate(
+		final Template template,
+		final Integer timeout) {
+
+		if (template == null) throw new DocuSignException(Label.UndefinedTemplate);
+		if (template.id == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.put(
+			new List<Object> { 'templates', template.id },
+			JSON.serialize(new APITemplate(template)),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to update template: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return template.withLastModified(Datetime.now());
+	}
+
+	public Boolean deleteTemplate(final UUID templateId) {
+		return this.deleteTemplate(templateId, RestAPI.defaultTimeout);
+	}
+
+	public Boolean deleteTemplate(
+		final UUID templateId,
+		final Integer timeout) {
+
+		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.put(
+			new List<Object> { 'folders', 'recyclebin' },
+			JSON.serialize(new Map<String, Object> {
+				'envelopeIds' => new List<String> {
+					String.valueOf(templateId)
+				}
+			}),
+			timeout);
+		if (response.hasError && response.error != APIError.notFound) {
+			this.log.error('Failed to delete template: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return response.error == APIError.none;
 	}
 }

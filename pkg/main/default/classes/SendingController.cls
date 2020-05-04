@@ -62,13 +62,12 @@ public with sharing class SendingController extends Controller {
 			Permissions.verifyIsDocuSignUser();
 
 			Set<Id> sourceIds = new Set<Id> { sourceId };
-			EnvelopeSettings es = EnvelopeSettings.getInstance();
 			// TODO: Check account features for templates. Pull on demand.
 			List<Template> templates;
 			List<Document> documents;
 			if (Collection.isEmpty(files)) {
 				try {
-					templates = TemplateAPI.getInstance().getTemplates();
+					templates = EnvelopeAPI.getInstance().getTemplates();
 				} catch (APIException ex) {
 					if (ex.error == APIError.consentRequired) {
 						LoggerService.getInstance().error('Failed to retrieve DocuSign templates: user consent required');
@@ -103,8 +102,8 @@ public with sharing class SendingController extends Controller {
 				templates == null ? new List<Template>() : templates,
 				documents == null ? new List<Document>() : documents,
 				recipients == null ? new List<Recipient>() : recipients,
-				es.defaultRoles,
-				es.allowRecipientLanguageSelection ? es.emailLocalizations : new List<Recipient.EmailSettings>());
+				RecipientService.getDefaultRoles(),
+				Localization.isEmailLocalizationEnabled() ? Localization.getEmailSettings() : new List<Recipient.EmailSettings>());
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get draft envelope');
 		}
@@ -228,7 +227,7 @@ public with sharing class SendingController extends Controller {
 			UUID scmFileId = UUID.parse(scmFileDetails[1]) ;
 			String name = scmFileDetails.size() > 2 ? scmFileDetails[2] : '';
 			String extension = scmFileDetails.size() > 3 ? scmFileDetails[3] : '';
-			return Document.fromScmFile(scmFileId, name, extension);
+			return Document.fromFile(scmFileId, name, extension);
 		} else {
 			return null;
 		}

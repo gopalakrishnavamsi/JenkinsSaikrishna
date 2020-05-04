@@ -109,7 +109,9 @@ private class EnvelopeAPITest {
 			Opportunity o = TestUtils.createOpportunity(a.Id);
 
 			Test.startTest();
-			EnvelopeAPI.CustomFields result = EnvelopeAPI.buildCustomFields(new List<CustomField> { cf1, cf2, cf3 },
+			EnvelopeAPI.APICustomFields result = EnvelopeAPI.buildCustomFields(
+				new List<CustomField> { cf1, cf2, cf3 },
+				new Envelope.Options(false, true), // TODO: Implement and validate document write-back
 				Entity.resolve(o.Id));
 			Test.stopTest();
 
@@ -135,22 +137,33 @@ private class EnvelopeAPITest {
 			ContentVersion cv2 = TestUtils.createContentVersion();
 			Schema.Document d1 = TestUtils.createDocument();
 			Document t1 = Document.fromTemplate(UUID.randomUUID(), 'UnitTestTemplate');
-			Document scm1 = Document.fromScmFile(UUID.randomUUID(), 'UnitTestScmFile', 'adf');
+			Document scm1 = Document.fromFile(UUID.randomUUID(), 'UnitTestScmFile', 'adf');
+			Document cd1 = new Document(
+				null,
+				Document.TYPE_FILE,
+				4,
+				cv2.Title,
+				cv2.FileExtension,
+				cv2.ContentSize,
+				cv2.LastModifiedDate,
+				cv2.ContentDocumentId,
+				false,
+				false);
 
 			Test.startTest();
 			Map<String, Blob> result1 = EnvelopeAPI.getDocumentContent(new List<Document> {
 				t1,
 				scm1,
-				DocumentService.convert(cv1),
-				DocumentService.convert(cv2),
-				DocumentService.convert(d1)
+				Document.fromFile(cv1),
+				cd1,
+				Document.fromDocument(d1)
 			}, false);
 			Map<String, Blob> result2 = EnvelopeAPI.getDocumentContent(new List<Document> {
 				t1,
 				scm1,
-				DocumentService.convert(cv1),
-				DocumentService.convert(cv2),
-				DocumentService.convert(d1)
+				Document.fromFile(cv1),
+				cd1,
+				Document.fromDocument(d1)
 			}, true);
 			Test.stopTest();
 
@@ -158,14 +171,14 @@ private class EnvelopeAPITest {
 			System.assertEquals(4, result1.size());
 			System.assertEquals('scm:' + scm1.sourceId, result1.get(scm1.sourceId).toString());
 			System.assertEquals(cv1.VersionData.toString(), result1.get(cv1.Id).toString());
-			System.assertEquals(cv2.VersionData.toString(), result1.get(cv2.Id).toString());
+			System.assertEquals(cv2.VersionData.toString(), result1.get(cv2.ContentDocumentId).toString());
 			System.assertEquals(d1.Body.toString(), result1.get(d1.Id).toString());
 
 			System.assertNotEquals(null, result2);
 			System.assertEquals(4, result2.size());
 			System.assertEquals('scm:' + scm1.sourceId, result2.get(scm1.sourceId).toString());
 			System.assertEquals(cv1.Id, result2.get(cv1.Id).toString());
-			System.assertEquals(cv2.Id, result2.get(cv2.Id).toString());
+			System.assertEquals(cv2.Id, result2.get(cv2.ContentDocumentId).toString());
 			System.assertEquals(d1.Id, result2.get(d1.Id).toString());
 		}
 	}
@@ -179,7 +192,7 @@ private class EnvelopeAPITest {
 			try {
 				EnvelopeAPI.getDocumentContent(new List<Document> {
 					new Document(null, Document.TYPE_FILE, null, 'UnitTest1.pdf', 'pdf', 1234, Datetime.now(), UserInfo.getUserId()),
-					DocumentService.convert(cv1),
+					Document.fromFile(cv1),
 					new Document(null, Document.TYPE_FILE, null, 'UnitTest2.pdf', 'pdf', 1234, Datetime.now(), UserInfo.getOrganizationId()),
 					new Document(null, Document.TYPE_TEMPLATE, null, 'UnitTestTemplate', null, null, Datetime.now(), UUID.randomUUID().toString())
 				}, false);
@@ -652,108 +665,6 @@ private class EnvelopeAPITest {
 	}
 
 	@IsTest
-	static void test_getSigningGroups_success() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
-
-		System.runAs(UserMock.createDocuSignUser()) {
-			EnvelopeAPI client = EnvelopeAPI.getInstance();
-
-			Test.startTest();
-			List<SigningGroup> signingGroups1 = client.getSigningGroups();
-			// Call again to get cached version
-			List<SigningGroup> signingGroups2 = client.getSigningGroups();
-			Test.stopTest();
-
-			System.assertNotEquals(null, signingGroups1);
-			System.assertEquals(3, signingGroups1.size());
-			System.assert(signingGroups1 === signingGroups2); // Check reference equality
-
-			System.assertNotEquals(null, signingGroups1[0].id);
-			System.assertEquals('SG1', signingGroups1[0].name);
-			System.assert(signingGroups1[0].isValid);
-			System.assertNotEquals(null, signingGroups1[0].members);
-			System.assertEquals(2, signingGroups1[0].members.size());
-			System.assertNotEquals(null, signingGroups1[0].members[0].username);
-			System.assertNotEquals(null, signingGroups1[0].members[0].email);
-			System.assertNotEquals(null, signingGroups1[0].members[1].username);
-			System.assertNotEquals(null, signingGroups1[0].members[1].email);
-
-			System.assertNotEquals(null, signingGroups1[1].id);
-			System.assertEquals('SG2', signingGroups1[1].name);
-			System.assert(!signingGroups1[1].isValid);
-			System.assertNotEquals(null, signingGroups1[1].members);
-			System.assertEquals(0, signingGroups1[1].members.size());
-
-			System.assertNotEquals(null, signingGroups1[2].id);
-			System.assertEquals('SG3', signingGroups1[2].name);
-			System.assert(signingGroups1[2].isValid);
-			System.assertNotEquals(null, signingGroups1[2].members);
-			System.assertEquals(1, signingGroups1[2].members.size());
-			System.assertNotEquals(null, signingGroups1[2].members[0].username);
-			System.assertNotEquals(null, signingGroups1[2].members[0].email);
-		}
-	}
-
-	private class SigningGroupsUnauthorizedMock extends OAuthTokenMock {
-
-		override public HttpResponse getResponse(final HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			response.setStatusCode(400);
-			response.setStatus('BAD_REQUEST');
-			response.setHeader('Content-Type', 'application/json; charset=utf-8');
-			response.setBody('{"errorCode":"ACCOUNT_LACKS_PERMISSIONS","message":"Signing groups are unauthorized for this account"}');
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_getSigningGroups_unauthorized() {
-		Test.setMock(HttpCalloutMock.class, new SigningGroupsUnauthorizedMock());
-
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			try {
-				EnvelopeAPI.getInstance().getSigningGroups();
-				throw new AssertException('Expected getSigningGroups to fail');
-			} catch (APIException ex) {
-				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.ACCOUNT_LACKS_PERMISSIONS, ex.error.code);
-				System.assertEquals(Label.SigningGroupsProhibited, ex.getMessage());
-			}
-			// Empty result is cached as the answer from DS will never change
-			List<SigningGroup> result = EnvelopeAPI.getInstance().getSigningGroups();
-			Test.stopTest();
-
-			System.assert(Collection.isEmpty(result));
-		}
-	}
-
-	@IsTest
-	static void test_getSigningGroups_failure() {
-		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock(false));
-
-		System.runAs(UserMock.createDocuSignUser()) {
-			Test.startTest();
-			try {
-				EnvelopeAPI.getInstance().getSigningGroups();
-				throw new AssertException('Expected getSigningGroups to fail');
-			} catch (APIException ex) {
-				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
-			}
-			// Result is not cached for non-auth-related errors
-			try {
-				EnvelopeAPI.getInstance().getSigningGroups();
-				throw new AssertException('Expected getSigningGroups to fail');
-			} catch (APIException ex) {
-				System.assertNotEquals(null, ex.error);
-				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_updateInPersonSigner_success() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
@@ -890,7 +801,7 @@ private class EnvelopeAPITest {
 				null,
 				new List<Document> {
 					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, Datetime.now(), UUID.randomUUID().toString()),
-					DocumentService.convert(TestUtils.createContentVersion()).withSequence(2)
+					Document.fromFile(TestUtils.createContentVersion()).withSequence(2)
 				},
 				new List<Recipient> {
 					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
@@ -905,7 +816,7 @@ private class EnvelopeAPITest {
 					CustomField.newTextField('cf1', '1', true, true),
 					CustomField.newListField('cf2', '2', new List<String> { '1', '2', '3' }, true, true)
 				},
-				new Notifications(false, 0, 0, false, 0, 0, false),
+				new Notifications(false, 0, 0, false, 0, 0),
 				'subject',
 				'body',
 				new Entity(o.Id),
@@ -915,7 +826,7 @@ private class EnvelopeAPITest {
 			Test.startTest();
 			UUID result = client.createEnvelope(
 				e2,
-				new Envelope.Options(true, true, true, true),
+				true,
 				'Unit Test');
 			Test.stopTest();
 
@@ -940,7 +851,7 @@ private class EnvelopeAPITest {
 				null,
 				new List<Document> {
 					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, Datetime.now(), UUID.randomUUID().toString()),
-					DocumentService.convert(TestUtils.createContentVersion()).withSequence(2)
+					Document.fromFile(TestUtils.createContentVersion()).withSequence(2)
 				},
 				new List<Recipient> {
 					Recipient.newInPersonSigner(1, new Recipient.Role('Signer 1', 1), 'Recipient One', 'r1@unit.test',
@@ -971,7 +882,7 @@ private class EnvelopeAPITest {
 			Test.startTest();
 			UUID result = client.createEnvelope(
 				e2,
-				new Envelope.Options(true, true, true, true),
+				true,
 				'Unit Test');
 			Test.stopTest();
 
@@ -994,7 +905,7 @@ private class EnvelopeAPITest {
 				new List<Document> { doc }, true);
 
 			Test.startTest();
-			List<EnvelopeAPI.CompositeTemplate> compositeTemplatesList = EnvelopeAPI.buildCompositeTemplates(
+			List<EnvelopeAPI.APICompositeTemplate> compositeTemplatesList = EnvelopeAPI.buildCompositeTemplates(
 				new List<Document> {
 					new Document(null, Document.TYPE_TEMPLATE, 1, 'Doc1', null, 100, Datetime.now(), UUID.randomUUID().toString()),
 					doc
@@ -1006,9 +917,9 @@ private class EnvelopeAPITest {
 					Recipient.newRecipient(2, Recipient.TYPE_SIGNER, new Recipient.Role('Signer 2', 2),
 						'Recipient Two', 'r2@unit.test', null, 'note2', false)
 				},
-				true,
 				content,
 				cfs,
+				new Envelope.Options(false, false),
 				new Entity(o.Id));
 			Test.stopTest();
 
@@ -1049,14 +960,14 @@ private class EnvelopeAPITest {
 						'Recipient Five', 'r5@unit.test', null, null, false)
 				},
 				new List<CustomField>(),
-				new Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
+				new Notifications(false, 0, 0, false, 0, 0), 'subject', 'body',
 				null, null);
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
 			UUID result = client.createEnvelope(
 				e2,
-				new Envelope.Options(true, true, true, true),
+				true,
 				'Unit Test');
 			Test.stopTest();
 
@@ -1083,13 +994,16 @@ private class EnvelopeAPITest {
 				docs,
 				new List<Recipient>(),
 				new List<CustomField>(),
-				new Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
-				null, null);
+				new Notifications(false, 0, 0, false, 0, 0),
+				'subject',
+				'body',
+				null,
+				null);
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 			Test.startTest();
 			UUID result = client.createEnvelope(
 				e2,
-				new Envelope.Options(true, true, false, true),
+				true,
 				'Unit Test');
 			Test.stopTest();
 
@@ -1109,7 +1023,7 @@ private class EnvelopeAPITest {
 			try {
 				client.createEnvelope(
 					e,
-					new Envelope.Options(true, true, true, true),
+					true,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope to fail');
 			} catch (APIException ex) {
@@ -1129,7 +1043,7 @@ private class EnvelopeAPITest {
 			try {
 				client.createEnvelope(
 					null,
-					new Envelope.Options(true, true, true, true),
+					true,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope to fail');
 			} catch (DocuSignException ex) {
@@ -1143,6 +1057,10 @@ private class EnvelopeAPITest {
 	static void test_createEnvelope_fetch_invalid_document() {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 		System.runAs(UserMock.createDocuSignUser()) {
+			Permissions.sessionParameters = new Map<String, Boolean> {
+				Permissions.KEY_IMPERSONATING => false,
+				Permissions.KEY_API_ENABLED => false // force disable document fetch
+			};
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Document__c d = new Document__c(
 				Envelope__c = e1.Id,
@@ -1158,15 +1076,18 @@ private class EnvelopeAPITest {
 				new List<Document> { DocumentService.DB.convert(d) },
 				new List<Recipient>(),
 				new List<CustomField>(),
-				new Notifications(false, 0, 0, false, 0, 0, false), 'subject', 'body',
-				null, null);
+				new Notifications(false, 0, 0, false, 0, 0),
+				'subject',
+				'body',
+				null,
+				null);
 			EnvelopeAPI client = EnvelopeAPI.getInstance();
 
 			Test.startTest();
 			try {
 				client.createEnvelope(
 					e2,
-					new Envelope.Options(true, true, false, true),
+					true,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope to fail');
 			} catch (DocuSignException ex) {
@@ -1200,7 +1121,7 @@ private class EnvelopeAPITest {
 			try {
 				client.createEnvelope(
 					e,
-					new Envelope.Options(false, true, true, true),
+					false,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
@@ -1234,7 +1155,7 @@ private class EnvelopeAPITest {
 			try {
 				client.createEnvelope(
 					e,
-					new Envelope.Options(false, true, true, true),
+					false,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
@@ -1268,7 +1189,7 @@ private class EnvelopeAPITest {
 			try {
 				client.createEnvelope(
 					e,
-					new Envelope.Options(false, true, true, true),
+					false,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
@@ -1302,7 +1223,7 @@ private class EnvelopeAPITest {
 			try {
 				client.createEnvelope(
 					e,
-					new Envelope.Options(false, true, true, true),
+					false,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
@@ -1336,7 +1257,7 @@ private class EnvelopeAPITest {
 			try {
 				client.createEnvelope(
 					e,
-					new Envelope.Options(false, true, true, true),
+					false,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
@@ -1370,7 +1291,7 @@ private class EnvelopeAPITest {
 			try {
 				client.createEnvelope(
 					e,
-					new Envelope.Options(false, true, true, true),
+					false,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
@@ -1404,7 +1325,7 @@ private class EnvelopeAPITest {
 			try {
 				client.createEnvelope(
 					e,
-					new Envelope.Options(false, true, true, true),
+					false,
 					'Unit Test');
 				throw new AssertException('Expected createEnvelope call to fail');
 			} catch (APIException ex) {
@@ -1761,17 +1682,129 @@ private class EnvelopeAPITest {
 			EnvelopeAPI.APIRecipient result4 = new EnvelopeAPI.APIRecipient(r3, '1', true); // with auto anchor tags, with null role
 			Test.stopTest();
 
-			System.assertNotEquals(null, result1);
-			System.assertEquals(null, result1.tabs);
+			EnvelopeAPI.APIRecipient r = result1;
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.tabs);
+			System.assertEquals(0, Collection.size(r.tabs.approveTabs));
+			System.assertEquals(0, Collection.size(r.tabs.checkboxTabs));
+			System.assertEquals(0, Collection.size(r.tabs.companyTabs));
+			System.assertEquals(0, Collection.size(r.tabs.dateSignedTabs));
+			System.assertEquals(0, Collection.size(r.tabs.dateTabs));
+			System.assertEquals(0, Collection.size(r.tabs.declineTabs));
+			System.assertEquals(0, Collection.size(r.tabs.emailAddressTabs));
+			System.assertEquals(0, Collection.size(r.tabs.emailTabs));
+			System.assertEquals(0, Collection.size(r.tabs.envelopeIdTabs));
+			System.assertEquals(0, Collection.size(r.tabs.firstNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.formulaTabs));
+			System.assertEquals(0, Collection.size(r.tabs.fullNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.initialHereTabs));
+			System.assertEquals(0, Collection.size(r.tabs.lastNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.listTabs));
+			System.assertEquals(0, Collection.size(r.tabs.notarizeTabs));
+			System.assertEquals(0, Collection.size(r.tabs.noteTabs));
+			System.assertEquals(0, Collection.size(r.tabs.numberTabs));
+			System.assertEquals(0, Collection.size(r.tabs.radioGroupTabs));
+			System.assertEquals(0, Collection.size(r.tabs.signerAttachmentTabs));
+			System.assertEquals(0, Collection.size(r.tabs.signHereTabs));
+			System.assertEquals(0, Collection.size(r.tabs.smartSectionTabs));
+			System.assertEquals(0, Collection.size(r.tabs.ssnTabs));
+			System.assertEquals(0, Collection.size(r.tabs.textTabs));
+			System.assertEquals(0, Collection.size(r.tabs.titleTabs));
+			System.assertEquals(0, Collection.size(r.tabs.viewTabs));
+			System.assertEquals(0, Collection.size(r.tabs.zipTabs));
 
-			System.assertNotEquals(null, result2);
-			System.assertNotEquals(null, result2.tabs);
+			r = result2;
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.tabs);
+			System.assertEquals(0, Collection.size(r.tabs.approveTabs));
+			System.assertEquals(0, Collection.size(r.tabs.checkboxTabs));
+			System.assertEquals(1, Collection.size(r.tabs.companyTabs));
+			System.assertEquals(1, Collection.size(r.tabs.dateSignedTabs));
+			System.assertEquals(0, Collection.size(r.tabs.dateTabs));
+			System.assertEquals(0, Collection.size(r.tabs.declineTabs));
+			System.assertEquals(0, Collection.size(r.tabs.emailAddressTabs));
+			System.assertEquals(0, Collection.size(r.tabs.emailTabs));
+			System.assertEquals(0, Collection.size(r.tabs.envelopeIdTabs));
+			System.assertEquals(0, Collection.size(r.tabs.firstNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.formulaTabs));
+			System.assertEquals(1, Collection.size(r.tabs.fullNameTabs));
+			System.assertEquals(2, Collection.size(r.tabs.initialHereTabs));
+			System.assertEquals(0, Collection.size(r.tabs.lastNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.listTabs));
+			System.assertEquals(0, Collection.size(r.tabs.notarizeTabs));
+			System.assertEquals(0, Collection.size(r.tabs.noteTabs));
+			System.assertEquals(0, Collection.size(r.tabs.numberTabs));
+			System.assertEquals(0, Collection.size(r.tabs.radioGroupTabs));
+			System.assertEquals(0, Collection.size(r.tabs.signerAttachmentTabs));
+			System.assertEquals(1, Collection.size(r.tabs.signHereTabs));
+			System.assertEquals(0, Collection.size(r.tabs.smartSectionTabs));
+			System.assertEquals(0, Collection.size(r.tabs.ssnTabs));
+			System.assertEquals(2, Collection.size(r.tabs.textTabs));
+			System.assertEquals(1, Collection.size(r.tabs.titleTabs));
+			System.assertEquals(0, Collection.size(r.tabs.viewTabs));
+			System.assertEquals(0, Collection.size(r.tabs.zipTabs));
 
-			System.assertNotEquals(null, result3);
-			System.assertEquals(null, result3.tabs);
+			r = result3;
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.tabs);
+			System.assertEquals(0, Collection.size(r.tabs.approveTabs));
+			System.assertEquals(0, Collection.size(r.tabs.checkboxTabs));
+			System.assertEquals(0, Collection.size(r.tabs.companyTabs));
+			System.assertEquals(0, Collection.size(r.tabs.dateSignedTabs));
+			System.assertEquals(0, Collection.size(r.tabs.dateTabs));
+			System.assertEquals(0, Collection.size(r.tabs.declineTabs));
+			System.assertEquals(0, Collection.size(r.tabs.emailAddressTabs));
+			System.assertEquals(0, Collection.size(r.tabs.emailTabs));
+			System.assertEquals(0, Collection.size(r.tabs.envelopeIdTabs));
+			System.assertEquals(0, Collection.size(r.tabs.firstNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.formulaTabs));
+			System.assertEquals(0, Collection.size(r.tabs.fullNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.initialHereTabs));
+			System.assertEquals(0, Collection.size(r.tabs.lastNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.listTabs));
+			System.assertEquals(0, Collection.size(r.tabs.notarizeTabs));
+			System.assertEquals(0, Collection.size(r.tabs.noteTabs));
+			System.assertEquals(0, Collection.size(r.tabs.numberTabs));
+			System.assertEquals(0, Collection.size(r.tabs.radioGroupTabs));
+			System.assertEquals(0, Collection.size(r.tabs.signerAttachmentTabs));
+			System.assertEquals(0, Collection.size(r.tabs.signHereTabs));
+			System.assertEquals(0, Collection.size(r.tabs.smartSectionTabs));
+			System.assertEquals(0, Collection.size(r.tabs.ssnTabs));
+			System.assertEquals(0, Collection.size(r.tabs.textTabs));
+			System.assertEquals(0, Collection.size(r.tabs.titleTabs));
+			System.assertEquals(0, Collection.size(r.tabs.viewTabs));
+			System.assertEquals(0, Collection.size(r.tabs.zipTabs));
 
-			System.assertNotEquals(null, result4);
-			System.assertEquals(null, result4.tabs);
+			r = result4;
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.tabs);
+			System.assertEquals(0, Collection.size(r.tabs.approveTabs));
+			System.assertEquals(0, Collection.size(r.tabs.checkboxTabs));
+			System.assertEquals(0, Collection.size(r.tabs.companyTabs));
+			System.assertEquals(0, Collection.size(r.tabs.dateSignedTabs));
+			System.assertEquals(0, Collection.size(r.tabs.dateTabs));
+			System.assertEquals(0, Collection.size(r.tabs.declineTabs));
+			System.assertEquals(0, Collection.size(r.tabs.emailAddressTabs));
+			System.assertEquals(0, Collection.size(r.tabs.emailTabs));
+			System.assertEquals(0, Collection.size(r.tabs.envelopeIdTabs));
+			System.assertEquals(0, Collection.size(r.tabs.firstNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.formulaTabs));
+			System.assertEquals(0, Collection.size(r.tabs.fullNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.initialHereTabs));
+			System.assertEquals(0, Collection.size(r.tabs.lastNameTabs));
+			System.assertEquals(0, Collection.size(r.tabs.listTabs));
+			System.assertEquals(0, Collection.size(r.tabs.notarizeTabs));
+			System.assertEquals(0, Collection.size(r.tabs.noteTabs));
+			System.assertEquals(0, Collection.size(r.tabs.numberTabs));
+			System.assertEquals(0, Collection.size(r.tabs.radioGroupTabs));
+			System.assertEquals(0, Collection.size(r.tabs.signerAttachmentTabs));
+			System.assertEquals(0, Collection.size(r.tabs.signHereTabs));
+			System.assertEquals(0, Collection.size(r.tabs.smartSectionTabs));
+			System.assertEquals(0, Collection.size(r.tabs.ssnTabs));
+			System.assertEquals(0, Collection.size(r.tabs.textTabs));
+			System.assertEquals(0, Collection.size(r.tabs.titleTabs));
+			System.assertEquals(0, Collection.size(r.tabs.viewTabs));
+			System.assertEquals(0, Collection.size(r.tabs.zipTabs));
 		}
 	}
 
@@ -1809,7 +1842,7 @@ private class EnvelopeAPITest {
 			});
 
 		Test.startTest();
-		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(e, false, false, false, true);
+		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(e, false, false);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -1854,7 +1887,7 @@ private class EnvelopeAPITest {
 			});
 
 		Test.startTest();
-		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(e2, false, false, true, true);
+		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(e2, false, true);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -1872,13 +1905,13 @@ private class EnvelopeAPITest {
 	static void test_APIEnvelope_scmFile() {
 		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 		s.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
-		Document d1 = Document.fromScmFile(UUID.randomUUID(), 'UnitTestScmFile1', 'doc');
-		Document d2 = Document.fromScmFile(UUID.randomUUID(), 'UnitTestScmFile2', 'html');
+		Document d1 = Document.fromFile(UUID.randomUUID(), 'UnitTestScmFile1', 'doc');
+		Document d2 = Document.fromFile(UUID.randomUUID(), 'UnitTestScmFile2', 'html');
 		Envelope e2 = new Envelope(null, 'Envelope subject', 'Envelope message', null)
 			.withDocuments(new List<Document> { d1, d2 });
 
 		Test.startTest();
-		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(e2, false, false, true, true);
+		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(e2, true, true);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -1908,8 +1941,6 @@ private class EnvelopeAPITest {
 		EnvelopeAPI.APIEnvelope result = new EnvelopeAPI.APIEnvelope(
 			e,
 			true,
-			true,
-			true,
 			true);
 		Test.stopTest();
 
@@ -1930,5 +1961,713 @@ private class EnvelopeAPITest {
 		System.assertNotEquals(null, recipients[2]);
 		System.assertEquals('3', recipients[2].recipientId);
 		System.assertEquals('2', recipients[2].routingOrder);
+	}
+
+	@IsTest
+	static void test_getTemplate_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			final Template t = client.getTemplate(UUID.randomUUID());
+			Test.stopTest();
+
+			System.assertNotEquals(null, t);
+			System.assertNotEquals(null, t.id);
+			System.assertNotEquals(null, t.name);
+			System.assertNotEquals(null, t.lastModified);
+			System.assertNotEquals(null, t.customFields);
+			System.assertEquals(3, t.customFields.size());
+			System.assertEquals('textField1', t.customFields[0].name);
+			System.assertEquals('textValue1', t.customFields[0].value);
+			System.assert(!t.customFields[0].required);
+			System.assert(t.customFields[0].show);
+			System.assertEquals('listField1', t.customFields[2].name);
+			System.assertEquals('listField1Value2', t.customFields[2].value);
+			System.assertEquals(new List<String> { 'listField1Value1', 'listField1Value2', 'listField1Value3' }, t.customFields[2].items);
+			System.assert(t.customFields[2].required);
+			System.assert(t.customFields[2].show);
+			System.assertNotEquals(null, t.notifications);
+			System.assert(t.notifications.remind);
+			System.assertEquals(10, t.notifications.remindAfterDays);
+			System.assertEquals(5, t.notifications.remindFrequencyDays);
+			System.assert(t.notifications.expires);
+			System.assertEquals(11, t.notifications.expireAfterDays);
+			System.assertEquals(6, t.notifications.expireWarnDays);
+			System.assertNotEquals(null, t.emailSubject);
+			System.assertNotEquals(null, t.emailMessage);
+			System.assertNotEquals(null, t.recipients);
+			System.assertEquals(9, t.recipients.size());
+			Integer sequence = 1;
+			for (Recipient r : t.recipients) {
+				System.assertNotEquals(null, r);
+				System.assertEquals(sequence, r.sequence);
+				System.assertEquals(sequence, r.routingOrder);
+				if (sequence == 1) {
+					System.assertEquals(Recipient.TYPE_INTERMEDIARY, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('INTERMEDIARY', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertNotEquals(null, r.authentication);
+					System.assertEquals('1234', r.authentication.accessCode);
+					System.assert(!r.authentication.idCheckRequired);
+					System.assertEquals(null, r.authentication.smsPhoneNumbers);
+					System.assertEquals(null, r.note);
+					System.assertEquals(null, r.emailSettings);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 2) {
+					System.assertEquals(Recipient.TYPE_IN_PERSON_SIGNER, r.type);
+					System.assertEquals('In-Person Signer', r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals('h1@unit.test', r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('IN_PERSON_SIGNER', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertEquals(null, r.authentication);
+					System.assertEquals(null, r.note);
+					System.assertEquals(null, r.emailSettings);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 3) {
+					System.assertEquals(Recipient.TYPE_CARBON_COPY, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('CARBON_COPY', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertNotEquals(null, r.authentication);
+					System.assertEquals(null, r.authentication.accessCode);
+					System.assert(r.authentication.idCheckRequired);
+					System.assertNotEquals(null, r.authentication.smsPhoneNumbers);
+					System.assertEquals(1, r.authentication.smsPhoneNumbers.size());
+					System.assertEquals('+1 415-555-5555', r.authentication.smsPhoneNumbers[0]);
+					System.assertEquals(null, r.note);
+					System.assertEquals(null, r.emailSettings);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 4) {
+					System.assertEquals(Recipient.TYPE_CERTIFIED_DELIVERY, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('CERTIFIED_DELIVERY', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertEquals(null, r.authentication);
+					System.assertEquals('unit test', r.note);
+					System.assertEquals(null, r.emailSettings);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 5) {
+					System.assertEquals(Recipient.TYPE_AGENT, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('AGENT', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertEquals(null, r.authentication);
+					System.assertEquals(null, r.note);
+					System.assertNotEquals(null, r.emailSettings);
+					// "Unsupported" language Bulgarian
+					System.assertEquals('bg', r.emailSettings.language);
+					System.assertEquals('', r.emailSettings.languageLabel);
+					System.assertEquals('bg subject', r.emailSettings.subject);
+					System.assertEquals('bg message', r.emailSettings.message);
+					System.assert(!r.readOnly);
+				} else if (sequence == 6) {
+					System.assertEquals(Recipient.TYPE_EDITOR, r.type);
+					System.assertEquals(null, r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('EDITOR', r.role.name);
+					System.assertEquals(null, r.signingGroup);
+					System.assertEquals(null, r.authentication);
+					System.assertEquals(null, r.note);
+					System.assertEquals(null, r.emailSettings);
+					System.assert(!r.readOnly);
+					System.assert(!r.required);
+				} else if (sequence == 7) {
+					System.assertEquals(Recipient.TYPE_SIGNER, r.type);
+					System.assertEquals('SG1', r.name);
+					System.assertEquals(null, r.email);
+					System.assertEquals(null, r.hostName);
+					System.assertEquals(null, r.hostEmail);
+					System.assertNotEquals(null, r.role);
+					System.assertEquals('SIGNER', r.role.name);
+					System.assertNotEquals(null, r.signingGroup);
+					System.assertNotEquals(null, r.signingGroup.id);
+					System.assertEquals('SG1', r.signingGroup.name);
+					System.assertEquals(null, r.authentication);
+					System.assertEquals(null, r.note);
+					System.assertNotEquals(null, r.emailSettings);
+					// "Supported" language French
+					System.assertEquals('fr', r.emailSettings.language);
+					System.assertEquals(Label.French, r.emailSettings.languageLabel);
+					System.assertEquals('fr subject', r.emailSettings.subject);
+					System.assertEquals('fr message', r.emailSettings.message);
+					System.assert(r.readOnly);
+					System.assert(r.required);
+				} else if (sequence == 8) {
+					System.assertEquals(Recipient.TYPE_SEAL, r.type);
+				} else if (sequence == 9) {
+					System.assertEquals(Recipient.TYPE_WITNESS, r.type);
+				}
+				sequence++;
+			}
+		}
+	}
+
+	@IsTest
+	static void test_getTemplate_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex;
+
+			Test.startTest();
+			try {
+				client.getTemplate(UUID.randomUUID());
+				throw new AssertException('Expected getTemplate to fail');
+			} catch (APIException ex2) {
+				ex = ex2;
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	@IsTest
+	static void test_getTemplates_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Template> templates = client.getTemplates();
+			Test.stopTest();
+
+			System.assertNotEquals(null, templates);
+			System.assertEquals(3, templates.size());
+
+			System.assertNotEquals(null, templates[0].id);
+			System.assertNotEquals(null, templates[0].name);
+			System.assertNotEquals(null, templates[0].lastModified);
+			System.assert(Collection.isEmpty(templates[0].customFields));
+
+			System.assertNotEquals(null, templates[1].id);
+			System.assertNotEquals(null, templates[1].name);
+			System.assertNotEquals(null, templates[1].lastModified);
+			System.assert(Collection.isEmpty(templates[1].customFields));
+
+			System.assertNotEquals(null, templates[2].id);
+			System.assertNotEquals(null, templates[2].name);
+			System.assertNotEquals(null, templates[2].lastModified);
+			System.assert(Collection.isEmpty(templates[2].customFields));
+		}
+	}
+
+	@IsTest
+	static void test_getTemplates_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignUser()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+			APIException ex = null;
+
+			Test.startTest();
+			try {
+				client.getTemplates();
+				throw new AssertException('Expected getTemplates to fail');
+			} catch (APIException ex1) {
+				ex = ex1;
+			}
+			Test.stopTest();
+
+			System.assertNotEquals(null, ex);
+			System.assertNotEquals(null, ex.error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+		}
+	}
+
+	@IsTest
+	static void test_createTemplate_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			CustomField cf1 = CustomField.newListField('lf', 'v1', new List<String> { 'v1', 'v2', 'v3' }, false, true);
+			CustomField cf2 = CustomField.newTextField('tf', 'v1', true, true);
+			Notifications n = new Notifications(true, 10, 2, true, 20, 18);
+			Document d1 = Document.fromFile(TestUtils.createContentVersion())
+				.withSequence(1);
+			Document d2 = Document.fromFile(TestUtils.createContentVersion())
+				.withSequence(2);
+			Contact c1 = TestUtils.createContact();
+			Recipient r1 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				String.valueOf(TestUtils.randomInteger(1000000)),
+				UUID.randomUUID().toString(),
+				new Entity(c1.Id))
+				.withSequence(1)
+				.withRoutingOrder(1);
+			Recipient r2 = Recipient.newInPersonSigner(
+				2,
+				new Recipient.Role(UUID.randomUUID().toString()),
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				UUID.randomUUID().toString(),
+				true)
+				.withSequence(2);
+			Template t = new Template(
+				null,
+				UUID.randomUUID().toString(),
+				new List<CustomField> { cf1, cf2 },
+				n,
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString(),
+				new List<Document> { d1, d2 },
+				new List<Recipient> { r1, r2 },
+				null);
+
+			Test.startTest();
+			Template result = EnvelopeAPI.getInstance().createTemplate(t);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.id);
+			System.assertEquals(t.name, result.name);
+			System.assertEquals(2, Collection.size(result.customFields));
+			System.assertNotEquals(null, result.customFields[0]);
+			System.assertEquals(cf1.type, result.customFields[0].type);
+			System.assertEquals(cf1.name, result.customFields[0].name);
+			System.assertEquals(cf1.value, result.customFields[0].value);
+			System.assertEquals(cf1.items, result.customFields[0].items);
+			System.assertEquals(cf1.required, result.customFields[0].required);
+			System.assertEquals(cf1.show, result.customFields[0].show);
+			System.assertNotEquals(null, result.customFields[1]);
+			System.assertEquals(cf2.type, result.customFields[1].type);
+			System.assertEquals(cf2.name, result.customFields[1].name);
+			System.assertEquals(cf2.value, result.customFields[1].value);
+			System.assertEquals(cf2.items, result.customFields[1].items);
+			System.assertEquals(cf2.required, result.customFields[1].required);
+			System.assertEquals(cf2.show, result.customFields[1].show);
+			System.assertNotEquals(null, result.notifications);
+			System.assertEquals(n.remind, result.notifications.remind);
+			System.assertEquals(n.remindAfterDays, result.notifications.remindAfterDays);
+			System.assertEquals(n.remindFrequencyDays, result.notifications.remindFrequencyDays);
+			System.assertEquals(n.expires, result.notifications.expires);
+			System.assertEquals(n.expireAfterDays, result.notifications.expireAfterDays);
+			System.assertEquals(n.expireWarnDays, result.notifications.expireWarnDays);
+			System.assertEquals(t.emailSubject, result.emailSubject);
+			System.assertEquals(t.emailMessage, result.emailMessage);
+			System.assertEquals(2, Collection.size(result.documents));
+			System.assertNotEquals(null, result.documents[0]);
+			System.assertEquals(d1.type, result.documents[0].type);
+			System.assertEquals(d1.sequence, result.documents[0].sequence);
+			System.assertEquals(d1.name, result.documents[0].name);
+			System.assertEquals(d1.extension, result.documents[0].extension);
+			System.assertEquals(d1.size, result.documents[0].size);
+			System.assertEquals(d1.lastModified, result.documents[0].lastModified);
+			System.assertEquals(d1.sourceId, result.documents[0].sourceId);
+			System.assertEquals(d1.readOnly, result.documents[0].readOnly);
+			System.assertEquals(d1.required, result.documents[0].required);
+			System.assertNotEquals(null, result.documents[1]);
+			System.assertEquals(d2.type, result.documents[1].type);
+			System.assertEquals(d2.sequence, result.documents[1].sequence);
+			System.assertEquals(d2.name, result.documents[1].name);
+			System.assertEquals(d2.extension, result.documents[1].extension);
+			System.assertEquals(d2.size, result.documents[1].size);
+			System.assertEquals(d2.lastModified, result.documents[1].lastModified);
+			System.assertEquals(d2.sourceId, result.documents[1].sourceId);
+			System.assertEquals(d2.readOnly, result.documents[1].readOnly);
+			System.assertEquals(d2.required, result.documents[1].required);
+			System.assertEquals(2, Collection.size(result.recipients));
+			System.assertNotEquals(null, result.recipients[0]);
+			System.assertEquals(r1.envelopeRecipientId, result.recipients[0].envelopeRecipientId);
+			System.assertEquals(r1.type, result.recipients[0].type);
+			System.assertEquals(r1.sequence, result.recipients[0].sequence);
+			System.assertEquals(r1.routingOrder, result.recipients[0].routingOrder);
+			System.assertNotEquals(null, result.recipients[0].role);
+			System.assertEquals(r1.role.name, result.recipients[0].role.name);
+			System.assertEquals(r1.name, result.recipients[0].name);
+			System.assertEquals(r1.email, result.recipients[0].email);
+			System.assertEquals(null, result.recipients[0].signingGroup);
+			System.assertEquals(r1.phone, result.recipients[0].phone);
+			System.assertEquals(null, result.recipients[0].authentication);
+			System.assertEquals(r1.note, result.recipients[0].note);
+			System.assertEquals(null, result.recipients[0].emailSettings);
+			System.assertEquals(r1.hostName, result.recipients[0].hostName);
+			System.assertEquals(r1.hostEmail, result.recipients[0].hostEmail);
+			System.assertEquals(r1.signNow, result.recipients[0].signNow);
+			System.assertEquals(r1.tabs, result.recipients[0].tabs);
+			System.assertEquals(r1.source, result.recipients[0].source);
+			System.assertEquals(r1.readOnly, result.recipients[0].readOnly);
+			System.assertEquals(r1.required, result.recipients[0].required);
+			System.assertNotEquals(null, result.recipients[1]);
+			System.assertEquals(r2.envelopeRecipientId, result.recipients[1].envelopeRecipientId);
+			System.assertEquals(r2.type, result.recipients[1].type);
+			System.assertEquals(r2.sequence, result.recipients[1].sequence);
+			System.assertEquals(r2.routingOrder, result.recipients[1].routingOrder);
+			System.assertNotEquals(null, result.recipients[1].role);
+			System.assertEquals(r2.role.name, result.recipients[1].role.name);
+			System.assertEquals(r2.name, result.recipients[1].name);
+			System.assertEquals(r2.email, result.recipients[1].email);
+			System.assertEquals(null, result.recipients[1].signingGroup);
+			System.assertEquals(r2.phone, result.recipients[1].phone);
+			System.assertEquals(null, result.recipients[1].authentication);
+			System.assertEquals(r2.note, result.recipients[1].note);
+			System.assertEquals(null, result.recipients[1].emailSettings);
+			System.assertEquals(r2.hostName, result.recipients[1].hostName);
+			System.assertEquals(r2.hostEmail, result.recipients[1].hostEmail);
+			System.assertEquals(r2.signNow, result.recipients[1].signNow);
+			System.assertEquals(r2.tabs, result.recipients[1].tabs);
+			System.assertEquals(r2.source, result.recipients[1].source);
+			System.assertEquals(r2.readOnly, result.recipients[1].readOnly);
+			System.assertEquals(r2.required, result.recipients[1].required);
+			System.assertNotEquals(null, result.lastModified);
+		}
+	}
+
+	@IsTest
+	static void test_createTemplate_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Template t = new Template(
+				UUID.randomUUID(),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().createTemplate(t);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getTemplateEditUrl_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Url result = EnvelopeAPI.getInstance().getTemplateEditUrl(
+				UUID.randomUUID(),
+				new Url('https://return.unit.test'));
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_getTemplateEditUrl_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().getTemplateEditUrl(
+					UUID.randomUUID(),
+					new Url('https://return.unit.test'));
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateTemplate_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			CustomField cf1 = CustomField.newListField('lf', 'v1', new List<String> { 'v1', 'v2', 'v3' }, false, true);
+			CustomField cf2 = CustomField.newTextField('tf', 'v1', true, true);
+			Notifications n = new Notifications(true, 10, 2, true, 20, 18);
+			Document d1 = Document.fromFile(TestUtils.createContentVersion())
+				.withSequence(1);
+			Document d2 = Document.fromFile(TestUtils.createContentVersion())
+				.withSequence(2);
+			Contact c1 = TestUtils.createContact();
+			Recipient r1 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				String.valueOf(TestUtils.randomInteger(1000000)),
+				UUID.randomUUID().toString(),
+				new Entity(c1.Id))
+				.withSequence(1)
+				.withRoutingOrder(1);
+			Recipient r2 = Recipient.newInPersonSigner(
+				2,
+				new Recipient.Role(UUID.randomUUID().toString()),
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				UUID.randomUUID().toString(),
+				true)
+				.withSequence(2);
+			Datetime lm = Datetime.now().addDays(-1);
+			Template t = new Template(
+				UUID.randomUUID(),
+				UUID.randomUUID().toString(),
+				new List<CustomField> { cf1, cf2 },
+				n,
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString(),
+				new List<Document> { d1, d2 },
+				new List<Recipient> { r1, r2 },
+				lm);
+
+			Test.startTest();
+			Template result = EnvelopeAPI.getInstance().updateTemplate(t);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(t.id, result.id);
+			System.assertEquals(t.name, result.name);
+			System.assertEquals(2, Collection.size(result.customFields));
+			System.assertNotEquals(null, result.customFields[0]);
+			System.assertEquals(cf1.type, result.customFields[0].type);
+			System.assertEquals(cf1.name, result.customFields[0].name);
+			System.assertEquals(cf1.value, result.customFields[0].value);
+			System.assertEquals(cf1.items, result.customFields[0].items);
+			System.assertEquals(cf1.required, result.customFields[0].required);
+			System.assertEquals(cf1.show, result.customFields[0].show);
+			System.assertNotEquals(null, result.customFields[1]);
+			System.assertEquals(cf2.type, result.customFields[1].type);
+			System.assertEquals(cf2.name, result.customFields[1].name);
+			System.assertEquals(cf2.value, result.customFields[1].value);
+			System.assertEquals(cf2.items, result.customFields[1].items);
+			System.assertEquals(cf2.required, result.customFields[1].required);
+			System.assertEquals(cf2.show, result.customFields[1].show);
+			System.assertNotEquals(null, result.notifications);
+			System.assertEquals(n.remind, result.notifications.remind);
+			System.assertEquals(n.remindAfterDays, result.notifications.remindAfterDays);
+			System.assertEquals(n.remindFrequencyDays, result.notifications.remindFrequencyDays);
+			System.assertEquals(n.expires, result.notifications.expires);
+			System.assertEquals(n.expireAfterDays, result.notifications.expireAfterDays);
+			System.assertEquals(n.expireWarnDays, result.notifications.expireWarnDays);
+			System.assertEquals(t.emailSubject, result.emailSubject);
+			System.assertEquals(t.emailMessage, result.emailMessage);
+			System.assertEquals(2, Collection.size(result.documents));
+			System.assertNotEquals(null, result.documents[0]);
+			System.assertEquals(d1.type, result.documents[0].type);
+			System.assertEquals(d1.sequence, result.documents[0].sequence);
+			System.assertEquals(d1.name, result.documents[0].name);
+			System.assertEquals(d1.extension, result.documents[0].extension);
+			System.assertEquals(d1.size, result.documents[0].size);
+			System.assertEquals(d1.lastModified, result.documents[0].lastModified);
+			System.assertEquals(d1.sourceId, result.documents[0].sourceId);
+			System.assertEquals(d1.readOnly, result.documents[0].readOnly);
+			System.assertEquals(d1.required, result.documents[0].required);
+			System.assertNotEquals(null, result.documents[1]);
+			System.assertEquals(d2.type, result.documents[1].type);
+			System.assertEquals(d2.sequence, result.documents[1].sequence);
+			System.assertEquals(d2.name, result.documents[1].name);
+			System.assertEquals(d2.extension, result.documents[1].extension);
+			System.assertEquals(d2.size, result.documents[1].size);
+			System.assertEquals(d2.lastModified, result.documents[1].lastModified);
+			System.assertEquals(d2.sourceId, result.documents[1].sourceId);
+			System.assertEquals(d2.readOnly, result.documents[1].readOnly);
+			System.assertEquals(d2.required, result.documents[1].required);
+			System.assertEquals(2, Collection.size(result.recipients));
+			System.assertNotEquals(null, result.recipients[0]);
+			System.assertEquals(r1.envelopeRecipientId, result.recipients[0].envelopeRecipientId);
+			System.assertEquals(r1.type, result.recipients[0].type);
+			System.assertEquals(r1.sequence, result.recipients[0].sequence);
+			System.assertEquals(r1.routingOrder, result.recipients[0].routingOrder);
+			System.assertNotEquals(null, result.recipients[0].role);
+			System.assertEquals(r1.role.name, result.recipients[0].role.name);
+			System.assertEquals(r1.name, result.recipients[0].name);
+			System.assertEquals(r1.email, result.recipients[0].email);
+			System.assertEquals(null, result.recipients[0].signingGroup);
+			System.assertEquals(r1.phone, result.recipients[0].phone);
+			System.assertEquals(null, result.recipients[0].authentication);
+			System.assertEquals(r1.note, result.recipients[0].note);
+			System.assertEquals(null, result.recipients[0].emailSettings);
+			System.assertEquals(r1.hostName, result.recipients[0].hostName);
+			System.assertEquals(r1.hostEmail, result.recipients[0].hostEmail);
+			System.assertEquals(r1.signNow, result.recipients[0].signNow);
+			System.assertEquals(r1.tabs, result.recipients[0].tabs);
+			System.assertEquals(r1.source, result.recipients[0].source);
+			System.assertEquals(r1.readOnly, result.recipients[0].readOnly);
+			System.assertEquals(r1.required, result.recipients[0].required);
+			System.assertNotEquals(null, result.recipients[1]);
+			System.assertEquals(r2.envelopeRecipientId, result.recipients[1].envelopeRecipientId);
+			System.assertEquals(r2.type, result.recipients[1].type);
+			System.assertEquals(r2.sequence, result.recipients[1].sequence);
+			System.assertEquals(r2.routingOrder, result.recipients[1].routingOrder);
+			System.assertNotEquals(null, result.recipients[1].role);
+			System.assertEquals(r2.role.name, result.recipients[1].role.name);
+			System.assertEquals(r2.name, result.recipients[1].name);
+			System.assertEquals(r2.email, result.recipients[1].email);
+			System.assertEquals(null, result.recipients[1].signingGroup);
+			System.assertEquals(r2.phone, result.recipients[1].phone);
+			System.assertEquals(null, result.recipients[1].authentication);
+			System.assertEquals(r2.note, result.recipients[1].note);
+			System.assertEquals(null, result.recipients[1].emailSettings);
+			System.assertEquals(r2.hostName, result.recipients[1].hostName);
+			System.assertEquals(r2.hostEmail, result.recipients[1].hostEmail);
+			System.assertEquals(r2.signNow, result.recipients[1].signNow);
+			System.assertEquals(r2.tabs, result.recipients[1].tabs);
+			System.assertEquals(r2.source, result.recipients[1].source);
+			System.assertEquals(r2.readOnly, result.recipients[1].readOnly);
+			System.assertEquals(r2.required, result.recipients[1].required);
+			System.assertNotEquals(lm, result.lastModified);
+		}
+	}
+
+	@IsTest
+	static void test_updateTemplate_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Template t = new Template(
+				UUID.randomUUID(),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().updateTemplate(t);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteTemplate_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			System.assert(EnvelopeAPI.getInstance().deleteTemplate(UUID.randomUUID()));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteTemplate_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			try {
+				EnvelopeAPI.getInstance().deleteTemplate(UUID.randomUUID());
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	static Tab newMergeField(final String type) {
+		return Tab.newMergeField(
+			type,
+			'Account.Name',
+			false,
+			false)
+			.withAutoPlaceText(UUID.randomUUID().toString());
+	}
+
+	@IsTest
+	static void test_APIRecipients_new() {
+		List<Tab> tabs = new List<Tab> {
+			newMergeField(Tab.TYPE_APPROVE),
+			newMergeField(Tab.TYPE_CHECKBOX),
+			newMergeField(Tab.TYPE_COMPANY),
+			newMergeField(Tab.TYPE_DATE_SIGNED),
+			newMergeField(Tab.TYPE_DATE),
+			newMergeField(Tab.TYPE_DECLINE),
+			newMergeField(Tab.TYPE_EMAIL_ADDRESS),
+			newMergeField(Tab.TYPE_EMAIL),
+			newMergeField(Tab.TYPE_ENVELOPE_ID),
+			newMergeField(Tab.TYPE_FIRST_NAME),
+			newMergeField(Tab.TYPE_FORMULA),
+			newMergeField(Tab.TYPE_FULL_NAME),
+			newMergeField(Tab.TYPE_INITIAL_HERE),
+			newMergeField(Tab.TYPE_LAST_NAME),
+			newMergeField(Tab.TYPE_LIST),
+			newMergeField(Tab.TYPE_NOTARIZE),
+			newMergeField(Tab.TYPE_NOTE),
+			newMergeField(Tab.TYPE_NUMBER),
+			newMergeField(Tab.TYPE_RADIO_GROUP),
+			newMergeField(Tab.TYPE_SIGNER_ATTACHMENT),
+			newMergeField(Tab.TYPE_SIGN_HERE),
+			newMergeField(Tab.TYPE_SMART_SECTION),
+			newMergeField(Tab.TYPE_SSN),
+			newMergeField(Tab.TYPE_TEXT),
+			newMergeField(Tab.TYPE_TITLE),
+			newMergeField(Tab.TYPE_VIEW),
+			newMergeField(Tab.TYPE_ZIP)
+		};
+
+		List<Recipient> recipients = new List<Recipient> {
+			Recipient.fromSource('s1', 's1@unit.test', null, null, null)
+				.withType(Recipient.TYPE_SEAL, false)
+				.withSequence(1)
+				.withTabs(tabs),
+			Recipient.fromSource('w1', 'w1@unit.test', null, null, null)
+				.withType(Recipient.TYPE_WITNESS, false)
+				.withSequence(2)
+		};
+		EnvelopeAPI.APIRecipients apiRecipients = new EnvelopeAPI.APIRecipients(
+			recipients,
+			'1',
+			false);
+
+		Test.startTest();
+		List<Recipient.Status> result1 = apiRecipients.toStatus();
+		List<Recipient> result2 = apiRecipients.toRecipients();
+		Test.stopTest();
+
+		System.assertEquals(2, Collection.size(result1));
+		System.assertNotEquals(null, result1[0]);
+		System.assertEquals(Recipient.TYPE_SEAL, result1[0].type);
+		System.assertNotEquals(null, result1[1]);
+		System.assertEquals(Recipient.TYPE_WITNESS, result1[1].type);
+
+		System.assertEquals(2, Collection.size(result2));
+		System.assertNotEquals(null, result2[0]);
+		System.assertEquals(Recipient.TYPE_SEAL, result2[0].type);
+		System.assertEquals(27, Collection.size(result2[0].tabs));
+		System.assertNotEquals(null, result2[1]);
+		System.assertEquals(Recipient.TYPE_WITNESS, result2[1].type);
+		System.assertEquals(0, Collection.size(result2[1].tabs));
 	}
 }

@@ -55,10 +55,9 @@ private class SendingControllerTest {
 			System.assertEquals(2, result.documents.size());
 			System.assertNotEquals(null, result.recipients);
 			System.assertEquals(1, result.recipients.size());
-			EnvelopeSettings es = EnvelopeSettings.getInstance();
-			System.assertEquals(es.defaultRoles, result.defaultRoles);
-			System.assertEquals(es.allowRecipientLanguageSelection
-				? es.emailLocalizations : new List<Recipient.EmailSettings>(), result.emailLocalizations);
+			System.assert(Collection.isNotEmpty(result.defaultRoles));
+			System.assertEquals(Localization.isEmailLocalizationEnabled()
+				? Localization.getEmailSettings() : new List<Recipient.EmailSettings>(), result.emailLocalizations);
 		}
 	}
 
@@ -85,10 +84,9 @@ private class SendingControllerTest {
 			System.assertEquals(4, result.documents.size());
 			System.assertNotEquals(null, result.recipients);
 			System.assertEquals(1, result.recipients.size());
-			EnvelopeSettings es = EnvelopeSettings.getInstance();
-			System.assertEquals(es.defaultRoles, result.defaultRoles);
-			System.assertEquals(es.allowRecipientLanguageSelection
-				? es.emailLocalizations : new List<Recipient.EmailSettings>(), result.emailLocalizations);
+			System.assert(Collection.isNotEmpty(result.defaultRoles));
+			System.assertEquals(Localization.isEmailLocalizationEnabled()
+				? Localization.getEmailSettings() : new List<Recipient.EmailSettings>(), result.emailLocalizations);
 		}
 	}
 
@@ -267,7 +265,7 @@ private class SendingControllerTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope())
 				.withDocuments(new List<Document> {
-					DocumentService.convert(TestUtils.createContentVersion())
+					Document.fromFile(TestUtils.createContentVersion())
 				})
 				.withRecipients(new List<Recipient> {
 					Recipient.newInPersonSigner(1, null, 'Recipient One', 'r1@unit.test', null, null, null, null, false)

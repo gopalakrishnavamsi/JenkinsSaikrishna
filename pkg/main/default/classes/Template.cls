@@ -33,6 +33,11 @@ global class Template {
 	@AuraEnabled
 	global String emailMessage { get; private set; }
 	/**
+	 * The DocuSign template documents.
+	 */
+	@AuraEnabled
+	public List<Document> documents { get; private set; }
+	/**
 	 * The DocuSign template recipients.
 	 */
 	@AuraEnabled
@@ -73,5 +78,50 @@ global class Template {
 		this.emailMessage = emailMessage;
 		this.recipients = recipients;
 		this.lastModified = lastModified;
+	}
+
+	/**
+	 * Constructs a DocuSign template.
+	 *
+	 * @param id The DocuSign template ID.
+	 * @param name The DocuSign template name.
+	 * @param customFields The DocuSign template custom fields.
+	 * @param notifications The reminder and expiration settings for the template.
+	 * @param emailSubject The subject of the email recipients receive.
+	 * @param emailMessage The message of the email recipients receive. This is contained within the standard DocuSign email body.
+	 * @param documents The DocuSign template documents.
+	 * @param recipients The DocuSign template recipients.
+	 * @param lastModified The date and time when the DocuSign template was last modified.
+	 */
+	public Template(
+		final UUID id,
+		final String name,
+		final List<CustomField> customFields,
+		final Notifications notifications,
+		final String emailSubject,
+		final String emailMessage,
+		final List<Document> documents,
+		final List<Recipient> recipients,
+		final Datetime lastModified) {
+
+		this.id = id;
+		this.name = name;
+		this.customFields = customFields;
+		this.notifications = notifications;
+		this.emailSubject = emailSubject;
+		this.emailMessage = emailMessage;
+		this.documents = documents;
+		this.recipients = recipients;
+		this.lastModified = lastModified;
+	}
+
+	public Template withId(final UUID id) {
+		this.id = id;
+		return this;
+	}
+
+	public Template withLastModified(final Datetime lastModified) {
+		this.lastModified = lastModified;
+		return this;
 	}
 }

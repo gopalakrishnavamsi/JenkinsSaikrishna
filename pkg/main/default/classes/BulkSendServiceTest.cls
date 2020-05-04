@@ -310,7 +310,7 @@ private class BulkSendServiceTest {
 			BulkList.Status bs2 = BulkSendService.DB.convert(createStatus(TestUtils.createLead().Id));
 
 			Test.startTest();
-			List<BulkList.Status> result = BulkSendService.DB.queryStatus(new Set<Id> { bs1.Id, bs2.Id });
+			List<BulkList.Status> result = BulkSendService.DB.queryStatus(new Set<Id> { bs1.id, bs2.id });
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
@@ -735,7 +735,7 @@ private class BulkSendServiceTest {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
 		System.runAs(UserMock.createDocuSignUser()) {
-			Document d = DocumentService.convert(TestUtils.createContentVersion());
+			Document d = Document.fromFile(TestUtils.createContentVersion());
 
 			Test.startTest();
 			Envelope result = BulkSendService.getDraftEnvelope(new List<Document> { d }, null);
@@ -840,7 +840,7 @@ private class BulkSendServiceTest {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			Envelope e = EnvelopeService.DB.convert(e1)
 				.withDocuments(new List<Document> {
-					DocumentService.convert(TestUtils.createContentVersion())
+					Document.fromFile(TestUtils.createContentVersion())
 				})
 				.withRecipients(new List<Recipient> {
 					Recipient.newBulkRecipientPlaceholder()
@@ -866,7 +866,7 @@ private class BulkSendServiceTest {
 			BulkList bl = BulkSendService.DB.convert(createList(null));
 			Envelope e = BulkSendService.getDraftEnvelope(
 				new List<Document> {
-					DocumentService.convert(TestUtils.createContentVersion())
+					Document.fromFile(TestUtils.createContentVersion())
 				},
 				null);
 

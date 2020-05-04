@@ -141,38 +141,6 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 	}
 
 	@TestVisible
-	private static PostInstallResults initializeEnvelopeSettings() {
-		PostInstallResults result = new PostInstallResults();
-		EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
-		if (settings.Id == null) {
-			insert settings;
-			result.endStepSuccess(Label.InitializeEnvelopeSettings);
-		} else if (settings.AllowSequentialSignNow__c != true) {
-			// Previous versions defaulted to false with no way for admin to toggle. Defaulting to true instead.
-			// TODO: Remove this if/when this setting is exposed to the admin.
-			settings.AllowSequentialSignNow__c = true;
-			update settings;
-			result.endStepSuccess(Label.InitializeEnvelopeSettings);
-		} else {
-			result.skipStep(Label.InitializeEnvelopeSettings, Label.AlreadyComplete);
-		}
-		return result;
-	}
-
-	@TestVisible
-	private static PostInstallResults initializeChatterSettings() {
-		PostInstallResults result = new PostInstallResults();
-		ChatterSettings__c settings = ChatterSettings__c.getOrgDefaults();
-		if (settings.Id == null) {
-			insert settings;
-			result.endStepSuccess(Label.InitializeChatterSettings);
-		} else {
-			result.skipStep(Label.InitializeChatterSettings, Label.AlreadyComplete);
-		}
-		return result;
-	}
-
-	@TestVisible
 	private static PostInstallResults initializeAccountSettings() {
 		PostInstallResults result = new PostInstallResults();
 		AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
@@ -314,8 +282,6 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 
 		results.addResults(assignDocuSignAdministratorPermissionSet(installerId));
 		results.addResults(initializeAccountSettings());
-		results.addResults(initializeEnvelopeSettings());
-		results.addResults(initializeChatterSettings());
 		results.addResults(createDefaultRecipientRoles());
 		results.addResults(createDefaultCLMObjMappings());
 

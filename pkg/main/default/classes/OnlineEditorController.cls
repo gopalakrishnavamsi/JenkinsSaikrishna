@@ -460,7 +460,7 @@ public with sharing class OnlineEditorController extends Controller {
 		for (SObjectField f : type.fields.getMap().values()) {
 			DescribeFieldResult field = f.getDescribe();
 			if (field.getReferenceTo().isEmpty() && MergeField.isValid(field)) {
-				result.add(MergeField.forField(field, null));
+				result.add(MergeField.forField(field));
 			}
 		}
 		return result;

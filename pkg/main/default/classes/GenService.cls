@@ -741,7 +741,6 @@ public with sharing class GenService {
 		return q.execute(sourceId);
 	}
 
-	@TestVisible
 	public static Boolean checkDocumentRule(
 		final Id sourceId,
 		final String startingObject,

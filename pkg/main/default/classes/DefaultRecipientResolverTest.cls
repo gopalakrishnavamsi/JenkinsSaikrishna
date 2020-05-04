@@ -2,18 +2,34 @@
 private class DefaultRecipientResolverTest {
 
 	@IsTest
-	static void test_canResolveRecipients() {
+	static void test_canResolveRecipientType() {
 		DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 		Test.startTest();
-		System.assert(rr.canResolveRecipients(Schema.Account.getSObjectType()));
-		System.assert(rr.canResolveRecipients(Schema.Case.getSObjectType()));
-		System.assert(rr.canResolveRecipients(Schema.Contact.getSObjectType()));
-		System.assert(rr.canResolveRecipients(Schema.Lead.getSObjectType()));
-		System.assert(rr.canResolveRecipients(Schema.Opportunity.getSObjectType()));
-		System.assert(rr.canResolveRecipients(Schema.User.getSObjectType()));
-		System.assert(!rr.canResolveRecipients(Schema.Envelope__c.getSObjectType()));
-		System.assert(!rr.canResolveRecipients(null));
+		System.assert(rr.canResolveRecipientType(Schema.Contact.getSObjectType()));
+		System.assert(rr.canResolveRecipientType(Schema.Lead.getSObjectType()));
+		System.assert(rr.canResolveRecipientType(Schema.User.getSObjectType()));
+		System.assert(rr.canResolveRecipientType(Schema.OpportunityContactRole.getSObjectType()));
+		System.assert(rr.canResolveRecipientType(Schema.CaseContactRole.getSObjectType()));
+		System.assert(!rr.canResolveRecipientType(Schema.Account.getSObjectType()));
+		System.assert(!rr.canResolveRecipientType(Schema.Envelope__c.getSObjectType()));
+		System.assert(!rr.canResolveRecipientType(null));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_canResolveRecipientSource() {
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		System.assert(rr.canResolveRecipientSource(Schema.Account.getSObjectType()));
+		System.assert(rr.canResolveRecipientSource(Schema.Case.getSObjectType()));
+		System.assert(rr.canResolveRecipientSource(Schema.Contact.getSObjectType()));
+		System.assert(rr.canResolveRecipientSource(Schema.Lead.getSObjectType()));
+		System.assert(rr.canResolveRecipientSource(Schema.Opportunity.getSObjectType()));
+		System.assert(rr.canResolveRecipientSource(Schema.User.getSObjectType()));
+		System.assert(!rr.canResolveRecipientSource(Schema.Envelope__c.getSObjectType()));
+		System.assert(!rr.canResolveRecipientSource(null));
 		Test.stopTest();
 	}
 
@@ -31,7 +47,7 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
-	static void test_getRecipients_Account() {
+	static void test_getSourceRecipients_Account() {
 		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
@@ -41,7 +57,9 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients(Schema.Account.getSObjectType(), new Set<Id> { a1.Id, a2.Id });
+			List<Recipient> result = rr.getSourceRecipients(
+				Schema.Account.getSObjectType(),
+				new Set<Id> { a1.Id, a2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -86,7 +104,7 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
-	static void test_getRecipients_Case() {
+	static void test_getSourceRecipients_Case() {
 		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
@@ -97,7 +115,9 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients(Schema.Case.getSObjectType(), new Set<Id> { cs1.Id, cs2.Id });
+			List<Recipient> result = rr.getSourceRecipients(
+				Schema.Case.getSObjectType(),
+				new Set<Id> { cs1.Id, cs2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -134,7 +154,7 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
-	static void test_getRecipients_Contact() {
+	static void test_getSourceRecipients_Contact() {
 		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Contact c1 = TestUtils.createContact(a1.Id);
@@ -142,7 +162,7 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients(Schema.Contact.getSObjectType(), new Set<Id> { c1.Id, c2.Id });
+			List<Recipient> result = rr.getSourceRecipients(Schema.Contact.getSObjectType(), new Set<Id> { c1.Id, c2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -178,15 +198,14 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
-	static void test_getRecipients_Lead() {
+	static void test_getSourceRecipients_Lead() {
 		System.runAs(UserMock.createUser()) {
-			Schema.Account a1 = TestUtils.createAccount();
 			Lead l1 = TestUtils.createLead();
 			Lead l2 = TestUtils.createLead();
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients(Schema.Lead.getSObjectType(), new Set<Id> { l1.Id, l2.Id });
+			List<Recipient> result = rr.getSourceRecipients(Schema.Lead.getSObjectType(), new Set<Id> { l1.Id, l2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -218,7 +237,7 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
-	static void test_getRecipients_Opportunity() {
+	static void test_getSourceRecipients_Opportunity() {
 		System.runAs(UserMock.createUser()) {
 			Schema.Account a1 = TestUtils.createAccount();
 			Schema.Account a2 = TestUtils.createAccount();
@@ -233,7 +252,7 @@ private class DefaultRecipientResolverTest {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients(Schema.Opportunity.getSObjectType(), new Set<Id> { o1.Id, o2.Id });
+			List<Recipient> result = rr.getSourceRecipients(Schema.Opportunity.getSObjectType(), new Set<Id> { o1.Id, o2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -284,7 +303,7 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
-	static void test_getRecipients_Opportunity_no_access() {
+	static void test_getSourceRecipients_Opportunity_no_access() {
 		// Expect only one contact (c2Id) belonging to account to be shared with default settings
 		// This may break if sharing settings are customized, so skip if OWS contact setting is not ControlledByParent.
 		if ([SELECT DefaultContactAccess FROM Organization LIMIT 1].DefaultContactAccess == 'ControlledByParent') {
@@ -303,7 +322,7 @@ private class DefaultRecipientResolverTest {
 
 			System.runAs(UserMock.createUser()) {
 				Test.startTest();
-				List<Recipient> result = new DefaultRecipientResolver().getRecipients(
+				List<Recipient> result = new DefaultRecipientResolver().getSourceRecipients(
 					Opportunity.getSObjectType(),
 					new Set<Id> { oId });
 				Test.stopTest();
@@ -317,14 +336,14 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
-	static void test_getRecipients_User() {
+	static void test_getSourceRecipients_User() {
 		System.runAs(UserMock.createAdministrator()) {
 			User u1 = UserMock.createUser();
 			User u2 = UserMock.createUser();
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
-			List<Recipient> result = rr.getRecipients(Schema.User.getSObjectType(), new Set<Id> { u1.Id, u2.Id });
+			List<Recipient> result = rr.getSourceRecipients(Schema.User.getSObjectType(), new Set<Id> { u1.Id, u2.Id });
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -356,14 +375,14 @@ private class DefaultRecipientResolverTest {
 	}
 
 	@IsTest
-	static void test_getRecipients_invalid() {
+	static void test_getSourceRecipients_invalid() {
 		System.runAs(UserMock.createUser()) {
 			DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 			Test.startTest();
 			try {
-				rr.getRecipients(Organization.getSObjectType(), new Set<Id> { UserInfo.getOrganizationId() });
-				throw new AssertException('Expected getRecipients to fail');
+				rr.getSourceRecipients(Organization.getSObjectType(), new Set<Id> { UserInfo.getOrganizationId() });
+				throw new AssertException('Expected getSourceRecipients to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(String.format(Label.CannotResolveRecipientSource_1, new List<String> {
 					String.valueOf(Organization.getSObjectType())
@@ -401,7 +420,6 @@ private class DefaultRecipientResolverTest {
 	@IsTest
 	static void test_searchRecipients_Lead() {
 		System.runAs(UserMock.createUser()) {
-			Schema.Account a1 = TestUtils.createAccount();
 			Lead c1 = new Lead(Company = 'Unit Test 1', FirstName = 'ABCD', LastName = 'WXYZ', Email = 'c1@unit.test', MobilePhone = '5555551111');
 			Lead c2 = new Lead(Company = 'Unit Test 2', FirstName = 'ABCD', LastName = 'EFGH', Email = 'c2@unit.test', Phone = '5555552222');
 			Lead c3 = new Lead(Company = 'Unit Test 3', FirstName = 'EFGH', LastName = 'WXYZ', Email = 'c3@unit.test');
@@ -481,5 +499,598 @@ private class DefaultRecipientResolverTest {
 			}
 			Test.stopTest();
 		}
+	}
+
+	@IsTest
+	static void test_executeQuery_lookup() {
+		Schema.Account a1 = TestUtils.createAccount();
+		Opportunity o1 = TestUtils.createOpportunity(a1.Id);
+		a1.Name = 'a1';
+		a1.AccountNumber = '0001';
+		Schema.Account a2 = TestUtils.createAccount();
+		a2.Name = 'a2';
+		a2.AccountNumber = '0002';
+		Opportunity o2 = TestUtils.createOpportunity(a2.Id);
+		Schema.Account b1 = TestUtils.createAccount();
+		b1.Name = 'b1';
+		b1.AccountNumber = '0003';
+		Opportunity o3 = TestUtils.createOpportunity(b1.Id);
+		Schema.Account b2 = TestUtils.createAccount();
+		b2.Name = 'b2';
+		b2.AccountNumber = '0004';
+		Opportunity o4 = TestUtils.createOpportunity(b2.Id);
+		update new List<Schema.Account> { a1, a2, b1, b2 };
+
+		Test.startTest();
+		List<SObject> result = DefaultRecipientResolver.executeQuery(
+			Opportunity.getSObjectType(),
+			new List<String> { 'Name', 'AccountNumber' },
+			new Set<Id> { o1.Id, o2.Id, o3.Id, o4.Id },
+			new Query.Relationship(
+				true,
+				'Account',
+				'Account',
+				'Account'),
+			new Query.Filter(
+				'Account.Name LIKE \'b%\'',
+				'Account.AccountNumber DESC',
+				1)); // expect only b2
+		Test.stopTest();
+
+		System.assertEquals(1, Collection.size(result));
+		System.assertNotEquals(null, result[0]);
+		System.assert(result[0] instanceof Schema.Opportunity);
+		Schema.Account a = (Schema.Account)result[0].getSObject('Account');
+		System.assertEquals(b2.Name, a.Name);
+		System.assertEquals(b2.AccountNumber, a.AccountNumber);
+	}
+
+	@IsTest
+	static void test_executeQuery_related_list() {
+		Schema.Account a1 = TestUtils.createAccount();
+		Opportunity o1 = TestUtils.createOpportunity(a1.Id);
+		Contact c1 = TestUtils.createContact(a1.Id);
+		c1.FirstName = 'a4';
+		OpportunityContactRole o1c1 = TestUtils.createOpportunityContactRole(o1.Id, c1.Id);
+		Contact c2 = TestUtils.createContact(a1.Id);
+		c2.FirstName = 'b2';
+		TestUtils.createOpportunityContactRole(o1.Id, c2.Id);
+		Contact c3 = TestUtils.createContact(a1.Id);
+		c3.FirstName = 'b3';
+		TestUtils.createOpportunityContactRole(o1.Id, c3.Id);
+		Schema.Account a2 = TestUtils.createAccount();
+		Opportunity o2 = TestUtils.createOpportunity(a2.Id);
+		Contact c4 = TestUtils.createContact(a2.Id);
+		c4.FirstName = 'a1';
+		TestUtils.createOpportunityContactRole(o2.Id, c4.Id);
+		Contact c5 = TestUtils.createContact(a2.Id);
+		c5.FirstName = 'a2';
+		OpportunityContactRole o2c5 = TestUtils.createOpportunityContactRole(o2.Id, c5.Id);
+		Contact c6 = TestUtils.createContact(a2.Id);
+		c6.FirstName = 'a3';
+		OpportunityContactRole o2c6 = TestUtils.createOpportunityContactRole(o2.Id, c6.Id);
+		update new List<Contact> { c1, c2, c3, c4, c5, c6 };
+		Query.Relationship r = new Query.Relationship(
+			false,
+			'OpportunityContactRoles',
+			'Opportunity Contact Roles',
+			'OpportunityContactRole');
+		Query.Filter f = new Query.Filter(
+			'Contact.Name LIKE \'a%\'',
+			'Contact.Name DESC',
+			2); // expect (o1.c1) and (o2.c6, o2.c5)
+
+		Test.startTest();
+		List<SObject> result = DefaultRecipientResolver.executeQuery(
+			Opportunity.getSObjectType(),
+			new List<String> { 'Role', 'Contact.Name' },
+			new Set<Id> { o1.Id, o2.Id },
+			r,
+			f);
+		Test.stopTest();
+
+		System.assertEquals(2, Collection.size(result));
+		System.assertNotEquals(null, result[0]);
+		System.assert(result[0] instanceof Opportunity);
+		System.assertEquals(o1.Id, result[0].Id);
+		List<OpportunityContactRole> ocrs = ((Opportunity)result[0]).OpportunityContactRoles;
+		System.assertEquals(1, Collection.size(ocrs));
+		System.assertNotEquals(null, ocrs[0]);
+		System.assertEquals(o1c1.Id, ocrs[0].Id);
+		System.assertEquals(c1.Id, ocrs[0].ContactId);
+		System.assertNotEquals(null, ocrs[0].Contact.Name);
+		System.assert(ocrs[0].isSet('Role'));
+		ocrs = ((Opportunity)result[1]).OpportunityContactRoles;
+		System.assertEquals(2, Collection.size(ocrs));
+		System.assertNotEquals(null, ocrs[0]);
+		System.assertEquals(o2c6.Id, ocrs[0].Id);
+		System.assertEquals(c6.Id, ocrs[0].ContactId);
+		System.assertNotEquals(null, ocrs[0].Contact.Name);
+		System.assert(ocrs[0].isSet('Role'));
+		System.assertNotEquals(null, ocrs[1]);
+		System.assertEquals(o2c5.Id, ocrs[1].Id);
+		System.assertEquals(c5.Id, ocrs[1].ContactId);
+		System.assertNotEquals(null, ocrs[1].Contact.Name);
+		System.assert(ocrs[1].isSet('Role'));
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_invalid_arguments() {
+		System.runAs(UserMock.createUser()) {
+			DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+			Test.startTest();
+			try {
+				rr.getRelatedRecipients(null, null, null, null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedType, ex.getMessage());
+			}
+			try {
+				rr.getRelatedRecipients(Opportunity.getSObjectType(), null, null, null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedRelationship, ex.getMessage());
+			}
+			try {
+				rr.getRelatedRecipients(Opportunity.getSObjectType(), null, new Query.Relationship(true, null, null, 'User'), null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedRelationship, ex.getMessage());
+			}
+			try {
+				rr.getRelatedRecipients(Opportunity.getSObjectType(), null, new Query.Relationship(true, 'Owner', null, ''), null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedRelationship, ex.getMessage());
+			}
+			try {
+				rr.getRelatedRecipients(Opportunity.getSObjectType(), null, new Query.Relationship(true, 'Owner', null, 'Opportunity'), null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(String.format(Label.CannotResolveRecipientSource_1,
+					new List<Object> { 'Opportunity' }), ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_unauthorized() {
+		Schema.Account a = TestUtils.createAccount();
+
+		System.runAs(UserMock.createRestrictedUser()) {
+			DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+			Test.startTest();
+			try {
+				rr.getRelatedRecipients(
+					Contact.getSObjectType(),
+					new Set<Id> { a.Id },
+					new Query.Relationship(
+						false,
+						'Contacts',
+						'Contacts',
+						'Contact'),
+					null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(UnauthorizedException.AccessRequirement.SecurityPermission, ex.requirement);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_Contact_lookup() {
+		Schema.Account a1 = TestUtils.createAccount();
+		Contact c1 = TestUtils.createContact(a1.Id);
+		Case cs1 = TestUtils.createCase(a1.Id, c1.Id);
+		Schema.Account a2 = TestUtils.createAccount();
+		Contact c2 = TestUtils.createContact(a2.Id);
+		Case cs2 = TestUtils.createCase(a2.Id, c2.Id);
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		List<Recipient> result = rr.getRelatedRecipients(
+			Schema.Case.getSObjectType(),
+			new Set<Id> { cs1.Id, cs2.Id },
+			new Query.Relationship(
+				true,
+				'Contact',
+				'Contact',
+				'Contact'),
+			null);
+		Test.stopTest();
+
+		System.assertEquals(2, Collection.size(result));
+		Boolean foundC1 = false, foundC2 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.source);
+			System.assertNotEquals(null, r.source.id);
+			Contact expected = null;
+			if (r.source.id == c1.Id && !foundC1) {
+				foundC1 = true;
+				expected = c1;
+			} else if (r.source.id == c2.Id && !foundC2) {
+				foundC2 = true;
+				expected = c2;
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundC1 && foundC2);
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_Contact_related_list() {
+		Schema.Account a1 = TestUtils.createAccount();
+		Contact c1 = TestUtils.createContact(a1.Id);
+		Contact c2 = TestUtils.createContact(a1.Id);
+		Schema.Account a2 = TestUtils.createAccount();
+		Contact c3 = TestUtils.createContact(a2.Id);
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		List<Recipient> result = rr.getRelatedRecipients(
+			Schema.Account.getSObjectType(),
+			new Set<Id> { a1.Id, a2.Id },
+			new Query.Relationship(
+				false,
+				'Contacts',
+				'Contacts',
+				'Contact'),
+			null);
+		Test.stopTest();
+
+		System.assertEquals(3, Collection.size(result));
+		Boolean foundC1 = false, foundC2 = false, foundC3 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.source);
+			System.assertNotEquals(null, r.source.id);
+			Contact expected = null;
+			if (r.source.id == c1.Id && !foundC1) {
+				foundC1 = true;
+				expected = c1;
+			} else if (r.source.id == c2.Id && !foundC2) {
+				foundC2 = true;
+				expected = c2;
+			} else if (r.source.id == c3.Id && !foundC3) {
+				foundC3 = true;
+				expected = c3;
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundC1 && foundC2 && foundC3);
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_Lead_lookup() {
+		Lead l1 = TestUtils.createLead();
+		Lead l2 = TestUtils.createLead();
+		Campaign c1 = new Campaign(Name = UUID.randomUUID().toString());
+		insert c1;
+		CampaignMember cm1 = new CampaignMember(CampaignId = c1.Id, LeadId = l1.Id);
+		CampaignMember cm2 = new CampaignMember(CampaignId = c1.Id, LeadId = l2.Id);
+		insert new List<CampaignMember> { cm1, cm2 };
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		List<Recipient> result = rr.getRelatedRecipients(
+			Schema.CampaignMember.getSObjectType(),
+			new Set<Id> { cm1.Id, cm2.Id },
+			new Query.Relationship(
+				true,
+				'Lead',
+				'Lead',
+				'Lead'),
+			null);
+		Test.stopTest();
+
+		System.assertEquals(2, Collection.size(result));
+		Boolean foundL1 = false, foundL2 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.source);
+			System.assertNotEquals(null, r.source.id);
+			Lead expected = null;
+			if (r.source.id == l1.Id && !foundL1) {
+				foundL1 = true;
+				expected = l1;
+			} else if (r.source.id == l2.Id && !foundL2) {
+				foundL2 = true;
+				expected = l2;
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundL1 && foundL2);
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_Lead_related_list() {
+		Individual i1 = new Individual(
+			FirstName = UUID.randomUUID().toString(),
+			LastName = UUID.randomUUID().toString());
+		Individual i2 = new Individual(
+			FirstName = UUID.randomUUID().toString(),
+			LastName = UUID.randomUUID().toString());
+		insert new List<Individual> { i1, i2 };
+		Lead l1 = TestUtils.createLead();
+		l1.IndividualId = i1.Id;
+		Lead l2 = TestUtils.createLead();
+		l2.IndividualId = i1.Id;
+		Lead l3 = TestUtils.createLead();
+		l3.IndividualId = i2.Id;
+		update new List<Lead> { l1, l2, l3 };
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		List<Recipient> result = rr.getRelatedRecipients(
+			Schema.Individual.getSObjectType(),
+			new Set<Id> { i1.Id, i2.Id },
+			new Query.Relationship(
+				false,
+				'Leads',
+				'Leads',
+				'Lead'),
+			null);
+		Test.stopTest();
+
+		System.assertEquals(3, Collection.size(result));
+		Boolean foundL1 = false, foundL2 = false, foundL3 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.source);
+			System.assertNotEquals(null, r.source.id);
+			Lead expected = null;
+			if (r.source.id == l1.Id && !foundL1) {
+				foundL1 = true;
+				expected = l1;
+			} else if (r.source.id == l2.Id && !foundL2) {
+				foundL2 = true;
+				expected = l2;
+			} else if (r.source.id == l3.Id && !foundL3) {
+				foundL3 = true;
+				expected = l3;
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundL1 && foundL2 && foundL3);
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_User_lookup() {
+		Schema.Account a1, a2;
+		User u1 = UserMock.createUser();
+		System.runAs(u1) {
+			a1 = TestUtils.createAccount();
+		}
+		User u2 = UserMock.createUser();
+		System.runAs(u2) {
+			a2 = TestUtils.createAccount();
+		}
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		List<Recipient> result = rr.getRelatedRecipients(
+			Schema.Account.getSObjectType(),
+			new Set<Id> { a1.Id, a2.Id },
+			new Query.Relationship(
+				true,
+				'CreatedBy',
+				'Created By',
+				'User'),
+			null);
+		Test.stopTest();
+
+		System.assertEquals(2, Collection.size(result));
+		Boolean foundU1 = false, foundU2 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.source);
+			System.assertNotEquals(null, r.source.id);
+			User expected = null;
+			if (r.source.id == u1.Id && !foundU1) {
+				foundU1 = true;
+				expected = u1;
+			} else if (r.source.id == u2.Id && !foundU2) {
+				foundU2 = true;
+				expected = u2;
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundU1 && foundU2);
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_User_related_list() {
+		User m1 = UserMock.createUser();
+		User u1 = UserMock.createUser();
+		u1.ManagerId = m1.Id;
+		User m2 = UserMock.createUser();
+		User u2 = UserMock.createUser();
+		u2.ManagerId = m2.Id;
+		User u3 = UserMock.createUser();
+		u3.ManagerId = m2.Id;
+		update new List<User> { u1, u2, u3 };
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		List<Recipient> result = rr.getRelatedRecipients(
+			Schema.User.getSObjectType(),
+			new Set<Id> { m1.Id, m2.Id },
+			new Query.Relationship(
+				false,
+				'ManagedUsers',
+				'Managed Users',
+				'User'),
+			null);
+		Test.stopTest();
+
+		System.assertEquals(3, Collection.size(result));
+		Boolean foundU1 = false, foundU2 = false, foundU3 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.source);
+			System.assertNotEquals(null, r.source.id);
+			User expected = null;
+			if (r.source.id == u1.Id && !foundU1) {
+				foundU1 = true;
+				expected = u1;
+			} else if (r.source.id == u2.Id && !foundU2) {
+				foundU2 = true;
+				expected = u2;
+			} else if (r.source.id == u3.Id && !foundU3) {
+				foundU3 = true;
+				expected = u3;
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundU1 && foundU2 && foundU3);
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_OpportunityContactRoles() {
+		Schema.Account a1 = TestUtils.createAccount();
+		Opportunity o1 = TestUtils.createOpportunity(a1.Id);
+		Contact c1 = TestUtils.createContact(a1.Id);
+		OpportunityContactRole o1c1 = TestUtils.createOpportunityContactRole(o1.Id, c1.Id);
+		o1c1.Role = 'o1c1';
+		Contact c2 = TestUtils.createContact(a1.Id);
+		OpportunityContactRole o1c2 = TestUtils.createOpportunityContactRole(o1.Id, c2.Id);
+		o1c2.Role = 'o1c2';
+		Schema.Account a2 = TestUtils.createAccount();
+		Opportunity o2 = TestUtils.createOpportunity(a2.Id);
+		Contact c3 = TestUtils.createContact(a2.Id);
+		OpportunityContactRole o2c3 = TestUtils.createOpportunityContactRole(o2.Id, c3.Id);
+		o2c3.Role = 'o2c3';
+		update new List<OpportunityContactRole> { o1c1, o1c2, o2c3 };
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		List<Recipient> result = rr.getRelatedRecipients(
+			Opportunity.getSObjectType(),
+			new Set<Id> { o1.Id, o2.Id },
+			new Query.Relationship(
+				false,
+				'OpportunityContactRoles',
+				'Opportunity Contact Roles',
+				'OpportunityContactRole'),
+			null);
+		Test.stopTest();
+
+		System.assertEquals(3, Collection.size(result));
+		System.assertEquals(3, Collection.size(result));
+		Boolean foundC1 = false, foundC2 = false, foundC3 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.source);
+			System.assertNotEquals(null, r.source.id);
+			Contact expected = null;
+			if (r.source.id == c1.Id && !foundC1) {
+				foundC1 = true;
+				expected = c1;
+				System.assertEquals('o1c1', r.getRoleName());
+			} else if (r.source.id == c2.Id && !foundC2) {
+				foundC2 = true;
+				expected = c2;
+				System.assertEquals('o1c2', r.getRoleName());
+			} else if (r.source.id == c3.Id && !foundC3) {
+				foundC3 = true;
+				expected = c3;
+				System.assertEquals('o2c3', r.getRoleName());
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundC1 && foundC2 && foundC3);
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_CaseContactRoles() {
+		Schema.Account a1 = TestUtils.createAccount();
+		Contact c1 = TestUtils.createContact(a1.Id);
+		Case cs1 = TestUtils.createCase(a1.Id, c1.Id);
+		CaseContactRole cs1c1 = TestUtils.createCaseContactRole(cs1.Id, c1.Id);
+		cs1c1.Role = 'cs1c1';
+		Contact c2 = TestUtils.createContact(a1.Id);
+		CaseContactRole cs1c2 = TestUtils.createCaseContactRole(cs1.Id, c2.Id);
+		cs1c2.Role = 'cs1c2';
+		Schema.Account a2 = TestUtils.createAccount();
+		Contact c3 = TestUtils.createContact(a2.Id);
+		Case cs2 = TestUtils.createCase(a2.Id, c3.Id);
+		CaseContactRole cs2c3 = TestUtils.createCaseContactRole(cs2.Id, c3.Id);
+		cs2c3.Role = 'cs2c3';
+		update new List<CaseContactRole> { cs1c1, cs1c2, cs2c3 };
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		List<Recipient> result = rr.getRelatedRecipients(
+			Case.getSObjectType(),
+			new Set<Id> { cs1.Id, cs2.Id },
+			new Query.Relationship(
+				false,
+				'CaseContactRoles',
+				'Case Contact Roles',
+				'CaseContactRole'),
+			null);
+		Test.stopTest();
+
+		System.assertEquals(3, Collection.size(result));
+		System.assertEquals(3, Collection.size(result));
+		Boolean foundC1 = false, foundC2 = false, foundC3 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			System.assertNotEquals(null, r.source);
+			System.assertNotEquals(null, r.source.id);
+			Contact expected = null;
+			if (r.source.id == c1.Id && !foundC1) {
+				foundC1 = true;
+				expected = c1;
+				System.assertEquals('cs1c1', r.getRoleName());
+			} else if (r.source.id == c2.Id && !foundC2) {
+				foundC2 = true;
+				expected = c2;
+				System.assertEquals('cs1c2', r.getRoleName());
+			} else if (r.source.id == c3.Id && !foundC3) {
+				foundC3 = true;
+				expected = c3;
+				System.assertEquals('cs2c3', r.getRoleName());
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundC1 && foundC2 && foundC3);
 	}
 }

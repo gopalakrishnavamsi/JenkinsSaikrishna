@@ -13,6 +13,10 @@
 		<enabled>true</enabled>
 	</classAccesses>
 	<classAccesses>
+		<apexClass>EnvelopeConfigurationController</apexClass>
+		<enabled>true</enabled>
+	</classAccesses>
+	<classAccesses>
 		<apexClass>FileController</apexClass>
 		<enabled>true</enabled>
 	</classAccesses>
@@ -158,127 +162,22 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>CustomParameterMap__c.Name__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomParameterMap__c.Order__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomParameterMap__c.SubValue__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomParameterMap__c.Type__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomParameterMap__c.Value__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.AccessCode__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>false</editable>
-		<field>CustomRecipient__c.EmailMessage__c</field>
-		<readable>false</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>false</editable>
-		<field>CustomRecipient__c.EmailSubject__c</field>
-		<readable>false</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.Email__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.FirstName__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.HostEmail__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.HostName__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.Language__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.LastName__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.Note__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.Relationship__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.Role__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.RoutingOrder__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>false</editable>
-		<field>CustomRecipient__c.SignNow__c</field>
-		<readable>false</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.SigningGroupId__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.SigningGroupName__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.SmsPhoneNumber__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>CustomRecipient__c.Type__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
 		<field>Document__c.Extension__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
 		<field>Document__c.LastModified__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Document__c.ReadOnly__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Document__c.Required__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
@@ -302,23 +201,18 @@
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
-		<editable>false</editable>
-		<field>EnvelopeConfiguration__c.Action__c</field>
-		<readable>false</readable>
-	</fieldPermissions>
-	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.Active__c</field>
+		<field>EnvelopeConfiguration__c.Name</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.AddSourceDocuments__c</field>
+		<field>EnvelopeConfiguration__c.CustomFields__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.AddSourceRecipients__c</field>
+		<field>EnvelopeConfiguration__c.DocuSignId__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
@@ -333,67 +227,187 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.ExpireAfterDays__c</field>
+		<field>EnvelopeConfiguration__c.IsDraft__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.ExpireWarnDays__c</field>
+		<field>EnvelopeConfiguration__c.MergeFields__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.Expires__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>false</editable>
-		<field>EnvelopeConfiguration__c.ObjectType__c</field>
-		<readable>false</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.RemindAfterDays__c</field>
+		<field>EnvelopeConfiguration__c.Notifications__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.RemindFrequencyDays__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>false</editable>
-		<field>EnvelopeConfiguration__c.Remind__c</field>
-		<readable>false</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.ShowChatterSettings__c</field>
+		<field>EnvelopeConfiguration__c.Options__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.ShowEmailMessage__c</field>
+		<field>EnvelopeConfiguration__c.SenderPermissions__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.ShowEmailSubject__c</field>
+		<field>EnvelopeConfiguration__c.SourceObject__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.ShowRemindExpire__c</field>
+		<field>EnvelopeConfigurationDocument__c.Extension__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.ShowSendButton__c</field>
+		<field>EnvelopeConfigurationDocument__c.Filter__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
-		<field>EnvelopeConfiguration__c.ShowTagButton__c</field>
+		<field>EnvelopeConfigurationDocument__c.Name__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationDocument__c.ReadOnly__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationDocument__c.Required__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationDocument__c.Sequence__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationDocument__c.SourceId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationDocument__c.Type__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.AccessCode__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Email__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.EmailMessage__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.EmailSubject__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Filter__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.HostEmail__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.HostName__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.IdCheckRequired__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.IncrementRoutingOrder__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Language__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Name__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Note__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.ReadOnly__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Relationship__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Required__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Roles__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.RoutingOrder__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Sequence__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.SigningGroupId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.SigningGroupName__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.SignNow__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.SmsPhoneNumber__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.Type__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
@@ -508,6 +522,11 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>Envelope__c.Options__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>Envelope__c.RemindAfterDays__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -523,17 +542,17 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>Envelope__c.SenderPermissions__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>Envelope__c.Sent__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
 		<field>Envelope__c.SourceId__c</field>
-		<readable>true</readable>
-	</fieldPermissions>
-	<fieldPermissions>
-		<editable>true</editable>
-		<field>Envelope__c.UpdateChatter__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
@@ -688,6 +707,16 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>Recipient__c.ReadOnly__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Recipient__c.Required__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>Recipient__c.RoleValue__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -782,24 +811,6 @@
 		<allowEdit>true</allowEdit>
 		<allowRead>true</allowRead>
 		<modifyAllRecords>false</modifyAllRecords>
-		<object>CustomParameterMap__c</object>
-		<viewAllRecords>false</viewAllRecords>
-	</objectPermissions>
-	<objectPermissions>
-		<allowCreate>true</allowCreate>
-		<allowDelete>true</allowDelete>
-		<allowEdit>true</allowEdit>
-		<allowRead>true</allowRead>
-		<modifyAllRecords>false</modifyAllRecords>
-		<object>CustomRecipient__c</object>
-		<viewAllRecords>false</viewAllRecords>
-	</objectPermissions>
-	<objectPermissions>
-		<allowCreate>true</allowCreate>
-		<allowDelete>true</allowDelete>
-		<allowEdit>true</allowEdit>
-		<allowRead>true</allowRead>
-		<modifyAllRecords>false</modifyAllRecords>
 		<object>Document__c</object>
 		<viewAllRecords>false</viewAllRecords>
 	</objectPermissions>
@@ -810,6 +821,24 @@
 		<allowRead>true</allowRead>
 		<modifyAllRecords>false</modifyAllRecords>
 		<object>EnvelopeConfiguration__c</object>
+		<viewAllRecords>false</viewAllRecords>
+	</objectPermissions>
+	<objectPermissions>
+		<allowCreate>true</allowCreate>
+		<allowDelete>true</allowDelete>
+		<allowEdit>true</allowEdit>
+		<allowRead>true</allowRead>
+		<modifyAllRecords>false</modifyAllRecords>
+		<object>EnvelopeConfigurationDocument__c</object>
+		<viewAllRecords>false</viewAllRecords>
+	</objectPermissions>
+	<objectPermissions>
+		<allowCreate>true</allowCreate>
+		<allowDelete>true</allowDelete>
+		<allowEdit>true</allowEdit>
+		<allowRead>true</allowRead>
+		<modifyAllRecords>false</modifyAllRecords>
+		<object>EnvelopeConfigurationRecipient__c</object>
 		<viewAllRecords>false</viewAllRecords>
 	</objectPermissions>
 	<objectPermissions>

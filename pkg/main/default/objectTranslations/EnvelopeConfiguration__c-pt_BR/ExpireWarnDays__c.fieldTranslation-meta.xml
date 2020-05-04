@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- smartling.translate_paths = CustomFieldTranslation/label -->
-    <label>Aviso de expiração em N dia(s) antes</label>
-    <name>ExpireWarnDays__c</name>
-</CustomFieldTranslation>

@@ -1,7 +1,7 @@
 /**
  * Representation of a DocuSign envelope recipient.
  */
-global class Recipient implements Comparable {
+global virtual class Recipient implements Comparable {
 	/**
 	 * Signer (Needs to Sign) recipient type constant.
 	 */
@@ -34,6 +34,14 @@ global class Recipient implements Comparable {
 	 * Intermediary (Update Recipients) recipient type constant.
 	 */
 	global static final String TYPE_INTERMEDIARY = 'Intermediary';
+	/**
+	 * Seal recipient type constant.
+	 */
+	public static final String TYPE_SEAL = 'Seal';
+	/**
+	 * Witness recipient type constant.
+	 */
+	public static final String TYPE_WITNESS = 'Witness';
 	/**
 	 * Created status constant.
 	 */
@@ -94,6 +102,14 @@ global class Recipient implements Comparable {
 	@AuraEnabled
 	global Role role { get; private set; }
 	/**
+	 * Whether the recipient has a defined role.
+	 */
+	public Boolean hasRole {
+		get {
+			return this.role != null && String.isNotBlank(this.role.name);
+		}
+	}
+	/**
 	 * The name of the recipient.
 	 */
 	@AuraEnabled
@@ -144,6 +160,10 @@ global class Recipient implements Comparable {
 	@AuraEnabled
 	global Boolean signNow { get; private set; }
 	/**
+	 * Custom tabs (e.g. merge fields) associated with the recipient.
+	 */
+	public List<Tab> tabs { get; private set; }
+	/**
 	 * The Salesforce source object for the recipient (Contact, Lead, or User).
 	 */
 	@AuraEnabled
@@ -167,6 +187,74 @@ global class Recipient implements Comparable {
 	 */
 	@AuraEnabled
 	global Boolean required { get; private set; }
+
+	/**
+	 * Constructs a DocuSign envelope recipient.
+	 *
+	 * @param id The ID of the associated dfsle__Recipient__c record.
+	 * @param envelopeRecipientId The envelope recipient ID of the recipient.
+	 * @param type The type of recipient.
+	 * @param sequence The ordinal sequence of the recipient.
+	 * @param routingOrder The routing order of the recipient.
+	 * @param role The recipient role.
+	 * @param name The name of the recipient.
+	 * @param email The email of the recipient.
+	 * @param signingGroup The DocuSign signing group.
+	 * @param phone The phone number of the recipient.
+	 * @param authentication Optional authentication method for the recipient.
+	 * @param note Optional private note sent to the recipient.
+	 * @param emailSettings The email settings for the recipient.
+	 * @param hostName The host name of the recipient, used for in-person signing.
+	 * @param hostEmail The host email of the recipient, used for in-person signing.
+	 * @param signNow Whether the recipient should sign now.
+	 * @param tabs Custom tabs (e.g. merge fields) associated with the recipient.
+	 * @param source The Salesforce source object for the recipient.
+	 * @param readOnly Whether this recipient may be modified. Used with DocuSign templates.
+	 * @param required Whether this recipient is required. Used with DocuSign templates.
+	 */
+	public Recipient(
+		final Id id,
+		final String envelopeRecipientId,
+		final String type,
+		final Integer sequence,
+		final Integer routingOrder,
+		final Recipient.Role role,
+		final String name,
+		final String email,
+		final SigningGroup signingGroup,
+		final String phone,
+		final Authentication authentication,
+		final String note,
+		final EmailSettings emailSettings,
+		final String hostName,
+		final String hostEmail,
+		final Boolean signNow,
+		final List<Tab> tabs,
+		final Entity source,
+		final Boolean readOnly,
+		final Boolean required) {
+
+		this.id = id;
+		this.envelopeRecipientId = envelopeRecipientId;
+		this.type = type;
+		this.sequence = sequence;
+		this.routingOrder = routingOrder;
+		this.role = role;
+		this.name = name;
+		this.email = email;
+		this.signingGroup = signingGroup;
+		this.phone = phone;
+		this.authentication = authentication;
+		this.note = note;
+		this.emailSettings = emailSettings;
+		this.hostName = hostName;
+		this.hostEmail = hostEmail;
+		this.signNow = signNow;
+		this.tabs = tabs == null ? new List<Tab>() : tabs;
+		this.source = source;
+		this.readOnly = readOnly;
+		this.required = required;
+	}
 
 	/**
 	 * Constructs a DocuSign envelope recipient.
@@ -210,24 +298,27 @@ global class Recipient implements Comparable {
 		final Boolean readOnly,
 		final Boolean required) {
 
-		this.id = id;
-		this.type = type;
-		this.sequence = sequence;
-		this.routingOrder = routingOrder;
-		this.role = role;
-		this.name = name;
-		this.email = email;
-		this.signingGroup = signingGroup;
-		this.phone = phone;
-		this.authentication = authentication;
-		this.note = note;
-		this.emailSettings = emailSettings;
-		this.hostName = hostName;
-		this.hostEmail = hostEmail;
-		this.signNow = signNow;
-		this.source = source;
-		this.readOnly = readOnly;
-		this.required = required;
+		this(
+			id,
+			null,
+			type,
+			sequence,
+			routingOrder,
+			role,
+			name,
+			email,
+			signingGroup,
+			phone,
+			authentication,
+			note,
+			emailSettings,
+			hostName,
+			hostEmail,
+			signNow,
+			null,
+			source,
+			readOnly,
+			required);
 	}
 
 	/**
@@ -250,6 +341,7 @@ global class Recipient implements Comparable {
 
 		return new Recipient(
 			null,
+			null,
 			Recipient.TYPE_SIGNER,
 			null,
 			routingOrder,
@@ -264,6 +356,7 @@ global class Recipient implements Comparable {
 			null,
 			null,
 			false,
+			null,
 			null,
 			false,
 			false);
@@ -327,7 +420,11 @@ global class Recipient implements Comparable {
 	 *
 	 * @return The recipient based on the Salesforce source entity.
 	 */
-	global static Recipient fromSource(final String name, final String email, final String phone, final String role,
+	global static Recipient fromSource(
+		final String name,
+		final String email,
+		final String phone,
+		final String role,
 		final Entity source) {
 
 		return new Recipient(
@@ -658,7 +755,10 @@ global class Recipient implements Comparable {
 		 * @param subject The localized email subject.
 		 * @param message The localized email message.
 		 */
-		global EmailSettings(final String language, final String languageLabel, final String subject,
+		global EmailSettings(
+			final String language,
+			final String languageLabel,
+			final String subject,
 			final String message) {
 
 			this.language = language;
@@ -920,9 +1020,15 @@ global class Recipient implements Comparable {
 		if (compareTo == null || !(compareTo instanceof Recipient)) return -1;
 
 		Recipient r = (Recipient)compareTo;
-		if (this.sequence == r.sequence) return 0;
-		if (this.sequence > r.sequence) return 1;
-		return -1;
+		if (this.sequence == null || r.sequence == null) {
+			if (this.routingOrder == r.routingOrder) return 0;
+			if (this.routingOrder > r.routingOrder) return 1;
+			return -1;
+		} else {
+			if (this.sequence == r.sequence) return 0;
+			if (this.sequence > r.sequence) return 1;
+			return -1;
+		}
 	}
 
 	/**
@@ -1027,6 +1133,18 @@ global class Recipient implements Comparable {
 	}
 
 	/**
+	 * Sets the recipient <code>role</code> property.
+	 *
+	 * @param role The new recipient role.
+	 *
+	 * @return The recipient with updated <code>role</code>.
+	 */
+	public Recipient withRole(final String role) {
+		this.role = String.isBlank(role) ? null : new Recipient.Role(role);
+		return this;
+	}
+
+	/**
 	 * Sets the recipient <code>note</code> property.
 	 *
 	 * @param note The new recipient note.
@@ -1063,6 +1181,18 @@ global class Recipient implements Comparable {
 	}
 
 	/**
+	 * Sets the recipient <code>tabs</code> property.
+	 *
+	 * @param tabs Tabs (e.g. merge fields) associated with the recipient.
+	 *
+	 * @return The recipient with updated <code>tabs</code>.
+	 */
+	public Recipient withTabs(final List<Tab> tabs) {
+		this.tabs = tabs == null ? new List<Tab>() : tabs;
+		return this;
+	}
+
+	/**
 	 * Sets the recipient host name and email for in-person signing.
 	 *
 	 * @param hostName The name of the in-person signing host.
@@ -1078,16 +1208,17 @@ global class Recipient implements Comparable {
 		return this;
 	}
 
-	/**
-	 * Sets the envelope recipient ID.
-	 *
-	 * @param envelopeRecipientId The envelope recipient ID.
-	 *
-	 * @return The recipient with updated <code>envelopeRecipientId</code>.
-	 */
-	public Recipient withEnvelopeRecipientId(final String envelopeRecipientId) {
-		this.envelopeRecipientId = envelopeRecipientId;
+	public Recipient withPermissions(
+		final Boolean readOnly,
+		final Boolean required) {
+
+		this.readOnly = readOnly;
+		this.required = required;
 		return this;
+	}
+
+	public String getRoleName() {
+		return this.role == null ? null : this.role.name;
 	}
 
 	/**

@@ -158,6 +158,17 @@ private class StringUtilsTest {
 	}
 
 	@IsTest
+	static void test_isValidId() {
+		Test.startTest();
+		System.assert(!StringUtils.isValidId(null));
+		System.assert(!StringUtils.isValidId(''));
+		System.assert(!StringUtils.isValidId('\r\n '));
+		System.assert(!StringUtils.isValidId('whatever'));
+		System.assert(StringUtils.isValidId(UserInfo.getUserId()));
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_mkName() {
 		Test.startTest();
 		String n1 = StringUtils.mkName(null, ' ');

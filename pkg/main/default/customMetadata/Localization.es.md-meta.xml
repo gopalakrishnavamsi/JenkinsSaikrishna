@@ -3,46 +3,6 @@
     <label>Spanish</label>
     <protected>true</protected>
     <values>
-        <field>ChatterEnvelopeCompleted__c</field>
-        <value xsi:type="xsd:string">El sobre para [SourceType] &quot;[SourceName]&quot; se ha firmado y completado en DocuSign. Tiempo transcurrido: [TimeFromSent]</value>
-    </values>
-    <values>
-        <field>ChatterEnvelopeDeclined__c</field>
-        <value xsi:type="xsd:string">El sobre para [SourceType] &quot;[SourceName]&quot; se ha rechazado en DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterEnvelopeDelivered__c</field>
-        <value xsi:type="xsd:string">El sobre para [SourceType] &quot;[SourceName]&quot; se ha entregado a todos los destinatarios en DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterEnvelopeSent__c</field>
-        <value xsi:type="xsd:string">El sobre para [SourceType] &quot;[SourceName]&quot; se ha enviado para su firma en DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterEnvelopeVoided__c</field>
-        <value xsi:type="xsd:string">El sobre para [SourceType] &quot;[SourceName]&quot; se ha anulado en DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientCompleted__c</field>
-        <value xsi:type="xsd:string">[Recipient] ha completado el sobre para [SourceType] &quot;[SourceName]&quot; en DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientDeclined__c</field>
-        <value xsi:type="xsd:string">[Recipient] ha rechazado el sobre para [SourceType] &quot;[SourceName]&quot; en DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientDelivered__c</field>
-        <value xsi:type="xsd:string">[Recipient] ha visto el sobre para [SourceType] &quot;[SourceName]&quot; en DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientSent__c</field>
-        <value xsi:type="xsd:string">El sobre para [SourceType] &quot;[SourceName]&quot; se ha enviado a [Recipient] en DocuSign.</value>
-    </values>
-    <values>
-        <field>ChatterRecipientSigned__c</field>
-        <value xsi:type="xsd:string">[Recipient] ha firmado el sobre para [SourceType] &quot;[SourceName]&quot; en DocuSign. Tiempo transcurrido: [TimeFromSent]</value>
-    </values>
-    <values>
         <field>EmailMessage__c</field>
         <value xsi:type="xsd:string">Estoy enviando esta solicitud para su firma electrónica, favor de revisar y firmar electrónicamente siguiendo el enlace a continuación.</value>
     </values>

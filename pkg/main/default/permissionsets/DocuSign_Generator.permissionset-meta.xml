@@ -10,6 +10,26 @@
 	</classAccesses>
 	<description>Provides access to document generation in DocuSign Apps Launcher</description>
 	<fieldPermissions>
+		<editable>true</editable>
+		<field>ContentVersion.GeneratedFileFormat__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>ContentVersion.GeneratedFileName__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>ContentVersion.GeneratedFileSuffix__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>false</editable>
+		<field>ContentVersion.Rule__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
 		<editable>false</editable>
 		<field>GenTemplate__c.Description__c</field>
 		<readable>true</readable>

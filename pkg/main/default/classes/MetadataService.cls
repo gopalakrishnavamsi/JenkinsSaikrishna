@@ -120,9 +120,9 @@ public with sharing class MetadataService {
 			DescribeFieldResult field = f.getDescribe();
 			if (MergeField.isValid(field)) {
 				if (depth < MergeField.MAX_DEPTH) {
-					result.add(MergeField.forField(field, field.getRelationshipName()));
+					result.add(MergeField.forField(field));
 				} else if (Collection.isEmpty(field.getReferenceTo())) { // no relationships when at max depth
-					result.add(MergeField.forField(field, null));
+					result.add(MergeField.forField(field));
 				}
 			}
 		}
@@ -143,7 +143,7 @@ public with sharing class MetadataService {
 				DescribeFieldResult field = f.getDescribe();
 				if (MergeField.isValid(field)) {
 					if (!field.getReferenceTo().isEmpty()) {
-						result.add(MergeField.forField(field, ''));
+						result.add(MergeField.forField(field));
 					}
 				}
 			}

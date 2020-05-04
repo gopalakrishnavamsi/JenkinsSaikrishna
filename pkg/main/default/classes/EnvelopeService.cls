@@ -92,10 +92,13 @@ global with sharing class EnvelopeService {
 					Integer.valueOf(e.RemindFrequencyDays__c),
 					e.Expires__c,
 					Integer.valueOf(e.ExpireAfterDays__c),
-					Integer.valueOf(e.ExpireWarnDays__c),
-					e.UpdateChatter__c),
+					Integer.valueOf(e.ExpireWarnDays__c)),
 				e.EmailSubject__c,
 				e.EmailMessage__c,
+				String.isBlank(e.SenderPermissions__c) ? Envelope.DEFAULT_PERMISSIONS
+					: (Envelope.Permissions)JSON.deserialize(e.SenderPermissions__c, Envelope.Permissions.class),
+				String.isBlank(e.Options__c) ? Envelope.DEFAULT_OPTIONS
+					: (Envelope.Options)JSON.deserialize(e.Options__c, Envelope.Options.class),
 				e.SourceId__c == null ? null : new Entity(e.SourceId__c),
 				e.Sent__c);
 		}
@@ -114,27 +117,70 @@ global with sharing class EnvelopeService {
 				Expires__c = e.notifications == null ? false : e.notifications.expires,
 				ExpireAfterDays__c = e.notifications == null ? 0 : e.notifications.expireAfterDays,
 				ExpireWarnDays__c = e.notifications == null ? 0 : e.notifications.expireWarnDays,
-				UpdateChatter__c = e.notifications == null ? false : e.notifications.updateChatter,
 				EmailSubject__c = e.emailSubject,
 				EmailMessage__c = e.emailMessage,
+				SenderPermissions__c = e.senderPermissions == null ? null : JSON.serialize(e.senderPermissions),
+				Options__c = e.options == null ? null : JSON.serialize(e.options),
 				SourceId__c = e.source == null || e.source.id == null ? null : e.source.id,
 				Sent__c = e.sent);
 		}
 
 		public Envelope queryEnvelope(final Id envelopeId) {
 			Permissions.verifyIsQueryable(TYPE_ENVELOPE, new List<String> {
-				'Id', 'Name', 'DocuSignId__c', 'EnvelopeConfiguration__c', 'Remind__c', 'RemindAfterDays__c',
-				'RemindFrequencyDays__c', 'Expires__c', 'ExpireAfterDays__c', 'ExpireWarnDays__c', 'UpdateChatter__c',
-				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
+				'Id',
+				'Name',
+				Application.namespacePrefix + 'DocuSignId__c',
+				Application.namespacePrefix + 'EmailMessage__c',
+				Application.namespacePrefix + 'EmailSubject__c',
+				Application.namespacePrefix + 'EnvelopeConfiguration__c',
+				Application.namespacePrefix + 'ExpireAfterDays__c',
+				Application.namespacePrefix + 'Expires__c',
+				Application.namespacePrefix + 'ExpireWarnDays__c',
+				Application.namespacePrefix + 'Remind__c',
+				Application.namespacePrefix + 'RemindAfterDays__c',
+				Application.namespacePrefix + 'RemindFrequencyDays__c',
+				Application.namespacePrefix + 'SenderPermissions__c',
+				Application.namespacePrefix + 'Options__c',
+				Application.namespacePrefix + 'SourceId__c',
+				Application.namespacePrefix + 'Sent__c'
 			});
 			Permissions.verifyIsQueryable(TYPE_DOCUMENT, new List<String> {
-				'Id', 'Type__c', 'Sequence__c', 'Name', 'Extension__c', 'Size__c', 'SourceId__c', 'LastModified__c'
+				'Id',
+				'Name',
+				Application.namespacePrefix + 'Extension__c',
+				Application.namespacePrefix + 'LastModified__c',
+				Application.namespacePrefix + 'ReadOnly__c',
+				Application.namespacePrefix + 'Required__c',
+				Application.namespacePrefix + 'Sequence__c',
+				Application.namespacePrefix + 'Size__c',
+				Application.namespacePrefix + 'SourceId__c',
+				Application.namespacePrefix + 'Type__c'
 			});
 			Permissions.verifyIsQueryable(TYPE_RECIPIENT, new List<String> {
-				'Id', 'EnvelopeRecipientId__c', 'Sequence__c', 'Name', 'Email__c', 'RoutingOrder__c', 'Type__c',
-				'Role__c', 'RoleValue__c', 'AccessCode__c', 'IdCheckRequired__c', 'SmsPhoneNumber__c', 'Note__c',
-				'Language__c', 'EmailSubject__c', 'EmailMessage__c', 'HostName__c', 'HostEmail__c', 'SignNow__c',
-				'SigningGroupId__c', 'SigningGroupName__c', 'SourceId__c'
+				'Id',
+				'Name',
+				Application.namespacePrefix + 'AccessCode__c',
+				Application.namespacePrefix + 'Email__c',
+				Application.namespacePrefix + 'EmailMessage__c',
+				Application.namespacePrefix + 'EmailSubject__c',
+				Application.namespacePrefix + 'EnvelopeRecipientId__c',
+				Application.namespacePrefix + 'HostEmail__c',
+				Application.namespacePrefix + 'HostName__c',
+				Application.namespacePrefix + 'IdCheckRequired__c',
+				Application.namespacePrefix + 'Language__c',
+				Application.namespacePrefix + 'Note__c',
+				Application.namespacePrefix + 'ReadOnly__c',
+				Application.namespacePrefix + 'Required__c',
+				Application.namespacePrefix + 'Role__c',
+				Application.namespacePrefix + 'RoleValue__c',
+				Application.namespacePrefix + 'RoutingOrder__c',
+				Application.namespacePrefix + 'Sequence__c',
+				Application.namespacePrefix + 'SigningGroupId__c',
+				Application.namespacePrefix + 'SigningGroupName__c',
+				Application.namespacePrefix + 'SignNow__c',
+				Application.namespacePrefix + 'SmsPhoneNumber__c',
+				Application.namespacePrefix + 'SourceId__c',
+				Application.namespacePrefix + 'Type__c'
 			});
 
 			List<Envelope__c> dses = [
@@ -148,9 +194,10 @@ global with sharing class EnvelopeService {
 					Expires__c,
 					ExpireAfterDays__c,
 					ExpireWarnDays__c,
-					UpdateChatter__c,
 					EmailSubject__c,
 					EmailMessage__c,
+					SenderPermissions__c,
+					Options__c,
 					SourceId__c,
 					Sent__c,
 					OwnerId, (
@@ -161,7 +208,9 @@ global with sharing class EnvelopeService {
 						Extension__c,
 						Size__c,
 						LastModified__c,
-						SourceId__c
+						SourceId__c,
+						ReadOnly__c,
+						Required__c
 					FROM Documents__r
 					ORDER BY Sequence__c
 				), (
@@ -186,7 +235,9 @@ global with sharing class EnvelopeService {
 						SignNow__c,
 						SigningGroupId__c,
 						SigningGroupName__c,
-						SourceId__c
+						SourceId__c,
+						ReadOnly__c,
+						Required__c
 					FROM Recipients__r
 					ORDER BY Sequence__c
 				)
@@ -205,9 +256,20 @@ global with sharing class EnvelopeService {
 
 		public Envelope insertEnvelope(final Envelope envelope) {
 			Permissions.verifyIsCreateable(TYPE_ENVELOPE, new List<String> {
-				'DocuSignId__c', 'EnvelopeConfiguration__c', 'Remind__c', 'RemindAfterDays__c',
-				'RemindFrequencyDays__c', 'Expires__c', 'ExpireAfterDays__c', 'ExpireWarnDays__c', 'UpdateChatter__c',
-				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
+				Application.namespacePrefix + 'DocuSignId__c',
+				Application.namespacePrefix + 'EmailMessage__c',
+				Application.namespacePrefix + 'EmailSubject__c',
+				Application.namespacePrefix + 'EnvelopeConfiguration__c',
+				Application.namespacePrefix + 'ExpireAfterDays__c',
+				Application.namespacePrefix + 'Expires__c',
+				Application.namespacePrefix + 'ExpireWarnDays__c',
+				Application.namespacePrefix + 'Remind__c',
+				Application.namespacePrefix + 'RemindAfterDays__c',
+				Application.namespacePrefix + 'RemindFrequencyDays__c',
+				Application.namespacePrefix + 'SenderPermissions__c',
+				Application.namespacePrefix + 'Options__c',
+				Application.namespacePrefix + 'Sent__c',
+				Application.namespacePrefix + 'SourceId__c'
 			});
 
 			if (envelope == null) return envelope;
@@ -223,9 +285,20 @@ global with sharing class EnvelopeService {
 
 		public List<Envelope> insertSentEnvelopes(final List<Envelope> envelopes) {
 			Permissions.verifyIsCreateable(TYPE_ENVELOPE, new List<String> {
-				'DocuSignId__c', 'EnvelopeConfiguration__c', 'Remind__c', 'RemindAfterDays__c',
-				'RemindFrequencyDays__c', 'Expires__c', 'ExpireAfterDays__c', 'ExpireWarnDays__c', 'UpdateChatter__c',
-				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
+				Application.namespacePrefix + 'DocuSignId__c',
+				Application.namespacePrefix + 'EmailMessage__c',
+				Application.namespacePrefix + 'EmailSubject__c',
+				Application.namespacePrefix + 'EnvelopeConfiguration__c',
+				Application.namespacePrefix + 'ExpireAfterDays__c',
+				Application.namespacePrefix + 'Expires__c',
+				Application.namespacePrefix + 'ExpireWarnDays__c',
+				Application.namespacePrefix + 'Remind__c',
+				Application.namespacePrefix + 'RemindAfterDays__c',
+				Application.namespacePrefix + 'RemindFrequencyDays__c',
+				Application.namespacePrefix + 'SenderPermissions__c',
+				Application.namespacePrefix + 'Options__c',
+				Application.namespacePrefix + 'Sent__c',
+				Application.namespacePrefix + 'SourceId__c'
 			});
 
 			List<Envelope> result = new List<Envelope>();
@@ -249,9 +322,20 @@ global with sharing class EnvelopeService {
 
 		public Envelope updateEnvelope2(final Envelope envelope, final Boolean sendNow) {
 			Permissions.verifyIsUpdateable(TYPE_ENVELOPE, new List<String> {
-				'DocuSignId__c', 'EnvelopeConfiguration__c', 'Remind__c', 'RemindAfterDays__c',
-				'RemindFrequencyDays__c', 'Expires__c', 'ExpireAfterDays__c', 'ExpireWarnDays__c', 'UpdateChatter__c',
-				'EmailSubject__c', 'EmailMessage__c', 'SourceId__c', 'Sent__c'
+				Application.namespacePrefix + 'DocuSignId__c',
+				Application.namespacePrefix + 'EmailMessage__c',
+				Application.namespacePrefix + 'EmailSubject__c',
+				Application.namespacePrefix + 'EnvelopeConfiguration__c',
+				Application.namespacePrefix + 'ExpireAfterDays__c',
+				Application.namespacePrefix + 'Expires__c',
+				Application.namespacePrefix + 'ExpireWarnDays__c',
+				Application.namespacePrefix + 'Remind__c',
+				Application.namespacePrefix + 'RemindAfterDays__c',
+				Application.namespacePrefix + 'RemindFrequencyDays__c',
+				Application.namespacePrefix + 'SenderPermissions__c',
+				Application.namespacePrefix + 'Options__c',
+				Application.namespacePrefix + 'Sent__c',
+				Application.namespacePrefix + 'SourceId__c'
 			});
 
 			if (envelope == null) return envelope;
@@ -268,18 +352,19 @@ global with sharing class EnvelopeService {
 				.withRecipients(envelope.recipients);
 		}
 
-		public Boolean updateEnvelopeSent(final Id envelopeId, final UUID dsEnvelopeId,
-			final String emailSubject, final String emailMessage, final Boolean sendNow) {
+		public Boolean updateEnvelopeSent(
+			final Id envelopeId,
+			final UUID dsEnvelopeId,
+			final Boolean sendNow) {
 
 			Permissions.verifyIsUpdateable(TYPE_ENVELOPE, new List<String> {
-				'DocuSignId__c', 'EmailSubject__c', 'EmailMessage__c', 'Sent__c'
+				Application.namespacePrefix + 'DocuSignId__c',
+				Application.namespacePrefix + 'Sent__c'
 			});
 
 			update new Envelope__c(
 				Id = envelopeId,
 				DocuSignId__c = UUID.toString(dsEnvelopeId),
-				EmailSubject__c = emailSubject,
-				EmailMessage__c = emailMessage,
 				Sent__c = sendNow ? Datetime.now() : null);
 			return true;
 		}
@@ -319,102 +404,32 @@ global with sharing class EnvelopeService {
 		}
 	}
 
-	@TestVisible
-	private static Envelope applyRecipientLimit(
-		final Envelope envelope,
-		final Integer recipientLimit) {
-
-		if (envelope == null || Collection.isEmpty(envelope.recipients) || recipientLimit <= 0) return envelope;
-
-		List<Recipient> rs = new List<Recipient>();
-		Integer counter = 1;
-		for (Recipient r : envelope.recipients) {
-			if (counter++ > recipientLimit) {
-				LOG.warn(String.format('Envelope recipient count {0} is greater than the configured limit {1}.',
-					new List<String> {
-						String.valueOf(envelope.recipients.size()),
-						String.valueOf(recipientLimit)
-					}));
-				break;
-			}
-			rs.add(r);
-		}
-
-		return envelope.withRecipients(rs);
-	}
-
-	@TestVisible
-	private static Envelope replaceUserTags(final Envelope envelope) {
-		if (envelope == null) return envelope;
-
-		return envelope
-			.withEmail(
-				StringUtils.replaceUserTags(envelope.emailSubject),
-				StringUtils.replaceUserTags(envelope.emailMessage));
-	}
-
 	/**
 	 * Saves a DocuSign envelope record.
 	 * <p>
 	 * <em>This method is intended for DocuSign internal use only.
 	 *
 	 * @param envelope The DocuSign envelope.
-	 * @param envelopeConfiguration Optional envelope configuration.
 	 *
 	 * @return The saved DocuSign envelope.
 	 */
-	public static Envelope saveEnvelope(
-		final Envelope envelope,
-		final EnvelopeConfiguration envelopeConfiguration) {
-
+	public static Envelope saveEnvelope(final Envelope envelope) {
 		// Custom fields are not stored in our custom object, so must load and merge them later.
-		Envelope result = DB.insertEnvelope(replaceUserTags(envelope));
+		Envelope result = DB.insertEnvelope(envelope);
 
 		// Add any non-custom-button documents and recipients
 		if (Collection.isNotEmpty(result.documents)) {
-			result = result.withDocuments(DocumentService.addEnvelopeDocuments(result.id, result.documents));
+			result = result.withDocuments(DocumentService.addEnvelopeDocuments(
+				result.id,
+				result.documents));
 		}
 		if (Collection.isNotEmpty(result.recipients)) {
 			result = result.withRecipients(RecipientService.addEnvelopeRecipients(
 				result.id,
-				RecipientService.prepareRecipients(
-					result.recipients,
-					envelopeConfiguration != null ? envelopeConfiguration.email : null,
-					envelopeConfiguration != null ? envelopeConfiguration.recipients : null)));
+				RecipientService.prepareRecipients(result.recipients)));
 		}
 
 		return result;
-	}
-
-	@TestVisible
-	private static Envelope addNotifications(final Envelope envelope, final Notifications notifications) {
-		if (envelope == null || notifications == null) return envelope;
-
-		return envelope.withNotifications(notifications);
-	}
-
-	@TestVisible
-	private static Envelope addEmail(final Envelope envelope, final String emailSubject, final String emailMessage) {
-		if (envelope == null || (String.isBlank(emailSubject) && String.isBlank(emailMessage))) return envelope;
-
-		return envelope
-			.withEmail(
-				StringUtils.replaceUserTags(String.isNotBlank(emailSubject) ? emailSubject : envelope.emailSubject),
-				StringUtils.replaceUserTags(String.isNotBlank(emailMessage) ? emailMessage : envelope.emailMessage));
-	}
-
-	@TestVisible
-	private static Envelope addFiles(final Envelope envelope, final Set<Id> fileIds) {
-		if (envelope == null || Collection.isEmpty(fileIds)) return envelope;
-
-		return envelope.addDocuments(DocumentService.resolveFiles(fileIds));
-	}
-
-	@TestVisible
-	private static Envelope addTemplates(final Envelope envelope, final Set<UUID> templateIds) {
-		if (envelope == null || Collection.isEmpty(templateIds)) return envelope;
-
-		return envelope.addDocuments(DocumentService.resolveTemplates(templateIds));
 	}
 
 	@TestVisible
@@ -429,22 +444,6 @@ global with sharing class EnvelopeService {
 	}
 
 	@TestVisible
-	private static Envelope addRelatedContacts(
-		final Envelope envelope,
-		final Entity source,
-		final List<EnvelopeConfiguration.RelatedContacts> relatedContacts,
-		final Map<String, SigningGroup> signingGroups) {
-
-		if (envelope == null || source == null || relatedContacts == null) return envelope;
-
-		for (EnvelopeConfiguration.RelatedContacts rc : relatedContacts) {
-			envelope.addRecipients(RecipientService.resolveRelatedContacts(source, rc, signingGroups));
-		}
-
-		return envelope;
-	}
-
-	@TestVisible
 	private static Envelope addSourceRecipients(
 		final Envelope envelope,
 		final Entity source,
@@ -454,18 +453,6 @@ global with sharing class EnvelopeService {
 		return envelope.addRecipients(RecipientService.resolveSourceRecipients(source, defaultEmailSettings));
 	}
 
-	@TestVisible
-	private static Envelope addCustomRecipients(
-		final Envelope envelope,
-		final List<EnvelopeConfiguration.CustomRecipient> customRecipients,
-		final Map<String, SigningGroup> signingGroups,
-		final Recipient.EmailSettings defaultEmailSettings) {
-
-		if (envelope == null || customRecipients == null) return envelope;
-		return envelope.addRecipients(RecipientService.resolveCustomRecipients(customRecipients, signingGroups,
-			defaultEmailSettings));
-	}
-
 	/**
 	 * Creates a DocuSign envelope. This method does not send the envelope; to do so call
 	 * <code>dfsle.EnvelopeService.sendEnvelope</code>.
@@ -473,17 +460,13 @@ global with sharing class EnvelopeService {
 	 * The caller must be assigned the <code>DocuSign User</code> permission set.
 	 *
 	 * @param envelope The envelope to create.
-	 * @param envelopeConfiguration Optional envelope configuration used to be merged with the envelope. This is
-	 * currently a placeholder argument, i.e. always pass <code>null</code>.
-	 * @param addFromSource Load source documents and recipients if <code>envelopeConfiguration</code> is
-	 * <code>null</code>.
+	 * @param addFromSource Load source documents and recipients.
 	 *
 	 * @return The newly-created envelope.
 	 * @see dfsle.EnvelopeService.sendEnvelope for details on how to send the created envelope.
 	 */
-	global static Envelope createEnvelope(
+	public static Envelope createEnvelope(
 		final Envelope envelope,
-		final EnvelopeConfiguration envelopeConfiguration,
 		final Boolean addFromSource) {
 
 		Permissions.verifyIsDocuSignUser();
@@ -496,50 +479,34 @@ global with sharing class EnvelopeService {
 		Recipient.EmailSettings defaultEmailSettings =
 			Localization.isEmailLocalizationEnabled() ? Localization.getEmailSettingsForCurrentLanguage() : null;
 		Envelope result = envelope;
-		if (envelopeConfiguration != null) {
-			// FIXME: Enable envelope configuration validation
-//			vr = EnvelopeConfigurationManager.validate(envelopeConfiguration);
-//			if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
-
-			// Envelope-level customization
-			result = result.withEnvelopeConfigurationId(envelopeConfiguration.id);
-			result = addNotifications(result, envelopeConfiguration.notifications);
-			if (envelopeConfiguration.email != null) {
-				result = addEmail(result, envelopeConfiguration.email.subject, envelopeConfiguration.email.message);
-			}
-			if (envelopeConfiguration.id != null) result.withEnvelopeConfigurationId(envelopeConfiguration.id);
-
-			if (envelopeConfiguration.documents != null) {
-				// Document-level customization
-				result = addFiles(result, envelopeConfiguration.documents.fileIds);
-				result = addTemplates(result, envelopeConfiguration.documents.templateIds);
-			}
-			if (envelopeConfiguration.documents == null || envelopeConfiguration.documents.addSourceDocuments) {
-				result = addSourceDocuments(result, envelopeConfiguration.source,
-					envelopeConfiguration.documents.addLastUpdatedOnly);
-			}
-
-			if (envelopeConfiguration.hasRecipients) {
-				// Recipient-level customization
-				Map<String, SigningGroup> signingGroups = RecipientService.resolveSigningGroups(
-					envelopeConfiguration.source, envelopeConfiguration.recipients);
-				result = addRelatedContacts(result, envelopeConfiguration.source,
-					envelopeConfiguration.recipients.relatedContacts, signingGroups);
-				result = addCustomRecipients(result, envelopeConfiguration.recipients.recipients, signingGroups,
-					defaultEmailSettings);
-			}
-			if (envelopeConfiguration.recipients == null || envelopeConfiguration.recipients.addSourceRecipients) {
-				result = addSourceRecipients(result, envelopeConfiguration.source, defaultEmailSettings);
-			}
-			if (envelopeConfiguration.recipients != null) {
-				result = applyRecipientLimit(result, envelopeConfiguration.recipients.recipientLimit);
-			}
-		} else if (addFromSource) { // Default settings if custom button is undefined?
+		if (addFromSource) { // Default settings if custom button is undefined?
 			result = addSourceDocuments(result, result.source, false);
 			result = addSourceRecipients(result, result.source, defaultEmailSettings);
 		}
 
-		return saveEnvelope(result, envelopeConfiguration);
+		return saveEnvelope(result);
+	}
+
+	/**
+	 * Creates a DocuSign envelope. This method does not send the envelope; to do so call
+	 * <code>dfsle.EnvelopeService.sendEnvelope</code>.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param envelope The envelope to create.
+	 * @param envelopeConfiguration Deprecated - ignored.
+	 * @param addFromSource Load source documents and recipients.
+	 *
+	 * @return The newly-created envelope.
+	 * @see dfsle.EnvelopeService.sendEnvelope for details on how to send the created envelope.
+	 */
+	@Deprecated
+	global static Envelope createEnvelope(
+		final Envelope envelope,
+		final EnvelopeConfiguration envelopeConfiguration,
+		final Boolean addFromSource) {
+
+		return createEnvelope(envelope, addFromSource);
 	}
 
 	/**
@@ -559,42 +526,6 @@ global with sharing class EnvelopeService {
 
 		if (envelope == null) throw new DocuSignException(Label.EnvelopeNotFound);
 		return envelope;
-	}
-
-	/**
-	 * Copies an envelope record.
-	 * <p>
-	 * The caller must be the owner of the original envelope.
-	 *
-	 * @param envelopeId The ID of the envelope.
-	 *
-	 * @return A copy of the envelope.
-	 */
-	public static Envelope copyEnvelope(final Id envelopeId) {
-		// queryEnvelope via getEnvelope verifies ownership
-		return saveEnvelope(getEnvelope(envelopeId).copy(), null);
-	}
-
-	/**
-	 * Updates envelope notification and email settings. This method does not update the envelope documents or
-	 * recipients; use <code>dfsle.EnvelopeService.updateEnvelope</code> to update everything.
-	 * <p>
-	 * The caller must be the owner of the envelope.
-	 *
-	 * @param envelope The envelope to update.
-	 *
-	 * @return The updated envelope.
-	 * @see dfsle.EnvelopeService.updateEnvelope to update all envelope properties.
-	 */
-	public static Envelope updateEnvelopeNotifications(final Envelope envelope) {
-		if (envelope == null) throw new DocuSignException(Label.UndefinedEnvelope);
-
-		Permissions.verifyIsOwner(envelope.id);
-
-		ValidationResult vr = validate(envelope, false);
-		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
-
-		return DB.updateEnvelope2(replaceUserTags(envelope), false);
 	}
 
 	/**
@@ -618,7 +549,7 @@ global with sharing class EnvelopeService {
 		// Determine which documents or recipients have changed
 		Envelope original = getEnvelope(envelope.id);
 
-		return DB.updateEnvelope2(replaceUserTags(envelope), false)
+		return DB.updateEnvelope2(envelope, false)
 			.withRecipients(RecipientService.updateEnvelopeRecipients(envelope.id, original.recipients, envelope.recipients))
 			.withDocuments(DocumentService.updateEnvelopeDocuments(envelope.id, original.documents, envelope.documents));
 	}
@@ -682,14 +613,13 @@ global with sharing class EnvelopeService {
 		ValidationResult vr = validate(envelope, sendNow);
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
 
-		Envelope result = replaceUserTags(envelope)
-			.withRecipients(RecipientService.prepareRecipients(
-				envelope.recipients,
-				null,
-				null));
+		Envelope result = envelope.withRecipients(RecipientService.prepareRecipients(envelope.recipients));
 		try {
 			result = result.withDocuSignId(
-				EnvelopeAPI.getInstance().createEnvelope(result, EnvelopeSettings.getOptions(sendNow), senderToken));
+				EnvelopeAPI.getInstance().createEnvelope(
+					result,
+					sendNow,
+					senderToken));
 		} finally {
 			if (updateNow) Credentials.save();
 		}
@@ -734,11 +664,10 @@ global with sharing class EnvelopeService {
 
 		Permissions.verifyIsOwner(envelope.id);
 
-		Envelope e = replaceUserTags(envelope);
-		Boolean result = DB.updateEnvelopeSent(e.id, e.docuSignId, e.emailSubject, e.emailMessage, sendNow);
+		Boolean result = DB.updateEnvelopeSent(envelope.id, envelope.docuSignId, sendNow);
 		if (sendNow) {
 			StatusService.createStatus(new List<Envelope.Status> {
-				e.withSent(Datetime.now()).toEnvelopeStatus()
+				envelope.withSent(Datetime.now()).toEnvelopeStatus()
 			});
 		}
 
@@ -778,22 +707,17 @@ global with sharing class EnvelopeService {
 		for (Envelope e : envelopes) {
 			ValidationResult vr2 = validate(e, true);
 			if (vr.isValid && vr2.isValid) { // Prepare envelope for sending only if there are no validation errors.
-				result.add(replaceUserTags(e)
-					.withRecipients(RecipientService.prepareRecipients(
-						e.recipients,
-						null,
-						null)));
+				result.add(e.withRecipients(RecipientService.prepareRecipients(e.recipients)));
 			} else { // Invalid envelope, skip preparation
 				vr.add(vr2);
 			}
 		}
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelope, vr);
 
-		Envelope.Options options = EnvelopeSettings.getOptions(true);
 		EnvelopeAPI client = EnvelopeAPI.getInstance();
 		for (Envelope e : result) {
 			try {
-				e = e.withDocuSignId(client.createEnvelope(e, options, SENDER_TOKEN))
+				e = e.withDocuSignId(client.createEnvelope(e, true, SENDER_TOKEN))
 					.withSent(Datetime.now());
 			} catch (APIException ex) {
 				LOG.exception(ex, 'Failed to send envelope');
@@ -897,11 +821,6 @@ global with sharing class EnvelopeService {
 	global static Envelope getEmptyEnvelope(final Entity source) {
 		Permissions.verifyIsDocuSignSender();
 
-		EnvelopeSettings__c settings = EnvelopeSettings__c.getOrgDefaults();
-		Integer remindAfterDays = Integer.valueOf(settings.RemindAfterDays__c);
-		Integer remindFrequencyDays = Integer.valueOf(settings.RemindFrequencyDays__c);
-		Integer expireAfterDays = Integer.valueOf(settings.ExpireAfterDays__c);
-		Integer expireWarnDays = Integer.valueOf(settings.ExpireWarnDays__c);
 		Recipient.EmailSettings emailSettings = Localization.getEmailSettingsForCurrentLanguage();
 		return new Envelope(
 			null,
@@ -912,15 +831,12 @@ global with sharing class EnvelopeService {
 			null,
 			null,
 			new Notifications(
-				remindAfterDays >= 0,
-				remindAfterDays >= 0 ? remindAfterDays : null,
-				remindFrequencyDays >= 0 ? remindFrequencyDays : null,
-				expireAfterDays >= 0,
-				expireAfterDays >= 0 ? expireAfterDays : null,
-				expireWarnDays >= 0 ? expireWarnDays : null,
-				Salesforce.isChatterEnabled
-					&& (settings.Chatter__c == EnvelopeSettings.CHATTER_ENABLED_ALWAYS_ON
-					|| settings.Chatter__c == EnvelopeSettings.CHATTER_ENABLED_DEFAULT_ON)),
+				false,
+				null,
+				null,
+				false,
+				null,
+				null),
 			emailSettings.subject,
 			emailSettings.message,
 			source,

@@ -2,6 +2,52 @@ public with sharing class Query {
 
 	public static final Integer MAXIMUM_RECORDS = 2000;
 
+	public class Relationship {
+		@AuraEnabled
+		public Boolean isLookup { get; private set; }
+		@AuraEnabled
+		public String name { get; private set; }
+		@AuraEnabled
+		public String label { get; private set; }
+		@AuraEnabled
+		public String relatesTo { get; private set; }
+
+		public Relationship(
+			final Boolean isLookup,
+			final String name,
+			final String label,
+			final String relatesTo) {
+
+			this.isLookup = isLookup;
+			this.name = name;
+			this.label = label;
+			this.relatesTo = relatesTo;
+		}
+
+		public SObjectType getType() {
+			return Salesforce.getSObjectType(relatesTo);
+		}
+	}
+
+	public class Filter {
+		@AuraEnabled
+		public String filterBy { get; private set; }
+		@AuraEnabled
+		public String orderBy { get; private set; }
+		@AuraEnabled
+		public Integer maximumRecords { get; private set; }
+
+		public Filter(
+			final String filterBy,
+			final String orderBy,
+			final Integer maximumRecords) {
+
+			this.filterBy = filterBy;
+			this.orderBy = orderBy;
+			this.maximumRecords = maximumRecords > 0 ? maximumRecords : null;
+		}
+	}
+
 	public class Result {
 		@AuraEnabled
 		public SObject result { get; private set; }

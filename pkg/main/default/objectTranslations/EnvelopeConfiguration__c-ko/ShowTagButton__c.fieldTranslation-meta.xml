@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- smartling.translate_paths = CustomFieldTranslation/label -->
-    <label>태그 버튼 표시</label>
-    <name>ShowTagButton__c</name>
-</CustomFieldTranslation>

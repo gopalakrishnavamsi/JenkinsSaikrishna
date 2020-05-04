@@ -1,7 +1,7 @@
 /**
  * Representation of a DocuSign envelope.
  */
-global class Envelope {
+global virtual class Envelope {
 	/**
 	 * Created status constant.
 	 */
@@ -27,6 +27,17 @@ global class Envelope {
 	 */
 	global static final String STATUS_COMPLETED = 'completed';
 
+	public static final Envelope.Permissions DEFAULT_PERMISSIONS = new Envelope.Permissions(
+		true,
+		true,
+		true,
+		true,
+		true,
+		true);
+	public static final Envelope.Options DEFAULT_OPTIONS = new Envelope.Options(
+		true,
+		true);
+
 	/**
 	 * The ID of the associated dfsle__Envelope__c record.
 	 */
@@ -43,7 +54,7 @@ global class Envelope {
 	@AuraEnabled
 	global UUID docuSignId { get; private set; }
 	/**
-	 * The ID of the configuration (f.k.a custom button) used to create the envelope.
+	 * The ID of the configuration used to create the envelope.
 	 */
 	@AuraEnabled
 	global Id envelopeConfigurationId { get; private set; }
@@ -77,6 +88,16 @@ global class Envelope {
 	 */
 	@AuraEnabled
 	global String emailMessage { get; private set; }
+	/**
+	 * Envelope sender permissions.
+	 */
+	@AuraEnabled
+	public Envelope.Permissions senderPermissions { get; private set; }
+	/**
+	 * The envelope options.
+	 */
+	@AuraEnabled
+	public Envelope.Options options { get; private set; }
 	/**
 	 * The Salesforce source object for the envelope (e.g. Opportunity or Lead).
 	 */
@@ -138,7 +159,7 @@ global class Envelope {
 	 * @param id The ID of the associated dfsle__Envelope__c record.
 	 * @param name The name of the envelope.
 	 * @param docuSignId The DocuSign ID of the envelope.
-	 * @param envelopeConfigurationId The ID of the configuration (f.k.a custom button) used to create the envelope.
+	 * @param envelopeConfigurationId The ID of the configuration used to create the envelope.
 	 * @param documents A list of documents contained by the envelope.
 	 * @param recipients A list of recipients who receive the envelope.
 	 * @param customFields A list of envelope custom fields.
@@ -162,16 +183,68 @@ global class Envelope {
 		final Entity source,
 		final Datetime sent) {
 
+		this(
+			id,
+			name,
+			docuSignId,
+			envelopeConfigurationId,
+			documents,
+			recipients,
+			customFields,
+			notifications,
+			emailSubject,
+			emailMessage,
+			DEFAULT_PERMISSIONS,
+			DEFAULT_OPTIONS,
+			source,
+			sent);
+	}
+
+	/**
+	 * Constructs a DocuSign envelope.
+	 *
+	 * @param id The ID of the associated dfsle__Envelope__c record.
+	 * @param name The name of the envelope.
+	 * @param docuSignId The DocuSign ID of the envelope.
+	 * @param envelopeConfigurationId The ID of the configuration used to create the envelope.
+	 * @param documents A list of documents contained by the envelope.
+	 * @param recipients A list of recipients who receive the envelope.
+	 * @param customFields A list of envelope custom fields.
+	 * @param notifications The reminder and expiration settings for the envelope.
+	 * @param emailSubject The subject of the email recipients receive.
+	 * @param emailMessage The message of the email recipients receive.
+	 * @param senderPermissions Envelope sender permissions.
+	 * @param options Envelope options.
+	 * @param source The Salesforce source object for the envelope.
+	 * @param sent The date and time when the envelope was sent.
+	 */
+	public Envelope(
+		final Id id,
+		final String name,
+		final UUID docuSignId,
+		final Id envelopeConfigurationId,
+		final List<Document> documents,
+		final List<Recipient> recipients,
+		final List<CustomField> customFields,
+		final Notifications notifications,
+		final String emailSubject,
+		final String emailMessage,
+		final Envelope.Permissions senderPermissions,
+		final Envelope.Options options,
+		final Entity source,
+		final Datetime sent) {
+
 		this.id = id;
 		this.name = name;
 		this.docuSignId = docuSignId;
-		this.envelopeConfigurationId = envelopeConfigurationId;
 		this.documents = documents;
 		this.recipients = recipients;
 		this.customFields = customFields;
 		this.notifications = notifications;
 		this.emailSubject = emailSubject;
 		this.emailMessage = emailMessage;
+		this.senderPermissions = senderPermissions == null ? DEFAULT_PERMISSIONS : senderPermissions;
+		this.options = options == null ? DEFAULT_OPTIONS : options;
 		this.source = source;
 		this.sent = sent;
 	}
@@ -190,7 +263,87 @@ global class Envelope {
 		final String emailMessage,
 		final Entity source) {
 
-		this(null, null, null, null, null, null, null, notifications, emailSubject, emailMessage, source, null);
+		this(
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			notifications,
+			emailSubject,
+			emailMessage,
+			DEFAULT_PERMISSIONS,
+			DEFAULT_OPTIONS,
+			source,
+			null);
+	}
+
+	/**
+	 * An envelope sender's permissions.
+	 */
+	public class Permissions {
+		/**
+		 * Whether the sender can add, remove, or reorder documents.
+		 */
+		public Boolean editDocuments { get; private set; }
+		/**
+		 * Whether the sender can add, remove, or reorder recipients.
+		 */
+		public Boolean editRecipients { get; private set; }
+		/**
+		 * Whether the sender can change the envelope email subject.
+		 */
+		public Boolean editEmailSubject { get; private set; }
+		/**
+		 * Whether the sender can change the envelope email message.
+		 */
+		public Boolean editEmailMessage { get; private set; }
+		/**
+		 * Whether the sender can change the envelope reminders and expiration settings.
+		 */
+		public Boolean editNotifications { get; private set; }
+		/**
+		 * Whether the sender can edit the recipient tags.
+		 */
+		public Boolean editTags { get; private set; }
+
+		/**
+		 * Constructs envelope sender permissions.
+		 *
+		 * @param editDocuments Whether the sender can add, remove, or reorder documents.
+		 * @param editRecipients Whether the sender can add, remove, or reorder recipients.
+		 * @param editEmailSubject Whether the sender can change the envelope email subject.
+		 * @param editEmailMessage Whether the sender can change the envelope email message.
+		 * @param editNotifications Whether the sender can change the envelope reminders and expiration settings.
+		 * @param editTags Whether the sender can edit the recipient tags.
+		 */
+		public Permissions(
+			final Boolean editDocuments,
+			final Boolean editRecipients,
+			final Boolean editEmailSubject,
+			final Boolean editEmailMessage,
+			final Boolean editNotifications,
+			final Boolean editTags) {
+
+			this.editDocuments = editDocuments;
+			this.editRecipients = editRecipients;
+			this.editEmailSubject = editEmailSubject;
+			this.editEmailMessage = editEmailMessage;
+			this.editNotifications = editNotifications;
+			this.editTags = editTags;
+		}
+
+		public Envelope.Permissions copy() {
+			return new Envelope.Permissions(
+				this.editDocuments,
+				this.editRecipients,
+				this.editEmailSubject,
+				this.editEmailMessage,
+				this.editNotifications,
+				this.editTags);
+		}
 	}
 
 	/**
@@ -198,40 +351,33 @@ global class Envelope {
 	 */
 	public class Options {
 		/**
-		 * Whether to send the envelope now or create a draft.
-		 */
-		public Boolean sendNow { get; private set; }
-		/**
 		 * Whether to include default anchor tabs that map to recipient roles.
 		 */
-		public Boolean includeDefaultAnchorTabs { get; private set; }
+		public Boolean includeDefaultAutoPlaceTags { get; private set; }
 		/**
-		 * Whether to push encoded documents to DocuSign or have DocuSign pull the documents from Salesforce.
+		 * Whether to write the completed envelope back to the initiating Salesforce source object.
 		 */
-		public Boolean fetchDocuments { get; private set; }
-		/**
-		 * Whether to use the configured DocuSign account notification defaults.
-		 */
-		public Boolean useAccountNotificationDefaults { get; private set; }
+		public Boolean writeBackCompletedEnvelope { get; private set; }
 
 		/**
 		 * Constructs DocuSign envelope options.
 		 *
-		 * @param sendNow Whether to send the envelope now or create a draft.
-		 * @param includeDefaultAnchorTabs Whether to include default anchor tabs that map to recipient roles.
-		 * @param fetchDocuments Whether to push encoded documents to DocuSign or have DocuSign pull the documents from Salesforce.
-		 * @param useAccountNotificationDefaults Whether to use the configured DocuSign account notification defaults.
+		 * @param includeDefaultAutoPlaceTags Whether to include default anchor tabs that map to recipient roles.
+		 * @param writeBackCompletedEnvelope Whether to write the completed envelope back to the initiating Salesforce
+		 * source object.
 		 */
 		public Options(
-			final Boolean sendNow,
-			final Boolean includeDefaultAnchorTabs,
-			final Boolean fetchDocuments,
-			final Boolean useAccountNotificationDefaults) {
+			final Boolean includeDefaultAutoPlaceTags,
+			final Boolean writeBackCompletedEnvelope) {
 
-			this.sendNow = sendNow;
-			this.includeDefaultAnchorTabs = includeDefaultAnchorTabs;
-			this.fetchDocuments = fetchDocuments;
-			this.useAccountNotificationDefaults = useAccountNotificationDefaults;
+			this.includeDefaultAutoPlaceTags = includeDefaultAutoPlaceTags;
+			this.writeBackCompletedEnvelope = writeBackCompletedEnvelope;
+		}
+
+		public Envelope.Options copy() {
+			return new Envelope.Options(
+				this.includeDefaultAutoPlaceTags,
+				this.writeBackCompletedEnvelope);
 		}
 	}
 
@@ -317,8 +463,8 @@ global class Envelope {
 		 * Constructs a DocuSign envelope status.
 		 *
 		 * @param id The ID of the underlying dfsle__EnvelopeStatus__c record.
-		 * @param docuSignId The DocuSign envelope ID.
 		 * @param source The Salesforce source entity.
+		 * @param docuSignId The DocuSign envelope ID.
 		 * @param status The current status.
 		 * @param senderName The sender name.
 		 * @param senderEmail The sender email address.
@@ -493,6 +639,8 @@ global class Envelope {
 			this.notifications == null ? null : this.notifications.copy(),
 			this.emailSubject,
 			this.emailMessage,
+			this.senderPermissions.copy(),
+			this.options.copy(),
 			this.source == null ? null : this.source.copy(),
 			null);
 	}
@@ -518,18 +666,6 @@ global class Envelope {
 	 */
 	public Envelope withDocuSignId(final UUID docuSignId) {
 		this.docuSignId = docuSignId;
-		return this;
-	}
-
-	/**
-	 * Sets the envelope's <code>envelopeConfigurationId</code> property.
-	 *
-	 * @param envelopeConfigurationId The new envelope configuration ID.
-	 *
-	 * @return This envelope with the updated <code>envelopeConfigurationId</code> property.
-	 */
-	public Envelope withEnvelopeConfigurationId(final Id envelopeConfigurationId) {
-		this.envelopeConfigurationId = envelopeConfigurationId;
 		return this;
 	}
 
@@ -635,6 +771,31 @@ global class Envelope {
 	}
 
 	/**
+	 * Sets the envelope's <code>senderPermissions</code> property.
+	 *
+	 * @param senderPermissions The new envelope sender permissions. A <code>null</code> value is interpreted as the
+	 * sender having unrestricted permissions.
+	 *
+	 * @return This envelope with the updated <code>senderPermissions</code> property.
+	 */
+	public Envelope withSenderPermissions(final Envelope.Permissions senderPermissions) {
+		this.senderPermissions = senderPermissions == null ? DEFAULT_PERMISSIONS : senderPermissions;
+		return this;
+	}
+
+	/**
+	 * Sets the envelope's <code>options</code> property.
+	 *
+	 * @param options The new envelope options.
+	 *
+	 * @return This envelope with the updated <code>options</code> property.
+	 */
+	public Envelope withOptions(final Envelope.Options options) {
+		this.options = options == null ? DEFAULT_OPTIONS : options;
+		return this;
+	}
+
+	/**
 	 * Sets the envelope's <code>sent</code> property.
 	 *
 	 * @param sent The new date and time when the envelope was sent.
@@ -643,6 +804,18 @@ global class Envelope {
 	 */
 	public Envelope withSent(final Datetime sent) {
 		this.sent = sent;
+		return this;
+	}
+
+	/**
+	 * Sets the envelope's <code>envelopeConfigurationId</code> property.
+	 *
+	 * @param envelopeConfigurationId The ID of the configuration used to create the envelope.
+	 *
+	 * @return This envelope with the updated <code>envelopeConfigurationId</code> property.
+	 */
+	public Envelope withEnvelopeConfigurationId(final Id envelopeConfigurationId) {
+		this.envelopeConfigurationId = envelopeConfigurationId;
 		return this;
 	}
 

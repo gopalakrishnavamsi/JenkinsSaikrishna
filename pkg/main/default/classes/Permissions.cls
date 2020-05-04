@@ -290,8 +290,10 @@ public with sharing class Permissions {
 			User user = (User)Collection.head([
 				SELECT Id, Username__c, Name, Email, CanManageAccount__c, Status__c
 				FROM User
-				WHERE Id = :userId AND IsActive = true
-				AND Username__c != null AND CanManageAccount__c = true
+				WHERE Id = :userId
+				AND IsActive = TRUE
+				AND Username__c != NULL
+				AND CanManageAccount__c = TRUE
 				AND Email = :String.valueOf(accountSettings.Email__c)
 				LIMIT 1
 			]);

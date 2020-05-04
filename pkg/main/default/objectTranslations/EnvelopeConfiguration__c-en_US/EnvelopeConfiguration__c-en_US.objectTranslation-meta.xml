@@ -1,24 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
-    <!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value,CustomObjectTranslation/layouts/sections/label -->
-    <caseValues>
-        <plural>false</plural>
-        <value>DocuSign Envelope Configuration</value>
-    </caseValues>
-    <caseValues>
-        <plural>true</plural>
-        <value>DocuSign Envelope Configurations</value>
-    </caseValues>
-    <layouts>
-        <layout>DocuSign Envelope Configuration Layout</layout>
-        <sections>
-            <label>Custom Links</label>
-            <section>Custom Links</section>
-        </sections>
-        <sections>
-            <label>Information</label>
-            <section>Information</section>
-        </sections>
-    </layouts>
-    <startsWith>Consonant</startsWith>
+	<!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value -->
+	<caseValues>
+		<plural>false</plural>
+		<value>DocuSign Envelope Configuration</value>
+	</caseValues>
+	<caseValues>
+		<plural>true</plural>
+		<value>DocuSign Envelope Configurations</value>
+	</caseValues>
+	<startsWith>Consonant</startsWith>
 </CustomObjectTranslation>

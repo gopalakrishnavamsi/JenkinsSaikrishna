@@ -452,10 +452,6 @@ global class UserMock {
 				TrialExpires__c = null)
 		};
 
-		insert EnvelopeSettings__c.getOrgDefaults();
-
-		insert ChatterSettings__c.getOrgDefaults();
-
 		insert new List<RoleSettings__c> {
 			new RoleSettings__c(Name = 'Signer 1', Value__c = 1),
 			new RoleSettings__c(Name = 'Signer 2', Value__c = 2),

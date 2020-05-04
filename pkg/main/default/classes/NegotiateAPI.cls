@@ -67,9 +67,9 @@ public with sharing class NegotiateAPI extends ScmAPI {
 			return XMLSerializer.toXMLForm(
 				new Set<String> { 'Documents', 'ExpiresInNumberOfDays', 'Reviewers', 'Email', 'DocumentUrl', 'FailureEmail', 'ExpiredReview', 'ReviewCompleted', 'CanceledReviewEmail' },
 				new Map<String, Object> {
-					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'id' }, this.documents, 'Documents', 'Document', false),
+					'Documents' => XMLSerializer.fromIterable(new Set<String> { 'id' }, this.documents, 'Documents', 'Document', false),
 					'ExpiresInNumberOfDays' => XMLSerializer.fromPrimitive(this.expiresInNumberOfDays, 'ExpiresInNumberOfDays'),
-					'Reviewers' => XMLSerializer.fromIteratable(new Set<String> { 'email', 'name' }, this.reviewers, 'Reviewers', 'Reviewer', false),
+					'Reviewers' => XMLSerializer.fromIterable(new Set<String> { 'email', 'name' }, this.reviewers, 'Reviewers', 'Reviewer', false),
 					'Email' => XMLSerializer.fromObject(new Set<String> { 'subject', 'body' }, this.email, 'Email', false),
 					'DocumentUrl' => XMLSerializer.fromPrimitive(getDocumentDeepLink(this.sourceId, this.documents[0]), 'DocumentUrl'),
 					'FailureEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('FailureEmail'), 'FailureEmail', false),
@@ -184,8 +184,8 @@ public with sharing class NegotiateAPI extends ScmAPI {
 					'CheckoutDocument' => XMLSerializer.fromPrimitive(true, 'CheckoutDocument'),
 					'RequiresAllToApprove' => XMLSerializer.fromPrimitive(true, 'RequiresAllToApprove'),
 					'RequiresAllToComplete' => XMLSerializer.fromPrimitive(false, 'RequiresAllToComplete'),
-					'Approvers' => XMLSerializer.fromIteratable(new Set<String> { 'email' }, this.approvers, 'Approvers', 'Approver', false),
-					'Documents' => XMLSerializer.fromIteratable(new Set<String> { 'id' }, this.documents, 'Documents', 'Document', false),
+					'Approvers' => XMLSerializer.fromIterable(new Set<String> { 'email' }, this.approvers, 'Approvers', 'Approver', false),
+					'Documents' => XMLSerializer.fromIterable(new Set<String> { 'id' }, this.documents, 'Documents', 'Document', false),
 					'Email' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('Email'), 'Email', false),
 					'ApprovalEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('ApprovalEmail'), 'ApprovalEmail', false),
 					'ApprovalOnBehalfEmail' => XMLSerializer.fromObject(new Set<String> { 'buttonText', 'headerTitleText', 'bodyText', 'subject' }, templateEmails.get('ApprovalOnBehalfEmail'), 'ApprovalOnBehalfEmail', false),

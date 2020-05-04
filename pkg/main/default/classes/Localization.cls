@@ -7,84 +7,6 @@ public with sharing class Localization {
 	@TestVisible
 	private static Boolean isEmailEnabled;
 
-	public class ChatterText {
-		public String envelopeSent { get; private set; }
-		public String envelopeDelivered { get; private set; }
-		public String envelopeCompleted { get; private set; }
-		public String envelopeDeclined { get; private set; }
-		public String envelopeVoided { get; private set; }
-		public String recipientSent { get; private set; }
-		public String recipientDelivered { get; private set; }
-		public String recipientCompleted { get; private set; }
-		public String recipientSigned { get; private set; }
-		public String recipientDeclined { get; private set; }
-
-		public ChatterText(final String envelopeSent, final String envelopeDelivered, final String envelopeCompleted,
-			final String envelopeDeclined, final String envelopeVoided, final String recipientSent,
-			final String recipientDelivered, final String recipientCompleted, final String recipientSigned,
-			final String recipientDeclined) {
-
-			this.envelopeSent = envelopeSent;
-			this.envelopeDelivered = envelopeDelivered;
-			this.envelopeCompleted = envelopeCompleted;
-			this.envelopeDeclined = envelopeDeclined;
-			this.envelopeVoided = envelopeVoided;
-			this.recipientSent = recipientSent;
-			this.recipientDelivered = recipientDelivered;
-			this.recipientCompleted = recipientCompleted;
-			this.recipientSigned = recipientSigned;
-			this.recipientDeclined = recipientDeclined;
-		}
-
-		public String getEnvelopeStatusText(final String s) {
-			String statusText = null;
-			if (String.isNotBlank(s)) {
-				if (s == Envelope.STATUS_SENT) {
-					statusText = this.envelopeSent;
-				} else if (s == Envelope.STATUS_DELIVERED) {
-					statusText = this.envelopeDelivered;
-				} else if (s == Envelope.STATUS_COMPLETED) {
-					statusText = this.envelopeCompleted;
-				} else if (s == Envelope.STATUS_DECLINED) {
-					statusText = this.envelopeDeclined;
-				} else if (s == Envelope.STATUS_VOIDED) {
-					statusText = this.envelopeVoided;
-				}
-			}
-			return statusText;
-		}
-
-		public String getRecipientStatusText(final String s) {
-			String statusText = null;
-			if (String.isNotBlank(s)) {
-				if (s == Recipient.STATUS_SENT) {
-					statusText = this.recipientSent;
-				} else if (s == Recipient.STATUS_DELIVERED) {
-					statusText = this.recipientDelivered;
-				} else if (s == Recipient.STATUS_COMPLETED) {
-					statusText = this.recipientCompleted;
-				} else if (s == Recipient.STATUS_DECLINED) {
-					statusText = this.recipientDeclined;
-				} else if (s == Recipient.STATUS_SIGNED) {
-					statusText = this.recipientSigned;
-				}
-			}
-			return statusText;
-		}
-	}
-
-	public class ChatterSettings {
-		public String language { get; private set; }
-		public String languageLabel { get; private set; }
-		public ChatterText text { get; private set; }
-
-		public ChatterSettings(final String language, final String languageLabel, final ChatterText text) {
-			this.language = language;
-			this.languageLabel = languageLabel;
-			this.text = text;
-		}
-	}
-
 	// Languages
 	public static final String EN = 'en';
 	public static final String DE = 'de';
@@ -97,7 +19,6 @@ public with sharing class Localization {
 	public static final String PT_BR = 'pt_BR';
 	public static final String RU = 'ru';
 	public static final String ZH_CN = 'zh_CN';
-	public static final String CURRENT = 'CURRENT'; // that's only for chatter text (current language settings)
 	private static final Map<String, String> LANGUAGE_TO_LABEL;
 	public static final String DEFAULT_LANGUAGE;
 
@@ -135,10 +56,6 @@ public with sharing class Localization {
 			FROM EnvelopeLocalization__c
 			LIMIT 100
 		];
-	}
-
-	public static Set<String> getAllLanguages() {
-		return LANGUAGE_TO_LABEL.keySet();
 	}
 
 	public static String getLabel(final String language) {
@@ -287,108 +204,6 @@ public with sharing class Localization {
 			mds[0].EmailMessage__c);
 	}
 
-	/**
-	 * Gets chatter text localized to specified language code
-	 */
-	public static ChatterText getDefaultChatterText(final String language) {
-		List<Localization__mdt> mds = [
-			SELECT ChatterEnvelopeSent__c,
-				ChatterEnvelopeDelivered__c,
-				ChatterEnvelopeCompleted__c,
-				ChatterEnvelopeDeclined__c,
-				ChatterEnvelopeVoided__c,
-				ChatterRecipientSent__c,
-				ChatterRecipientDelivered__c,
-				ChatterRecipientCompleted__c,
-				ChatterRecipientSigned__c,
-				ChatterRecipientDeclined__c
-			FROM Localization__mdt
-			WHERE DeveloperName = :language
-		];
-		if (Collection.isEmpty(mds)) throw new DocuSignException(Label.UnrecognizedLanguageCode);
-
-		Localization__mdt md = mds[0];
-		return new ChatterText(
-			md.ChatterEnvelopeSent__c,
-			md.ChatterEnvelopeDelivered__c,
-			md.ChatterEnvelopeCompleted__c,
-			md.ChatterEnvelopeDeclined__c,
-			md.ChatterEnvelopeVoided__c,
-			md.ChatterRecipientSent__c,
-			md.ChatterRecipientDelivered__c,
-			md.ChatterRecipientCompleted__c,
-			md.ChatterRecipientSigned__c,
-			md.ChatterRecipientDeclined__c);
-	}
-
-	public static ChatterText getChatterText() {
-		ChatterSettings__c settings = ChatterSettings__c.getOrgDefaults();
-		Localization__mdt md = [
-			SELECT
-				ChatterEnvelopeSent__c,
-				ChatterEnvelopeDelivered__c,
-				ChatterEnvelopeCompleted__c,
-				ChatterEnvelopeDeclined__c,
-				ChatterEnvelopeVoided__c,
-				ChatterRecipientSent__c,
-				ChatterRecipientDelivered__c,
-				ChatterRecipientCompleted__c,
-				ChatterRecipientSigned__c,
-				ChatterRecipientDeclined__c
-			FROM Localization__mdt
-			WHERE DeveloperName = :DEFAULT_LANGUAGE
-		];
-		return new ChatterText(
-			String.isNotBlank(settings.EnvelopeSent__c) ? settings.EnvelopeSent__c : md.ChatterEnvelopeSent__c,
-			String.isNotBlank(settings.EnvelopeDelivered__c) ? settings.EnvelopeDelivered__c : md.ChatterEnvelopeDelivered__c,
-			String.isNotBlank(settings.EnvelopeCompleted__c) ? settings.EnvelopeCompleted__c : md.ChatterEnvelopeCompleted__c,
-			String.isNotBlank(settings.EnvelopeDeclined__c) ? settings.EnvelopeDeclined__c : md.ChatterEnvelopeDeclined__c,
-			String.isNotBlank(settings.EnvelopeVoided__c) ? settings.EnvelopeVoided__c : md.ChatterEnvelopeVoided__c,
-			String.isNotBlank(settings.RecipientSent__c) ? settings.RecipientSent__c : md.ChatterRecipientSent__c,
-			String.isNotBlank(settings.RecipientDelivered__c) ? settings.RecipientDelivered__c : md.ChatterRecipientDelivered__c,
-			String.isNotBlank(settings.RecipientCompleted__c) ? settings.RecipientCompleted__c : md.ChatterRecipientCompleted__c,
-			String.isNotBlank(settings.RecipientSigned__c) ? settings.RecipientSigned__c : md.ChatterRecipientSigned__c,
-			String.isNotBlank(settings.RecipientDeclined__c) ? settings.RecipientDeclined__c : md.ChatterRecipientDeclined__c);
-	}
-
-	public static void save(final ChatterText chatterText) {
-		if (chatterText == null) throw new DocuSignException(Label.UndefinedChatterText);
-		ValidationResult vr = validate(chatterText);
-		if (!vr.isValid) {
-			throw new ValidationException(Label.InvalidChatterText, vr);
-		}
-
-		ChatterSettings__c settings = ChatterSettings__c.getOrgDefaults();
-		settings.EnvelopeSent__c = chatterText.envelopeSent;
-		settings.EnvelopeDelivered__c = chatterText.envelopeDelivered;
-		settings.EnvelopeCompleted__c = chatterText.envelopeCompleted;
-		settings.EnvelopeDeclined__c = chatterText.envelopeDeclined;
-		settings.EnvelopeVoided__c = chatterText.envelopeVoided;
-		settings.RecipientSent__c = chatterText.recipientSent;
-		settings.RecipientDelivered__c = chatterText.recipientDelivered;
-		settings.RecipientCompleted__c = chatterText.recipientCompleted;
-		settings.RecipientSigned__c = chatterText.recipientSigned;
-		settings.RecipientDeclined__c = chatterText.recipientDeclined;
-		upsert settings;
-	}
-
-	public static List<Localization.ChatterSettings> getChatterSettings() {
-		final List<Localization.ChatterSettings> settings = new List<Localization.ChatterSettings> {
-			new Localization.ChatterSettings(
-				Localization.CURRENT,
-				Label.CurrentChatterLanguageSettings,
-				Localization.getChatterText())
-		};
-		for (String language : getAllLanguages()) {
-			settings.add(new Localization.ChatterSettings(
-				language,
-				getLabel(language),
-				getDefaultChatterText(language)
-			));
-		}
-		return settings;
-	}
-
 	@TestVisible
 	private static ValidationResult validate(final Recipient.EmailSettings settings) {
 		ValidationResult result = new ValidationResult();
@@ -398,21 +213,6 @@ public with sharing class Localization {
 			result.add(Label.UnrecognizedLanguageCode);
 		}
 		if (settings == null || String.isBlank(settings.subject) || String.isBlank(settings.message)) {
-			result.add(Label.AllValuesMustNotBeBlank);
-		}
-		return result;
-	}
-
-	@TestVisible
-	private static ValidationResult validate(final ChatterText chatterText) {
-		ValidationResult result = new ValidationResult();
-		if (chatterText == null || String.isBlank(chatterText.envelopeCompleted)
-			|| String.isBlank(chatterText.envelopeDeclined) || String.isBlank(chatterText.envelopeDelivered)
-			|| String.isBlank(chatterText.envelopeSent) || String.isBlank(chatterText.envelopeVoided)
-			|| String.isBlank(chatterText.recipientCompleted) || String.isBlank(chatterText.recipientDeclined)
-			|| String.isBlank(chatterText.recipientDelivered) || String.isBlank(chatterText.recipientSent)
-			|| String.isBlank(chatterText.recipientSigned)) {
-
 			result.add(Label.AllValuesMustNotBeBlank);
 		}
 		return result;

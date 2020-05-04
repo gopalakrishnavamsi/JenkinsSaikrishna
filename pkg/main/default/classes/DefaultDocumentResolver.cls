@@ -1,16 +1,51 @@
 public with sharing class DefaultDocumentResolver implements DocumentResolver {
 
+	private static final SObjectType TYPE_CONTENT_DOCUMENT = ContentDocument.getSObjectType();
 	private static final SObjectType TYPE_CONTENT_VERSION = ContentVersion.getSObjectType();
 	private static final SObjectType TYPE_DOCUMENT = Schema.Document.getSObjectType();
 	private static final SObjectType TYPE_CONTENT_WORKSPACE = ContentWorkspace.getSObjectType();
 	private static final SObjectType TYPE_FOLDER = Folder.getSObjectType();
+	private static final Integer DEFAULT_LIMIT = 10;
 
 	private static final Set<SObjectType> TYPES = new Set<SObjectType> {
-		TYPE_CONTENT_VERSION, TYPE_DOCUMENT
+		TYPE_CONTENT_DOCUMENT, TYPE_CONTENT_VERSION, TYPE_DOCUMENT
 	};
 
 	public Boolean canResolveDocuments(final SObjectType type) {
 		return type != null && TYPES.contains(type);
+	}
+
+	private static List<Document> getContentDocuments(final Set<Id> contentDocumentIds) {
+		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> {
+			'Id', 'Title', 'FileExtension', 'ContentSize', 'LastModifiedDate'
+		});
+
+		List<Document> result = new List<Document>();
+		if (!Collection.isEmpty(contentDocumentIds)) {
+			for (ContentDocument cd : [
+				SELECT
+					Id,
+					LatestPublishedVersion.Id,
+					LatestPublishedVersion.Title,
+					LatestPublishedVersion.ContentSize,
+					LatestPublishedVersion.FileExtension,
+					LatestPublishedVersion.LastModifiedDate
+				FROM ContentDocument
+				WHERE Id IN :contentDocumentIds
+				ORDER BY LatestPublishedVersion.Id ASC
+			]) {
+				result.add(new Document(
+					null,
+					Document.TYPE_FILE,
+					null,
+					cd.LatestPublishedVersion.Title,
+					cd.LatestPublishedVersion.FileExtension,
+					cd.LatestPublishedVersion.ContentSize,
+					cd.LatestPublishedVersion.LastModifiedDate,
+					cd.Id));
+			}
+		}
+		return result;
 	}
 
 	private static List<Document> getContentVersions(final Set<Id> contentVersionIds) {
@@ -26,8 +61,15 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 				WHERE Id IN :contentVersionIds
 				ORDER BY Id ASC
 			]) {
-				result.add(new Document(null, Document.TYPE_FILE, null, cv.Title, cv.FileExtension, cv.ContentSize,
-					cv.LastModifiedDate, cv.Id));
+				result.add(new Document(
+					null,
+					Document.TYPE_FILE,
+					null,
+					cv.Title,
+					cv.FileExtension,
+					cv.ContentSize,
+					cv.LastModifiedDate,
+					cv.Id));
 			}
 		}
 		return result;
@@ -53,11 +95,16 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		return result;
 	}
 
-	public List<Document> getDocuments(final SObjectType type, final Set<Id> documentIds) {
+	public List<Document> getDocuments(
+		final SObjectType type,
+		final Set<Id> documentIds) {
+
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document> result = null;
-		if (type == TYPE_CONTENT_VERSION) {
+		if (type == TYPE_CONTENT_DOCUMENT) {
+			result = getContentDocuments(documentIds);
+		} else if (type == TYPE_CONTENT_VERSION) {
 			result = getContentVersions(documentIds);
 		} else if (type == TYPE_DOCUMENT) {
 			result = getDocuments(documentIds);
@@ -68,68 +115,72 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		return result;
 	}
 
-	private static List<Document> getLinkedContentVersions(final Set<Id> linkedEntityIds,
-		final Boolean getLastUpdatedOnly) {
+	private static List<Document> getLinkedContentVersions(
+		final Set<Id> linkedEntityIds,
+		final Query.Filter filter) {
 
 		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> {
 			'Id', 'Title', 'FileExtension', 'ContentSize', 'LastModifiedDate'
 		});
 
-		List<Document> documents = new List<Document>();
-		if (Collection.isNotEmpty(linkedEntityIds)) {
-			List<ContentDocumentLink> cdls;
-			if (getLastUpdatedOnly) {
-				cdls = [
-					SELECT ContentDocument.LatestPublishedVersion.Id,
-						ContentDocument.LatestPublishedVersion.Title,
-						ContentDocument.LatestPublishedVersion.FileExtension,
-						ContentDocument.LatestPublishedVersion.ContentSize,
-						ContentDocument.LatestPublishedVersion.LastModifiedDate
-					FROM ContentDocumentLink
-					WHERE LinkedEntityId IN :linkedEntityIds
-					AND ContentDocument.PublishStatus != 'U'
-					AND ContentDocument.LatestPublishedVersion.ContentSize > 0
-					ORDER BY ContentDocument.LatestPublishedVersion.LastModifiedDate DESC,
-						ContentDocument.LatestPublishedVersion.Id DESC
-					LIMIT 1
-				];
-			} else {
-				cdls = [
-					SELECT ContentDocument.LatestPublishedVersion.Id,
-						ContentDocument.LatestPublishedVersion.Title,
-						ContentDocument.LatestPublishedVersion.FileExtension,
-						ContentDocument.LatestPublishedVersion.ContentSize,
-						ContentDocument.LatestPublishedVersion.LastModifiedDate
-					FROM ContentDocumentLink
-					WHERE LinkedEntityId IN :linkedEntityIds
-					AND ContentDocument.PublishStatus != 'U'
-					AND ContentDocument.LatestPublishedVersion.ContentSize > 0
-					ORDER BY ContentDocument.LatestPublishedVersion.LastModifiedDate DESC
-					LIMIT 100
-				];
-			}
+		Integer maximumRecords = DEFAULT_LIMIT;
+		String whereClause = 'LinkedEntityId IN :linkedEntityIds '
+			+ 'AND ContentDocument.PublishStatus != \'U\' '
+			+ 'AND ContentDocument.LatestPublishedVersion.ContentSize > 0';
+		String orderByClause = 'ContentDocument.LatestPublishedVersion.LastModifiedDate DESC';
+		if (filter != null) {
+			if (String.isNotBlank(filter.filterBy)) whereClause += ' AND (' + filter.filterBy + ')';
+			if (String.isNotBlank(filter.orderBy)) orderByClause = filter.orderBy;
+			if (filter.maximumRecords > 0) maximumRecords = filter.maximumRecords;
+		}
 
-			Integer sequence = 1;
-			for (ContentDocumentLink cdl : cdls) {
-				if (cdl != null && cdl.ContentDocument != null && cdl.ContentDocument.LatestPublishedVersion != null) {
-					ContentVersion cv = cdl.ContentDocument.LatestPublishedVersion;
-					documents.add(new Document(null, Document.TYPE_FILE, sequence++, cv.Title, cv.FileExtension,
-						cv.ContentSize, cv.LastModifiedDate, cv.Id));
-				}
+		String query = String.format(
+			'SELECT ContentDocument.LatestPublishedVersion.Id, '
+				+ 'ContentDocument.LatestPublishedVersion.Title, '
+				+ 'ContentDocument.LatestPublishedVersion.FileExtension, '
+				+ 'ContentDocument.LatestPublishedVersion.ContentSize, '
+				+ 'ContentDocument.LatestPublishedVersion.LastModifiedDate '
+				+ 'FROM ContentDocumentLink '
+				+ 'WHERE {0} '
+				+ 'ORDER BY {1} '
+				+ 'LIMIT :maximumRecords', new List<Object> {
+				whereClause,
+				orderByClause
+			});
+
+		List<Document> result = new List<Document>();
+		Integer sequence = 0;
+		for (ContentDocumentLink cdl : (List<ContentDocumentLink>)Database.query(query)) {
+			if (cdl != null
+				&& cdl.ContentDocument != null
+				&& cdl.ContentDocument.LatestPublishedVersion != null) {
+
+				ContentVersion cv = cdl.ContentDocument.LatestPublishedVersion;
+				result.add(new Document(
+					null,
+					Document.TYPE_FILE,
+					++sequence,
+					cv.Title,
+					cv.FileExtension,
+					cv.ContentSize,
+					cv.LastModifiedDate,
+					cv.Id));
 			}
 		}
-		return documents;
+		return result;
 	}
 
-	public List<Document> getLinkedDocuments(final SObjectType type, final Set<Id> linkedEntityIds,
-		final Boolean getLastUpdatedOnly) {
+	public List<Document> getLinkedDocuments(
+		final SObjectType type,
+		final Set<Id> linkedEntityIds,
+		final Query.Filter filter) {
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document> result = null;
-		if (type == TYPE_CONTENT_VERSION) {
-			result = getLinkedContentVersions(linkedEntityIds, getLastUpdatedOnly);
-		} else if (type != TYPE_DOCUMENT) {
+		if (type == TYPE_CONTENT_VERSION || type == TYPE_CONTENT_DOCUMENT) {
+			result = getLinkedContentVersions(linkedEntityIds, filter);
+		} else if (!canResolveDocuments(type)) {
 			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1,
 				new List<String> { String.valueOf(type) }));
 		}
@@ -249,7 +300,10 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		return result;
 	}
 
-	public List<Document> getFolderDocuments(final SObjectType type, final Set<Id> folderIds) {
+	public List<Document> getFolderDocuments(
+		final SObjectType type,
+		final Set<Id> folderIds) {
+
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Document> result = null;
@@ -261,6 +315,21 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1, new List<String> {
 				String.valueOf(type)
 			}));
+		}
+		return result;
+	}
+
+	private static Map<Id, Blob> getContentDocumentContent(final Set<Id> contentDocumentIds) {
+		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> { 'VersionData' });
+
+		Map<Id, Blob> result = new Map<Id, Blob>();
+		for (ContentDocument cd : [
+			SELECT Id,
+				LatestPublishedVersion.VersionData
+			FROM ContentDocument
+			WHERE Id IN :contentDocumentIds
+		]) {
+			result.put(cd.Id, cd.LatestPublishedVersion.VersionData);
 		}
 		return result;
 	}
@@ -289,7 +358,9 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		Map<Id, Blob> result = null;
-		if (type == TYPE_CONTENT_VERSION) {
+		if (type == TYPE_CONTENT_DOCUMENT) {
+			result = getContentDocumentContent(documentIds);
+		} else if (type == TYPE_CONTENT_VERSION) {
 			result = getContentVersionContent(documentIds);
 		} else if (type == TYPE_DOCUMENT) {
 			result = getDocumentContent(documentIds);
