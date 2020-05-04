@@ -22,8 +22,8 @@
     <aura:handler name="init" value="{!this}" action="{!c.init}"/>
 
     <div class="slds-grid">
-        <div class="slds-col slds-size_1-of-8 slds-text-title_caps slds-p-top_small">
-            {!if(v.isFirst, $Label.c.IfStatement, if(v.ruleType == 'any', $Label.c.OrIfStatement, $Label.c.AndIfStatement))}
+        <div class="slds-col slds-size_1-of-8 slds-text-color_weak text-letter-spacing slds-p-top_small">
+            {!if(v.isFirst, $Label.c.IfStatement, if(v.ruleType == 'any', $Label.c.OrIfStatementUppercase, $Label.c.AndIfStatementUppercase))}
         </div>
         <div class="slds-col slds-size_small">
             <lightning:select

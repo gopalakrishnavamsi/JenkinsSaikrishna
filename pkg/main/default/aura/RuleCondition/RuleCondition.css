@@ -1,3 +1,7 @@
 .THIS .ds-condition-padding {
     padding-top: 2px;
 }
+
+.THIS .text-letter-spacing {
+    letter-spacing: .0625rem;
+}

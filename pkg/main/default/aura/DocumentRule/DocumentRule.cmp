@@ -20,7 +20,7 @@
 
     <div class="slds-m-top_large">
         <div class="slds-m-bottom_xxx-small">
-            <span class="slds-text-title_caps">{!$Label.c.DocumentRule}</span>
+            <span class="slds-text-color_weak text-letter-spacing">{!$Label.c.DocumentRuleUppercase}</span>
             <span class="slds-text-color_weak"> &bull; </span>
             <span class="slds-text-body_small">
                 <a href="{!$Label.c.DocumentRuleHelpURL}" target="_blank">{!$Label.c.Help}</a>
@@ -82,8 +82,8 @@
         </div>
 
         <div class="slds-grid">
-            <div class="slds-col slds-size_1-of-8 slds-text-title_caps slds-p-top_small">
-                {!$Label.c.Apply}
+            <div class="slds-col slds-size_1-of-8 slds-text-color_weak text-letter-spacing slds-p-top_small">
+                {!$Label.c.ApplyUppercase}
             </div>
             <div class="slds-col slds-size_xx-small">
                 <lightning:select
@@ -120,7 +120,7 @@
                     onConditionChange="{!c.onConditionChange}"/>
         </aura:iteration>
         <div class="slds-grid">
-            <div class="slds-col slds-size_1-of-8 slds-text-title_caps slds-p-top_small">
+            <div class="slds-col slds-size_1-of-8 slds-text-color_weak text-letter-spacing slds-p-top_small">
                 {!$Label.c.Then}
             </div>
             <div class="slds-col slds-p-top_small slds-text-body__small slds-text-color_weak">

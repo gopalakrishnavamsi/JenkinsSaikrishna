@@ -1930,6 +1930,14 @@
 		<name>ImportTemplatesDescription</name>
 	</customLabels>
 	<customLabels>
+		<label>APPLY</label>
+		<name>ApplyUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>DOCUMENT RULE</label>
+		<name>DocumentRuleUppercase</name>
+	</customLabels>
+	<customLabels>
 		<label>Document Rule</label>
 		<name>DocumentRule</name>
 	</customLabels>
@@ -1950,7 +1958,7 @@
 		<name>OfRuleConditions</name>
 	</customLabels>
 	<customLabels>
-		<label>then</label>
+		<label>THEN</label>
 		<name>Then</name>
 	</customLabels>
 	<customLabels>
@@ -1958,7 +1966,7 @@
 		<name>RuleGenerateDocument</name>
 	</customLabels>
 	<customLabels>
-		<label>if</label>
+		<label>IF</label>
 		<name>IfStatement</name>
 	</customLabels>
 	<customLabels>
@@ -1966,8 +1974,16 @@
 		<name>OrIfStatement</name>
 	</customLabels>
 	<customLabels>
+		<label>OR IF</label>
+		<name>OrIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
 		<label>and if</label>
 		<name>AndIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>AND IF</label>
+		<name>AndIfStatementUppercase</name>
 	</customLabels>
 	<customLabels>
 		<label>Enter conditional value</label>

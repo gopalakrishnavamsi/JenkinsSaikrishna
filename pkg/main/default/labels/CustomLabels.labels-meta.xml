@@ -4013,6 +4013,20 @@
 		<value>Once your Word templates have your anchor text, you can upload them.</value>
 	</labels>
 	<labels>
+		<fullName>ApplyUppercase</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Apply text uppercase</shortDescription>
+		<value>APPLY</value>
+	</labels>
+	<labels>
+		<fullName>DocumentRuleUppercase</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Document Rule title uppercase</shortDescription>
+		<value>DOCUMENT RULE</value>
+	</labels>
+	<labels>
 		<fullName>DocumentRule</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -4052,7 +4066,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Then text</shortDescription>
-		<value>then</value>
+		<value>THEN</value>
 	</labels>
 	<labels>
 		<fullName>RuleGenerateDocument</fullName>
@@ -4065,8 +4079,8 @@
 		<fullName>IfStatement</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Begin rule if statement</shortDescription>
-		<value>if</value>
+		<shortDescription>Begin rule if statement uppercase</shortDescription>
+		<value>IF</value>
 	</labels>
 	<labels>
 		<fullName>OrIfStatement</fullName>
@@ -4076,11 +4090,25 @@
 		<value>or if</value>
 	</labels>
 	<labels>
+		<fullName>OrIfStatementUppercase</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Continue or if statement uppercase</shortDescription>
+		<value>OR IF</value>
+	</labels>
+	<labels>
 		<fullName>AndIfStatement</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Continue and if statement</shortDescription>
 		<value>and if</value>
+	</labels>
+	<labels>
+		<fullName>AndIfStatementUppercase</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Continue and if statement uppercase</shortDescription>
+		<value>AND IF</value>
 	</labels>
 	<labels>
 		<fullName>EnterConditionalValue</fullName>

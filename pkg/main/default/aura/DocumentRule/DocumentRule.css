@@ -13,3 +13,7 @@
 .THIS .rule-name-icon {
     width: 30px !important;
 }
+
+.THIS .text-letter-spacing {
+    letter-spacing: .0625rem;
+}
