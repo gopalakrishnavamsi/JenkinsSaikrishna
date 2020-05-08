@@ -944,117 +944,6 @@ private class EnvelopeConfigurationServiceTest {
 	}
 
 	@IsTest
-	static void test_validate_merge_field_null() {
-		Tab mergeField = null;
-		Integer index = 0;
-		DescribeSObjectResult sourceDescribe = Opportunity.getSObjectType().getDescribe();
-
-		Test.startTest();
-		ValidationResult result = EnvelopeConfigurationService.validate(
-			mergeField,
-			index,
-			sourceDescribe);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result);
-		System.assert(!result.isValid);
-		System.assertEquals(String.format(Label.ArrayError_3, new List<Object> {
-			Label.MergeFieldElements,
-			index,
-			Label.UndefinedMergeField
-		}), result.toString());
-	}
-
-	@IsTest
-	static void test_validate_merge_field_invalid() {
-		Tab mergeField = Tab.newMergeField(null, null, false, false);
-		Integer index = 0;
-		DescribeSObjectResult sourceDescribe = Opportunity.getSObjectType().getDescribe();
-
-		Test.startTest();
-		ValidationResult result = EnvelopeConfigurationService.validate(
-			mergeField,
-			index,
-			sourceDescribe);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result);
-		System.assert(!result.isValid);
-		System.assertEquals(2, Collection.size(result.messages));
-		System.assertEquals(String.format(Label.ArrayError_3, new List<Object> {
-			Label.MergeFieldElements,
-			index,
-			Label.UndefinedType
-		}), result.messages[0]);
-		System.assertEquals(String.format(Label.ArrayError_3, new List<Object> {
-			Label.MergeFieldElements,
-			index,
-			Label.UndefinedPath
-		}), result.messages[1]);
-	}
-
-	@IsTest
-	static void test_validate_merge_field_unrelated_object() {
-		Tab mergeField = Tab.newMergeField(Tab.TYPE_TEXT, 'Account.Name', false, false);
-		Integer index = 0;
-		DescribeSObjectResult sourceDescribe = Opportunity.getSObjectType().getDescribe();
-
-		Test.startTest();
-		ValidationResult result = EnvelopeConfigurationService.validate(
-			mergeField,
-			index,
-			sourceDescribe);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result);
-		System.assert(!result.isValid);
-		System.assertEquals(String.format(Label.ArrayError_3, new List<Object> {
-			Label.MergeFieldElements,
-			index,
-			Label.UnrelatedMergeField
-		}), result.toString());
-	}
-
-	@IsTest
-	static void test_validate_merge_field_unrelated_field() {
-		Tab mergeField = Tab.newMergeField(Tab.TYPE_TEXT, 'Opportunity.Invalid', false, false);
-		Integer index = 0;
-		DescribeSObjectResult sourceDescribe = Opportunity.getSObjectType().getDescribe();
-
-		Test.startTest();
-		ValidationResult result = EnvelopeConfigurationService.validate(
-			mergeField,
-			index,
-			sourceDescribe);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result);
-		System.assert(!result.isValid);
-		System.assertEquals(String.format(Label.ArrayError_3, new List<Object> {
-			Label.MergeFieldElements,
-			index,
-			Label.UnrelatedMergeField
-		}), result.toString());
-	}
-
-	@IsTest
-	static void test_validate_merge_field_valid() {
-		Tab mergeField = Tab.newMergeField(Tab.TYPE_TEXT, 'Opportunity.StageName', false, false);
-		Integer index = 0;
-		DescribeSObjectResult sourceDescribe = Opportunity.getSObjectType().getDescribe();
-
-		Test.startTest();
-		ValidationResult result = EnvelopeConfigurationService.validate(
-			mergeField,
-			index,
-			sourceDescribe);
-		Test.stopTest();
-
-		System.assertNotEquals(null, result);
-		System.assert(result.isValid);
-	}
-
-	@IsTest
 	static void test_validate_null() {
 		EnvelopeConfiguration ec = null;
 		Boolean forUpdate = false;
@@ -1153,11 +1042,10 @@ private class EnvelopeConfigurationServiceTest {
 
 		System.assertNotEquals(null, result);
 		System.assert(!result.isValid);
-		System.assertEquals(4, Collection.size(result.messages));
+		System.assertEquals(3, Collection.size(result.messages));
 		System.assertEquals(Label.UndefinedId, result.messages[0]);
 		System.assertEquals(Label.UndefinedName, result.messages[1]);
-		System.assertEquals(Label.UndefinedDocuSignTemplateId, result.messages[2]);
-		System.assertEquals(Label.UndefinedSourceObject, result.messages[3]);
+		System.assertEquals(Label.UndefinedSourceObject, result.messages[2]);
 	}
 
 	@IsTest
@@ -1329,6 +1217,77 @@ private class EnvelopeConfigurationServiceTest {
 
 		System.assertNotEquals(null, result);
 		System.assert(result.isValid);
+	}
+
+	@IsTest
+	static void test_getTemplateRecipients() {
+		// Related recipients, single role
+		Recipient r1 = new EnvelopeConfiguration.RelatedRecipients(
+			null,
+			null,
+			Recipient.TYPE_SIGNER,
+			null,
+			false,
+			new List<String> { 'r1' },
+			true,
+			true);
+		// Vanilla recipient
+		Recipient r2 = Recipient.fromSource(
+			'r2',
+			'r2@unit.test',
+			null,
+			'r2',
+			null)
+			.withRoutingOrder(2);
+		// Related recipient, 2 roles
+		Recipient r3 = new EnvelopeConfiguration.RelatedRecipients(
+			null,
+			null,
+			Recipient.TYPE_SIGNER,
+			3,
+			false,
+			new List<String> { 'r3_1', 'r3_2' },
+			true,
+			true);
+		Recipient r4 = new EnvelopeConfiguration.LookupRecipient(
+			null,
+			Recipient.TYPE_CARBON_COPY,
+			3,
+			'r4',
+			true,
+			true);
+		List<Recipient> rs = new List<Recipient> { r1, r2, r3, r4 };
+
+		Test.startTest();
+		List<Recipient> result = EnvelopeConfigurationService.getTemplateRecipients(rs);
+		Test.stopTest();
+
+		System.assertEquals(5, Collection.size(result));
+
+		System.assertNotEquals(null, result[0]);
+		System.assertEquals(1, result[0].sequence);
+		System.assertEquals(1, result[0].routingOrder);
+		System.assertEquals('r1', result[0].getRoleName());
+
+		System.assertNotEquals(null, result[1]);
+		System.assertEquals(2, result[1].sequence);
+		System.assertEquals(2, result[1].routingOrder);
+		System.assertEquals('r2', result[1].getRoleName());
+
+		System.assertNotEquals(null, result[2]);
+		System.assertEquals(3, result[2].sequence);
+		System.assertEquals(3, result[2].routingOrder);
+		System.assertEquals('r3_1', result[2].getRoleName());
+
+		System.assertNotEquals(null, result[3]);
+		System.assertEquals(4, result[3].sequence);
+		System.assertEquals(3, result[3].routingOrder);
+		System.assertEquals('r3_2', result[3].getRoleName());
+
+		System.assertNotEquals(null, result[4]);
+		System.assertEquals(5, result[4].sequence);
+		System.assertEquals(3, result[4].routingOrder);
+		System.assertEquals('r4', result[4].getRoleName());
 	}
 
 	@IsTest
@@ -1539,7 +1498,105 @@ private class EnvelopeConfigurationServiceTest {
 	}
 
 	@IsTest
-	static void test_updateEnvelopeConfiguration_success() {
+	static void test_updateEnvelopeConfiguration_new_template() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			ContentVersion cv = TestUtils.createContentVersion();
+			EnvelopeConfiguration__c dbec = TestUtils.createEnvelopeConfiguration(
+				null,
+				'Opportunity');
+			EnvelopeConfiguration ec = new EnvelopeConfiguration(
+				dbec.Id,
+				UUID.randomUUID().toString(),
+				dbec.SourceObject__c,
+				null,
+				new List<Document> {
+					new EnvelopeConfiguration.TemplateDocument(
+						null,
+						cv.ContentDocumentId,
+						1,
+						cv.Title,
+						cv.FileExtension,
+						false,
+						true),
+					new EnvelopeConfiguration.SourceFiles(
+						null,
+						null,
+						2,
+						true,
+						false)
+				},
+				new List<Recipient> {
+					new EnvelopeConfiguration.LookupRecipient(
+						new Query.Relationship(
+							true,
+							'Owner',
+							'Owner',
+							'User'),
+						Recipient.TYPE_EMBEDDED_SIGNER,
+						1,
+						'r1',
+						true,
+						false),
+					new EnvelopeConfiguration.RelatedRecipients(
+						new Query.Relationship(
+							false,
+							'OpportunityContactRoles',
+							'Opportunity Contact Roles',
+							'OpportunityContactRole'),
+						null,
+						Recipient.TYPE_CARBON_COPY,
+						2,
+						true,
+						new List<String> { 'r1', 'r2', 'r3' },
+						false,
+						true)
+				},
+				new List<CustomField> {
+					CustomField.newTextField('tf', 'tv', false, true),
+					CustomField.newListField('lf', 'lv2', new List<String> { 'lv1', 'lv2', 'lv3' }, true, false)
+				},
+				new Notifications(true, 2, 1, true, 9, 7, false),
+				's',
+				'm',
+				new List<Tab> {
+					Tab.newMergeField(Tab.TYPE_TEXT, 'Opportunity.Name', false, false),
+					Tab.newMergeField(Tab.TYPE_NUMBER, 'Opportunity.Amount', true, true)
+				},
+				Envelope.DEFAULT_PERMISSIONS,
+				Envelope.DEFAULT_OPTIONS,
+				false);
+
+			Test.startTest();
+			EnvelopeConfiguration result = EnvelopeConfigurationService.updateEnvelopeConfiguration(ec);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.id);
+			System.assertEquals(ec.name, result.name);
+			System.assertEquals(ec.sourceObject, result.sourceObject);
+			System.assertNotEquals(null, result.docuSignId);
+			System.assertEquals(Collection.size(ec.customFields), Collection.size(result.customFields));
+			System.assertEquals(Collection.size(ec.documents), Collection.size(result.documents));
+			System.assertEquals(Collection.size(ec.recipients), Collection.size(result.recipients));
+			System.assertNotEquals(null, result.notifications);
+			System.assertEquals(ec.notifications.remind, result.notifications.remind);
+			System.assertEquals(ec.notifications.remindAfterDays, result.notifications.remindAfterDays);
+			System.assertEquals(ec.notifications.remindFrequencyDays, result.notifications.remindFrequencyDays);
+			System.assertEquals(ec.notifications.expires, result.notifications.expires);
+			System.assertEquals(ec.notifications.expireAfterDays, result.notifications.expireAfterDays);
+			System.assertEquals(ec.notifications.expireWarnDays, result.notifications.expireWarnDays);
+			System.assertEquals(ec.notifications.updateChatter, result.notifications.updateChatter);
+			System.assertEquals(ec.emailSubject, result.emailSubject);
+			System.assertEquals(ec.emailMessage, result.emailMessage);
+			System.assertEquals(Collection.size(ec.mergeFields), Collection.size(result.mergeFields));
+			System.assertNotEquals(null, result.senderPermissions);
+			System.assertEquals(ec.isDraft, result.isDraft);
+		}
+	}
+
+	@IsTest
+	static void test_updateEnvelopeConfiguration_existing_template() {
 		ESignatureAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			EnvelopeConfiguration__c dbec = TestUtils.createEnvelopeConfiguration(
@@ -1766,6 +1823,129 @@ private class EnvelopeConfigurationServiceTest {
 	}
 
 	@IsTest
+	static void test_resolveDocuments() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
+		insert s;
+		Lead l = TestUtils.createLead();
+		ContentVersion cv1 = TestUtils.createContentVersion('111', 'pdf');
+		TestUtils.createContentDocumentLink(l.Id, cv1);
+		ContentVersion cv2 = TestUtils.createContentVersion('222', 'pdf');
+		TestUtils.createContentDocumentLink(l.Id, cv2);
+		ContentVersion cv3 = TestUtils.createContentVersion();
+		// Template documents skipped
+		Document d1 = new EnvelopeConfiguration.TemplateDocument(
+			null,
+			null,
+			1,
+			'td',
+			'pdf',
+			true,
+			true);
+		// Linked documents from source added, sorted by name DESC (cv2, cv1)
+		Document d2 = new EnvelopeConfiguration.SourceFiles(
+			null,
+			new Query.Filter(
+				null,
+				'ContentDocument.LatestPublishedVersion.Title DESC',
+				null),
+			null,
+			true,
+			true);
+		// Document added as-is
+		Document d3 = Document.fromFile(cv3);
+		// Expect docs: cv2, cv1, cv3
+
+		Test.startTest();
+		List<Document> result = EnvelopeConfigurationService.resolveDocuments(
+			new Entity(l.Id),
+			new List<Document> { d1, d2, d3 });
+		Test.stopTest();
+
+		System.assertEquals(3, Collection.size(result));
+		System.assertNotEquals(null, result[0]);
+		System.assertEquals(cv2.Id, result[0].sourceId);
+		System.assertEquals(2, result[0].sequence); // First doc is DS template, so sequence starts with 2
+		System.assertNotEquals(null, result[1]);
+		System.assertEquals(cv1.Id, result[1].sourceId);
+		System.assertEquals(3, result[1].sequence);
+		System.assertNotEquals(null, result[2]);
+		System.assertEquals(cv3.Id, result[2].sourceId);
+		System.assertEquals(4, result[2].sequence);
+	}
+
+	@IsTest
+	static void test_resolveRelatedRecipients() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
+		insert s;
+		Schema.Account a = TestUtils.createAccount();
+		Contact c0 = TestUtils.createContact(a.Id);
+		Contact c1 = TestUtils.createContact(a.Id);
+		Contact c2 = TestUtils.createContact(a.Id);
+		Opportunity o = TestUtils.createOpportunity(a.Id);
+		// Expect to be mapped to r3
+		TestUtils.createOpportunityContactRole(o.Id, c0.Id, 'r0');
+		// Expect match r1
+		TestUtils.createOpportunityContactRole(o.Id, c1.Id, 'r1');
+		// Expect match r2
+		TestUtils.createOpportunityContactRole(o.Id, c2.Id, 'r2');
+		// No r4, so placeholder will be added
+		EnvelopeConfiguration.RelatedRecipients rrs = new EnvelopeConfiguration.RelatedRecipients(
+			new Query.Relationship(
+				false,
+				'OpportunityContactRoles',
+				'Opportunity Contact Roles',
+				'OpportunityContactRole'),
+			new Query.Filter(
+				null,
+				'Role ASC',
+				null),
+			Recipient.TYPE_SIGNER,
+			2,
+			true,
+			new List<String> { 'r1', 'r2', 'r3', 'r4' },
+			true,
+			false);
+
+		Test.startTest();
+		List<Recipient> result = EnvelopeConfigurationService.resolveRelatedRecipients(
+			rrs,
+			new Entity(o.Id));
+		Test.stopTest();
+
+		System.assertEquals(4, Collection.size(result));
+
+		System.assertNotEquals(null, result[0]);
+		System.assertEquals(2, result[0].routingOrder);
+		System.assertEquals(c1.Name, result[0].name);
+		System.assertEquals(c1.Email, result[0].email);
+		System.assertEquals(c1.Id, result[0].getSourceId());
+		System.assertEquals('r1', result[0].getRoleName());
+
+		System.assertNotEquals(null, result[1]);
+		System.assertEquals(3, result[1].routingOrder);
+		System.assertEquals(c2.Name, result[1].name);
+		System.assertEquals(c2.Email, result[1].email);
+		System.assertEquals(c2.Id, result[1].getSourceId());
+		System.assertEquals('r2', result[1].getRoleName());
+
+		System.assertNotEquals(null, result[2]);
+		System.assertEquals(4, result[2].routingOrder);
+		System.assertEquals(c0.Name, result[2].name);
+		System.assertEquals(c0.Email, result[2].email);
+		System.assertEquals(c0.Id, result[2].getSourceId());
+		System.assertEquals('r3', result[2].getRoleName());
+
+		System.assertNotEquals(null, result[3]);
+		System.assertEquals(5, result[3].routingOrder);
+		System.assertEquals(null, result[3].name);
+		System.assertEquals(null, result[3].email);
+		System.assertEquals(null, result[3].getSourceId());
+		System.assertEquals('r4', result[3].getRoleName());
+	}
+
+	@IsTest
 	static void test_getEnvelope_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
@@ -1877,7 +2057,13 @@ private class EnvelopeConfigurationServiceTest {
 						new List<String> { 'r2', 'r3' },
 						false,
 						false)
-						.withNote('Dear {!$Recipient.Name}, check this out')
+						.withNote('Dear {!$Recipient.Name}, check this out'),
+					Recipient.fromSource(
+						UUID.randomUUID().toString(),
+						UUID.randomUUID() + '@unit.test',
+						String.valueOf(TestUtils.randomInteger(10000000)),
+						'r4',
+						null)
 				},
 				new List<CustomField> {
 					CustomField.newTextField('n1', 'v1', true, true),
@@ -1946,7 +2132,8 @@ private class EnvelopeConfigurationServiceTest {
 			System.assert(!result.documents[1].readOnly);
 			System.assert(!result.documents[1].required);
 
-			System.assertEquals(3, Collection.size(result.recipients));
+			System.assertEquals(4, Collection.size(result.recipients));
+			System.assertNotEquals(null, result.recipients[0]);
 			System.assertEquals(UserInfo.getName(), result.recipients[0].name);
 			System.assertEquals(UserInfo.getUserEmail(), result.recipients[0].email);
 			System.assertEquals('r1', result.recipients[0].getRoleName());
@@ -1955,17 +2142,22 @@ private class EnvelopeConfigurationServiceTest {
 			System.assertEquals('From our company, ' + UserInfo.getOrganizationName(), result.recipients[0].emailSettings.message);
 			System.assertEquals(null, result.recipients[0].note);
 
+			System.assertNotEquals(null, result.recipients[1]);
 			System.assertEquals(ocr2.Contact.Name, result.recipients[1].name);
 			System.assertEquals(ocr2.Contact.Email, result.recipients[1].email);
 			System.assertEquals(ocr2.Role, result.recipients[1].getRoleName());
 			System.assertEquals(null, result.recipients[1].emailSettings);
 			System.assertEquals('Dear ' + result.recipients[1].name + ', check this out', result.recipients[1].note);
 
+			System.assertNotEquals(null, result.recipients[2]);
 			System.assertEquals(ocr3.Contact.Name, result.recipients[2].name);
 			System.assertEquals(ocr3.Contact.Email, result.recipients[2].email);
 			System.assertEquals(ocr3.Role, result.recipients[2].getRoleName());
 			System.assertEquals(null, result.recipients[2].emailSettings);
 			System.assertEquals('Dear ' + result.recipients[2].name + ', check this out', result.recipients[2].note);
+
+			System.assertNotEquals(null, result.recipients[3]);
+			System.assertEquals('r4', result.recipients[3].getRoleName());
 
 			System.assertEquals(2, Collection.size(result.customFields));
 			System.assertNotEquals(null, result.notifications);

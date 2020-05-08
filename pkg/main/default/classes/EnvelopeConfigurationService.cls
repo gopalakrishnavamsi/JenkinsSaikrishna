@@ -464,23 +464,6 @@ public with sharing class EnvelopeConfigurationService {
 			]));
 		}
 
-		public List<Tab> queryMergeFields(final Id envelopeConfigurationId) {
-			List<Tab> result = new List<Tab>();
-			if (envelopeConfigurationId != null) {
-				EnvelopeConfiguration__c ec = (EnvelopeConfiguration__c)Collection.head([
-					SELECT MergeFields__c
-					FROM EnvelopeConfiguration__c
-					WHERE Id = :envelopeConfigurationId
-					WITH SECURITY_ENFORCED
-					LIMIT 1
-				]);
-				if (ec != null && String.isNotBlank(ec.MergeFields__c)) {
-					result = (List<Tab>)JSON.deserialize(ec.MergeFields__c, List<Tab>.class);
-				}
-			}
-			return result;
-		}
-
 		public EnvelopeConfiguration updateEnvelopeConfiguration(final EnvelopeConfiguration envelopeConfiguration) {
 			Permissions.verifyIsUpdateable(EnvelopeConfiguration__c.getSObjectType(), new List<String> {
 				'Name',
@@ -829,60 +812,6 @@ public with sharing class EnvelopeConfigurationService {
 
 	@TestVisible
 	private static ValidationResult validate(
-		final Tab mergeField,
-		final Integer index,
-		final DescribeSObjectResult sourceDescribe) {
-
-		if (mergeField == null) {
-			return new ValidationResult(String.format(Label.ArrayError_3, new List<Object> {
-				Label.MergeFieldElements,
-				index,
-				Label.UndefinedMergeField
-			}));
-		}
-
-		ValidationResult result = new ValidationResult();
-		if (String.isBlank(mergeField.type)) {
-			result.add(String.format(Label.ArrayError_3, new List<Object> {
-				Label.MergeFieldElements,
-				index,
-				Label.UndefinedType
-			}));
-		}
-
-		if (String.isBlank(mergeField.path)) {
-			result.add(String.format(Label.ArrayError_3, new List<Object> {
-				Label.MergeFieldElements,
-				index,
-				Label.UndefinedPath
-			}));
-		} else if (sourceDescribe != null) {
-			if (!mergeField.path.startsWithIgnoreCase(sourceDescribe.getName() + '.')) {
-				result.add(String.format(Label.ArrayError_3, new List<Object> {
-					Label.MergeFieldElements,
-					index,
-					Label.UnrelatedMergeField
-				}));
-			} else {
-				List<String> path = mergeField.path.split('\\.');
-				if (Collection.size(path) == 2) { // Field on the object
-					if (String.isBlank(path[1])
-						|| !sourceDescribe.fields.getMap().containsKey(path[1].trim().toLowerCase())) {
-
-						result.add(String.format(Label.ArrayError_3, new List<Object> {
-							Label.MergeFieldElements,
-							index,
-							Label.UnrelatedMergeField
-						}));
-					}
-				} // else lookup or child relationship--finding this is super inefficient
-			}
-		}
-		return result;
-	}
-
-	@TestVisible
-	private static ValidationResult validate(
 		final EnvelopeConfiguration ec,
 		final Boolean forUpdate) {
 
@@ -897,10 +826,6 @@ public with sharing class EnvelopeConfigurationService {
 
 		if (String.isBlank(ec.name)) {
 			result.add(Label.UndefinedName);
-		}
-
-		if (forUpdate && UUID.isEmpty(ec.docuSignId)) {
-			result.add(Label.UndefinedDocuSignTemplateId);
 		}
 
 		DescribeSObjectResult sourceDescribe = null;
@@ -927,12 +852,6 @@ public with sharing class EnvelopeConfigurationService {
 		if (Collection.isNotEmpty(ec.customFields)) {
 			for (Integer i = 0; i < ec.customFields.size(); i++) {
 				result.add(validate(ec.customFields[i], i));
-			}
-		}
-
-		if (Collection.isNotEmpty(ec.mergeFields)) {
-			for (Integer i = 0; i < ec.mergeFields.size(); i++) {
-				result.add(validate(ec.mergeFields[i], i, sourceDescribe));
 			}
 		}
 
@@ -973,7 +892,9 @@ public with sharing class EnvelopeConfigurationService {
 								.withRoutingOrder(rrs.incrementRoutingOrder ? routingOrder++ : routingOrder));
 						}
 					} else {
-						result.add(r.copy().withSequence(++sequence));
+						result.add(r.copy()
+							.withSequence(++sequence)
+							.withRoutingOrder(routingOrder));
 					}
 				} else {
 					result.add(r.copy().withSequence(++sequence));
@@ -999,77 +920,6 @@ public with sharing class EnvelopeConfigurationService {
 			Datetime.now());
 	}
 
-	private static Boolean isSourceObjectMergeField(
-		final String sourceObject,
-		final Tab tab) {
-
-		return tab != null
-			&& tab.name != null
-			&& tab.path != null
-			&& tab.path.startsWithIgnoreCase(sourceObject + '.');
-	}
-
-	@TestVisible
-	private static List<Tab> saveMergeFields(
-		final UUID templateId,
-		final String sourceObject,
-		final List<Tab> mergeFields) {
-
-		if (templateId == null) throw new DocuSignException(Label.UndefinedArgument);
-		if (String.isBlank(sourceObject)) throw new DocuSignException(Label.UndefinedSourceObject);
-
-		String name = String.valueOf(templateId); // Name indicates ownership by this DEC and DS template.
-		List<Tab> result = new List<Tab>();
-		if (mergeFields != null) {
-			Map<String, Tab> newMergeFields = new Map<String, Tab>();
-			for (Tab t : mergeFields) {
-				if (String.isNotBlank(t.path)) newMergeFields.put(t.path.toLowerCase(), t.withName(name));
-			}
-
-			AccountAPI client = AccountAPI.getInstance();
-			// List all tabs on the account, filtering merge fields for the source object type.
-			for (Tab t : client.getTabs()) {
-				if (!isSourceObjectMergeField(sourceObject, t)) continue;
-
-				Tab t2 = newMergeFields.get(t.path.toLowerCase());
-				if (t2 != null && t2.path == t.path) {
-					// Set ID and name to ensure we reuse existing custom tabs.
-					newMergeFields.put(t2.path.toLowerCase(), t2.withId(t.id).withName(t.name));
-				}
-			}
-
-			// Create or update merge fields
-			for (Tab t : newMergeFields.values()) {
-				result.add(client.saveTab(t));
-			}
-		}
-		return result;
-	}
-
-	private static Boolean deleteMergeFields(final UUID templateId) {
-		if (templateId == null) throw new DocuSignException(Label.UndefinedArgument);
-
-		String name = String.valueOf(templateId); // Name indicates ownership by this DEC and DS template.
-		Set<UUID> tabIds = new Set<UUID>();
-		for (Tab t : AccountAPI.getInstance().getTabs()) {
-			if (t != null && t.name == name) { // Delete only merge fields belonging to this template/DEC.
-				tabIds.add(t.id);
-			}
-		}
-		return deleteMergeFields(tabIds);
-	}
-
-	private static Boolean deleteMergeFields(final Set<UUID> tabIds) {
-		Boolean result = false;
-		if (tabIds != null) {
-			AccountAPI client = AccountAPI.getInstance();
-			for (UUID id : tabIds) {
-				result |= client.deleteTab(id);
-			}
-		}
-		return result;
-	}
-
 	public static EnvelopeConfiguration createEnvelopeConfiguration(final EnvelopeConfiguration envelopeConfiguration) {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -1078,13 +928,9 @@ public with sharing class EnvelopeConfigurationService {
 
 		try {
 			Template template = EnvelopeAPI.getInstance().createTemplate(getTemplate(envelopeConfiguration));
-			EnvelopeConfiguration result = envelopeConfiguration
-				.withMergeFields(saveMergeFields(
-					template.id,
-					envelopeConfiguration.sourceObject,
-					envelopeConfiguration.mergeFields));
+			envelopeConfiguration.withDocuSignId(template.id);
 
-			return DB.insertEnvelopeConfiguration((EnvelopeConfiguration)result.withDocuSignId(template.id));
+			return DB.insertEnvelopeConfiguration(envelopeConfiguration);
 		} finally {
 			Credentials.save();
 		}
@@ -1131,31 +977,7 @@ public with sharing class EnvelopeConfigurationService {
 				EnvelopeAPI.getInstance().updateTemplate(template);
 			}
 
-			Set<String> newMergeFields = new Set<String>();
-			if (envelopeConfiguration.mergeFields != null) {
-				for (Tab t : envelopeConfiguration.mergeFields) {
-					if (t != null && String.isNotBlank(t.path)) newMergeFields.add(t.path.toLowerCase());
-				}
-			}
-
-			Set<UUID> mergeFieldsToDelete = new Set<UUID>();
-			for (Tab t : DB.queryMergeFields(envelopeConfiguration.id)) {
-				if (t != null
-					&& t.id != null
-					&& String.isNotBlank(t.path)
-					&& !newMergeFields.contains(t.path.toLowerCase())) {
-
-					mergeFieldsToDelete.add(t.id);
-				}
-			}
-			deleteMergeFields(mergeFieldsToDelete);
-
-			EnvelopeConfiguration result = envelopeConfiguration.withMergeFields(saveMergeFields(
-				envelopeConfiguration.docuSignId,
-				envelopeConfiguration.sourceObject,
-				envelopeConfiguration.mergeFields));
-
-			return DB.updateEnvelopeConfiguration(result);
+			return DB.updateEnvelopeConfiguration(envelopeConfiguration);
 		} finally {
 			Credentials.save();
 		}
@@ -1169,7 +991,6 @@ public with sharing class EnvelopeConfigurationService {
 		try {
 			UUID templateId = DB.queryDocuSignId(envelopeConfigurationId);
 			if (templateId != null) {
-				deleteMergeFields(templateId);
 				EnvelopeAPI.getInstance().deleteTemplate(templateId);
 			}
 
@@ -1179,6 +1000,7 @@ public with sharing class EnvelopeConfigurationService {
 		}
 	}
 
+	@TestVisible
 	private static List<Document> resolveDocuments(
 		final Entity source,
 		final List<Document> documents) {
@@ -1257,6 +1079,7 @@ public with sharing class EnvelopeConfigurationService {
 		return result;
 	}
 
+	@TestVisible
 	private static List<Recipient> resolveRelatedRecipients(
 		final EnvelopeConfiguration.RelatedRecipients templateRecipient,
 		final Entity source) {
@@ -1267,6 +1090,9 @@ public with sharing class EnvelopeConfigurationService {
 			&& source.isValid
 			&& templateRecipient.relationship != null
 			&& String.isNotBlank(templateRecipient.relationship.name)) {
+
+			Set<String> templateRoles = templateRecipient.roles == null
+				? new Set<String>() : new Set<String>(templateRecipient.roles);
 
 			// Query the related recipients
 			List<Recipient> recipients = RecipientService.getRelatedRecipients(
@@ -1281,7 +1107,10 @@ public with sharing class EnvelopeConfigurationService {
 			List<Recipient> nonRoleRecipients = new List<Recipient>();
 			for (Recipient r : recipients) {
 				String role = r.getRoleName();
-				if (String.isNotBlank(role) && !roleRecipients.containsKey(role)) {
+				if (String.isNotBlank(role)
+					&& templateRoles.contains(role)
+					&& !roleRecipients.containsKey(role)) {
+
 					roleRecipients.put(role, r);
 				} else {
 					nonRoleRecipients.add(r);
@@ -1305,23 +1134,6 @@ public with sharing class EnvelopeConfigurationService {
 					envelopeRecipient,
 					templateRecipient.incrementRoutingOrder ? routingOrder++ : routingOrder,
 					role));
-			}
-
-			// Add additional recipients
-			for (String role : roleRecipients.keySet()) {
-				result.add(mergeRecipient(
-					templateRecipient,
-					roleRecipients.get(role),
-					templateRecipient.incrementRoutingOrder ? routingOrder++ : routingOrder,
-					role));
-			}
-
-			for (Recipient r : nonRoleRecipients) {
-				result.add(mergeRecipient(
-					templateRecipient,
-					r,
-					templateRecipient.incrementRoutingOrder ? routingOrder++ : routingOrder,
-					null));
 			}
 		}
 		return result;
@@ -1357,7 +1169,6 @@ public with sharing class EnvelopeConfigurationService {
 				r.withSequence(++sequence);
 			}
 		}
-		result.sort();
 		return result;
 	}
 

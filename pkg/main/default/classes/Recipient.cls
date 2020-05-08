@@ -1221,6 +1221,10 @@ global virtual class Recipient implements Comparable {
 		return this.role == null ? null : this.role.name;
 	}
 
+	public Id getSourceId() {
+		return this.source == null ? null : this.source.id;
+	}
+
 	/**
 	 * Recipient search behaviors:
 	 * <ul>

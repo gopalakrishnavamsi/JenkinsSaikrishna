@@ -1671,7 +1671,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
-	private virtual class APIEnvelope {
+	private class APIEnvelope {
 		public String envelopeId;
 		public String status;
 		public String transactionId;
@@ -1927,42 +1927,48 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		}
 	}
 
-	private static Envelope templateToEnvelope(final Template template) {
-		if (template == null) return null;
-
-		return new Envelope(
-			null,
-			template.name,
-			template.id,
-			null,
-			template.documents,
-			template.recipients,
-			template.customFields,
-			template.notifications,
-			template.emailSubject,
-			template.emailMessage,
-			null,
-			new Envelope.Options(false, true),
-			null,
-			null);
-	}
-
 	private static String nullIfBlank(final String s) {
 		return String.isBlank(s) ? null : s;
 	}
 
 	@TestVisible
-	private class APITemplate extends APIEnvelope {
+	private class APITemplate {
 		public APITemplateId envelopeTemplateDefinition;
+		public APICustomFields customFields;
+		public List<APIDocument> documents;
+		public APIRecipients recipients;
+		public String emailBlurb;
+		public String emailSubject;
+		public APINotifications notification;
+		public APITabs tabs;
 
 		public APITemplate(final Template template) {
-			super(
-				templateToEnvelope(template),
-				false, // send now?
-				false); // TODO: Enable document fetch for templates. Requires platform change.
-
 			if (template != null) {
 				this.envelopeTemplateDefinition = new APITemplateId(template.id, template.name);
+				if (String.isNotBlank(template.emailSubject)) this.emailSubject = template.emailSubject;
+				if (String.isNotBlank(template.emailMessage)) this.emailBlurb = template.emailMessage;
+				this.notification = new APINotifications(template.notifications);
+				if (Collection.isNotEmpty(template.documents)) {
+					Map<String, Blob> documentContent = getDocumentContent(
+						template.documents,
+						false); // TODO: Enable document fetch for templates. Requires platform change.
+					this.documents = new List<APIDocument>();
+					for (Document d : template.documents) {
+						this.documents.add(new APIDocument(d,
+							d.type != Document.TYPE_TEMPLATE && String.isNotBlank(d.sourceId)
+								? documentContent.get(d.sourceId) : null));
+					}
+				}
+				if (Collection.isNotEmpty(template.recipients)) {
+					this.recipients = new APIRecipients(
+						template.recipients,
+						null,
+						false); // TODO: Make configurable?
+				}
+				this.customFields = buildCustomFields(
+					template.customFields,
+					null, // TODO: Wire up document write-back
+					null);
 			}
 		}
 
@@ -2095,7 +2101,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 		RestAPI.Response response = this.post(
 			'templates',
-			JSON.serialize(new APITemplate(template)),
+			JSON.serialize(new APITemplate(template), true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to create templates: ' + response.error);
@@ -2119,7 +2125,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 		RestAPI.Response response = this.put(
 			new List<Object> { 'templates', template.id },
-			JSON.serialize(new APITemplate(template)),
+			JSON.serialize(new APITemplate(template), true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to update template: ' + response.error);
