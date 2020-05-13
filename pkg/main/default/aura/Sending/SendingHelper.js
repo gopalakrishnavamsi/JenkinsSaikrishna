@@ -417,7 +417,7 @@
     sendEnvelope.setCallback(self, function (response1) {
       if (response1.getState() === 'SUCCESS') {
         if (sendNow) {
-          self.deleteAttachment(component);
+          self.deleteDocument(component);
           navUtils.navigateToSObject(component.get('v.recordId'));
         } else {
           var getTaggerUrl = component.get('c.getTaggerUrl');
@@ -675,20 +675,20 @@
   },
 
   cancelSend: function (component) {
-    this.deleteAttachment(component);
     this.trackCancel(component, this.SEND_FOR_SIGNATURE);
+    var isOnlineEditor = component.get('v.lock') === true && component.get('v.sendNow') === true;
+    if (isOnlineEditor) {
+      this.deleteDocument(component);
+    }
     navUtils.navigateToSObject(component.get('v.recordId'));
   },
 
-  deleteAttachment: function (component) {
+  deleteDocument: function (component) {
     var files = component.get('v.files');
-    var isOnlineEditor = component.get('v.lock') === true;
-    if (!$A.util.isEmpty(files) && isOnlineEditor) {
-      this.invokeAction(component, component.get('c.deleteAttachment'),
+    if (!$A.util.isEmpty(files)) {
+      this.invokeAction(component, component.get('c.deleteDocument'),
         {
-          fileId: files[0]
-        },
-        function () {
+          scmFile: files[0]
         }
       );
     }

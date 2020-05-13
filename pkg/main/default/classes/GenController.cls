@@ -329,9 +329,9 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
-	public static void deleteDocument(final String documentId) {
+	public static Boolean deleteDocument(final String documentId) {
 		try {
-			GenService.deleteScmDocument(UUID.parse(documentId));
+			return GenService.deleteScmDocument(UUID.parse(documentId));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to delete document');
 		}

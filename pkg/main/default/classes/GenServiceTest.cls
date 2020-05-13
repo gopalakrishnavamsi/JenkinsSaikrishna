@@ -1232,7 +1232,6 @@ private class GenServiceTest {
 	static void test_getTempEOSFolderId_withoutConfig_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
-			TestUtils.createAgreementConfiguration(ScmAPIMock.SOURCE_OBJECT_ID, ScmAPIMock.FOLDER_ID.toString(), ScmAPIMock.FOLDER_ID_3.toString());
 			Test.startTest();
 			UUID eosFolderId = GenService.getTempEOSFolderId(ScmAPIMock.SOURCE_OBJECT_ID);
 			System.assert(eosFolderId != null);
@@ -1299,8 +1298,7 @@ private class GenServiceTest {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
 			Test.startTest();
-			GenService.deleteScmDocument(ScmAPIMock.DOCUMENT_ID);
-			system.assert(true);
+			system.assert(GenService.deleteScmDocument(ScmAPIMock.DOCUMENT_ID));
 			Test.stopTest();
 		}
 	}

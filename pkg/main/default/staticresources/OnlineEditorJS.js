@@ -441,27 +441,6 @@ jQuery(document).ready(function ($) {
     });
   }
 
-  function saveAttachments(templateId, sourceId, htmlData) {
-    return new Promise(function (resolve, reject) {
-      try {
-        Visualforce.remoting.Manager.invokeAction(
-          RemoteActions.saveAttachments,
-          sourceId,
-          htmlData,
-          templateId,
-          function (result, event) {
-            if (event.status) {
-              resolve(result);
-            } else {
-              reject(event.message);
-            }
-          });
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
   function launchOnlineEditor(element, template, isEditing) {
     return isEditing && template && template.springTemplateId
       ? generateDownloadToken(getSpringTemplateIdToString(template))
@@ -995,48 +974,23 @@ jQuery(document).ready(function ($) {
   }
 
   prepareSendForSignature = (function () {
-    return function () {
+    return function (scmFile) {
       hideAll();
       var size = 0;
-      if (Configuration.template) {
-        exportDocument('html')
-          .then(function (htmlData) {
-            size = htmlData.length;
-            return saveAttachments(Configuration.template.id, Configuration.sourceId, htmlData);
-          })
-          .then(function (attachmentId) {
-            var pageUrl = Configuration.sendingUrl;
-            if (pageUrl.indexOf('?') !== -1) {
-              pageUrl += '&';
-            } else {
-              pageUrl += '?';
-            }
-            // noinspection SpellCheckingInspection
-            pageUrl += 'sId=' + encodeURIComponent(Configuration.sourceId)
-              + '&files=' + encodeURIComponent(attachmentId)
-              + '&phrs=' + encodeURIComponent(JSON.stringify(getPlaceholderRecipients()))
-              + '&lock=1'
-              + '&sendNow=1';
-            _userEvents.success(_sessionType, {'Size': size});
-            window.open(pageUrl, '_self');
-
-          })
-          .catch(function (error) {
-            createToastComponent(error, 'error');
-            _userEvents.error(
-              _sessionType,
-              {},
-              error && error.message ? error.message : error
-            );
-          });
+      var pageUrl = Configuration.sendingUrl;
+      if (pageUrl.indexOf('?') !== -1) {
+        pageUrl += '&';
       } else {
-        createToastComponent(Labels.templateUndefinedLabel, 'error');
-        _userEvents.error(
-          _sessionType,
-          {},
-          EventLabels.templateUndefined
-        );
+        pageUrl += '?';
       }
+      // noinspection SpellCheckingInspection
+      pageUrl += 'sId=' + encodeURIComponent(Configuration.sourceId)
+        + '&phrs=' + encodeURIComponent(JSON.stringify(getPlaceholderRecipients()))
+        + '&files=' + encodeURIComponent(scmFile)
+        + '&lock=1'
+        + '&sendNow=1';
+      _userEvents.success(_sessionType, {'Size': size});
+      window.open(pageUrl, '_self');
     };
   })();
 

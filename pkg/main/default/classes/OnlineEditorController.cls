@@ -579,41 +579,6 @@ public with sharing class OnlineEditorController extends Controller {
 			AuthService.getContentAccessToken());
 	}
 
-	@RemoteAction
-	public static Id saveAttachments(
-		final Id recordId,
-		final String htmlData,
-		final Id templateId) {
-
-		Permissions.verifyIsDocuSignGenerator();
-
-		Permissions.verifyIsQueryable(ContentVersion.getSObjectType(), new List<String> {
-			'Id', 'ContentDocumentId'
-		});
-		Permissions.verifyIsCreateable(ContentVersion.getSObjectType(), new List<String> {
-			'Title', 'PathOnClient', 'VersionData'
-		});
-		Permissions.verifyIsCreateable(ContentDocumentLink.getSObjectType(), new List<String> {
-			'ContentDocumentId', 'LinkedEntityId', 'ShareType'
-		});
-
-		Gen.Template genTemplate = GenService.getTemplate(templateId);
-		String fileName = getFileName(genTemplate.fileName, genTemplate.fileSuffix, genTemplate.sourceObject);
-		ContentVersion attachment = new ContentVersion();
-		attachment.VersionData = Blob.valueOf(htmlData);
-		attachment.Title = fileName;
-		attachment.PathOnClient = fileName;
-		insert attachment;
-
-		ContentDocumentLink attachmentLink = new ContentDocumentLink();
-		attachmentLink.ContentDocumentId = [SELECT Id, ContentDocumentId FROM ContentVersion WHERE Id = :attachment.Id].ContentDocumentId;
-		attachmentLink.LinkedEntityId = recordId;
-		attachmentLink.ShareType = 'V';
-		insert attachmentLink;
-
-		return attachment.Id;
-	}
-
 	// FIXME: Don't swallow exceptions. This will be a support driver.
 	@RemoteAction
 	public static OnlineEditorController.Query getMergeData(

@@ -18,7 +18,6 @@
       RemoteActions = {
         getUserProperties: '{!$RemoteAction.OnlineEditorController.getUserProperties}',
         generateDownloadToken: '{!$RemoteAction.OnlineEditorController.generateDownloadToken}',
-        saveAttachments: '{!$RemoteAction.OnlineEditorController.saveAttachments}',
         getMergeData: '{!$RemoteAction.OnlineEditorController.getMergeData}',
         getMergeFields: '{!$RemoteAction.OnlineEditorController.getMergeFields}',
         getEntityRecords: '{!$RemoteAction.OnlineEditorController.getEntityRecords}',
@@ -51,8 +50,8 @@
         return prepareOnlineEditorDocumentGenerator();
       };
 
-      var sendForSignature = function () {
-        prepareSendForSignature();
+      var sendForSignature = function (scmFile) {
+        prepareSendForSignature(scmFile);
       };
 
       var onCancel = function () {

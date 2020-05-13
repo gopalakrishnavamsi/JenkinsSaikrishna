@@ -928,8 +928,7 @@ private class GenControllerTest {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
 			Test.startTest();
-			GenController.deleteDocument(String.valueOf(ScmAPIMock.DOCUMENT_ID));
-			system.assert(true);
+			system.assert(GenController.deleteDocument(String.valueOf(ScmAPIMock.DOCUMENT_ID)));
 			Test.stopTest();
 		}
 	}

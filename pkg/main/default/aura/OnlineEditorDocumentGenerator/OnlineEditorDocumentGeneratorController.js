@@ -8,11 +8,10 @@
     helper.deleteDocument(component);
     navUtils.navigateToSObject(component.get('v.recordId'));
   },
-  sendForSignatureClicked: function (component, event, helper) {
+  sendForSignatureClicked: function (component) {
     component.set('v.loading', true);
     var sendForSignature = component.get('v.sendForSignature');
-    helper.deleteDocument(component);
-    sendForSignature();
+    sendForSignature(stringUtils.formatSCMFile(component.get('v.scmFileGuid'), component.get('v.fileName'), 'html'));
   },
   downloadAsWordFileClicked: function (component, event, helper) {
     helper.processDownloadAsWordFile(component);

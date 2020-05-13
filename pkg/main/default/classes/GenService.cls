@@ -1088,9 +1088,9 @@ public with sharing class GenService {
 		NegotiateAPI.getInstance().convertHtmlDocumentToWord(documentGuid);
 	}
 
-	public static void deleteScmDocument(final UUID documentGuid) {
+	public static Boolean deleteScmDocument(final UUID documentGuid) {
 		Permissions.verifyIsDocuSignGenerator();
-		NegotiateAPI.getInstance().deleteAgreement(documentGuid);
+		return NegotiateAPI.getInstance().deleteAgreement(documentGuid);
 	}
 
 	public static LimitedAccessToken generateLimitedAccessToken(final UUID documentId) {

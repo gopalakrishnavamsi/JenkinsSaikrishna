@@ -371,30 +371,6 @@ private class OnlineEditorControllerTest {
 	}
 
 	@IsTest
-	static void test_saveAttachments() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			Schema.Account testAccount = TestUtils.createAccount();
-			Opportunity testOpportunity = TestUtils.createOpportunity(testAccount.Id);
-			GenTemplate__c genTemplate = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
-			genTemplate.Name = TestUtils.randomString(12);
-			genTemplate.SourceObject__c = 'Opportunity';
-			genTemplate.FileName__c = TestUtils.randomString(100);
-			genTemplate.FileSuffix__c = 'Main Data Source Name';
-			update genTemplate;
-
-			String htmlData = '<h1>Hello World</h1>';
-
-			Test.startTest();
-			Id fileId = OnlineEditorController.saveAttachments(testOpportunity.Id, htmlData, genTemplate.Id);
-			System.assertNotEquals(fileId, null);
-			ContentVersion cv = (ContentVersion)Collection.head([SELECT Id, Title FROM ContentVersion WHERE Id = :fileId]);
-			Test.stopTest();
-			System.assertEquals(cv.Title.length(), 80);
-			System.assertEquals(cv.Title.substringAfterLast('.'), 'html');
-		}
-	}
-
-	@IsTest
 	static void test_getFileName_mainDataSourceSuffix() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			System.assert(OnlineEditorController.getFileName('One', 'Main Data Source Name', 'Account').contains('Account'));
@@ -749,39 +725,6 @@ private class OnlineEditorControllerTest {
 				throw new AssertException('Expected to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_saveAttachments_success() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			Contact testContact = new Contact(FirstName = 'testContact', LastName = 'test', Email = 'unittest@test.com');
-			insert testContact;
-			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.TYPE_ONLINE, SourceObject__c = 'Contact', FileName__c = 'Main', FileSuffix__c = 'Main Data Source');
-			insert testTemplate;
-			Id testAttachmentId;
-			Test.startTest();
-			testAttachmentId = OnlineEditorController.saveAttachments(testContact.Id, 'Test HTML data', testTemplate.Id);
-			Test.stopTest();
-			System.assertNotEquals(null, testAttachmentId);
-		}
-	}
-
-	@IsTest
-	static void test_saveAttachments_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Contact testContact = new Contact(FirstName = 'testContact', LastName = 'test', Email = 'unittest@test.com');
-			insert testContact;
-			GenTemplate__c testTemplate = new GenTemplate__c(Name = 'TestTemplate', TemplateType__c = Gen.TYPE_ONLINE);
-			insert testTemplate;
-			Test.startTest();
-			try {
-				OnlineEditorController.saveAttachments(UserInfo.getUserId(), 'test', UserInfo.getUserId());
-				throw new AssertException('Expected to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
 			Test.stopTest();
 		}

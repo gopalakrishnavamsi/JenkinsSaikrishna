@@ -404,15 +404,29 @@ private class SendingControllerTest {
 	}
 
 	@IsTest
-	static void test_deleteAttachment_success() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			ContentVersion cv = TestUtils.createContentVersion();
-			System.assertNotEquals(null, cv.ContentDocumentId);
+	static void test_deleteDocument_success() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator(true)) {
+			String scmFile = 'scm;' + ScmAPIMock.DOCUMENT_ID + ';UnitTestScmFile1;html';
 			Test.startTest();
-			SendingController.deleteAttachment(cv.Id);
+			System.assert(SendingController.deleteDocument(scmFile));
 			Test.stopTest();
-			System.assert(Collection.isEmpty([SELECT Id FROM ContentVersion WHERE Id = :cv.Id]));
-			System.assert(Collection.isEmpty([SELECT Id FROM ContentDocument WHERE Id = :cv.ContentDocumentId]));
+		}
+	}
+
+	@IsTest
+	static void test_deleteDocument_unAuthorized() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser(true)) {
+			String scmFile = 'scm;' + ScmAPIMock.DOCUMENT_ID + ';UnitTestScmFile1;html';
+			Test.startTest();
+			try {
+				SendingController.deleteDocument(scmFile);
+				throw new AssertException('Expected deleteDocument to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
 		}
 	}
 }

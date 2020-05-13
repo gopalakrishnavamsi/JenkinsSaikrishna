@@ -211,9 +211,10 @@ public with sharing class SendingController extends Controller {
 	}
 
 	@AuraEnabled
-	public static void deleteAttachment(final Id fileId) {
+	public static Boolean deleteDocument(final String scmFile) {
 		try {
-			deleteContentDocument(fileId);
+			UUID scmFileGuid = getSCMFileGuid(scmFile);
+			return UUID.isNotEmpty(scmFileGuid) ? GenService.deleteScmDocument(scmFileGuid) : false;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to delete document');
 		}
@@ -233,15 +234,9 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
-	private static Boolean deleteContentDocument(final Id contentVersionId) {
-		Permissions.verifyIsDeletable(CONTENT_DOCUMENT_TYPE);
-		Boolean result = false;
-		if (contentVersionId != null) {
-			ContentVersion contentVersionInstance = [SELECT ContentDocumentId,FileType FROM ContentVersion WHERE Id = :contentVersionId];
-			ContentDocument contentDocumentInstance = [SELECT Id FROM ContentDocument WHERE Id = :contentVersionInstance.ContentDocumentId];
-			delete contentDocumentInstance;
-			result = true;
-		}
-		return result;
+	private static UUID getSCMFileGuid(final string scmFile) {
+		List<String> scmFileDetails = scmFile.split(';');
+		Boolean isScmFile = Collection.isNotEmpty(scmFileDetails) && scmFileDetails[0].equalsIgnoreCase(Document.TYPE_SCM);
+		return isScmFile && scmFileDetails.size() > 1 ? UUID.parse(scmFileDetails[1]) : null ;
 	}
 }
