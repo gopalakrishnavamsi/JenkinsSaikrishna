@@ -89,7 +89,7 @@ jQuery(document).ready(function ($) {
     return message;
   }
 
-  function createToastComponent(message, mode) {
+  function createToastComponent(message, mode, detail) {
     if (_toastComponent) _toastComponent.destroy();
     $Lightning.use(Configuration.namespace + ':LightningOutApp', function () {
       $Lightning.createComponent(Configuration.namespace + ':Toast',
@@ -97,7 +97,8 @@ jQuery(document).ready(function ($) {
           showToast: true,
           visualforce: true,
           message: getMessage(message),
-          mode: mode
+          mode: mode,
+          detail: $A.util.isEmpty(detail) ? null : detail
         },
         'toastNotificationContainer',
         function (cmp) {
@@ -196,7 +197,7 @@ jQuery(document).ready(function ($) {
                   {},
                   event.message
                 );
-                createToastComponent(event.message, 'error');
+                createToastComponent(event.message, 'error', Labels.UnauthorizedQueryMessage);
                 reject(event.message);
               }
             });
@@ -887,7 +888,7 @@ jQuery(document).ready(function ($) {
               resolve(response);
             })
             .catch(function (err) {
-              createToastComponent(err, 'error');
+              createToastComponent(err, 'error', Labels.UnauthorizedQueryMessage);
               _userEvents.error(
                 _sessionType,
                 {},

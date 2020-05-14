@@ -4356,6 +4356,13 @@
 		<value>Unable to generate the following files:</value>
 	</labels>
 	<labels>
+		<fullName>UnauthorizedQueryMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UnauthorizedQueryMessage</shortDescription>
+		<value>Unable to generate or preview the document because you have insufficient permissions. Please contact your administrator for assistance.</value>
+	</labels>
+	<labels>
 		<fullName>NoDocForTemplateMsg</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

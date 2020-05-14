@@ -62,7 +62,8 @@
         templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}',
         templateSaveValidationLabel: '{!$Label.OnlineEditorSaveValidation}',
         templateSCMHrefUndefinedLabel: '{!$Label.SCMHrefUndefined}',
-        apiError_3: '{!$Label.ApiError_3}'
+        apiError_3: '{!$Label.ApiError_3}',
+        UnauthorizedQueryMessage: '{!$Label.UnauthorizedQueryMessage}'
       };
     </script>
 

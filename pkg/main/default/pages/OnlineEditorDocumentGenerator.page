@@ -42,7 +42,8 @@
       Labels = {
         templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}',
         templateExportDataIsUndefinedLabel: '{!$Label.ExportDataIsUndefinedLabel}',
-        apiError_3: '{!$Label.ApiError_3}'
+        apiError_3: '{!$Label.ApiError_3}',
+        UnauthorizedQueryMessage: '{!$Label.UnauthorizedQueryMessage}'
       };
 
 

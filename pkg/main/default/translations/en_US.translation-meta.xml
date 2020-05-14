@@ -2126,6 +2126,10 @@
 		<name>GenerateFileFailMsg</name>
 	</customLabels>
 	<customLabels>
+		<label>Unable to generate or preview the document because you have insufficient permissions. Please contact your administrator for assistance.</label>
+		<name>UnauthorizedQueryMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>Sorry, there are no document templates for this configuration.</label>
 		<name>NoDocForTemplateMsg</name>
 	</customLabels>
