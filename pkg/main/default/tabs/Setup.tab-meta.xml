@@ -2,6 +2,6 @@
 <CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
     <icon>DocuSign/AppIcon.png</icon>
     <label>DocuSign Setup</label>
-    <motif>Custom7: Square</motif>
+    <motif>Custom67: Gears</motif>
     <page>Setup</page>
 </CustomTab>

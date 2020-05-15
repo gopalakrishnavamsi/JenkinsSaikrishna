@@ -607,6 +607,36 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>Log__c.Class__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Log__c.Message__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Log__c.Method__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Log__c.Severity__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Log__c.Type__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Log__c.Version__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>RecipientStatus__c.Completed__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -882,6 +912,15 @@
 		<allowDelete>true</allowDelete>
 		<allowEdit>true</allowEdit>
 		<allowRead>true</allowRead>
+		<modifyAllRecords>true</modifyAllRecords>
+		<object>Log__c</object>
+		<viewAllRecords>true</viewAllRecords>
+	</objectPermissions>
+	<objectPermissions>
+		<allowCreate>true</allowCreate>
+		<allowDelete>true</allowDelete>
+		<allowEdit>true</allowEdit>
+		<allowRead>true</allowRead>
 		<modifyAllRecords>false</modifyAllRecords>
 		<object>RecipientStatus__c</object>
 		<viewAllRecords>false</viewAllRecords>
@@ -958,7 +997,15 @@
 	</pageAccesses>
 	<tabSettings>
 		<tab>GenTemplate__c</tab>
-		<visibility>Available</visibility>
+		<visibility>Visible</visibility>
+	</tabSettings>
+	<tabSettings>
+		<tab>EnvelopeConfiguration__c</tab>
+		<visibility>Visible</visibility>
+	</tabSettings>
+	<tabSettings>
+		<tab>Log__c</tab>
+		<visibility>Visible</visibility>
 	</tabSettings>
 	<tabSettings>
 		<tab>EnvelopeStatus__c</tab>
