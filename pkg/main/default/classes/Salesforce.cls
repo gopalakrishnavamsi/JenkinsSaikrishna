@@ -2,7 +2,7 @@
 public with sharing class Salesforce {
 
 	private static final Map<String, SObjectType> GLOBAL_DESCRIBE;
-
+	
 	private static List<String> visualforceOrigins;
 	private static List<String> lightningOrigins;
 
@@ -15,11 +15,15 @@ public with sharing class Salesforce {
 	@TestVisible
 	public static Url baseUrl { get; private set; }
 	@TestVisible
+	public static String sitePrefix { get; private set; }
+	@TestVisible
 	public static Boolean isSandbox { get; private set; }
 	@TestVisible
 	public static Boolean isApiSupported { get; private set; }
 	@TestVisible
 	public static Boolean isFlsSupported { get; private set; }
+	@TestVisible
+	public static Boolean isChatterEnabled { get; private set; }
 	@TestVisible
 	public static Boolean isCommunitySite { get; private set; }
 	@TestVisible
@@ -28,6 +32,7 @@ public with sharing class Salesforce {
 	static {
 		String siteBaseUrl = Site.getBaseUrl();
 		baseUrl = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl) : Url.getOrgDomainUrl();
+		sitePrefix = String.isNotBlank(Site.getPathPrefix()) ? Site.getPathPrefix() : '' ;
 		oauthUrl = new Url(baseUrl, '/services/oauth2/authorize');
 		Organization org = [
 			SELECT InstanceName, IsSandbox, OrganizationType, NamespacePrefix
@@ -53,6 +58,7 @@ public with sharing class Salesforce {
 		}
 		namespace = org.NamespacePrefix;
 		GLOBAL_DESCRIBE = Schema.getGlobalDescribe();
+		isChatterEnabled = GLOBAL_DESCRIBE.containsKey('FeedItem');
 		isCommunitySite = Site.getSiteType() == 'ChatterNetwork';
 	}
 
@@ -95,24 +101,22 @@ public with sharing class Salesforce {
 	}
 
 	public static SObjectType getSObjectType(final String typeName) {
-		if (String.isBlank(typeName)) {
-			throw new DocuSignException(
-				String.format(Label.InvalidSObjectType_1,
-					new List<String> {
-						typeName
-					})
-			);
-		}
+		if (String.isBlank(typeName)) throw new DocuSignException(
+			String.format(Label.InvalidSObjectType_1,
+				new List<String> {
+					typeName
+				})
+		);
+
+		//Could not resolve object type X. Verify the object exists and you have access to it
 
 		SObjectType result = GLOBAL_DESCRIBE.get(Application.resolveType(typeName).toLowerCase());
-		if (result == null) {
-			throw new DocuSignException(
-				String.format(Label.InvalidSObjectType_1,
-					new List<String> {
-						typeName
-					})
-			);
-		}
+		if (result == null) throw new DocuSignException(
+			String.format(Label.InvalidSObjectType_1,
+				new List<String> {
+					typeName
+				})
+		);
 
 		return result;
 	}

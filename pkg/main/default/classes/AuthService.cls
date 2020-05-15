@@ -748,7 +748,7 @@ global with sharing class AuthService {
 
 	@TestVisible
 	private static Url getOAuthRedirectUrl() {
-		return new Url(Salesforce.baseUrl, Page.CompleteOAuth.getUrl());
+		return new Url(Salesforce.baseUrl, Salesforce.sitePrefix.removeEndIgnoreCase('/s') + Page.CompleteOAuth.getUrl());
 	}
 
 	/**

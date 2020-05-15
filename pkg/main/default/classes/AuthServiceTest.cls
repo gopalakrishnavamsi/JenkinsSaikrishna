@@ -963,6 +963,15 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_getCommunityOAuthRedirectUrl() {
+		Salesforce.baseUrl = new Url('https://communityexample.com/Partner/s');
+		Salesforce.sitePrefix = '/Partner/s';
+		System.assertEquals(
+			new Url('https://communityexample.com/Partner' + Page.CompleteOAuth.getUrl()).toExternalForm(),
+			AuthService.getOAuthRedirectUrl().toExternalForm());
+	}
+
+	@IsTest
 	static void test_getLoginUrl_user_unauthorized() {
 		System.runAs(UserMock.createDocuSignSender(false)) {
 			Test.startTest();

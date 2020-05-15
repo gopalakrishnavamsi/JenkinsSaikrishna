@@ -986,7 +986,7 @@ public with sharing class Permissions {
 		if (String.isBlank(fieldName) || fieldMap.containsKey(fieldName)) return false;
 		String formmatedFieldName = formatIdPointingField(fieldName);
 		return fieldMap.containsKey(formmatedFieldName) && fieldMap.get(formmatedFieldName).getDescribe().getReferenceTo() != null;
-	}	
+	}
 
 	@TestVisible
 	private static FlsResults getFlsResults(
@@ -1374,30 +1374,32 @@ public with sharing class Permissions {
 			};
 			if (Auth.CommunitiesUtil.isGuestUser()) { // Cannot check session for guest users without an exception
 				sessionParameters.put(KEY_API_ENABLED, false);
-			} else if (!Test.isRunningTest() && !System.isFuture()) {
-				try {
-					// Cannot check session in test or future context without an exception
-					Map<String, String> session = Auth.SessionManagement.getCurrentSession();
-					String sessionType = session.get('SessionType');
-					Boolean isImpersonating = sessionType == 'SubstituteUser';
-					if (!isImpersonating) { // Fallback to parent session
-						String parentSessionId = session.get('ParentId');
-						if (String.isNotBlank(parentSessionId)) {
-							AuthSession parentSession = (AuthSession)Collection.head([
-								SELECT SessionType
-								FROM AuthSession
-								WHERE Id = :parentSessionId
-								LIMIT 1
-							]);
-							isImpersonating = parentSession != null && parentSession.SessionType == 'SubstituteUser';
-						}
+			} else if (!Test.isRunningTest()
+				&& !System.isFuture()
+				&& !System.isBatch()
+				&& !System.isScheduled()
+				&& !System.isQueueable()) {
+
+				// Cannot check session in test, future, scheduled, batch, and queueable contexts without an
+				// un-catchable UnexpectedException. This is impossible to validate with unit tests.
+				Map<String, String> session = Auth.SessionManagement.getCurrentSession();
+				String sessionType = session.get('SessionType');
+				Boolean isImpersonating = sessionType == 'SubstituteUser';
+				if (!isImpersonating) { // Fallback to parent session
+					String parentSessionId = session.get('ParentId');
+					if (String.isNotBlank(parentSessionId)) {
+						AuthSession parentSession = (AuthSession)Collection.head([
+							SELECT SessionType
+							FROM AuthSession
+							WHERE Id = :parentSessionId
+							LIMIT 1
+						]);
+						isImpersonating = parentSession != null && parentSession.SessionType == 'SubstituteUser';
 					}
-					sessionParameters.put(KEY_IMPERSONATING, isImpersonating);
-					sessionParameters.put(KEY_API_ENABLED, // Lightning Aura sessions are not valid for API
-						String.isNotBlank(UserInfo.getSessionId()) && sessionType != 'Aura');
-				} catch (UnexpectedException ex) {
-					LoggerService.getInstance().exception(ex, 'Failed to check current auth session');
 				}
+				sessionParameters.put(KEY_IMPERSONATING, isImpersonating);
+				sessionParameters.put(KEY_API_ENABLED, // Lightning Aura sessions are not valid for API
+					String.isNotBlank(UserInfo.getSessionId()) && sessionType != 'Aura');
 			}
 		}
 		return sessionParameters;
