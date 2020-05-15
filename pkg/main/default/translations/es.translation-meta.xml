@@ -698,14 +698,6 @@
 		<name>InitializeAccountSettings</name>
 	</customLabels>
 	<customLabels>
-		<label>Inicializar configuración de Chatter</label>
-		<name>InitializeChatterSettings</name>
-	</customLabels>
-	<customLabels>
-		<label>Inicializar configuración del sobre</label>
-		<name>InitializeEnvelopeSettings</name>
-	</customLabels>
-	<customLabels>
 		<label>Actualizar destinatarios</label>
 		<name>Intermediary</name>
 	</customLabels>

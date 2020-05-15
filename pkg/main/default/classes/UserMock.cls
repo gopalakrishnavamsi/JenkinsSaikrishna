@@ -471,6 +471,12 @@ global class UserMock {
 		onEditorRootSettings.FolderId__c = UUID.randomUUID().toString();
 		insert onEditorRootSettings;
 
+		LogSettings__c logSettings = LogSettings__c.getOrgDefaults();
+		logSettings.Level__c = String.valueOf(LoggingLevel.WARN);
+		logSettings.MaximumAgeDays__c = 90;
+		logSettings.MaximumRecords__c = 1000;
+		insert logSettings;
+
 		return accountId;
 	}
 }

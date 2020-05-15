@@ -164,6 +164,62 @@ private class PostInstallTest {
 	}
 
 	@IsTest
+	static void test_initializeLogSettings_new() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			PostInstallResults result = PostInstall.initializeLogSettings();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.success);
+			List<PostInstallResults.Step> steps = result.getSteps();
+			System.assertNotEquals(null, steps);
+			System.assertEquals(1, steps.size());
+			System.assertNotEquals(null, steps[0]);
+			System.assertEquals(Label.InitializeLogSettings, steps[0].name);
+			System.assertEquals(PostInstallResults.StepStatus.SUCCESS, steps[0].status);
+
+			LogSettings__c settings = LogSettings__c.getOrgDefaults();
+			System.assertNotEquals(null, settings);
+			System.assertNotEquals(null, settings.Id);
+			System.assertEquals('WARN', settings.Level__c);
+			System.assertEquals(90, settings.MaximumAgeDays__c);
+			System.assertEquals(1000, settings.MaximumRecords__c);
+		}
+	}
+
+	@IsTest
+	static void test_initializeLogSettings_upgrade() {
+		System.runAs(UserMock.createUser()) {
+			LogSettings__c settings = LogSettings__c.getOrgDefaults();
+			settings.Level__c = 'DEBUG';
+			settings.MaximumAgeDays__c = 30;
+			settings.MaximumRecords__c = 100;
+			insert settings;
+
+			Test.startTest();
+			PostInstallResults result = PostInstall.initializeLogSettings();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(result.success);
+			List<PostInstallResults.Step> steps = result.getSteps();
+			System.assertNotEquals(null, steps);
+			System.assertEquals(1, steps.size());
+			System.assertNotEquals(null, steps[0]);
+			System.assertEquals(Label.InitializeLogSettings, steps[0].name);
+			System.assertEquals(PostInstallResults.StepStatus.SKIPPED, steps[0].status);
+
+			settings = LogSettings__c.getOrgDefaults();
+			System.assertNotEquals(null, settings);
+			System.assertNotEquals(null, settings.Id);
+			System.assertEquals('DEBUG', settings.Level__c);
+			System.assertEquals(30, settings.MaximumAgeDays__c);
+			System.assertEquals(100, settings.MaximumRecords__c);
+		}
+	}
+
+	@IsTest
 	static void test_createDefaultRecipientRoles_new() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
@@ -262,7 +318,6 @@ private class PostInstallTest {
 	@IsTest
 	static void test_install() {
 		System.runAs(UserMock.createUser()) {
-
 			Test.startTest();
 			Test.testInstall(new PostInstall(), Application.version);
 			Test.stopTest();
@@ -274,6 +329,12 @@ private class PostInstallTest {
 			System.assertNotEquals(null, s1.EntityResolvers__c);
 			System.assertNotEquals(null, s1.RecipientResolvers__c);
 			System.assert(Permissions.isDocuSignAdministrator());
+			LogSettings__c s2 = LogSettings__c.getOrgDefaults();
+			System.assertNotEquals(null, s2);
+			System.assertNotEquals(null, s2.Id);
+			System.assertNotEquals(null, s2.Level__c);
+			System.assertNotEquals(null, s2.MaximumAgeDays__c);
+			System.assertNotEquals(null, s2.MaximumRecords__c);
 		}
 	}
 

@@ -162,6 +162,26 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 	}
 
 	@TestVisible
+	private static PostInstallResults initializeLogSettings() {
+		PostInstallResults result = new PostInstallResults();
+		LogSettings__c settings = LogSettings__c.getOrgDefaults();
+		if (settings.Id == null) {
+			try {
+				settings.Level__c = String.valueOf(LoggingLevel.WARN);
+				settings.MaximumAgeDays__c = 90;
+				settings.MaximumRecords__c = 1000;
+				insert settings;
+				result.endStepSuccess(Label.InitializeLogSettings);
+			} catch (Exception ex) {
+				result.endStepFailure(Label.InitializeLogSettings, ex);
+			}
+		} else {
+			result.skipStep(Label.InitializeLogSettings, Label.AlreadyComplete);
+		}
+		return result;
+	}
+
+	@TestVisible
 	private static PostInstallResults createDefaultCLMObjMappings() {
 		PostInstallResults result = new PostInstallResults();
 		try {
@@ -284,6 +304,7 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 		results.addResults(initializeAccountSettings());
 		results.addResults(createDefaultRecipientRoles());
 		results.addResults(createDefaultCLMObjMappings());
+		results.addResults(initializeLogSettings());
 
 		results.addResults(executeScript(
 			Label.PostInstall2,

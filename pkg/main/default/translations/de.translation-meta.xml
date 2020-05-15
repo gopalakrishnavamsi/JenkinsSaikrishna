@@ -698,14 +698,6 @@
 		<name>InitializeAccountSettings</name>
 	</customLabels>
 	<customLabels>
-		<label>Chatter-Einstellungen initialisieren</label>
-		<name>InitializeChatterSettings</name>
-	</customLabels>
-	<customLabels>
-		<label>Umschlageinstellungen initialisieren</label>
-		<name>InitializeEnvelopeSettings</name>
-	</customLabels>
-	<customLabels>
 		<label>Empfänger aktualisieren</label>
 		<name>Intermediary</name>
 	</customLabels>

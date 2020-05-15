@@ -698,14 +698,6 @@
 		<name>InitializeAccountSettings</name>
 	</customLabels>
 	<customLabels>
-		<label>채터 설정 초기화</label>
-		<name>InitializeChatterSettings</name>
-	</customLabels>
-	<customLabels>
-		<label>봉투 설정 초기화</label>
-		<name>InitializeEnvelopeSettings</name>
-	</customLabels>
-	<customLabels>
 		<label>수신인 업데이트</label>
 		<name>Intermediary</name>
 	</customLabels>

@@ -1413,20 +1413,12 @@
 		<value>Initialize account settings</value>
 	</labels>
 	<labels>
-		<fullName>InitializeChatterSettings</fullName>
+		<fullName>InitializeLogSettings</fullName>
 		<categories>PostInstall</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Initialize Chatter settings</shortDescription>
-		<value>Initialize Chatter settings</value>
-	</labels>
-	<labels>
-		<fullName>InitializeEnvelopeSettings</fullName>
-		<categories>PostInstall</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Initialize envelope settings</shortDescription>
-		<value>Initialize envelope settings</value>
+		<shortDescription>Initialize log settings</shortDescription>
+		<value>Initialize log settings</value>
 	</labels>
 	<labels>
 		<fullName>Integration</fullName>

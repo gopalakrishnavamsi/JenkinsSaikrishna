@@ -698,12 +698,8 @@
 		<name>InitializeAccountSettings</name>
 	</customLabels>
 	<customLabels>
-		<label>Initialize Chatter settings</label>
-		<name>InitializeChatterSettings</name>
-	</customLabels>
-	<customLabels>
-		<label>Initialize envelope settings</label>
-		<name>InitializeEnvelopeSettings</name>
+		<label>Initialize log settings</label>
+		<name>InitializeLogSettings</name>
 	</customLabels>
 	<customLabels>
 		<label>Update Recipients</label>
