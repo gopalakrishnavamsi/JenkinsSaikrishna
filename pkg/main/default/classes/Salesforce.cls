@@ -2,7 +2,7 @@
 public with sharing class Salesforce {
 
 	private static final Map<String, SObjectType> GLOBAL_DESCRIBE;
-	
+
 	private static List<String> visualforceOrigins;
 	private static List<String> lightningOrigins;
 
@@ -22,8 +22,6 @@ public with sharing class Salesforce {
 	public static Boolean isApiSupported { get; private set; }
 	@TestVisible
 	public static Boolean isFlsSupported { get; private set; }
-	@TestVisible
-	public static Boolean isChatterEnabled { get; private set; }
 	@TestVisible
 	public static Boolean isCommunitySite { get; private set; }
 	@TestVisible
@@ -58,7 +56,6 @@ public with sharing class Salesforce {
 		}
 		namespace = org.NamespacePrefix;
 		GLOBAL_DESCRIBE = Schema.getGlobalDescribe();
-		isChatterEnabled = GLOBAL_DESCRIBE.containsKey('FeedItem');
 		isCommunitySite = Site.getSiteType() == 'ChatterNetwork';
 	}
 
@@ -107,8 +104,6 @@ public with sharing class Salesforce {
 					typeName
 				})
 		);
-
-		//Could not resolve object type X. Verify the object exists and you have access to it
 
 		SObjectType result = GLOBAL_DESCRIBE.get(Application.resolveType(typeName).toLowerCase());
 		if (result == null) throw new DocuSignException(
