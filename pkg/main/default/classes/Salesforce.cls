@@ -17,6 +17,8 @@ public with sharing class Salesforce {
 	@TestVisible
 	public static String sitePrefix { get; private set; }
 	@TestVisible
+	public static String edition { get; private set; }
+	@TestVisible
 	public static Boolean isSandbox { get; private set; }
 	@TestVisible
 	public static Boolean isApiSupported { get; private set; }
@@ -39,7 +41,8 @@ public with sharing class Salesforce {
 		];
 		instance = org.InstanceName.toLowerCase();
 		isSandbox = org.IsSandbox;
-		switch on (org.OrganizationType) {
+		edition = org.OrganizationType;
+		switch on (edition) {
 			when 'Professional Edition' {
 				isApiSupported = true;
 				isFlsSupported = false;

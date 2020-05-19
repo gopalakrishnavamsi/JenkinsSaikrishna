@@ -20,6 +20,11 @@ private class SalesforceTest {
 	}
 
 	@IsTest
+	static void test_edition() {
+		System.assertEquals([SELECT OrganizationType FROM Organization LIMIT 1].OrganizationType, Salesforce.edition);
+	}
+
+	@IsTest
 	static void test_isSandbox() {
 		System.assertEquals([SELECT IsSandbox FROM Organization LIMIT 1].IsSandbox, Salesforce.isSandbox);
 	}
