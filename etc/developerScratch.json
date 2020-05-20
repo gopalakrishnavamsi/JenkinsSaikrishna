@@ -3,8 +3,14 @@
   "edition": "Developer",
   "hasSampleData": true,
   "settings": {
+    "accountSettings": {
+      "enableAccountTeams": true
+    },
     "languageSettings": {
       "enableTranslationWorkbench": true
+    },
+    "opportunitySettings": {
+      "enableOpportunityTeam": true
     }
   }
 }

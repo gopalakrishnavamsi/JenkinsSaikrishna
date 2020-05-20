@@ -23,6 +23,17 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		TYPE_CONTACT, TYPE_LEAD, TYPE_USER
 	};
 
+	static {
+		// AccountTeamMember and OpportunityTeamMember SObjects are only available if the admin has enabled
+		// Account or Opportunity Teams, so we cannot have a hard reference to these types.
+		if (Salesforce.isValidSObject('AccountTeamMember')) {
+			RESOLVABLE_TYPES.add(Salesforce.getSObjectType('AccountTeamMember'));
+		}
+		if (Salesforce.isValidSObject('OpportunityTeamMember')) {
+			RESOLVABLE_TYPES.add(Salesforce.getSObjectType('OpportunityTeamMember'));
+		}
+	}
+
 	public Boolean canResolveRecipientType(final SObjectType type) {
 		return type != null && RESOLVABLE_TYPES.contains(type);
 	}
@@ -432,6 +443,43 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		return result;
 	}
 
+	private static List<Recipient> getRelatedTeamMembers(
+		final SObjectType type,
+		final Set<Id> ids,
+		final Query.Relationship relationship,
+		final Query.Filter filter) {
+
+		Permissions.verifyIsQueryable(TYPE_USER, new List<String> { 'Name', 'Email' });
+
+		List<Recipient> result = new List<Recipient>();
+		if (Collection.isNotEmpty(ids)) {
+			for (SObject obj : executeQuery(
+				type,
+				new List<String> {
+					'User.Id', 'User.Name', 'User.Email', 'User.Phone', 'User.MobilePhone', 'TeamMemberRole'
+				},
+				ids,
+				relationship,
+				filter)) {
+
+				if (obj == null) continue;
+
+				for (SObject teamMember : obj.getSObjects(relationship.name)) {
+					if (teamMember == null) continue;
+
+					User user = (User)teamMember.getSObject('User');
+					if (user != null) {
+						result.add(convert(
+							user,
+							(String)teamMember.get('TeamMemberRole'),
+							null));
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	public List<Recipient> getRelatedRecipients(
 		final SObjectType type,
 		final Set<Id> ids,
@@ -456,6 +504,8 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 				result = getRelatedUsers(type, ids, relationship, filter);
 			} when 'OpportunityContactRole', 'CaseContactRole' {
 				result = getRelatedContactRoles(type, ids, relationship, filter);
+			} when 'AccountTeamMember', 'OpportunityTeamMember' {
+				result = getRelatedTeamMembers(type, ids, relationship, filter);
 			} when else {
 				throw new DocuSignException(String.format(Label.CannotResolveRecipientSource_1,
 					new List<Object> { relationship.relatesTo }));

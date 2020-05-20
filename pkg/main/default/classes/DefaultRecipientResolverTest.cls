@@ -1005,7 +1005,6 @@ private class DefaultRecipientResolverTest {
 		Test.stopTest();
 
 		System.assertEquals(3, Collection.size(result));
-		System.assertEquals(3, Collection.size(result));
 		Boolean foundC1 = false, foundC2 = false, foundC3 = false;
 		for (Recipient r : result) {
 			System.assertNotEquals(null, r);
@@ -1065,7 +1064,6 @@ private class DefaultRecipientResolverTest {
 		Test.stopTest();
 
 		System.assertEquals(3, Collection.size(result));
-		System.assertEquals(3, Collection.size(result));
 		Boolean foundC1 = false, foundC2 = false, foundC3 = false;
 		for (Recipient r : result) {
 			System.assertNotEquals(null, r);
@@ -1092,5 +1090,133 @@ private class DefaultRecipientResolverTest {
 			System.assertEquals(expected.Phone, r.phone);
 		}
 		System.assert(foundC1 && foundC2 && foundC3);
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_AccountTeamMembers() {
+		if (Salesforce.isValidSObject('AccountTeamMember')) { // Admin must enable
+			SObjectType atm = Salesforce.getSObjectType('AccountTeamMember');
+			Schema.Account a = TestUtils.createAccount();
+			User u1 = UserMock.createUser();
+			SObject atm1 = atm.newSObject();
+			atm1.put('AccountId', a.Id);
+			atm1.put('UserId', u1.Id);
+			atm1.put('TeamMemberRole', 'atm1');
+			User u2 = UserMock.createUser();
+			SObject atm2 = atm.newSObject();
+			atm2.put('AccountId', a.Id);
+			atm2.put('UserId', u2.Id);
+			atm2.put('TeamMemberRole', 'atm2');
+			User u3 = UserMock.createUser();
+			SObject atm3 = atm.newSObject();
+			atm3.put('AccountId', a.Id);
+			atm3.put('UserId', u3.Id);
+			atm3.put('TeamMemberRole', 'atm3');
+			insert new List<SObject> { atm1, atm2, atm3 };
+			DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+			Test.startTest();
+			List<Recipient> result = rr.getRelatedRecipients(
+				Schema.Account.getSObjectType(),
+				new Set<Id> { a.Id },
+				new Query.Relationship(
+					false,
+					'AccountTeamMembers',
+					'Account Team Members',
+					'AccountTeamMember'),
+				new Query.Filter(
+					null,
+					'TeamMemberRole DESC',
+					2));
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			Boolean foundAtm2 = false, foundAtm3 = false;
+			for (Recipient r : result) {
+				System.assertNotEquals(null, r);
+				System.assertNotEquals(null, r.source);
+				System.assertNotEquals(null, r.source.id);
+				User expected = null;
+				if (r.source.id == u2.Id && !foundAtm2) {
+					foundAtm2 = true;
+					expected = u2;
+					System.assertEquals('atm2', r.getRoleName());
+				} else if (r.source.id == u3.Id && !foundAtm3) {
+					foundAtm3 = true;
+					expected = u3;
+					System.assertEquals('atm3', r.getRoleName());
+				} else {
+					throw new AssertException('Unexpected recipient: ' + r);
+				}
+				System.assertEquals(expected.Name, r.name);
+				System.assertEquals(expected.Email, r.email);
+				System.assertEquals(expected.Phone, r.phone);
+			}
+			System.assert(foundAtm2 && foundAtm3);
+		}
+	}
+
+	@IsTest
+	static void test_getRelatedRecipients_OpportunityTeamMembers() {
+		if (Salesforce.isValidSObject('OpportunityTeamMember')) { // Admin must enable
+			SObjectType atm = Salesforce.getSObjectType('OpportunityTeamMember');
+			Opportunity o = TestUtils.createOpportunity();
+			User u1 = UserMock.createUser();
+			SObject otm1 = atm.newSObject();
+			otm1.put('OpportunityId', o.Id);
+			otm1.put('UserId', u1.Id);
+			otm1.put('TeamMemberRole', 'otm1');
+			User u2 = UserMock.createUser();
+			SObject otm2 = atm.newSObject();
+			otm2.put('OpportunityId', o.Id);
+			otm2.put('UserId', u2.Id);
+			otm2.put('TeamMemberRole', 'otm2');
+			User u3 = UserMock.createUser();
+			SObject otm3 = atm.newSObject();
+			otm3.put('OpportunityId', o.Id);
+			otm3.put('UserId', u3.Id);
+			otm3.put('TeamMemberRole', 'otm3');
+			insert new List<SObject> { otm1, otm2, otm3 };
+			DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+			Test.startTest();
+			List<Recipient> result = rr.getRelatedRecipients(
+				Opportunity.getSObjectType(),
+				new Set<Id> { o.Id },
+				new Query.Relationship(
+					false,
+					'OpportunityTeamMembers',
+					'Opportunity Team Members',
+					'OpportunityTeamMember'),
+				new Query.Filter(
+					null,
+					'TeamMemberRole DESC',
+					2));
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			Boolean foundOtm2 = false, foundOtm3 = false;
+			for (Recipient r : result) {
+				System.assertNotEquals(null, r);
+				System.assertNotEquals(null, r.source);
+				System.assertNotEquals(null, r.source.id);
+				User expected = null;
+				if (r.source.id == u2.Id && !foundOtm2) {
+					foundOtm2 = true;
+					expected = u2;
+					System.assertEquals('otm2', r.getRoleName());
+				} else if (r.source.id == u3.Id && !foundOtm3) {
+					foundOtm3 = true;
+					expected = u3;
+					System.assertEquals('otm3', r.getRoleName());
+				} else {
+					throw new AssertException('Unexpected recipient: ' + r);
+				}
+				System.assertEquals(expected.Name, r.name);
+				System.assertEquals(expected.Email, r.email);
+				System.assertEquals(expected.Phone, r.phone);
+			}
+			System.assert(foundOtm2 && foundOtm3);
+		}
 	}
 }

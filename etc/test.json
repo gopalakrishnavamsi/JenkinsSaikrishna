@@ -3,8 +3,14 @@
   "edition": "Developer",
   "features": ["AuthorApex", "API", "ForceComPlatform"],
   "settings": {
+    "accountSettings": {
+      "enableAccountTeams": true
+    },
     "languageSettings": {
       "enableTranslationWorkbench": true
+    },
+    "opportunitySettings": {
+      "enableOpportunityTeam": true
     }
   }
 }

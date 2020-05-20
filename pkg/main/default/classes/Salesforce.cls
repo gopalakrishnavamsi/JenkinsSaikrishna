@@ -101,20 +101,24 @@ public with sharing class Salesforce {
 	}
 
 	public static SObjectType getSObjectType(final String typeName) {
-		if (String.isBlank(typeName)) throw new DocuSignException(
-			String.format(Label.InvalidSObjectType_1,
-				new List<String> {
-					typeName
-				})
-		);
+		if (String.isBlank(typeName)) {
+			throw new DocuSignException(
+				String.format(Label.InvalidSObjectType_1,
+					new List<String> {
+						typeName
+					})
+			);
+		}
 
 		SObjectType result = GLOBAL_DESCRIBE.get(Application.resolveType(typeName).toLowerCase());
-		if (result == null) throw new DocuSignException(
-			String.format(Label.InvalidSObjectType_1,
-				new List<String> {
-					typeName
-				})
-		);
+		if (result == null) {
+			throw new DocuSignException(
+				String.format(Label.InvalidSObjectType_1,
+					new List<String> {
+						typeName
+					})
+			);
+		}
 
 		return result;
 	}
