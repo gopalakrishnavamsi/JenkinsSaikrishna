@@ -1,15 +1,79 @@
 /**
  * A DocuSign eSignature envelope configuration.
  */
-global class EnvelopeConfiguration extends Envelope {
+global class EnvelopeConfiguration {
 
 	public static final String DOCUMENT_TYPE_TEMPLATE_DOCUMENT = 'TemplateDocument';
 	public static final String DOCUMENT_TYPE_SOURCE_FILES = 'SourceFiles';
 
+	/**
+	 * The ID of the associated dfsle__EnvelopeConfiguration__c record.
+	 */
+	@AuraEnabled
+	public Id id { get; private set; }
+	/**
+	 * The name of the envelope configuration.
+	 */
+	@AuraEnabled
+	public String name { get; private set; }
+	/**
+	 * The Salesforce object type name.
+	 */
 	@AuraEnabled
 	public String sourceObject { get; private set; }
+	/**
+	 * The DocuSign ID of the associated template.
+	 */
+	@AuraEnabled
+	public UUID docuSignId { get; private set; }
+	/**
+	 * A list of documents contained by the envelope.
+	 */
+	@AuraEnabled
+	public List<Document> documents { get; private set; }
+	/**
+	 * A list of recipients who will receive the envelope.
+	 */
+	@AuraEnabled
+	public List<Recipient> recipients { get; private set; }
+	/**
+	 * A list of envelope custom fields.
+	 */
+	@AuraEnabled
+	public List<CustomField> customFields { get; private set; }
+	/**
+	 * The reminder and expiration settings for the envelope.
+	 */
+	@AuraEnabled
+	public Notifications notifications { get; private set; }
+	/**
+	 * The subject of the email recipients receive.
+	 */
+	@AuraEnabled
+	public String emailSubject { get; private set; }
+	/**
+	 * The message of the email recipients receive. This is contained within the standard DocuSign email body.
+	 */
+	@AuraEnabled
+	public String emailMessage { get; private set; }
+	/**
+	 * Salesforce merge fields available to the envelope configuration.
+	 */
 	@AuraEnabled
 	public List<Tab> mergeFields { get; private set; }
+	/**
+	 * Envelope sender permissions.
+	 */
+	@AuraEnabled
+	public Envelope.Permissions senderPermissions { get; private set; }
+	/**
+	 * The envelope options.
+	 */
+	@AuraEnabled
+	public Envelope.Options options { get; private set; }
+	/**
+	 * Whether or the envelope configuration is in draft mode.
+	 */
 	@AuraEnabled
 	public Boolean isDraft { get; private set; }
 
@@ -29,25 +93,81 @@ global class EnvelopeConfiguration extends Envelope {
 		final Envelope.Options options,
 		final Boolean isDraft) {
 
-		super(
-			id,
-			name,
-			docuSignId,
-			id,
-			documents,
-			recipients,
-			customFields,
-			notifications,
-			emailSubject,
-			emailMessage,
-			senderPermissions,
-			options,
-			null,
-			null);
-
+		this.id = id;
+		this.name = name;
 		this.sourceObject = sourceObject;
+		this.docuSignId = docuSignId;
+		this.documents = documents == null ? new List<Document>() : documents;
+		this.recipients = recipients == null ? new List<Recipient>() : recipients;
+		this.customFields = customFields == null ? new List<CustomField>() : customFields;
+		this.notifications = notifications;
+		this.emailSubject = emailSubject;
+		this.emailMessage = emailMessage;
 		this.mergeFields = mergeFields == null ? new List<Tab>() : mergeFields;
+		this.senderPermissions = senderPermissions == null ? Envelope.DEFAULT_PERMISSIONS : senderPermissions;
+		this.options = options == null ? Envelope.DEFAULT_OPTIONS : options;
 		this.isDraft = isDraft;
+	}
+
+	/**
+	 * Sets the envelope configuration's <code>id</code> property.
+	 *
+	 * @param id The new ID of the associated dfsle__EnvelopeConfiguration__c record.
+	 *
+	 * @return The envelope configuration with an updated <code>id</code> property.
+	 */
+	public EnvelopeConfiguration withId(final Id id) {
+		this.id = id;
+		return this;
+	}
+
+	/**
+	 * Sets the envelope configuration's <code>docuSignId</code> property.
+	 *
+	 * @param docuSignId The new DocuSign ID of the associated template.
+	 *
+	 * @return The envelope configuration with an updated <code>docuSignId</code> property.
+	 */
+	public EnvelopeConfiguration withDocuSignId(final UUID docuSignId) {
+		this.docuSignId = docuSignId;
+		return this;
+	}
+
+	/**
+	 * Sets the envelope configuration's <code>documents</code> property.
+	 *
+	 * @param documents The new list of documents.
+	 *
+	 * @return The envelope configuration with an updated <code>documents</code> property.
+	 */
+	public EnvelopeConfiguration withDocuments(final List<Document> documents) {
+		this.documents = new List<Document>();
+		if (documents != null) {
+			Integer sequence = 1;
+			for (Document d : documents) {
+				this.documents.add(d.withSequence(sequence++));
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * @descriptions Sets the envelope configuration's <code>recipients</code> property.
+	 *
+	 * @param recipients The new list of recipients.
+	 *
+	 * @return The envelope configuration with an updated <code>recipients</code> property.
+	 */
+	public EnvelopeConfiguration withRecipients(final List<Recipient> recipients) {
+		this.recipients = new List<Recipient>();
+		if (recipients != null) {
+			Integer sequence = 1;
+			for (Recipient r : recipients) {
+				if (r.routingOrder == null) r = r.withRoutingOrder(sequence);
+				this.recipients.add(r.withSequence(sequence++));
+			}
+		}
+		return this;
 	}
 
 	// 1 file linked to the DEC
@@ -276,10 +396,5 @@ global class EnvelopeConfiguration extends Envelope {
 				readOnly,
 				required);
 		}
-	}
-
-	public EnvelopeConfiguration withMergeFields(final List<Tab> mergeFields) {
-		this.mergeFields = mergeFields == null ? new List<Tab>() : mergeFields;
-		return this;
 	}
 }

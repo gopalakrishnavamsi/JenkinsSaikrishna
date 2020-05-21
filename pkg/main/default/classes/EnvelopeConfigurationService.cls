@@ -398,7 +398,7 @@ public with sharing class EnvelopeConfigurationService {
 				insert recipients;
 			}
 
-			return (EnvelopeConfiguration)envelopeConfiguration
+			return envelopeConfiguration
 				.withId(ec.Id)
 				.withDocuments(convert(documents))
 				.withRecipients(convert(recipients));
@@ -1026,7 +1026,7 @@ public with sharing class EnvelopeConfigurationService {
 		EnvelopeConfiguration ec = DB.queryEnvelopeConfiguration(envelopeConfigurationId);
 		if (ec == null) throw new DocuSignException(Label.EnvelopeConfigurationNotFound);
 
-		return (EnvelopeConfiguration)ec.withRecipients(mergeRecipients(ec.recipients));
+		return ec.withRecipients(mergeRecipients(ec.recipients));
 	}
 
 	public static EnvelopeConfiguration updateEnvelopeConfiguration(final EnvelopeConfiguration envelopeConfiguration) {

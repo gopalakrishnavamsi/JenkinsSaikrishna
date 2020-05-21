@@ -1,7 +1,7 @@
 /**
  * Representation of a DocuSign envelope.
  */
-global virtual class Envelope {
+global class Envelope {
 	/**
 	 * Created status constant.
 	 */
