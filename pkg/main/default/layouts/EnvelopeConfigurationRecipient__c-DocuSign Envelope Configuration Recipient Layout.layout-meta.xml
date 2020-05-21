@@ -104,6 +104,10 @@
                 <behavior>Edit</behavior>
                 <field>IncrementRoutingOrder__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>SourceId__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>

@@ -2,6 +2,38 @@
 private class DefaultRecipientResolverTest {
 
 	@IsTest
+	static void test_canResolveRelatedRecipients() {
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		System.assert(rr.canResolveRelatedRecipients(Schema.Contact.getSObjectType()));
+		System.assert(rr.canResolveRelatedRecipients(Schema.Lead.getSObjectType()));
+		System.assert(rr.canResolveRelatedRecipients(Schema.User.getSObjectType()));
+		System.assert(rr.canResolveRelatedRecipients(Schema.OpportunityContactRole.getSObjectType()));
+		System.assert(rr.canResolveRelatedRecipients(Schema.CaseContactRole.getSObjectType()));
+		System.assert(!rr.canResolveRelatedRecipients(Schema.Account.getSObjectType()));
+		System.assert(!rr.canResolveRelatedRecipients(Schema.Envelope__c.getSObjectType()));
+		System.assert(!rr.canResolveRelatedRecipients(null));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_canResolveSourceRecipients() {
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+
+		Test.startTest();
+		System.assert(rr.canResolveSourceRecipients(Schema.Account.getSObjectType()));
+		System.assert(rr.canResolveSourceRecipients(Schema.Case.getSObjectType()));
+		System.assert(rr.canResolveSourceRecipients(Schema.Contact.getSObjectType()));
+		System.assert(rr.canResolveSourceRecipients(Schema.Lead.getSObjectType()));
+		System.assert(rr.canResolveSourceRecipients(Schema.Opportunity.getSObjectType()));
+		System.assert(rr.canResolveSourceRecipients(Schema.User.getSObjectType()));
+		System.assert(!rr.canResolveSourceRecipients(Schema.Envelope__c.getSObjectType()));
+		System.assert(!rr.canResolveSourceRecipients(null));
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_canResolveRecipientType() {
 		DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
@@ -9,40 +41,8 @@ private class DefaultRecipientResolverTest {
 		System.assert(rr.canResolveRecipientType(Schema.Contact.getSObjectType()));
 		System.assert(rr.canResolveRecipientType(Schema.Lead.getSObjectType()));
 		System.assert(rr.canResolveRecipientType(Schema.User.getSObjectType()));
-		System.assert(rr.canResolveRecipientType(Schema.OpportunityContactRole.getSObjectType()));
-		System.assert(rr.canResolveRecipientType(Schema.CaseContactRole.getSObjectType()));
-		System.assert(!rr.canResolveRecipientType(Schema.Account.getSObjectType()));
 		System.assert(!rr.canResolveRecipientType(Schema.Envelope__c.getSObjectType()));
 		System.assert(!rr.canResolveRecipientType(null));
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_canResolveRecipientSource() {
-		DefaultRecipientResolver rr = new DefaultRecipientResolver();
-
-		Test.startTest();
-		System.assert(rr.canResolveRecipientSource(Schema.Account.getSObjectType()));
-		System.assert(rr.canResolveRecipientSource(Schema.Case.getSObjectType()));
-		System.assert(rr.canResolveRecipientSource(Schema.Contact.getSObjectType()));
-		System.assert(rr.canResolveRecipientSource(Schema.Lead.getSObjectType()));
-		System.assert(rr.canResolveRecipientSource(Schema.Opportunity.getSObjectType()));
-		System.assert(rr.canResolveRecipientSource(Schema.User.getSObjectType()));
-		System.assert(!rr.canResolveRecipientSource(Schema.Envelope__c.getSObjectType()));
-		System.assert(!rr.canResolveRecipientSource(null));
-		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_canSearchRecipients() {
-		DefaultRecipientResolver rr = new DefaultRecipientResolver();
-
-		Test.startTest();
-		System.assert(rr.canSearchRecipients(Schema.Contact.getSObjectType()));
-		System.assert(rr.canSearchRecipients(Schema.Lead.getSObjectType()));
-		System.assert(rr.canSearchRecipients(Schema.User.getSObjectType()));
-		System.assert(!rr.canSearchRecipients(Schema.Envelope__c.getSObjectType()));
-		System.assert(!rr.canSearchRecipients(null));
 		Test.stopTest();
 	}
 
@@ -1218,5 +1218,127 @@ private class DefaultRecipientResolverTest {
 			}
 			System.assert(foundOtm2 && foundOtm3);
 		}
+	}
+
+	@IsTest
+	static void test_getRecipients_invalid() {
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+		SObjectType type = Opportunity.getSObjectType();
+		Set<Id> ids = new Set<Id>();
+
+		Test.startTest();
+		try {
+			rr.getRecipients(type, ids);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(String.format(Label.CannotResolveRecipientSource_1,
+				new List<String> { String.valueOf(type) }), ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getRecipients_Contact() {
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+		SObjectType type = Contact.getSObjectType();
+		Contact r1 = TestUtils.createContact();
+		Contact r2 = TestUtils.createContact();
+		Set<Id> ids = new Set<Id> { r1.Id, r2.Id };
+
+		Test.startTest();
+		List<Recipient> result = rr.getRecipients(type, ids);
+		Test.stopTest();
+
+		System.assertEquals(2, Collection.size(result));
+		Boolean foundR1 = false, foundR2 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			Id sourceId = r.getSourceId();
+			System.assertNotEquals(null, sourceId);
+			Contact expected = null;
+			if (sourceId == r1.Id && !foundR1) {
+				foundR1 = true;
+				expected = r1;
+			} else if (sourceId == r2.Id && !foundR2) {
+				foundR2 = true;
+				expected = r2;
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundR1 && foundR2);
+	}
+
+	@IsTest
+	static void test_getRecipients_Lead() {
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+		SObjectType type = Lead.getSObjectType();
+		Lead r1 = TestUtils.createLead();
+		Lead r2 = TestUtils.createLead();
+		Set<Id> ids = new Set<Id> { r1.Id, r2.Id };
+
+		Test.startTest();
+		List<Recipient> result = rr.getRecipients(type, ids);
+		Test.stopTest();
+
+		System.assertEquals(2, Collection.size(result));
+		Boolean foundR1 = false, foundR2 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			Id sourceId = r.getSourceId();
+			System.assertNotEquals(null, sourceId);
+			Lead expected = null;
+			if (sourceId == r1.Id && !foundR1) {
+				foundR1 = true;
+				expected = r1;
+			} else if (sourceId == r2.Id && !foundR2) {
+				foundR2 = true;
+				expected = r2;
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundR1 && foundR2);
+	}
+
+	@IsTest
+	static void test_getRecipients_User() {
+		DefaultRecipientResolver rr = new DefaultRecipientResolver();
+		SObjectType type = User.getSObjectType();
+		User r1 = UserMock.createUser();
+		User r2 = UserMock.createUser();
+		Set<Id> ids = new Set<Id> { r1.Id, r2.Id };
+
+		Test.startTest();
+		List<Recipient> result = rr.getRecipients(type, ids);
+		Test.stopTest();
+
+		System.assertEquals(2, Collection.size(result));
+		Boolean foundR1 = false, foundR2 = false;
+		for (Recipient r : result) {
+			System.assertNotEquals(null, r);
+			Id sourceId = r.getSourceId();
+			System.assertNotEquals(null, sourceId);
+			User expected = null;
+			if (sourceId == r1.Id && !foundR1) {
+				foundR1 = true;
+				expected = r1;
+			} else if (sourceId == r2.Id && !foundR2) {
+				foundR2 = true;
+				expected = r2;
+			} else {
+				throw new AssertException('Unexpected recipient: ' + r);
+			}
+			System.assertEquals(expected.Name, r.name);
+			System.assertEquals(expected.Email, r.email);
+			System.assertEquals(expected.Phone, r.phone);
+		}
+		System.assert(foundR1 && foundR2);
 	}
 }

@@ -276,7 +276,7 @@ private class EnvelopeConfigurationServiceTest {
 			null,
 			null,
 			true,
-			null,
+			new Entity(UserInfo.getUserId()),
 			true,
 			true);
 		List<Recipient> rs = new List<Recipient> { r1, r2, r3 };
@@ -316,6 +316,7 @@ private class EnvelopeConfigurationServiceTest {
 		System.assertEquals(r1.hostName, lr.hostName);
 		System.assertEquals(r1.hostEmail, lr.hostEmail);
 		System.assertEquals(r1.signNow, lr.signNow);
+		System.assertEquals(null, lr.source);
 		System.assertEquals(r1.readOnly, lr.readOnly);
 		System.assertEquals(r1.required, lr.required);
 
@@ -354,6 +355,7 @@ private class EnvelopeConfigurationServiceTest {
 		System.assertEquals(r2.hostName, rrs.hostName);
 		System.assertEquals(r2.hostEmail, rrs.hostEmail);
 		System.assertEquals(r2.signNow, rrs.signNow);
+		System.assertEquals(null, rrs.source);
 		System.assertEquals(r2.readOnly, rrs.readOnly);
 		System.assertEquals(r2.required, rrs.required);
 
@@ -382,6 +384,7 @@ private class EnvelopeConfigurationServiceTest {
 		System.assertEquals(r3.hostName, r.hostName);
 		System.assertEquals(r3.hostEmail, r.hostEmail);
 		System.assertEquals(r3.signNow, r.signNow);
+		System.assertEquals(r3.source, r.source);
 		System.assertEquals(r3.readOnly, r.readOnly);
 		System.assertEquals(r3.required, r.required);
 	}
@@ -819,7 +822,7 @@ private class EnvelopeConfigurationServiceTest {
 	}
 
 	@IsTest
-	static void test_validate_recipient_invalid_Recipient() {
+	static void test_validate_recipient_invalid_placeholder() {
 		Recipient recipient = Recipient.fromSource(
 			null,
 			null,
@@ -846,13 +849,43 @@ private class EnvelopeConfigurationServiceTest {
 	}
 
 	@IsTest
-	static void test_validate_recipient_valid() {
+	static void test_validate_recipient_invalid_source() {
 		Recipient recipient = Recipient.fromSource(
 			null,
 			null,
 			null,
 			'r1',
-			null);
+			new Entity(UserInfo.getOrganizationId()));
+		Integer index = 0;
+		DescribeSObjectResult sourceDescribe = Opportunity.getSObjectType().getDescribe();
+
+		Test.startTest();
+		ValidationResult result = EnvelopeConfigurationService.validate(
+			recipient,
+			index,
+			sourceDescribe);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assert(!result.isValid);
+		System.assertEquals(String.format(Label.ArrayError_3, new List<Object> {
+			Label.RecipientElements,
+			index,
+			String.format(Label.CannotResolveRecipientSource_1, new List<Object> { Organization.getSObjectType() })
+		}), result.toString());
+	}
+
+	@IsTest
+	static void test_validate_recipient_valid() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
+		insert s;
+		Recipient recipient = Recipient.fromSource(
+			null,
+			null,
+			null,
+			'r1',
+			new Entity(UserInfo.getUserId()));
 		Integer index = 0;
 		DescribeSObjectResult sourceDescribe = Opportunity.getSObjectType().getDescribe();
 
@@ -1457,8 +1490,14 @@ private class EnvelopeConfigurationServiceTest {
 
 	@IsTest
 	static void test_getEnvelopeConfiguration_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Contact c = TestUtils.createContact();
 			EnvelopeConfiguration__c ec = TestUtils.createEnvelopeConfiguration();
+			EnvelopeConfigurationRecipient__c ecr = new EnvelopeConfigurationRecipient__c(
+				EnvelopeConfiguration__c = ec.Id,
+				Roles__c = 'r1',
+				SourceId__c = c.Id);
+			insert ecr;
 
 			Test.startTest();
 			EnvelopeConfiguration result = EnvelopeConfigurationService.getEnvelopeConfiguration(ec.Id);
@@ -1466,6 +1505,13 @@ private class EnvelopeConfigurationServiceTest {
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(ec.Id, result.id);
+			System.assertEquals(1, Collection.size(result.recipients));
+			System.assertNotEquals(null, result.recipients[0]);
+			System.assertEquals(c.Name, result.recipients[0].name);
+			System.assertEquals(c.Email, result.recipients[0].email);
+			System.assertEquals(c.Phone, result.recipients[0].phone);
+			System.assertEquals('r1', result.recipients[0].getRoleName());
+			System.assertEquals(c.Id, result.recipients[0].getSourceId());
 		}
 	}
 
@@ -2063,7 +2109,7 @@ private class EnvelopeConfigurationServiceTest {
 						UUID.randomUUID() + '@unit.test',
 						String.valueOf(TestUtils.randomInteger(10000000)),
 						'r4',
-						null)
+						new Entity(UserInfo.getUserId()))
 				},
 				new List<CustomField> {
 					CustomField.newTextField('n1', 'v1', true, true),
@@ -2157,7 +2203,10 @@ private class EnvelopeConfigurationServiceTest {
 			System.assertEquals('Dear ' + result.recipients[2].name + ', check this out', result.recipients[2].note);
 
 			System.assertNotEquals(null, result.recipients[3]);
+			System.assertEquals(UserInfo.getName(), result.recipients[3].name);
+			System.assertEquals(UserInfo.getUserEmail(), result.recipients[3].email);
 			System.assertEquals('r4', result.recipients[3].getRoleName());
+			System.assertEquals(UserInfo.getUserId(), result.recipients[3].getSourceId());
 
 			System.assertEquals(2, Collection.size(result.customFields));
 			System.assertNotEquals(null, result.notifications);
@@ -2167,5 +2216,125 @@ private class EnvelopeConfigurationServiceTest {
 			System.assertNotEquals(null, result.source);
 			System.assertEquals(o.Id, result.source.id);
 		}
+	}
+
+	@IsTest
+	static void test_mergeRecipients() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
+		insert s;
+		Recipient r1 = new EnvelopeConfiguration.RelatedRecipients(
+			new Query.Relationship(
+				false,
+				'OpportunityContactRoles',
+				'Opportunity Contact Roles',
+				'OpportunityContactRole'),
+			null,
+			Recipient.TYPE_SIGNER,
+			1,
+			true,
+			new List<String> { 'r1', 'r2' },
+			false,
+			false);
+		Recipient r2 = Recipient.fromSource(
+			null,
+			null,
+			null,
+			'r3',
+			new Entity(UserInfo.getUserId()))
+			.withRoutingOrder(3);
+		Contact c1 = TestUtils.createContact();
+		Recipient r3 = Recipient.fromSource(
+			null,
+			null,
+			null,
+			'r4',
+			new Entity(c1.Id))
+			.withRoutingOrder(4);
+		Lead l = TestUtils.createLead();
+		Recipient r4 = Recipient.fromSource(
+			null,
+			null,
+			null,
+			'r5',
+			new Entity(l.Id))
+			.withRoutingOrder(5);
+		Recipient r5 = new EnvelopeConfiguration.LookupRecipient(
+			new Query.Relationship(
+				true,
+				'Owner',
+				'Owner',
+				'User'),
+			Recipient.TYPE_CARBON_COPY,
+			6,
+			'r6',
+			false,
+			false);
+		Contact c2 = TestUtils.createContact();
+		Recipient r6 = Recipient.fromSource(
+			null,
+			null,
+			null,
+			'r7',
+			new Entity(c2.Id))
+			.withRoutingOrder(7);
+
+		Test.startTest();
+		List<Recipient> result = EnvelopeConfigurationService.mergeRecipients(new List<Recipient> {
+			r1, r2, r3, r4, r5, r6
+		});
+		Test.stopTest();
+
+		System.assertEquals(6, Collection.size(result));
+
+		System.assertNotEquals(null, result[0]);
+		System.assert(result[0] instanceof EnvelopeConfiguration.RelatedRecipients);
+		System.assertEquals(null, result[0].name);
+		System.assertEquals(null, result[0].email);
+		System.assertEquals(null, result[0].phone);
+		System.assertEquals(null, result[0].source);
+		System.assertEquals('r1', result[0].getRoleName());
+		System.assertEquals(1, result[0].routingOrder);
+
+		System.assertNotEquals(null, result[1]);
+		System.assertEquals(UserInfo.getName(), result[1].name);
+		System.assertEquals(UserInfo.getUserEmail(), result[1].email);
+		System.assertEquals([SELECT Phone FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1].Phone, result[1].phone);
+		System.assertEquals('r3', result[1].getRoleName());
+		System.assertEquals(UserInfo.getUserId(), result[1].getSourceId());
+		System.assertEquals(3, result[1].routingOrder);
+
+		System.assertNotEquals(null, result[2]);
+		System.assertEquals(c1.Name, result[2].name);
+		System.assertEquals(c1.Email, result[2].email);
+		System.assertEquals(c1.Phone, result[2].phone);
+		System.assertEquals('r4', result[2].getRoleName());
+		System.assertEquals(c1.Id, result[2].getSourceId());
+		System.assertEquals(4, result[2].routingOrder);
+
+		System.assertNotEquals(null, result[3]);
+		System.assertEquals(l.Name, result[3].name);
+		System.assertEquals(l.Email, result[3].email);
+		System.assertEquals(l.Phone, result[3].phone);
+		System.assertEquals('r5', result[3].getRoleName());
+		System.assertEquals(l.Id, result[3].getSourceId());
+		System.assertEquals(5, result[3].routingOrder);
+
+		System.assertNotEquals(null, result[4]);
+		System.assert(result[4] instanceof EnvelopeConfiguration.LookupRecipient);
+		System.assertEquals(null, result[4].name);
+		System.assertEquals(null, result[4].email);
+		System.assertEquals(null, result[4].phone);
+		System.assertEquals('r6', result[4].getRoleName());
+		System.assertEquals(null, result[4].source);
+		System.assertEquals(6, result[4].routingOrder);
+
+		System.assertNotEquals(null, result[5]);
+		System.assertEquals(c2.Name, result[5].name);
+		System.assertEquals(c2.Email, result[5].email);
+		System.assertEquals(c2.Phone, result[5].phone);
+		System.assertEquals('r7', result[5].getRoleName());
+		System.assertEquals(c2.Id, result[5].getSourceId());
+		System.assertEquals(7, result[5].routingOrder);
 	}
 }

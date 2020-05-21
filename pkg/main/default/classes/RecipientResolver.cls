@@ -3,31 +3,33 @@
  */
 public interface RecipientResolver {
 	/**
-	 * Tests whether recipients can be resolved by the target SObject type.
+	 * Tests whether related recipients can be resolved by the target SObject type. For example, <code>Contact</code> or
+	 * <code>OpportunityContactRole</code>.
 	 *
-	 * @param type The SObject type.
+	 * @param type The related list SObject type.
 	 *
 	 * @return True if this implementation can resolve recipients from the target SObject type, false otherwise.
 	 */
-	Boolean canResolveRecipientType(SObjectType type);
+	Boolean canResolveRelatedRecipients(SObjectType type);
 
 	/**
-	 * Tests whether recipients can be resolved by the source SObject type.
+	 * Tests whether recipients can be resolved by the envelope source SObject type.
 	 *
-	 * @param type The SObject type.
+	 * @param type The envelope source SObject type.
 	 *
 	 * @return True if this implementation can resolve recipients from the source SObject type, false otherwise.
 	 */
-	Boolean canResolveRecipientSource(SObjectType type);
+	Boolean canResolveSourceRecipients(SObjectType type);
 
 	/**
-	 * Tests whether recipient SObjects can be searched.
+	 * Tests whether recipient SObjects can be searched or directly queried. These are discrete Salesforce entities that
+	 * can be added to an envelope. <code>User</code> and <code>Contact</code> are examples.
 	 *
-	 * @param type The SObject type.
+	 * @param type The recipient SObject type.
 	 *
-	 * @return True if this implementation can search the recipient SObject.
+	 * @return True if this implementation can search or directly query the recipient SObject.
 	 */
-	Boolean canSearchRecipients(SObjectType type);
+	Boolean canResolveRecipientType(SObjectType type);
 
 	/**
 	 * Reads recipients from SObjects using default rules.
@@ -73,4 +75,16 @@ public interface RecipientResolver {
 		String firstName,
 		String lastName,
 		Recipient.SearchBehavior behavior);
+
+	/**
+	 * Retrieves a list of recipients by ID.
+	 *
+	 * @param type The SObject type
+	 * @param ids The source SObject IDs.
+	 *
+	 * @return The resolved recipients.
+	 */
+	List<Recipient> getRecipients(
+		SObjectType type,
+		Set<Id> ids);
 }

@@ -477,12 +477,21 @@ global with sharing class RecipientService {
 
 		List<Recipient> result = null;
 		for (RecipientResolver rr : RECIPIENT_RESOLVERS) {
-			if (rr.canResolveRecipientSource(type)) {
+			if (rr.canResolveSourceRecipients(type)) {
 				result = rr.getSourceRecipients(type, ids);
 				break;
 			}
 		}
 		return result;
+	}
+
+	public static Boolean canResolveRelatedRecipients(final SObjectType type) {
+		for (RecipientResolver rr : RECIPIENT_RESOLVERS) {
+			if (rr.canResolveRelatedRecipients(type)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static Boolean canResolveRecipientType(final SObjectType type) {
@@ -521,7 +530,7 @@ global with sharing class RecipientService {
 		SObjectType relatesToType = relationship.getType();
 		List<Recipient> result = null;
 		for (RecipientResolver rr : RECIPIENT_RESOLVERS) {
-			if (rr.canResolveRecipientType(relatesToType)) {
+			if (rr.canResolveRelatedRecipients(relatesToType)) {
 				result = rr.getRelatedRecipients(type, ids, relationship, filter);
 				break;
 			}
@@ -562,14 +571,16 @@ global with sharing class RecipientService {
 	 * @return A list of envelope recipients.
 	 * @see Recipient.SearchBehavior for more details on search options.
 	 */
-	global static List<Recipient> searchRecipients(final SObjectType type, final String firstName,
+	global static List<Recipient> searchRecipients(
+		final SObjectType type,
+		final String firstName,
 		final String lastName) {
 
 		if (type == null) throw new DocuSignException(Label.UndefinedType);
 
 		List<Recipient> result = null;
 		for (RecipientResolver rr : RECIPIENT_RESOLVERS) {
-			if (rr.canSearchRecipients(type)) {
+			if (rr.canResolveRecipientType(type)) {
 				result = rr.searchRecipients(type, firstName, lastName, getSearchBehavior());
 				break;
 			}
@@ -839,6 +850,36 @@ global with sharing class RecipientService {
 				result[i] = result[i].withEmailSettings(defaultEmailSettings);
 			}
 		}
-		return result;
+		return result == null ? new List<Recipient>() : result;
+	}
+
+	/**
+	 * Queries a list of recipients by Salesforce ID.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign Sender</code> permission set.
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.</em>
+	 *
+	 * @param type The recipient SObject type.
+	 * @param ids The recipient IDs.
+	 *
+	 * @return A list of recipients.
+	 */
+	public static List<Recipient> resolveRecipients(
+		final SObjectType type,
+		final Set<Id> ids) {
+
+		Permissions.verifyIsDocuSignSender();
+
+		if (type == null) throw new DocuSignException(Label.InvalidType);
+
+		List<Recipient> result = null;
+		for (RecipientResolver rr : RECIPIENT_RESOLVERS) {
+			if (rr.canResolveRecipientType(type)) {
+				result = rr.getRecipients(type, ids);
+				break;
+			}
+		}
+		return result == null ? new List<Recipient>() : result;
 	}
 }

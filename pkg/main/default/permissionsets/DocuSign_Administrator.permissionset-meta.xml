@@ -407,6 +407,11 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>EnvelopeConfigurationRecipient__c.SourceId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>EnvelopeConfigurationRecipient__c.Type__c</field>
 		<readable>true</readable>
 	</fieldPermissions>

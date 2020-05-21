@@ -982,6 +982,52 @@ private class RecipientServiceTest {
 	}
 
 	@IsTest
+	static void test_canResolveRelatedRecipients() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
+		insert s;
+
+		Test.startTest();
+		System.assert(!RecipientService.canResolveRelatedRecipients(null));
+		System.assert(!RecipientService.canResolveRelatedRecipients(Envelope__c.getSObjectType()));
+		System.assert(RecipientService.canResolveRelatedRecipients(Contact.getSObjectType()));
+		System.assert(RecipientService.canResolveRelatedRecipients(Lead.getSObjectType()));
+		System.assert(RecipientService.canResolveRelatedRecipients(User.getSObjectType()));
+		System.assert(RecipientService.canResolveRelatedRecipients(OpportunityContactRole.getSObjectType()));
+		System.assert(RecipientService.canResolveRelatedRecipients(CaseContactRole.getSObjectType()));
+		if (Salesforce.isValidSObject('AccountTeamMember')) {
+			System.assert(RecipientService.canResolveRelatedRecipients(Salesforce.getSObjectType('AccountTeamMember')));
+		}
+		if (Salesforce.isValidSObject('OpportunityTeamMember')) {
+			System.assert(RecipientService.canResolveRelatedRecipients(Salesforce.getSObjectType('OpportunityTeamMember')));
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_canResolveRecipientType() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
+		insert s;
+
+		Test.startTest();
+		System.assert(!RecipientService.canResolveRecipientType(null));
+		System.assert(!RecipientService.canResolveRecipientType(Envelope__c.getSObjectType()));
+		System.assert(RecipientService.canResolveRecipientType(Contact.getSObjectType()));
+		System.assert(RecipientService.canResolveRecipientType(Lead.getSObjectType()));
+		System.assert(RecipientService.canResolveRecipientType(User.getSObjectType()));
+		System.assert(!RecipientService.canResolveRecipientType(OpportunityContactRole.getSObjectType()));
+		System.assert(!RecipientService.canResolveRecipientType(CaseContactRole.getSObjectType()));
+		if (Salesforce.isValidSObject('AccountTeamMember')) {
+			System.assert(!RecipientService.canResolveRecipientType(Salesforce.getSObjectType('AccountTeamMember')));
+		}
+		if (Salesforce.isValidSObject('OpportunityTeamMember')) {
+			System.assert(!RecipientService.canResolveRecipientType(Salesforce.getSObjectType('OpportunityTeamMember')));
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_getRelatedRecipients_invalid_arguments() {
 		Test.startTest();
 		try {
@@ -1058,6 +1104,51 @@ private class RecipientServiceTest {
 			System.assertEquals(UserInfo.getUserEmail(), result[0].email);
 			System.assertNotEquals(null, result[0].source);
 			System.assertEquals(UserInfo.getUserId(), result[0].source.id);
+		}
+	}
+
+	@IsTest
+	static void test_resolveRecipients_unauthorized() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				RecipientService.resolveRecipients(null, null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_resolveRecipients_invalid_arguments() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Test.startTest();
+			try {
+				RecipientService.resolveRecipients(null, null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidType, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_resolveRecipients_success() {
+		System.runAs(UserMock.createDocuSignSender()) {
+			Contact c1 = TestUtils.createContact();
+			Contact c2 = TestUtils.createContact();
+			Contact c3 = TestUtils.createContact();
+
+			Test.startTest();
+			List<Recipient> result = RecipientService.resolveRecipients(
+				Contact.getSObjectType(),
+				new Set<Id> { c1.Id, c2.Id, c3.Id });
+			Test.stopTest();
+
+			System.assertEquals(3, Collection.size(result));
 		}
 	}
 }

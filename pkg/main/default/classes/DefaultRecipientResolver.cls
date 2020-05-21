@@ -10,16 +10,16 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 	private static final SObjectType TYPE_USER = User.getSObjectType();
 	private static final Integer DEFAULT_LIMIT = 10;
 
-	private static final Set<SObjectType> RESOLVABLE_TYPES = new Set<SObjectType> {
+	private static final Set<SObjectType> RELATED_TYPES = new Set<SObjectType> {
 		TYPE_CONTACT, TYPE_LEAD, TYPE_USER,
 		TYPE_OPPORTUNITY_CONTACT_ROLE, TYPE_CASE_CONTACT_ROLE
 	};
 
-	private static final Set<SObjectType> DEFAULT_SOURCES = new Set<SObjectType> {
+	private static final Set<SObjectType> SOURCE_TYPES = new Set<SObjectType> {
 		TYPE_ACCOUNT, TYPE_CASE, TYPE_CONTACT, TYPE_LEAD, TYPE_OPPORTUNITY, TYPE_USER
 	};
 
-	private static final Set<SObjectType> SEARCHABLE_TYPES = new Set<SObjectType> {
+	private static final Set<SObjectType> QUERYABLE_TYPES = new Set<SObjectType> {
 		TYPE_CONTACT, TYPE_LEAD, TYPE_USER
 	};
 
@@ -27,23 +27,23 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 		// AccountTeamMember and OpportunityTeamMember SObjects are only available if the admin has enabled
 		// Account or Opportunity Teams, so we cannot have a hard reference to these types.
 		if (Salesforce.isValidSObject('AccountTeamMember')) {
-			RESOLVABLE_TYPES.add(Salesforce.getSObjectType('AccountTeamMember'));
+			RELATED_TYPES.add(Salesforce.getSObjectType('AccountTeamMember'));
 		}
 		if (Salesforce.isValidSObject('OpportunityTeamMember')) {
-			RESOLVABLE_TYPES.add(Salesforce.getSObjectType('OpportunityTeamMember'));
+			RELATED_TYPES.add(Salesforce.getSObjectType('OpportunityTeamMember'));
 		}
+	}
+
+	public Boolean canResolveRelatedRecipients(final SObjectType type) {
+		return type != null && RELATED_TYPES.contains(type);
+	}
+
+	public Boolean canResolveSourceRecipients(final SObjectType type) {
+		return type != null && SOURCE_TYPES.contains(type);
 	}
 
 	public Boolean canResolveRecipientType(final SObjectType type) {
-		return type != null && RESOLVABLE_TYPES.contains(type);
-	}
-
-	public Boolean canResolveRecipientSource(final SObjectType type) {
-		return type != null && DEFAULT_SOURCES.contains(type);
-	}
-
-	public Boolean canSearchRecipients(final SObjectType type) {
-		return type != null && SEARCHABLE_TYPES.contains(type);
+		return type != null && QUERYABLE_TYPES.contains(type);
 	}
 
 	private static Object getValue(
@@ -659,6 +659,25 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 			throw new DocuSignException(String.format(Label.CannotResolveRecipientSource_1,
 				new List<String> { String.valueOf(type) }));
 		}
+		return result;
+	}
+
+	public List<Recipient> getRecipients(
+		final SObjectType type,
+		final Set<Id> ids) {
+
+		List<Recipient> result;
+		if (type == TYPE_CONTACT) {
+			result = getContactRecipients(ids);
+		} else if (type == TYPE_LEAD) {
+			result = getLeadRecipients(ids);
+		} else if (type == TYPE_USER) {
+			result = getUserRecipients(ids);
+		} else {
+			throw new DocuSignException(String.format(Label.CannotResolveRecipientSource_1,
+				new List<String> { String.valueOf(type) }));
+		}
+
 		return result;
 	}
 }

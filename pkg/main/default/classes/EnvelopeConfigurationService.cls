@@ -116,6 +116,7 @@ public with sharing class EnvelopeConfigurationService {
 				HostName__c = recipient.hostName,
 				HostEmail__c = recipient.hostEmail,
 				SignNow__c = recipient.signNow == true,
+				SourceId__c = recipient.getSourceId(),
 				ReadOnly__c = recipient.readOnly == true,
 				Required__c = recipient.required == true);
 		}
@@ -284,7 +285,7 @@ public with sharing class EnvelopeConfigurationService {
 					r.HostName__c,
 					r.HostEmail__c,
 					r.SignNow__c == true,
-					null,
+					String.isBlank(r.SourceId__c) ? null : new Entity(r.SourceId__c),
 					r.ReadOnly__c == true,
 					r.Required__c == true);
 			}
@@ -376,6 +377,7 @@ public with sharing class EnvelopeConfigurationService {
 				Application.namespacePrefix + 'SigningGroupName__c',
 				Application.namespacePrefix + 'SignNow__c',
 				Application.namespacePrefix + 'SmsPhoneNumber__c',
+				Application.namespacePrefix + 'SourceId__c',
 				Application.namespacePrefix + 'Type__c'
 			});
 
@@ -452,6 +454,7 @@ public with sharing class EnvelopeConfigurationService {
 						HostName__c,
 						HostEmail__c,
 						SignNow__c,
+						SourceId__c,
 						ReadOnly__c,
 						Required__c
 					FROM Recipients__r
@@ -522,6 +525,7 @@ public with sharing class EnvelopeConfigurationService {
 				Application.namespacePrefix + 'SigningGroupName__c',
 				Application.namespacePrefix + 'SignNow__c',
 				Application.namespacePrefix + 'SmsPhoneNumber__c',
+				Application.namespacePrefix + 'SourceId__c',
 				Application.namespacePrefix + 'Type__c'
 			});
 			Permissions.verifyIsUpdateable(EnvelopeConfigurationRecipient__c.getSObjectType(), new List<String> {
@@ -547,6 +551,7 @@ public with sharing class EnvelopeConfigurationService {
 				Application.namespacePrefix + 'SigningGroupName__c',
 				Application.namespacePrefix + 'SignNow__c',
 				Application.namespacePrefix + 'SmsPhoneNumber__c',
+				Application.namespacePrefix + 'SourceId__c',
 				Application.namespacePrefix + 'Type__c'
 			});
 
@@ -696,7 +701,7 @@ public with sharing class EnvelopeConfigurationService {
 				index,
 				String.format(Label.InvalidRelatedObject_1, new List<Object> { relationship.relatesTo })
 			}));
-		} else if (!RecipientService.canResolveRecipientType(Salesforce.getSObjectType(relationship.relatesTo))) {
+		} else if (!RecipientService.canResolveRelatedRecipients(Salesforce.getSObjectType(relationship.relatesTo))) {
 			result.add(String.format(Label.ArrayError_3, new List<Object> {
 				Label.RecipientElements,
 				index,
@@ -750,10 +755,14 @@ public with sharing class EnvelopeConfigurationService {
 		}
 
 		ValidationResult result = new ValidationResult();
+		Id sourceId = recipient.getSourceId();
+		Boolean validateSource = String.isNotBlank(sourceId);
 		if (recipient instanceof EnvelopeConfiguration.LookupRecipient) {
+			validateSource = false; // Source is determined at envelope generation time
 			EnvelopeConfiguration.LookupRecipient lr = (EnvelopeConfiguration.LookupRecipient)recipient;
 			result.add(validate(lr.relationship, index, sourceDescribe, true));
 		} else if (recipient instanceof EnvelopeConfiguration.RelatedRecipients) {
+			validateSource = false; // Source is determined at envelope generation time
 			EnvelopeConfiguration.RelatedRecipients rrs = (EnvelopeConfiguration.RelatedRecipients)recipient;
 			result.add(validate(rrs.relationship, index, sourceDescribe, false));
 		} else if (String.isBlank(recipient.email)
@@ -764,6 +773,14 @@ public with sharing class EnvelopeConfigurationService {
 				Label.RecipientElements,
 				index,
 				Label.PlaceholderRecipientMustHaveRole
+			}));
+		}
+
+		if (validateSource && !RecipientService.canResolveRecipientType(sourceId.getSobjectType())) {
+			result.add(String.format(Label.ArrayError_3, new List<Object> {
+				Label.RecipientElements,
+				index,
+				String.format(Label.CannotResolveRecipientSource_1, new List<Object> { sourceId.getSobjectType() })
 			}));
 		}
 		return result;
@@ -920,6 +937,56 @@ public with sharing class EnvelopeConfigurationService {
 			Datetime.now());
 	}
 
+	@TestVisible
+	private static List<Recipient> mergeRecipients(final List<Recipient> recipients) {
+		if (recipients == null) return new List<Recipient>();
+
+		// Build list to query
+		Map<SObjectType, Set<Id>> toQuery = new Map<SObjectType, Set<Id>>();
+		for (Recipient r : recipients) {
+			if (r == null) continue;
+
+			Id sourceId = r.getSourceId();
+			if (String.isNotBlank(sourceId)) {
+				SObjectType type = sourceId.getSobjectType();
+				if (toQuery.containsKey(type)) {
+					toQuery.get(type).add(sourceId);
+				} else {
+					toQuery.put(type, new Set<Id> { sourceId });
+				}
+			}
+		}
+
+		// Query the Salesforce recipients
+		Map<Id, Recipient> toMerge = new Map<Id, Recipient>();
+		for (SObjectType t : toQuery.keySet()) {
+			for (Recipient r : RecipientService.resolveRecipients(t, toQuery.get(t))) {
+				if (r == null) continue;
+
+				Id sourceId = r.getSourceId();
+				if (String.isNotBlank(sourceId)) toMerge.put(sourceId, r);
+			}
+		}
+
+		// Merge the Salesforce recipients
+		List<Recipient> result = new List<Recipient>();
+		for (Recipient r : recipients) {
+			if (r == null) continue;
+
+			Id sourceId = r.getSourceId();
+			if (String.isNotBlank(sourceId) && toMerge.containsKey(sourceId)) {
+				result.add(mergeRecipient(
+					r,
+					toMerge.get(sourceId),
+					r.routingOrder,
+					r.getRoleName()));
+			} else {
+				result.add(r);
+			}
+		}
+		return result;
+	}
+
 	public static EnvelopeConfiguration createEnvelopeConfiguration(final EnvelopeConfiguration envelopeConfiguration) {
 		Permissions.verifyIsDocuSignAdministrator();
 
@@ -959,7 +1026,7 @@ public with sharing class EnvelopeConfigurationService {
 		EnvelopeConfiguration ec = DB.queryEnvelopeConfiguration(envelopeConfigurationId);
 		if (ec == null) throw new DocuSignException(Label.EnvelopeConfigurationNotFound);
 
-		return ec;
+		return (EnvelopeConfiguration)ec.withRecipients(mergeRecipients(ec.recipients));
 	}
 
 	public static EnvelopeConfiguration updateEnvelopeConfiguration(final EnvelopeConfiguration envelopeConfiguration) {
@@ -1145,7 +1212,7 @@ public with sharing class EnvelopeConfigurationService {
 
 		List<Recipient> result = new List<Recipient>();
 		if (recipients != null) {
-			for (Recipient r : recipients) {
+			for (Recipient r : mergeRecipients(recipients)) {
 				if (r == null) continue;
 
 				if (r instanceof EnvelopeConfiguration.LookupRecipient) {
@@ -1158,7 +1225,7 @@ public with sharing class EnvelopeConfigurationService {
 						(EnvelopeConfiguration.RelatedRecipients)r,
 						source));
 				} else {
-					result.add(r.copy());  // base recipients added without modification
+					result.add(r.copy()); // base recipients added without modification
 				}
 			}
 
