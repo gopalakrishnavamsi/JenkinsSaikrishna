@@ -7,73 +7,8 @@ private class CLMEOSViewControllerTest {
 	}
 
 	@IsTest
-	static void test_constructor_valid() {
-		DocuSignAPIMock.success();
-		System.runAs(UserMock.createClmViewer()) {
-			EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
-			eos.FolderName__c = '{!Account.Name}';
-			eos.Path__c = 'Salesforce/Account/{!Account.Phone}/';
-			eos.PathFormat__c= 'Salesforce/Account/{0}/';
-			eos.Variables__c = 'Account.Phone';
-			eos.Name = 'Account';
-			insert eos;
-			Id acctId = [SELECT Id FROM Account WHERE Name='UNIT TEST' LIMIT 1].Id;
-			Test.startTest();
-			Test.setCurrentPageReference(new PageReference('Page.CLMEOSView'));
-			System.currentPageReference().getParameters().put('sid', acctId);
-			CLMEOSViewController result=new CLMEOSViewController();
-			System.assert (String.isNotBlank(result.hostingUrl));
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_constructor_apiError() {
-		DocuSignAPIMock.failure();
-		System.runAs(UserMock.createClmViewer()) {
-			EOS_Type__c eos = EOS_Type__c.getOrgDefaults();
-			eos.FolderName__c = '{!Account.Name}';
-			eos.Path__c = 'Salesforce/Account/{!Account.Phone}/';
-			eos.PathFormat__c= 'Salesforce/Account/{0}/';
-			eos.Variables__c = 'Account.Phone';
-			eos.Name = 'Account';
-			insert eos;
-			Id acctId = [SELECT Id FROM Account WHERE Name='UNIT TEST' LIMIT 1].Id;
-			Test.startTest();
-			Test.setCurrentPageReference(new PageReference('Page.CLMEOSView'));
-			System.currentPageReference().getParameters().put('sid', acctId);
-			CLMEOSViewController result=new CLMEOSViewController();
-			System.assert (result.connectionError);
-			System.assert (result.errorMessage.contains('1234'));
-			System.assert (result.errorMessage.contains('Reference ID'));
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_constructor_inValid() {
-		System.runAs(UserMock.createClmViewer()) {
-			Test.startTest();
-			Id contactId = [SELECT Id FROM Contact LIMIT 1].Id;
-			Test.setCurrentPageReference(new PageReference('Page.CLMEOSView'));
-			System.currentPageReference().getParameters().put('sid',contactId);
-			CLMEOSViewController result=new CLMEOSViewController();
-			System.assert (!result.mappingExists);
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_constructor_unauthorized() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			Id contactId = [SELECT Id FROM Contact LIMIT 1].Id;
-			Test.setCurrentPageReference(new PageReference('Page.CLMEOSView'));
-			System.currentPageReference().getParameters().put('sid',contactId);
-			CLMEOSViewController result=new CLMEOSViewController();
-			System.assert (result.connectionError);
-			Test.stopTest();
-		}
+	static void test_constructors() {
+		System.assertNotEquals(null, new CLMEOSViewController());
 	}
 
 	@IsTest
@@ -190,6 +125,32 @@ private class CLMEOSViewControllerTest {
 			Test.stopTest();
 			System.assertNotEquals(null, substitutedParams);
 			System.assertEquals('_', substitutedParams.salesforceFolderName);
+		}
+	}
+
+	@IsTest
+	static void test_getNameSpace_failure() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				CLMEOSViewController.getNameSpace();
+				throw new AssertException('Expected get namespace to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeClmViewer, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getNameSpace_success() {
+		System.runAs(UserMock.createClmUser()) {
+
+			Test.startTest();
+			String result = CLMEOSViewController.getNameSpace();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
 		}
 	}
 }

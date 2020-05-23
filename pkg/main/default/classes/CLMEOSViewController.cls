@@ -1,36 +1,16 @@
-public with sharing class CLMEOSViewController {
+public with sharing class CLMEOSViewController extends Controller {
     public String hostingUrl {set; get;}
     public Boolean mappingExists {set; get;}
     public Boolean connectionError {set; get;}
     public String objectType {set; get;}
     public String errorMessage {set; get;}
 
-    //Constructor called from VF page - CLMEOSView.page
+    public Entity sourceEntity { get; set; }
+
     public CLMEOSViewController() {
-        try {
-            Permissions.verifyIsClmViewer();
-            hostingUrl = '';
-            Id sid = System.currentPageReference().getParameters().get('sid');
-            if (sid != NULL) {
-                DescribeSObjectResult objDetails = MetadataService.describeSObject(sid);
-                if (objDetails != NULL) {
-                    objectType = objDetails.getName();
-                    EOSUrlResult eosRes = fetchUrl(sid);
-                    if (eosRes.mappingExists) {
-                        hostingUrl= eosRes.eosUrl;
-                        mappingExists=true;
-                        connectionError = false;
-                    } else {
-                        mappingExists = false;
-                        connectionError = false;
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            LoggerService.getInstance().exception(ex, 'Failed to fetch clm Url');
-            connectionError = true;
-            mappingExists = false;
-            errorMessage = ex.getMessage();
+        Id sourceId = ApexPages.currentPage().getParameters().get('sid');
+        if (sourceId != null && sourceEntity == null) {
+            sourceEntity = Entity.resolve(sourceId);
         }
     }
 
@@ -72,5 +52,15 @@ public with sharing class CLMEOSViewController {
             eosResult = new EOSUrlResult(false, true, CLMService.getHostingUrl(config, recordId).toExternalForm(), null);
         }
         return eosResult;
+    }
+
+    @AuraEnabled(Cacheable = true)
+    public static String getNameSpace() {
+        try {
+            Permissions.verifyIsClmViewer();
+            return Application.namespace;
+        } catch (Exception ex) {
+            throw Controller.wrapException(ex, 'Failed to get namespace.');
+        }
     }
 }

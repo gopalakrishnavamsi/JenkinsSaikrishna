@@ -1,66 +1,90 @@
-<apex:page controller="CLMEOSViewController">
+<apex:page controller="CLMEOSViewController" showHeader="true" sidebar="false"
+		   title="{!$Label.DocuSignCLM}">
+	<apex:includeLightning/>
 	<apex:slds/>
-	<style>
-		.ds-main {
-			width: 100%;
+	<apex:includeScript value="{!$Resource.navUtils}"/>
+
+	<style type="text/css">
+		#content {
+			background-color: white;
+			position: relative;
+			height: calc(100vh - 165px);
+			overflow: auto;
 		}
 
-		.ds-font-size {
-			font-size: 1.25rem;
+		.ds-agreementsFooter {
+			background: #f3f2f2;
+			margin-top: 0px;
 		}
 
-		.ds-gray-color {
-			background-color: #f2f2f2
+		.ds-agreementsHeader {
+			background: #f3f2f2 !important;
+		}
+
+		.ds-agreementsContainer {
+			border: 1px solid #dcdbda;
+		}
+
+		.ds-agreementsBody {
+			border: 0px !important;
 		}
 	</style>
-	<apex:form>
-		<apex:outputPanel rendered="{!AND(mappingExists == false, connectionError == false)}">
-			<div class="slds-scope">
-				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color ds-font-size">
-					<svg class="slds-icon" style="fill:#AB7C94;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-						<use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#warning"></use>
-					</svg>
-				</div>
-				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color ds-font-size">
-					{!SUBSTITUTE($Label.ObjectNotMappedToDocuSignCLM, "{0}", objectType)}
-				</div>
-				<div class="slds-p-bottom_large slds-align_absolute-center ds-gray-color ds-font-size">
-					{!$Label.MapToViewFolders}
+	<div class="slds-scope" id="content">
+		<div class="slds-container_medium slds-container_center">
+			<div class="ds-agreementsHeader slds-page-header slds-m-bottom_medium slds-m-top_medium">
+				<div class="slds-page-header__row">
+					<div class="slds-page-header__col-title">
+						<div class="slds-media">
+							<div class="slds-media__figure">
+                        <span class="{!'slds-icon_container slds-icon-standard-'+LOWER(sourceEntity.typeName)}"
+							  title="{!sourceEntity.typeName}"> 
+                          <svg aria-hidden="true" class="slds-icon"> 
+                            <use xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+								 xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/standard-sprite/svg/symbols.svg#'+LOWER(sourceEntity.typeName))}"></use>
+                          </svg> 
+                        </span>
+							</div>
+							<div class="slds-media__body">
+								<div class="slds-page-header__name">
+									<div class="slds-page-header__name-title">
+										<h1>
+                                    <span class="slds-page-header__title slds-truncate"
+										  title="{!sourceEntity.Name}">{!sourceEntity.Name}</span>
+										</h1>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-		</apex:outputPanel>
-		<apex:outputPanel rendered="{!AND(mappingExists == false, connectionError == true)}">
-			<div class="slds-scope">
-				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color ds-font-size">
-					<svg class="slds-icon" style="fill:#AB7C94;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-						<use xlink:href="/apexpages/slds/latest/assets/icons/utility-sprite/svg/symbols.svg#warning"></use>
-					</svg>
-				</div>
-				<div class="slds-p-top_large slds-align_absolute-center ds-gray-color ds-font-size">
-					{!$Label.CouldNotConnectToCLM}
-				</div>
-				<div class="slds-p-bottom_large slds-align_absolute-center ds-gray-color ds-font-size">
-					{!errorMessage}
-				</div>
+			<div class="ds-agreementsContainer">
+				<div id="ds-clmeosviewpage"></div>
+				<footer class="slds-card__footer ds-agreementsFooter">
+					<button type="button" class="slds-button slds-button_neutral slds-align_absolute-center"
+							onclick="navigateToSourceRecord('{!JSENCODE($CurrentPage.parameters.sid)}')">{!$Label.Back}
+					</button>
+				</footer>
 			</div>
-		</apex:outputPanel>
-		<apex:outputPanel rendered="{!mappingExists}">
-			<script>
-				document.addEventListener("DOMContentLoaded", onIframeRender);
-				function onIframeRender() {
-					var iframeWin = document.getElementById("frame");
-					if (iframeWin) {
-						var content = (iframeWin.contentWindow || iframeWin.contentDocument);
-						var contentHeight = Math.max(content.parent.innerHeight || 0, content.parent.outerHeight || 0);
-						var iframeHost = document.getElementById('main');
-						if (iframeHost)
-							iframeHost.style.height = contentHeight + 'px';
-					}
-				}
-			</script>
-			<div class="ds-main" id="main">
-				<iframe id="frame" src="{!hostingUrl}" width="100%" height="100%" frameborder="0" seamless="true"/>
-			</div>
-		</apex:outputPanel>
-	</apex:form>
+		</div>
+	</div>
+
+	<script>
+		var _namespace = '{!JSENCODE(namespace)}';
+		var _navigateToURL = function (event) {
+			window.location.replace(event.getParam('url'));
+		};
+		$Lightning.use(_namespace + ':CLMEOSViewApp', function () {
+			$Lightning.createComponent(_namespace + ':CLMEOSView', {
+				visualforce: true, recordId: '{!JSENCODE($CurrentPage.parameters.sid)}'
+			}, 'ds-clmeosviewpage', function () {
+				$A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': _navigateToURL});
+			});
+		});
+
+		function navigateToSourceRecord(sourceId) {
+			navUtils.navigateToSObject(sourceId);
+		}
+	</script>
+
 </apex:page>

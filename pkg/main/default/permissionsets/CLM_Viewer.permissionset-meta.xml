@@ -27,4 +27,8 @@
 		<apexPage>CompleteOAuth</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
+	<pageAccesses>
+		<apexPage>CLMEOSView</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
 </PermissionSet>
