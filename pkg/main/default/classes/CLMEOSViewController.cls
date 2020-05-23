@@ -1,7 +1,4 @@
 public with sharing class CLMEOSViewController extends Controller {
-    public String hostingUrl {set; get;}
-    public Boolean mappingExists {set; get;}
-    public Boolean connectionError {set; get;}
     public String objectType {set; get;}
     public String errorMessage {set; get;}
 
@@ -10,7 +7,12 @@ public with sharing class CLMEOSViewController extends Controller {
     public CLMEOSViewController() {
         Id sourceId = ApexPages.currentPage().getParameters().get('sid');
         if (sourceId != null && sourceEntity == null) {
-            sourceEntity = Entity.resolve(sourceId);
+            try {
+                sourceEntity = Entity.resolve(sourceId);
+            } catch (Exception ex) {
+                throw Controller.wrapException(ex, 'Enable to resolve Entity');
+            }
+
         }
     }
 
@@ -54,13 +56,4 @@ public with sharing class CLMEOSViewController extends Controller {
         return eosResult;
     }
 
-    @AuraEnabled(Cacheable = true)
-    public static String getNameSpace() {
-        try {
-            Permissions.verifyIsClmViewer();
-            return Application.namespace;
-        } catch (Exception ex) {
-            throw Controller.wrapException(ex, 'Failed to get namespace.');
-        }
-    }
 }

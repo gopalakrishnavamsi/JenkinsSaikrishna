@@ -127,30 +127,4 @@ private class CLMEOSViewControllerTest {
 			System.assertEquals('_', substitutedParams.salesforceFolderName);
 		}
 	}
-
-	@IsTest
-	static void test_getNameSpace_failure() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				CLMEOSViewController.getNameSpace();
-				throw new AssertException('Expected get namespace to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeClmViewer, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_getNameSpace_success() {
-		System.runAs(UserMock.createClmUser()) {
-
-			Test.startTest();
-			String result = CLMEOSViewController.getNameSpace();
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-		}
-	}
 }
