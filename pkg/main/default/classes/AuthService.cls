@@ -531,21 +531,23 @@ global with sharing class AuthService {
 	public static Set<Id> resetAccount(final Boolean resetUsers) {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		// delete instance application
-		// DFS-7442: Temporarily disable instance application deletion in 2.4. In 2.5 re-enable this and check whether
-		// the org "owns" the instance application before deleting.
-//		if (Credentials.isAccountValid()) {
-//			Credentials c = Credentials.getInstance();
-//			getAuthAPI(c.environment.accountBaseUrl).deleteInstance(
-//				c.client.id,
-//				getAccessToken(
-//					c.token,
-//					c.environment.accountBaseUrl,
-//					c.user.id,
-//					true,
-//					c.client.id,
-//					c.client.privateKey).token);
-//		}
+		// delete instance application if this is the original org where DAL was installed (i.e. not refreshed sandbox)
+		if (Credentials.isAccountValid()
+			&& AccountSettings__c.getOrgDefaults().OrganizationId__c == UserInfo.getOrganizationId()) {
+
+			Credentials c = Credentials.getInstance();
+			getAuthAPI(c.environment.accountBaseUrl).deleteInstance(
+				c.client.id,
+				getAccessToken(
+					c.token,
+					c.environment.accountBaseUrl,
+					c.user.id,
+					true,
+					c.client.id,
+					c.client.privateKey).token);
+		}
+
+		AccountProducts.clear();
 
 		Set<Id> result = Credentials.clear(resetUsers);
 		if (resetUsers) {
@@ -559,8 +561,6 @@ global with sharing class AuthService {
 			]) {
 				result.add(psa.AssigneeId);
 			}
-
-			AccountProducts.clear();
 
 			// This must be done in a @Future context to avoid MIXED_DML errors.
 			clearPermissions(result);

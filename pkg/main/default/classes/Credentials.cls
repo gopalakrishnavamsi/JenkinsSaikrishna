@@ -492,6 +492,7 @@ public with sharing class Credentials {
 		}
 
 		public Credentials updateCredentials(
+			final Id organizationId,
 			final Id userId,
 			final Environment environment,
 			final ClientCredentials client,
@@ -502,6 +503,7 @@ public with sharing class Credentials {
 			AccountSettings__c accountSettings = setEnvironment(AccountSettings__c.getOrgDefaults(), environment);
 			accountSettings = setClient(accountSettings, client);
 			accountSettings = setAccount(accountSettings, account);
+			accountSettings.OrganizationId__c = organizationId;
 			upsert accountSettings;
 
 			updateUser(userId, user);
@@ -573,6 +575,7 @@ public with sharing class Credentials {
 			settings.AdministratorProfileId__c = null;
 			settings.SenderProfileId__c = null;
 			settings.IsPlatformAuthorized__c = false;
+			settings.OrganizationId__c = null;
 			upsert settings;
 			return settings;
 		}
@@ -645,6 +648,7 @@ public with sharing class Credentials {
 		final AccessToken token) {
 
 		return save(
+			UserInfo.getOrganizationId(),
 			UserInfo.getUserId(),
 			environment,
 			client,
@@ -655,6 +659,7 @@ public with sharing class Credentials {
 
 	@TestVisible
 	private static Credentials save(
+		final Id organizationId,
 		final Id userId,
 		final Environment environment,
 		final ClientCredentials client,
@@ -663,6 +668,7 @@ public with sharing class Credentials {
 		final AccessToken token) {
 
 		self = DB.updateCredentials(
+			organizationId,
 			userId,
 			environment,
 			client,

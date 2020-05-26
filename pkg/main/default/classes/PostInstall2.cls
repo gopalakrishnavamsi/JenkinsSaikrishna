@@ -4,7 +4,7 @@
 public class PostInstall2 implements PostInstallScript {
 
 	@TestVisible
-	private static PostInstallResults initializeAccountSettings() {
+	private static PostInstallResults initializeAccountSettings(final Id organizationId) {
 		Boolean didInit = false;
 		PostInstallResults result = new PostInstallResults();
 		AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
@@ -19,6 +19,11 @@ public class PostInstall2 implements PostInstallScript {
 			didInit = true;
 		}
 
+		if (String.isBlank(settings.OrganizationId__c)) {
+			settings.OrganizationId__c = organizationId;
+			didInit = true;
+		}
+
 		if (didInit) {
 			update settings;
 			result.endStepSuccess(Label.InitializeAccountSettings);
@@ -28,16 +33,24 @@ public class PostInstall2 implements PostInstallScript {
 		return result;
 	}
 
-	public Boolean shouldExecute(Id organizationId, Id installerId, Version previousVersion, Boolean isPush,
-		Boolean isUpgrade) {
+	public Boolean shouldExecute(
+		final Id organizationId,
+		final Id installerId,
+		final Version previousVersion,
+		final Boolean isPush,
+		final Boolean isUpgrade) {
 
 		return previousVersion != null
 			&& previousVersion.major() < 2;
 	}
 
-	public PostInstallResults execute(Id organizationId, Id installerId, Version previousVersion, Boolean isPush,
-		Boolean isUpgrade) {
+	public PostInstallResults execute(
+		final Id organizationId,
+		final Id installerId,
+		final Version previousVersion,
+		final Boolean isPush,
+		final Boolean isUpgrade) {
 
-		return new PostInstallResults().addResults(initializeAccountSettings());
+		return new PostInstallResults().addResults(initializeAccountSettings(organizationId));
 	}
 }

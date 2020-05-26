@@ -141,7 +141,7 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 	}
 
 	@TestVisible
-	private static PostInstallResults initializeAccountSettings() {
+	private static PostInstallResults initializeAccountSettings(final Id organizationId) {
 		PostInstallResults result = new PostInstallResults();
 		AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 		if (settings.Id == null) {
@@ -150,6 +150,7 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 				settings.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
 				settings.DocumentResolvers__c = Application.classNamespacePrefix + 'DefaultDocumentResolver';
 				settings.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
+				settings.OrganizationId__c = organizationId;
 				insert settings;
 				result.endStepSuccess(Label.InitializeAccountSettings);
 			} catch (Exception ex) {
@@ -301,7 +302,7 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 		PostInstallResults results = new PostInstallResults();
 
 		results.addResults(assignDocuSignAdministratorPermissionSet(installerId));
-		results.addResults(initializeAccountSettings());
+		results.addResults(initializeAccountSettings(organizationId));
 		results.addResults(createDefaultRecipientRoles());
 		results.addResults(createDefaultCLMObjMappings());
 		results.addResults(initializeLogSettings());

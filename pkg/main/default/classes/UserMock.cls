@@ -398,6 +398,7 @@ global class UserMock {
 		accountSettings.ScmAuthBaseUrl__c = 'https://auth.test.springcm.com/';
 		accountSettings.ClientId__c = UUID.randomUUID().toString();
 		accountSettings.ClientSecret__c = UUID.randomUUID().toString();
+		accountSettings.OrganizationId__c = UserInfo.getOrganizationId();
 		accountSettings.PrivateKey0__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(0, 255);
 		accountSettings.PrivateKey1__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(255, 255);
 		accountSettings.PrivateKey2__c = TestUtils.TEST_RSA_PRIVATE_KEY_BASE64.mid(510, 255);

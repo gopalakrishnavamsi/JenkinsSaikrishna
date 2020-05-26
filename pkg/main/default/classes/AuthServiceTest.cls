@@ -759,7 +759,7 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_resetCredentials_unauthorized() {
+	static void test_resetAccount_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
@@ -774,7 +774,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_resetAccount_success() {
-//		ApplicationAPIMock.success();
+		ApplicationAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u1 = UserMock.createDocuSignUser(false);
 			// Senders are unique in that they do not have DS user credentials.
@@ -797,12 +797,17 @@ private class AuthServiceTest {
 			System.assertEquals(5, Collection.size([SELECT Id FROM AgreementConfiguration__c]));
 
 			Test.startTest();
-			AuthService.resetAccount(true);
+			Set<Id> result = AuthService.resetAccount(true);
 			Test.stopTest();
+
+			System.assertEquals(new Set<Id>(), Collection.difference(new Set<Id> { u1.Id, u2.Id }, result));
 
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			System.assertEquals(null, s.AccountId__c);
+			System.assertEquals(null, s.OrganizationId__c);
+
 			System.assertEquals(null, [SELECT Username__c FROM User WHERE Id = :UserInfo.getUserId()].Username__c);
+
 			System.assertEquals(0, Collection.size([
 				SELECT Id
 				FROM PermissionSetAssignment
@@ -814,6 +819,43 @@ private class AuthServiceTest {
 					AND NamespacePrefix = :Application.packageNamespace
 				)
 			]));
+
+			// Verify current user didn't lose admin permissions
+			System.assertEquals(1, Collection.size([
+				SELECT Id
+				FROM PermissionSetAssignment
+				WHERE AssigneeId = :UserInfo.getUserId()
+				AND PermissionSet.NamespacePrefix = :Application.packageNamespace
+				AND PermissionSet.Name = :Permissions.DOCUSIGN_ADMINISTRATOR
+			]));
+
+			System.assert(Collection.isEmpty(ProductSettings__c.getAll()));
+			System.assert(Collection.isEmpty(ProductRoleSettings__c.getAll()));
+
+			// Verify all folder configuration records have been cleared
+			System.assertEquals(0, Collection.size([SELECT Id FROM AgreementConfiguration__c]));
+		}
+	}
+
+	@IsTest
+	static void test_resetAccount_not_install_org() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.OrganizationId__c = UserInfo.getUserId();
+			update s;
+
+			Test.startTest();
+			Set<Id> result = AuthService.resetAccount(false);
+			Test.stopTest();
+
+			System.assertEquals(new Set<Id>(), result);
+
+			s = AccountSettings__c.getOrgDefaults();
+			System.assertEquals(null, s.AccountId__c);
+			System.assertEquals(null, s.OrganizationId__c);
+
+			System.assertNotEquals(null, [SELECT Username__c FROM User WHERE Id = :UserInfo.getUserId()].Username__c);
+
 			// Verify current user didn't lose admin permissions
 			System.assertEquals(1, Collection.size([
 				SELECT Id

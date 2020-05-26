@@ -80,7 +80,7 @@ private class PostInstallTest {
 	static void test_initializeAccountSettings_new() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
-			PostInstallResults result = PostInstall.initializeAccountSettings();
+			PostInstallResults result = PostInstall.initializeAccountSettings(UserInfo.getOrganizationId());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -109,6 +109,7 @@ private class PostInstallTest {
 			System.assertEquals(Application.classNamespacePrefix + 'DefaultEntityResolver', settings.EntityResolvers__c);
 			System.assertEquals(Application.classNamespacePrefix + 'DefaultDocumentResolver', settings.DocumentResolvers__c);
 			System.assertEquals(Application.classNamespacePrefix + 'DefaultRecipientResolver', settings.RecipientResolvers__c);
+			System.assertEquals(UserInfo.getOrganizationId(), settings.OrganizationId__c);
 		}
 	}
 
@@ -130,10 +131,11 @@ private class PostInstallTest {
 			settings.ProductsLastChecked__c = Datetime.now();
 			settings.ProductsCheckFrequency__c = 60;
 			settings.CalloutTimeout__c = 9999;
+			settings.OrganizationId__c = UserInfo.getUserId();
 			insert settings;
 
 			Test.startTest();
-			PostInstallResults result = PostInstall.initializeAccountSettings();
+			PostInstallResults result = PostInstall.initializeAccountSettings(UserInfo.getOrganizationId());
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -160,6 +162,7 @@ private class PostInstallTest {
 			System.assertEquals(settings.EntityResolvers__c, s2.EntityResolvers__c);
 			System.assertEquals(settings.DocumentResolvers__c, s2.DocumentResolvers__c);
 			System.assertEquals(settings.RecipientResolvers__c, s2.RecipientResolvers__c);
+			System.assertEquals(UserInfo.getUserId(), s2.OrganizationId__c);
 		}
 	}
 

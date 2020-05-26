@@ -8,9 +8,10 @@ private class PostInstall2Test {
 		insert s;
 		System.assertNotEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertEquals(null, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
+		System.assertEquals(null, AccountSettings__c.getOrgDefaults().OrganizationId__c);
 
 		Test.startTest();
-		PostInstallResults result = PostInstall2.initializeAccountSettings();
+		PostInstallResults result = PostInstall2.initializeAccountSettings(UserInfo.getOrganizationId());
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -19,6 +20,7 @@ private class PostInstall2Test {
 		System.assertEquals(PostInstallResults.StepStatus.SUCCESS, result.getSteps()[0].status);
 		System.assertEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
+		System.assertEquals(UserInfo.getOrganizationId(), AccountSettings__c.getOrgDefaults().OrganizationId__c);
 	}
 
 	@IsTest
@@ -27,10 +29,11 @@ private class PostInstall2Test {
 		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 		s.IsESignatureEnabled__c = true;
 		s.EncryptionKey__c = pvk;
+		s.OrganizationId__c = UserInfo.getUserId();
 		insert s;
 
 		Test.startTest();
-		PostInstallResults result = PostInstall2.initializeAccountSettings();
+		PostInstallResults result = PostInstall2.initializeAccountSettings(UserInfo.getOrganizationId());
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -39,6 +42,7 @@ private class PostInstall2Test {
 		System.assertEquals(PostInstallResults.StepStatus.SKIPPED, result.getSteps()[0].status);
 		System.assertEquals(true, AccountSettings__c.getOrgDefaults().IsESignatureEnabled__c);
 		System.assertEquals(pvk, AccountSettings__c.getOrgDefaults().EncryptionKey__c);
+		System.assertEquals(UserInfo.getUserId(), AccountSettings__c.getOrgDefaults().OrganizationId__c);
 	}
 
 	@IsTest

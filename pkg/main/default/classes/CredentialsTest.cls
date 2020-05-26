@@ -106,9 +106,8 @@ private class CredentialsTest {
 		User admin2 = UserMock.createDocuSignAdministrator(false);
 
 		System.runAs(admin1) {
-
 			//update UserName__c on admin1 so that it matches the current SystemSenderId
-			User u = [SELECT Id, UserName__c from User WHERE Id = :admin1.Id];
+			User u = [SELECT Id, Username__c FROM User WHERE Id = :admin1.Id];
 			System.assertNotEquals(null, u);
 			u.Username__c = AccountSettings__c.getOrgDefaults().SystemSenderId__c;
 			update u;
@@ -120,7 +119,7 @@ private class CredentialsTest {
 
 			//update System Sender to admin2
 			AccountSettings__c accountSettingsInstance = AccountSettings__c.getOrgDefaults();
-			accountSettingsInstance.SystemSenderId__c = [SELECT Id, UserName__c FROM User WHERE Id = :admin2.Id].Username__c;
+			accountSettingsInstance.SystemSenderId__c = [SELECT Id, Username__c FROM User WHERE Id = :admin2.Id].Username__c;
 			upsert accountSettingsInstance;
 
 			//System Sender as admin2
@@ -129,8 +128,8 @@ private class CredentialsTest {
 
 			Test.stopTest();
 
-			User adminUser1 = [SELECT Id, UserName__c from User WHERE Id = :admin1.Id];
-			User adminUser2 = [SELECT Id, UserName__c from User WHERE Id = :admin2.Id];
+			User adminUser1 = [SELECT Id, Username__c FROM User WHERE Id = :admin1.Id];
+			User adminUser2 = [SELECT Id, Username__c FROM User WHERE Id = :admin2.Id];
 
 			System.assertNotEquals(null, result1);
 			System.assert(result1.isValid);
@@ -283,6 +282,8 @@ private class CredentialsTest {
 			System.assertEquals(token, s.AccessToken0__c);
 			System.assertEquals(expires, s.AccessTokenExpires__c);
 
+			System.assertEquals(UserInfo.getOrganizationId(), AccountSettings__c.getOrgDefaults().OrganizationId__c);
+
 			System.assert(result2 === result1);
 		}
 	}
@@ -376,6 +377,8 @@ private class CredentialsTest {
 			UserSettings__c us = UserSettings__c.getInstance();
 			System.assertEquals(token, us.AccessToken0__c);
 			System.assertEquals(expires, us.AccessTokenExpires__c);
+
+			System.assertEquals(UserInfo.getOrganizationId(), AccountSettings__c.getOrgDefaults().OrganizationId__c);
 
 			System.assert(result2 === result1);
 		}
@@ -481,25 +484,26 @@ private class CredentialsTest {
 		System.runAs(dsa) {
 			UserMock.createAccountConfiguration(UUID.randomUUID());
 
-			Credentials result = Credentials.getInstance(dsu1.Id, false);
-			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.user);
-			System.assertEquals(userId1, result.user.id);
+			Credentials creds = Credentials.getInstance(dsu1.Id, false);
+			System.assertNotEquals(null, creds);
+			System.assertNotEquals(null, creds.user);
+			System.assertEquals(userId1, creds.user.id);
 
-			result = Credentials.getInstance(dsu2.Id, false);
-			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.user);
-			System.assertEquals(userId2, result.user.id);
+			creds = Credentials.getInstance(dsu2.Id, false);
+			System.assertNotEquals(null, creds);
+			System.assertNotEquals(null, creds.user);
+			System.assertEquals(userId2, creds.user.id);
 
-			result = Credentials.getInstance(dsu3.Id, false);
-			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.user);
-			System.assertEquals(userId3, result.user.id);
+			creds = Credentials.getInstance(dsu3.Id, false);
+			System.assertNotEquals(null, creds);
+			System.assertNotEquals(null, creds.user);
+			System.assertEquals(userId3, creds.user.id);
 
 			Test.startTest();
-			Credentials.clear(false);
+			Set<Id> result = Credentials.clear(false);
 			Test.stopTest();
 
+			System.assertEquals(new Set<Id>(), result);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProvisioningBaseUrl__c);
@@ -548,25 +552,26 @@ private class CredentialsTest {
 		System.runAs(dsa) {
 			UserMock.createAccountConfiguration(UUID.randomUUID());
 
-			Credentials result = Credentials.getInstance(dsu1.Id, false);
-			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.user);
-			System.assertEquals(userId1, result.user.id);
+			Credentials creds = Credentials.getInstance(dsu1.Id, false);
+			System.assertNotEquals(null, creds);
+			System.assertNotEquals(null, creds.user);
+			System.assertEquals(userId1, creds.user.id);
 
-			result = Credentials.getInstance(dsu2.Id, false);
-			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.user);
-			System.assertEquals(userId2, result.user.id);
+			creds = Credentials.getInstance(dsu2.Id, false);
+			System.assertNotEquals(null, creds);
+			System.assertNotEquals(null, creds.user);
+			System.assertEquals(userId2, creds.user.id);
 
-			result = Credentials.getInstance(dsu3.Id, false);
-			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.user);
-			System.assertEquals(userId3, result.user.id);
+			creds = Credentials.getInstance(dsu3.Id, false);
+			System.assertNotEquals(null, creds);
+			System.assertNotEquals(null, creds.user);
+			System.assertEquals(userId3, creds.user.id);
 
 			Test.startTest();
-			Credentials.clear(true);
+			Set<Id> result = Credentials.clear(true);
 			Test.stopTest();
 
+			System.assertEquals(new Set<Id>(), Collection.difference(new Set<Id> { dsu1.Id, dsu2.Id, dsu3.Id }, result));
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().Environment__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AccountBaseUrl__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProvisioningBaseUrl__c);
@@ -971,5 +976,16 @@ private class CredentialsTest {
 			System.assertEquals(null, us2.AccessToken5__c);
 			System.assertEquals(null, us2.AccessTokenExpires__c);
 		}
+	}
+
+	@IsTest
+	static void test_Database_queryToken_invalid_user() {
+		Test.startTest();
+		Credentials.AccessToken result = Credentials.DB.queryToken(UUID.randomUUID());
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(null, result.token);
+		System.assertEquals(null, result.expires);
 	}
 }
