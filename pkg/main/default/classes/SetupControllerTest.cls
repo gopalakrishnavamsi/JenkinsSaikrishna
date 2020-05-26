@@ -209,7 +209,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_logout_success() {
-		DocuSignAPIMock.success();
+//		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			LoginInformation result = SetupController.logout(true);

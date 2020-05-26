@@ -774,7 +774,7 @@ private class AuthServiceTest {
 
 	@IsTest
 	static void test_resetAccount_success() {
-		ApplicationAPIMock.success();
+//		ApplicationAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			User u1 = UserMock.createDocuSignUser(false);
 			// Senders are unique in that they do not have DS user credentials.

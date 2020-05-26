@@ -532,18 +532,20 @@ global with sharing class AuthService {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		// delete instance application
-		if (Credentials.isAccountValid()) {
-			Credentials c = Credentials.getInstance();
-			getAuthAPI(c.environment.accountBaseUrl).deleteInstance(
-				c.client.id,
-				getAccessToken(
-					c.token,
-					c.environment.accountBaseUrl,
-					c.user.id,
-					true,
-					c.client.id,
-					c.client.privateKey).token);
-		}
+		// DFS-7442: Temporarily disable instance application deletion in 2.4. In 2.5 re-enable this and check whether
+		// the org "owns" the instance application before deleting.
+//		if (Credentials.isAccountValid()) {
+//			Credentials c = Credentials.getInstance();
+//			getAuthAPI(c.environment.accountBaseUrl).deleteInstance(
+//				c.client.id,
+//				getAccessToken(
+//					c.token,
+//					c.environment.accountBaseUrl,
+//					c.user.id,
+//					true,
+//					c.client.id,
+//					c.client.privateKey).token);
+//		}
 
 		Set<Id> result = Credentials.clear(resetUsers);
 		if (resetUsers) {
