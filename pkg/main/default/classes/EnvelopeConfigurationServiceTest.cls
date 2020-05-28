@@ -2219,6 +2219,41 @@ private class EnvelopeConfigurationServiceTest {
 	}
 
 	@IsTest
+	static void test_queryEnvelopeConfigurationsForDisplay_success() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeConfiguration__c config1 = TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
+			EnvelopeConfiguration__c config2 = TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
+
+			Test.startTest();
+			List<EnvelopeConfiguration.Listing> listings = EnvelopeConfigurationService.queryEnvelopeConfigurationsForDisplay();
+			Test.stopTest();
+
+			System.assertNotEquals(listings, null);
+			System.assertEquals(listings.size(), 2);
+			System.assertNotEquals(listings[0], null);
+			System.assertEquals(listings[0].sourceObject, 'Account');
+			System.assertNotEquals(listings[1], null);
+			System.assertEquals(listings[1].sourceObject, 'Account');
+		}
+	}
+
+	@IsTest
+	static void test_queryEnvelopeConfigurationsForDisplay_failure() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			EnvelopeConfiguration__c config1 = TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
+			EnvelopeConfiguration__c config2 = TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
+			Test.startTest();
+			try {
+				List<EnvelopeConfiguration.Listing> listings = EnvelopeConfigurationService.queryEnvelopeConfigurationsForDisplay();
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@isTest
 	static void test_mergeRecipients() {
 		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 		s.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';

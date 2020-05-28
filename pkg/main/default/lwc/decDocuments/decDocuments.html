@@ -1,0 +1,80 @@
+<template>
+    <div class="slds-m-top_x-large">
+        <span class="slds-float_right">
+            <c-help-video-image-box video-link={label.helpVideoLink}
+                                    video-text={label.helpVideoText}
+                                    video-length={label.helpVideoLength}>
+            </c-help-video-image-box>
+        </span>
+        <!-- Add Documents Information section -->
+        <div class="ds-addDocuments-information-section">
+            <div class="ds-addDocuments-information-header">{label.addDocuments}</div>
+            <div class="slds-m-top_small ds-addDocuments-information-text">{label.addDocumentsInfoText}</div>
+        </div>
+        <!-- Documents details section -->
+        <div class="slds-m-top_large">
+            <div class="ds-addDocuments-details-section">
+                <!-- details header section -->
+                <div class="ds-addDocuments-details-header slds-p-around_medium">
+                    <div class="slds-grid slds-grid_align-spread">
+                        <div class="slds-col">
+                            <div class="ds-addDocuments-details-header-text">{label.documents}</div>
+                        </div>
+                        <div class="slds-col">
+                            <c-file-upload
+                                    record-id={recordId}
+                                    onsuccess={handleFileUploadSuccess}
+                                    file-upload-label={label.upload}></c-file-upload>
+                        </div>
+                    </div>
+                </div>
+                <!-- details body section -->
+                <template if:false={hasTemplateDocuments}>
+                    <template if:false={hideTemplateFileUpload}>
+                    <div class="slds-grid slds-p-around_large">
+                        <div class="slds-col slds-size_1-of-12 ds-addDocuments-sequence-whenEmpty">
+                            <lightning-icon
+                                    icon-name="utility:drag_and_drop"
+                                    alternative-text="Drag and Drop"
+                                    variant="neutral"
+                                    size="small"></lightning-icon>
+                            <span class="slds-p-left_small slds-p-right_small">1</span>
+                        </div>
+                        <div class="slds-col ds-addDocuments-details-body">
+                            <div class="slds-p-around_large">
+                                <span class="slds-text-heading_medium">{label.addDocuments}</span>
+                                <span class="slds-float_right">
+                                    <img src={addDocumentsEmptyImageURL}/>
+                                </span>
+                                <div class="slds-p-top_large">{label.addDocumentsHelpText}</div>
+                                <div class="slds-m-top_medium">
+                                    <c-file-upload
+                                            record-id={recordId}
+                                            onsuccess={handleFileUploadSuccess}
+                                            file-upload-label={label.uploadDocument}></c-file-upload>
+                                    <span class="ds-addDocuments-dropDocuments-text slds-p-left_x-small">
+                                        {label.dropDocuments}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <lightning-icon
+                                icon-name="utility:clear"
+                                size="small"
+                                class="ds-addDocuments-close-whenEmpty slds-p-left_small"
+                                onclick={handleClearTemplateDocument}>
+                        </lightning-icon>
+                    </div>
+                    </template>
+                </template>
+                <div onupdatedocuments={updateDocumentsEvent}>
+                    <c-dec-documents-list
+                            list={documents}
+                            attach-source-files={attachSourceFiles}
+                            onupdatedocument={updateDocument}>
+                    </c-dec-documents-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

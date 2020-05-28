@@ -1,0 +1,24 @@
+<template>
+    <template if:true={isRecordFieldsLookup}>
+        <c-dec-record-fields-recipient relationship={relationship} source-object={sourceObject} onrelationshipupdate={handleRelationshipUpdate}></c-dec-record-fields-recipient>
+    </template>
+    <template if:true={isRelatedRecipient}>
+        <c-dec-related-recipient relationship={relationship} source-object={sourceObject} onrelationshipupdate={handleRelationshipUpdate}></c-dec-related-recipient>
+    </template>
+    <template if:true={isEntityLookup}>
+        <c-dec-recipient-lookup onrecordselection={handleSourceChange}></c-dec-recipient-lookup>
+    </template>
+    <template if:true={isRoleRecipient}>
+        <c-dec-role-recipient></c-dec-role-recipient>
+    </template>
+    <template if:true={isSigningGroup}>
+        <c-dec-signing-group-recipient signing-group={recipient.signingGroup}></c-dec-signing-group-recipient>
+    </template>
+    <section>
+        <c-dec-recipient-action onactionchange={updateAction}></c-dec-recipient-action>
+
+        <c-dec-recipient-authentication onauthenticationchange={handleAuthenticationChange}></c-dec-recipient-authentication>
+
+        <c-dec-recipient-private-message onnotechange={updateNote} recipient-note={recipient.note}></c-dec-recipient-private-message>
+    </section>
+</template>

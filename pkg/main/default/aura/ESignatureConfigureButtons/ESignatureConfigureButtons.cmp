@@ -1,0 +1,41 @@
+<aura:component>
+    <div class="slds-grid">
+        <!-- Left hand side add button to layout section -->
+        <div class="slds-col slds-size_1-of-2 ds-add-button-section">
+            <div class="slds-p-around_large">
+                <div class="ds-add-button-section-header">
+                    {!$Label.c.AddButtonEsignature} 
+                </div>
+                <div class="slds-m-top_x-large ds-add-button-section-chooseObjectHeader">
+                    {!$Label.c.ChooseObjectFirst}
+                </div>
+                <div class="slds-m-top_xx-small ds-add-button-section-chooseObjectHelpText">
+                    {!$Label.c.ChooseObjectHelpText}
+                </div>
+                <div class="slds-m-top_large ds-add-button-section-chooseObjectHelpText">
+                    <c:Layouts/>
+                </div>
+            </div>
+        </div>
+        <!-- Right hand side button location section -->
+        <div class="slds-col slds-size_1-of-2 ds-button-location-section slds-gutters_medium slds-m-bottom--small">
+            <div class="slds-p-around_large">
+                <div class="ds-button-location-section-header">
+                    {!$Label.c.AddButtonLocation}
+                </div>
+                <div class="slds-m-top_xx-small ds-button-location-section-body">
+                    {!$Label.c.AddButtonPosition}
+                </div>
+                <div class="slds-m-top_xx-small">
+                    <img class="ds-button-location-section-image" src="{!$Resource.EsignatureAddButton}"/>
+                </div>
+                <div class="slds-m-top_xx-small ds-button-location-section-body">
+                    {!$Label.c.AddButtonOrder}
+                </div>
+                <div class="ds-button-location-section-path">
+                    {!$Label.c.AddButtonPath}
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

@@ -16,3 +16,4 @@ package-lock.json
 lintop.txt
 debug.log
 uncrustify.cfg
+jsconfig.json

@@ -2140,6 +2140,22 @@
 		<value>Save</value>
 	</labels>
 	<labels>
+		<fullName>SaveAndClose</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SaveAndClose</shortDescription>
+		<value>Save and Close</value>
+	</labels>
+	<labels>
+		<fullName>SaveAndFinish</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SaveAndFinish</shortDescription>
+		<value>Save and Finish</value>
+	</labels>
+	<labels>
 		<fullName>SearchByName</fullName>
 		<categories>General</categories>
 		<language>en_US</language>
@@ -9162,7 +9178,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Most Commonly Used</shortDescription>
-		<value>MOST COMMONLY USED</value>
+		<value>Most Commonly Used</value>
 	</labels>
 	<labels>
 		<fullName>OtherItems</fullName>
@@ -9170,7 +9186,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Other Items</shortDescription>
-		<value>OTHER ITEMS</value>
+		<value>Other Items</value>
 	</labels>
 	<!-- end of chorus migration -->
 	<labels>
@@ -9388,11 +9404,25 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Are you sure you want to delete this template?</value>
 	</labels>
 	<labels>
+		<fullName>DeleteEnvelopeMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Delete Envelop Message</shortDescription>
+		<value>Are you sure you want to delete this envelope?</value>
+	</labels>
+	<labels>
 		<fullName>TemplateDeleted</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TemplateDeleted</shortDescription>
 		<value>The template has been deleted.</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeDeleted</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EnvelopeDeleted</shortDescription>
+		<value>The envelope has been deleted.</value>
 	</labels>
 	<labels>
 		<fullName>Error</fullName>
@@ -9694,5 +9724,451 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Example Filter By Clause</shortDescription>		
 		<value>Example: CreatedDate ASC</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeTemplates</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Templates</shortDescription>
+		<value>Envelope Templates</value>
+	</labels>
+	<labels>
+		<fullName>CreateTemplate</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Create Template</shortDescription>
+		<value>Create Template</value>
+	</labels>
+	<labels>
+		<fullName>StartFirstEnvelopeConfiguration</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Start First Envelope Configuration</shortDescription>
+		<value>Ready to Start Your First Envelope Configuration?</value>
+	</labels>
+	<labels>
+		<fullName>NotFamiliarWithEnvelopeConfiguration</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Not Familiar With Envelope Configuration</shortDescription>
+		<value>Not familiar with Envelope Configurations?</value>
+	</labels>
+	<labels>
+		<fullName>AddName</fullName>
+		<categories>dec</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Name</shortDescription>
+		<value>Name</value>
+	</labels>
+	<labels>
+		<fullName>CanNotModifiedLater</fullName>
+		<categories>dec</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Can Not Modified Later</shortDescription>
+		<value>This can't be modified later.</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeTemplateUpperCase</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Template in Upper Case</shortDescription>
+		<value>ENVELOPE TEMPLATE</value>
+	</labels>
+	<labels>
+		<fullName>Tagger</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Tagger</shortDescription>
+		<value>Tagger</value>
+	</labels>
+	<labels>
+		<fullName>Documents</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Documents</shortDescription>
+		<value>Documents</value>
+	</labels>
+	<labels>
+		<fullName>MergeFields</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Merge Fields</shortDescription>
+		<value>Merge Fields</value>
+	</labels>
+	<labels>
+		<fullName>AddDocuments</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Documents</shortDescription>
+		<value>Add Documents</value>
+	</labels>
+	<labels>
+		<fullName>AddDocumentsHelpText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Drag and drop files here to upload them.</shortDescription>
+		<value>Drag and drop files here to upload them.</value>
+	</labels>
+	<labels>
+		<fullName>AddDocumentsInfoText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>AddDocumentsInfoText</shortDescription>
+		<value>Add the files that recipients will need to review and sign. You can upload documents from your machine or load documents from your Salesforce record.</value>
+	</labels>
+	<labels>
+		<fullName>UploadDocument</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>UploadDocument</shortDescription>
+		<value>Upload Document</value>
+	</labels>
+	<labels>
+		<fullName>DropDocuments</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Drop Documents</shortDescription>
+		<value>or Drop Documents</value>
+	</labels>
+	<labels>
+		<fullName>DECDataSourceHelpText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Data Source Help Text</shortDescription>
+		<value>Placeholder</value>
+	</labels>
+	<labels>
+		<fullName>SearchPlaceHolder</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Search PlaceHolder</shortDescription>
+		<value>Search...</value>
+	</labels>
+	<labels>
+		<fullName>RenameEnvelopeConfiguration</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RenameEnvelopeConfiguration</shortDescription>
+		<value>Rename Envelope Configuration</value>
+	</labels>
+	<labels>
+		<fullName>AttachDocuments</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Attach Documents toggle text</shortDescription>
+		<value>Attach documents from Salesforce record</value>
+	</labels>
+	<labels>
+		<fullName>DocumentSelection</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Document Selection for Source Files</shortDescription>
+		<value>Document Selection</value>
+	</labels>
+	<labels>
+		<fullName>LatestDocument</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Latest Document selection</shortDescription>
+		<value>Latest Document</value>
+	</labels>
+	<labels>
+		<fullName>FileNameContainsPending</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Contains text selection pending</shortDescription>
+		<value>File Name Contains...</value>
+	</labels>
+	<labels>
+		<fullName>FileNameContains</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Contains text selection</shortDescription>
+		<value>File Name Contains</value>
+	</labels>
+	<labels>
+		<fullName>AllDocuments</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>All Documents selection</shortDescription>
+		<value>All Documents</value>
+	</labels>
+	<labels>
+		<fullName>DecDocumentsVideoText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>How to Add Documents</value>
+	</labels>
+	<labels>
+		<fullName>DecDocumentsVideoLength</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>2 min video</value>
+	</labels>
+	<labels>
+		<fullName>DecDocumentsVideoLink</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>https://docusign.wistia.com/medias/elojgoj4cu</value>
+	</labels>
+	<labels>
+		<fullName>DecRecipientsVideoText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>Add Template Recipients</value>
+	</labels>
+	<labels>
+		<fullName>DecRecipientsVideoLength</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>2 min video</value>
+	</labels>
+	<labels>
+		<fullName>DecRecipientsVideoLink</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>https://docusign.wistia.com/medias/elojgoj4cu</value>
+	</labels>
+	<labels>
+		<fullName>DecAddRecipients</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Recipients</shortDescription>
+		<value>Add Recipients</value>
+	</labels>
+	<labels>
+		<fullName>DecAddRecipientsDescription</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Recipients Description</shortDescription>
+		<value>Set up who will receive this template and what their roles will be. You can add users from your Salesforce org or from external sources.</value>
+	</labels>
+	<labels>
+		<fullName>DecAddRecipientsDescription2</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Recipients Description 2</shortDescription>
+		<value>The recipients you add to view or sign the document will show up here.</value>
+	</labels>
+	<labels>
+		<fullName>DecFromSalesforce</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>From Salesforce</shortDescription>
+		<value>From Salesforce</value>
+	</labels>
+	<labels>
+		<fullName>DecRecordFieldsTitle1</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Dec Record Fields Title 1</shortDescription>
+		<value>Select a dynamic recipient from</value>
+	</labels>
+	<labels>
+		<fullName>DecRecordFieldsTitle2</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Dec Record Fields Title 2</shortDescription>
+		<value>Their name and contact information will be pulled in automatically when the template is used.</value>
+	</labels>
+	<labels>
+		<fullName>DecRecordFields</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Dec Record Fields</shortDescription>
+		<value>Record Fields</value>
+	</labels>
+	<labels>
+		<fullName>DecUsersOrContacts</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Dec Users Or Contacts</shortDescription>
+		<value>Users/Contacts</value>
+	</labels>
+	<labels>
+		<fullName>DecByRole</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>By Role</shortDescription>
+		<value>By Role</value>
+	</labels>
+	<labels>
+		<fullName>DecSigningGroup</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signing Group</shortDescription>
+		<value>Signing Group</value>
+	</labels>
+	<labels>
+		<fullName>DecSMSorPhone</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SMS or Phone</shortDescription>
+		<value>SMS/Phone</value>
+	</labels>
+	<labels>
+		<fullName>DecRoleRecipientTitle</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Role Recipient Title</shortDescription>
+		<value>Add a placeholder recipient that the sender can specify later. You can also hardcode a specific person here.</value>
+	</labels>
+	<labels>
+		<fullName>DecSigningGroupRecipientTitle</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signing Group Recipient Title</shortDescription>
+		<value>Choose a signing group from your organization's DocuSign account. Don't know what a signing group is?</value>
+	</labels>
+	<labels>
+		<fullName>DecSigningGroupLearnMoreLink</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Signing Group Learn More Link</shortDescription>
+		<value>https://support.docusign.com/</value>
+	</labels>
+	<labels>
+		<fullName>DecSearchByGroupNamePlaceHolder</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Search By Group Name PlaceHolder</shortDescription>
+		<value>Search by Group Name..</value>
+	</labels>
+	<labels>
+		<fullName>DecRecordsFieldsLookupLabel</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Records Fields Lookup Label</shortDescription>
+		<value>Select Lookup</value>
+	</labels>
+	<labels>
+		<fullName>DecRelatedListLabel</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Select Related List Label</shortDescription>
+		<value>Select Related List</value>
+	</labels>		
+	<labels>
+		<fullName>Searching</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Searching</shortDescription>
+		<value>Searching...</value>
+	</labels>
+	<labels>
+		<fullName>DecSelectGroup</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Select Group</shortDescription>
+		<value>Select Group</value>
+	</labels>
+	<labels>
+		<fullName>DecEntityLookupRecipientTitle</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Entity Lookup Recipient Title</shortDescription>
+		<value>Add a specific user from your Salesforce Users or Contacts. This user will not be dynamic.</value>
+	</labels>
+	<labels>
+		<fullName>DecSelectUserOrContact</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Select User Or Contact</shortDescription>
+		<value>Select User or Contact</value>
+	</labels>
+	<labels>
+		<fullName>DecAddPrivateMessage</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Private Message</shortDescription>
+		<value>Add Private Message</value>
+	</labels>
+	<labels>
+		<fullName>DecAddAccessAuthentication</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Access Authentication</shortDescription>
+		<value>Add Access Authentication</value>
+	</labels>
+	<labels>
+		<fullName>DecRecipientAction</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Action</shortDescription>
+		<value>Action</value>
+	</labels>
+	<labels>
+		<fullName>InPersonSigner</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>In Person Signer</shortDescription>
+		<value>In Person Signer</value>
+	</labels>
+	<labels>
+		<fullName>EmbeddedSigner</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Embedded Signer</shortDescription>
+		<value>Embedded Signer</value>
 	</labels>
 </CustomLabels>

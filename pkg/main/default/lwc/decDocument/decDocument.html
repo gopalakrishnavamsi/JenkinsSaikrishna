@@ -1,0 +1,44 @@
+<template>
+    <div class="slds-grid slds-p-around_medium"
+        data-id={document.id}
+        ondragstart={itemDragStart}
+        ondragend={itemDragEnd}>
+
+        <div class="slds-col slds-size_1-of-12">
+            <span>
+                <div class="slds-media slds-media_center">
+                    <div class="slds-media__figure">
+                        <lightning-icon
+                                    icon-name="utility:drag_and_drop"
+                                    alternative-text="Drag and Drop"
+                                    variant="neutral"
+                                    size="small"></lightning-icon>
+                        <span class="slds-p-left_small slds-p-right_small">{document.sequence}</span>
+                    </div>
+                </div>
+            </span>
+        </div>
+
+        <div class="slds-col">
+            <!-- Template Document -->
+            <template if:true={isTemplateDocument}>
+                <div onupdatedocument={updateDocument}>
+                    <c-dec-template-document
+                        document={document}>
+                    </c-dec-template-document>
+                </div>
+            </template>
+
+            <!-- Source Files -->
+        <template if:true={isSourceFiles}>
+                <div onupdatedocument={updateDocument}>
+                    <c-dec-source-files
+                        document={document}
+                        index={index}
+                        attach-source-files={attachSourceFiles}>
+                    </c-dec-source-files>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -151,6 +151,52 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+	public static List<Query.Relationship> getLookups(final SObjectType type) {
+		Permissions.verifyIsDocuSignAdministrator();
+		if (type == null) throw new DocuSignException(Label.InvalidType);
+		List<Query.Relationship> result = new List<Query.Relationship>();
+		DescribeSObjectResult typeDesc = type.getDescribe();
+		for (SObjectField f : typeDesc.fields.getMap().values()) {
+			DescribeFieldResult fieldDesc = f.getDescribe();           	
+            SObjectType fieldSourceType = (SObjectType) Collection.head(fieldDesc.getReferenceTo());
+			if (RecipientService.canResolveRecipientType(fieldSourceType)) {
+				result.add(
+					new Query.Relationship(
+						true,
+						fieldDesc.getName(),
+						fieldDesc.getLabel(),
+						String.valueOf(type)
+					)
+				);
+			}
+		}
+
+		return result;		
+	}
+
+	public static List<Query.Relationship> getChildRelationships(final SObjectType type) {
+		Permissions.verifyIsDocuSignAdministrator();
+		if (type == null) throw new DocuSignException(Label.InvalidType);
+		List<Query.Relationship> result = new List<Query.Relationship>();
+		DescribeSObjectResult typeDesc = type.getDescribe();
+        for (Schema.ChildRelationship cr : typeDesc.getChildRelationships()) {
+			DescribeFieldResult sourceField = cr.getField().getDescribe();
+			SObjectType childType = cr.getChildSObject();
+			if (RecipientService.canResolveRelatedRecipients(childType) && String.isNotBlank(cr.getRelationshipName())) {
+				result.add(
+					new Query.Relationship(
+						false,
+						cr.getRelationshipName(),
+						cr.getRelationshipName(),
+						String.valueOf(childType)
+					)					
+				);
+			}
+		}
+
+		return result;
+	}	
+
 	@TestVisible
 	private static String getErrorMessage(final MetadataAPI.SaveResult saveResult) {
 		if (saveResult == null || Collection.isEmpty(saveResult.errors)) {

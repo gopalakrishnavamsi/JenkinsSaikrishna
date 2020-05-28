@@ -956,6 +956,14 @@
 		<enabled>true</enabled>
 	</pageAccesses>
 	<pageAccesses>
+		<apexPage>EnvelopeConfigurationNavigator</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>EnvelopeConfigurationDelete</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
 		<apexPage>GenTemplate</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
@@ -1022,5 +1030,9 @@
 	<tabSettings>
 		<tab>GenTemplate__c</tab>
 		<visibility>Visible</visibility>
+	</tabSettings>
+	<tabSettings>
+		<tab>EnvelopeConfiguration__c</tab>
+		<visibility>Available</visibility>
 	</tabSettings>
 </PermissionSet>

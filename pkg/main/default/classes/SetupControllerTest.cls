@@ -898,5 +898,44 @@ private class SetupControllerTest {
 			System.assertNotEquals(null, result);
 		}
 	}
+
+	@IsTest
+	static void test_queryEnvelopeConfigurationsForDisplay_success() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeConfiguration__c config1 = TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
+			EnvelopeConfiguration__c config2 = TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
+	
+			Test.startTest();
+			List<EnvelopeConfiguration.Listing> listings = SetupController.getEnvelopeConfigurations();
+			Test.stopTest();
+
+			System.assertNotEquals(listings, null);
+			System.assertEquals(listings.size(), 2);
+			System.assertNotEquals(listings[0], null);
+			System.assertEquals(listings[0].id, config1.id);
+			System.assertEquals(listings[0].name, config1.name);
+			System.assertEquals(listings[0].sourceObject, config1.sourceObject__c);
+			System.assertNotEquals(listings[1], null);
+			System.assertEquals(listings[1].id, config2.id);
+			System.assertEquals(listings[1].name, config2.name);
+			System.assertEquals(listings[1].sourceObject, config2.sourceObject__c);			
+		}
+	}
+
+	@IsTest
+	static void test_queryEnvelopeConfigurationsForDisplay_failure() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			EnvelopeConfiguration__c config1 = TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
+			EnvelopeConfiguration__c config2 = TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
+			Test.startTest();
+			try {
+				List<EnvelopeConfiguration.Listing> listings = SetupController.getEnvelopeConfigurations();
+				throw new AssertException('Expected failure');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
 }
 

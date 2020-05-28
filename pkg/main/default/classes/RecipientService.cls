@@ -60,6 +60,11 @@ global with sharing class RecipientService {
 		return result;
 	}
 
+	public static List<SigningGroup> getSigningGroups() {
+		Permissions.verifyIsDocuSignAdministrator();
+		return AccountAPI.getInstance().getSigningGroups();
+	}
+
 	@TestVisible
 	private static ValidationResult validate(
 		final Recipient recipient,

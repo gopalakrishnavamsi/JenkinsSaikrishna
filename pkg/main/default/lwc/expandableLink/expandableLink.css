@@ -1,0 +1,14 @@
+.ds-clear-icon-container {
+    margin-top: 2rem;
+}
+
+.ds-clear-icon {
+    cursor: pointer;
+    opacity:0.7;
+}
+
+.ds-type-icon {
+    margin-top: 2px;
+    padding-right: 7px;
+    opacity:0.7;
+}

@@ -1,0 +1,33 @@
+<template>
+    <lightning-input
+        type="checkbox"
+        checked={attachSourceFiles}
+        onchange={handleToggleSourceFiles}
+        label={label.attachDocuments}>
+    </lightning-input>
+    <template if:true={attachSourceFiles}>
+        <div class="slds-grid slds-m-top_small">
+            <div class="slds-col slds-size_1-of-5">
+                <div class="slds-form-element__label slds-no-flex">{label.documentSelection}</div>
+                <select
+                    class="slds-select"
+                    onchange={handleSourceFilesChange}>
+                    <option value={sourceFilesTypes.LATEST} selected={isLatestSelected}>{label.latestDocument}</option>
+                    <option value={sourceFilesTypes.CONTAINS} selected={isContainsSelected}>{label.fileNameContainsPending}</option>
+                    <option value={sourceFilesTypes.ALL} selected={isAllSelected}>{label.allDocuments}</option>
+                </select>
+            </div>
+
+            <template if:true={isContainsSelected}>
+                <div class="slds-col slds-size_1-of-6 slds-m-left_medium">
+                    <lightning-input
+                        type="text"
+                        value={containsValue}
+                        onchange={handleContainsValue}
+                        label={label.fileNameContains}>
+                    </lightning-input>
+                </div>
+            </template>
+        </div>
+    </template>
+</template>

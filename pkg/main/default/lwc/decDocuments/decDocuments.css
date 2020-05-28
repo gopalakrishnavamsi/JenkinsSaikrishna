@@ -1,0 +1,73 @@
+.ds-addDocuments-information-section {
+    height: 94px;
+    width: 920px;
+}
+
+.ds-addDocuments-information-header {
+    color: var(--lwc-colorTextActionLabelActive);
+    font-size: var(--lwc-fontSize7);
+    font-weight: var(--lwc-fontWeightBold);
+}
+
+.ds-addDocuments-information-text {
+    color: rgb(62, 62, 60);
+    font-size: var(--lwc-fontSize3);
+    width: 729px;
+}
+
+.ds-addDocuments-dropDocuments-text {
+    color: rgb(80, 81, 77);
+    font-size: var(--lwc-fontSize3);
+    width: 729px;
+}
+
+.ds-addDocuments-details-section {
+    background: rgb(255, 255, 255);
+    border-radius: 4px;
+    border: 1px solid rgb(221, 219, 218);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.ds-addDocuments-details-header {
+    background: rgb(243, 242, 242);
+    border-radius: 4px 4px 0px 0px;
+    height: 66px;
+}
+
+.ds-addDocuments-details-header-text {
+    color: rgb(5, 5, 5);
+    font-size: var(--lwc-fontSize5);
+    font-weight: bold;
+}
+
+.ds-addDocuments-details-body {
+    border-radius: 4px;
+    border: 1px solid rgb(221, 219, 218);
+    height: 169px;
+    width: 836px;
+}
+
+.ds-addDocuments-sequence-whenEmpty {
+    padding-top: 70px;
+}
+
+.ds-addDocuments-close-whenEmpty {
+    padding-top: 70px;
+}
+
+.ds-addDocuments-details-noDocuments-header {
+    font-size: var(--lwc-fontSize5);
+}
+
+.ds-addDocuments-details-noDocuments-text {
+    font-size: var(--lwc-fontSize3);
+}
+
+.ds-addDocuments-details-noDocuments-center {
+    align-self: center;
+}
+
+.over {
+    border-style: dashed;
+    border-color: green;
+}

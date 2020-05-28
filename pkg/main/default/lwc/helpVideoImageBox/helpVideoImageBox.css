@@ -1,0 +1,30 @@
+.ds-help-video-box {
+    position: relative;
+    text-align: center;
+    background: rgba(62, 62, 60, 0.24);
+}
+
+.ds-help-video-topic {
+    position: absolute;
+    font-weight: bold;
+    cursor: pointer;
+    top: 8px;
+    left: 16px;
+    color: #fff;
+    font-size: 16px;
+    text-align: left;
+    width: 130px;
+    height: 46px;
+    overflow: hidden;
+}
+
+.ds-help-video-time {
+    cursor: pointer;
+    color: #d6fb00;
+    height: 15px;
+    letter-spacing: 0;
+    width: 109px;
+    left: 22px;
+    bottom: 13px;
+    position: absolute;
+}

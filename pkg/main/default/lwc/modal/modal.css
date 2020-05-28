@@ -1,0 +1,15 @@
+.ds-modal-header-title {
+    font-weight: var(--lwc-fontFamilyheading);
+}
+
+.ds-modal-container {
+    width: var(--lwc-sizeXLarge);
+    min-height: 538px;
+}
+
+.ds-modal-header {
+    height: 55px;
+}
+.slds-modal__content{
+    overflow: initial;
+}

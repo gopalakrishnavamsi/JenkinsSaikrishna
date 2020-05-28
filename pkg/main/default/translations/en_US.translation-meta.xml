@@ -4756,11 +4756,11 @@
 	</customLabels>
 	<customLabels>
 		<name>MostCommonlyUsed</name>
-		<label>MOST COMMONLY USED</label>
+		<label>Most Commonly Used</label>
 	</customLabels>
 	<customLabels>
 		<name>OtherItems</name>
-		<label>OTHER ITEMS</label>
+		<label>Other Items</label>
 	</customLabels>
 	<!-- End of Chorus Gen Labels -->
 	<customLabels>
@@ -4880,8 +4880,16 @@
 		<name>DeleteTemplateMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>Are you sure you want to delete this envelope?</label>
+		<name>DeleteEnvelopeMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>The template has been deleted.</label>
 		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>The envelope has been deleted.</label>
+		<name>EnvelopeDeleted</name>
 	</customLabels>
 	<customLabels>
 		<label>Error</label>
@@ -5055,6 +5063,238 @@
 		<label>Example: CreatedDate ASC</label>
 		<name>ExampleOrderByClause</name>	
 	</customLabels>
+	<customLabels>
+		<label>Envelope Templates</label>
+		<name>EnvelopeTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Create Template</label>
+		<name>CreateTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Ready to Start Your First Envelope Configuration?</label>
+		<name>StartFirstEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Not familiar with Envelope Configurations?</label>
+		<name>NotFamiliarWithEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Name</label>
+		<name>AddName</name>
+	</customLabels>
+	<customLabels>
+		<label>This can't be modified later.</label>
+		<name>CanNotModifiedLater</name>
+	</customLabels>
+	<customLabels>
+		<label>ENVELOPE TEMPLATE</label>
+		<name>EnvelopeTemplateUpperCase</name>
+	</customLabels>
+	<customLabels>
+		<label>Placeholder</label>
+		<name>DECDataSourceHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Search...</label>
+		<name>SearchPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Attach documents from Salesforce record</label>
+		<name>AttachDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Selection</label>
+		<name>DocumentSelection</name>
+	</customLabels>
+	<customLabels>
+		<label>Latest Document</label>
+		<name>LatestDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>File Name Contains...</label>
+		<name>FileNameContainsPending</name>
+	</customLabels>
+	<customLabels>
+		<label>File Name Contains</label>
+		<name>FileNameContains</name>
+	</customLabels>
+	<customLabels>
+		<label>All Documents</label>
+		<name>AllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>How to Add Documents</label>
+		<name>DecDocumentsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 min video</label>
+		<name>DecDocumentsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>DecDocumentsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Template Recipients</label>
+		<name>DecRecipientsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 min video</label>
+		<name>DecRecipientsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>DecRecipientsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Recipients</label>
+		<name>DecAddRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Set up who will receive this template and what their roles will be. You can add users from your Salesforce org or from external sources.</label>
+		<name>DecAddRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>The recipients you add to view or sign the document will show up here.</label>
+		<name>DecAddRecipientsDescription2</name>
+	</customLabels>
+	<customLabels>
+		<label>From Salesforce</label>
+		<name>DecFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Select a dynamic recipient from</label>
+		<name>DecRecordFieldsTitle1</name>
+	</customLabels>
+	<customLabels>
+		<label>Their name and contact information will be pulled in automatically when the template is used.</label>
+		<name>DecRecordFieldsTitle2</name>
+	</customLabels>
+	<customLabels>
+		<label>Record Fields</label>
+		<name>DecRecordFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Users/Contacts</label>
+		<name>DecUsersOrContacts</name>
+	</customLabels>
+	<customLabels>
+		<label>By Role</label>
+		<name>DecByRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Signing Group</label>
+		<name>DecSigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>SMS/Phone</label>
+		<name>DecSMSorPhone</name>
+	</customLabels>
+	<customLabels>
+		<label>Add a placeholder recipient that the sender can specify later. You can also hardcode a specific person here.</label>
+		<name>DecRoleRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Choose a signing group from your organization's DocuSign account. Don't know what a signing group is?</label>
+		<name>DecSigningGroupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/</label>
+		<name>DecSigningGroupLearnMoreLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Search by Group Name..</label>
+		<name>DecSearchByGroupNamePlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Searching...</label>
+		<name>Searching</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Group</label>
+		<name>DecSelectGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>Add a specific user from your Salesforce Users or Contacts. This user will not be dynamic.</label>
+		<name>DecEntityLookupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Select User or Contact</label>
+		<name>DecSelectUserOrContact</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Private Message</label>
+		<name>DecAddPrivateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Access Authentication</label>
+		<name>DecAddAccessAuthentication</name>
+	</customLabels>
+	<customLabels>
+		<label>Action</label>
+		<name>DecRecipientAction</name>
+	</customLabels>
+	<customLabels>
+		<label>In Person Signer</label>
+		<name>InPersonSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>Embedded Signer</label>
+		<name>EmbeddedSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>Save and Close</label>
+		<name>SaveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>Save and Finish</label>
+		<name>SaveAndFinish</name>
+	</customLabels>
+	<customLabels>
+		<label>Tagger</label>
+		<name>Tagger</name>
+	</customLabels>
+	<customLabels>
+		<label>Documents</label>
+		<name>Documents</name>
+	</customLabels>
+	<customLabels>
+		<label>Merge Fields</label>
+		<name>MergeFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Documents</label>
+		<name>AddDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Drag and drop files here to upload them.</label>
+		<name>AddDocumentsHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Add the files that recipients will need to review and sign. You can upload documents from your machine or load documents from your Salesforce record.</label>
+		<name>AddDocumentsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Upload Document</label>
+		<name>UploadDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>or Drop Document</label>
+		<name>DropDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Rename Envelope Configuration</label>
+		<name>RenameEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Lookup</label>
+		<name>DecRecordsFieldsLookupLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Select Related List</label>
+		<name>DecRelatedListLabel</name>
+	</customLabels>	
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

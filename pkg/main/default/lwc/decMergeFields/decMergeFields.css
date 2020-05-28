@@ -1,0 +1,15 @@
+.ds-addMergeFields-information-section {
+    height: 91px;
+}
+
+.ds-addMergeFields-information-header {
+    color: var(--lwc-colorTextActionLabelActive);
+    font-size: var(--lwc-fontSize7);
+    font-weight: var(--lwc-fontWeightBold);
+}
+
+.ds-addMergeFields-information-text {
+    color: rgb(62, 62, 60);
+    font-size: var(--lwc-fontSize3);
+    width: 729px;
+}

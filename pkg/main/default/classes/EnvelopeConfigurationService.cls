@@ -2,6 +2,7 @@ public with sharing class EnvelopeConfigurationService {
 
 	@TestVisible
 	private static final EnvelopeConfigurationService.Database DB = new EnvelopeConfigurationService.Database();
+	private static final SObjectType ENVELOPE_CONFIGURATION_TYPE = EnvelopeConfiguration__c.getSObjectType();
 
 	private class Database {
 
@@ -467,6 +468,27 @@ public with sharing class EnvelopeConfigurationService {
 			]));
 		}
 
+		public List<EnvelopeConfiguration.Listing> queryEnvelopeConfigurations() {
+			Permissions.verifyIsQueryable(ENVELOPE_CONFIGURATION_TYPE, new List<String> {
+				'Id', 'Name', 'LastModifiedDate',
+				Application.namespacePrefix + 'SourceObject__c'
+			});
+			List<EnvelopeConfiguration.Listing> configurationList = new List<EnvelopeConfiguration.Listing>();
+			for (EnvelopeConfiguration__c template : [
+								SELECT Id, Name, SourceObject__c, LastModifiedDate
+				FROM EnvelopeConfiguration__c
+				ORDER BY LastModifiedDate DESC
+				LIMIT 50000
+			]) {
+				configurationList.add(new EnvelopeConfiguration.Listing(
+					template.Id,
+					template.Name,
+					template.SourceObject__c,
+					template.LastModifiedDate));
+			}
+			return configurationList;
+		}		
+
 		public EnvelopeConfiguration updateEnvelopeConfiguration(final EnvelopeConfiguration envelopeConfiguration) {
 			Permissions.verifyIsUpdateable(EnvelopeConfiguration__c.getSObjectType(), new List<String> {
 				'Name',
@@ -555,18 +577,26 @@ public with sharing class EnvelopeConfigurationService {
 				Application.namespacePrefix + 'Type__c'
 			});
 
+			List<EnvelopeConfigurationDocument__c> documents = null;
+			List<EnvelopeConfigurationRecipient__c> recipients = null;
+			
 			if (envelopeConfiguration != null && envelopeConfiguration.id != null) {
 				update convert(envelopeConfiguration, true);
 
 				if (Collection.isNotEmpty(envelopeConfiguration.documents)) {
-					upsert convert(envelopeConfiguration.id, envelopeConfiguration.documents);
+					documents = convert(envelopeConfiguration.id, envelopeConfiguration.documents);
+					upsert documents;
 				}
 
 				if (Collection.isNotEmpty(envelopeConfiguration.recipients)) {
-					upsert convert(envelopeConfiguration.id, envelopeConfiguration.recipients);
+					recipients = convert(envelopeConfiguration.id, envelopeConfiguration.recipients);
+					upsert recipients;
 				}
 			}
-			return envelopeConfiguration;
+
+			return (EnvelopeConfiguration) envelopeConfiguration
+				.withDocuments(convert(documents))
+				.withRecipients(convert(recipients));
 		}
 
 		public UUID queryDocuSignId(final Id envelopeConfigurationId) {
@@ -1028,6 +1058,12 @@ public with sharing class EnvelopeConfigurationService {
 
 		return ec.withRecipients(mergeRecipients(ec.recipients));
 	}
+
+	public static List<EnvelopeConfiguration.Listing> queryEnvelopeConfigurationsForDisplay() {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		return DB.queryEnvelopeConfigurations();
+	}	
 
 	public static EnvelopeConfiguration updateEnvelopeConfiguration(final EnvelopeConfiguration envelopeConfiguration) {
 		Permissions.verifyIsDocuSignAdministrator();

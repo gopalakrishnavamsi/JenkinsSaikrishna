@@ -1021,4 +1021,94 @@ private class MetadataServiceTest {
 
 		System.assertNotEquals(null, result);
 	}
+
+	@IsTest
+	static void test_getLookups_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) { 
+			SObjectType opportunityType = Opportunity.getSObjectType();
+			Test.startTest();
+			List<Query.Relationship> results = MetadataService.getLookups(opportunityType);
+			Test.stopTest();
+			System.assert(Collection.isNotEmpty(results));
+			System.assert(String.isNotEmpty(results[0].name));
+			System.assert(String.isNotEmpty(results[0].label));
+			System.assert(String.isNotEmpty(results[0].relatesTo));
+			System.assertEquals(results[0].isLookup, true);
+		}
+	}
+
+	@IsTest
+	static void test_childRelationships_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) { 
+			SObjectType opportunityType = Opportunity.getSObjectType();
+			Test.startTest();
+			List<Query.Relationship> results = MetadataService.getChildRelationships(opportunityType);
+			Test.stopTest();
+			System.assert(Collection.isNotEmpty(results), results);
+			System.assert(String.isNotEmpty(results[0].name));
+			System.assert(String.isNotEmpty(results[0].label));
+			System.assert(String.isNotEmpty(results[0].relatesTo));
+			System.assertEquals(results[0].isLookup, false);
+		}
+	}	
+
+	@IsTest
+	static void test_getLookups_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser()) { 
+			SObjectType opportunityType = Opportunity.getSObjectType();
+			Test.startTest();
+			try {
+				List<Query.Relationship> results = MetadataService.getLookups(opportunityType);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getLookups_invalid() {
+		System.runAs(UserMock.createDocuSignAdministrator()) { 
+			Test.startTest();
+			try {
+				SObjectType type = null;
+				List<Query.Relationship> results = MetadataService.getLookups(type);
+				throw new AssertException('Expected failure');
+			} catch (DocusignException ex) {
+				System.assertEquals(Label.InvalidType, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}	
+
+	@IsTest
+	static void test_getChildRelationships_invalid() {
+		System.runAs(UserMock.createDocuSignAdministrator()) { 
+			Test.startTest();
+			try {
+				SObjectType type = null;
+				List<Query.Relationship> results = MetadataService.getChildRelationships(type);
+				throw new AssertException('Expected failure');
+			} catch (DocusignException ex) {
+				System.assertEquals(Label.InvalidType, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}		
+	
+	@IsTest
+	static void test_getChildRelationships_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser()) { 
+			SObjectType opportunityType = Opportunity.getSObjectType();
+			Test.startTest();
+			try {
+				List<Query.Relationship> results = MetadataService.getChildRelationships(opportunityType);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}	
 }

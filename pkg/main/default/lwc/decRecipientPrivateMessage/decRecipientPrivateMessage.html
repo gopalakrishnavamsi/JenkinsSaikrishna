@@ -1,0 +1,8 @@
+<template>
+    <c-expandable-link label={Labels.decAddPrivateMessage} icon-name="utility:quick_text">
+        <div slot='content'>
+            <lightning-textarea value={recipientNote} name="privateMessage" label={Labels.privateMessage}
+                                onchange={updateNote}></lightning-textarea>
+        </div>
+    </c-expandable-link>
+</template>

@@ -3,9 +3,13 @@
     <apex:includeLightning/>
     <apex:slds/>
     <apex:includeScript value="{!$Resource.stringUtils}"/>
+    <apex:stylesheet value="{!$Resource.dstooltip}"/>
 
     <apex:form>
         <apex:actionFunction name="redirectToNewTemplateUrl" action="{!redirectOnNewTemplate}" reRender="">
+            <apex:param name="id" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction name="redirectToNewConfigUrl" action="{!redirectToNewConfigUrl}" reRender="">
             <apex:param name="id" value=""/>
         </apex:actionFunction>
     </apex:form>
@@ -175,7 +179,13 @@
         if (templateId != null) {
           redirectToNewTemplateUrl(templateId);
         }
-      }
+      };
+
+      var navigateToNewEnvelopeConfigUrl = function (configId) {
+        if (configId != null) {
+          redirectToNewConfigUrl(configId);
+        }
+      };
 
       $Lightning.use('{!JSENCODE(namespace)}:SetupApp', function () {
         $Lightning.createComponent('{!JSENCODE(namespace)}:Setup', {
@@ -183,7 +193,8 @@
           beginSpringOAuth: beginSpringOAuth,
           showSetupComponent: showSetupComponent,
           showSetupSpinner: showSetupSpinner,
-          navigateToNewTemplateUrl: navigateToNewTemplateUrl
+          navigateToNewTemplateUrl: navigateToNewTemplateUrl,
+          navigateToNewEnvelopeConfigUrl: navigateToNewEnvelopeConfigUrl
         }, 'ds-unifiedAppSetupSection', function (component, status, errorMessage) {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': navigateToURL});
         });

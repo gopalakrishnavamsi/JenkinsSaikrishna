@@ -1,0 +1,51 @@
+<template>
+    <div class="ds-envelopeConfig-setup"
+         onupdate={updateLocalData}>
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+        </template>
+        <c-dec-header
+                icon="standard:email_chatter"
+                header-name={label.envelopeConfiguration}
+                sub-header-name={configurationName}
+                modal-title={label.renameEnvelopeConfiguration}
+                is-first-step={documentsStep}
+                is-final-step={customButtonStep}
+                onmodalsave={onRenameSave}
+                onsaveandclose={handleSaveAndClose}
+                onnext={handleNext}
+                onback={handleBack}>
+        </c-dec-header>
+        <div class="slds-m-top_large ds-envelopeConfig-margin">
+            <c-progress-bar
+                    current-step={currentStep}
+                    steps={steps}
+                    onclickprogressstep={handleOnClickProgressStep}>
+            </c-progress-bar>
+            <template if:true={documentsStep}>
+                <div onupdatetemplatedocuments={handleUpdateDocument}>
+                    <c-dec-documents
+                        documents={documents}
+                        attach-source-files={attachSourceFiles}
+                        record-id={recordId}>
+                    </c-dec-documents>
+                </div>
+            </template>
+            <template if:true={recipientsStep}>
+                <c-dec-recipients source-object={sourceObject}></c-dec-recipients>
+            </template>
+            <template if:true={mergeFieldsStep}>
+                <c-dec-merge-fields></c-dec-merge-fields>
+            </template>
+            <template if:true={taggerStep}>
+                Step 4
+            </template>
+            <template if:true={optionsStep}>
+                Step 5
+            </template>
+            <template if:true={customButtonStep}>
+                Step 6
+            </template>
+        </div>
+    </div>
+</template>

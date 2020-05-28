@@ -7,6 +7,7 @@
     "doc": "doc"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "eslint": "^5.14.1",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -25,9 +26,9 @@
     "updateOrg": "sfdx force:source:push",
     "postInstall": "sfdx force:apex:execute -f ./etc/postinstall.apex -u dfsle-scratch-org",
     "generatePassword": "sfdx force:user:password:generate -u dfsle-scratch-org",
-    "openOrg":"sfdx force:org:open",
-    "installPackage":"sfdx force:package:install",
-    "setup":"npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg",    
+    "openOrg": "sfdx force:org:open",
+    "installPackage": "sfdx force:package:install",
+    "setup": "npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg",
     "lint": "eslint ./;",
     "test": "mocha -r jsdom-global/register"
   },
@@ -48,6 +49,5 @@
       "eslint",
       "git add"
     ]
-  },
-  "dependencies": {}
+  }
 }

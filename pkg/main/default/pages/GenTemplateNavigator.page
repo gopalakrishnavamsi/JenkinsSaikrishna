@@ -4,6 +4,7 @@
     <apex:includeLightning/>
     <apex:includeScript value="{!$Resource.navUtils}"/>
     <apex:includeScript value="{!$Resource.stringUtils}"/>
+    <apex:stylesheet value="{!$Resource.dstooltip}"/>
     <apex:slds/>
 
     <apex:form>

@@ -1,0 +1,40 @@
+<aura:component description="DECWizard" extends="c:RootContainer">
+
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
+
+    <!-- Lightning message service - Subscriber -->
+    <lightning:messageChannel type="DecError__c"
+                              onMessage="{!c.handleDecErrorMessage}"
+                              scope="APPLICATION"/>
+
+    <aura:attribute type="Id" name="recordId"/>
+    <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="products" type="Product[]" access="private"/>
+    <aura:attribute name="permission" type="Object" access="private"/>
+    <aura:attribute name="showWizard" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="loading" type="Boolean" default="false" access="private"/>
+
+    <c:Toast aura:id="ds-toast" visualforce="true"/>
+    <!-- override RootContainer component attributes -->
+    <aura:set attribute="showDefaultSpinner" value="false"/>
+
+    <!-- handlers -->
+    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
+
+    <aura:if isTrue="{!or(v.fetchingOAuthStatus, v.loading)}">
+        <div class="ds-env-configuration-setup-spinner">
+            <c:BlueSpinner/>
+        </div>
+    </aura:if>
+
+    <aura:if isTrue="{!not(v.isAuthorized)}">
+        <c:AuthorizeApplication isAuthorized="{!v.isAuthorized}"
+                                fetchingOAuthStatus="{!v.fetchingOAuthStatus}"
+                                products="{!v.products}" permission="{!v.permission}"/>
+        <aura:set attribute="else">
+            <!-- all lwc child component will be here -->
+            <c:decSetupConfig recordId ="{!v.recordId}"/>
+        </aura:set>
+    </aura:if>
+</aura:component>

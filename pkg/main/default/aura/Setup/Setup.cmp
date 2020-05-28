@@ -11,6 +11,7 @@
     <aura:attribute name="isTrial" type="Boolean" access="private"/>
     <aura:attribute name="isTrialExpired" type="Boolean" access="private"/>
     <aura:attribute name="navigateToNewTemplateUrl" type="Object"/>
+    <aura:attribute name="navigateToNewEnvelopeConfigUrl" type="Object"/>
 
     <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.onInitialize}"/>
 

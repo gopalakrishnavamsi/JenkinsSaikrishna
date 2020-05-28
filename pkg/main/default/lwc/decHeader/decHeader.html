@@ -1,0 +1,80 @@
+<template>
+    <div class="ds-envelopeConfig-header-container slds-page-header slds-m-bottom_medium">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container">
+                            <lightning-icon icon-name={icon} alternative-text={headerName}></lightning-icon>
+                            <span class="slds-assistive-text">{headerName}</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="ds-envelopeConfig-header-upperText">{headerName}</span>
+                                    <span class="slds-page-header__title slds-truncate ds-envelopeConfig-header-name">
+                                        {subHeaderName}
+                                        <lightning-button-icon
+                                                class="slds-m-left_xx-small"
+                                                icon-name="utility:edit"
+                                                variant="bare"
+                                                alternative-text="Edit"
+                                                onclick={openRenameModal}>
+                                        </lightning-button-icon>
+                                    </span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <lightning-button label={saveLabel}
+                                          variant={saveLabelClass}
+                                          onclick={handleSaveAndClose}></lightning-button>
+                        <lightning-button label={label.back}
+                                          variant="neutral"
+                                          class="slds-p-left_large"
+                                          onclick={handleBack}
+                                          disabled={isFirstStep}></lightning-button>
+                        <lightning-button label={label.next}
+                                          variant="brand"
+                                          class="slds-p-left--xx-small"
+                                          onclick={handleNext}
+                                          disabled={isFinalStep}></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <c-modal
+            header={modalTitle}
+            show-modal={showRenameModal}
+            onclose={closeRenameModal}>
+        <div slot="content" class="slds-p-around_medium">
+            <lightning-input
+                    label={label.NameLabel}
+                    value={nameCopy}
+                    max-length="80"
+                    onchange={handleNameChange}>
+            </lightning-input>
+        </div>
+        <div slot="footer">
+            <lightning-button
+                    label={label.cancel}
+                    onclick={closeRenameModal}>
+            </lightning-button>
+            <lightning-button
+                    variant="brand"
+                    label={label.save}
+                    disabled={disableModalSave}
+                    onclick={saveRenameModal}
+                    class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+    </c-modal>
+</template>

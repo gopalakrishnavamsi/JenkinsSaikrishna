@@ -1108,6 +1108,61 @@ private class RecipientServiceTest {
 	}
 
 	@IsTest
+	static void test_getSigningGroups() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			List<SigningGroup> signingGroups1 = RecipientService.getSigningGroups();
+			// Call again to get cached version
+			List<SigningGroup> signingGroups2 = RecipientService.getSigningGroups();
+			Test.stopTest();
+
+			System.assertNotEquals(null, signingGroups1);
+			System.assertEquals(3, signingGroups1.size());
+			System.assert(signingGroups1 === signingGroups2); // Check reference equality
+
+			System.assertNotEquals(null, signingGroups1[0].id);
+			System.assertEquals('SG1', signingGroups1[0].name);
+			System.assert(signingGroups1[0].isValid);
+			System.assertNotEquals(null, signingGroups1[0].members);
+			System.assertEquals(2, signingGroups1[0].members.size());
+			System.assertNotEquals(null, signingGroups1[0].members[0].username);
+			System.assertNotEquals(null, signingGroups1[0].members[0].email);
+			System.assertNotEquals(null, signingGroups1[0].members[1].username);
+			System.assertNotEquals(null, signingGroups1[0].members[1].email);
+
+			System.assertNotEquals(null, signingGroups1[1].id);
+			System.assertEquals('SG2', signingGroups1[1].name);
+			System.assert(!signingGroups1[1].isValid);
+			System.assertNotEquals(null, signingGroups1[1].members);
+			System.assertEquals(0, signingGroups1[1].members.size());
+
+			System.assertNotEquals(null, signingGroups1[2].id);
+			System.assertEquals('SG3', signingGroups1[2].name);
+			System.assert(signingGroups1[2].isValid);
+			System.assertNotEquals(null, signingGroups1[2].members);
+			System.assertEquals(1, signingGroups1[2].members.size());
+			System.assertNotEquals(null, signingGroups1[2].members[0].username);
+			System.assertNotEquals(null, signingGroups1[2].members[0].email);
+		}
+	}
+
+
+	@IsTest
+	static void test_getSigningGroups_unauthorized() {
+		System.runAs(UserMock.createDocuSignSender()) {
+			Test.startTest();
+			try {
+				List<SigningGroup> signingGroups = RecipientService.getSigningGroups();
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}	
+
+	@IsTest
 	static void test_resolveRecipients_unauthorized() {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();

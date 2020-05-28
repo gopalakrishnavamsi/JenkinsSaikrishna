@@ -397,4 +397,33 @@ global class EnvelopeConfiguration {
 				required);
 		}
 	}
+
+	public EnvelopeConfiguration withMergeFields(final List<Tab> mergeFields) {
+		this.mergeFields = mergeFields == null ? new List<Tab>() : mergeFields;
+		return this;
+	}
+
+	public class Listing {
+		@AuraEnabled
+		public Id id { get; private set; }
+		@AuraEnabled
+		public String name { get; private set; }
+		@AuraEnabled
+		public String sourceObject { get; private set; }
+		@AuraEnabled
+		public Datetime lastModifiedDate { get; private set; }
+
+		public Listing(
+			final Id id,
+			final String name,
+			final String sourceObject,
+			final Datetime lastModifiedDate) {
+
+			this.id = id;
+			this.name = name;
+			this.sourceObject = sourceObject;
+			this.lastModifiedDate = lastModifiedDate;
+		}
+	}
+
 }

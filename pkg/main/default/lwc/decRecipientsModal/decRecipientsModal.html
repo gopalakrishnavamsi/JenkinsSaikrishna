@@ -1,0 +1,53 @@
+<template>
+    <c-modal
+            header={Labels.addRecipient}
+            show-modal={isOpen}
+            onclose={closeModal}>
+        <div slot="content">
+            <lightning-layout>
+                <lightning-layout-item>
+                    <div class="ds-recipient-type-selection">
+                        <lightning-vertical-navigation onselect={handleTypeChange}>
+                            <lightning-vertical-navigation-section label={Labels.decFromSalesforce}>
+                                <lightning-vertical-navigation-item label={Types.LookupRecipient.label}
+                                                                    name={Types.LookupRecipient.value}>
+                                </lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label={Types.RelatedRecipient.label}
+                                                                    name={Types.RelatedRecipient.value}>
+                                </lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label={Types.EntityLookup.label}
+                                                                    name={Types.EntityLookup.value}>
+                                </lightning-vertical-navigation-item>
+                            </lightning-vertical-navigation-section>
+                            <lightning-vertical-navigation-section label={Labels.otherSourcesText}>
+                                <lightning-vertical-navigation-item label={Types.Role.label}
+                                                                    name={Types.Role.value}>
+                                </lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label={Types.SigningGroup.label}
+                                                                    name={Types.SigningGroup.value}>
+                                </lightning-vertical-navigation-item>
+                            </lightning-vertical-navigation-section>
+                        </lightning-vertical-navigation>
+                    </div>
+                </lightning-layout-item>
+                <div class="ds-panel-separator"></div>
+                <lightning-layout-item class="slds-p-around_small">
+                    <c-dec-recipient-details onrecipientupdate={handleRecipientUpdate} source-object={sourceObject} recipient={privateRecipient} type={selectedType}></c-dec-recipient-details>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <div slot="footer">
+            <lightning-button
+                    label={Labels.cancel}
+                    variant="neutral"
+                    onclick={closeModal}>
+            </lightning-button>
+            <span class="slds-p-left_xx-small"></span>
+            <lightning-button
+                    label={Labels.add}
+                    onclick={saveRecipient}
+                    variant="brand">
+            </lightning-button>
+        </div>
+    </c-modal>
+</template>

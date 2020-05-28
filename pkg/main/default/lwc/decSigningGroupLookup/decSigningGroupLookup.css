@@ -1,0 +1,7 @@
+.pillSize {
+    width: 100%;
+}
+.ds-lookup-listbox{
+    min-height:40px;
+    margin-top:0px !important
+}

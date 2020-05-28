@@ -64,18 +64,18 @@ window.navUtils = (function () {
    */
 
   var navigateToUrl = function (url) {
-      var navEvt = $A.get('e.force:navigateToURL');
-      if (!$A.util.isEmpty(navEvt)) {
-        navEvt.setParams({
-          'url': url
-        });
-        navEvt.fire();
-      }
+    var navEvt = $A.get('e.force:navigateToURL');
+    if (!$A.util.isEmpty(navEvt)) {
+      navEvt.setParams({
+        'url': url
+      });
+      navEvt.fire();
+    }
   };
 
   /**
-  * Checks to see if users current browser is running IE 11 or earlier. 
-  */
+   * Checks to see if users current browser is running IE 11 or earlier.
+   */
 
   var isIE = function isIE() {
     var agent = window.navigator.userAgent;

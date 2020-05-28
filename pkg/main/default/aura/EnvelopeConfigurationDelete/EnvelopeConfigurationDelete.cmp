@@ -1,0 +1,69 @@
+<aura:component controller="EnvelopeConfigurationController" extends="c:RootContainer">
+    <!-- load required scripts -->
+    <ltng:require scripts="{!join(',', $Resource.uiHelper, $Resource.stringUtils, $Resource.navUtils)}"
+                  afterScriptsLoaded="{!c.onLoad}"/>
+
+    <!-- component public attributes -->
+    <aura:attribute name="namespace" type="String"/>
+    <aura:attribute name="envelopeConfigurationId" type="Id"/>
+    <aura:attribute name="invokedFromSetupPage" type="Boolean" default="false"/>
+
+    <!-- component private attributes -->
+    <aura:attribute name="envelopeConfiguration" type="Object" access="private"/>
+    <aura:attribute name="envelopeConfigurationRecord" type="Object" access="private"/>
+    <aura:attribute name="message" type="String" access="private"/>
+    <aura:attribute name="mode" type="String" access="private"/>
+    <aura:attribute name="showToast" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="loading" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="uiHelper" type="Object" access="private"/>
+
+    <!-- override RootContainer component attributes -->
+    <aura:set attribute="showDefaultSpinner" value="false"/>
+
+    <!-- register events -->
+    <aura:registerEvent name="reloadEnvelopeConfigurations" type="c:ReloadEnvelopeConfigurations"/>
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+
+    <!-- event handlers -->
+    <aura:handler name="strike_evt_modalCloseButtonClicked" event="c:strike_evt" action="{!c.cancelClicked}"/>
+
+    <force:recordData recordId="{!v.envelopeConfigurationId}"
+                      targetRecord="{!v.envelopeConfiguration}"
+                      targetFields="{!v.envelopeConfigurationRecord}"
+                      fields="Id, Name"/>
+
+    <c:strike_modal aura:id="envelopeConfigurationDelete"
+                    title="{!v.envelopeConfigurationRecord.Name}"
+                    showModal="true"
+                    showHeader="true"
+                    showClose="true">
+
+        <aura:if isTrue="{!v.loading}">
+            <div class="ds-envelope-configuration-delete-spinner">
+                <c:BlueSpinner/>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-scope slds-p-horizontal_xx-large">
+                    <div class="slds-grid slds-grid_vertical">
+                        <div class="slds-col">
+                            <div class="slds-text-align_center slds-text-body_regular">
+                                {!$Label.c.DeleteEnvelopeMessage}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aura:set>
+        </aura:if>
+
+        <!-- modal footer buttons -->
+        <aura:set attribute="footerButtons">
+            <lightning:button class="slds-button slds-button_neutral" onclick="{!c.cancelClicked}"
+                              label="{!$Label.c.Cancel}">
+            </lightning:button>
+            <lightning:button class="slds-button slds-button_destructive" onclick="{!c.deleteClicked}"
+                              label="{!$Label.c.DeleteButtonLabel}" disabled="{!v.loading}"/>
+        </aura:set>
+
+    </c:strike_modal>
+</aura:component>

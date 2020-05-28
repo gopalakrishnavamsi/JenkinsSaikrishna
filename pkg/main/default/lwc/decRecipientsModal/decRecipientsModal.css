@@ -1,0 +1,9 @@
+.ds-recipient-type-selection {
+    width: 211px;
+    height: 384px
+}
+
+.ds-panel-separator {
+    background: var(--lwc-colorBorder);
+    width: 1px;
+}

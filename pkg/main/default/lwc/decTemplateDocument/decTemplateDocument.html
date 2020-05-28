@@ -1,0 +1,30 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+                <span>
+                    <div class="slds-media slds-media_center">
+                        <div class="slds-media__figure">
+                            <c-file-extension-icon extension={document.extension} size="medium"></c-file-extension-icon>
+                        </div>
+                        <div class="slds-media__content slds-has-flexi-truncate">
+                            <p class="slds-truncate" title={document.name}>
+                                <a href="javascript:void(0)" onclick={previewFile}>{document.name}</a>
+                            </p>
+                            <p class="slds-text-body__small slds-text-color_weak">{fileSize} &bull; {document.extension}</p>
+                        </div>
+                    </div>
+                </span>
+        </div>
+        <div class="slds-col">
+            <span>
+                <lightning-button-icon icon-name="utility:down"
+                                       alternative-text="More Actions"
+                                       title="More Actions"
+                                       variant="neutral"
+                                       class="slds-float_right"
+                                       size="small">
+                </lightning-button-icon>
+            </span>
+        </div>
+    </div>
+</template>

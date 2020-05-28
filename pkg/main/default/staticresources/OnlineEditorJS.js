@@ -2,10 +2,10 @@
 /* exported prepareOnlineEditorDocumentGenerator, prepareSendForSignature, cancelGeneration, exportHtmlDocument  */
 jQuery.noConflict();
 
-var prepareOnlineEditorDocumentGenerator;
-var prepareSendForSignature;
-var cancelGeneration;
-var exportHtmlDocument;
+var prepareOnlineEditorDocumentGenerator;// eslint-disable-line no-unused-vars
+var prepareSendForSignature;// eslint-disable-line no-unused-vars
+var cancelGeneration;// eslint-disable-line no-unused-vars
+var exportHtmlDocument;// eslint-disable-line no-unused-vars
 
 // FIXME: Split JS file between edit and generate VF pages. Can share common functions in 3rd JS file.
 // FIXME: Use consistent variable naming matching those in Apex layer.

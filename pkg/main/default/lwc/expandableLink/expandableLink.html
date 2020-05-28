@@ -1,0 +1,24 @@
+<template>
+    <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+        <section if:false={isVisible}>
+            <div class="slds-grid slds-wrap">
+                    <lightning-icon size="xx-small" icon-name={iconName} class="ds-type-icon"></lightning-icon>
+                    <a onclick={showContent}>
+                        {label}
+                    </a>
+            </div>
+        </section>
+        <section if:true={isVisible}>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_11-of-12">
+                    <slot name="content">
+                    </slot>
+                </div>
+                <div class="slds-col slds-size_1-of-12 slds-p-left_x-small ds-clear-icon-container">
+                    <lightning-icon size="xx-small" icon-name='utility:clear' onclick={hideContent}
+                                    class="ds-clear-icon"></lightning-icon>
+                </div>
+            </div>
+        </section>
+    </section>
+</template>

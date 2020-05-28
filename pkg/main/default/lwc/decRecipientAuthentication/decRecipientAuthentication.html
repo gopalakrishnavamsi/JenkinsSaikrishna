@@ -1,0 +1,14 @@
+<template>
+    <c-expandable-link label={Labels.decAddAccessAuthentication} icon-name="utility:shield">
+        <div slot='content'>
+            <lightning-combobox
+                    name="Access Authentication"
+                    label={Labels.accessAuthentication}
+                    value={value}
+                    placeholder="Select Action"
+                    options={options}
+                    onchange={handleChange}
+            ></lightning-combobox>
+        </div>
+    </c-expandable-link>
+</template>

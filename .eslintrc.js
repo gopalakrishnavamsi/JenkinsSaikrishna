@@ -1,13 +1,17 @@
 module.exports = {
   extends: "eslint:recommended",
+  parser: "babel-eslint",
   env: {
-    browser: true
+    browser: true,
+    es6: true
   },
   parserOptions: {
-    ecmaVersion: 5,
+    ecmaVersion: 9,
     ecmaFeatures: {
-      impliedStrict: true
-    }
+      impliedStrict: true,
+      experimentalObjectRestSpread: true
+    },
+    "sourceType": "module"
   },
   globals: {
     $A: "readonly",

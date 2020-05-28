@@ -1,0 +1,8 @@
+<template>
+    <template if:true={isWebExtension}>
+        <img class="slds-is-relative slds-icon" src={adfLogoUrl} alt=""/>
+    </template>
+    <template if:false={isWebExtension}>
+        <lightning-icon icon-name={iconName} size={size}></lightning-icon>
+    </template>
+</template>

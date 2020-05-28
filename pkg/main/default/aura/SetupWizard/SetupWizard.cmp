@@ -12,6 +12,7 @@
     <aura:attribute name="showSetupComponent" type="Object"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="navigateToNewTemplateUrl" type="Object"/>
+    <aura:attribute name="navigateToNewEnvelopeConfigUrl" type="Object"/>
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
     <!--register events -->
     <aura:registerEvent name="logoutEvent" type="c:ReloadEvent"/>
@@ -212,7 +213,7 @@
                                     headerIconName="standard:email_chatter"/>
                         </div>
                         <div class="ds-esignature-section invisible-scrollbar slds-m-top_small ds-flex">
-                            <c:SetupEsignature/>
+                            <c:SetupEsignature navigateToNewEnvelopeConfigUrl="{!v.navigateToNewEnvelopeConfigUrl}"/>
                         </div>
                     </div>
                 </aura:if>

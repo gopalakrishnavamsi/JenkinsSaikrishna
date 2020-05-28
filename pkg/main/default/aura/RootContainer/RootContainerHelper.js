@@ -1,9 +1,11 @@
 ({
   setLoading: function (component, isLoading) {
     if (component && component.isValid()) {
-      var dsLoading = component.find('ds-loading') || component.getSuper().find('ds-loading');
-      if (dsLoading) {
-        isLoading === true ? dsLoading.show() : dsLoading.hide();
+      if (!$A.util.isUndefinedOrNull(component.find('ds-loading'))) {
+        var dsLoading = component.find('ds-loading') || component.getSuper().find('ds-loading');
+        if (dsLoading) {
+          isLoading === true ? dsLoading.show() : dsLoading.hide();
+        }
       }
     }
   },
@@ -163,5 +165,21 @@
     }
 
     userEvents.cancel(eventName, properties || {});
-  }
+  },
+
+  createComponent: function (anchor, component, componentName, attributes) {
+    $A.createComponent(
+      componentName,
+      attributes,
+      $A.getCallback(function (componentBody) {
+          if (component.isValid()) {
+            var targetCmp = component.find(anchor);
+            var body = targetCmp.get('v.body');
+            targetCmp.set('v.body', []);
+            body.push(componentBody);
+            targetCmp.set('v.body', body);
+          }
+        }
+      ));
+  },
 });

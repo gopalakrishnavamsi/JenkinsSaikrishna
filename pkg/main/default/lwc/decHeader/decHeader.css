@@ -1,0 +1,17 @@
+.ds-envelopeConfig-header-container {
+    background: rgb(243, 242, 242);
+    border-radius: 4px 4px 0px 0px;
+    height: 70.72px;
+}
+
+.ds-envelopeConfig-header-name {
+    color: var(--lwc-colorTextActionLabelActive);
+    font-size: var(--lwc-fontSize7);
+    font-weight: var(--lwc-fontWeightBold);
+}
+
+.ds-envelopeConfig-header-upperText {
+    color: rgb(43, 40, 38);
+    font-size: var(--lwc-fontSize2);
+    font-weight: normal;
+}

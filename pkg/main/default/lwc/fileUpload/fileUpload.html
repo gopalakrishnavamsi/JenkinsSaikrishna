@@ -1,0 +1,62 @@
+<template>
+    <label for="file-upload" class="custom-file-upload slds-button slds-button_neutral">
+        {fileUploadLabel}
+    </label>
+    <input type="file"
+           name="fileUpload"
+           id="file-upload"
+           onchange={handleFilesChange}
+           multiple>
+    <c-modal header={label.uploadFile}
+             show-modal={showUploadFilesModal}
+             onclose={closeUploadFilesModal}>
+        <div slot="content">
+            <div class="slds-table_bordered">
+                <div class="slds-grid slds-grid_vertical-align-center slds-p-around_small">
+                    <div class="slds-col_padded slds-size_6-of-12">
+                        <div class="slds-media slds-media_center">
+                            <div class="slds-media__figure">
+                                <span>
+                                    <c-file-extension-icon extension={extension} size="small"></c-file-extension-icon>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <div class="slds-truncate" title={fileName}>{fileName}</div>
+                                <span class="fileSizeUnits uiOutputText">{fileSize}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col--padded slds-size_5-of-12">
+                        <div class="slds-progress-bar slds-progress-bar_medium slds-progress-bar_circular"
+                             aria-valuemin="0"
+                             aria-live="polite"
+                             aria-valuemax="100"
+                             aria-valuenow={progress}
+                             role="progressbar">
+                                <span class="slds-progress-bar__value" style={progressWidth}>
+                                    <span class="slds-assistive-text">{fileName} upload progress is {progress}%</span>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="slds-col_padded slds-size_1-of-12 slds-text-align_center">
+                        <template if:true={isFileUploadedSuccessful}>
+                            <lightning-icon icon-name="utility:success" variant="success" size="small">
+                            </lightning-icon>
+                        </template>
+                        <template if:false={isFileUploadedSuccessful}>
+                            <lightning-icon icon-name="utility:error" size="small">
+                            </lightning-icon>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <lightning-button
+                    label="Done"
+                    variant="brand"
+                    onclick={closeUploadFilesModal}>
+            </lightning-button>
+        </div>
+    </c-modal>
+</template>

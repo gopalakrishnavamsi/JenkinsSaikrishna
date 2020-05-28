@@ -1,0 +1,24 @@
+<template>
+    <template
+        for:each={list}
+        for:item="item"
+        for:index="index">
+        <div class="slds-border_bottom slds-p-around_small"
+            draggable="true"
+            data-id={item.id}
+            data-index={index}
+            key={item.id}
+            ondrop={handleDrop}
+            ondragenter={handleDragEnter}
+            ondragover={handleDragOver}
+            ondragleave={handleDragLeave}
+            ondragstart={itemDragStart}
+            ondragend={itemDragEnd}>
+            <c-dec-document
+                document={item}
+                attach-source-files={attachSourceFiles}
+                index={index}>
+            </c-dec-document>
+        </div>
+    </template>
+</template>

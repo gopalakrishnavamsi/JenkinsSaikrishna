@@ -7,7 +7,7 @@
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
 
-    <ul>
+    <ul class="slds-p-around_large">
         <aura:if isTrue="{!v.loading}">
             <div class="ds-settings-spinner">
                 <c:BlueSpinner/>

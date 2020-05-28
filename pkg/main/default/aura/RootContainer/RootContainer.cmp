@@ -1,18 +1,22 @@
 <aura:component abstract="true" extensible="true">
     <ltng:require scripts="{!$Resource.stringUtils}"/>
 
-    <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
+    <aura:attribute name="visualforce" type="Boolean" default="false"/>
+    <aura:attribute name="showDefaultSpinner" type="Boolean" default="true"/>
 
     <aura:handler name="toastEvent" event="c:ToastEvent" action="{!c.onToast}"/>
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.onLoading}"/>
     <aura:handler name="userEvent" event="c:UserEvent" action="{!c.onUserEvent}"/>
 
+
     <div class="slds-scope">
         <c:Toast aura:id="ds-toast"
                  visualforce="{!v.visualforce}"/>
-
-        <c:GraySpinner aura:id="ds-loading"
-                       visualforce="{!v.visualforce}"/>
+        <!-- Display the default RootContainer spinner only if showDefaultSpinner is set to true -->
+        <aura:if isTrue="{!v.showDefaultSpinner}">
+            <c:GraySpinner aura:id="ds-loading"
+                           visualforce="{!v.visualforce}"/>
+        </aura:if>
 
         <c:UserEvents aura:id="ds-user-events"/>
 

@@ -36,15 +36,15 @@
     });
     saveChunk.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
-        var cvId = response.getReturnValue();
+        var cv = response.getReturnValue();
         var s = end;
         var e = Math.min(base64Data.length, s + this.CHUNK_SIZE);
         if (s < e) {
-          self._uploadChunk(uiHelper, component, file, base64Data, s, e, cvId);
+          self._uploadChunk(uiHelper, component, file, base64Data, s, e, cv.Id);
         } else {
           var evt = component.getEvent('uploadEvent');
           evt.setParams({
-            success: true, sourceId: cvId
+            success: true, sourceId: cv.Id
           });
           evt.fire();
           uiHelper.setLoading(false);

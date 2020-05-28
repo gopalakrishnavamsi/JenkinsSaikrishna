@@ -1,0 +1,85 @@
+<aura:component controller="SetupController" extends="c:RootContainer">
+    <!-- load required scripts -->
+    <ltng:require scripts="{!join(',', $Resource.uiHelper, $Resource.navUtils)}" afterScriptsLoaded="{!c.onLoad}"/>
+
+    <!-- component public attributes -->
+    <aura:attribute name="envelopeConfigurations" type="Object[]" access="private"/>
+    <aura:attribute name="navigateToNewEnvelopeConfigUrl" type="Object"/>
+
+    <!-- component private attributes -->
+    <aura:attribute name="loading" type="Boolean" default="true" access="private"/>
+    <aura:attribute name="columns" type="List" access="private"/>
+    <aura:attribute name="uiHelper" type="Object" access="private"/>
+
+    <!-- override RootContainer component attributes -->
+    <aura:set attribute="showDefaultSpinner" value="false"/>
+
+    <!-- register events -->
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
+    <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
+
+    <!-- event handlers -->
+    <aura:handler name="reloadEnvelopeConfigurations" event="c:ReloadEnvelopeConfigurations"
+                  action="{!c.onLoad}"/>
+
+    <div aura:id="decNavigator"/>
+    <div>
+        <aura:if isTrue="{!v.loading}">
+            <div class="ds-dec-templates-setup-spinner">
+                <c:BlueSpinner/>
+            </div>
+            <aura:set attribute="else">
+                <aura:if isTrue="{!empty(v.envelopeConfigurations)}">
+                    <div class="slds-container_medium slds-container_center">
+                        <div class="ds-dec-noTemplates-section">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">
+                                    <img class="ds-dec-image-section" src="{!$Resource.LearnDEC}"/>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div class="ds-dec-noTemplates-section-header">
+                                        {!$Label.c.StartFirstEnvelopeConfiguration}
+                                    </div>
+                                    <div class="slds-m-top_large">
+                                        <lightning:button variant="brand"
+                                                          label="{!$Label.c.CreateTemplate}"
+                                                          onclick="{!c.createEnvelopeConfig}"/>
+                                    </div>
+                                    <div class="slds-m-top_large ds-dec-noTemplates-section-body">
+                                        {!$Label.c.NotFamiliarWithEnvelopeConfiguration}
+                                    </div>
+                                    <div class="slds-m-top_xx-small ds-dec-noTemplates-section-body">
+                                        <!-- TODO add help link -->
+                                        <lightning:formattedRichText value="{!$Label.c.GenQuickGuide}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <aura:set attribute="else">
+                        <!-- Envelope Configurations present -->
+                        <div class="slds-p-around_large">
+                            <div class="slds-grid slds-grid_align-spread">
+                                <div class="slds-col ds-dec-setup-componentHeader">
+                                    {!$Label.c.EnvelopeTemplates}
+                                </div>
+                                <div class="slds-col slds-no-flex">
+                                    <lightning:button label="{!$Label.c.CreateTemplate}"
+                                                      onclick="{!c.createEnvelopeConfig}"/>
+                                </div>
+                            </div>
+                            <div class="slds-m-top_large">
+                                <lightning:datatable keyField="Id" data="{!v.envelopeConfigurations}"
+                                                     columns="{!v.columns}"
+                                                     hideCheckboxColumn="true" onrowaction="{!c.handleRowAction}"/>
+                            </div>
+                        </div>
+                    </aura:set>
+                </aura:if>
+            </aura:set>
+        </aura:if>
+    </div>
+    <!-- Placeholder div for displaying Delete component -->
+    <div aura:id="deleteDecSetup" id="ds-decSetup-delete">
+    </div>
+</aura:component>

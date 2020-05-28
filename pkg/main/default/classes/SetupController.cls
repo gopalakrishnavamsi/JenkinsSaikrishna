@@ -351,6 +351,15 @@ public with sharing class SetupController extends Controller {
 		}
 	}
 
+	@AuraEnabled
+	public static List<EnvelopeConfiguration.Listing> getEnvelopeConfigurations() { 
+		try {
+			return EnvelopeConfigurationService.queryEnvelopeConfigurationsForDisplay();
+		} catch(Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get envelope configurations');
+		}
+	}
+
 	public PageReference redirectOnNewTemplate() {
 		PageReference redirectPage;
 		QueryString params = QueryString.fromCurrentPage();
@@ -359,6 +368,18 @@ public with sharing class SetupController extends Controller {
 			Gen.Template template = GenService.getTemplate(templateId);
 			redirectPage = GenService.getTemplatePage(template, true);
 			redirectPage.getParameters().put('isEdit', 'false');
+			redirectPage.setRedirect(true);
+		}
+		return redirectPage;
+	}
+
+	public PageReference redirectToNewConfigUrl() {
+		PageReference redirectPage;
+		QueryString params = QueryString.fromCurrentPage();
+		Id configId = params.getId('id', null);
+		if (configId != null) {
+			redirectPage = Page.EnvelopeConfigurationNavigator;
+			redirectPage.getParameters().put('id', configId);
 			redirectPage.setRedirect(true);
 		}
 		return redirectPage;
