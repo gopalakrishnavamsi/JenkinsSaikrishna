@@ -10156,7 +10156,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Action</value>
 	</labels>
 	<labels>
-		<fullName>InPersonSigner</fullName>
+		<fullName>InPersonSignerLabel</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>

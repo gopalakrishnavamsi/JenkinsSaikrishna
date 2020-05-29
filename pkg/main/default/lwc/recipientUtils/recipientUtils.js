@@ -42,7 +42,7 @@ import carbonCopyLabel from '@salesforce/label/c.CarbonCopy';
 import certifiedDeliveryLabel from '@salesforce/label/c.CertifiedDelivery';
 import agentLabel from '@salesforce/label/c.Agent';
 import editorLabel from '@salesforce/label/c.Editor';
-import inPersonSignerLabel from '@salesforce/label/c.InPersonSigner';
+import inPersonSignerLabel from '@salesforce/label/c.InPersonSignerLabel';
 import embeddedSignerLabel from '@salesforce/label/c.EmbeddedSigner';
 import decRecordsFieldsLookupLabel from '@salesforce/label/c.DecRecordsFieldsLookupLabel';
 import decRelatedListLabel from '@salesforce/label/c.DecRelatedListLabel';

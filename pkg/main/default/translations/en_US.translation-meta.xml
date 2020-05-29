@@ -5237,7 +5237,7 @@
 	</customLabels>
 	<customLabels>
 		<label>In Person Signer</label>
-		<name>InPersonSigner</name>
+		<name>InPersonSignerLabel</name>
 	</customLabels>
 	<customLabels>
 		<label>Embedded Signer</label>
