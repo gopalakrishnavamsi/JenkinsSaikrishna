@@ -45,7 +45,7 @@ const SOURCE_FILES_TYPES = {
 
 const getDefaultSourceFiles = (sequence = 2) => {
   return {
-    id: DOCUMENT_TYPE_SOURCE_FILES,
+    id: DOCUMENT_TYPE_SOURCE_FILES, // placeholder ID to bypass null ID error on rendering
     type: DOCUMENT_TYPE_SOURCE_FILES,
     filter: {
       filterBy: '',
@@ -60,7 +60,7 @@ const getDefaultSourceFiles = (sequence = 2) => {
 
 const getDefaultTemplateDocument = (sequence = 1, contentVersion) => {
   return {
-    id: null,
+    id: contentVersion.id, // placeholder ID to bypass null ID error on rendering
     type: DOCUMENT_TYPE_TEMPLATE_DOCUMENT,
     sourceId: contentVersion.ContentDocumentId,
     sequence,
