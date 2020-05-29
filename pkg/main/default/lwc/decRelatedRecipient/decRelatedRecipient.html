@@ -5,8 +5,9 @@
             <span class="slds-text-title_bold slds-p-left_x-small">{source}.</span>
         </div>
         <div>{Labels.decRecordFieldsTitle2}</div>
-        <c-dec-relationship-lookup label={Labels.decRelatedListLabel} source-object={sourceObject} onrelationshipupdate={handleSelect}>
-
-        </c-dec-relationship-lookup>
+    </section>
+    <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+        <c-dec-relationship-lookup label={Labels.decRelatedListLabel} source-object={sourceObject}
+                                   onrelationshipupdate={handleSelect}></c-dec-relationship-lookup>
     </section>
 </template>

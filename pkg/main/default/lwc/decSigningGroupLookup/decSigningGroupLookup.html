@@ -16,7 +16,8 @@
                 </div>
             </div>
             <div if:false={hasSelection}>
-                <c-lookup-input onchange={handleInput} label={label} place-holder={placeHolder}></c-lookup-input>
+                <c-lookup-input onchange={handleInput} label={label} place-holder={placeHolder}
+                                required></c-lookup-input>
             </div>
         </div>
         <lightning-spinner
@@ -25,7 +26,8 @@
                 if:true={showSpinner}>
         </lightning-spinner>
         <div>{message}</div>
-        <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-lookup__menu slds ds-lookup-listbox" role="listbox" if:true={showResultPanel}>
+        <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-lookup__menu slds ds-lookup-listbox"
+            role="listbox" if:true={showResultPanel}>
             <template for:each={searchResults} for:item="signingGroup" for:index="index">
                 <c-dec-signing-group-lookup-result
                         signing-group={signingGroup}

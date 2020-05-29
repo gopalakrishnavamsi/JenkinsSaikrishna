@@ -2,6 +2,9 @@
     <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
         {Labels.decSigningGroupRecipientTitle}
         <a href={Labels.decSigningGroupLearnMoreLink} target="_blank">{Labels.learnMore}</a>
-        <c-dec-signing-group-lookup label={Labels.decSelectGroup} place-holder={Labels.decSearchByGroupNamePlaceHolder} onchange={handleSelect}></c-dec-signing-group-lookup>
+    </section>
+    <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+        <c-dec-signing-group-lookup label={Labels.decSelectGroup} place-holder={Labels.decSearchByGroupNamePlaceHolder}
+                                    onchange={handleSelect}></c-dec-signing-group-lookup>
     </section>
 </template>

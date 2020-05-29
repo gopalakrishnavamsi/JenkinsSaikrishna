@@ -1,10 +1,11 @@
 <template>
     <lightning-input
             name="enter-search"
-            label={label}
             onchange={handleChange}
             type="search"
             autocomplete="off"
-            placeholder={placeHolder}>
+            placeholder={placeHolder}
+            label={label}
+            required={required}>
     </lightning-input>
 </template>

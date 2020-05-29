@@ -8,6 +8,7 @@ import noSearchResults from '@salesforce/label/c.NoSearchResults';
 export default class Lookup extends LightningElement {
 
   @api label;
+  @api required = false;
 
   resultClass;
   selectedRecord = null;

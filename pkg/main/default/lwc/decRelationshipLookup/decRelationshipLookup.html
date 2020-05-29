@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div if:false={hasSelection}>
-                <c-lookup-input onchange={handleInput} label={label} place-holder="Search by Name.."></c-lookup-input>
+                <c-lookup-input onchange={handleInput} label={label} required></c-lookup-input>
             </div>
         </div>
         <lightning-spinner
@@ -25,7 +25,8 @@
                 if:true={showSpinner}>
         </lightning-spinner>
         <div>{message}</div>
-        <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-lookup__menu slds ds-lookup-listbox" role="listbox" if:true={showResultPanel}>
+        <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-lookup__menu slds ds-lookup-listbox"
+            role="listbox" if:true={showResultPanel}>
             <template for:each={searchResults} for:item="relationship" for:index="index">
                 <c-dec-relationship-lookup-result
                         relationship={relationship}

@@ -47,6 +47,7 @@ import embeddedSignerLabel from '@salesforce/label/c.EmbeddedSigner';
 import decRecordsFieldsLookupLabel from '@salesforce/label/c.DecRecordsFieldsLookupLabel';
 import decRelatedListLabel from '@salesforce/label/c.DecRelatedListLabel';
 import untitledLabel from '@salesforce/label/c.Untitled';
+import searchPlaceHolder from '@salesforce/label/c.SearchPlaceHolder';
 
 export class Recipient {
   constructor({id = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = null, signingGroup = null}, role, routingOrder = 1) {
@@ -167,7 +168,8 @@ export const Labels = {
   decRecipientAction: decRecipientAction,
   decRecordsFieldsLookupLabel: decRecordsFieldsLookupLabel,
   decRelatedListLabel: decRelatedListLabel,
-  untitledLabel: untitledLabel
+  untitledLabel: untitledLabel,
+  searchPlaceHolder: searchPlaceHolder
 };
 
 export const Actions = {

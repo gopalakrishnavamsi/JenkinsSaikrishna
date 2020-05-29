@@ -17,7 +17,7 @@
             </div>
             <div if:false={selectedRecord}>
                 <c-lookup-input onchange={handleChange} label={label}
-                                place-holder={customLabel.searchByName}></c-lookup-input>
+                                place-holder={customLabel.searchByName} required={required}></c-lookup-input>
             </div>
         </div>
         <lightning-spinner

@@ -10089,7 +10089,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Records Fields Lookup Label</shortDescription>
-		<value>Select Lookup</value>
+		<value>Select Record Field</value>
 	</labels>
 	<labels>
 		<fullName>DecRelatedListLabel</fullName>
