@@ -5288,6 +5288,10 @@
 		<name>RenameEnvelopeConfiguration</name>
 	</customLabels>
 	<customLabels>
+		<label>More Actions</label>
+		<name>MoreActions</name>
+	</customLabels>
+	<customLabels>
 		<label>Select Record Field</label>
 		<name>DecRecordsFieldsLookupLabel</name>
 	</customLabels>

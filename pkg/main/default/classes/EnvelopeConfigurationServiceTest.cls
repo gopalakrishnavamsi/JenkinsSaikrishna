@@ -2372,4 +2372,33 @@ private class EnvelopeConfigurationServiceTest {
 		System.assertEquals(c2.Id, result[5].getSourceId());
 		System.assertEquals(7, result[5].routingOrder);
 	}
+
+	@IsTest
+	static void test_deleteContentDocument_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				EnvelopeConfigurationService.deleteContentDocument(null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deleteContentDocument_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			ContentVersion cv = TestUtils.createContentVersion();
+			System.assertNotEquals(null, cv.ContentDocumentId);
+
+			Test.startTest();
+			System.assert(EnvelopeConfigurationService.deleteContentDocument(cv.ContentDocumentId));
+			Test.stopTest();
+
+			System.assert(Collection.isEmpty([SELECT Id FROM ContentVersion WHERE Id = :cv.Id]));
+			System.assert(Collection.isEmpty([SELECT Id FROM ContentDocument WHERE Id = :cv.ContentDocumentId]));
+		}
+	}
 }

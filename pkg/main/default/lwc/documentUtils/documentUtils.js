@@ -9,12 +9,16 @@ import dropDocuments from '@salesforce/label/c.DropDocuments';
 import helpVideoText from '@salesforce/label/c.DecDocumentsVideoText';
 import helpVideoLength from '@salesforce/label/c.DecDocumentsVideoLength';
 import helpVideoLink from '@salesforce/label/c.DecDocumentsVideoLink';
+import moreActions from '@salesforce/label/c.MoreActions';
 import attachDocuments from '@salesforce/label/c.AttachDocuments';
 import documentSelection from '@salesforce/label/c.DocumentSelection';
 import latestDocument from '@salesforce/label/c.LatestDocument';
 import fileNameContainsPending from '@salesforce/label/c.FileNameContainsPending';
 import fileNameContains from '@salesforce/label/c.FileNameContains';
 import allDocuments from '@salesforce/label/c.AllDocuments';
+import previewDocument from '@salesforce/label/c.PreviewStep';
+import renameDocument from '@salesforce/label/c.Rename';
+import deleteDocument from '@salesforce/label/c.DeleteButtonLabel';
 
 const DOCUMENT_TYPE_TEMPLATE_DOCUMENT = 'TemplateDocument';
 const DOCUMENT_TYPE_SOURCE_FILES = 'SourceFiles';
@@ -29,13 +33,32 @@ const LABEL = {
   helpVideoText,
   helpVideoLength,
   helpVideoLink,
+  moreActions,
   attachDocuments,
   documentSelection,
   latestDocument,
   fileNameContainsPending,
   fileNameContains,
-  allDocuments
-}
+  allDocuments,
+  previewDocument,
+  renameDocument,
+  deleteDocument
+};
+
+const TEMPLATE_DOCUMENT_ACTIONS = [
+  {
+    label: LABEL.previewDocument,
+    value: 'preview'
+  },
+  {
+    label: LABEL.renameDocument,
+    value: 'rename'
+  },
+  {
+    label: LABEL.deleteDocument,
+    value: 'delete'
+  }
+];
 
 const SOURCE_FILES_TYPES = {
   LATEST: 'latest',
@@ -77,5 +100,6 @@ export {
   LABEL,
   getDefaultSourceFiles,
   getDefaultTemplateDocument,
-  SOURCE_FILES_TYPES
+  SOURCE_FILES_TYPES,
+  TEMPLATE_DOCUMENT_ACTIONS
 }

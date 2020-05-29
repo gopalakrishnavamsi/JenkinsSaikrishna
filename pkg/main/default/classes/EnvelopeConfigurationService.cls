@@ -3,6 +3,7 @@ public with sharing class EnvelopeConfigurationService {
 	@TestVisible
 	private static final EnvelopeConfigurationService.Database DB = new EnvelopeConfigurationService.Database();
 	private static final SObjectType ENVELOPE_CONFIGURATION_TYPE = EnvelopeConfiguration__c.getSObjectType();
+	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
 
 	private class Database {
 
@@ -582,16 +583,15 @@ public with sharing class EnvelopeConfigurationService {
 			
 			if (envelopeConfiguration != null && envelopeConfiguration.id != null) {
 				update convert(envelopeConfiguration, true);
+				EnvelopeConfiguration currentConfiguration = getEnvelopeConfiguration(envelopeConfiguration.id);
 
-				if (Collection.isNotEmpty(envelopeConfiguration.documents)) {
-					documents = convert(envelopeConfiguration.id, envelopeConfiguration.documents);
-					upsert documents;
-				}
+				documents = convert(envelopeConfiguration.id, envelopeConfiguration.documents);
+				delete convert(envelopeConfiguration.id, currentConfiguration.documents);
+				insert documents;
 
-				if (Collection.isNotEmpty(envelopeConfiguration.recipients)) {
-					recipients = convert(envelopeConfiguration.id, envelopeConfiguration.recipients);
-					upsert recipients;
-				}
+				recipients = convert(envelopeConfiguration.id, envelopeConfiguration.recipients);
+				delete convert(envelopeConfiguration.id, currentConfiguration.recipients);
+				insert recipients;
 			}
 
 			return (EnvelopeConfiguration) envelopeConfiguration
@@ -627,6 +627,17 @@ public with sharing class EnvelopeConfigurationService {
 					delete toDelete;
 					result = true;
 				}
+			}
+			return result;
+		}
+
+		public Boolean deleteContentDocument(final Id contentDocumentId) {
+			Permissions.verifyIsDeletable(CONTENT_DOCUMENT_TYPE);
+	
+			Boolean result = false;
+			if (contentDocumentId != null) {
+				delete [SELECT Id FROM ContentDocument WHERE Id = :contentDocumentId];
+				result = true;
 			}
 			return result;
 		}
@@ -1084,6 +1095,12 @@ public with sharing class EnvelopeConfigurationService {
 		} finally {
 			Credentials.save();
 		}
+	}
+
+	public static Boolean deleteContentDocument(final Id contentDocumentId) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		return DB.deleteContentDocument(contentDocumentId);
 	}
 
 	public static Boolean deleteEnvelopeConfiguration(final Id envelopeConfigurationId) {

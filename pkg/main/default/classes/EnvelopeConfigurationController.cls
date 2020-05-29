@@ -83,6 +83,15 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 		}
 	}
 
+	@AuraEnabled
+	public static Boolean deleteContentDocument(final Id contentDocumentId) {
+		try {
+			return EnvelopeConfigurationService.deleteContentDocument(contentDocumentId);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to delete content document');
+		}
+	}
+
 	@AuraEnabled(Cacheable = true)
 	public static EnvelopeConfiguration getEnvelopeConfiguration(final Id recordId) {
 		try {

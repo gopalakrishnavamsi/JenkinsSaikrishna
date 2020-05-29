@@ -17,13 +17,24 @@
         </div>
         <div class="slds-col">
             <span>
-                <lightning-button-icon icon-name="utility:down"
-                                       alternative-text="More Actions"
-                                       title="More Actions"
-                                       variant="neutral"
-                                       class="slds-float_right"
-                                       size="small">
-                </lightning-button-icon>
+                <lightning-button-menu
+                        icon-name="utility:down"
+                        alternative-text={label.moreActions}
+                        title={label.moreActions}
+                        variant="neutral"
+                        class="slds-float_right"
+                        icon-size="small"
+                        onselect={handleFileOption}>
+                        <template
+                            for:each={templateDocumentActions}
+                            for:item="action">
+                            <lightning-menu-item
+                                key={action.value}
+                                label={action.label}
+                                value={action.value}>
+                            </lightning-menu-item>
+                        </template>
+                </lightning-button-menu>
             </span>
         </div>
     </div>

@@ -10,6 +10,7 @@ import {createMessageContext,
 import DEC_ERROR from '@salesforce/messageChannel/DecError__c';
 // Subscriber
 import DEC_UPDATE_SOURCE_FILES from '@salesforce/messageChannel/DecUpdateSourceFiles__c';
+import DEC_DELETE_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecDeleteTemplateDocument__c';
 
 
 // utility functions
@@ -20,6 +21,7 @@ import { LABEL } from 'c/setupUtils';
 //apex methods
 import updateEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.updateEnvelopeConfiguration';
 import getEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.getEnvelopeConfiguration';
+import deleteContentDocument from '@salesforce/apex/EnvelopeConfigurationController.deleteContentDocument';
 
 const MAX_STEP = '6';
 const MIN_STEP = '1';
@@ -44,7 +46,8 @@ export default class DecSetupConfig extends LightningElement {
   envelopeConfigurationData;
   isLoading = false;
   context = createMessageContext();
-  subscription = null;
+  sourceFilesSubscription = null;
+  templateDocumentSubscription = null;
 
   @api
   attachSourceFiles = false;
@@ -59,7 +62,8 @@ export default class DecSetupConfig extends LightningElement {
     {'label': this.label.customButton, 'value': PROGRESS_STEP.CUSTOM_BUTTON}];
 
   connectedCallback() {
-    this.subscribeToMessageChannel();
+    this.subscribeToSourceFilesMessageChannel();
+    this.subscribeToTemplateDocumentMessageChannel();
   }
 
   disconnectedCallback() {
@@ -71,12 +75,7 @@ export default class DecSetupConfig extends LightningElement {
   })
   getEnvelopeConfigurationData({error, data}) {
     if (error) {
-      if (error.body !== null) {
-        const message = {
-          errorMessage : error.body.message
-        }
-        publish(this.context, DEC_ERROR, message);
-      }
+      this.showError(error);
     } else if (data) {
       this.attachSourceFiles = !isEmpty(data.documents.find(d => d.type === DOCUMENT_TYPE_SOURCE_FILES));
       this.envelopeConfigurationData = data;
@@ -124,16 +123,29 @@ export default class DecSetupConfig extends LightningElement {
     return this.envelopeConfigurationData ? this.envelopeConfigurationData.sourceObject : null;
   }  
 
-  subscribeToMessageChannel() {
-    if(this.subscription) {
+  subscribeToSourceFilesMessageChannel() {
+    if (this.sourceFilesSubscription) {
       return;
     }
-    this.subscription = subscribe(this.context, DEC_UPDATE_SOURCE_FILES, (message) => {
-      this.handleSubscription(message);
-    }, {scope: APPLICATION_SCOPE});
+    this.sourceFilesSubscription = subscribe(this.context, DEC_UPDATE_SOURCE_FILES, (message) => {
+      this.handleSourceFilesSubscription(message);
+    }, {
+      scope: APPLICATION_SCOPE
+    });
   }
 
-  handleSubscription(message){
+  subscribeToTemplateDocumentMessageChannel() {
+    if (this.templateDocumentSubscription) {
+      return;
+    }
+    this.templateDocumentSubscription = subscribe(this.context, DEC_DELETE_TEMPLATE_DOCUMENT, (message) => {
+      this.handleDeleteTemplateDocument(message);
+    }, {
+      scope: APPLICATION_SCOPE
+    });
+  }
+
+  handleSourceFilesSubscription(message){
     this.attachSourceFiles = message.isSourceFilesSelected;
   }
 
@@ -182,6 +194,22 @@ export default class DecSetupConfig extends LightningElement {
     this.isLoading = isTrue ? true : false;
   }
 
+  handleDeleteTemplateDocument(message) {
+    this.setLoading(true);
+    deleteContentDocument({
+      contentDocumentId: message.contentDocumentId
+    })
+      .then(() => {
+        const documents = this.envelopeConfigurationData.documents.filter((d, i) => i !== message.index);
+        this.envelopeConfigurationData = {
+          ... this.envelopeConfigurationData,
+          documents
+        };
+        this.updateEnvelopeConfiguration();
+      })
+      .catch(this.showError);
+  }
+
   updateEnvelopeConfiguration(step) {
     this.setLoading(true);
     let configurationData = this.getFilteredConfigurationData();
@@ -194,15 +222,7 @@ export default class DecSetupConfig extends LightningElement {
         this.currentStep = isEmpty(step) ? this.currentStep : step;
         this.setLoading(false);
       })
-      .catch(error => {
-        if (error.body !== null) {
-          const message = {
-            errorMessage : error.body.message
-          }
-          publish(this.context, DEC_ERROR, message);
-        }
-        this.setLoading(false);
-      });
+      .catch(this.showError);
   }
 
   // Process configuration data before updating it in server
@@ -211,12 +231,24 @@ export default class DecSetupConfig extends LightningElement {
       return null;
     }
 
-    this.envelopeConfigurationData.documents.forEach(doc => {
-      if (doc.id === DOCUMENT_TYPE_SOURCE_FILES) {
-        doc.id = null;
-      }
-    });
+    const processedFields = {};
+    
+    processedFields.documents = this.envelopeConfigurationData.documents.map(doc => ({ ... doc, id: null }));
 
-    return JSON.stringify(this.envelopeConfigurationData);
+    return JSON.stringify({
+      ...this.envelopeConfigurationData,
+      ...processedFields
+    });
+  }
+
+  showError(error) {
+    if (!isEmpty(error.body)) {
+      const msg = {
+        errorMessage: error.body.message
+      }
+      publish(this.context, DEC_ERROR, msg);
+    }
+    
+    this.setLoading(false);
   }
 }

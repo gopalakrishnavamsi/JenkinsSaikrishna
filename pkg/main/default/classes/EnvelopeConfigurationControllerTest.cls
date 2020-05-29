@@ -492,5 +492,34 @@ private class EnvelopeConfigurationControllerTest {
 			}
 			Test.stopTest();
 		}
-	}	
+	}
+
+	@IsTest
+	static void test_deleteContentDocument_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Boolean testResult;
+			ContentVersion testContentVersion = TestUtils.createContentVersion();
+			Test.startTest();
+			testResult = EnvelopeConfigurationController.deleteContentDocument(testContentVersion.ContentDocumentId);
+			Test.stopTest();
+
+			System.assertNotEquals(null, testResult);
+			System.assertEquals(true, testResult);
+		}
+	}
+
+	@IsTest
+	static void test_deleteContentDocument_failure() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			ContentVersion testContentVersion = TestUtils.createContentVersion();
+			Test.startTest();
+			try {
+				EnvelopeConfigurationController.deleteContentDocument(testContentVersion.ContentDocumentId);
+				throw new AssertException('Expected deleteContentDocument to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
 }

@@ -9868,6 +9868,14 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Rename Envelope Configuration</value>
 	</labels>
 	<labels>
+		<fullName>MoreActions</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>More Actions for template documents</shortDescription>
+		<value>More Actions</value>
+	</labels>
+	<labels>
 		<fullName>AttachDocuments</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>
