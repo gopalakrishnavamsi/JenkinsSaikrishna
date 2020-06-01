@@ -48,6 +48,9 @@ import decRecordsFieldsLookupLabel from '@salesforce/label/c.DecRecordsFieldsLoo
 import decRelatedListLabel from '@salesforce/label/c.DecRelatedListLabel';
 import untitledLabel from '@salesforce/label/c.Untitled';
 import searchPlaceHolder from '@salesforce/label/c.SearchPlaceHolder';
+import emailAddressLabel from '@salesforce/label/c.EmailAddress';
+import nameLabel from '@salesforce/label/c.NameLabel';
+import recipientRoleLabel from '@salesforce/label/c.RecipientRoleLabel';
 
 export class Recipient {
   constructor({id = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = null, signingGroup = null}, role, routingOrder = 1) {
@@ -169,7 +172,10 @@ export const Labels = {
   decRecordsFieldsLookupLabel: decRecordsFieldsLookupLabel,
   decRelatedListLabel: decRelatedListLabel,
   untitledLabel: untitledLabel,
-  searchPlaceHolder: searchPlaceHolder
+  searchPlaceHolder: searchPlaceHolder,
+  emailAddressLabel: emailAddressLabel,
+  nameLabel: nameLabel,
+  recipientRoleLabel: recipientRoleLabel
 };
 
 export const Actions = {

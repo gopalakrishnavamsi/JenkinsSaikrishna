@@ -1,3 +1,26 @@
 <template>
-    <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">{Labels.decRoleRecipientTitle}</section>
+    <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+        <div>
+            <span>{Labels.decRoleRecipientTitle}</span>
+        </div>
+        <div class="slds-form-element__row">
+            <div class="slds-form-element">
+                <lightning-input name="role" label={Labels.recipientRoleLabel} value={role} onchange={handleChange}></lightning-input>
+            </div>
+        </div>
+        <c-expandable-link label={Labels.decAddAccessAuthentication} icon-name="utility:add">
+                <div class="slds-grid slds-gutters slds-p-left_xxx-small" slot="content">
+                    <div class="slds-col slds-size_1-of-2 slds-p-left_none">
+                        <div class="slds-form-element">
+                            <lightning-input name="name" onchange={handleChange} label={Labels.nameLabel} value={name}></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-left_none">
+                        <div class="slds-form-element">
+                            <lightning-input name="email" onchange={handleChange} label={Labels.emailAddressLabel} value={email}></lightning-input>
+                        </div>
+                    </div>
+                </div>
+        </c-expandable-link>
+    </section>
 </template>

@@ -9,7 +9,7 @@
         <c-dec-recipient-lookup onrecordselection={handleSourceChange}></c-dec-recipient-lookup>
     </template>
     <template if:true={isRoleRecipient}>
-        <c-dec-role-recipient></c-dec-role-recipient>
+        <c-dec-role-recipient onrolechange={handleRoleRecipientChange}></c-dec-role-recipient>
     </template>
     <template if:true={isSigningGroup}>
         <c-dec-signing-group-recipient signing-group={recipient.signingGroup}></c-dec-signing-group-recipient>

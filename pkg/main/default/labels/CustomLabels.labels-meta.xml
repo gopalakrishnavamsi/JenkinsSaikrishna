@@ -10179,4 +10179,12 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Embedded Signer</shortDescription>
 		<value>Embedded Signer</value>
 	</labels>
+	<labels>
+		<fullName>RecipientRoleLabel</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Role</shortDescription>
+		<value>Role</value>
+	</labels>
 </CustomLabels>

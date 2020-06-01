@@ -50,6 +50,15 @@ export default class DecRecipientDetails extends LightningElement {
     this.dispatchEvent(evt);
   }
 
+  handleRoleRecipientChange({ detail }) {
+    const { name, email, role } = detail;
+    let recipient = this.recipient;
+    recipient.role = role;
+    recipient.name = name;
+    recipient.email = email;
+    this.updateRecipient(recipient);
+  }  
+
   handleRelationshipUpdate({ detail }) {
     let recipient = this.recipient;
     recipient.relationship = detail;

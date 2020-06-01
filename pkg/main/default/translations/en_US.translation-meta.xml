@@ -5299,6 +5299,10 @@
 		<label>Select Related List</label>
 		<name>DecRelatedListLabel</name>
 	</customLabels>	
+	<customLabels>
+		<label>Role</label>
+		<name>RecipientRoleLabel</name>
+	</customLabels>	
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
