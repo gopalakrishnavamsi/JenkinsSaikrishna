@@ -21,7 +21,7 @@ def defaultSalesforceArgs = [
 
 
 
-salesforcenightlyBuildPipeline(
+salesforceNightlyBuildPipeline(
   appName: 'salesforce-dal-nightly-build',
   installTasks: installTasks,
   salesforceArgs: defaultSalesforceArgs,
