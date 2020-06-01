@@ -2,7 +2,6 @@ public with sharing class EnvelopeConfigurationService {
 
 	@TestVisible
 	private static final EnvelopeConfigurationService.Database DB = new EnvelopeConfigurationService.Database();
-	private static final SObjectType ENVELOPE_CONFIGURATION_TYPE = EnvelopeConfiguration__c.getSObjectType();
 	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
 
 	private class Database {
@@ -470,14 +469,11 @@ public with sharing class EnvelopeConfigurationService {
 		}
 
 		public List<EnvelopeConfiguration.Listing> queryEnvelopeConfigurations() {
-			Permissions.verifyIsQueryable(ENVELOPE_CONFIGURATION_TYPE, new List<String> {
-				'Id', 'Name', 'LastModifiedDate',
-				Application.namespacePrefix + 'SourceObject__c'
-			});
 			List<EnvelopeConfiguration.Listing> configurationList = new List<EnvelopeConfiguration.Listing>();
 			for (EnvelopeConfiguration__c template : [
 								SELECT Id, Name, SourceObject__c, LastModifiedDate
 				FROM EnvelopeConfiguration__c
+				WITH SECURITY_ENFORCED
 				ORDER BY LastModifiedDate DESC
 				LIMIT 50000
 			]) {
