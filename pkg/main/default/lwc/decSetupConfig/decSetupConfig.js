@@ -10,6 +10,7 @@ import {createMessageContext,
 import DEC_ERROR from '@salesforce/messageChannel/DecError__c';
 // Subscriber
 import DEC_UPDATE_SOURCE_FILES from '@salesforce/messageChannel/DecUpdateSourceFiles__c';
+import DEC_RENAME_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecRenameTemplateDocument__c';
 import DEC_DELETE_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecDeleteTemplateDocument__c';
 import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEnvelopeTemplate__c';
 
@@ -48,7 +49,8 @@ export default class DecSetupConfig extends LightningElement {
   isLoading = false;
   context = createMessageContext();
   sourceFilesSubscription = null;
-  templateDocumentSubscription = null;
+  renameTemplateDocSubscription = null;
+  deleteTemplateDocSubscription = null;
 
   @api
   attachSourceFiles = false;
@@ -64,8 +66,8 @@ export default class DecSetupConfig extends LightningElement {
 
   connectedCallback() {
     this.subscribeToSourceFilesMessageChannel();
-    this.subscribeToTemplateDocumentMessageChannel();
-    this.subscribeToRenameEnvelopeTemplateMessageChannel();
+    this.subscribeToRenameTemplateDocMessageChannel();
+    this.subscribeToDeleteTemplateDocMessageChannel();
   }
 
   disconnectedCallback() {
@@ -136,11 +138,22 @@ export default class DecSetupConfig extends LightningElement {
     });
   }
 
-  subscribeToTemplateDocumentMessageChannel() {
-    if (this.templateDocumentSubscription) {
+  subscribeToRenameTemplateDocMessageChannel() {
+    if (this.renameTemplateDocSubscription) {
       return;
     }
-    this.templateDocumentSubscription = subscribe(this.context, DEC_DELETE_TEMPLATE_DOCUMENT, (message) => {
+    this.renameTemplateDocSubscription = subscribe(this.context, DEC_RENAME_TEMPLATE_DOCUMENT, (message) => {
+      this.handleRenameTemplateDocument(message);
+    }, {
+      scope: APPLICATION_SCOPE
+    });
+  }
+
+  subscribeToDeleteTemplateDocMessageChannel() {
+    if (this.deleteTemplateDocSubscription) {
+      return;
+    }
+    this.deleteTemplateDocSubscription = subscribe(this.context, DEC_DELETE_TEMPLATE_DOCUMENT, (message) => {
       this.handleDeleteTemplateDocument(message);
     }, {
       scope: APPLICATION_SCOPE
@@ -209,6 +222,22 @@ export default class DecSetupConfig extends LightningElement {
     this.isLoading = isTrue ? true : false;
   }
 
+  handleRenameTemplateDocument(message) {
+    const documentName = message.name;
+    const documentIndex = message.index;
+    const documents = this.envelopeConfigurationData.documents.map((d, i) => {
+      if (i === documentIndex) {
+        return { ... d, name: documentName };
+      }
+      return d;
+    });
+
+    this.updateEnvelopeConfiguration(null, {
+      ... this.envelopeConfigurationData,
+      documents
+    });
+  }
+
   handleDeleteTemplateDocument(message) {
     this.setLoading(true);
     deleteContentDocument({
@@ -216,11 +245,10 @@ export default class DecSetupConfig extends LightningElement {
     })
       .then(() => {
         const documents = this.envelopeConfigurationData.documents.filter((d, i) => i !== message.index);
-        this.envelopeConfigurationData = {
+        this.updateEnvelopeConfiguration(null, {
           ... this.envelopeConfigurationData,
           documents
-        };
-        this.updateEnvelopeConfiguration();
+        });
       })
       .catch(this.showError);
   }

@@ -38,4 +38,32 @@
             </span>
         </div>
     </div>
+    <div>
+        <c-modal
+            header={label.renameModalTitle}
+            show-modal={showRenameModal}
+            onclose={closeRenameModal}>
+            <div slot="content" class="slds-p-around_medium">
+                <lightning-input
+                        label={label.NameLabel}
+                        value={documentNameCopy}
+                        max-length="80"
+                        onchange={handleNameChange}>
+                </lightning-input>
+            </div>
+            <div slot="footer">
+                <lightning-button
+                        label={label.cancel}
+                        onclick={closeRenameModal}>
+                </lightning-button>
+                <lightning-button
+                        variant="brand"
+                        label={label.renameDocument}
+                        disabled={disableModalSave}
+                        onclick={saveRenameModal}
+                        class="slds-m-left_x-small">
+                </lightning-button>
+            </div>
+        </c-modal>
+    </div>
 </template>

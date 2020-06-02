@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+	<masterLabel>DecRenameTemplateDocument</masterLabel>
+	<isExposed>true</isExposed>
+	<description>Handles renaming of template documents in Envelope Templates</description>
+	<lightningMessageFields>
+		<fieldName>name</fieldName>
+		<description>String value to update the document's name to</description>
+	</lightningMessageFields>
+	<lightningMessageFields>
+		<fieldName>index</fieldName>
+		<description>Index of document in configuration data to update</description>
+	</lightningMessageFields>
+</LightningMessageChannel>
