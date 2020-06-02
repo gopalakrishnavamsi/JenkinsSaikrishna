@@ -8,7 +8,7 @@
     <apex:includeScript value="{!$Resource.OnlineEditorJs}"/>
     <apex:includeScript value="{!$Resource.scmwidgetsjs}"/>
     <apex:includeScript value="{!$Resource.stringUtils}"/>
-    <apex:includeScript value="{!URLFOR($Resource.ds_editor, '/ds-editor-salesforce-1.1.2.js')}"/>
+    <apex:includeScript value="{!$Resource.dsEditor}"/>
 
     <script type="application/javascript">
       Visualforce.remoting.timeout = 120000;
