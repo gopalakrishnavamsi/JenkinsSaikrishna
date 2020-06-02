@@ -8044,6 +8044,14 @@
 		<value>Take a look at the &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;Quick Guide&lt;/a&gt;</value>
 	</labels>
 	<labels>
+		<fullName>EnvelopeTemplatesQuickGuide</fullName>
+		<categories>SetupWizard</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EnvelopeTemplatesQuickGuide</shortDescription>
+		<value>Check out our &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;guide&lt;/a> or watch a &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;quick video&lt;/a></value>
+	</labels>
+	<labels>
 		<fullName>TemplateConfigurationLabel</fullName>
 		<categories>SetupWizard</categories>
 		<language>en_US</language>
@@ -9745,7 +9753,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Start First Envelope Configuration</shortDescription>
-		<value>Ready to Start Your First Envelope Configuration?</value>
+		<value>Ready to Create Your First Envelope Template?</value>
 	</labels>
 	<labels>
 		<fullName>NotFamiliarWithEnvelopeConfiguration</fullName>
@@ -9753,7 +9761,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Not Familiar With Envelope Configuration</shortDescription>
-		<value>Not familiar with Envelope Configurations?</value>
+		<value>Not familiar with Envelope Templates?</value>
 	</labels>
 	<labels>
 		<fullName>AddName</fullName>
@@ -9965,6 +9973,30 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 	</labels>
 	<labels>
 		<fullName>DecRecipientsVideoLink</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>https://docusign.wistia.com/medias/elojgoj4cu</value>
+	</labels>
+	<labels>
+		<fullName>DecSetupTemplatesVideoText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>Getting Started with Templates</value>
+	</labels>
+	<labels>
+		<fullName>DecSetupTemplatesVideoLength</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>4 min video</value>
+	</labels>
+	<labels>
+		<fullName>DecSetupTemplatesVideoLink</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>

@@ -10,6 +10,8 @@
   },
 
   getEnvelopeConfigurations: function (component, uiHelper) {
+    component.set('v.loading', true);
+    component.set('v.envelopeConfigurations', []);
     uiHelper.invokeAction(component.get('c.getEnvelopeConfigurations'), {}, $A.getCallback(function (envelopeConfigurations) {
       if ($A.util.isEmpty(envelopeConfigurations)) {
         component.set('v.loading', false);

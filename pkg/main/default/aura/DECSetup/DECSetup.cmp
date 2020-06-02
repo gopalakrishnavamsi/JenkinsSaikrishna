@@ -31,26 +31,30 @@
             <aura:set attribute="else">
                 <aura:if isTrue="{!empty(v.envelopeConfigurations)}">
                     <div class="slds-container_medium slds-container_center">
-                        <div class="ds-dec-noTemplates-section">
-                            <div class="slds-media">
-                                <div class="slds-media__figure">
-                                    <img class="ds-dec-image-section" src="{!$Resource.LearnDEC}"/>
+                        <div class="slds-m-top_xx-large">
+                            <div class="slds-m-around_x-large">
+                                <div class="ds-dec-noTemplates-section-videoImage">
+                                    <c:helpVideoImageBox videoText="{!$Label.c.DecSetupTemplatesVideoText}"
+                                                         videoLength="{!$Label.c.DecSetupTemplatesVideoLength}"
+                                                         videoLink="{!$Label.c.DecSetupTemplatesVideoLink}">
+                                    </c:helpVideoImageBox>
                                 </div>
-                                <div class="slds-media__body">
+                                <div class="slds-m-top_large slds-text-align_center">
                                     <div class="ds-dec-noTemplates-section-header">
                                         {!$Label.c.StartFirstEnvelopeConfiguration}
                                     </div>
-                                    <div class="slds-m-top_large">
-                                        <lightning:button variant="brand"
-                                                          label="{!$Label.c.CreateTemplate}"
-                                                          onclick="{!c.createEnvelopeConfig}"/>
-                                    </div>
-                                    <div class="slds-m-top_large ds-dec-noTemplates-section-body">
+                                </div>
+                                <div class="slds-m-top_small slds-text-align_center">
+                                    <lightning:button variant="brand"
+                                                      label="{!$Label.c.CreateTemplate}"
+                                                      onclick="{!c.createEnvelopeConfig}"/>
+                                </div>
+                                <div class="slds-m-top_large slds-text-align_center">
+                                    <div class="ds-dec-noTemplates-section-body">
                                         {!$Label.c.NotFamiliarWithEnvelopeConfiguration}
                                     </div>
                                     <div class="slds-m-top_xx-small ds-dec-noTemplates-section-body">
-                                        <!-- TODO add help link -->
-                                        <lightning:formattedRichText value="{!$Label.c.GenQuickGuide}"/>
+                                        <lightning:formattedRichText value="{!$Label.c.EnvelopeTemplatesQuickGuide}"/>
                                     </div>
                                 </div>
                             </div>

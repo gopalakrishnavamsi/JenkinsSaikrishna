@@ -4098,6 +4098,10 @@
 		<name>GenQuickGuide</name>
 	</customLabels>
 	<customLabels>
+		<label>Check out our &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;guide&lt;/a> or watch a &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;quick video&lt;/a></label>
+		<name>EnvelopeTemplatesQuickGuide</name>
+	</customLabels>
+	<customLabels>
 		<label>Template Configurations</label>
 		<name>TemplateConfigurationLabel</name>
 	</customLabels>
@@ -5072,11 +5076,11 @@
 		<name>CreateTemplate</name>
 	</customLabels>
 	<customLabels>
-		<label>Ready to Start Your First Envelope Configuration?</label>
+		<label>Ready to Create Your First Envelope Template?</label>
 		<name>StartFirstEnvelopeConfiguration</name>
 	</customLabels>
 	<customLabels>
-		<label>Not familiar with Envelope Configurations?</label>
+		<label>Not familiar with Envelope Templates?</label>
 		<name>NotFamiliarWithEnvelopeConfiguration</name>
 	</customLabels>
 	<customLabels>
@@ -5146,6 +5150,18 @@
 	<customLabels>
 		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
 		<name>DecRecipientsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Getting Started with Templates</label>
+		<name>DecSetupTemplatesVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>4 min video</label>
+		<name>DecSetupTemplatesVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>DecSetupTemplatesVideoLink</name>
 	</customLabels>
 	<customLabels>
 		<label>Add Recipients</label>

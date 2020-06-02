@@ -2,24 +2,27 @@
     max-width: 40rem;
 }
 
-.THIS .ds-dec-image-section {
-    height: 216px;
-    width: 300px;
-}
-
-.THIS .ds-dec-noTemplates-section {
-    padding-top: 18px;
-}
-
-.THIS .ds-dec-noTemplates-section-header, .THIS .ds-dec-setup-componentHeader {
+.THIS .ds-dec-setup-componentHeader {
     color: rgb(43, 40, 38);
     font-size: t(fontSize8);
     font-weight: t(fontWeightBold);
 }
 
+.THIS .ds-dec-noTemplates-section-header {
+    color: rgb(71, 71, 68);
+    font-size: t(fontSize7);
+    font-weight: normal;
+}
+
+.THIS .ds-dec-noTemplates-section-videoImage {
+    display: flex;
+    justify-content: center;
+}
+
 .THIS .ds-dec-noTemplates-section-body {
-    color: rgb(8, 7, 7);
+    color: rgb(112, 114, 108);
     font-size: t(fontSize3);
+    font-weight: normal;
 }
 
 .THIS .ds-dec-templates-setup-spinner {
