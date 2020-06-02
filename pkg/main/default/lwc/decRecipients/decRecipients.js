@@ -27,4 +27,10 @@ export default class DecRecipients extends LightningElement {
     this.privateRecipients.push(recipient);
     this.closeRecipientsModal();
   };
+
+  handleSigningOrderModalOpen = () => {
+    const signingOrderDiagramComponent = this.template.querySelector('c-signing-order');
+    signingOrderDiagramComponent.handleShow();
+  }
+
 }

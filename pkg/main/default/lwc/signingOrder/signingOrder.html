@@ -1,0 +1,138 @@
+<template>
+    <c-modal header={label.signingOrderDiagram}
+             show-modal={showSigningOrderDiagram}
+             onclose={handleClose}>
+        <div slot="content">
+            <div class="diagram-container">
+                <table role="presentation">
+                    <tr class="diagram-row">
+                        <td>
+                            <h4 class="diagram-row-caption text-uppercase">
+                                {label.sender}
+                            </h4>
+                        </td>
+                        <td class="diagram-row-contents text-center sender">
+                            <div class="thumbnail-wrapper" style={signingOrderImage}>
+                                <button class="thumbnail-contents text-strong senderText"
+                                        type="button"
+                                        role="text">
+                                    <span>
+                                        {label.sender}
+                                    </span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <template for:each={orderedRoutingGroups} for:item="routingGroup">
+                        <tr class="diagram-row" key={routingGroup.routingOrder}>
+                            <td>
+                                <h4 class="diagram-row-caption">
+                                    {routingGroup.routingOrder}
+                                </h4>
+                            </td>
+                            <td class="diagram-row-contents text-center recipient-row">
+                                <template for:each={routingGroup.recipients} for:item="recipient">
+                                    <div class="thumbnail-wrapper" style={signingOrderImage} key={recipient.index}>
+                                            <span>
+                                                <button class="text-strong thumbnail-contents recipient-draft"
+                                                        type="button"
+                                                        role="text"
+                                                        data-name={recipient.name}
+                                                        data-email={recipient.email}
+                                                        data-iconname={recipient.iconName}
+                                                        data-customid={recipient.customId}
+                                                        onmouseenter={handleRecipientToolTip}
+                                                        onfocus={handleRecipientToolTip}
+                                                        onblur={hideRecipientToolTip}
+                                                        onmouseleave={hideRecipientToolTip}
+                                                        aria-describedby={recipient.name}>
+                                                    <span class="text-strong">
+                                                        {recipient.initials}
+                                                    </span>
+                                                 </button>
+                                                <div class="slds-is-relative tooltipPadding"
+                                                     data-customid={recipient.customId} style="display:none">
+                                                    <section class="slds-popover slds-nubbin_bottom-left tooltipContent"
+                                                             role="dialog">
+                                                        <div class="slds-popover__body">
+                                                            <template for:each={toolTipLabel} for:item="label">
+                                                                <div key={label.name}>
+                                                                    <span>
+                                                                        <lightning-icon icon-name={label.iconname}
+                                                                                        size="xx-small"></lightning-icon>
+                                                                        <span class="text-strong slds-p-left_xx-small">{label.name}</span>
+                                                                    </span>
+                                                                    <p class="toolTipEmail">{label.email}</p>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </section>
+                                                 </div>
+                                            </span>
+                                    </div>
+                                </template>
+                                <template if:true={routingGroup.hasAdditionalRecipients}>
+                                    <div class="thumbnail-wrapper" style={signingOrderImage}>
+                                        <span>
+                                            <!-- Todo - mouse events - optimize mouse enter and leave -->
+                                            <button class="text-strong thumbnail-contents recipient-draft"
+                                                    type="button"
+                                                    role="text"
+                                                    data-group={routingGroup.routingOrder}
+                                                    data-groupstring={routingGroup.routingOrderString}
+                                                    onmouseenter={handleAdditionalRecipientToolTip}
+                                                    onmouseleave={hideAdditionalRecipientToolTip}>
+                                                    <span class="text-strong">
+                                                        + {routingGroup.numberOfAdditionalRecipients}
+                                                    </span>
+                                            </button>
+                                            <div class="slds-is-relative tooltipPadding"
+                                                 data-customgroupid={routingGroup.routingOrderString}
+                                                 style="display:none">
+                                                <section class="slds-popover slds-nubbin_bottom-left tooltipContent"
+                                                         role="dialog">
+                                                    <div class="slds-popover__body">
+                                                        <template for:each={toolTipLabel} for:item="label">
+                                                             <div key={label.name}>
+                                                                 <span> <!-- Todo icon and name should appear in same line -->
+                                                                     <lightning-icon icon-name={label.iconname}
+                                                                                     size="xx-small"></lightning-icon>
+                                                                     <span class="text-strong slds-p-left_xx-small">{label.name}</span>
+                                                                 </span>
+                                                                 <p class="toolTipEmail"> {label.email} </p>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+                    <tr class="diagram-row">
+                        <td>
+                            <h4 class="diagram-row-caption text-uppercase">
+                                {label.completed}
+                            </h4>
+                        </td>
+                        <td class="diagram-row-contents text-center completed">
+                            <div class="thumbnail-wrapper" style={signingOrderImage}>
+                                <button class="text-strong thumbnail-contents recipient-draft"
+                                        type="button"
+                                        role="text">
+                                    <span class="text-strong">
+                                        &#10004;
+                                    </span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div slot="footer">
+        </div>
+    </c-modal>
+</template>

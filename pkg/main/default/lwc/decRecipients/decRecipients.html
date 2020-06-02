@@ -24,7 +24,14 @@
                             <div class="ds-addRecipients-details-header-text">{Labels.recipients}</div>
                         </div>
                         <div class="slds-col">
+                            <lightning-button-group>
+                                <lightning-button label={Labels.signingOrderLabel}
+                                                  icon-name="utility:add"
+                                                  onclick={handleSigningOrderModalOpen}></lightning-button>
+                                <lightning-button label={Labels.view}></lightning-button>
+                            </lightning-button-group>
                             <lightning-button label={Labels.addRecipient}
+                                              class="slds-p-left_x-small"
                                               onclick={handleRecipientsModalOpen}></lightning-button>
                         </div>
                     </div>
@@ -54,6 +61,11 @@
             </div>
         </div>
     </div>
+
+    <div>
+        <c-signing-order></c-signing-order>
+    </div>
+
     <c-dec-recipients-modal is-open={showAddRecipientsModal} handle-save={addRecipient}
                             handle-close={closeRecipientsModal} source-object={sourceObject}>
     </c-dec-recipients-modal>

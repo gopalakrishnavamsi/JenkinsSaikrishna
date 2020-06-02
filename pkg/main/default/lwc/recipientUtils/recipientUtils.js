@@ -47,10 +47,12 @@ import embeddedSignerLabel from '@salesforce/label/c.EmbeddedSigner';
 import decRecordsFieldsLookupLabel from '@salesforce/label/c.DecRecordsFieldsLookupLabel';
 import decRelatedListLabel from '@salesforce/label/c.DecRelatedListLabel';
 import untitledLabel from '@salesforce/label/c.Untitled';
+import signingOrderLabel from '@salesforce/label/c.SigningOrder';
 import searchPlaceHolder from '@salesforce/label/c.SearchPlaceHolder';
 import emailAddressLabel from '@salesforce/label/c.EmailAddress';
 import nameLabel from '@salesforce/label/c.NameLabel';
 import recipientRoleLabel from '@salesforce/label/c.RecipientRoleLabel';
+import view from '@salesforce/label/c.View';
 
 export class Recipient {
   constructor({id = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = null, signingGroup = null}, role, routingOrder = 1) {
@@ -172,10 +174,12 @@ export const Labels = {
   decRecordsFieldsLookupLabel: decRecordsFieldsLookupLabel,
   decRelatedListLabel: decRelatedListLabel,
   untitledLabel: untitledLabel,
+  signingOrderLabel: signingOrderLabel,
   searchPlaceHolder: searchPlaceHolder,
   emailAddressLabel: emailAddressLabel,
   nameLabel: nameLabel,
-  recipientRoleLabel: recipientRoleLabel
+  recipientRoleLabel: recipientRoleLabel,
+  view: view
 };
 
 export const Actions = {

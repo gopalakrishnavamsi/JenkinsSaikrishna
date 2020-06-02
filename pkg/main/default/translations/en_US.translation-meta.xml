@@ -5314,11 +5314,23 @@
 	<customLabels>
 		<label>Select Related List</label>
 		<name>DecRelatedListLabel</name>
-	</customLabels>	
+	</customLabels>
+	<customLabels>
+		<label>Signing Order Diagram</label>
+		<name>SigningOrderDiagram</name>
+	</customLabels>
+	<customLabels>
+		<label>Signing Order</label>
+		<name>SigningOrder</name>
+	</customLabels>
 	<customLabels>
 		<label>Role</label>
 		<name>RecipientRoleLabel</name>
-	</customLabels>	
+	</customLabels>
+	<customLabels>
+		<label>View</label>
+		<name>View</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
