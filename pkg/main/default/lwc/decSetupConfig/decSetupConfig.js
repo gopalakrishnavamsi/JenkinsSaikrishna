@@ -11,6 +11,7 @@ import DEC_ERROR from '@salesforce/messageChannel/DecError__c';
 // Subscriber
 import DEC_UPDATE_SOURCE_FILES from '@salesforce/messageChannel/DecUpdateSourceFiles__c';
 import DEC_DELETE_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecDeleteTemplateDocument__c';
+import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEnvelopeTemplate__c';
 
 
 // utility functions
@@ -64,6 +65,7 @@ export default class DecSetupConfig extends LightningElement {
   connectedCallback() {
     this.subscribeToSourceFilesMessageChannel();
     this.subscribeToTemplateDocumentMessageChannel();
+    this.subscribeToRenameEnvelopeTemplateMessageChannel();
   }
 
   disconnectedCallback() {
@@ -145,6 +147,17 @@ export default class DecSetupConfig extends LightningElement {
     });
   }
 
+  subscribeToRenameEnvelopeTemplateMessageChannel() {
+    if (this.renameEnvelopeTemplateSubscription) {
+      return;
+    }
+    this.renameEnvelopeTemplateSubscription = subscribe(this.context, DEC_RENAME_ENVELOPE_TEMPLATE, (message) => {
+      this.handleRenameEnvelopeTemplate(message);
+    }, {
+      scope: APPLICATION_SCOPE
+    });
+  }
+
   handleSourceFilesSubscription(message){
     this.attachSourceFiles = message.isSourceFilesSelected;
   }
@@ -170,9 +183,11 @@ export default class DecSetupConfig extends LightningElement {
     this.updateEnvelopeConfiguration();
   }
 
-  onRenameSave(event) {
-    this.updateLocalData(event);
-    this.updateEnvelopeConfiguration();
+  handleRenameEnvelopeTemplate(message) {
+    this.updateEnvelopeConfiguration(null, {
+      ... this.envelopeConfigurationData,
+      name: message.name
+    });
   }
 
   updateLocalData(event) {
@@ -210,11 +225,11 @@ export default class DecSetupConfig extends LightningElement {
       .catch(this.showError);
   }
 
-  updateEnvelopeConfiguration(step) {
+  updateEnvelopeConfiguration(step, configurationData = this.envelopeConfigurationData) {
     this.setLoading(true);
-    let configurationData = this.getFilteredConfigurationData();
+    const updatedConfiguration = this.getFilteredConfigurationData(configurationData);
     updateEnvelopeConfiguration({
-      envelopeConfigurationJSON: configurationData,
+      envelopeConfigurationJSON: updatedConfiguration,
       attachSourceFiles: this.attachSourceFiles
     })
       .then(result => {
@@ -226,18 +241,18 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   // Process configuration data before updating it in server
-  getFilteredConfigurationData() {
-    if (isEmpty(this.envelopeConfigurationData)) {
+  getFilteredConfigurationData(configurationData) {
+    if (isEmpty(configurationData)) {
       return null;
     }
 
     const processedFields = {};
     
-    processedFields.documents = this.envelopeConfigurationData.documents.map(doc => ({ ... doc, id: null }));
+    processedFields.documents = configurationData.documents.map(doc => ({ ... doc, id: null }));
 
     return JSON.stringify({
-      ...this.envelopeConfigurationData,
-      ...processedFields
+      ... configurationData,
+      ... processedFields
     });
   }
 

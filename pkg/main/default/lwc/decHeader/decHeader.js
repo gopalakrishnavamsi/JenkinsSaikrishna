@@ -4,6 +4,14 @@ import { LightningElement, api } from 'lwc';
 import { isEmpty } from 'c/utils';
 import { LABEL } from 'c/setupUtils';
 
+// Lightning message service
+import {createMessageContext,
+    releaseMessageContext,
+    publish
+  } from 'lightning/messageService';
+  // Publisher
+  import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEnvelopeTemplate__c';
+
 export default class DecHeader extends LightningElement {
     showRenameModal = false;
     nameCopy;
@@ -27,6 +35,12 @@ export default class DecHeader extends LightningElement {
 
     label = LABEL;
 
+    context = createMessageContext();
+
+    disconnectedCallback() {
+      releaseMessageContext(this.context);
+    }
+
     get saveLabel() {
         return this.isFinalStep ? this.label.saveAndFinish : this.label.saveAndClose;
     }
@@ -49,14 +63,13 @@ export default class DecHeader extends LightningElement {
     }
     
     saveRenameModal() {
-        const updateEvent = new CustomEvent('modalsave', {
-            detail: {
-                name: this.nameCopy.trim()
-            }
-        });
+        const message = {
+            name: this.nameCopy.trim()
+        };
+        publish(this.context, DEC_RENAME_ENVELOPE_TEMPLATE, message);
         this.closeRenameModal();
-        this.dispatchEvent(updateEvent);
     }
+
     
     handleNameChange(event) {
         event.preventDefault();
