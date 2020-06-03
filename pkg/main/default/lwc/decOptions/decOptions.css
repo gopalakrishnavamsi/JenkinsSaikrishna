@@ -1,0 +1,22 @@
+.ds-options-information-section {
+    height: 94px;
+    width: 920px;
+}
+
+.ds-options-information-header {
+    color: var(--lwc-colorTextActionLabelActive);
+    font-size: var(--lwc-fontSize7);
+    font-weight: var(--lwc-fontWeightBold);
+}
+
+.ds-options-information-text {
+    color: rgb(62, 62, 60);
+    font-size: var(--lwc-fontSize3);
+    width: 729px;
+}
+
+.ds-options-details-header-text {
+    color: rgb(5, 5, 5);
+    font-size: var(--lwc-fontSize5);
+    font-weight: bold;
+}

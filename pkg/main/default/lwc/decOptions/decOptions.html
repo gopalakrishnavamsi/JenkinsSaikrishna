@@ -1,0 +1,23 @@
+<template>
+    <div class="slds-m-top_x-large">
+        <span class="slds-float_right">
+            <c-help-video-image-box video-link={label.helpVideoLink}
+                                    video-text={label.helpVideoText}
+                                    video-length={label.helpVideoLength}>
+            </c-help-video-image-box>
+        </span>
+        <!-- Options Information section -->
+        <div class="ds-options-information-section">
+            <div class="ds-options-information-header">{label.options}</div>
+            <div class="slds-m-top_small ds-options-information-text">{label.optionsInfoText}</div>
+        </div>
+        <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large">
+            <div class="ds-options-details-header-text ">{label.opportunityStage}</div>
+            <div class="slds-p-top_large">TBD</div>
+        </div>
+        <div class="slds-p-bottom_large slds-p-top_large">
+            <div class="ds-options-details-header-text">{label.documentWriteback}</div>
+            <div class="slds-p-top_large">TBD</div>
+        </div>
+    </div>
+</template>

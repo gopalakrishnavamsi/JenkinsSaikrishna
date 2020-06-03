@@ -10243,4 +10243,52 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>View</shortDescription>
 		<value>View</value>
 	</labels>
+	<labels>
+		<fullName>OptionsInfoText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Tweak configuration settings in template</shortDescription>
+		<value>You can tweak the settings used in this template before and after sending.</value>
+	</labels>
+	<labels>
+		<fullName>DecOptionsVideoText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Setup Post-Sign Options</shortDescription>
+		<value>Setup Post-Sign Options</value>
+	</labels>
+	<labels>
+		<fullName>DecOptionsVideoLength</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>2 min video</shortDescription>
+		<value>2 min video</value>
+	</labels>
+	<labels>
+		<fullName>DecOptionsVideoLink</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>https://docusign.wistia.com/medias/elojgoj4cu</value>
+	</labels>
+	<labels>
+		<fullName>DocumentWriteback</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Document Writeback</shortDescription>
+		<value>Document Writeback</value>
+	</labels>
+	<labels>
+		<fullName>OpportunityStage</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Opportunity Stage</shortDescription>
+		<value>Opportunity Stage</value>
+	</labels>
 </CustomLabels>

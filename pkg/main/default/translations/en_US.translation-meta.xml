@@ -5331,6 +5331,30 @@
 		<label>View</label>
 		<name>View</name>
 	</customLabels>
+	<customLabels>
+		<label>You can tweak the settings used in this template before and after sending.</label>
+		<name>OptionsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Setup Post-Sign Options</label>
+		<name>DecOptionsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 min video</label>
+		<name>DecOptionsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>DecOptionsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Writeback</label>
+		<name>DocumentWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>Opportunity Stage</label>
+		<name>OpportunityStage</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>
