@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <!-- details body section -->
-                <div class="ds-addRecipients-details-body slds-m-around_medium">
+                <div class="ds-addRecipients-details-body slds-m-around_medium" if:false={recipientsJson}>
                     <div class="slds-grid slds-grid_vertical">
                         <div class="slds-col slds-m-top_large ds-addRecipients-details-noRecipients-center">
                             <img src={Labels.addRecipientsEmptyImage}/>
@@ -58,15 +58,15 @@
                         </div>
                     </div>
                 </div>
+
+                <c-dec-recipients-list recipients={recipientsJson} if:true={recipientsJson}></c-dec-recipients-list>
+
             </div>
         </div>
     </div>
-
     <div>
         <c-signing-order></c-signing-order>
     </div>
-
     <c-dec-recipients-modal is-open={showAddRecipientsModal} handle-save={addRecipient}
-                            handle-close={closeRecipientsModal} source-object={sourceObject}>
-    </c-dec-recipients-modal>
+                            handle-close={closeRecipientsModal} source-object={sourceObject}></c-dec-recipients-modal>
 </template>

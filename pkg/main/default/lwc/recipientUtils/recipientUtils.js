@@ -52,10 +52,11 @@ import searchPlaceHolder from '@salesforce/label/c.SearchPlaceHolder';
 import emailAddressLabel from '@salesforce/label/c.EmailAddress';
 import nameLabel from '@salesforce/label/c.NameLabel';
 import recipientRoleLabel from '@salesforce/label/c.RecipientRoleLabel';
+import recipientRecordFieldLabel from '@salesforce/label/c.RecipientRecordFieldLabel';
 import view from '@salesforce/label/c.View';
 
 export class Recipient {
-  constructor({id = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = null, signingGroup = null}, role, routingOrder = 1) {
+  constructor({id = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = 'Signer', signingGroup = null}, role, routingOrder = 1) {
     this.id = id;
     this.name = name;
     this.email = email;
@@ -86,15 +87,15 @@ export class Recipient {
   }
 
   get recipientType() {
-    switch(this.constructor) {
+    switch (this.constructor) {
       case LookupRecipient:
-          return Types.LookupRecipient.value;
+        return Types.LookupRecipient.value;
       case RelatedRecipient:
-          return Types.RelatedRecipient.value;
+        return Types.RelatedRecipient.value;
       default:
-          if (this.signingGroup) return Types.SigningGroup.value;
-          else if (!isEmpty(this.source)) return Types.EntityLookup.value;
-          return Types.Role.value;
+        if (this.signingGroup) return Types.SigningGroup.value;
+        else if (!isEmpty(this.source)) return Types.EntityLookup.value;
+        return Types.Role.value;
     }
   }
 
@@ -179,6 +180,7 @@ export const Labels = {
   emailAddressLabel: emailAddressLabel,
   nameLabel: nameLabel,
   recipientRoleLabel: recipientRoleLabel,
+  recipientRecordFieldLabel: recipientRecordFieldLabel,
   view: view
 };
 

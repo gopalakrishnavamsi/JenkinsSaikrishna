@@ -1,0 +1,20 @@
+<template>
+      <template
+            for:each={recipients}
+            for:item="item"
+            for:index="index">
+        <div class="slds-border_bottom"
+             draggable="true"
+             data-id={item.routingOrder}
+             data-index={index}
+             key={item.routingOrder}
+             ondrop={handleDrop}
+             ondragenter={handleDragEnter}
+             ondragover={handleDragOver}
+             ondragleave={handleDragLeave}
+             ondragstart={itemDragStart}
+             ondragend={itemDragEnd}>
+            <c-dec-recipient recipient={item}></c-dec-recipient>
+        </div>
+    </template>
+</template>

@@ -116,6 +116,10 @@ export default class DecSetupConfig extends LightningElement {
     return isEmpty(this.envelopeConfigurationData) ? [] : this.envelopeConfigurationData.documents;
   }
 
+  get recipients() {
+    return isEmpty(this.envelopeConfigurationData) ? [] : JSON.stringify(this.envelopeConfigurationData.recipients);
+  }
+
   // Passed to decHeader
   get configurationName() {
     return this.envelopeConfigurationData ? this.envelopeConfigurationData.name : '';
@@ -193,6 +197,13 @@ export default class DecSetupConfig extends LightningElement {
     let docs = this.envelopeConfigurationData.documents;
     docs = [...docs, {...event.detail.data}];
     this.envelopeConfigurationData = {...this.envelopeConfigurationData,documents:docs};
+    this.updateEnvelopeConfiguration(this.currentStep);
+  }
+
+  handleUpdateRecipient(event) {
+    let recipients = this.envelopeConfigurationData.recipients;
+    recipients = [...recipients, {...event.detail.data}];
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData,recipients:recipients};
     this.updateEnvelopeConfiguration(this.currentStep);
   }
 

@@ -24,14 +24,19 @@
             <template if:true={documentsStep}>
                 <div onupdatetemplatedocuments={handleUpdateDocument}>
                     <c-dec-documents
-                        documents={documents}
-                        attach-source-files={attachSourceFiles}
-                        record-id={recordId}>
+                            documents={documents}
+                            attach-source-files={attachSourceFiles}
+                            record-id={recordId}>
                     </c-dec-documents>
                 </div>
             </template>
             <template if:true={recipientsStep}>
-                <c-dec-recipients source-object={sourceObject}></c-dec-recipients>
+                <div onupdatetemplaterecipients={handleUpdateRecipient}>
+                    <c-dec-recipients
+                            source-object={sourceObject}
+                            recipients={recipients}>
+                    </c-dec-recipients>
+                </div>
             </template>
             <template if:true={mergeFieldsStep}>
                 <c-dec-merge-fields></c-dec-merge-fields>

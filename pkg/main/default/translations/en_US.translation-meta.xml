@@ -5328,6 +5328,10 @@
 		<name>RecipientRoleLabel</name>
 	</customLabels>
 	<customLabels>
+		<label>Record Field</label>
+		<name>RecipientRecordFieldLabel</name>
+	</customLabels>
+	<customLabels>
 		<label>View</label>
 		<name>View</name>
 	</customLabels>

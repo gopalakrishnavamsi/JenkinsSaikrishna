@@ -71,8 +71,10 @@ export default class DecRecipientDetails extends LightningElement {
     this.updateRecipient(recipient);  
   }
 
-  handleAuthenticationChange() {
-      //TODO
+  handleAuthenticationChange({ detail }) {
+    let recipient = this.recipient;
+    recipient.authentication = detail;
+    this.updateRecipient(recipient);
   }
 
   updateNote({ detail }) {

@@ -1,0 +1,49 @@
+.ds-type-icon {
+    margin-top: 2px;
+    padding-right: 7px;
+    opacity: 0.7;
+}
+
+.ds-recipient-color-1 {
+    background-color: #ffd65b;
+}
+
+.ds-recipient-color-2 {
+    background-color: #acdce6;
+}
+
+.ds-recipient-color-3 {
+    background-color: #c0a5cf;
+}
+
+.ds-recipient-color-4 {
+    background-color: #97c9bf;
+}
+
+.ds-recipient-color-5 {
+    background-color: #f7b994;
+}
+
+.ds-recipient-color-6 {
+    background-color: #c3d5e6;
+}
+
+.ds-recipient-color-7 {
+    background-color: #cfdb7f;
+}
+
+.ds-recipient-color-8 {
+    background-color: #ff9980;
+}
+
+.ds-recipient-color-9 {
+    background-color: #ff9980;
+}
+
+.ds-recipient-color-0 {
+    background-color: #ffb3c6;
+}
+
+.ds-recipient-item {
+    max-width: 4px;
+}

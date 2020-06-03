@@ -10236,6 +10236,14 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Role</value>
 	</labels>
 	<labels>
+		<fullName>RecipientRecordFieldLabel</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>RecordField</shortDescription>
+		<value>Record Field</value>
+	</labels>
+	<labels>
 		<fullName>View</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>
