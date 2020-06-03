@@ -205,9 +205,8 @@ public with sharing class NegotiateService {
 		}
 		UUID returnValue;
 		UUID taskId = NegotiateAPI.getInstance().compareAgreements(originalDocumentHref, compareVersionHref);
-		NegotiateAPI.TaskStatus taskStatus = NegotiateAPI.getInstance().getCompareAgreementsStatus(taskId);
 		//successfully processed agreement comparison task
-		if (taskStatus.status.equals(TASK_SUCCESS)) {
+		if (taskId != null) {
 			returnValue = taskId;
 		}
 		//throw exception if status is not equal to success

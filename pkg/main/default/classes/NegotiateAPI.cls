@@ -506,10 +506,10 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		final String compareVersionHref) {
 
 		RestAPI.Response response = this.post(
-			new List<Object> { 'v2', accountId, 'documentcomparetasks' },
+			new List<Object> { 'negotiate', 'api', 'v1', accountId, 'compare' },
 			JSON.serialize(new Map<String, Object> {
-				'OriginalDocument' => new APIDocument(originalDocumentHref),
-				'RevisedDocument' => new APIDocument(compareVersionHref)
+				'originalDocumentUid' =>  originalDocumentHref.substringAfterLast('/'),
+				'revisedDocumentUid' =>  compareVersionHref.substringAfterLast('/')
 			}),
 			RestAPI.defaultTimeout);
 		if (response.hasError) {
@@ -518,7 +518,7 @@ public with sharing class NegotiateAPI extends ScmAPI {
 		}
 
 		Map<String, Object> body = (Map<String, Object>)JSON.deserializeUntyped(response.body);
-		return UUID.parse(((String)body.get('Href')).substringAfterLast('/'));
+		return UUID.parse((String)body.get('compareDocumentUid'));
 	}
 
 	@TestVisible
@@ -558,29 +558,6 @@ public with sharing class NegotiateAPI extends ScmAPI {
 				RestAPI.defaultTimeout);
 			if (response.hasError) {
 				this.log.error('Failed to get status of newly Agreement in EOSfolder for - ' + taskId + ': ' + response.error);
-				throw new APIException(response.error);
-			}
-			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);
-			status = result.status;
-			count += 1;
-		}
-
-		return result;
-	}
-
-	public NegotiateAPI.TaskStatus getCompareAgreementsStatus(final UUID taskId) {
-		String status = '';
-		Long count = 0;
-		NegotiateAPI.TaskStatus result = new NegotiateAPI.TaskStatus();
-
-		while (status != 'Success' && count < API_RETRY_LIMIT) {
-			final RestAPI.Response response = this.get(
-				new List<Object> {
-					'v2', accountId, 'documentcomparetasks', taskId
-				},
-				RestAPI.defaultTimeout);
-			if (response.hasError) {
-				this.log.error('Failed to get status of comparison of Agreements - ' + taskId + ': ' + response.error);
 				throw new APIException(response.error);
 			}
 			result = (NegotiateAPI.TaskStatus)JSON.deserialize(response.body, NegotiateAPI.TaskStatus.class);

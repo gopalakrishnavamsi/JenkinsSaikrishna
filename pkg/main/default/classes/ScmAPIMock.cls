@@ -24,9 +24,9 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 	public static final UUID WORKITEM_ID = UUID.parse('382bd222-e541-e911-9c1d-3ca82a1e3a66');
 	public static final UUID EXTERNAL_REVIEW_ID = UUID.parse('2a2167ad-0187-e911-9c35-3863bb335c17');
 	public static final Id OBJECT_ID = Id.valueOf('0061U0000058I2EQAU');
-	public static final String ORIGINAL_DOCUMENT_HREF = 'https://apiqana11.springcm.com/v2/013fc30e-f6ca-464e-a97c-e4765dbad495/documents/5a10a488-8fbc-e911-9c37-3863bb335c17';
-	public static final String COMPARE_VERSION_HREF = 'https://apiqana11.springcm.com/v2/013fc30e-f6ca-464e-a97c-e4765dbad495/documents/6d4a28c5-8fbc-e911-9c37-3863bb335c17';
-	public static final UUID COMPARE_TASK_ID = UUID.parse('233d8ee7-1135-4d63-9163-c532c4e2571a');
+	public static final String ORIGINAL_DOCUMENT_HREF = 'https://apiqana11.springcm.com/v2/f7e07673-7855-446c-b61e-9d5c4fc116e9/documents/df0c145c-f7a4-ea11-9c46-3863bb335c17';
+	public static final String COMPARE_VERSION_HREF = 'https://apiqana11.springcm.com/v2/f7e07673-7855-446c-b61e-9d5c4fc116e9/documents/47912546-f7a4-ea11-9c46-3863bb335c17';
+	public static final UUID COMPARE_TASK_ID = UUID.parse('05d5e974-595f-42cc-82cb-171be288bf85');
 
 	private static final Map<String, String> MOCK_TYPES = new Map<String, String> {
 		'emails' => Application.classNamespacePrefix + 'ScmAPIMock.EmailMock',
@@ -38,7 +38,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		'workflows' => Application.classNamespacePrefix + 'ScmAPIMock.WorkflowMock',
 		'salesforcecontentdocumentimporttasks' => Application.classNamespacePrefix + 'ScmAPIMock.ImportMock',
 		'salesforcecontentdocumentexporttasks' => Application.classNamespacePrefix + 'ScmAPIMock.ExportMock',
-		'documentcomparetasks' => Application.classNamespacePrefix + 'ScmAPIMock.CompareMock',
+		'compare' => Application.classNamespacePrefix + 'ScmAPIMock.CompareMock',
 		'reviews' => Application.classNamespacePrefix + 'ScmAPIMock.ReviewMock',
 		'workitems' => Application.classNamespacePrefix + 'ScmAPIMock.WorkItemMock',
 		'documents' => Application.classNamespacePrefix + 'ScmAPIMock.DocumentMock',
@@ -274,9 +274,9 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
 			if (request.method == 'GET') {
-				response = MockResponse.ok('{"Status":"Success","Href":"https://apiqana11.springcm.com/v2/013fc30e-f6ca-464e-a97c-e4765dbad495/documentcompareapitasks/233d8ee7-1135-4d63-9163-c532c4e2571a"}');
+				response = MockResponse.ok('"compareDocumentUid":"05d5e974-595f-42cc-82cb-171be288bf85","status":"Success","message":""}');
 			} else if (request.method == 'POST') {
-				response = MockResponse.created('{"Status":"Success","Href":"https://apiqana11.springcm.com/v2/013fc30e-f6ca-464e-a97c-e4765dbad495/documentcompareapitasks/233d8ee7-1135-4d63-9163-c532c4e2571a"}');
+				response = MockResponse.created('{"compareDocumentUid":"05d5e974-595f-42cc-82cb-171be288bf85","status":"Success","message":""}');
 			}
 			return response;
 		}

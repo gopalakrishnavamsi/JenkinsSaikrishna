@@ -450,38 +450,6 @@ public with sharing class NegotiateAPITest {
 	}
 
 	@IsTest
-	static void test_getCompareAgreementsStatus_success() {
-		ScmAPIMock.success();
-
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-
-			Test.startTest();
-			NegotiateAPI.TaskStatus result = NegotiateAPI.getInstance().getCompareAgreementsStatus(ScmAPIMock.COMPARE_TASK_ID);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals('Success', result.status);
-		}
-	}
-
-	@IsTest
-	static void test_getCompareAgreementsStatus_failure() {
-		ScmAPIMock.failure();
-		System.runAs(UserMock.createDocuSignNegotiator()) {
-			Test.startTest();
-			Boolean hasError = false;
-			try {
-				NegotiateAPI.getInstance().getCompareAgreementsStatus(ScmAPIMock.COMPARE_TASK_ID);
-			} catch (APIException ex) {
-				hasError = true;
-			}
-			Test.stopTest();
-
-			System.assertEquals(hasError, true);
-		}
-	}
-
-	@IsTest
 	static void test_getRootLevelFolderUrl_success() {
 		ScmAPIMock.success();
 
