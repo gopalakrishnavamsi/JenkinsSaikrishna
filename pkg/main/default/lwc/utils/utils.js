@@ -1,3 +1,5 @@
+// Lightning message service
+import { APPLICATION_SCOPE, subscribe} from 'lightning/messageService';
 const UNKNOWN_ICON_NAME = 'doctype:unknown';
 const SUCCESS_EVENT_LABEL = 'success';
 const ERROR_EVENT_LABEL = 'error';
@@ -86,6 +88,22 @@ const format = function (s) {
   return '';
 };
 
+/**
+ * Creates a subscription for a message channel within a given message context. Supports event handling in LWC
+ * @param context {object} The base on which pub-sub relationships can be made
+ * @param subscription {object} Allows messages to be published to a given channel
+ * @param channel {object} Path for messages to be published, leading to handler function executions
+ * @param handler {function} Method that executes when a subscriber publishes to the given channel
+ * @returns {object} The subscription made to the given message channel
+ */
+const subscribeToMessageChannel = (context, subscription, channel, handler) => {
+  if (subscription) {
+    return subscription;
+  }
+
+  return subscribe(context, channel, handler, { scope: APPLICATION_SCOPE });
+};
+
 export {
     FILE_EXTENSION_TO_ICON_NAME_MAPPING,
     UNKNOWN_ICON_NAME,
@@ -95,5 +113,6 @@ export {
     isEmpty,
     formatFileSize,
     genericEvent,
-    format
+    format,
+    subscribeToMessageChannel
 };

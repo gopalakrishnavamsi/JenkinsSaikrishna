@@ -3,9 +3,7 @@ import {LightningElement, api, wire} from 'lwc';
 // Lightning message service
 import {createMessageContext,
         releaseMessageContext,
-        publish,
-        APPLICATION_SCOPE,
-        subscribe} from 'lightning/messageService';
+        publish} from 'lightning/messageService';
 // Publisher
 import DEC_ERROR from '@salesforce/messageChannel/DecError__c';
 // Subscriber
@@ -16,7 +14,7 @@ import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEn
 
 
 // utility functions
-import { isEmpty } from 'c/utils';
+import { isEmpty, subscribeToMessageChannel } from 'c/utils';
 import { DOCUMENT_TYPE_SOURCE_FILES } from 'c/documentUtils';
 import { LABEL } from 'c/setupUtils';
 
@@ -48,7 +46,10 @@ export default class DecSetupConfig extends LightningElement {
   envelopeConfigurationData;
   isLoading = false;
   context = createMessageContext();
+
+  // Subscriptions
   sourceFilesSubscription = null;
+  renameEnvelopeTemplateSubscription = null;
   renameTemplateDocSubscription = null;
   deleteTemplateDocSubscription = null;
 
@@ -65,9 +66,34 @@ export default class DecSetupConfig extends LightningElement {
     {'label': this.label.customButton, 'value': PROGRESS_STEP.CUSTOM_BUTTON}];
 
   connectedCallback() {
-    this.subscribeToSourceFilesMessageChannel();
-    this.subscribeToRenameTemplateDocMessageChannel();
-    this.subscribeToDeleteTemplateDocMessageChannel();
+
+    this.sourceFilesSubscription = subscribeToMessageChannel(
+      this.context,
+      this.sourceFilesSubscription,
+      DEC_UPDATE_SOURCE_FILES,
+      this.handleToggleSourceFiles.bind(this)
+    );
+
+    this.renameTemplateDocSubscription = subscribeToMessageChannel(
+      this.context,
+      this.renameTemplateDocSubscription,
+      DEC_RENAME_TEMPLATE_DOCUMENT,
+      this.handleRenameTemplateDocument.bind(this)
+    );
+
+    this.deleteTemplateDocSubscription = subscribeToMessageChannel(
+      this.context,
+      this.deleteTemplateDocSubscription,
+      DEC_DELETE_TEMPLATE_DOCUMENT,
+      this.handleDeleteTemplateDocument.bind(this)
+    );
+
+    this.renameEnvelopeTemplateSubscription = subscribeToMessageChannel(
+        this.context,
+        this.renameEnvelopeTemplateSubscription,
+        DEC_RENAME_ENVELOPE_TEMPLATE,
+        this.handleRenameEnvelopeTemplate.bind(this)
+    );
   }
 
   disconnectedCallback() {
@@ -127,51 +153,7 @@ export default class DecSetupConfig extends LightningElement {
     return this.envelopeConfigurationData ? this.envelopeConfigurationData.sourceObject : null;
   }  
 
-  subscribeToSourceFilesMessageChannel() {
-    if (this.sourceFilesSubscription) {
-      return;
-    }
-    this.sourceFilesSubscription = subscribe(this.context, DEC_UPDATE_SOURCE_FILES, (message) => {
-      this.handleSourceFilesSubscription(message);
-    }, {
-      scope: APPLICATION_SCOPE
-    });
-  }
-
-  subscribeToRenameTemplateDocMessageChannel() {
-    if (this.renameTemplateDocSubscription) {
-      return;
-    }
-    this.renameTemplateDocSubscription = subscribe(this.context, DEC_RENAME_TEMPLATE_DOCUMENT, (message) => {
-      this.handleRenameTemplateDocument(message);
-    }, {
-      scope: APPLICATION_SCOPE
-    });
-  }
-
-  subscribeToDeleteTemplateDocMessageChannel() {
-    if (this.deleteTemplateDocSubscription) {
-      return;
-    }
-    this.deleteTemplateDocSubscription = subscribe(this.context, DEC_DELETE_TEMPLATE_DOCUMENT, (message) => {
-      this.handleDeleteTemplateDocument(message);
-    }, {
-      scope: APPLICATION_SCOPE
-    });
-  }
-
-  subscribeToRenameEnvelopeTemplateMessageChannel() {
-    if (this.renameEnvelopeTemplateSubscription) {
-      return;
-    }
-    this.renameEnvelopeTemplateSubscription = subscribe(this.context, DEC_RENAME_ENVELOPE_TEMPLATE, (message) => {
-      this.handleRenameEnvelopeTemplate(message);
-    }, {
-      scope: APPLICATION_SCOPE
-    });
-  }
-
-  handleSourceFilesSubscription(message){
+  handleToggleSourceFiles(message) {
     this.attachSourceFiles = message.isSourceFilesSelected;
   }
 
