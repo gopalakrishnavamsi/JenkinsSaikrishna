@@ -105,7 +105,7 @@ export default class DecSetupConfig extends LightningElement {
   })
   getEnvelopeConfigurationData({error, data}) {
     if (error) {
-      this.showError(error);
+      this.showError(error).bind(this);
     } else if (data) {
       this.attachSourceFiles = !isEmpty(data.documents.find(d => d.type === DOCUMENT_TYPE_SOURCE_FILES));
       this.envelopeConfigurationData = data;
@@ -243,7 +243,7 @@ export default class DecSetupConfig extends LightningElement {
           documents
         });
       })
-      .catch(this.showError);
+      .catch(this.showError.bind(this));
   }
 
   updateEnvelopeConfiguration(step, configurationData = this.envelopeConfigurationData) {
@@ -258,7 +258,7 @@ export default class DecSetupConfig extends LightningElement {
         this.currentStep = isEmpty(step) ? this.currentStep : step;
         this.setLoading(false);
       })
-      .catch(this.showError);
+      .catch(this.showError.bind(this));
   }
 
   // Process configuration data before updating it in server
