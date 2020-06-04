@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <!-- details body section -->
-                <div class="ds-addRecipients-details-body slds-m-around_medium" if:false={recipientsJson}>
+                <div class="ds-addRecipients-details-body slds-m-around_medium" if:false={hasRecipients}>
                     <div class="slds-grid slds-grid_vertical">
                         <div class="slds-col slds-m-top_large ds-addRecipients-details-noRecipients-center">
                             <img src={Labels.addRecipientsEmptyImage}/>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                <c-dec-recipients-list recipients={recipientsJson} if:true={recipientsJson}></c-dec-recipients-list>
+                <c-dec-recipients-list recipients={recipients} if:true={hasRecipients}></c-dec-recipients-list>
 
             </div>
         </div>

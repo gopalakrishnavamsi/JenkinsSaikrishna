@@ -1,9 +1,8 @@
 <template>
     <div class="ds-envelopeConfig-setup"
          onupdate={updateLocalData}>
-        <template if:true={isLoading}>
-            <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
-        </template>
+        <lightning-spinner if:true={isLoading} alternative-text="Loading" size="medium"
+                           variant="brand"></lightning-spinner>
         <c-dec-header
                 icon="standard:email_chatter"
                 header-name={label.envelopeConfiguration}
@@ -21,32 +20,22 @@
                     steps={steps}
                     onclickprogressstep={handleOnClickProgressStep}>
             </c-progress-bar>
-            <template if:true={documentsStep}>
-                <div onupdatetemplatedocuments={handleUpdateDocument}>
-                    <c-dec-documents
-                            documents={documents}
-                            attach-source-files={attachSourceFiles}
-                            record-id={recordId}>
-                    </c-dec-documents>
-                </div>
-            </template>
-            <template if:true={recipientsStep}>
-                <div onupdatetemplaterecipients={handleUpdateRecipient}>
-                    <c-dec-recipients
-                            source-object={sourceObject}
-                            recipients={recipients}>
-                    </c-dec-recipients>
-                </div>
-            </template>
-            <template if:true={mergeFieldsStep}>
-                <c-dec-merge-fields></c-dec-merge-fields>
-            </template>
+            <c-dec-documents
+                    onupdatetemplatedocuments={handleUpdateDocument}
+                    if:true={documentsStep}
+                    documents={documents}
+                    attach-source-files={attachSourceFiles}
+                    record-id={recordId}>
+            </c-dec-documents>
+            <c-dec-recipients if:true={recipientsStep}
+                              source-object={sourceObject}
+                              recipients={recipients}>
+            </c-dec-recipients>
+            <c-dec-merge-fields if:true={mergeFieldsStep}></c-dec-merge-fields>
             <template if:true={taggerStep}>
                 Step 4
             </template>
-            <template if:true={optionsStep}>
-                <c-dec-options></c-dec-options>
-            </template>
+            <c-dec-options if:true={optionsStep}></c-dec-options>
             <template if:true={customButtonStep}>
                 Step 6
             </template>

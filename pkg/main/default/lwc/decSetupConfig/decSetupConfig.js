@@ -1,9 +1,11 @@
 import {LightningElement, api, wire} from 'lwc';
 
 // Lightning message service
-import {createMessageContext,
-        releaseMessageContext,
-        publish} from 'lightning/messageService';
+import {
+  createMessageContext,
+  releaseMessageContext,
+  publish
+} from 'lightning/messageService';
 // Publisher
 import DEC_ERROR from '@salesforce/messageChannel/DecError__c';
 // Subscriber
@@ -14,9 +16,9 @@ import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEn
 
 
 // utility functions
-import { isEmpty, subscribeToMessageChannel } from 'c/utils';
-import { DOCUMENT_TYPE_SOURCE_FILES } from 'c/documentUtils';
-import { LABEL } from 'c/setupUtils';
+import {isEmpty, subscribeToMessageChannel} from 'c/utils';
+import {DOCUMENT_TYPE_SOURCE_FILES} from 'c/documentUtils';
+import {LABEL} from 'c/setupUtils';
 
 //apex methods
 import updateEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.updateEnvelopeConfiguration';
@@ -38,7 +40,7 @@ const PROGRESS_STEP = {
 const OPERATION = {
   BACK: 'back',
   NEXT: 'next'
-}
+};
 
 export default class DecSetupConfig extends LightningElement {
   @api recordId;
@@ -89,10 +91,10 @@ export default class DecSetupConfig extends LightningElement {
     );
 
     this.renameEnvelopeTemplateSubscription = subscribeToMessageChannel(
-        this.context,
-        this.renameEnvelopeTemplateSubscription,
-        DEC_RENAME_ENVELOPE_TEMPLATE,
-        this.handleRenameEnvelopeTemplate.bind(this)
+      this.context,
+      this.renameEnvelopeTemplateSubscription,
+      DEC_RENAME_ENVELOPE_TEMPLATE,
+      this.handleRenameEnvelopeTemplate.bind(this)
     );
   }
 
@@ -155,7 +157,7 @@ export default class DecSetupConfig extends LightningElement {
 
   get sourceObject() {
     return this.envelopeConfigurationData ? this.envelopeConfigurationData.sourceObject : null;
-  }  
+  }
 
   handleToggleSourceFiles(message) {
     this.attachSourceFiles = message.isSourceFilesSelected;
@@ -172,7 +174,7 @@ export default class DecSetupConfig extends LightningElement {
   handleOperation(operation) {
     let stepNumber = parseInt(this.currentStep, 10);
     const isValidStep = operation === OPERATION.BACK ? stepNumber > MIN_STEP : stepNumber < MAX_STEP;
-    if(isValidStep) {
+    if (isValidStep) {
       operation === OPERATION.BACK ? --stepNumber : ++stepNumber;
       this.updateEnvelopeConfiguration(stepNumber.toString());
     }
@@ -184,26 +186,19 @@ export default class DecSetupConfig extends LightningElement {
 
   handleRenameEnvelopeTemplate(message) {
     this.updateEnvelopeConfiguration(null, {
-      ... this.envelopeConfigurationData,
+      ...this.envelopeConfigurationData,
       name: message.name
     });
   }
 
   updateLocalData(event) {
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData,documents: event.detail.data};
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents: event.detail.data};
   }
 
   handleUpdateDocument(event) {
     let docs = this.envelopeConfigurationData.documents;
     docs = [...docs, {...event.detail.data}];
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData,documents:docs};
-    this.updateEnvelopeConfiguration(this.currentStep);
-  }
-
-  handleUpdateRecipient(event) {
-    let recipients = this.envelopeConfigurationData.recipients;
-    recipients = [...recipients, {...event.detail.data}];
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData,recipients:recipients};
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents: docs};
     this.updateEnvelopeConfiguration(this.currentStep);
   }
 
@@ -220,13 +215,13 @@ export default class DecSetupConfig extends LightningElement {
     const documentIndex = message.index;
     const documents = this.envelopeConfigurationData.documents.map((d, i) => {
       if (i === documentIndex) {
-        return { ... d, name: documentName };
+        return {...d, name: documentName};
       }
       return d;
     });
 
     this.updateEnvelopeConfiguration(null, {
-      ... this.envelopeConfigurationData,
+      ...this.envelopeConfigurationData,
       documents
     });
   }
@@ -239,7 +234,7 @@ export default class DecSetupConfig extends LightningElement {
       .then(() => {
         const documents = this.envelopeConfigurationData.documents.filter((d, i) => i !== message.index);
         this.updateEnvelopeConfiguration(null, {
-          ... this.envelopeConfigurationData,
+          ...this.envelopeConfigurationData,
           documents
         });
       })
@@ -266,14 +261,17 @@ export default class DecSetupConfig extends LightningElement {
     if (isEmpty(configurationData)) {
       return null;
     }
-
     const processedFields = {};
-    
-    processedFields.documents = configurationData.documents.map(doc => ({ ... doc, id: null }));
+
+    let recipientsSelector = this.template.querySelector('c-dec-recipients');
+    if (!isEmpty(recipientsSelector)) {
+      processedFields.recipients = recipientsSelector.fetchRecipients();
+    }
+    processedFields.documents = configurationData.documents.map(doc => ({...doc, id: null}));
 
     return JSON.stringify({
-      ... configurationData,
-      ... processedFields
+      ...configurationData,
+      ...processedFields
     });
   }
 
@@ -281,10 +279,10 @@ export default class DecSetupConfig extends LightningElement {
     if (!isEmpty(error.body)) {
       const msg = {
         errorMessage: error.body.message
-      }
+      };
       publish(this.context, DEC_ERROR, msg);
     }
-    
+
     this.setLoading(false);
   }
 }

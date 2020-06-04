@@ -12,18 +12,26 @@ export default class DecRecipients extends LightningElement {
 
   @api
   get recipients() {
-    return this.privateRecipients;
+    return !isEmpty(this.privateRecipients) ? JSON.stringify(this.privateRecipients) : '';
   }
 
   set recipients(value) {
     this.privateRecipients = !isEmpty(value) ? JSON.parse(value) : [];
   }
 
+  get hasRecipients() {
+    return !isEmpty(this.privateRecipients) && this.privateRecipients.length > 0;
+  }
+
+  @api
+  fetchRecipients = () => {
+    return this.privateRecipients;
+  };
+
 
   @api
   sourceObject;
 
-  recipientsJson;
 
   closeRecipientsModal = () => {
     this.showAddRecipientsModal = false;
@@ -34,9 +42,8 @@ export default class DecRecipients extends LightningElement {
   };
 
   addRecipient = (recipient) => {
-    recipient.routingOrder = this.recipients.length + 1;
+    recipient.routingOrder = this.privateRecipients.length + 1;
     this.privateRecipients.push(recipient);
-    this.recipientsJson = JSON.stringify(this.privateRecipients);
     this.closeRecipientsModal();
   };
 
@@ -45,5 +52,4 @@ export default class DecRecipients extends LightningElement {
     const signingOrderDiagramComponent = this.template.querySelector('c-signing-order');
     signingOrderDiagramComponent.handleShow();
   };
-
 }

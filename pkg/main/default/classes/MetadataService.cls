@@ -165,7 +165,7 @@ public with sharing class MetadataService {
 						true,
 						fieldDesc.getName(),
 						fieldDesc.getLabel(),
-						String.valueOf(type)
+						String.valueOf(fieldSourceType)
 					)
 				);
 			}
