@@ -522,4 +522,30 @@ private class EnvelopeConfigurationControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_getMergeFields_failure() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				EnvelopeConfigurationController.getMergeFields('Opportunity');
+				throw new AssertException('Expected getMergeFields to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getMergeFields_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			List<MergeField> result = EnvelopeConfigurationController.getMergeFields('Opportunity');
+			Test.stopTest();
+
+			System.assert(Collection.isNotEmpty(result));
+			System.assertNotEquals(null, JSON.serialize(result));
+		}
+	}	
 }

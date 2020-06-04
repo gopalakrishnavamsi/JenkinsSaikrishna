@@ -1,0 +1,22 @@
+<template>
+    <c-modal header={Labels.addFilterLabel} size='large' show-modal={isOpen} onclose={handleClose}>
+        <div slot='content'>
+            <c-conditional-logic source-object={sourceObject} logic={logic} onlogicchange={handleUpdate}>
+
+            </c-conditional-logic>
+        </div>
+        <div slot='footer'>
+            <lightning-button
+            label={Labels.cancelLabel}
+            variant="neutral"
+            onclick={handleClose}>
+            </lightning-button>
+            <span class="slds-p-left_xx-small"></span>
+            <lightning-button
+            label={Labels.saveLabel}
+            onclick={handleSave}
+            variant="brand">
+            </lightning-button>
+        </div>
+    </c-modal>
+</template>

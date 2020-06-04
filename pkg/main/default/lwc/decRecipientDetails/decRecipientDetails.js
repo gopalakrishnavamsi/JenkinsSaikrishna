@@ -43,11 +43,21 @@ export default class DecRecipientDetails extends LightningElement {
     this.recipient.relationship = val;
   }
 
+  get filter() {
+    return this.recipient ? this.recipient.filter : null;
+  }
+
   updateRecipient(recipient) {
     let evt = new CustomEvent('updaterecipient', {
         detail: recipient
     });
     this.dispatchEvent(evt);
+  }
+
+  handleFilterChange({ detail }) {
+    let recipient = this.recipient;
+    recipient.filter = detail;
+    this.updateRecipient(recipient);    
   }
 
   handleRoleRecipientChange({ detail }) {

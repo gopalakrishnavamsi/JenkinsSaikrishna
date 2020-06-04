@@ -1,0 +1,39 @@
+<template>
+    <template if:true={hasLogic}>
+        <section class="slds-grid slds-wrap slds-p-around_small">
+            <div class="slds-col slds-size_1-of-12 slds-p-top_small slds-text-body__small slds-text-color_weak">
+                {Labels.applyUppercaseLabel}
+            </div>
+            <div class="slds-col slds-size_2-of-12 ">
+                <lightning-combobox
+                name="ruleType"
+                value={logic.type}
+                options={ruleTypeOptions}
+                onchange={handleRuleTypeChange}>
+                </lightning-combobox> 
+            </div>
+            <div class="slds-col slds-size_4-of-12  slds-p-top_small slds-p-left_large slds-text-body__small slds-text-color_weak">
+                {Labels.ofRuleConditionsLabel}
+            </div>
+        </section>
+        <section class="slds-grid slds-wrap slds-p-around_small">
+            <div class="slds-col slds-size_1-of-1">
+                <template iterator:it={privateRules}>
+                    <c-conditional-logic-rule
+                        key={it.value.key}
+                        rule={it.value}
+                        index={it.index}
+                        fields={fields}
+                        rule-type={logic.type}
+                        last-index={lastIndex}
+                        onclone={cloneRule}
+                        onadd={addRule}
+                        onremove={removeRule}
+                        onchange={updateRule}
+                    >
+                    </c-conditional-logic-rule>
+                </template>
+            </div>
+        </section>
+    </template>
+</template>

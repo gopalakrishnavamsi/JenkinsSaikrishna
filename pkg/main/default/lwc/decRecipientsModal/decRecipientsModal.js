@@ -43,7 +43,7 @@ export default class DecRecipientsModal extends LightningElement {
     return isEmpty(this.recipient);
   }
 
-  handleRecipientUpdate({ detail }) {
+  handleRecipientUpdate = ({ detail }) => {
     this.privateRecipient = detail;
   }
 

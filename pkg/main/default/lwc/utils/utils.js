@@ -88,6 +88,11 @@ const format = function (s) {
   return '';
 };
 
+const getRandomKey = () => {
+  const randomNum = () => (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  return `${randomNum()}-${randomNum()}-${randomNum()}-${randomNum()}`;
+}
+
 /**
  * Creates a subscription for a message channel within a given message context. Supports event handling in LWC
  * @param context {object} The base on which pub-sub relationships can be made
@@ -114,5 +119,6 @@ export {
     formatFileSize,
     genericEvent,
     format,
+    getRandomKey,
     subscribeToMessageChannel
 };

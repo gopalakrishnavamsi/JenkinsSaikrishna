@@ -9466,7 +9466,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>or</shortDescription>
 		<value>or</value>
-	</labels>
+	</labels>	
 	<labels>
 		<fullName>SCMHrefUndefined</fullName>
 		<language>en_US</language>
@@ -10212,6 +10212,48 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Embedded Signer</value>
 	</labels>
 	<labels>
+		<fullName>andLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>and</shortDescription>
+		<value>and</value>
+	</labels>
+	<labels>
+		<fullName>GreaterThanLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Greater Than</shortDescription>
+		<value>greater than</value>
+	</labels>
+	<labels>
+		<fullName>LessThanLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Less Than</shortDescription>
+		<value>less than</value>
+	</labels>
+	<labels>
+		<fullName>GreaterThanOrEqualsLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>greater than or equals</shortDescription>
+		<value>greater than or equals</value>
+	</labels>
+	<labels>
+		<fullName>LessThanOrEqualsLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>less than or equals</shortDescription>
+		<value>less than or equals</value>
+	</labels>
+	<labels>
+		<fullName>ContainsLabel</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>contains</shortDescription>
+		<value>contains</value>
+	</labels>						
+  <labels>
 		<fullName>SigningOrderDiagram</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>

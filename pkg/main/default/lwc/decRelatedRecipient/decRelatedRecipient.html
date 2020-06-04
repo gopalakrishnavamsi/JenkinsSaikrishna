@@ -2,7 +2,7 @@
     <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
         <div>
             <span>{Labels.decRecordFieldsTitle1}</span>
-            <span class="slds-text-title_bold slds-p-left_x-small">{source}.</span>
+            <span class="slds-text-title_bold slds-p-left_x-small">{sourceObject}.</span>
         </div>
         <div>{Labels.decRecordFieldsTitle2}</div>
     </section>
@@ -10,4 +10,32 @@
         <c-dec-relationship-lookup label={Labels.decRelatedListLabel} source-object={sourceObject}
                                    onrelationshipupdate={handleSelect}></c-dec-relationship-lookup>
     </section>
+    <section if:false={showFilterPill} class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+        <div class="slds-grid slds-wrap" onclick={openLogicModal}>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning-icon size="xx-small" icon-name='utility:add' onclick={openLogicModal}></lightning-icon>
+            </div>            
+            <div class="slds-col">
+                {Labels.addFilterLabel}
+            </div>
+        </div>
+    </section>
+    <section if:true={showFilterPill}>
+        <section class="slds-grid slds-wrap slds-p-around_xx-small slds-p-left_small filterByPill">
+            <div class="slds-col slds-size_1-of-12 slds-p-top_xxx-small slds-p-left_x-small">
+                <lightning-icon size="xx-small" icon-name="utility:filterList"></lightning-icon>
+            </div>
+            <div class="slds-col slds-size_9-of-12 slds-truncate">
+                <p class="slds-truncate">{privateFilter.filterBy}</p>
+            </div>   
+            <div class="slds-col slds-size_1-of-12 slds-p-top_xxx-small slds-p-left_x-small">
+                <lightning-icon onclick={openLogicModal} size="xx-small" icon-name="utility:edit"></lightning-icon>
+            </div>  
+            <div class="slds-col slds-size_1-of-12 slds-p-top_xxx-small">
+                <lightning-icon size="xx-small" icon-name='utility:clear' onclick={removeFilter}
+                class="ds-clear-icon"></lightning-icon>
+            </div>                                             
+        </section>     
+    </section>
+    <c-conditional-logic-modal is-open={isLogicModalOpen} source-object={relatedObject} filter={privateFilter} onclose={handleFilterByChange}></c-conditional-logic-modal>
 </template>

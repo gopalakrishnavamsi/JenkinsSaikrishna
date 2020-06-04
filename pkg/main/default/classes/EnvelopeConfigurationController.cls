@@ -120,7 +120,16 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to get lookup fields.');
 		}
 	}
-	
+
+	@AuraEnabled(Cacheable = true)
+	public static List<MergeField> getMergeFields(final String sObjectType) {
+		try {
+			return MetadataService.getFields(Salesforce.getSObjectType(sObjectType), 1);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to retrieve merge fields.');
+		}
+	}	
+
 	@AuraEnabled
 	public static List<SigningGroup> getSigningGroups(){
 		try  {
