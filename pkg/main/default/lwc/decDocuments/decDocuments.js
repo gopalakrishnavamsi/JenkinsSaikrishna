@@ -66,7 +66,7 @@ export default class DecDocuments extends LightningElement {
       }
       
       this.updateDocuments([...this.documents, sourceFilesDoc]);
-    } else if (sourceFilesDoc.id !== this.sourceFilesDocument.id) {
+    } else if (isEmpty(this.sourceFilesDocument) || sourceFilesDoc.id !== this.sourceFilesDocument.id) {
       this.sourceFilesDocument = sourceFilesDoc;
     }
   }
