@@ -10,19 +10,23 @@ def installTasks = [
 ]
 
 def defaultSalesforceArgs = [
-  versionNumber: 'put version number here',
+  versionNumber: '2.5',
   nightlyJwtKeyFileCredsId: 'salesforce-nightly-jwt-key-file',
   nightlyConsumerKeyCredsId: 'salesforce-nightly-jwt-consumer-key',
   packagingOrgUsername: 'vineet.puranik+dfsle@docusign.com',
   orgAlias: 'PackagingOrg',
   packageId: '0336A000000R2HG',
-  packageName: 'DocuSign Apps Launcher'
+  packageName: '\"DocuSign Apps Launcher\"'
 ]
 
 
 
 salesforceNightlyBuildPipeline(
   appName: 'salesforce-dal-nightly-build',
+  firstStageInitTask:{
+  sh """  sudo apt-get update
+          sudo apt install xmlstarlet -y
+        """.stripIndent()},
   installTasks: installTasks,
   salesforceArgs: defaultSalesforceArgs,
   doSonarQube: false,
