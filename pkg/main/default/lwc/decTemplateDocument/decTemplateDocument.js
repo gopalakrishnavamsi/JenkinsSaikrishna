@@ -50,6 +50,7 @@ export default class DecTemplateDocument extends LightningElement {
       index: this.index
     };
     publish(this.context, DEC_RENAME_TEMPLATE_DOCUMENT, message);
+    this.closeRenameModal();
   }
 
   handleNameChange(event) {

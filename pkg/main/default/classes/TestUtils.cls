@@ -519,4 +519,18 @@ global class TestUtils {
 		insert result;
 		return result;
 	}
+
+	public static EnvelopeConfigurationDocument__c createEnvelopeConfigurationDocument(
+		final String name,
+		final Id envelopeConfiguration,
+		final String sourceId,
+		final String type) {
+		EnvelopeConfigurationDocument__c result = new EnvelopeConfigurationDocument__c(
+			Name__c = name,
+			EnvelopeConfiguration__c = envelopeConfiguration,
+			SourceId__c = sourceId,
+			Type__c = type);
+		insert result;
+		return result;
+	}
 }

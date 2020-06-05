@@ -122,7 +122,7 @@ private class EnvelopeConfigurationControllerTest {
 				null);
 			Test.startTest();
 			EnvelopeConfiguration updatedEnvelopeConfiguration =
-				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), false);
+				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), false, null);
 			Test.stopTest();
 			System.assertEquals(updatedEnvelopeConfiguration.name, UPDATED_ENV_CONFIG_NAME);
 		}
@@ -198,7 +198,7 @@ private class EnvelopeConfigurationControllerTest {
 				Envelope.DEFAULT_OPTIONS,
 				false);
 
-			String ecJSON = JSON.serialize(ec);	
+			String ecJSON = JSON.serialize(ec);
 			Test.startTest();
 			EnvelopeConfiguration result = EnvelopeConfigurationController.parseUpdates(ecJSON, true);
 			Test.stopTest();
@@ -209,8 +209,8 @@ private class EnvelopeConfigurationControllerTest {
 			System.assertEquals(result.documents.size(), 2);
 			System.assertEquals(result.documents[0] instanceof EnvelopeConfiguration.TemplateDocument, true);
 			System.assertEquals(result.documents[1] instanceof EnvelopeConfiguration.SourceFiles, true);
-		}		
-	}	
+		}
+	}
 
 	@IsTest
 	static void test_parseRecipients() {
@@ -285,7 +285,7 @@ private class EnvelopeConfigurationControllerTest {
 			null,
 			true,
 			true);
-		List<Object> recipients = (List<Object>) JSON.deserializeUntyped(JSON.serialize(new List<Recipient> { r1, r2, r3 }));
+		List<Object> recipients = (List<Object>)JSON.deserializeUntyped(JSON.serialize(new List<Recipient> { r1, r2, r3 }));
 		List<Object> emptyRecipients = new List<Object>();
 
 		Test.startTest();
@@ -318,7 +318,7 @@ private class EnvelopeConfigurationControllerTest {
 			2,
 			false,
 			true);
-		List<Object> ds = (List<Object>) JSON.deserializeUntyped(JSON.serialize(new List<Document> { d1, d2 }));
+		List<Object> ds = (List<Object>)JSON.deserializeUntyped(JSON.serialize(new List<Document> { d1, d2 }));
 		List<Object> emptyDocs = new List<Object>();
 
 		Test.startTest();
@@ -355,8 +355,8 @@ private class EnvelopeConfigurationControllerTest {
 				null,
 				null);
 			Test.startTest();
-			try{
-				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), false);
+			try {
+				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), false, null);
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -436,7 +436,7 @@ private class EnvelopeConfigurationControllerTest {
 
 	@IsTest
 	static void test_getLookupFields_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(true)) { 
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			List<Query.Relationship> results = EnvelopeConfigurationController.getLookupFields(String.valueOf(opportunityType));
@@ -451,7 +451,7 @@ private class EnvelopeConfigurationControllerTest {
 
 	@IsTest
 	static void test_childRelationships_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(true)) { 
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			List<Query.Relationship> results = EnvelopeConfigurationController.getChildRelationships(String.valueOf(opportunityType));
@@ -462,11 +462,11 @@ private class EnvelopeConfigurationControllerTest {
 			System.assert(String.isNotEmpty(results[0].relatesTo));
 			System.assertEquals(results[0].isLookup, false);
 		}
-	}	
+	}
 
 	@IsTest
 	static void test_getLookupFields_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser()) { 
+		System.runAs(UserMock.createDocuSignUser()) {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			try {
@@ -478,10 +478,10 @@ private class EnvelopeConfigurationControllerTest {
 			Test.stopTest();
 		}
 	}
-	
+
 	@IsTest
 	static void test_getChildRelationships_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser()) { 
+		System.runAs(UserMock.createDocuSignUser()) {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			try {
@@ -496,26 +496,178 @@ private class EnvelopeConfigurationControllerTest {
 
 	@IsTest
 	static void test_deleteContentDocument_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			Boolean testResult;
-			ContentVersion testContentVersion = TestUtils.createContentVersion();
-			Test.startTest();
-			testResult = EnvelopeConfigurationController.deleteContentDocument(testContentVersion.ContentDocumentId);
-			Test.stopTest();
+			ContentVersion testContentVersion1 = TestUtils.createContentVersion();
+			ContentVersion testContentVersion2 = TestUtils.createContentVersion();
+			EnvelopeConfiguration__c envConfig = TestUtils.createEnvelopeConfiguration();
+			System.assertNotEquals(envConfig.Id, null);
+			System.assertNotEquals(testContentVersion1.ContentDocumentId, null);
+			System.assertNotEquals(testContentVersion2.ContentDocumentId, null);
+			List<Id> contentVersionIds = new List<Id> { testContentVersion1.Id, testContentVersion2.Id };
+			List<Id> contentDocumentIds = new List<Id> { testContentVersion1.ContentDocumentId, testContentVersion2.ContentDocumentId };
 
-			System.assertNotEquals(null, testResult);
-			System.assertEquals(true, testResult);
+			EnvelopeConfiguration config = new EnvelopeConfiguration(
+				envConfig.Id,
+				envConfig.Name,
+				envConfig.SourceObject__c,
+				UUID.parse(envConfig.DocuSignId__c),
+				new List<Document> {
+					new EnvelopeConfiguration.TemplateDocument(
+						null,
+						testContentVersion1.ContentDocumentId,
+						1,
+						testContentVersion1.Title,
+						testContentVersion1.FileExtension,
+						false,
+						true),
+					new EnvelopeConfiguration.TemplateDocument(
+						null,
+						testContentVersion2.ContentDocumentId,
+						1,
+						testContentVersion2.Title,
+						testContentVersion2.FileExtension,
+						false,
+						true)
+				},
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+			EnvelopeConfigurationDocument__c templateDocument1 = TestUtils.createEnvelopeConfigurationDocument(
+				testContentVersion1.Title,
+				envConfig.Id,
+				testContentVersion1.ContentDocumentId,
+				EnvelopeConfiguration.DOCUMENT_TYPE_TEMPLATE_DOCUMENT
+			);
+			System.assertNotEquals(templateDocument1.Id, null);
+			EnvelopeConfigurationDocument__c templateDocument2 = TestUtils.createEnvelopeConfigurationDocument(
+				testContentVersion2.Title,
+				envConfig.Id,
+				testContentVersion2.ContentDocumentId,
+				EnvelopeConfiguration.DOCUMENT_TYPE_TEMPLATE_DOCUMENT
+			);
+			System.assertNotEquals(templateDocument2.Id, null);
+			Test.startTest();
+			config = new EnvelopeConfiguration(
+				envConfig.Id,
+				envConfig.Name,
+				envConfig.SourceObject__c,
+				UUID.parse(envConfig.DocuSignId__c),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+			EnvelopeConfiguration updatedEnvelopeConfiguration = EnvelopeConfigurationController.updateEnvelopeConfiguration(
+				Json.serialize(config),
+				false,
+				contentDocumentIds);
+			Test.stopTest();
+			System.assertEquals(updatedEnvelopeConfiguration.documents.size(), 0);
+			System.assertEquals([SELECT Id FROM ContentVersion WHERE Id IN:contentVersionIds].size(), 0);
+			System.assertEquals([SELECT Id FROM ContentDocument WHERE Id IN:contentDocumentIds].size(), 0);
 		}
 	}
 
 	@IsTest
-	static void test_deleteContentDocument_failure() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			ContentVersion testContentVersion = TestUtils.createContentVersion();
+	static void test_deleteContentDocument_unauthorized() {
+		ESignatureAPIMock.success();
+		EnvelopeConfiguration__c envConfig;
+		EnvelopeConfiguration config;
+		List<Id> contentDocumentIds;
+		List<Id> contentVersionIds;
+
+		Boolean testResult;
+		ContentVersion testContentVersion1 = TestUtils.createContentVersion();
+		ContentVersion testContentVersion2 = TestUtils.createContentVersion();
+		envConfig = TestUtils.createEnvelopeConfiguration();
+		System.assertNotEquals(envConfig.Id, null);
+		System.assertNotEquals(testContentVersion1.ContentDocumentId, null);
+		System.assertNotEquals(testContentVersion2.ContentDocumentId, null);
+		contentVersionIds = new List<Id> { testContentVersion1.Id, testContentVersion2.Id };
+		contentDocumentIds = new List<Id> { testContentVersion1.ContentDocumentId, testContentVersion2.ContentDocumentId };
+
+		config = new EnvelopeConfiguration(
+			envConfig.Id,
+			envConfig.Name,
+			envConfig.SourceObject__c,
+			UUID.parse(envConfig.DocuSignId__c),
+			new List<Document> {
+				new EnvelopeConfiguration.TemplateDocument(
+					null,
+					testContentVersion1.ContentDocumentId,
+					1,
+					testContentVersion1.Title,
+					testContentVersion1.FileExtension,
+					false,
+					true),
+				new EnvelopeConfiguration.TemplateDocument(
+					null,
+					testContentVersion2.ContentDocumentId,
+					1,
+					testContentVersion2.Title,
+					testContentVersion2.FileExtension,
+					false,
+					true)
+			},
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null);
+		EnvelopeConfigurationDocument__c templateDocument1 = TestUtils.createEnvelopeConfigurationDocument(
+			testContentVersion1.Title,
+			envConfig.Id,
+			testContentVersion1.ContentDocumentId,
+			EnvelopeConfiguration.DOCUMENT_TYPE_TEMPLATE_DOCUMENT
+		);
+		System.assertNotEquals(templateDocument1.Id, null);
+		EnvelopeConfigurationDocument__c templateDocument2 = TestUtils.createEnvelopeConfigurationDocument(
+			testContentVersion2.Title,
+			envConfig.Id,
+			testContentVersion2.ContentDocumentId,
+			EnvelopeConfiguration.DOCUMENT_TYPE_TEMPLATE_DOCUMENT
+		);
+		System.assertNotEquals(templateDocument2.Id, null);
+
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
+			config = new EnvelopeConfiguration(
+				envConfig.Id,
+				envConfig.Name,
+				envConfig.SourceObject__c,
+				UUID.parse(envConfig.DocuSignId__c),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
 			try {
-				EnvelopeConfigurationController.deleteContentDocument(testContentVersion.ContentDocumentId);
-				throw new AssertException('Expected deleteContentDocument to fail');
+				EnvelopeConfiguration updatedEnvelopeConfiguration = EnvelopeConfigurationController.updateEnvelopeConfiguration(
+					Json.serialize(config),
+					false,
+					contentDocumentIds);
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}

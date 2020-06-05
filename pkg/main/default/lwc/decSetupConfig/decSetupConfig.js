@@ -23,7 +23,6 @@ import {LABEL} from 'c/setupUtils';
 //apex methods
 import updateEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.updateEnvelopeConfiguration';
 import getEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.getEnvelopeConfiguration';
-import deleteContentDocument from '@salesforce/apex/EnvelopeConfigurationController.deleteContentDocument';
 
 const MAX_STEP = '6';
 const MIN_STEP = '1';
@@ -48,6 +47,7 @@ export default class DecSetupConfig extends LightningElement {
   envelopeConfigurationData;
   isLoading = false;
   context = createMessageContext();
+  contentDocumentIdsToDelete = [];
 
   // Subscriptions
   sourceFilesSubscription = null;
@@ -68,7 +68,6 @@ export default class DecSetupConfig extends LightningElement {
     {'label': this.label.customButton, 'value': PROGRESS_STEP.CUSTOM_BUTTON}];
 
   connectedCallback() {
-
     this.sourceFilesSubscription = subscribeToMessageChannel(
       this.context,
       this.sourceFilesSubscription,
@@ -107,7 +106,7 @@ export default class DecSetupConfig extends LightningElement {
   })
   getEnvelopeConfigurationData({error, data}) {
     if (error) {
-      this.showError(error).bind(this);
+      this.showError(error);
     } else if (data) {
       this.attachSourceFiles = !isEmpty(data.documents.find(d => d.type === DOCUMENT_TYPE_SOURCE_FILES));
       this.envelopeConfigurationData = data;
@@ -198,8 +197,13 @@ export default class DecSetupConfig extends LightningElement {
   handleUpdateDocument(event) {
     let docs = this.envelopeConfigurationData.documents;
     docs = [...docs, {...event.detail.data}];
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents: docs};
-    this.updateEnvelopeConfiguration(this.currentStep);
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData,documents:docs};
+  }
+
+  handleUpdateRecipient(event) {
+    let recipients = this.envelopeConfigurationData.recipients;
+    recipients = [...recipients, {...event.detail.data}];
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData,recipients:recipients};
   }
 
   handleOnClickProgressStep(event) {
@@ -219,26 +223,13 @@ export default class DecSetupConfig extends LightningElement {
       }
       return d;
     });
-
-    this.updateEnvelopeConfiguration(null, {
-      ...this.envelopeConfigurationData,
-      documents
-    });
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents};
   }
 
   handleDeleteTemplateDocument(message) {
-    this.setLoading(true);
-    deleteContentDocument({
-      contentDocumentId: message.contentDocumentId
-    })
-      .then(() => {
-        const documents = this.envelopeConfigurationData.documents.filter((d, i) => i !== message.index);
-        this.updateEnvelopeConfiguration(null, {
-          ...this.envelopeConfigurationData,
-          documents
-        });
-      })
-      .catch(this.showError.bind(this));
+    const documents = this.envelopeConfigurationData.documents.filter((d, i) => i !== message.index);
+    this.envelopeConfigurationData = {... this.envelopeConfigurationData, documents};
+    this.contentDocumentIdsToDelete.push(message.contentDocumentId);
   }
 
   updateEnvelopeConfiguration(step, configurationData = this.envelopeConfigurationData) {
@@ -246,7 +237,8 @@ export default class DecSetupConfig extends LightningElement {
     const updatedConfiguration = this.getFilteredConfigurationData(configurationData);
     updateEnvelopeConfiguration({
       envelopeConfigurationJSON: updatedConfiguration,
-      attachSourceFiles: this.attachSourceFiles
+      attachSourceFiles: this.attachSourceFiles,
+      contentDocumentIdsToDelete: this.contentDocumentIdsToDelete
     })
       .then(result => {
         this.envelopeConfigurationData = result;
@@ -282,7 +274,6 @@ export default class DecSetupConfig extends LightningElement {
       };
       publish(this.context, DEC_ERROR, msg);
     }
-
     this.setLoading(false);
   }
 }

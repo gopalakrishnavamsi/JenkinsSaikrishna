@@ -24,6 +24,10 @@ export default class DecDocument extends LightningElement {
         releaseMessageContext(this.context);
     }
 
+    get documentSequence() {
+        return this.index + 1;
+    }
+
     get isTemplateDocument() {
         return isEmpty(this.document) ? false :
           this.document.type === DOCUMENT_TYPE_TEMPLATE_DOCUMENT;

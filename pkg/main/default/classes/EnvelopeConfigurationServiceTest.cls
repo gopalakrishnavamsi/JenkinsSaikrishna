@@ -2374,11 +2374,11 @@ private class EnvelopeConfigurationServiceTest {
 	}
 
 	@IsTest
-	static void test_deleteContentDocument_unauthorized() {
+	static void test_deleteContentDocuments_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				EnvelopeConfigurationService.deleteContentDocument(null);
+				EnvelopeConfigurationService.deleteContentDocuments(null);
 				throw new AssertException('Expected failure');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -2388,17 +2388,21 @@ private class EnvelopeConfigurationServiceTest {
 	}
 
 	@IsTest
-	static void test_deleteContentDocument_success() {
+	static void test_deleteContentDocuments_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			ContentVersion cv = TestUtils.createContentVersion();
-			System.assertNotEquals(null, cv.ContentDocumentId);
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
+			List<Id> contentVersionIds = new List<Id> { cv1.Id, cv2.Id };
+			List<Id> contentDocumentIds = new List<Id> { cv1.ContentDocumentId, cv2.ContentDocumentId };
+			System.assertNotEquals(null, cv1.ContentDocumentId);
+			System.assertNotEquals(null, cv2.ContentDocumentId);
 
 			Test.startTest();
-			System.assert(EnvelopeConfigurationService.deleteContentDocument(cv.ContentDocumentId));
+			System.assert(EnvelopeConfigurationService.deleteContentDocuments(contentDocumentIds));
 			Test.stopTest();
 
-			System.assert(Collection.isEmpty([SELECT Id FROM ContentVersion WHERE Id = :cv.Id]));
-			System.assert(Collection.isEmpty([SELECT Id FROM ContentDocument WHERE Id = :cv.ContentDocumentId]));
+			System.assert(Collection.isEmpty([SELECT Id FROM ContentVersion WHERE Id IN :contentVersionIds]));
+			System.assert(Collection.isEmpty([SELECT Id FROM ContentDocument WHERE Id IN :contentDocumentIds]));
 		}
 	}
 }

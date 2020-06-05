@@ -471,7 +471,7 @@ public with sharing class EnvelopeConfigurationService {
 		public List<EnvelopeConfiguration.Listing> queryEnvelopeConfigurations() {
 			List<EnvelopeConfiguration.Listing> configurationList = new List<EnvelopeConfiguration.Listing>();
 			for (EnvelopeConfiguration__c template : [
-								SELECT Id, Name, SourceObject__c, LastModifiedDate
+				SELECT Id, Name, SourceObject__c, LastModifiedDate
 				FROM EnvelopeConfiguration__c
 				WITH SECURITY_ENFORCED
 				ORDER BY LastModifiedDate DESC
@@ -484,7 +484,7 @@ public with sharing class EnvelopeConfigurationService {
 					template.LastModifiedDate));
 			}
 			return configurationList;
-		}		
+		}
 
 		public EnvelopeConfiguration updateEnvelopeConfiguration(final EnvelopeConfiguration envelopeConfiguration) {
 			Permissions.verifyIsUpdateable(EnvelopeConfiguration__c.getSObjectType(), new List<String> {
@@ -576,7 +576,7 @@ public with sharing class EnvelopeConfigurationService {
 
 			List<EnvelopeConfigurationDocument__c> documents = null;
 			List<EnvelopeConfigurationRecipient__c> recipients = null;
-			
+
 			if (envelopeConfiguration != null && envelopeConfiguration.id != null) {
 				update convert(envelopeConfiguration, true);
 				EnvelopeConfiguration currentConfiguration = getEnvelopeConfiguration(envelopeConfiguration.id);
@@ -590,7 +590,7 @@ public with sharing class EnvelopeConfigurationService {
 				insert recipients;
 			}
 
-			return (EnvelopeConfiguration) envelopeConfiguration
+			return (EnvelopeConfiguration)envelopeConfiguration
 				.withDocuments(convert(documents))
 				.withRecipients(convert(recipients));
 		}
@@ -627,12 +627,12 @@ public with sharing class EnvelopeConfigurationService {
 			return result;
 		}
 
-		public Boolean deleteContentDocument(final Id contentDocumentId) {
+		public Boolean deleteContentDocuments(final List<Id> contentDocumentIds) {
 			Permissions.verifyIsDeletable(CONTENT_DOCUMENT_TYPE);
-	
+
 			Boolean result = false;
-			if (contentDocumentId != null) {
-				delete [SELECT Id FROM ContentDocument WHERE Id = :contentDocumentId];
+			if (Collection.isNotEmpty(contentDocumentIds)) {
+				delete [SELECT Id FROM ContentDocument WHERE Id IN :contentDocumentIds];
 				result = true;
 			}
 			return result;
@@ -1070,7 +1070,7 @@ public with sharing class EnvelopeConfigurationService {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		return DB.queryEnvelopeConfigurations();
-	}	
+	}
 
 	public static EnvelopeConfiguration updateEnvelopeConfiguration(final EnvelopeConfiguration envelopeConfiguration) {
 		Permissions.verifyIsDocuSignAdministrator();
@@ -1093,10 +1093,10 @@ public with sharing class EnvelopeConfigurationService {
 		}
 	}
 
-	public static Boolean deleteContentDocument(final Id contentDocumentId) {
+	public static Boolean deleteContentDocuments(final List<Id> contentDocumentIds) {
 		Permissions.verifyIsDocuSignAdministrator();
 
-		return DB.deleteContentDocument(contentDocumentId);
+		return DB.deleteContentDocuments(contentDocumentIds);
 	}
 
 	public static Boolean deleteEnvelopeConfiguration(final Id envelopeConfigurationId) {
