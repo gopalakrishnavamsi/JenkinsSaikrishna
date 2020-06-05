@@ -56,7 +56,7 @@ const genericEvent = (eventName, message, thisProperty, isBubbles) =>
 /**
  * Formats a byte size. For example, 2048 bytes will be formatted as '2 kB'.
  * @param size {number} The size in bytes.
- * @param precision {number} Decimal precision [default 2].
+ * @param precision {number} Decimal precision.
  * @returns {string} The formatted size string.
  */
 const formatFileSize = (size, precision) => {
@@ -65,11 +65,10 @@ const formatFileSize = (size, precision) => {
   }
 
   let constant = 1024;
-  let p = precision || 2;
   let exponents = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   let factor = Math.floor(Math.log(size) / Math.log(constant));
 
-  return parseFloat((size / Math.pow(constant, factor)).toFixed(p)) + ' ' + exponents[factor];
+  return parseFloat((size / Math.pow(constant, factor)).toFixed(precision)) + ' ' + exponents[factor];
 };
 
 /**

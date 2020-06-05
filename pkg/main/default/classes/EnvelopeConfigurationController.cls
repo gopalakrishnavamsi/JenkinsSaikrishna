@@ -84,7 +84,7 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 			if (Collection.isNotEmpty(contentDocumentIdsToDelete)) {
 				EnvelopeConfigurationService.deleteContentDocuments(contentDocumentIdsToDelete);
 			}
-			return ec;
+			return parseEnvelopeConfiguration(ec);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to update envelope configuration.');
 		}
@@ -93,10 +93,62 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static EnvelopeConfiguration getEnvelopeConfiguration(final Id recordId) {
 		try {
-			return EnvelopeConfigurationService.getEnvelopeConfiguration(recordId);
+			EnvelopeConfiguration ec = EnvelopeConfigurationService.getEnvelopeConfiguration(recordId);
+			return parseEnvelopeConfiguration(ec);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get envelope configuration.');
 		}
+	}
+
+	private static EnvelopeConfiguration parseEnvelopeConfiguration(final EnvelopeConfiguration ec) {
+		List<Id> contentDocumentIds = new List<Id>();
+		for (Document doc : filterDocuments(ec, EnvelopeConfiguration.DOCUMENT_TYPE_TEMPLATE_DOCUMENT)) {
+			contentDocumentIds.add(doc.sourceId);
+		}
+		if (Collection.isEmpty(contentDocumentIds)) {
+			return ec;
+		}
+		List<Document> updatedDocuments = getDocumentsWithFileSize(ec, contentDocumentIds);
+		return ec.withDocuments(updatedDocuments);
+	}
+
+	private static List<Document> filterDocuments(final EnvelopeConfiguration ec, final String type) {
+		List<Document> documents = new List<Document>();
+		for (Document doc : ec.documents) {
+			if (doc.type == type) {
+				documents.add(doc);
+			}
+		}
+		return documents;
+	}
+
+	private static List<Document> getDocumentsWithFileSize(final EnvelopeConfiguration ec, final List<Id> contentDocumentIds) {
+		Map<Id, ContentDocument> contentDocumentIdToFileSize =
+			new Map<Id, ContentDocument>([
+				SELECT Id, ContentSize
+				FROM ContentDocument
+				WHERE Id IN:contentDocumentIds
+			]);
+		List<Document> updatedDocs = new List<Document>();
+		for (Document doc : ec.documents) {
+			if (contentDocumentIdToFileSize.containsKey(doc.sourceId)) {
+				document d = new document(
+					doc.id,
+					doc.type,
+					doc.sequence,
+					doc.name,
+					doc.extension,
+					contentDocumentIdToFileSize.get(doc.sourceId).ContentSize,
+					doc.lastModified,
+					doc.sourceId,
+					doc.readOnly,
+					doc.required);
+				updatedDocs.add(d);
+			} else {
+				updatedDocs.add(doc);
+			}
+		}
+		return updatedDocs;
 	}
 
 	@AuraEnabled
@@ -126,8 +178,7 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to retrieve merge fields.');
 		}
-	}	
-
+	}
 
 	@AuraEnabled
 	public static List<SigningGroup> getSigningGroups() {

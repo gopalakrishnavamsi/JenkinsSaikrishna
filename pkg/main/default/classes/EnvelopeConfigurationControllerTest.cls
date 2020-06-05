@@ -699,5 +699,76 @@ private class EnvelopeConfigurationControllerTest {
 			System.assert(Collection.isNotEmpty(result));
 			System.assertNotEquals(null, JSON.serialize(result));
 		}
-	}	
+	}
+
+	@IsTest
+	static void test_parseEnvelopeConfiguration_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Boolean testResult;
+			ContentVersion testContentVersion1 = TestUtils.createContentVersion();
+			ContentVersion testContentVersion2 = TestUtils.createContentVersion();
+			EnvelopeConfiguration__c envConfig = TestUtils.createEnvelopeConfiguration();
+			System.assertNotEquals(envConfig.Id, null);
+			System.assertNotEquals(testContentVersion1.ContentDocumentId, null);
+			System.assertNotEquals(testContentVersion2.ContentDocumentId, null);
+			List<Id> contentVersionIds = new List<Id> { testContentVersion1.Id, testContentVersion2.Id };
+			List<Id> contentDocumentIds = new List<Id> { testContentVersion1.ContentDocumentId, testContentVersion2.ContentDocumentId };
+
+			EnvelopeConfiguration config = new EnvelopeConfiguration(
+				envConfig.Id,
+				envConfig.Name,
+				envConfig.SourceObject__c,
+				UUID.parse(envConfig.DocuSignId__c),
+				new List<Document> {
+					new EnvelopeConfiguration.TemplateDocument(
+						null,
+						testContentVersion1.ContentDocumentId,
+						1,
+						testContentVersion1.Title,
+						testContentVersion1.FileExtension,
+						false,
+						true),
+					new EnvelopeConfiguration.TemplateDocument(
+						null,
+						testContentVersion2.ContentDocumentId,
+						1,
+						testContentVersion2.Title,
+						testContentVersion2.FileExtension,
+						false,
+						true)
+				},
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+			EnvelopeConfigurationDocument__c templateDocument1 = TestUtils.createEnvelopeConfigurationDocument(
+				testContentVersion1.Title,
+				envConfig.Id,
+				testContentVersion1.ContentDocumentId,
+				EnvelopeConfiguration.DOCUMENT_TYPE_TEMPLATE_DOCUMENT
+			);
+			System.assertNotEquals(templateDocument1.Id, null);
+			EnvelopeConfigurationDocument__c templateDocument2 = TestUtils.createEnvelopeConfigurationDocument(
+				testContentVersion2.Title,
+				envConfig.Id,
+				testContentVersion2.ContentDocumentId,
+				EnvelopeConfiguration.DOCUMENT_TYPE_TEMPLATE_DOCUMENT
+			);
+			System.assertNotEquals(templateDocument2.Id, null);
+			Test.startTest();
+			EnvelopeConfiguration updatedEnvelopeConfiguration =
+				EnvelopeConfigurationController.getEnvelopeConfiguration(envConfig.Id);
+			Test.stopTest();
+			System.assertEquals(updatedEnvelopeConfiguration.documents.size(), 2);
+			System.assertEquals([SELECT Id FROM ContentVersion WHERE Id IN:contentVersionIds].size(), 2);
+			System.assertEquals([SELECT Id FROM ContentDocument WHERE Id IN:contentDocumentIds].size(), 2);
+			System.assertNotEquals(updatedEnvelopeConfiguration.documents[0].size, 0);
+		}
+	}
 }

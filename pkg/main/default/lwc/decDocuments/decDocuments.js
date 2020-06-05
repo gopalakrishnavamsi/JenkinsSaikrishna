@@ -45,7 +45,7 @@ export default class DecDocuments extends LightningElement {
 
   handleFileUploadSuccess(event) {
     const newTemplateDocument = getDefaultTemplateDocument(1, event.detail.data);
-    genericEvent('updatetemplatedocuments', newTemplateDocument, this, true);
+    genericEvent('updatetemplatedocuments', {...newTemplateDocument, size:event.detail.data.ContentSize}, this, true);
   }
 
   renderedCallback() {
