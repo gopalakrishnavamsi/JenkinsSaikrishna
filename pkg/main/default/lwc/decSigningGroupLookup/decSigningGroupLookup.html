@@ -7,11 +7,6 @@
                             class="pillSize"
                             label={selectedSigningGroup.name}
                             onremove={handlePillRemove}>
-                        <lightning-icon
-                                icon-name={selectedSigningGroup.icon}
-                                variant="plain"
-                                alternative-text={selectedSigningGroup.name}>
-                        </lightning-icon>
                     </lightning-pill>
                 </div>
             </div>
@@ -33,7 +28,7 @@
                         signing-group={signingGroup}
                         index={index}
                         onselection={handleSelect}
-                        key={signingGroup.name}
+                        key={signingGroup.id}
                 ></c-dec-signing-group-lookup-result>
             </template>
         </ul>
