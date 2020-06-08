@@ -13,6 +13,7 @@ import DEC_UPDATE_SOURCE_FILES from '@salesforce/messageChannel/DecUpdateSourceF
 import DEC_RENAME_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecRenameTemplateDocument__c';
 import DEC_DELETE_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecDeleteTemplateDocument__c';
 import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEnvelopeTemplate__c';
+import DEC_UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/DecUpdateNotifications__c';
 
 
 // utility functions
@@ -54,6 +55,7 @@ export default class DecSetupConfig extends LightningElement {
   renameEnvelopeTemplateSubscription = null;
   renameTemplateDocSubscription = null;
   deleteTemplateDocSubscription = null;
+  updateNotificationsSubscription = null;
 
   @api
   attachSourceFiles = false;
@@ -95,6 +97,13 @@ export default class DecSetupConfig extends LightningElement {
       DEC_RENAME_ENVELOPE_TEMPLATE,
       this.handleRenameEnvelopeTemplate.bind(this)
     );
+
+    this.updateNotificationsSubscription = subscribeToMessageChannel(
+      this.context,
+      this.updateNotificationsSubscription,
+      DEC_UPDATE_NOTIFICATIONS,
+      this.handleUpdateNotifications.bind(this)
+    );
   }
 
   disconnectedCallback() {
@@ -119,6 +128,10 @@ export default class DecSetupConfig extends LightningElement {
 
   get recipients() {
     return isEmpty(this.envelopeConfigurationData) ? [] : this.envelopeConfigurationData.recipients;
+  }
+
+  get notifications() {
+    return isEmpty(this.envelopeConfigurationData) || isEmpty(this.envelopeConfigurationData.notifications) ? null : this.envelopeConfigurationData.notifications;
   }
 
   // Passed to decHeader
@@ -188,6 +201,19 @@ export default class DecSetupConfig extends LightningElement {
       ...this.envelopeConfigurationData,
       name: message.name
     });
+  }
+
+  handleUpdateNotifications(message) {
+    this.updateLocalConfiguration({
+      notifications: message.notifications
+    });
+  }
+
+  updateLocalConfiguration(fieldsToUpdate) {
+    this.envelopeConfigurationData = {
+      ... this.envelopeConfigurationData,
+      ... fieldsToUpdate
+    };
   }
 
   updateLocalData(event) {

@@ -5336,6 +5336,26 @@
 		<name>View</name>
 	</customLabels>
 	<customLabels>
+		<label>Automatic Reminders</label>
+		<name>AutomaticReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>- Do Not Remind -</label>
+		<name>DoNotRemind</name>
+	</customLabels>
+	<customLabels>
+		<label>Every Day</label>
+		<name>EveryDay</name>
+	</customLabels>
+	<customLabels>
+		<label>Every {0} Days</label>
+		<name>EveryNumberOfDays</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope expires {0} days after sending</label>
+		<name>ExpiresAfterSending</name>
+	</customLabels>
+	<customLabels>
 		<label>You can tweak the settings used in this template before and after sending.</label>
 		<name>OptionsInfoText</name>
 	</customLabels>

@@ -12,6 +12,39 @@
             <div class="slds-m-top_small ds-options-information-text">{label.optionsInfoText}</div>
         </div>
         <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large">
+            <div class="ds-options-details-header-text">{label.reminders}</div>
+            <div class="slds-grid slds-p-top_large">
+                <div class="slds-col slds-size_1-of-6 ds-options-inner-text ds-options-fit-content-width slds-p-right_small">{label.automaticReminders}</div>
+                <div class="slds-col slds-size_1-of-5 ds-options-fit-content-width">  
+                    <lightning-combobox
+                        value={reminder}
+                        options={reminderOptions}
+                        onchange={handleReminderChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+        </div>
+        <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large">
+            <div class="ds-options-details-header-text">{label.expiration}</div>
+            <div class="slds-grid slds-p-top_large">
+                <div class="slds-col slds-size_1-of-3 slds-p-right_small ds-options-inner-text ds-options-fit-content-width">
+                    {envelopeExpires}
+                </div>
+                <div class="slds-col slds-size_1-of-12 ds-options-fit-content-width">
+                    <lightning-input
+                        type="text"
+                        class="slds-form-element ds-options-expiration-input"
+                        onchange={handleExpirationChange}
+                        onblur={handleExpirationBlur}
+                        value={expiration}>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-3 slds-p-left_small ds-options-inner-text ds-options-fit-content-width">
+                    {daysAfterSending}
+                </div>
+            </div>
+        </div>
+        <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large">
             <div class="ds-options-details-header-text ">{label.opportunityStage}</div>
             <div class="slds-p-top_large">TBD</div>
         </div>

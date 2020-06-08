@@ -10294,6 +10294,46 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>View</value>
 	</labels>
 	<labels>
+		<fullName>AutomaticReminders</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Reminders sub-text for Envelope Templates</shortDescription>
+		<value>Automatic Reminders</value>
+	</labels>
+	<labels>
+		<fullName>DoNotRemind</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Do Not Remind option for Envelope Templates</shortDescription>
+		<value>- Do Not Remind -</value>
+	</labels>
+	<labels>
+		<fullName>EveryDay</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Reminder setting for Envelope Templates</shortDescription>
+		<value>Every Day</value>
+	</labels>
+	<labels>
+		<fullName>EveryNumberOfDays</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Reminder settings for Envelope Templates</shortDescription>
+		<value>Every {0} Days</value>
+	</labels>
+	<labels>
+		<fullName>ExpiresAfterSending</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Expiration inner text for Envelope Templates</shortDescription>
+		<value>Envelope expires {0} days after sending</value>
+	</labels>
+	<labels>
 		<fullName>OptionsInfoText</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>

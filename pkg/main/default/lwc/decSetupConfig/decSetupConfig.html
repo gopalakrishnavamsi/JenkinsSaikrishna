@@ -35,7 +35,10 @@
             <template if:true={taggerStep}>
                 Step 4
             </template>
-            <c-dec-options if:true={optionsStep}></c-dec-options>
+            <c-dec-options
+                if:true={optionsStep}
+                notifications={notifications}>
+            </c-dec-options>
             <template if:true={customButtonStep}>
                 Step 6
             </template>
