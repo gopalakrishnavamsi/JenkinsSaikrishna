@@ -1932,6 +1932,14 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
+	private class APITemplateUpdateDocuments {
+		public List<APIDocument> documents;
+		public APITemplateUpdateDocuments(final List<APIDocument> documents) {
+			this.documents = Collection.isNotEmpty(documents) ? documents : new List<APIDocument>();
+		}
+	}
+
+	@TestVisible
 	private class APITemplate {
 		public APITemplateId envelopeTemplateDefinition;
 		public APICustomFields customFields;
@@ -2123,13 +2131,38 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		if (template == null) throw new DocuSignException(Label.UndefinedTemplate);
 		if (template.id == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
 
+		APITemplate updateTemplateRequest = new APITemplate(template);
+		List<APIDocument> updateTemplateDocumentsRequest = Collection.isNotEmpty(updateTemplateRequest.documents) ? updateTemplateRequest.documents : null;
+		//null out the documents in the updateTemplateRequest since
+		//documents will be updated using updateTemplateDocumentsRequest and a separate endpoint
+		updateTemplateRequest.documents = null;
+
+		//TODO : Add DAL appropriate customFields to template
+		//null out the custom fields since we will have to
+		//decide the appropriate fields for DAL templates as well as use logic to retrieve this fieldIds
+		updateTemplateRequest.customFields = null;
+
+		//TODO : Add error handling to cover both multi item put requests viz;
+		//'templates/{templateId}' and 'templates/{templateId}/documents'
+		//this will require updates to RestAPI.cls and will be covered in follow up JIRA ticket
 		RestAPI.Response response = this.put(
 			new List<Object> { 'templates', template.id },
-			JSON.serialize(new APITemplate(template), true),
+			JSON.serialize(updateTemplateRequest, true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to update template: ' + response.error);
 			throw new APIException(response.error);
+		}
+
+		if (Collection.isNotEmpty(updateTemplateDocumentsRequest)) {
+			RestAPI.Response documentsResponse = this.put(
+				new List<Object> { 'templates', template.id, 'documents' },
+				JSON.serialize(new APITemplateUpdateDocuments(updateTemplateDocumentsRequest), true),
+				timeout);
+			if (documentsResponse.hasError) {
+				this.log.error('Failed to update template documents: ' + documentsResponse.error);
+				throw new APIException(documentsResponse.error);
+			}
 		}
 
 		return template.withLastModified(Datetime.now());

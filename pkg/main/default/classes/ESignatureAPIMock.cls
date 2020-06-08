@@ -35,6 +35,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		'tab_definitions' => Application.classNamespacePrefix + 'ESignatureAPIMock.TabDefinitionsMock',
 		'tab_definitions' => Application.classNamespacePrefix + 'ESignatureAPIMock.TabDefinitionsMock',
 		'templates' => Application.classNamespacePrefix + 'ESignatureAPIMock.TemplatesMock',
+		'documents' => Application.classNamespacePrefix + 'ESignatureAPIMock.DocumentsUpdateMock',
 		'users' => Application.classNamespacePrefix + 'ESignatureAPIMock.UsersMock',
 		'views' => Application.classNamespacePrefix + 'ESignatureAPIMock.ViewsMock'
 	};
@@ -879,6 +880,20 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					t.envelopeTemplateDefinition.lastModified = StringUtils.formatDatetime(Datetime.now());
 				}
 				response = MockResponse.ok(t);
+			}
+			return response;
+		}
+	}
+
+	//noinspection ApexUnusedDeclaration
+	//TODO: Implement Documents Update mock based on implementation
+	//of error handling for multi-item PUT requests
+	public class DocumentsUpdateMock implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			if (request.method == 'PUT') {
+				response = MockResponse.ok(null);
 			}
 			return response;
 		}
