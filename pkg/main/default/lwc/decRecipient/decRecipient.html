@@ -32,9 +32,9 @@
             </div>
             <div class="slds-col slds-p-around_large">
                 <lightning-icon size="xx-small" icon-name="utility:shield" class="ds-type-icon"
-                                if:true={hasAuthentication}></lightning-icon>
+                                if:true={recipient.hasAuthentication}></lightning-icon>
                 <lightning-icon size="xx-small" icon-name="utility:quick_text" class="ds-type-icon"
-                                if:true={hasNote}></lightning-icon>
+                                if:true={recipient.hasNote}></lightning-icon>
             </div>
         </div>
     </div>

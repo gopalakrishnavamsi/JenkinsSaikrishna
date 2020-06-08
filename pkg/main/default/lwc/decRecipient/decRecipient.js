@@ -1,6 +1,6 @@
 import {LightningElement, api} from 'lwc';
 import {isEmpty} from 'c/utils';
-import {Labels, Actions} from 'c/recipientUtils';
+import {Labels} from 'c/recipientUtils';
 
 export default class DecRecipient extends LightningElement {
 
@@ -22,7 +22,7 @@ export default class DecRecipient extends LightningElement {
     } else if (!isEmpty(this.recipient.source)) {
       return this.recipient.source.name;
     } else if (!isEmpty(this.recipient.role)) {
-      return this.recipient.role;
+      return this.recipient.role.name;
     } else if (!isEmpty(this.recipient.signingGroup)) {
       return this.recipient.signingGroup;
     } else {
@@ -46,20 +46,7 @@ export default class DecRecipient extends LightningElement {
   }
 
   get recipientType() {
-    if (isEmpty(this.recipient)) return '';
-    if (!isEmpty(this.recipient.type)) {
-      return Actions[this.recipient.type].label;
-    } else {
-      return '';
-    }
-  }
-
-  get hasNote() {
-    return !isEmpty(this.recipient) && !isEmpty(this.recipient.note);
-  }
-
-  get hasAuthentication() {
-    return !isEmpty(this.recipient) && !isEmpty(this.recipient.authentication);
+    return this.recipient.recipientType.label;
   }
 
   get recipientBackgroundColor() {

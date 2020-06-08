@@ -118,7 +118,7 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   get recipients() {
-    return isEmpty(this.envelopeConfigurationData) ? [] : JSON.stringify(this.envelopeConfigurationData.recipients);
+    return isEmpty(this.envelopeConfigurationData) ? [] : this.envelopeConfigurationData.recipients;
   }
 
   // Passed to decHeader
@@ -257,10 +257,12 @@ export default class DecSetupConfig extends LightningElement {
 
     let recipientsSelector = this.template.querySelector('c-dec-recipients');
     if (!isEmpty(recipientsSelector)) {
-      processedFields.recipients = recipientsSelector.fetchRecipients();
+      let recipients = recipientsSelector.fetchRecipients();
+      if (recipients) processedFields.recipients = recipients.map(r => ({...r, id: null}));
+    } else {
+      processedFields.recipients = configurationData.recipients.map(r => ({...r, id: null}));
     }
     processedFields.documents = configurationData.documents.map(doc => ({...doc, id: null}));
-
     return JSON.stringify({
       ...configurationData,
       ...processedFields

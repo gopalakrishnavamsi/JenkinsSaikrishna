@@ -47,55 +47,37 @@ export default class DecRecipientDetails extends LightningElement {
     return this.recipient ? this.recipient.filter : null;
   }
 
-  updateRecipient(recipient) {
-    let evt = new CustomEvent('updaterecipient', {
-        detail: recipient
-    });
-    this.dispatchEvent(evt);
-  }
-
   handleFilterChange({ detail }) {
-    let recipient = this.recipient;
-    recipient.filter = detail;
-    this.updateRecipient(recipient);    
+    this.recipient.filter = detail;
   }
 
   handleRoleRecipientChange({ detail }) {
-    const { name, email, role } = detail;
-    let recipient = this.recipient;
-    recipient.role = role;
-    recipient.name = name;
-    recipient.email = email;
-    this.updateRecipient(recipient);
+    const { name = null, email = null, role = null } = detail;
+    this.recipient.addRole(role);
+    this.recipient.name = name;
+    this.recipient.email = email;
   }  
 
-  handleRelationshipUpdate({ detail }) {
-    let recipient = this.recipient;
-    recipient.relationship = detail;
-    this.updateRecipient(recipient);
+  handleRelationshipUpdate = ({ detail }) => {
+    this.recipient.relationship = detail;
   }
 
-  updateAction({ detail }) {
-    let recipient = this.recipient;
-    recipient.type = detail;
-    this.updateRecipient(recipient);  
+  updateAction = ({ detail }) => {
+    this.recipient.type = detail;
   }
 
-  handleAuthenticationChange({ detail }) {
-    let recipient = this.recipient;
-    recipient.authentication = detail;
-    this.updateRecipient(recipient);
+  handleAuthenticationChange = ({ detail }) => {
+    this.recipient.authentication = detail;
   }
 
-  updateNote({ detail }) {
-    let recipient = this.recipient;
-    recipient.note = detail;
-    this.updateRecipient(recipient);        
+  updateNote = ({ detail }) => {
+    this.recipient.note = detail;
   }
 
-  handleSourceChange({ detail }) {
-    let recipient = this.recipient;
-    recipient.source = detail;
-    this.updateRecipient(recipient);          
+  handleSourceChange = ({ detail }) => {
+    const { name = null, email = null } = detail;
+    this.recipient.name = name;
+    this.recipient.email = email;
+    this.recipient.source = detail;
   }
 }

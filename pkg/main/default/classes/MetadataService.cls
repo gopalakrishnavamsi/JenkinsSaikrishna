@@ -163,7 +163,7 @@ public with sharing class MetadataService {
 				result.add(
 					new Query.Relationship(
 						true,
-						fieldDesc.getName(),
+						fieldDesc.getRelationshipName(),
 						fieldDesc.getLabel(),
 						String.valueOf(fieldSourceType)
 					)

@@ -9,11 +9,10 @@ import {
   itemDragStart,
   itemDragEnd
 } from 'c/dragUtils';
-import {isEmpty} from 'c/utils';
 
 export default class DecRecipientsList extends LightningElement {
 
-  privateRecipients;
+  privateRecipients = [];
 
   @api
   get recipients(){
@@ -21,7 +20,7 @@ export default class DecRecipientsList extends LightningElement {
   }
 
   set recipients(value){
-    this.privateRecipients = !isEmpty(isEmpty) ? JSON.parse(value) : null;
+    this.privateRecipients = value;
   }
 
   fromIndex = null;

@@ -76,6 +76,36 @@ export class Recipient {
     this.role = role;
   }
 
+  static fromObject(recipientDetails = {}) {
+    if (isEmpty(recipientDetails)) return null;
+
+    if (recipientDetails.relationship) {
+      if (recipientDetails.relationship.isLookup) {
+        return new LookupRecipient(
+          recipientDetails.relationship,
+          recipientDetails.role,
+          recipientDetails.routingOrder,
+          recipientDetails
+        )
+      } else {
+        return new RelatedRecipient(
+          recipientDetails.relationship,
+          recipientDetails.roles,
+          recipientDetails.incrementRoutingOrder,
+          recipientDetails.routingOrder,
+          recipientDetails.filter,
+          recipientDetails
+        )
+      } 
+    }
+
+    return new Recipient(
+      recipientDetails, 
+      recipientDetails.role, 
+      recipientDetails.routingOrder
+    );
+  }  
+
   get isPlaceHolder() {
     return this.constructor === Recipient && !isEmpty(this.role) && isEmpty(this.signingGroup) && isEmpty(this.name) && isEmpty(this.email);
   }
@@ -107,6 +137,10 @@ export class Recipient {
 
   get hasFilter() {
     return !isEmpty(this.filter);
+  }
+
+  addRole(name) {
+    this.role = new Role(name, this.routingOrder);
   }
 
   addSMSAuthentication(phoneNumber = null) {
@@ -142,6 +176,14 @@ export class RelatedRecipient extends Recipient {
 
   addFilter(filterBy) {
     this.filter = new Filter(filterBy);
+  }
+}
+
+
+class Role {
+  constructor(name, value = 1) {
+    this.name = name;
+    this.value = value;
   }
 }
 

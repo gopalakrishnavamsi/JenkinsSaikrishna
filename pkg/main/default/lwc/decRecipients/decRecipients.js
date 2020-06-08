@@ -1,6 +1,6 @@
 import {LightningElement, api} from 'lwc';
-import {Labels} from 'c/recipientUtils';
-import {isEmpty} from 'c/utils';
+import {Labels, Recipient} from 'c/recipientUtils';
+import {isEmpty, proxify} from 'c/utils';
 
 export default class DecRecipients extends LightningElement {
 
@@ -8,30 +8,32 @@ export default class DecRecipients extends LightningElement {
 
   showAddRecipientsModal = false;
 
-  privateRecipients = [];
+  @api
+  recipients = [];
+
+  privateRecipients = proxify([]);
 
   @api
-  get recipients() {
-    return !isEmpty(this.privateRecipients) ? JSON.stringify(this.privateRecipients) : '';
-  }
+  sourceObject;
 
-  set recipients(value) {
-    this.privateRecipients = !isEmpty(value) ? JSON.parse(value) : [];
-  }
-
-  get hasRecipients() {
-    return !isEmpty(this.privateRecipients) && this.privateRecipients.length > 0;
+  connectedCallback() {
+    if (!isEmpty(this.recipients)) {
+      this.privateRecipients = this.recipients.map(r => Recipient.fromObject(r));
+    }
   }
 
   @api
   fetchRecipients = () => {
     return this.privateRecipients;
-  };
+  };  
 
+  get nextRole() {
+    return this.privateRecipients ? this.privateRecipients.length + 1 : 1;
+  }  
 
-  @api
-  sourceObject;
-
+  get hasRecipients() {
+    return !isEmpty(this.privateRecipients) && this.privateRecipients.length > 0;
+  }
 
   closeRecipientsModal = () => {
     this.showAddRecipientsModal = false;
@@ -42,11 +44,9 @@ export default class DecRecipients extends LightningElement {
   };
 
   addRecipient = (recipient) => {
-    recipient.routingOrder = this.privateRecipients.length + 1;
-    this.privateRecipients.push(recipient);
+    this.privateRecipients = [...this.privateRecipients, recipient];
     this.closeRecipientsModal();
   };
-
 
   handleSigningOrderModalOpen = () => {
     const signingOrderDiagramComponent = this.template.querySelector('c-signing-order');

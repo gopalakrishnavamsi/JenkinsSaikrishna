@@ -108,6 +108,18 @@ const subscribeToMessageChannel = (context, subscription, channel, handler) => {
   return subscribe(context, channel, handler, { scope: APPLICATION_SCOPE });
 };
 
+const proxify = (source) => {
+  if (isEmpty(source)) return null;
+  return new Proxy(source, {
+    get: function (target, key, receiver) {
+      return Reflect.get(target, key, receiver);
+    },
+    set: function (target, key, value, receiver) {
+      return Reflect.set(target, key, value, receiver);
+    }
+  });
+}
+
 export {
     FILE_EXTENSION_TO_ICON_NAME_MAPPING,
     UNKNOWN_ICON_NAME,
@@ -119,5 +131,6 @@ export {
     genericEvent,
     format,
     getRandomKey,
+    proxify,
     subscribeToMessageChannel
 };

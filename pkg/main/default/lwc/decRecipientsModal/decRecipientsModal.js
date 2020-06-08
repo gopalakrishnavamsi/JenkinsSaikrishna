@@ -1,6 +1,6 @@
 import {LightningElement, api} from 'lwc';
 import {Recipient, LookupRecipient, RelatedRecipient, Types, Labels} from 'c/recipientUtils';
-import {isEmpty} from 'c/utils';
+import {isEmpty, proxify} from 'c/utils';
 
 export default class DecRecipientsModal extends LightningElement {
 
@@ -11,15 +11,12 @@ export default class DecRecipientsModal extends LightningElement {
 
   Types = Types;
 
-  @api
-  recipient = null;
-
   selectedType = this.Types.LookupRecipient.value;
 
   @api
   isOpen;
 
-  privateRecipient = null;
+  privateRecipient = this.convertRecipientType({});;
 
   @api
   routingOrder = 1;
@@ -29,22 +26,18 @@ export default class DecRecipientsModal extends LightningElement {
 
   @api
   handleSave;
-    
-  connectedCallback() {
-    //Edit Flow
-    if (!isEmpty(this.recipient) && isEmpty(this.privateRecipient)) {
-      this.privateRecipient = this.recipient;
-    } else if (isEmpty(this.recipient)) {
-      this.privateRecipient = this.convertRecipientType({});
-    }
+
+  @api
+  set recipient(val) {
+    this.privateRecipient = val;
+  }
+
+  get recipient() {
+    return this.privateRecipient;
   }
 
   get isNew() {
     return isEmpty(this.recipient);
-  }
-
-  handleRecipientUpdate = ({ detail }) => {
-    this.privateRecipient = detail;
   }
 
   saveRecipient = () => {
@@ -66,9 +59,11 @@ export default class DecRecipientsModal extends LightningElement {
   convertRecipientType({ note = null, authentication = null }) {
     if (!isEmpty(this.recipient) && this.selectedType === this.recipient.recipientType) return this.recipient;
 
+    let result;
+
     switch(this.selectedType) {
       case this.Types.LookupRecipient.value:
-        return new LookupRecipient(
+        result = new LookupRecipient(
           null,
           null,
           this.routingOrder,
@@ -77,8 +72,9 @@ export default class DecRecipientsModal extends LightningElement {
               note                        
           }
         );
+        break;
       case this.Types.RelatedRecipient.value:
-        return new RelatedRecipient(
+        result = new RelatedRecipient(
           null,
           null,
           null,
@@ -89,15 +85,18 @@ export default class DecRecipientsModal extends LightningElement {
               note
           }                   
         )
-        default:
-          return new Recipient(
-            {
-                authentication,
-                note 
-            }, 
-            null, 
-            this.routingOrder
-          );
+        break;
+      default:
+        result = new Recipient(
+          {
+              authentication,
+              note 
+          }, 
+          null, 
+          this.routingOrder
+        );
+        break;
      }
+     return proxify(result);
   } 
 }
