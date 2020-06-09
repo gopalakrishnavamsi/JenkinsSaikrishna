@@ -1157,6 +1157,7 @@ public with sharing class EnvelopeConfigurationService {
 		if (templateRecipient == null) return envelopeRecipient;
 
 		return envelopeRecipient
+			.withId(templateRecipient.id)
 			.withType(templateRecipient.type, templateRecipient.signNow)
 			.withRoutingOrder(routingOrder)
 			.withRole(role)

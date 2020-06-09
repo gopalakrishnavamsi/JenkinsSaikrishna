@@ -1,19 +1,11 @@
 import {LightningElement, api} from 'lwc';
 import {isEmpty} from 'c/utils';
-import {Labels} from 'c/recipientUtils';
+import {Labels,Actions} from 'c/recipientUtils';
 
 export default class DecRecipient extends LightningElement {
 
-  privateRecipient;
-
   @api
-  get recipient() {
-    return this.privateRecipient;
-  }
-
-  set recipient(value) {
-    this.privateRecipient = value;
-  }
+  recipient = {}
 
   get recipientLabel() {
     if (isEmpty(this.recipient)) return '';
@@ -46,7 +38,7 @@ export default class DecRecipient extends LightningElement {
   }
 
   get recipientType() {
-    return this.recipient.recipientType.label;
+    return !isEmpty(this.recipient) ? Actions[this.recipient.type].label : '';
   }
 
   get recipientBackgroundColor() {

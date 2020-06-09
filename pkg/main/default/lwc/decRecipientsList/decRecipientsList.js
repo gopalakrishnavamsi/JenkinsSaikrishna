@@ -12,16 +12,8 @@ import {
 
 export default class DecRecipientsList extends LightningElement {
 
-  privateRecipients = [];
-
   @api
-  get recipients(){
-    return this.privateRecipients;
-  }
-
-  set recipients(value){
-    this.privateRecipients = value;
-  }
+  recipients = [];
 
   fromIndex = null;
 

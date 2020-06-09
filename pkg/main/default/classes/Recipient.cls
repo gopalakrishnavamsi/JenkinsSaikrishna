@@ -1208,6 +1208,18 @@ global virtual class Recipient implements Comparable {
 		return this;
 	}
 
+	/**
+	 * Sets the recipient <code>id</code> property.
+	 *
+	 * @param id Id associated with the recipient.
+	 *
+	 * @return The recipient with updated <code>id</code>.
+	 */
+	public Recipient withId(final String id) {
+		this.id = id;
+		return this;
+	}
+
 	public Recipient withPermissions(
 		final Boolean readOnly,
 		final Boolean required) {
