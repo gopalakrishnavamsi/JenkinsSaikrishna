@@ -15,7 +15,6 @@ const routingGroups =  [
         'name' : 'Monkey D. Luffy',
         'email' :  'monkeydluffy@onepiece.com',
         'initials' : 'ML',
-        'iconName' : 'utility:edit',
         'customId' : 'ML1' // Initials + Index
       },
       {
@@ -23,7 +22,6 @@ const routingGroups =  [
         'name' : 'Roronoa Zoro',
         'email' :  'roronoazoro@onepiece.com',
         'initials' : 'RZ',
-        'iconName' : 'utility:edit',
         'customId' : 'RZ2'
       },
     ],
@@ -32,14 +30,12 @@ const routingGroups =  [
       {
         'name' : 'Nami',
         'email' : '',
-        'initials' : 'NN',
-        'iconName' : 'utility:people'
+        'initials' : 'NN'
       },
       {
         'name' : 'Usopp',
         'email' : '',
-        'initials' : 'UU',
-        'iconName' : 'utility:copy'
+        'initials' : 'UU'
       }
     ],
     'numberOfAdditionalRecipients' : 2,
@@ -52,7 +48,6 @@ const routingGroups =  [
         'name' : 'Vinsmoke Sanji',
         'email' : '',
         'initials' : 'VS',
-        'iconName' : 'utility:edit',
         'customId' : 'VS1'
       },
       {
@@ -60,7 +55,6 @@ const routingGroups =  [
         'name' : 'Tony Tony Chopper',
         'email' : '',
         'initials' : 'TT',
-        'iconName' : 'utility:copy',
         'customId' : 'TT2'
       }],
     'hasAdditionalRecipients' : true,
@@ -68,14 +62,12 @@ const routingGroups =  [
       {
         'name' : 'Nico Robin',
         'email' : '',
-        'initials' : 'NR',
-        'iconName' : 'utility:people'
+        'initials' : 'NR'
       },
       {
         'name' : 'Franky',
         'email' : '',
-        'initials' : 'FF',
-        'iconName' : 'utility:edit'
+        'initials' : 'FF'
       }
     ],
     'numberOfAdditionalRecipients' : 2,
@@ -88,7 +80,6 @@ const routingGroups =  [
         'name' : 'Brook',
         'email' : '',
         'initials' : 'BB',
-        'iconName' : 'utility:edit',
         'customId' : 'BB1'
       }],
     'hasAdditionalRecipients' : false,

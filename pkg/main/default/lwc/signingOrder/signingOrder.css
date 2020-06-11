@@ -1,5 +1,4 @@
 .diagram-container {
-    background-color: #e8edf7;
     display: block;
     text-align: center;
 }
@@ -88,15 +87,11 @@ td:nth-child(2) {
 
 /* Thumbnail for each recipient */
 .thumbnail-contents {
-    background: #d9e1f1;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-color: #b8bfcc;
-    border-radius: 50%;
-    display: inline-block;
-    height: 40px;
-    line-height: 40px;
-    margin: 1px 3px;
-    width: 40px;
+    background: rgb(233, 242, 251);
+    border-radius: 24px;
+    border: 1px solid rgb(0, 112, 210);
+    height: 48px;
+    width: 48px;
 }
 
 .thumbnail-contents * {
@@ -104,21 +99,10 @@ td:nth-child(2) {
     text-transform: uppercase;
 }
 
-.recipient-draft {
-    background-color: #d9e1f1;
-    border-color: #b8bfcc;
-}
-
-.recipient-draft *,
-.recipient-draft .completion-icon::before {
-    color: #666666;
-}
-
 .text-strong {
     font-weight: bold;
 }
 
-/* text alignment */
 .text-center {
     text-align: center;
 }
@@ -132,7 +116,8 @@ td:nth-child(2) {
 }
 
 .senderText {
-    width: 68px;
+    height: 48px;
+    width: 75px;
 }
 
 .recipient-row {
@@ -143,14 +128,37 @@ td:nth-child(2) {
     text-transform: uppercase;
 }
 
-.tooltipPadding {
-    bottom: 60px;
-}
-
 .tooltipContent {
     width: fit-content;
 }
 
-.toolTipEmail {
-    font-size : var(--lwc-fontSize1);
+.tooltipLabel {
+    color: rgb(0, 0, 0);
+    font-size: var(--lwc-fontSize3);
+    font-weight: bold;
+    height: 20px;
+    letter-spacing: 0px;
+    line-height: 20px;
+}
+
+.tooltipEmail {
+    color: rgb(5, 5, 5);
+    font-size : var(--lwc-fontSize3);
+    height: 20px;
+    font-weight: normal;
+    letter-spacing: 0px;
+    line-height: 20px;
+}
+
+.completedCheck {
+    color: rgb(0, 112, 210);
+    height: 10px;
+    width: 15px;
+}
+
+.popover {
+    background: rgb(255, 255, 255);
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.2);
 }
