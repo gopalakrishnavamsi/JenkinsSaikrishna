@@ -88,7 +88,7 @@ export class Relationship {
     }
 
     get icon() {
-        return `standard:${this.relatesTo.toLowerCase()}`;
+        return !isEmpty(this.relatesTo) ? `standard:${this.relatesTo.toLowerCase()}` : null;
     }    
 }
 

@@ -7,7 +7,7 @@
         <div>{Labels.decRecordFieldsTitle2}</div>
     </section>
     <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
-        <c-dec-relationship-lookup label={Labels.decRelatedListLabel} source-object={sourceObject}
+        <c-dec-relationship-lookup relationship={relationship} label={Labels.decRelatedListLabel} source-object={sourceObject}
                                    onrelationshipupdate={handleRelationshipSelect}></c-dec-relationship-lookup>
     </section>
     <section if:false={showFilterPill} class="slds-p-vertical_x-small slds-p-horizontal_x-small">

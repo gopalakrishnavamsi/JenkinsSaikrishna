@@ -1,9 +1,9 @@
-import {LightningElement, api, track} from 'lwc';
+import {LightningElement, api} from 'lwc';
 import getChildRelationships from '@salesforce/apex/EnvelopeConfigurationController.getChildRelationships';
 import getLookupFields from '@salesforce/apex/EnvelopeConfigurationController.getLookupFields';
 import {Relationship} from 'c/queryUtils';
 import loadingLabel from '@salesforce/label/c.Loading';
-import {isEmpty} from 'c/utils';
+import {isEmpty,proxify} from 'c/utils';
 import {Labels} from 'c/recipientUtils';
 
 export default class DecRelationshipLookup extends LightningElement {
@@ -22,7 +22,6 @@ export default class DecRelationshipLookup extends LightningElement {
   @api
   isLookup = false;
 
-  @track
   selectedRelationship = null;
 
   relationships = [];
@@ -32,6 +31,15 @@ export default class DecRelationshipLookup extends LightningElement {
   searchTerm;
 
   errorMessage;
+
+  @api
+  get relationship() {
+    return this.selectedRelationship;
+  }
+
+  set relationship(val) {
+    this.selectedRelationship = proxify(val);
+  }
 
   connectedCallback() {
     if (isEmpty(this.sourceObject)) return;
@@ -60,7 +68,7 @@ export default class DecRelationshipLookup extends LightningElement {
   }
 
   get hasSelection() {
-    return !isEmpty(this.selectedRelationship);
+    return !isEmpty(this.relationship) && !this.relationship.isEmpty;
   }
 
   get resultClass() {
@@ -95,7 +103,7 @@ export default class DecRelationshipLookup extends LightningElement {
   }
 
   handlePillRemove = () => {
-    this.selectedRelationship = null;
+    this.relationship = null;
     this.dispatchEvent(new CustomEvent('relationshipupdate', {detail: null}));
   }
 
@@ -105,8 +113,8 @@ export default class DecRelationshipLookup extends LightningElement {
   }
 
   handleSelect = ({detail}) => {
-    this.selectedRelationship = this.searchResults[detail];
-    this.dispatchEvent(new CustomEvent('relationshipupdate', {detail: this.selectedRelationship}));
+    this.relationship = this.searchResults[detail];
+    this.dispatchEvent(new CustomEvent('relationshipupdate', {detail: this.relationship}));
     this.resetSearch(this.relationships);
   };
 }
