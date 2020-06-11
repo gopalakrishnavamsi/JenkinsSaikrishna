@@ -25,11 +25,7 @@ export default class DecRecipients extends LightningElement {
   @api
   fetchRecipients = () => {
     return this.privateRecipients;
-  };  
-
-  get nextRole() {
-    return this.privateRecipients ? this.privateRecipients.length + 1 : 1;
-  }  
+  };
 
   get hasRecipients() {
     return !isEmpty(this.privateRecipients) && this.privateRecipients.length > 0;
@@ -43,9 +39,13 @@ export default class DecRecipients extends LightningElement {
     this.showAddRecipientsModal = true;
   };
 
-  addRecipient = (recipient) => {
+  addRecipient = (recipient, isAddNew = false) => {
+    recipient.routingOrder = this.privateRecipients.length + 1;
     this.privateRecipients = [...this.privateRecipients, recipient];
     this.closeRecipientsModal();
+    if(isAddNew){
+      this.handleRecipientsModalOpen();
+    }
   };
 
   handleSigningOrderModalOpen = () => {

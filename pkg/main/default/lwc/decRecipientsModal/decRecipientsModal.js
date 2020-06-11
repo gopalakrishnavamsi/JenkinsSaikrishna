@@ -1,6 +1,7 @@
 import {LightningElement, api} from 'lwc';
 import {Recipient, LookupRecipient, RelatedRecipient, Types, Labels} from 'c/recipientUtils';
 import {isEmpty, proxify} from 'c/utils';
+const DEFAULT_SELECTED_TYPE = Types.LookupRecipient.value;
 
 export default class DecRecipientsModal extends LightningElement {
 
@@ -11,12 +12,12 @@ export default class DecRecipientsModal extends LightningElement {
 
   Types = Types;
 
-  selectedType = this.Types.LookupRecipient.value;
+  selectedType = DEFAULT_SELECTED_TYPE;
 
   @api
   isOpen;
 
-  privateRecipient = this.convertRecipientType({});;
+  privateRecipient = this.convertRecipientType({});
 
   @api
   routingOrder = 1;
@@ -48,37 +49,43 @@ export default class DecRecipientsModal extends LightningElement {
   }
 
   saveRecipient = () => {
-    if (this.handleSave) this.handleSave(this.privateRecipient);
+    if (this.handleSave) this.handleSave(this.privateRecipient, false);
     this.recipient = null;
-  }
+  };
+
+  saveRecipientAndOpenNew = () => {
+    if (this.handleSave) this.handleSave(this.privateRecipient, true);
+    this.selectedType = DEFAULT_SELECTED_TYPE;
+    this.recipient = null;
+  };
 
   closeModal = () => {
     if (this.handleClose) this.handleClose();
     this.recipient = null;
-  }
+  };
 
-  handleTypeChange = ({ detail }) => {
+  handleTypeChange = ({detail}) => {
     if (this.selectedType === detail.name) return;
     this.selectedType = detail.name;
     this.recipient = !isEmpty(this.recipient) ? this.convertRecipientType(this.recipient) : null;
     this.isValid = false;
-  }
+  };
 
-  handleValidationChange = ({ detail }) => {
+  handleValidationChange = ({detail}) => {
     this.isValid = detail;
-  }
+  };
 
-  convertRecipientType({ note = null }) {
+  convertRecipientType({note = null}) {
     let result;
 
-    switch(this.selectedType) {
+    switch (this.selectedType) {
       case this.Types.LookupRecipient.value:
         result = new LookupRecipient(
           null,
           null,
           this.routingOrder,
           {
-              note                        
+            note
           }
         );
         break;
@@ -90,20 +97,20 @@ export default class DecRecipientsModal extends LightningElement {
           this.routingOrder,
           null,
           {
-              note
-          }                   
-        )
+            note
+          }
+        );
         break;
       default:
         result = new Recipient(
           {
-              note 
-          }, 
-          null, 
+            note
+          },
+          null,
           this.routingOrder
         );
         break;
-     }
-     return proxify(result);
-  } 
+    }
+    return proxify(result);
+  }
 }

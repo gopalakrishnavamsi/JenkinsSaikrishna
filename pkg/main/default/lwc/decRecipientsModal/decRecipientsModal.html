@@ -7,7 +7,7 @@
             <lightning-layout>
                 <lightning-layout-item>
                     <div class="ds-recipient-type-selection">
-                        <lightning-vertical-navigation onselect={handleTypeChange}>
+                        <lightning-vertical-navigation onselect={handleTypeChange} selected-item={selectedType}>
                             <lightning-vertical-navigation-section label={Labels.decFromSalesforce}>
                                 <lightning-vertical-navigation-item label={Types.LookupRecipient.label}
                                                                     name={Types.LookupRecipient.value}>
@@ -32,7 +32,7 @@
                 </lightning-layout-item>
                 <div class="ds-panel-separator"></div>
                 <lightning-layout-item class="slds-p-around_small">
-                    <c-dec-recipient-details source-object={sourceObject} recipient={privateRecipient} type={selectedType} onvalidationchange={handleValidationChange}></c-dec-recipient-details>
+                    <c-dec-recipient-details source-object={sourceObject} recipient={recipient} type={selectedType} onvalidationchange={handleValidationChange}></c-dec-recipient-details>
                 </lightning-layout-item>
             </lightning-layout>
         </div>
@@ -41,6 +41,13 @@
                     label={Labels.cancel}
                     variant="neutral"
                     onclick={closeModal}>
+            </lightning-button>
+            <span class="slds-p-left_xx-small"></span>
+            <lightning-button
+                    label={Labels.addAndNew}
+                    onclick={saveRecipientAndOpenNew}
+                    disabled={isSaveDisabled}
+                    variant="neutral">
             </lightning-button>
             <span class="slds-p-left_xx-small"></span>
             <lightning-button

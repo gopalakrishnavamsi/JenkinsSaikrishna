@@ -67,6 +67,10 @@
     <div>
         <c-signing-order></c-signing-order>
     </div>
-    <c-dec-recipients-modal routing-order={nextRole} is-open={showAddRecipientsModal} handle-save={addRecipient}
-                            handle-close={closeRecipientsModal} source-object={sourceObject}></c-dec-recipients-modal>
+    <c-dec-recipients-modal is-open={showAddRecipientsModal}
+                            handle-save={addRecipient}
+                            handle-close={closeRecipientsModal}
+                            source-object={sourceObject}
+                            if:true={showAddRecipientsModal}>
+    </c-dec-recipients-modal>
 </template>

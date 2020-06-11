@@ -10381,4 +10381,12 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Opportunity Stage</shortDescription>
 		<value>Opportunity Stage</value>
 	</labels>
+	<labels>
+		<fullName>AddAndNew</fullName>
+		<categories>General</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add and New</shortDescription>
+		<value>Add &amp; New</value>
+	</labels>
 </CustomLabels>

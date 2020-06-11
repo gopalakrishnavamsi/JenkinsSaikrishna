@@ -5379,6 +5379,10 @@
 		<label>Opportunity Stage</label>
 		<name>OpportunityStage</name>
 	</customLabels>
+	<customLabels>
+		<label>Add &amp; New</label>
+		<name>AddAndNew</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

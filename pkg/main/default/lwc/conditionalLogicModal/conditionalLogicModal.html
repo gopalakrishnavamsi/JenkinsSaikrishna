@@ -1,5 +1,5 @@
 <template>
-    <c-modal header={Labels.addFilterLabel} size='large' show-modal={isOpen} onclose={handleClose}>
+    <c-modal header={Labels.addFilterLabel} show-modal={isOpen} onclose={handleClose}>
         <div slot='content'>
             <c-conditional-logic source-object={sourceObject} logic={logic} onlogicchange={handleUpdate}>
 

@@ -1,13 +1,14 @@
 import {api, LightningElement} from 'lwc';
 import {Types, AuthenticationTypes} from 'c/recipientUtils';
 import getEntityPhone from '@salesforce/apex/EnvelopeConfigurationController.getEntityPhone';
+const DEFAULT_TYPE = Types.LookupRecipient.value;
 
 export default class DecRecipientDetails extends LightningElement {
 
   Types = Types;
 
   @api
-  type;
+  type = DEFAULT_TYPE;
 
   @api
   sourceObject;

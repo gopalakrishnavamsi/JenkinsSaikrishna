@@ -7,6 +7,9 @@ export default class DecRecipient extends LightningElement {
   @api
   recipient = {}
 
+  @api
+  index = 0;
+
   get recipientLabel() {
     if (isEmpty(this.recipient)) return '';
     if (!isEmpty(this.recipient.relationship)) {
@@ -38,12 +41,12 @@ export default class DecRecipient extends LightningElement {
   }
 
   get recipientType() {
-    return !isEmpty(this.recipient) ? Actions[this.recipient.type].label : '';
+    return !isEmpty(this.recipient) && !isEmpty(this.recipient.type) ? Actions[this.recipient.type].label : '';
   }
 
   get recipientBackgroundColor() {
     if (isEmpty(this.recipient)) return '';
-    let colorSequence = this.recipient.routingOrder > 9 ? this.recipient.routingOrder % 10 : this.recipient.routingOrder;
+    let colorSequence = this.index > 9 ? this.index % 10 : this.index;
     return 'slds-col ds-recipient-item ds-recipient-color-' + colorSequence;
   }
 

@@ -54,6 +54,7 @@ import nameLabel from '@salesforce/label/c.NameLabel';
 import recipientRoleLabel from '@salesforce/label/c.RecipientRoleLabel';
 import recipientRecordFieldLabel from '@salesforce/label/c.RecipientRecordFieldLabel';
 import view from '@salesforce/label/c.View';
+import addAndNew from '@salesforce/label/c.AddAndNew';
 
 //eslint-disable-next-line
 const emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -269,6 +270,7 @@ export const Labels = {
   recipientRoleLabel: recipientRoleLabel,
   recipientRecordFieldLabel: recipientRecordFieldLabel,
   view: view,
+  addAndNew: addAndNew,
   accessCodeLabel: accessCodeLabel,
   decSMSorPhone: decSMSorPhone
 };
