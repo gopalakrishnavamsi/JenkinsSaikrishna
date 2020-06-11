@@ -1,5 +1,6 @@
 import {api, LightningElement} from 'lwc';
-import {Types} from 'c/recipientUtils';
+import {Types, AuthenticationTypes} from 'c/recipientUtils';
+import getEntityPhone from '@salesforce/apex/EnvelopeConfigurationController.getEntityPhone';
 
 export default class DecRecipientDetails extends LightningElement {
 
@@ -47,6 +48,17 @@ export default class DecRecipientDetails extends LightningElement {
     return this.recipient ? this.recipient.filter : null;
   }
 
+  sendValidationEvent(isValid = false) {
+    this.dispatchEvent(
+      new CustomEvent(
+        'validationchange',
+        {
+          detail: isValid
+        }
+      )
+    )
+  }
+
   handleFilterChange({ detail }) {
     this.recipient.filter = detail;
   }
@@ -56,18 +68,44 @@ export default class DecRecipientDetails extends LightningElement {
     this.recipient.addRole(role);
     this.recipient.name = name;
     this.recipient.email = email;
+    this.sendValidationEvent(this.recipient.isValid);
   }  
 
   handleRelationshipUpdate = ({ detail }) => {
     this.recipient.relationship = detail;
+    this.sendValidationEvent(this.recipient.isValid);
   }
 
   updateAction = ({ detail }) => {
     this.recipient.type = detail;
   }
 
-  handleAuthenticationChange = ({ detail }) => {
-    this.recipient.authentication = detail;
+  handleAuthenticationChange = async ({ detail = {} }) => {
+    const { type, data = null, isRemove = false } = detail;
+
+    if (isRemove) {
+      this.recipient.authentication = null;
+      return;
+    } else if (type === AuthenticationTypes.AccessCode.value) {
+      this.recipient.addAccessCode(data);
+      return;
+    } 
+
+    switch(this.type) {
+      case this.Types.EntityLookup.value: {
+        const sourceId = this.recipient.sourceId;
+        const phone = await getEntityPhone({ entityId: sourceId});
+        this.recipient.addSMSAuthentication(phone);
+        break;
+      }
+      case this.Types.LookupRecipient.value:
+      case this.Types.RelatedRecipient.value:
+        this.recipient.addSMSAuthentication();
+        break;
+      default:
+        this.recipient.addSMSAuthentication(data);
+        break;
+    }
   }
 
   updateNote = ({ detail }) => {
@@ -79,5 +117,10 @@ export default class DecRecipientDetails extends LightningElement {
     this.recipient.name = name;
     this.recipient.email = email;
     this.recipient.source = detail;
+    this.sendValidationEvent(this.recipient.isValid);
+  }
+
+  handleSigningGroupChange = ({ detail }) => {
+    this.recipient.signingGroup = detail;
   }
 }

@@ -13,6 +13,20 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	}
 
 	@TestVisible
+	private static String queryEntityPhone(final Id entityId) {
+		if (entityId == null) return null;
+		SObjectType objectType = entityId.getSobjectType();
+		if (!RecipientService.canResolveRecipientType(objectType))  return null;
+		Query phoneQuery = Query.newQuery(
+			String.valueOf(objectType), 
+			new List<String>{ 'Id', 'MobilePhone' },
+			null
+		);
+		Query.Result queryResult = phoneQuery.execute(entityId);
+		return (String) queryResult.result.get('MobilePhone');
+	}
+
+	@TestVisible
 	private static EnvelopeConfiguration parseUpdates(final String envelopeConfigurationJSON, final Boolean attachSourceFiles) {
 		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(envelopeConfigurationJSON);
 		List<Recipient> recipients = parseRecipients((List<Object>)untypedConfig.get('recipients'));
@@ -195,6 +209,15 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 			return EnvelopeConfigurationService.deleteEnvelopeConfiguration(envelopeConfigurationId);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to delete envelope configuration.');
+		}
+	}
+
+	@AuraEnabled
+	public static String getEntityPhone(final String entityId) {
+		try {
+			return queryEntityPhone((Id) entityId);
+		} catch(Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get entity phone number.');
 		}
 	}
 

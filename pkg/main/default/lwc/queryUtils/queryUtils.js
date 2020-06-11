@@ -83,6 +83,10 @@ export class Relationship {
         return new Relationship(isLookup, name, label, relatesTo);
     }
 
+    get isEmpty() {
+        return isEmpty(this.name) || isEmpty(this.label) || isEmpty(this.relatesTo);
+    }
+
     get icon() {
         return `standard:${this.relatesTo.toLowerCase()}`;
     }    

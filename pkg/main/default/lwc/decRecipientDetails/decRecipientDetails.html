@@ -12,12 +12,12 @@
         <c-dec-role-recipient onrolechange={handleRoleRecipientChange}></c-dec-role-recipient>
     </template>
     <template if:true={isSigningGroup}>
-        <c-dec-signing-group-recipient signing-group={recipient.signingGroup}></c-dec-signing-group-recipient>
+        <c-dec-signing-group-recipient onchange={handleSigningGroupChange} signing-group={recipient.signingGroup}></c-dec-signing-group-recipient>
     </template>
     <section>
         <c-dec-recipient-action onactionchange={updateAction}></c-dec-recipient-action>
 
-        <c-dec-recipient-authentication onauthenticationchange={handleAuthenticationChange}></c-dec-recipient-authentication>
+        <c-dec-recipient-authentication type={type} onauthenticationchange={handleAuthenticationChange}></c-dec-recipient-authentication>
 
         <c-dec-recipient-private-message onnotechange={updateNote} recipient-note={recipient.note}></c-dec-recipient-private-message>
     </section>

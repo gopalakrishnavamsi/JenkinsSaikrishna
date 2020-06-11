@@ -1,9 +1,7 @@
 import {LightningElement, api} from 'lwc';
 import {Labels} from 'c/recipientUtils';
 import {Filter} from 'c/queryUtils';
-import { isEmpty } from 'c/utils';
-
-
+import {isEmpty} from 'c/utils';
 
 export default class DecRelatedRecipient extends LightningElement {
   Labels = Labels;
@@ -67,7 +65,7 @@ export default class DecRelatedRecipient extends LightningElement {
     )
   }
 
-  handleSelect({ detail }) {
+  handleRelationshipSelect = ({ detail }) => {
     this.relationship = detail;
     this.dispatchEvent(
       new CustomEvent(

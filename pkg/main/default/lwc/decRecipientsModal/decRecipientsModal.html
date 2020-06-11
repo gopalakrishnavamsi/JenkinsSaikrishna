@@ -32,7 +32,7 @@
                 </lightning-layout-item>
                 <div class="ds-panel-separator"></div>
                 <lightning-layout-item class="slds-p-around_small">
-                    <c-dec-recipient-details source-object={sourceObject} recipient={privateRecipient} type={selectedType}></c-dec-recipient-details>
+                    <c-dec-recipient-details source-object={sourceObject} recipient={privateRecipient} type={selectedType} onvalidationchange={handleValidationChange}></c-dec-recipient-details>
                 </lightning-layout-item>
             </lightning-layout>
         </div>
@@ -45,6 +45,7 @@
             <span class="slds-p-left_xx-small"></span>
             <lightning-button
                     label={Labels.add}
+                    disabled={isSaveDisabled}
                     onclick={saveRecipient}
                     variant="brand">
             </lightning-button>

@@ -1,6 +1,5 @@
 import {isEmpty} from 'c/utils';
 import {Relationship, Filter} from 'c/queryUtils';
-
 //labels
 import add from '@salesforce/label/c.Add';
 import cancel from '@salesforce/label/c.Cancel';
@@ -56,6 +55,8 @@ import recipientRoleLabel from '@salesforce/label/c.RecipientRoleLabel';
 import recipientRecordFieldLabel from '@salesforce/label/c.RecipientRecordFieldLabel';
 import view from '@salesforce/label/c.View';
 
+//eslint-disable-next-line
+const emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 export class Recipient {
   constructor({id = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = 'Signer', signingGroup = null}, role, routingOrder = 1) {
@@ -109,6 +110,10 @@ export class Recipient {
   get isPlaceHolder() {
     return this.constructor === Recipient && !isEmpty(this.role) && isEmpty(this.signingGroup) && isEmpty(this.name) && isEmpty(this.email);
   }
+  
+  get sourceId() {
+    return this.source && this.source.id ? this.source.id : null;
+  }
 
   get hasAuthentication() {
     return !isEmpty(this.authentication);
@@ -139,22 +144,31 @@ export class Recipient {
     return !isEmpty(this.filter);
   }
 
+  get isValidEmail() {
+    if (isEmpty(this.email)) return false;
+    return emailRegEx.test(this.email);
+  }
+
+  get isValid() {
+    if (!isEmpty(this.signingGroup)) return true;
+    if (this.entity && this.entity.id) return true;
+    if (this.relationship) return !this.relationship.isEmpty;
+    
+    return (!isEmpty(this.role) && !this.role.isEmpty) || (!isEmpty(this.name) && this.isValidEmail);
+  }
+
   addRole(name) {
     this.role = new Role(name, this.routingOrder);
   }
 
-  addSMSAuthentication(phoneNumber = null) {
-    if (isEmpty(phoneNumber)) return;
-    this.authentication = {
-      smsPhoneNumbers: [phoneNumber]
-    };
+  addSMSAuthentication(phone = null) {
+    if (isEmpty(phone)) return;
+    this.authentication = new Authentication({ phone });
   }
 
   addAccessCode(accessCode = null) {
     if (isEmpty(accessCode)) return;
-    this.authentication = {
-      accessCode: parseInt(accessCode)
-    };
+    this.authentication = new Authentication({ accessCode });
   }
 }
 
@@ -163,6 +177,10 @@ export class LookupRecipient extends Recipient {
     super(props, role, routingOrder);
     this.relationship = isEmpty(relationship) ? new Relationship() : relationship;
   }
+
+  addSMSAuthentication() {
+    this.authentication = new Authentication({ idCheckRequired: true })
+  }  
 }
 
 export class RelatedRecipient extends Recipient {
@@ -174,6 +192,10 @@ export class RelatedRecipient extends Recipient {
     this.filter = filter;
   }
 
+  addSMSAuthentication() {
+    this.authentication = new Authentication({ idCheckRequired: true })
+  }  
+
   addFilter(filterBy) {
     this.filter = new Filter(filterBy);
   }
@@ -184,6 +206,26 @@ class Role {
   constructor(name, value = 1) {
     this.name = name;
     this.value = value;
+  }
+
+  get isEmpty() {
+    return isEmpty(this.name);
+  }
+}
+
+export class Authentication {
+  constructor({ phone = null, accessCode = null, idCheckRequired = false }) {
+    this.smsPhoneNumbers = !isEmpty(phone) ? [phone] : null;
+    this.accessCode = !isEmpty(accessCode) && !isNaN(accessCode) ? parseInt(accessCode) : null;
+    this.idCheckRequired = idCheckRequired;
+  }
+
+  get phoneValue() {
+    return !isEmpty(this.smsPhoneNumbers) && !isEmpty(this.smsPhoneNumbers[0]) ? this.smsPhoneNumbers[0] : null;
+  }
+
+  set phoneValue(phone) {
+    this.smsPhoneNumbers = !isEmpty(phone) ? [phone] : null;
   }
 }
 
@@ -226,7 +268,9 @@ export const Labels = {
   nameLabel: nameLabel,
   recipientRoleLabel: recipientRoleLabel,
   recipientRecordFieldLabel: recipientRecordFieldLabel,
-  view: view
+  view: view,
+  accessCodeLabel: accessCodeLabel,
+  decSMSorPhone: decSMSorPhone
 };
 
 export const Actions = {
@@ -289,7 +333,7 @@ export const AuthenticationTypes = {
     label: decSMSorPhone
   },
   AccessCode: {
-    value: 'Access Code',
+    value: 'AccessCode',
     label: accessCodeLabel
   }
 };

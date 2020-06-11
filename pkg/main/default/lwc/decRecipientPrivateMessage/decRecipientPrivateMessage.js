@@ -5,10 +5,18 @@ export default class DecRecipientPrivateMessage extends LightningElement {
 
   Labels = Labels;
 
-  @api
-  recipientNote = {};
+  privateNote;
 
-  updateNote({target}) {
+  @api
+  get recipientNote() {
+    return this.privateNote
+  }
+
+  set recipientNote(note = '') {
+    this.privateNote = note;
+  }
+
+  updateNote = ({target}) => {
     this.dispatchEvent(
       new CustomEvent('notechange', {
         detail: target.value
@@ -16,5 +24,14 @@ export default class DecRecipientPrivateMessage extends LightningElement {
     )
     this.recipientNote = target.value;
 
+  }
+
+  resetNote = () => {
+    this.dispatchEvent(
+      new CustomEvent('notechange', {
+        detail: null
+      })
+    )
+    this.recipientNote = null;
   }
 }

@@ -771,4 +771,56 @@ private class EnvelopeConfigurationControllerTest {
 			System.assertNotEquals(updatedEnvelopeConfiguration.documents[0].size, 0);
 		}
 	}
+
+	@IsTest
+	static void test_queryEntityPhone() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Contact testContact = TestUtils.createContact();
+			testContact.MobilePhone = '1111111111';
+			update testContact;
+
+			Id invalidTypeId = TestUtils.createEnvelope().id;
+
+			Test.startTest();
+			String result1 = EnvelopeConfigurationController.queryEntityPhone(null);
+			String result2 = EnvelopeConfigurationController.queryEntityPhone(invalidTypeId);
+			String result3 = EnvelopeConfigurationController.queryEntityPhone(testContact.id);
+			Test.stopTest();
+
+			System.assertEquals(result1, null);
+			System.assertEquals(result2, null);
+			System.assertEquals(result3, testContact.MobilePhone, testContact.MobilePhone);
+		}
+	}
+
+	@IsTest
+	static void test_getEntityPhone_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Contact testContact = TestUtils.createContact();
+			testContact.MobilePhone = '1111111111';
+			update testContact;
+			Test.startTest();
+			String result = EnvelopeConfigurationController.queryEntityPhone(testContact.id);
+			Test.stopTest();
+
+			System.assertEquals(result, testContact.MobilePhone, testContact.MobilePhone);
+		}
+	}
+
+	@IsTest
+	static void test_getEntityPhone_failure() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			String result1 = EnvelopeConfigurationController.queryEntityPhone(null);
+			try {
+				String result2 = EnvelopeConfigurationController.queryEntityPhone('BadIdValue');
+				throw new AssertException('Expected queryEntityPhone to fail');
+			} catch(Exception ex) {
+				System.assert(ex.getMessage().startsWith('Invalid id'), ex.getMessage());
+			}
+			Test.stopTest();		
+			System.assertEquals(result1, null);
+		}
+	}
+
 }

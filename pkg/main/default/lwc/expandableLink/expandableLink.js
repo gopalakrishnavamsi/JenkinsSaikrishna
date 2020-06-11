@@ -12,9 +12,19 @@ export default class ExpandableLink extends LightningElement {
 
     showContent() {
         this.isVisible = true;
+        this.dispatchEvent(
+            new CustomEvent(
+                'expand'
+            )
+        )        
     }
 
     hideContent() {
         this.isVisible = false;
+        this.dispatchEvent(
+            new CustomEvent(
+                'collapse'
+            )
+        )
     }
 }

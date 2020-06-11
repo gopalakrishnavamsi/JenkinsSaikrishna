@@ -94,12 +94,9 @@ export default class DecRelationshipLookup extends LightningElement {
     }
   }
 
-  handlePillRemove() {
+  handlePillRemove = () => {
     this.selectedRelationship = null;
-    const payload = {
-      detail: {}
-    };
-    this.dispatchEvent(new CustomEvent('selection', payload));
+    this.dispatchEvent(new CustomEvent('relationshipupdate', {detail: null}));
   }
 
   handleError(error) {

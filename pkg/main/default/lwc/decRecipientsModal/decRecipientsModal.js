@@ -27,13 +27,20 @@ export default class DecRecipientsModal extends LightningElement {
   @api
   handleSave;
 
+  isValid = false;
+
   @api
   set recipient(val) {
-    this.privateRecipient = val;
+    this.privateRecipient = !isEmpty(val) ? val : this.convertRecipientType({});
+    this.isValid = this.privateRecipient.isValid;
   }
 
   get recipient() {
     return this.privateRecipient;
+  }
+
+  get isSaveDisabled() {
+    return !this.isValid;
   }
 
   get isNew() {
@@ -42,23 +49,26 @@ export default class DecRecipientsModal extends LightningElement {
 
   saveRecipient = () => {
     if (this.handleSave) this.handleSave(this.privateRecipient);
-    this.privateRecipient = this.convertRecipientType({});
+    this.recipient = null;
   }
 
   closeModal = () => {
     if (this.handleClose) this.handleClose();
-    this.privateRecipient = this.convertRecipientType({});
+    this.recipient = null;
   }
 
-  handleTypeChange({ detail }) {
+  handleTypeChange = ({ detail }) => {
     if (this.selectedType === detail.name) return;
     this.selectedType = detail.name;
-    this.privateRecipient = !isEmpty(this.privateRecipient) ? this.convertRecipientType(this.privateRecipient) : this.convertRecipientType({});
+    this.recipient = !isEmpty(this.recipient) ? this.convertRecipientType(this.recipient) : null;
+    this.isValid = false;
   }
 
-  convertRecipientType({ note = null, authentication = null }) {
-    if (!isEmpty(this.recipient) && this.selectedType === this.recipient.recipientType) return this.recipient;
+  handleValidationChange = ({ detail }) => {
+    this.isValid = detail;
+  }
 
+  convertRecipientType({ note = null }) {
     let result;
 
     switch(this.selectedType) {
@@ -68,7 +78,6 @@ export default class DecRecipientsModal extends LightningElement {
           null,
           this.routingOrder,
           {
-              authentication,
               note                        
           }
         );
@@ -81,7 +90,6 @@ export default class DecRecipientsModal extends LightningElement {
           this.routingOrder,
           null,
           {
-              authentication,
               note
           }                   
         )
@@ -89,7 +97,6 @@ export default class DecRecipientsModal extends LightningElement {
       default:
         result = new Recipient(
           {
-              authentication,
               note 
           }, 
           null, 
