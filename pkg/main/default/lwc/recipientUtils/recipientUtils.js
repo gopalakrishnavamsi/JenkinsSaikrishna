@@ -272,7 +272,8 @@ export const Labels = {
   view: view,
   addAndNew: addAndNew,
   accessCodeLabel: accessCodeLabel,
-  decSMSorPhone: decSMSorPhone
+  decSMSorPhone: decSMSorPhone,
+  decSigningGroup: decSigningGroup
 };
 
 export const Actions = {

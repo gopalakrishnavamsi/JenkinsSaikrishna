@@ -4,7 +4,9 @@
         <a href={Labels.decSigningGroupLearnMoreLink} target="_blank">{Labels.learnMore}</a>
     </section>
     <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
-        <c-dec-signing-group-lookup label={Labels.decSelectGroup} place-holder={Labels.decSearchByGroupNamePlaceHolder}
-                                    onchange={handleSelect}></c-dec-signing-group-lookup>
+        <c-dec-signing-group-lookup label={Labels.decSelectGroup}
+                                    place-holder={Labels.decSearchByGroupNamePlaceHolder}
+                                    onselection={handleSelect}>
+        </c-dec-signing-group-lookup>
     </section>
 </template>

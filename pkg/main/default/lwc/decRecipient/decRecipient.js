@@ -14,12 +14,12 @@ export default class DecRecipient extends LightningElement {
     if (isEmpty(this.recipient)) return '';
     if (!isEmpty(this.recipient.relationship)) {
       return this.recipient.relationship.label;
-    } else if (!isEmpty(this.recipient.source)) {
-      return this.recipient.source.name;
+    } else if (!isEmpty(this.recipient.name)) {
+      return this.recipient.name;
     } else if (!isEmpty(this.recipient.role)) {
       return this.recipient.role.name;
     } else if (!isEmpty(this.recipient.signingGroup)) {
-      return this.recipient.signingGroup;
+      return this.recipient.signingGroup.name;
     } else {
       return '';
     }
@@ -29,8 +29,8 @@ export default class DecRecipient extends LightningElement {
     if (isEmpty(this.recipient)) return '';
     if (!isEmpty(this.recipient.relationship)) {
       return Labels.recipientRecordFieldLabel;
-    } else if (!isEmpty(this.recipient.source)) {
-      return this.recipient.source.email;
+    } else if (!isEmpty(this.recipient.email)) {
+      return this.recipient.email;
     } else if (!isEmpty(this.recipient.role)) {
       return Labels.recipientRoleLabel;
     } else if (!isEmpty(this.recipient.signingGroup)) {

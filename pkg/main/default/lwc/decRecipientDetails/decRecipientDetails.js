@@ -123,5 +123,6 @@ export default class DecRecipientDetails extends LightningElement {
 
   handleSigningGroupChange = ({ detail }) => {
     this.recipient.signingGroup = detail;
+    this.sendValidationEvent(this.recipient.isValid);
   }
 }

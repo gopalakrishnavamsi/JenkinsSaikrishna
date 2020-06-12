@@ -12,7 +12,7 @@
         <c-dec-role-recipient onrolechange={handleRoleRecipientChange}></c-dec-role-recipient>
     </template>
     <template if:true={isSigningGroup}>
-        <c-dec-signing-group-recipient onchange={handleSigningGroupChange} signing-group={recipient.signingGroup}></c-dec-signing-group-recipient>
+        <c-dec-signing-group-recipient onsigninggroupchange={handleSigningGroupChange} signing-group={recipient.signingGroup}></c-dec-signing-group-recipient>
     </template>
     <section>
         <c-dec-recipient-action onactionchange={updateAction}></c-dec-recipient-action>

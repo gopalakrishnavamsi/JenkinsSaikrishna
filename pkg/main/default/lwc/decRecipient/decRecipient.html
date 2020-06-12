@@ -3,7 +3,7 @@
          ondragend={itemDragEnd}>
         <div class="slds-grid">
             <div class={recipientBackgroundColor}></div>
-            <div class="slds-col slds-p-around_large">
+            <div class="slds-col slds-p-around_large slds-size_1-of-12">
             <span>
                 <div class="slds-media slds-media_center">
                     <div class="slds-media__figure">
@@ -17,7 +17,7 @@
                 </div>
             </span>
             </div>
-            <div class="slds-col slds-p-around_large">
+            <div class="slds-col slds-p-around_large slds-size_1-of-4">
                 <div class="slds-grid_vertical">
                     <div class="slds-col">
                         <span>{recipientLabel}</span>
@@ -27,10 +27,10 @@
                     </div>
                 </div>
             </div>
-            <div class="slds-col slds-p-around_large">
+            <div class="slds-col slds-p-around_large slds-size_1-of-4">
                 <span>{recipientType}</span>
             </div>
-            <div class="slds-col slds-p-around_large">
+            <div class="slds-col slds-p-around_large slds-size_1-of-4">
                 <lightning-icon size="xx-small" icon-name="utility:shield" class="ds-type-icon"
                                 if:true={recipient.hasAuthentication}></lightning-icon>
                 <lightning-icon size="xx-small" icon-name="utility:quick_text" class="ds-type-icon"
