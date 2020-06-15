@@ -5,7 +5,7 @@ public class MergeField implements Comparable {
 	@TestVisible
 	private static final String TYPE_CHILD_RELATIONSHIP = 'CHILD_RELATIONSHIP';
 	// updating the list of blocked fields
-	private static final Set<String> BLACKLIST = new Set<String> {
+	private static final Set<String> DENY_LIST = new Set<String> {
 		'LastModifiedDate', 'LastReferencedDate', 'SystemModstamp',
 		'LastViewedDate', 'IsArchived', 'IsDeleted',
 		'CreatedById', 'LastModifiedById'
@@ -54,7 +54,7 @@ public class MergeField implements Comparable {
 	public static Boolean isValid(final DescribeFieldResult field) {
 		//bypass isNamePointing() check on OwnerId field
 		if (field == null
-			|| BLACKLIST.contains(field.getName())
+			|| DENY_LIST.contains(field.getName())
 			|| !field.isAccessible()
 			|| (field.isNamePointing() && field.getName() != 'OwnerId')) {
 

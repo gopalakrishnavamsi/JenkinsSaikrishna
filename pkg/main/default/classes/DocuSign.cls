@@ -26,7 +26,7 @@ public class DocuSign {
 		Invalid, QA, Stage, Demo, Production, HQTEST0, HQTEST1, HQTEST2, HQTEST3, Other
 	}
 
-	private static final List<String> domainWhitelist = new List<String> {
+	private static final List<String> allowedDomainsList = new List<String> {
 		'.docusign.com',
 		'.docusign.net',
 		'.docusignhq.com',
@@ -34,7 +34,7 @@ public class DocuSign {
 	};
 
 	/**
- 	 * Verifies that a DocuSign host is valid. The host must be whitelisted.
+ 	 * Verifies that a DocuSign host is valid. The host must be in the allowed list.
  	 *
  	 * @param host The host to validate.
  	 *
@@ -44,7 +44,7 @@ public class DocuSign {
 		Boolean result = false;
 		if (String.isNotBlank(host)) {
 			String h = host.trim().toLowerCase();
-			for (String domain : domainWhitelist) {
+			for (String domain : allowedDomainsList) {
 				if (h.endsWith(domain)) {
 					result = true;
 					break;
@@ -55,7 +55,7 @@ public class DocuSign {
 	}
 
 	/**
- 	 * Verifies that a DocuSign URL is valid. It must use HTTPS and the host must be whitelisted.
+ 	 * Verifies that a DocuSign URL is valid. It must use HTTPS and the host must be in the allowed list.
  	 *
  	 * @param url The URL to validate.
  	 *

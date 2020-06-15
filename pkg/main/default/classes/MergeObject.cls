@@ -1,6 +1,6 @@
 public class MergeObject implements Comparable {
 
-	private static final Set<SObjectType> BLACKLIST = new Set<SObjectType> {
+	private static final Set<SObjectType> DENY_LIST = new Set<SObjectType> {
 		Schema.Task.getSObjectType()
 	};
 	private static final String CUSTOM_METADATA_SUFFIX = 'mdt';
@@ -38,7 +38,7 @@ public class MergeObject implements Comparable {
 
 	public static Boolean isValid(final DescribeSObjectResult type) {
 		return type != null
-			&& !BLACKLIST.contains(type.getSObjectType())
+			&& !DENY_LIST.contains(type.getSObjectType())
 			&& type.isAccessible()
 			&& type.isCreateable()
 			&& type.isQueryable()

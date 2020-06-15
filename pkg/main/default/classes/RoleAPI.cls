@@ -220,7 +220,7 @@ public with sharing class RoleAPI extends ProvisioningAPI {
 			for (APIGroup g : gs.groups) {
 				String productName = g == null ? '' : getProductName(g.source_product_name);
 				String role = g == null ? null : getRoleName(productName, g.group_id);
-				// Only add if it's in the product role whitelist.
+				// Only add if it's in the product role allowed list.
 				if (result.containsKey(productName) && String.isNotBlank(role)) {
 					Product.Role r = g.toExternalForm(role);
 					if (r != null) result.get(productName).put(r.id, r);

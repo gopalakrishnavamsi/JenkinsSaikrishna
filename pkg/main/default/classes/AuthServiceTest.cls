@@ -1371,7 +1371,7 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_non_whitelist_url() {
+	static void test_decodeState_non_allowedList_url() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
 			String origin = TestUtils.getOrigin();

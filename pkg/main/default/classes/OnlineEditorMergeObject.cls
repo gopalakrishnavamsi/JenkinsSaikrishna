@@ -1,11 +1,11 @@
 public class OnlineEditorMergeObject implements Comparable {
 
-	private static final Set<SObjectType> BLACKLIST = new Set<SObjectType> {
+	private static final Set<SObjectType> DENY_LIST = new Set<SObjectType> {
 		Schema.Task.sObjectType
 	};
 
 	// updating the list of blocked fields
-	private static final List<String> FIELD_BLACKLIST = new List<String> {
+	private static final List<String> FIELD_DENY_LIST = new List<String> {
 		'LastModifiedDate', 'LastReferencedDate', 'SystemModstamp',
 		'LastViewedDate', 'CreatedDate', 'IsArchived', 'IsDeleted',
 		'CreatedById', 'LastModifiedById'
@@ -55,7 +55,7 @@ public class OnlineEditorMergeObject implements Comparable {
 
 	public static Boolean isValid(final DescribeSObjectResult type) {
 		return type != null
-			&& !BLACKLIST.contains(type.getSObjectType())
+			&& !DENY_LIST.contains(type.getSObjectType())
 			&& type.isAccessible()
 			&& type.isCreateable()
 			&& type.isQueryable();
@@ -63,7 +63,7 @@ public class OnlineEditorMergeObject implements Comparable {
 
 	public static Boolean isValid(final DescribeFieldResult field) {
 		return field != null
-			&& !FIELD_BLACKLIST.contains(field.getName())
+			&& !FIELD_DENY_LIST.contains(field.getName())
 			&& field.isAccessible()
 			&& !field.isNamePointing()
 			&& String.isNotBlank(field.getRelationshipName());

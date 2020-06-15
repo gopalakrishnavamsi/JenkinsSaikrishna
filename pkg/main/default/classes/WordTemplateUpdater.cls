@@ -4,7 +4,7 @@
  */
 public class WordTemplateUpdater implements Database.Batchable<SObject>, PostInstallScript {
 
-	private static final Set<SObjectType> TYPE_BLACKLIST = new Set<SObjectType> { Schema.Group.getSObjectType() };
+	private static final Set<SObjectType> DENY_LIST = new Set<SObjectType> { Schema.Group.getSObjectType() };
 	private static final String CURRENT_DATE = 'CurrentDate';
 	private static Integer templateCount = null;
 	private static final Map<String, String> V1_TO_V2_DATE_MAPPINGS = new Map<String, String> {
@@ -113,7 +113,7 @@ public class WordTemplateUpdater implements Database.Batchable<SObject>, PostIns
 			DescribeFieldResult fd = f.getDescribe();
 			if (fd != null && fd.getType() == Schema.DisplayType.REFERENCE && fd.getRelationshipName() == relationshipName) {
 				Set<SObjectType> refs = new Set<SObjectType>(fd.getReferenceTo());
-				refs.removeAll(TYPE_BLACKLIST); // This can be polymorphic, filter out types we can't deal with (for now)
+				refs.removeAll(DENY_LIST); // This can be polymorphic, filter out types we can't deal with (for now)
 				SObjectType t = (SObjectType)Collection.head(new List<SObjectType>(refs));
 				if (t != null) {
 					result = new Relationship(

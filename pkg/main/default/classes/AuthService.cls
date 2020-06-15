@@ -917,7 +917,7 @@ global with sharing class AuthService {
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		// 9) Verify whitelisted DocuSign URL
+		// 9) Verify if baseUrl is included in allowed List of URL's
 		if (!DocuSign.isValidUrl(baseUrl)) {
 			LOG.error('Invalid DocuSign base URL: ' + baseUrl.toExternalForm());
 			throw new UnauthorizedException(Label.InvalidAuthState);
