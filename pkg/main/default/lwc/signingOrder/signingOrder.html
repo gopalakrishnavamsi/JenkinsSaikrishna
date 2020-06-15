@@ -46,16 +46,24 @@
                                                         onblur={hideRecipientToolTip}
                                                         onmouseleave={hideRecipientToolTip}
                                                         aria-describedby={recipient.name}>
-                                                    {recipient.initials}
+                                                     <lightning-icon if:false={recipient.initials}
+                                                                     icon-name="utility:edit"
+                                                                     size="xx-small"></lightning-icon>
+                                                    <p if:true={recipient.initials}>{recipient.initials}</p>
                                                 </button>
                                                 <div class="slds-is-absolute"
                                                      data-customid={recipient.customId} style="display:none">
-                                                    <section class="slds-popover slds-nubbin_top-left tooltipContent slds-text-align_left"
-                                                             role="dialog">
+                                                    <section
+                                                            class="slds-popover slds-nubbin_top-left tooltipContent slds-text-align_left"
+                                                            role="dialog">
                                                         <div class="slds-popover__body popover">
                                                             <template for:each={toolTipLabel} for:item="label">
-                                                                <div key={label.name}>
-                                                                    <span class="tooltipLabel slds-p-left_xx-small">{label.name}</span>
+                                                                <div key={label.id}>
+                                                                    <lightning-icon
+                                                                            icon-name="utility:edit"
+                                                                            size="xx-small"></lightning-icon>
+                                                                    <span
+                                                                            class="tooltipLabel slds-p-left_xx-small">{label.name}</span>
                                                                     <template if:true={label.email}>
                                                                         <p class="toolTipEmail"> {label.email} </p>
                                                                     </template>
@@ -83,15 +91,17 @@
                                             <div class="slds-is-absolute"
                                                  data-customgroupid={routingGroup.routingOrderString}
                                                  style="display:none">
-                                                <section class="slds-popover slds-nubbin_top-left tooltipContent slds-text-align_left"
-                                                         role="dialog">
+                                                <section
+                                                        class="slds-popover slds-nubbin_top-left tooltipContent slds-text-align_left"
+                                                        role="dialog">
                                                     <div class="slds-popover__body popover">
                                                         <template for:each={toolTipLabel} for:item="label">
-                                                             <div key={label.name}>
+                                                             <div key={label.id} if:true={label.name}>
+                                                                 <lightning-icon icon-name="utility:edit"
+                                                                                 size="xx-small"></lightning-icon>
                                                                  <span class="tooltipLabel slds-p-left_xx-small">{label.name}</span>
-                                                                 <template if:true={label.email}>
-                                                                    <p class="toolTipEmail"> {label.email} </p>
-                                                                 </template>
+                                                                 <p class="toolTipEmail"
+                                                                    if:true={label.email}> {label.email} </p>
                                                             </div>
                                                         </template>
                                                     </div>
@@ -114,10 +124,10 @@
                                 <button class="thumbnail-contents"
                                         type="button"
                                         role="text">
-                                       <lightning-icon
-                                               icon-name="utility:check"
-                                               size="xx-small"
-                                               class="completedCheck"></lightning-icon>
+                                    <lightning-icon
+                                            icon-name="utility:check"
+                                            size="xx-small"
+                                            class="completedCheck"></lightning-icon>
                                 </button>
                             </div>
                         </td>

@@ -1,5 +1,5 @@
 import {LightningElement, api} from 'lwc';
-import {isEmpty} from 'c/utils';
+import {genericEvent, isEmpty} from 'c/utils';
 import {Labels,Actions} from 'c/recipientUtils';
 
 export default class DecRecipient extends LightningElement {
@@ -9,6 +9,9 @@ export default class DecRecipient extends LightningElement {
 
   @api
   index = 0;
+
+  @api
+  isSigningOrder = false;
 
   get recipientLabel() {
     if (isEmpty(this.recipient)) return '';
@@ -49,5 +52,10 @@ export default class DecRecipient extends LightningElement {
     let colorSequence = this.index > 9 ? this.index % 10 : this.index;
     return 'slds-col ds-recipient-item ds-recipient-color-' + colorSequence;
   }
+
+  handleRoutingOrderChange = (event) =>{
+    let payload = {'currentIndex': this.index , 'newRoutingOrder' : event.target.value};
+    genericEvent('routingorderupdate', payload, this, false);
+  };
 
 }

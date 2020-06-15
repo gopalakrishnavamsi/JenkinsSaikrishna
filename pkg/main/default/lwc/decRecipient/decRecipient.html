@@ -1,23 +1,29 @@
 <template>
-    <div ondragstart={itemDragStart}
-         ondragend={itemDragEnd}>
+    <div
+            ondragstart={itemDragStart}
+            ondragend={itemDragEnd}>
         <div class="slds-grid">
             <div class={recipientBackgroundColor}></div>
-            <div class="slds-col slds-p-around_large slds-size_1-of-12">
-            <span>
-                <div class="slds-media slds-media_center">
-                    <div class="slds-media__figure">
-                        <lightning-icon
-                                icon-name="utility:drag_and_drop"
-                                alternative-text="Drag and Drop"
-                                variant="neutral"
-                                size="small"></lightning-icon>
-                        <span class="slds-p-left_small slds-p-right_small">{recipient.routingOrder}</span>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-11">
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    <div class="slds-media slds-media_center slds-col">
+                        <div class="slds-media__figure">
+                            <lightning-icon
+                                    icon-name="utility:drag_and_drop"
+                                    alternative-text="Drag and Drop"
+                                    variant="neutral"
+                                    size="small"></lightning-icon>
+                        </div>
+                    </div>
+                    <div class="slds-col ds-routingOrderInput">
+                        <lightning-input if:true={isSigningOrder}
+                                         value={recipient.routingOrder}
+                                         pattern="[0-9]*"
+                                         onchange={handleRoutingOrderChange}></lightning-input>
                     </div>
                 </div>
-            </span>
             </div>
-            <div class="slds-col slds-p-around_large slds-size_1-of-4">
+            <div class="slds-col slds-p-around_medium slds-size_1-of-5">
                 <div class="slds-grid_vertical">
                     <div class="slds-col">
                         <span>{recipientLabel}</span>
@@ -27,14 +33,17 @@
                     </div>
                 </div>
             </div>
-            <div class="slds-col slds-p-around_large slds-size_1-of-4">
+            <div class="slds-col slds-p-around_large slds-size_1-of-5">
                 <span>{recipientType}</span>
             </div>
-            <div class="slds-col slds-p-around_large slds-size_1-of-4">
+            <div class="slds-col slds-p-around_medium slds-size_1-of-5">
                 <lightning-icon size="xx-small" icon-name="utility:shield" class="ds-type-icon"
                                 if:true={recipient.hasAuthentication}></lightning-icon>
                 <lightning-icon size="xx-small" icon-name="utility:quick_text" class="ds-type-icon"
                                 if:true={recipient.hasNote}></lightning-icon>
+            </div>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-5">
+                <!-- Delete/Edit section-->
             </div>
         </div>
     </div>

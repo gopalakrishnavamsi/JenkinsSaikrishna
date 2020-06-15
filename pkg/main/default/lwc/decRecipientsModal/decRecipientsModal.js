@@ -19,7 +19,6 @@ export default class DecRecipientsModal extends LightningElement {
 
   privateRecipient = this.convertRecipientType({});
 
-  @api
   routingOrder = 1;
 
   @api

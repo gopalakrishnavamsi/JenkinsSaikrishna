@@ -1,20 +1,24 @@
 <template>
-      <template
-            for:each={recipients}
+    <template
+            for:each={privateRecipients}
             for:item="item"
             for:index="index">
         <div class="slds-border_bottom"
              draggable="true"
-             data-id={item.routingOrder}
              data-index={index}
-             key={item.routingOrder}
+             key={key}
              ondrop={handleDrop}
              ondragenter={handleDragEnter}
              ondragover={handleDragOver}
              ondragleave={handleDragLeave}
              ondragstart={itemDragStart}
              ondragend={itemDragEnd}>
-            <c-dec-recipient recipient={item} index={index}></c-dec-recipient>
+            <c-dec-recipient
+                    recipient={item}
+                    index={index}
+                    is-signing-order={isSigningOrder}
+                    onroutingorderupdate={handleRoutingOrderUpdate}>
+            </c-dec-recipient>
         </div>
     </template>
 </template>

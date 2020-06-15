@@ -88,7 +88,7 @@ export class Recipient {
           recipientDetails.role,
           recipientDetails.routingOrder,
           recipientDetails
-        )
+        );
       } else {
         return new RelatedRecipient(
           recipientDetails.relationship,
@@ -97,21 +97,21 @@ export class Recipient {
           recipientDetails.routingOrder,
           recipientDetails.filter,
           recipientDetails
-        )
-      } 
+        );
+      }
     }
 
     return new Recipient(
-      recipientDetails, 
-      recipientDetails.role, 
+      recipientDetails,
+      recipientDetails.role,
       recipientDetails.routingOrder
     );
-  }  
+  }
 
   get isPlaceHolder() {
     return this.constructor === Recipient && !isEmpty(this.role) && isEmpty(this.signingGroup) && isEmpty(this.name) && isEmpty(this.email);
   }
-  
+
   get sourceId() {
     return this.source && this.source.id ? this.source.id : null;
   }
@@ -154,7 +154,7 @@ export class Recipient {
     if (!isEmpty(this.signingGroup)) return true;
     if (this.entity && this.entity.id) return true;
     if (this.relationship) return !this.relationship.isEmpty;
-    
+
     return (!isEmpty(this.role) && !this.role.isEmpty) || (!isEmpty(this.name) && this.isValidEmail);
   }
 
@@ -164,12 +164,12 @@ export class Recipient {
 
   addSMSAuthentication(phone = null) {
     if (isEmpty(phone)) return;
-    this.authentication = new Authentication({ phone });
+    this.authentication = new Authentication({phone});
   }
 
   addAccessCode(accessCode = null) {
     if (isEmpty(accessCode)) return;
-    this.authentication = new Authentication({ accessCode });
+    this.authentication = new Authentication({accessCode});
   }
 }
 
@@ -180,8 +180,8 @@ export class LookupRecipient extends Recipient {
   }
 
   addSMSAuthentication() {
-    this.authentication = new Authentication({ idCheckRequired: true })
-  }  
+    this.authentication = new Authentication({idCheckRequired: true});
+  }
 }
 
 export class RelatedRecipient extends Recipient {
@@ -194,8 +194,8 @@ export class RelatedRecipient extends Recipient {
   }
 
   addSMSAuthentication() {
-    this.authentication = new Authentication({ idCheckRequired: true })
-  }  
+    this.authentication = new Authentication({idCheckRequired: true});
+  }
 
   addFilter(filterBy) {
     this.filter = new Filter(filterBy);
@@ -215,7 +215,7 @@ class Role {
 }
 
 export class Authentication {
-  constructor({ phone = null, accessCode = null, idCheckRequired = false }) {
+  constructor({phone = null, accessCode = null, idCheckRequired = false}) {
     this.smsPhoneNumbers = !isEmpty(phone) ? [phone] : null;
     this.accessCode = !isEmpty(accessCode) && !isNaN(accessCode) ? parseInt(accessCode) : null;
     this.idCheckRequired = idCheckRequired;
@@ -340,3 +340,26 @@ export const AuthenticationTypes = {
     label: accessCodeLabel
   }
 };
+
+export class RecipientGroupedByRoutingOrder {
+  constructor(routingOrder, groupedRecipients) {
+    this.routingOrder = routingOrder;
+    this.hasAdditionalRecipients = groupedRecipients.length > 2;
+    let recipientGroupedBySigningOrder =
+      groupedRecipients.map((obj, index) => ({
+        ...obj,
+        initials: obj.name ? this.parseInitial(obj.name) : '',
+        customId: obj.name && index < 2 ? this.parseInitial(obj.name) + (index + 1) : '',
+        index: index + 1
+      }));
+    this.additionalRecipients = this.hasAdditionalRecipients ? recipientGroupedBySigningOrder.slice(2, recipientGroupedBySigningOrder.length) : [];
+    this.numberOfAdditionalRecipients = this.hasAdditionalRecipients ? this.additionalRecipients.length : 0;
+    this.recipients = recipientGroupedBySigningOrder.slice(0, 2);
+    this.routingOrderString = `r${this.routingOrder}`;
+  }
+
+  parseInitial = (name) => {
+    let initials = name.match(/\b\w/g) || [];
+    return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+  };
+}

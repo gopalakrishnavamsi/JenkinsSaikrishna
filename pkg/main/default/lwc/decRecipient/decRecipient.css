@@ -47,3 +47,17 @@
 .ds-recipient-item {
     max-width: 4px;
 }
+
+.draggable-card {
+    border-bottom: 1px solid rgb(221, 219, 218);
+}
+
+.drag {
+    border-style: dashed;
+    border: 2px dashed black;
+    opacity: 0.25;
+}
+
+.ds-routingOrderInput {
+    max-width:50px;
+}

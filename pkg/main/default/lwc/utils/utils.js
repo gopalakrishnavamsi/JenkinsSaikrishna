@@ -1,41 +1,41 @@
 // Lightning message service
-import { APPLICATION_SCOPE, subscribe} from 'lightning/messageService';
+import {APPLICATION_SCOPE, subscribe} from 'lightning/messageService';
 const UNKNOWN_ICON_NAME = 'doctype:unknown';
 const SUCCESS_EVENT_LABEL = 'success';
 const ERROR_EVENT_LABEL = 'error';
 const UPDATE_EVENT_LABEL = 'update';
 const FILE_EXTENSION_TO_ICON_NAME_MAPPING = new Map([
-    ['doc' , 'doctype:word'],
-    ['docm' , 'doctype:gdoc'],
-    ['docx' , 'doctype:word'],
-    ['dotm' , 'doctype:gdoc'],
-    ['dotx' , 'doctype:gdoc'],
-    ['msg' , 'doctype:unknown'],
-    ['pdf' , 'doctype:pdf'],
-    ['rtf' , 'doctype:gdoc'],
-    ['txt' , 'doctype:gdoc'],
-    ['wpd' , 'doctype:gdoc'],
-    ['xps' , 'doctype:unknown'],
-    ['xps' , 'doctype:unknown'],
-    ['bmp' , 'doctype:image'],
-    ['gif', 'doctype:image'],
-    ['jpg' , 'doctype:image'],
-    ['jpeg' , 'doctype:image'],
-    ['tif' , 'doctype:image'],
-    ['png' , 'doctype:image'],
-    ['tiff' , 'doctype:image'],
-    ['pot'  , 'doctype:slide'],
-    ['potx' , 'doctype:slide'],
-    ['pps' , 'doctype:slide'],
-    ['ppt' , 'doctype:slide'],
-    ['pptm' , 'doctype:slide'],
-    ['pptx' , 'doctype:slide'],
-    ['csv' , 'doctype:csv'],
-    ['xls' , 'doctype:gsheet'],
-    ['xlsm' , 'doctype:gsheet'],
-    ['xlsx' , 'doctype:gsheet'],
-    ['xml' , 'doctype:xml'],
-    ['' , 'doctype:unknown']]);
+  ['doc', 'doctype:word'],
+  ['docm', 'doctype:gdoc'],
+  ['docx', 'doctype:word'],
+  ['dotm', 'doctype:gdoc'],
+  ['dotx', 'doctype:gdoc'],
+  ['msg', 'doctype:unknown'],
+  ['pdf', 'doctype:pdf'],
+  ['rtf', 'doctype:gdoc'],
+  ['txt', 'doctype:gdoc'],
+  ['wpd', 'doctype:gdoc'],
+  ['xps', 'doctype:unknown'],
+  ['xps', 'doctype:unknown'],
+  ['bmp', 'doctype:image'],
+  ['gif', 'doctype:image'],
+  ['jpg', 'doctype:image'],
+  ['jpeg', 'doctype:image'],
+  ['tif', 'doctype:image'],
+  ['png', 'doctype:image'],
+  ['tiff', 'doctype:image'],
+  ['pot', 'doctype:slide'],
+  ['potx', 'doctype:slide'],
+  ['pps', 'doctype:slide'],
+  ['ppt', 'doctype:slide'],
+  ['pptm', 'doctype:slide'],
+  ['pptx', 'doctype:slide'],
+  ['csv', 'doctype:csv'],
+  ['xls', 'doctype:gsheet'],
+  ['xlsm', 'doctype:gsheet'],
+  ['xlsx', 'doctype:gsheet'],
+  ['xml', 'doctype:xml'],
+  ['', 'doctype:unknown']]);
 
 const isEmpty = (value) => value === undefined || value === null || value === '';
 
@@ -88,9 +88,9 @@ const format = function (s) {
 };
 
 const getRandomKey = () => {
-  const randomNum = () => (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  const randomNum = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   return `${randomNum()}-${randomNum()}-${randomNum()}-${randomNum()}`;
-}
+};
 
 /**
  * Creates a subscription for a message channel within a given message context. Supports event handling in LWC
@@ -105,7 +105,7 @@ const subscribeToMessageChannel = (context, subscription, channel, handler) => {
     return subscription;
   }
 
-  return subscribe(context, channel, handler, { scope: APPLICATION_SCOPE });
+  return subscribe(context, channel, handler, {scope: APPLICATION_SCOPE});
 };
 
 const proxify = (source) => {
@@ -118,19 +118,34 @@ const proxify = (source) => {
       return Reflect.set(target, key, value, receiver);
     }
   });
-}
+};
+
+/**
+ * Creates a group by map based on attribute of a array
+ * @param xs {object} list
+ * @param key {string} group by attribute
+ * @returns {object} group by map
+ */
+let groupBy = function (xs, key) {
+  return xs.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
 
 export {
-    FILE_EXTENSION_TO_ICON_NAME_MAPPING,
-    UNKNOWN_ICON_NAME,
-    SUCCESS_EVENT_LABEL,
-    ERROR_EVENT_LABEL,
-    UPDATE_EVENT_LABEL,
-    isEmpty,
-    formatFileSize,
-    genericEvent,
-    format,
-    getRandomKey,
-    proxify,
-    subscribeToMessageChannel
+  FILE_EXTENSION_TO_ICON_NAME_MAPPING,
+  UNKNOWN_ICON_NAME,
+  SUCCESS_EVENT_LABEL,
+  ERROR_EVENT_LABEL,
+  UPDATE_EVENT_LABEL,
+  isEmpty,
+  formatFileSize,
+  genericEvent,
+  format,
+  getRandomKey,
+  proxify,
+  subscribeToMessageChannel,
+  groupBy
 };

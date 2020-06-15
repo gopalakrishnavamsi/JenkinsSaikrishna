@@ -26,9 +26,10 @@
                         <div class="slds-col">
                             <lightning-button-group>
                                 <lightning-button label={Labels.signingOrderLabel}
-                                                  icon-name="utility:add"
+                                                  icon-name={signingOrderButtonIcon}
+                                                  onclick={handleRecipientSigningOrder}></lightning-button>
+                                <lightning-button label={Labels.view}
                                                   onclick={handleSigningOrderModalOpen}></lightning-button>
-                                <lightning-button label={Labels.view}></lightning-button>
                             </lightning-button-group>
                             <lightning-button label={Labels.addRecipient}
                                               class="slds-p-left_x-small"
@@ -59,13 +60,18 @@
                     </div>
                 </div>
 
-                <c-dec-recipients-list recipients={privateRecipients} if:true={hasRecipients}></c-dec-recipients-list>
+                <c-dec-recipients-list
+                        if:true={hasRecipients}
+                        is-signing-order={isSigningOrder}
+                        list={privateRecipients}
+                        onupdaterecipient={handleRecipientsUpdate}
+                ></c-dec-recipients-list>
 
             </div>
         </div>
     </div>
     <div>
-        <c-signing-order></c-signing-order>
+        <c-signing-order recipients={privateRecipients}></c-signing-order>
     </div>
     <c-dec-recipients-modal is-open={showAddRecipientsModal}
                             handle-save={addRecipient}
