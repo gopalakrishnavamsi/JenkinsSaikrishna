@@ -10,8 +10,9 @@ import {
   itemDragEnd
 } from 'c/dragUtils';
 
-const DEFAULT_ROUTING_ORDER = 1;
 import {genericEvent, getRandomKey} from 'c/utils';
+
+const DEFAULT_ROUTING_ORDER = 1;
 
 export default class DecRecipientsList extends LightningElement {
 
@@ -35,7 +36,13 @@ export default class DecRecipientsList extends LightningElement {
 
   fromIndex = 0;
 
+  fromRecipientIndex = 0;
+  toRecipientIndex = 0;
+
   handleDragEnter(evt) {
+    if (!this.isSigningOrder) {
+      genericEvent('signingorderchecked', {}, this, false);
+    }
     handleDragEnter(this, evt);
   }
 
@@ -56,14 +63,8 @@ export default class DecRecipientsList extends LightningElement {
   }
 
   itemDragStart(evt) {
+    this.fromRecipientIndex = parseInt(evt.currentTarget.dataset.index);
     itemDragStart(this, evt.currentTarget.dataset.id);
-    if (!this.isSigningOrder) {
-      this.isSigningOrder = true;
-      this.privateRecipients = this.privateRecipients.map((r, index) => ({
-        ...r,
-        routingOrder: this.isSigningOrder ? index + 1 : DEFAULT_ROUTING_ORDER
-      }));
-    }
   }
 
   itemDragEnd(evt) {
@@ -71,18 +72,32 @@ export default class DecRecipientsList extends LightningElement {
   }
 
   handleDrop(evt) {
+    this.toRecipientIndex = parseInt(evt.currentTarget.dataset.index);
+    if (this.fromRecipientIndex === this.toRecipientIndex) return;
     handleDrop(this, evt, this.updateRecipients.bind(this));
   }
 
-  /** Recipient-specific functions for envelope configuration **/
-
   updateRecipients = (recipients) => {
-    this.dispatchEvent(new CustomEvent('updaterecipient', {
-      detail: {
-        recipients
-      },
-      bubbles: true
-    }));
+    let recs = [...recipients];
+    let dragUp = this.toRecipientIndex < this.fromRecipientIndex;
+    let updatedRoutingOrder = DEFAULT_ROUTING_ORDER;
+    let previousIndexRoutingOrder = recs[this.toRecipientIndex - 1] ? recs[this.toRecipientIndex - 1].routingOrder : 1;
+    let nextIndexRoutingOrder = recs[this.toRecipientIndex + 1] ? recs[this.toRecipientIndex + 1].routingOrder : 1;
+    if (previousIndexRoutingOrder === nextIndexRoutingOrder || (previousIndexRoutingOrder + 1 === nextIndexRoutingOrder)) {
+      updatedRoutingOrder = previousIndexRoutingOrder;
+    } else {
+      updatedRoutingOrder = dragUp ? (nextIndexRoutingOrder === DEFAULT_ROUTING_ORDER ? DEFAULT_ROUTING_ORDER : nextIndexRoutingOrder - 1) : previousIndexRoutingOrder + 1;
+    }
+
+    const updatedRecs = recs.map((r, index) =>
+      index === this.toRecipientIndex
+        ? {
+          ...r,
+          routingOrder: updatedRoutingOrder
+        }
+        : r
+    );
+    genericEvent('dragrecipientupdate', updatedRecs, this, false);
   };
 
   handleRoutingOrderUpdate = (event) => {

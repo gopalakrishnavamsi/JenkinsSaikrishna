@@ -81,6 +81,14 @@ export default class DecRecipients extends LightningElement {
   };
 
   handleRecipientsUpdate = (event) => {
+    if(event.detail.data) {
+      this.privateRecipients = event.detail.data.sort(function (x, y) {
+        return x.routingOrder - y.routingOrder;
+      });
+    }
+  };
+
+  handleDragRecipientsUpdate = (event) => {
     this.privateRecipients = event.detail.data;
   };
 }
