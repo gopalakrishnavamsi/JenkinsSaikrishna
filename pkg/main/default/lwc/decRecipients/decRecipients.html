@@ -63,7 +63,7 @@
                 <c-dec-recipients-list
                         if:true={hasRecipients}
                         is-signing-order={isSigningOrder}
-                        list={privateRecipients}
+                        list={recipients}
                         onupdaterecipient={handleRecipientsUpdate}
                         ondragrecipientupdate={handleDragRecipientsUpdate}
                         onsigningorderchecked={handleRecipientSigningOrder}
@@ -73,7 +73,7 @@
         </div>
     </div>
     <div>
-        <c-signing-order recipients={privateRecipients}></c-signing-order>
+        <c-signing-order recipients={recipients}></c-signing-order>
     </div>
     <c-dec-recipients-modal is-open={showAddRecipientsModal}
                             handle-save={addRecipient}

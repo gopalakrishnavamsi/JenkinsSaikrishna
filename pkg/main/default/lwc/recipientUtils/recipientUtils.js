@@ -106,13 +106,13 @@ export class Recipient {
             authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
           }
         );
-      } 
+      }
     }
 
     return new Recipient(
       {
         ...recipientDetails,
-         authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
+        authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
       },
       recipientDetails.role,
       recipientDetails.routingOrder
@@ -128,7 +128,7 @@ export class Recipient {
   }
 
   get hasAuthentication() {
-    return !isEmpty(this.authentication);
+    return !isEmpty(this.authentication) && !isEmpty(this.authentication.type);
   }
 
   get hasNote() {
@@ -171,21 +171,21 @@ export class Recipient {
 
   get lookupRecord() {
     if (isEmpty(this.source)) return null;
-    const { id = null, typeName = '' } = this.source;
+    const {id = null, typeName = ''} = this.source;
     return !isEmpty(id) ? {
-      label : this.name,
-      value : id,
-      sublabel : this.email,
-      objType : typeName
-    } : null
+      label: this.name,
+      value: id,
+      sublabel: this.email,
+      objType: typeName
+    } : null;
   }
 
-  set lookupRecord({ name = null, email = null, id = null, typeName = null }) {
+  set lookupRecord({name = null, email = null, id = null, typeName = null}) {
     if (isEmpty(id)) return;
     this.name = name;
     this.email = email;
     this.source = {
-      name, 
+      name,
       id,
       typeName
     };
@@ -379,9 +379,9 @@ export const AuthenticationTypes = {
 };
 
 export const StandardEvents = {
-  Delete : DEC_DELETE_RECIPIENT,
-  Edit : DEC_EDIT_RECIPIENT
-}
+  Delete: DEC_DELETE_RECIPIENT,
+  Edit: DEC_EDIT_RECIPIENT
+};
 
 export class RecipientGroupedByRoutingOrder {
   constructor(routingOrder, groupedRecipients) {

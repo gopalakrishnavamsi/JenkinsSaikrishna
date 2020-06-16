@@ -47,7 +47,7 @@ export default class DecRecipients extends LightningElement {
     );
     
     if (!isEmpty(this.recipients)) {
-      let recipientsGroup = groupBy(this.privateRecipients, 'routingOrder');
+      let recipientsGroup = groupBy(this.recipients, 'routingOrder');
       Object.keys(recipientsGroup).forEach(function (key) {
         if (parseInt(key) > DEFAULT_ROUTING_ORDER) {
           this.isSigningOrder = true;
@@ -97,7 +97,7 @@ export default class DecRecipients extends LightningElement {
   addRecipient = (recipient, isAddNew = false) => {
     const isEdit = !isEmpty(this.editRecipientIndex);
     if (this.isSigningOrder && !isEdit) {
-      const maxRoutingOrder = Math.max(...this.privateRecipients.map(r => r.routingOrder), 0);
+      const maxRoutingOrder = Math.max(...this.recipients.map(r => r.routingOrder), 0);
       recipient.routingOrder = maxRoutingOrder + 1;
     } else if (!isEdit) recipient.routingOrder = DEFAULT_ROUTING_ORDER;
     
@@ -105,7 +105,7 @@ export default class DecRecipients extends LightningElement {
       this.editRecipient = recipient; 
       this.editRecipientIndex = null;
     }
-    else this.recipients = [...this.privateRecipients, recipient];
+    else this.recipients = [...this.recipients, recipient];
 
     this.closeRecipientsModal();
     if(isAddNew) this.handleRecipientsModalOpen();
@@ -128,7 +128,7 @@ export default class DecRecipients extends LightningElement {
 
   handleRecipientSigningOrder = () => {
     this.isSigningOrder = !this.isSigningOrder;
-    this.privateRecipients = this.privateRecipients.map((r, index) => ({
+    this.recipients = this.recipients.map((r, index) => ({
       ...r,
       routingOrder: this.isSigningOrder ? index + 1 : DEFAULT_ROUTING_ORDER
     }));
@@ -136,13 +136,15 @@ export default class DecRecipients extends LightningElement {
 
   handleRecipientsUpdate = (event) => {
     if(event.detail.data) {
-      this.privateRecipients = event.detail.data.sort(function (x, y) {
+      this.recipients = event.detail.data.sort(function (x, y) {
         return x.routingOrder - y.routingOrder;
       });
     }
   };
 
   handleDragRecipientsUpdate = (event) => {
-    this.privateRecipients = event.detail.data;
+    if(event.detail.data) {
+      this.recipients = event.detail.data;
+    }
   };
 }
