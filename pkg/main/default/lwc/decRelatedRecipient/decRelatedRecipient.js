@@ -13,19 +13,17 @@ export default class DecRelatedRecipient extends LightningElement {
   relationship;
 
   @api
-  filter;
+  get filter() {
+    return this.privateFilter;
+  }
+
+  set filter(val) {
+    this.privateFilter = isEmpty(val) ? new Filter() : val;
+  }
 
   privateFilter;
 
   isLogicModalOpen = false;
-
-  connectedCallback() {
-    if (!isEmpty(this.filter) && isEmpty(this.privateFilter)) {
-      this.privateFilter = this.filter;
-    } else if (isEmpty(this.privateFilter)) {
-      this.privateFilter = new Filter();  
-    }
-  }
 
   get showFilterPill() {
     return this.privateFilter && !this.privateFilter.isEmpty;
@@ -44,14 +42,14 @@ export default class DecRelatedRecipient extends LightningElement {
     const { isSave = false, filterBy = null } = detail;
     this.isLogicModalOpen = false;
     if (isSave) {
-      this.privateFilter.filterBy = filterBy;
-      this.handleFilterChange(this.privateFilter);
+      this.filter.filterBy = filterBy;
+      this.handleFilterChange(this.filter);
     }
   }
 
   removeFilter = () => {
-    this.privateFilter = new Filter();
-    this.handleFilterChange(this.privateFilter);
+    this.filter = new Filter();
+    this.handleFilterChange(this.filter);
   }
 
   handleFilterChange(filter) {

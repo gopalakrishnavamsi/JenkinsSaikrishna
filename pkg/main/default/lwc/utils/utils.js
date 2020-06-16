@@ -146,6 +146,11 @@ let groupBy = function (xs, key) {
   }, {});
 };
 
+const removeArrayElement = (arry = [], index = null) => 
+  isEmpty(index) || index > arry.length || index < 0 ? arry : [...arry.slice(0, index), ...arry.slice(index + 1, arry.length)]
+
+const editArrayElement = (arry = [], index, updatedValue) => 
+  isEmpty(index) || index > arry.length || index < 0 ? arry : [...arry.slice(0, index), updatedValue,...arry.slice(index + 1, arry.length)]
 
 const showSuccess = (context, message, channel) => {
   if (!isEmpty(message)) {
@@ -170,6 +175,8 @@ export {
   proxify,
   subscribeToMessageChannel,
   groupBy,
+  removeArrayElement,
+  editArrayElement,
   showError,
   showSuccess
 };

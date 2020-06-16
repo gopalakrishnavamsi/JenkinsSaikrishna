@@ -43,7 +43,10 @@
                                 if:true={recipient.hasNote}></lightning-icon>
             </div>
             <div class="slds-col slds-p-around_medium slds-size_1-of-5">
-                <!-- Delete/Edit section-->
+                <lightning-button-menu icon-size="small" alternative-text="Show menu" variant="border-filled">
+                    <lightning-menu-item value="edit" label={Labels.Edit} onclick={handleRecipientAction}></lightning-menu-item>
+                    <lightning-menu-item value="delete" label={Labels.Delete} onclick={handleRecipientAction}></lightning-menu-item>
+                </lightning-button-menu>
             </div>
         </div>
     </div>

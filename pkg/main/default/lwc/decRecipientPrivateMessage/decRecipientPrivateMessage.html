@@ -1,5 +1,5 @@
 <template>
-    <c-expandable-link label={Labels.decAddPrivateMessage} icon-name="utility:quick_text" oncollapse={resetNote}>
+    <c-expandable-link label={Labels.decAddPrivateMessage} icon-name="utility:quick_text" oncollapse={resetNote} is-visible={hasNote}>
         <div slot='content'>
             <lightning-textarea value={recipientNote} name="privateMessage" label={Labels.privateMessage}
                                 onchange={updateNote}></lightning-textarea>

@@ -55,6 +55,8 @@ import recipientRoleLabel from '@salesforce/label/c.RecipientRoleLabel';
 import recipientRecordFieldLabel from '@salesforce/label/c.RecipientRecordFieldLabel';
 import view from '@salesforce/label/c.View';
 import addAndNew from '@salesforce/label/c.AddAndNew';
+import DEC_DELETE_RECIPIENT from '@salesforce/messageChannel/DecDeleteRecipient__c';
+import DEC_EDIT_RECIPIENT from '@salesforce/messageChannel/DecEditRecipient__c';
 
 //eslint-disable-next-line
 const emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -84,25 +86,34 @@ export class Recipient {
     if (recipientDetails.relationship) {
       if (recipientDetails.relationship.isLookup) {
         return new LookupRecipient(
-          recipientDetails.relationship,
+          Relationship.fromObject(recipientDetails.relationship),
           recipientDetails.role,
           recipientDetails.routingOrder,
-          recipientDetails
+          {
+            ...recipientDetails,
+            authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
+          }
         );
       } else {
         return new RelatedRecipient(
-          recipientDetails.relationship,
+          Relationship.fromObject(recipientDetails.relationship),
           recipientDetails.roles,
           recipientDetails.incrementRoutingOrder,
           recipientDetails.routingOrder,
-          recipientDetails.filter,
-          recipientDetails
+          Filter.fromObject(recipientDetails.filter || {}),
+          {
+            ...recipientDetails,
+            authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
+          }
         );
-      }
+      } 
     }
 
     return new Recipient(
-      recipientDetails,
+      {
+        ...recipientDetails,
+         authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
+      },
       recipientDetails.role,
       recipientDetails.routingOrder
     );
@@ -152,10 +163,32 @@ export class Recipient {
 
   get isValid() {
     if (!isEmpty(this.signingGroup)) return true;
-    if (this.entity && this.entity.id) return true;
+    if (!isEmpty(this.sourceId)) return true;
     if (this.relationship) return !this.relationship.isEmpty;
 
     return (!isEmpty(this.role) && !this.role.isEmpty) || (!isEmpty(this.name) && this.isValidEmail);
+  }
+
+  get lookupRecord() {
+    if (isEmpty(this.source)) return null;
+    const { id = null, typeName = '' } = this.source;
+    return !isEmpty(id) ? {
+      label : this.name,
+      value : id,
+      sublabel : this.email,
+      objType : typeName
+    } : null
+  }
+
+  set lookupRecord({ name = null, email = null, id = null, typeName = null }) {
+    if (isEmpty(id)) return;
+    this.name = name;
+    this.email = email;
+    this.source = {
+      name, 
+      id,
+      typeName
+    };
   }
 
   addRole(name) {
@@ -227,6 +260,10 @@ export class Authentication {
 
   set phoneValue(phone) {
     this.smsPhoneNumbers = !isEmpty(phone) ? [phone] : null;
+  }
+
+  get type() {
+    return !isEmpty(this.accessCode) ? AuthenticationTypes.AccessCode.value : !isEmpty(this.phoneValue) || this.idCheckRequired === true ? AuthenticationTypes.SMSOrPhone.value : null;
   }
 }
 
@@ -340,6 +377,11 @@ export const AuthenticationTypes = {
     label: accessCodeLabel
   }
 };
+
+export const StandardEvents = {
+  Delete : DEC_DELETE_RECIPIENT,
+  Edit : DEC_EDIT_RECIPIENT
+}
 
 export class RecipientGroupedByRoutingOrder {
   constructor(routingOrder, groupedRecipients) {

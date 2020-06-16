@@ -1,6 +1,7 @@
 import {LightningElement, api} from 'lwc';
-import {Labels, Recipient} from 'c/recipientUtils';
-import {groupBy, isEmpty, proxify} from 'c/utils';
+import {Labels, Recipient,StandardEvents} from 'c/recipientUtils';
+import {isEmpty,proxify,removeArrayElement,subscribeToMessageChannel,editArrayElement,groupBy} from 'c/utils';
+import {createMessageContext,releaseMessageContext} from 'lightning/messageService';
 
 const DEFAULT_ROUTING_ORDER = 1;
 
@@ -10,19 +11,42 @@ export default class DecRecipients extends LightningElement {
 
   showAddRecipientsModal = false;
 
-  @api
-  recipients = [];
-
   privateRecipients = proxify([]);
+
+  editRecipientIndex = null;
 
   isSigningOrder = false;
 
   @api
   sourceObject;
 
+  context = createMessageContext();
+
+  @api
+  get recipients() {
+    return this.privateRecipients;
+  }
+
+  set recipients(val = []) {
+    this.privateRecipients = proxify(val.map(r => Recipient.fromObject(r)))
+  }
+
   connectedCallback() {
+    this.deleteChannelEvent = subscribeToMessageChannel(
+      this.context,
+      this.deleteChannelEvent,
+      StandardEvents.Delete,
+      this.handleDeleteRecipient
+    );
+
+    this.editChannelEvent = subscribeToMessageChannel(
+      this.context,
+      this.editChannelEvent,
+      StandardEvents.Edit,
+      this.handleEditRecipient
+    );
+    
     if (!isEmpty(this.recipients)) {
-      this.privateRecipients = this.recipients.map(r => Recipient.fromObject(r));
       let recipientsGroup = groupBy(this.privateRecipients, 'routingOrder');
       Object.keys(recipientsGroup).forEach(function (key) {
         if (parseInt(key) > DEFAULT_ROUTING_ORDER) {
@@ -31,6 +55,10 @@ export default class DecRecipients extends LightningElement {
       }, this);
     }
   }
+
+  disconnectedCallback() {
+    releaseMessageContext(this.context);
+  }  
 
   @api
   fetchRecipients = () => {
@@ -45,27 +73,53 @@ export default class DecRecipients extends LightningElement {
     return !isEmpty(this.privateRecipients) && this.privateRecipients.length > 0;
   }
 
+  get editRecipient() {
+    return isEmpty(this.editRecipientIndex) ? null : this.recipients[this.editRecipientIndex];
+  }
+
+  set editRecipient(val) {
+    this.recipients = editArrayElement(this.recipients, this.editRecipientIndex, val)
+  }
+
   closeRecipientsModal = () => {
     this.showAddRecipientsModal = false;
+    if (!isEmpty(this.editRecipientIndex)) this.editRecipientIndex = null;
   };
 
   handleRecipientsModalOpen = () => {
     this.showAddRecipientsModal = true;
   };
 
+  removeRecipient = (index) => {
+    this.recipients = removeArrayElement(this.recipients, index);
+  }
+
   addRecipient = (recipient, isAddNew = false) => {
-    if (this.isSigningOrder) {
+    const isEdit = !isEmpty(this.editRecipientIndex);
+    if (this.isSigningOrder && !isEdit) {
       const maxRoutingOrder = Math.max(...this.privateRecipients.map(r => r.routingOrder), 0);
       recipient.routingOrder = maxRoutingOrder + 1;
-    } else {
-      recipient.routingOrder = DEFAULT_ROUTING_ORDER;
+    } else if (!isEdit) recipient.routingOrder = DEFAULT_ROUTING_ORDER;
+    
+    if (isEdit) {
+      this.editRecipient = recipient; 
+      this.editRecipientIndex = null;
     }
-    this.privateRecipients = [...this.privateRecipients, recipient];
+    else this.recipients = [...this.privateRecipients, recipient];
+
     this.closeRecipientsModal();
-    if (isAddNew) {
-      this.handleRecipientsModalOpen();
-    }
+    if(isAddNew) this.handleRecipientsModalOpen();
   };
+
+  handleDeleteRecipient = ({ index }) => {
+    if (isEmpty(index) || isEmpty(this.recipients) || isEmpty(this.recipients[index])) return;
+    this.recipients = removeArrayElement(this.recipients, index);
+  }
+
+  handleEditRecipient = ({ index }) => {
+    this.editRecipientIndex = index;
+    this.showAddRecipientsModal = true;
+  }
 
   handleSigningOrderModalOpen = () => {
     const signingOrderDiagramComponent = this.template.querySelector('c-signing-order');

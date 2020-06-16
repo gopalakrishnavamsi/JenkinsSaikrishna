@@ -49,6 +49,14 @@ export default class DecRecipientDetails extends LightningElement {
     return this.recipient ? this.recipient.filter : null;
   }
 
+  get lookupRecord() {
+    return this.recipient ? this.recipient.lookupRecord : null;
+  }
+
+  get authentication() {
+    return this.recipient ? this.recipient.authentication : null;
+  }
+
   sendValidationEvent(isValid = false) {
     this.dispatchEvent(
       new CustomEvent(
@@ -113,11 +121,8 @@ export default class DecRecipientDetails extends LightningElement {
     this.recipient.note = detail;
   }
 
-  handleSourceChange = ({ detail }) => {
-    const { name = null, email = null } = detail;
-    this.recipient.name = name;
-    this.recipient.email = email;
-    this.recipient.source = detail;
+  handleSourceChange = ({ detail = {}}) => {
+    this.recipient.lookupRecord = detail;
     this.sendValidationEvent(this.recipient.isValid);
   }
 

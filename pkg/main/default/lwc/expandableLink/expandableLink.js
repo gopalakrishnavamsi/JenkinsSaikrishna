@@ -8,9 +8,18 @@ export default class ExpandableLink extends LightningElement {
     @api
     label;
 
-    isVisible = false;
+    isOpen = false;
 
-    showContent() {
+    @api
+    get isVisible() {
+        return this.isOpen;
+    }
+
+    set isVisible(val) {
+        this.isOpen = val;
+    }
+
+    showContent = () => {
         this.isVisible = true;
         this.dispatchEvent(
             new CustomEvent(
@@ -19,7 +28,7 @@ export default class ExpandableLink extends LightningElement {
         )        
     }
 
-    hideContent() {
+    hideContent = () => {
         this.isVisible = false;
         this.dispatchEvent(
             new CustomEvent(

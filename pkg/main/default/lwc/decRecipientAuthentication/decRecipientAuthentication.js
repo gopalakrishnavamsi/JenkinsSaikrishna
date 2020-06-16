@@ -1,6 +1,6 @@
 import {LightningElement, api} from 'lwc';
 import {AuthenticationTypes, Labels, Types, Authentication} from 'c/recipientUtils';
-import {isEmpty} from 'c/utils';
+import {isEmpty,proxify} from 'c/utils';
 
 const dynamicTypes = new Set(
   [
@@ -16,7 +16,7 @@ export default class DecRecipientAuthentication extends LightningElement {
 
   privateType;
 
-  privateValue = new Authentication({});
+  privateValue = proxify(new Authentication({}));
 
   authenticationType;
 
@@ -26,7 +26,8 @@ export default class DecRecipientAuthentication extends LightningElement {
   }
 
   set value(val) {
-    this.privateValue = !isEmpty(val) ? val : new Authentication({});
+    this.privateValue = !isEmpty(val) ? proxify(val) : new Authentication({});
+    this.authenticationType = !isEmpty(this.privateValue) ? this.privateValue.type : null;
   }
 
   @api
@@ -56,6 +57,10 @@ export default class DecRecipientAuthentication extends LightningElement {
 
   get showAccessCode() {
     return this.authenticationType === this.AuthenticationTypes.AccessCode.value;
+  }
+
+  get hasAuthentication() {
+    return !isEmpty(this.value) && !isEmpty(this.value.type);
   }
 
   resetAuthentication = () => {

@@ -26,6 +26,15 @@ export default class Lookup extends LightningElement {
     this.switchResult(false);
   }
 
+  @api
+  get record() {
+    return this.selectedRecord;
+  }
+
+  set record(val) {
+    this.selectedRecord = val;
+  }
+  
   handleChange(event) {
     let searchTerm = event.detail;
     if (searchTerm && searchTerm.length >= 2) {

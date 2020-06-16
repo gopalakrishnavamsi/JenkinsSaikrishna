@@ -1,5 +1,6 @@
 import {LightningElement, api} from 'lwc';
 import {Labels} from 'c/recipientUtils';
+import { isEmpty } from 'c/utils';
 
 export default class DecRecipientPrivateMessage extends LightningElement {
 
@@ -14,6 +15,10 @@ export default class DecRecipientPrivateMessage extends LightningElement {
 
   set recipientNote(note = '') {
     this.privateNote = note;
+  }
+
+  get hasNote() {
+    return !isEmpty(this.recipientNote);
   }
 
   updateNote = ({target}) => {

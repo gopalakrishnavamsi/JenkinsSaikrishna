@@ -3,6 +3,6 @@
         <div class="slds-m-top_small ds-addRecipients-information-text">{Labels.decEntityLookupRecipientTitle}</div>
     </section>
     <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
-        <c-lookup onselection={handleRecordSelection} label={Labels.decSelectUserOrContact} required></c-lookup>
+        <c-lookup record={lookupRecord} onselection={handleRecordSelection} label={Labels.decSelectUserOrContact} required></c-lookup>
     </section>
 </template>

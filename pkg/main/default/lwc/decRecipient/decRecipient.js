@@ -1,6 +1,9 @@
 import {LightningElement, api} from 'lwc';
+import {Labels,Actions,StandardEvents} from 'c/recipientUtils';
+import {createMessageContext,releaseMessageContext,publish} from 'lightning/messageService';
 import {genericEvent, isEmpty} from 'c/utils';
-import {Labels, Actions} from 'c/recipientUtils';
+import EditLabel from '@salesforce/label/c.Edit';
+import DeleteLabel from '@salesforce/label/c.DeleteButtonLabel';
 
 export default class DecRecipient extends LightningElement {
 
@@ -12,6 +15,17 @@ export default class DecRecipient extends LightningElement {
 
   @api
   isSigningOrder = false;
+
+  Labels = {
+    Edit: EditLabel,
+    Delete: DeleteLabel
+  }
+
+  context = createMessageContext();
+
+  disconnectedCallback() {
+    releaseMessageContext(this.context);
+  }
 
   get recipientLabel() {
     if (isEmpty(this.recipient)) return '';
@@ -53,10 +67,32 @@ export default class DecRecipient extends LightningElement {
     return 'slds-col ds-recipient-item ds-recipient-color-' + colorSequence;
   }
 
+  handleRecipientAction = ({ target }) => {
+    const action = target.value;
+    switch(action){
+      case 'edit':
+        this.sendRecipientAction(StandardEvents.Edit);
+        break;
+      case 'delete':
+        this.sendRecipientAction(StandardEvents.Delete);
+        break;
+    }
+  }
+
+  sendRecipientAction(event) {
+    if (!event) return;
+    publish(
+      this.context, 
+      event, 
+      {
+        index: this.index
+      }
+    );
+  }
+
   handleRoutingOrderChange = (event) => {
     if (isEmpty(event.target.value)) return;
     let payload = {'currentIndex': this.index, 'newRoutingOrder': event.target.value};
     genericEvent('routingorderupdate', payload, this, false);
-  };
-
+  }
 }

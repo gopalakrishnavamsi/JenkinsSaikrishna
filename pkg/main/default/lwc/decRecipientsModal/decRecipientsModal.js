@@ -31,7 +31,8 @@ export default class DecRecipientsModal extends LightningElement {
 
   @api
   set recipient(val) {
-    this.privateRecipient = !isEmpty(val) ? val : this.convertRecipientType({});
+    this.privateRecipient = !isEmpty(val) ? proxify(val) : this.convertRecipientType({});
+    if (!isEmpty(val)) this.selectedType = val.recipientType
     this.isValid = this.privateRecipient.isValid;
   }
 
@@ -54,8 +55,8 @@ export default class DecRecipientsModal extends LightningElement {
 
   saveRecipientAndOpenNew = () => {
     if (this.handleSave) this.handleSave(this.privateRecipient, true);
-    this.selectedType = DEFAULT_SELECTED_TYPE;
     this.recipient = null;
+    this.selectedType = DEFAULT_SELECTED_TYPE;
   };
 
   closeModal = () => {
@@ -65,8 +66,8 @@ export default class DecRecipientsModal extends LightningElement {
 
   handleTypeChange = ({detail}) => {
     if (this.selectedType === detail.name) return;
+    this.recipient = !isEmpty(this.recipient) ? this.convertRecipientType(this.recipient, detail.name) : null;
     this.selectedType = detail.name;
-    this.recipient = !isEmpty(this.recipient) ? this.convertRecipientType(this.recipient) : null;
     this.isValid = false;
   };
 
@@ -74,10 +75,12 @@ export default class DecRecipientsModal extends LightningElement {
     this.isValid = detail;
   };
 
-  convertRecipientType({note = null}) {
+  convertRecipientType({note = null}, type = DEFAULT_SELECTED_TYPE) {
+    if (isEmpty(type)) return null;
+    
     let result;
 
-    switch (this.selectedType) {
+    switch (type) {
       case this.Types.LookupRecipient.value:
         result = new LookupRecipient(
           null,

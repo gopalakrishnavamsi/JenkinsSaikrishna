@@ -99,6 +99,10 @@ export class Filter {
         this.maximumRecords = maximumRecords;
     }
 
+    static fromObject({ filterBy = null, orderBy = null, maximumRecords = null }) {
+        return new Filter(filterBy, orderBy, maximumRecords);
+    }
+
     get isEmpty() {
         return isEmpty(this.filterBy) && isEmpty(this.orderBy) && isEmpty(this.maximumRecords);
     }
