@@ -190,7 +190,7 @@ public with sharing class GenController extends Controller {
 			List<Gen.RuleEvaluation> ruleEvaluations = new List<Gen.RuleEvaluation>();
 			for (Gen.File file : files) {
 				if (file.rule != null) {
-					ruleEvaluations.add(new Gen.RuleEvaluation(file.contentDocumentId, GenService.checkDocumentRule(sourceId, startingObject, file.rule)));
+					ruleEvaluations.add(new Gen.RuleEvaluation(file.contentDocumentId, GenService.checkDocumentRule(startingObject, file.rule)));
 				}
 			}
 			return ruleEvaluations;

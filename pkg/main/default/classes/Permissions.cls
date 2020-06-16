@@ -882,7 +882,7 @@ public with sharing class Permissions {
 		 *
 		 * @return The error message.
 		 */
-		public String getErrorMessage() {
+		override public String toString() {
 			String message = '';
 			if (!isAuthorized) {
 				if (!objectResult.isAuthorized) {
@@ -961,8 +961,11 @@ public with sharing class Permissions {
 	}
 
 	@TestVisible
-	private static FlsResults getFlsResults(final FlsAccess requestedAccess, final SObjectType type,
+	private static FlsResults getFlsResults(
+		final FlsAccess requestedAccess,
+		final SObjectType type,
 		final List<String> fieldNames) {
+
 		if (type == null) {
 			return new FlsResults(requestedAccess, false, new FlsResult(Label.Unknown, FlsStatus.BadRequest),
 				new List<FlsResult>());
@@ -1053,7 +1056,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsCreateable(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isCreateable(type, fieldNames);
-		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(String.valueOf(results));
 	}
 
 	/**
@@ -1077,7 +1080,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsDeletable(final SObjectType type) {
 		FlsResults results = isDeletable(type);
-		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(String.valueOf(results));
 	}
 
 	/**
@@ -1113,7 +1116,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsQueryable(final SObjectType type) {
 		FlsResults results = isQueryable(type, null);
-		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(String.valueOf(results));
 	}
 
 	/**
@@ -1125,7 +1128,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsQueryable(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isQueryable(type, fieldNames);
-		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(String.valueOf(results));
 	}
 
 	/**
@@ -1151,7 +1154,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsUpdateable(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isUpdateable(type, fieldNames);
-		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(String.valueOf(results));
 	}
 
 	/**
@@ -1176,7 +1179,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsFilterable(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isFilterable(type, fieldNames);
-		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(String.valueOf(results));
 	}
 
 	/**
@@ -1201,7 +1204,7 @@ public with sharing class Permissions {
 	 */
 	public static void verifyIsUnencrypted(final SObjectType type, final List<String> fieldNames) {
 		FlsResults results = isUnencrypted(type, fieldNames);
-		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(results.getErrorMessage());
+		if (!results.isAuthorized) throw UnauthorizedException.missingSecurityPermission(String.valueOf(results));
 	}
 
 	@TestVisible
@@ -1434,5 +1437,27 @@ public with sharing class Permissions {
 
 	public static Boolean isApiEnabled() {
 		return (Boolean)getSessionParameters().get(KEY_API_ENABLED);
+	}
+
+	/**
+	 * Checks FLS for the current user.
+	 *
+	 * @param requestedAccess The database access being requested.
+	 * @param accessMap Map of SObject type to fields being accessed.
+	 *
+	 * @return A list of failed FLS checks.
+	 */
+	public static List<FlsResults> checkAccess(
+		final Permissions.FlsAccess requestedAccess,
+		final Map<SObjectType, Set<String>> accessMap) {
+
+		if (!Salesforce.isFlsSupported) return new List<FlsResults>();
+
+		List<FlsResults> result = new List<FlsResults>();
+		for (SObjectType type : accessMap.keySet()) {
+			FlsResults fls = getFlsResults(requestedAccess, type, new List<String>(accessMap.get(type)));
+			if (!fls.isAuthorized) result.add(fls);
+		}
+		return result;
 	}
 }

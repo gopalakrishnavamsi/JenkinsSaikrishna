@@ -33,7 +33,6 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		'settings' => Application.classNamespacePrefix + 'ESignatureAPIMock.SettingsMock',
 		'signing_groups' => Application.classNamespacePrefix + 'ESignatureAPIMock.SigningGroupsMock',
 		'tab_definitions' => Application.classNamespacePrefix + 'ESignatureAPIMock.TabDefinitionsMock',
-		'tab_definitions' => Application.classNamespacePrefix + 'ESignatureAPIMock.TabDefinitionsMock',
 		'templates' => Application.classNamespacePrefix + 'ESignatureAPIMock.TemplatesMock',
 		'documents' => Application.classNamespacePrefix + 'ESignatureAPIMock.DocumentsUpdateMock',
 		'users' => Application.classNamespacePrefix + 'ESignatureAPIMock.UsersMock',
@@ -243,125 +242,172 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
 			if (request.method == 'GET') {
-				UUID id = UUID.tryParse((String)Collection.last(request.path));
-				if (id != null) { // get status
+				if ((String)Collection.last(request.path) == 'recipients') { // get merge fields
+					Tab t1 = Tab.newMergeField(Tab.TYPE_TEXT, 'opportunity.name', true, false)
+						.withValue(UUID.randomUUID().toString());
+					Tab t2 = Tab.newMergeField(Tab.TYPE_CHECKBOX, 'opportunity.isprivate', true, false)
+						.withValue(true);
+					Tab t3 = Tab.newMergeField(Tab.TYPE_TEXT, 'opportunity.account.name', true, false)
+						.withValue(UUID.randomUUID().toString());
+					Tab t4 = Tab.newMergeField(Tab.TYPE_NUMBER, 'opportunity.amount', false, false)
+						.withValue(TestUtils.randomInteger(100000));
+					Tab t5 = Tab.newMergeField(Tab.TYPE_TEXT, 'opportunity.stagename', false, false)
+						.withValue('Closed Won');
+					Tab t6 = Tab.newMergeField(Tab.TYPE_TEXT, 'opportunity.account.accountnumber', false, false)
+						.withValue(String.valueOf(TestUtils.randomInteger(100000)));
+					Tab t7 = Tab.newMergeField(Tab.TYPE_EMAIL_ADDRESS, 'opportunity.opportunitycontactroles.contact.email', true, false)
+						.withValue(UUID.randomUUID() + '@unit.test');
+					Tab t8 = Tab.newMergeField(Tab.TYPE_DATE, 'opportunity.closedate', true, false)
+						.withValue(Date.today());
+					Tab t9 = Tab.newMergeField(Tab.TYPE_INITIAL_HERE, 'opportunity.id', false, false)
+						.withValue(Datetime.now().addDays(-1));
 					EnvelopeAPI.APIRecipient r1 = new EnvelopeAPI.APIRecipient(null, null, false);
-					r1.name = UUID.randomUUID().toString();
-					r1.email = UUID.randomUUID() + '@unit.test';
 					r1.recipientId = '1';
-					r1.status = 'completed';
-					r1.routingOrder = '1';
-					r1.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-10));
-					r1.declinedDateTime = '';
-					r1.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-10).addMinutes(30));
-					r1.declinedReason = '';
+					r1.tabs = new EnvelopeAPI.APITabs();
+					r1.tabs.textTabs.add(new EnvelopeAPI.APITab('1', '1', t1));
+					r1.tabs.checkboxTabs.add(new EnvelopeAPI.APITab('1', '1', t2));
+					r1.tabs.textTabs.add(new EnvelopeAPI.APITab('1', '1', t3));
 					EnvelopeAPI.APIRecipient r2 = new EnvelopeAPI.APIRecipient(null, null, false);
-					r2.name = UUID.randomUUID().toString();
-					r2.email = UUID.randomUUID() + '@unit.test';
 					r2.recipientId = '2';
-					r2.status = 'completed';
-					r2.routingOrder = '2';
-					r2.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-9));
-					r2.declinedDateTime = '';
-					r2.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-9).addMinutes(30));
-					r2.declinedReason = '';
+					r2.tabs = new EnvelopeAPI.APITabs();
+					r2.tabs.numberTabs.add(new EnvelopeAPI.APITab('1', '2', t4));
 					EnvelopeAPI.APIRecipient r3 = new EnvelopeAPI.APIRecipient(null, null, false);
-					r3.name = UUID.randomUUID().toString();
-					r3.email = UUID.randomUUID() + '@unit.test';
 					r3.recipientId = '3';
-					r3.status = 'completed';
-					r3.routingOrder = '3';
-					r3.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-8));
-					r3.declinedDateTime = '';
-					r3.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-8).addMinutes(30));
-					r3.declinedReason = '';
+					r3.tabs = new EnvelopeAPI.APITabs();
+					r3.tabs.textTabs.add(new EnvelopeAPI.APITab('1', '3', t5));
 					EnvelopeAPI.APIRecipient r4 = new EnvelopeAPI.APIRecipient(null, null, false);
-					r4.name = UUID.randomUUID().toString();
-					r4.email = UUID.randomUUID() + '@unit.test';
 					r4.recipientId = '4';
-					r4.status = 'completed';
-					r4.routingOrder = '4';
-					r4.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-7));
-					r4.declinedDateTime = '';
-					r4.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-7).addMinutes(30));
-					r4.declinedReason = '';
 					EnvelopeAPI.APIRecipient r5 = new EnvelopeAPI.APIRecipient(null, null, false);
-					r5.name = UUID.randomUUID().toString();
-					r5.email = UUID.randomUUID() + '@unit.test';
 					r5.recipientId = '5';
-					r5.status = 'completed';
-					r5.routingOrder = '5';
-					r5.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-6));
-					r5.declinedDateTime = '';
-					r5.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-6).addMinutes(30));
-					r5.declinedReason = '';
-					EnvelopeAPI.APIRecipient r6 = new EnvelopeAPI.APIRecipient(null, null, false);
-					r6.name = UUID.randomUUID().toString();
-					r6.email = UUID.randomUUID() + '@unit.test';
-					r6.recipientId = '6';
-					r6.status = 'completed';
-					r6.routingOrder = '6';
-					r6.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-5));
-					r6.declinedDateTime = '';
-					r6.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-5).addMinutes(30));
-					r6.declinedReason = '';
-					EnvelopeAPI.APIRecipient r7 = new EnvelopeAPI.APIRecipient(null, null, false);
-					r7.signerName = UUID.randomUUID().toString();
-					r7.signerEmail = UUID.randomUUID() + '@unit.test';
-					r7.hostName = UUID.randomUUID().toString();
-					r7.hostEmail = UUID.randomUUID() + '@unit.test';
-					r7.recipientId = '7';
-					r7.status = 'completed';
-					r7.routingOrder = '7';
-					r7.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-4));
-					r7.declinedDateTime = '';
-					r7.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-4).addMinutes(30));
-					r7.declinedReason = '';
-					EnvelopeAPI.APIRecipient r8 = new EnvelopeAPI.APIRecipient(null, null, false);
-					r8.signerName = UUID.randomUUID().toString();
-					r8.signerEmail = UUID.randomUUID() + '@unit.test';
-					r8.hostName = UUID.randomUUID().toString();
-					r8.hostEmail = UUID.randomUUID() + '@unit.test';
-					r8.recipientId = '8';
-					r8.status = 'completed';
-					r8.routingOrder = '8';
-					r8.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-3));
-					r8.declinedDateTime = '';
-					r8.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-3).addMinutes(30));
-					r8.declinedReason = '';
-					EnvelopeAPI.APIRecipient r9 = new EnvelopeAPI.APIRecipient(null, null, false);
-					r9.signerName = UUID.randomUUID().toString();
-					r9.signerEmail = UUID.randomUUID() + '@unit.test';
-					r9.hostName = UUID.randomUUID().toString();
-					r9.hostEmail = UUID.randomUUID() + '@unit.test';
-					r9.recipientId = '9';
-					r9.status = 'completed';
-					r9.routingOrder = '9';
-					r9.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-2));
-					r9.declinedDateTime = '';
-					r9.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-2).addMinutes(30));
-					r9.declinedReason = '';
-					EnvelopeAPI.APIRecipients rs = new EnvelopeAPI.APIRecipients(null, null, false);
-					rs.signers = new List<EnvelopeAPI.APIRecipient> { r1 };
-					rs.agents = new List<EnvelopeAPI.APIRecipient> { r2 };
-					rs.editors = new List<EnvelopeAPI.APIRecipient> { r3 };
-					rs.intermediaries = new List<EnvelopeAPI.APIRecipient> { r4 };
-					rs.carbonCopies = new List<EnvelopeAPI.APIRecipient> { r5 };
-					rs.certifiedDeliveries = new List<EnvelopeAPI.APIRecipient> { r6 };
-					rs.inPersonSigners = new List<EnvelopeAPI.APIRecipient> { r7 };
-					rs.seals = new List<EnvelopeAPI.APIRecipient> { r8 };
-					rs.witnesses = new List<EnvelopeAPI.APIRecipient> { r9 };
-					EnvelopeAPI.APINotifications notif = new EnvelopeAPI.APINotifications(null);
-					EnvelopeAPI.APIEnvelope e = new EnvelopeAPI.APIEnvelope(null, false, false);
-					e.envelopeId = String.valueOf(id);
-					e.status = 'completed';
-					e.recipients = rs;
-					e.notification = notif;
-					e.sentDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-10));
-					e.completedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-1));
-					e.emailSubject = 'email subject';
-					e.voidedReason = '';
-					response = MockResponse.ok(e);
+					r5.tabs = new EnvelopeAPI.APITabs();
+					r5.tabs.textTabs.add(new EnvelopeAPI.APITab('1', '5', t6));
+					r5.tabs.emailAddressTabs.add(new EnvelopeAPI.APITab('1', '5', t7));
+					r5.tabs.dateTabs.add(new EnvelopeAPI.APITab('1', '5', t8));
+					r5.tabs.initialHereTabs.add(new EnvelopeAPI.APITab('1', '5', t9));
+					EnvelopeAPI.APIRecipients rs = new EnvelopeAPI.APIRecipients(null, '1', false);
+					rs.signers = new List<EnvelopeAPI.APIRecipient> { r1, r2, r3, r4, r5 };
+					response = MockResponse.ok(rs);
+				} else {
+					UUID id = UUID.tryParse((String)Collection.last(request.path));
+					if (id != null) { // get status
+						EnvelopeAPI.APIRecipient r1 = new EnvelopeAPI.APIRecipient(null, null, false);
+						r1.name = UUID.randomUUID().toString();
+						r1.email = UUID.randomUUID() + '@unit.test';
+						r1.recipientId = '1';
+						r1.status = 'completed';
+						r1.routingOrder = '1';
+						r1.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-10));
+						r1.declinedDateTime = '';
+						r1.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-10).addMinutes(30));
+						r1.declinedReason = '';
+						EnvelopeAPI.APIRecipient r2 = new EnvelopeAPI.APIRecipient(null, null, false);
+						r2.name = UUID.randomUUID().toString();
+						r2.email = UUID.randomUUID() + '@unit.test';
+						r2.recipientId = '2';
+						r2.status = 'completed';
+						r2.routingOrder = '2';
+						r2.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-9));
+						r2.declinedDateTime = '';
+						r2.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-9).addMinutes(30));
+						r2.declinedReason = '';
+						EnvelopeAPI.APIRecipient r3 = new EnvelopeAPI.APIRecipient(null, null, false);
+						r3.name = UUID.randomUUID().toString();
+						r3.email = UUID.randomUUID() + '@unit.test';
+						r3.recipientId = '3';
+						r3.status = 'completed';
+						r3.routingOrder = '3';
+						r3.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-8));
+						r3.declinedDateTime = '';
+						r3.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-8).addMinutes(30));
+						r3.declinedReason = '';
+						EnvelopeAPI.APIRecipient r4 = new EnvelopeAPI.APIRecipient(null, null, false);
+						r4.name = UUID.randomUUID().toString();
+						r4.email = UUID.randomUUID() + '@unit.test';
+						r4.recipientId = '4';
+						r4.status = 'completed';
+						r4.routingOrder = '4';
+						r4.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-7));
+						r4.declinedDateTime = '';
+						r4.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-7).addMinutes(30));
+						r4.declinedReason = '';
+						EnvelopeAPI.APIRecipient r5 = new EnvelopeAPI.APIRecipient(null, null, false);
+						r5.name = UUID.randomUUID().toString();
+						r5.email = UUID.randomUUID() + '@unit.test';
+						r5.recipientId = '5';
+						r5.status = 'completed';
+						r5.routingOrder = '5';
+						r5.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-6));
+						r5.declinedDateTime = '';
+						r5.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-6).addMinutes(30));
+						r5.declinedReason = '';
+						EnvelopeAPI.APIRecipient r6 = new EnvelopeAPI.APIRecipient(null, null, false);
+						r6.name = UUID.randomUUID().toString();
+						r6.email = UUID.randomUUID() + '@unit.test';
+						r6.recipientId = '6';
+						r6.status = 'completed';
+						r6.routingOrder = '6';
+						r6.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-5));
+						r6.declinedDateTime = '';
+						r6.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-5).addMinutes(30));
+						r6.declinedReason = '';
+						EnvelopeAPI.APIRecipient r7 = new EnvelopeAPI.APIRecipient(null, null, false);
+						r7.signerName = UUID.randomUUID().toString();
+						r7.signerEmail = UUID.randomUUID() + '@unit.test';
+						r7.hostName = UUID.randomUUID().toString();
+						r7.hostEmail = UUID.randomUUID() + '@unit.test';
+						r7.recipientId = '7';
+						r7.status = 'completed';
+						r7.routingOrder = '7';
+						r7.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-4));
+						r7.declinedDateTime = '';
+						r7.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-4).addMinutes(30));
+						r7.declinedReason = '';
+						EnvelopeAPI.APIRecipient r8 = new EnvelopeAPI.APIRecipient(null, null, false);
+						r8.signerName = UUID.randomUUID().toString();
+						r8.signerEmail = UUID.randomUUID() + '@unit.test';
+						r8.hostName = UUID.randomUUID().toString();
+						r8.hostEmail = UUID.randomUUID() + '@unit.test';
+						r8.recipientId = '8';
+						r8.status = 'completed';
+						r8.routingOrder = '8';
+						r8.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-3));
+						r8.declinedDateTime = '';
+						r8.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-3).addMinutes(30));
+						r8.declinedReason = '';
+						EnvelopeAPI.APIRecipient r9 = new EnvelopeAPI.APIRecipient(null, null, false);
+						r9.signerName = UUID.randomUUID().toString();
+						r9.signerEmail = UUID.randomUUID() + '@unit.test';
+						r9.hostName = UUID.randomUUID().toString();
+						r9.hostEmail = UUID.randomUUID() + '@unit.test';
+						r9.recipientId = '9';
+						r9.status = 'completed';
+						r9.routingOrder = '9';
+						r9.deliveredDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-2));
+						r9.declinedDateTime = '';
+						r9.signedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-2).addMinutes(30));
+						r9.declinedReason = '';
+						EnvelopeAPI.APIRecipients rs = new EnvelopeAPI.APIRecipients(null, null, false);
+						rs.signers = new List<EnvelopeAPI.APIRecipient> { r1 };
+						rs.agents = new List<EnvelopeAPI.APIRecipient> { r2 };
+						rs.editors = new List<EnvelopeAPI.APIRecipient> { r3 };
+						rs.intermediaries = new List<EnvelopeAPI.APIRecipient> { r4 };
+						rs.carbonCopies = new List<EnvelopeAPI.APIRecipient> { r5 };
+						rs.certifiedDeliveries = new List<EnvelopeAPI.APIRecipient> { r6 };
+						rs.inPersonSigners = new List<EnvelopeAPI.APIRecipient> { r7 };
+						rs.seals = new List<EnvelopeAPI.APIRecipient> { r8 };
+						rs.witnesses = new List<EnvelopeAPI.APIRecipient> { r9 };
+						EnvelopeAPI.APINotifications notif = new EnvelopeAPI.APINotifications(null);
+						EnvelopeAPI.APIEnvelope e = new EnvelopeAPI.APIEnvelope(null, false, false);
+						e.envelopeId = String.valueOf(id);
+						e.status = 'completed';
+						e.recipients = rs;
+						e.notification = notif;
+						e.sentDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-10));
+						e.completedDateTime = StringUtils.formatDatetime(Datetime.now().addDays(-1));
+						e.emailSubject = 'email subject';
+						e.voidedReason = '';
+						response = MockResponse.ok(e);
+					}
 				}
 			} else if (request.method == 'POST') {
 				String v = (String)Collection.last(request.path);
@@ -473,7 +519,9 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				senderProfile.permissionProfileId = '2222';
 				senderProfile.permissionProfileName = 'DocuSign Sender';
 				AuthService.APIPermissionProfiles pps = new AuthService.APIPermissionProfiles();
-				pps.permissionProfiles = new List<AuthService.APIPermissionProfile> { adminProfile, senderProfile };
+				pps.permissionProfiles = new List<AuthService.APIPermissionProfile> {
+					adminProfile, senderProfile
+				};
 				response = MockResponse.ok(pps);
 			}
 			return response;
@@ -533,7 +581,9 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				AccountAPI.APISigningGroup sg1 = new AccountAPI.APISigningGroup();
 				sg1.signingGroupId = String.valueOf(TestUtils.randomInteger(1000000));
 				sg1.groupName = 'SG1';
-				sg1.users = new List<AccountAPI.APISigningGroupMember> { sg1m1, sg1m2 };
+				sg1.users = new List<AccountAPI.APISigningGroupMember> {
+					sg1m1, sg1m2
+				};
 				AccountAPI.APISigningGroup sg2 = new AccountAPI.APISigningGroup();
 				sg2.signingGroupId = String.valueOf(TestUtils.randomInteger(1000000));
 				sg2.groupName = 'SG2';
@@ -545,7 +595,9 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				sg3.groupName = 'SG3';
 				sg3.users = new List<AccountAPI.APISigningGroupMember> { sg3m1 };
 				AccountAPI.APISigningGroups sgs = new AccountAPI.APISigningGroups();
-				sgs.groups = new List<AccountAPI.APISigningGroup> { sg1, sg2, sg3 };
+				sgs.groups = new List<AccountAPI.APISigningGroup> {
+					sg1, sg2, sg3
+				};
 				response = MockResponse.ok(sgs);
 			}
 			return response;
@@ -576,7 +628,9 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				ct1.underline = 'false';
 				ct1.fontColor = 'default';
 				ct1.fontSize = 'default';
-				ct1.items = new List<String> { 'one', 'two' };
+				ct1.items = new List<String> {
+					'one', 'two'
+				};
 				ct1.customTabId = UUID.randomUUID().toString();
 				ct1.initialValue = '';
 				ct1.disableAutoSize = 'false';
@@ -637,7 +691,9 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				ct3.editable = 'true';
 				ct3.mergeField = mf2;
 				AccountAPI.APITabs cts = new AccountAPI.APITabs();
-				cts.tabs = new List<AccountAPI.APITab> { ct1, ct2, ct3 };
+				cts.tabs = new List<AccountAPI.APITab> {
+					ct1, ct2, ct3
+				};
 				response = MockResponse.ok(cts);
 			} else if (request.method == 'POST') {
 				AccountAPI.APITab ct = (AccountAPI.APITab)JSON.deserialize(
@@ -690,12 +746,18 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					EnvelopeAPI.APIListCustomField lf1 = new EnvelopeAPI.APIListCustomField(CustomField.newListField(
 						'listField1',
 						'listField1Value2',
-						new List<String> { 'listField1Value1', 'listField1Value2', 'listField1Value3' },
+						new List<String> {
+							'listField1Value1', 'listField1Value2', 'listField1Value3'
+						},
 						true,
 						true));
 					EnvelopeAPI.APICustomFields cfs = new EnvelopeAPI.APICustomFields(
-						new List<EnvelopeAPI.APITextCustomField> { tf1, tf2 },
-						new List<EnvelopeAPI.APIListCustomField> { lf1 });
+						new List<EnvelopeAPI.APITextCustomField> {
+							tf1, tf2
+						},
+						new List<EnvelopeAPI.APIListCustomField> {
+							lf1
+						});
 					EnvelopeAPI.APINotifications n = new EnvelopeAPI.APINotifications(new Notifications(
 						true,
 						10,
@@ -713,7 +775,9 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 						null,
 						'fr subject',
 						'fr message'));
-					EnvelopeAPI.APISmsAuthentication pa = new EnvelopeAPI.APISmsAuthentication(new List<String> { '+1 415-555-5555' });
+					EnvelopeAPI.APISmsAuthentication pa = new EnvelopeAPI.APISmsAuthentication(new List<String> {
+						'+1 415-555-5555'
+					});
 					EnvelopeAPI.APIRecipient agent = new EnvelopeAPI.APIRecipient(null, null, false);
 					agent.name = '';
 					agent.email = '';
@@ -817,15 +881,33 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					witness.templateLocked = 'false';
 					witness.templateRequired = 'false';
 					EnvelopeAPI.APIRecipients rs = new EnvelopeAPI.APIRecipients(null, d.documentId, false);
-					rs.agents = new List<EnvelopeAPI.APIRecipient> { agent };
-					rs.carbonCopies = new List<EnvelopeAPI.APIRecipient> { cc };
-					rs.certifiedDeliveries = new List<EnvelopeAPI.APIRecipient> { cd };
-					rs.editors = new List<EnvelopeAPI.APIRecipient> { editor };
-					rs.inPersonSigners = new List<EnvelopeAPI.APIRecipient> { ips };
-					rs.intermediaries = new List<EnvelopeAPI.APIRecipient> { intermediary };
-					rs.signers = new List<EnvelopeAPI.APIRecipient> { signer };
-					rs.seals = new List<EnvelopeAPI.APIRecipient> { seal };
-					rs.witnesses = new List<EnvelopeAPI.APIRecipient> { witness };
+					rs.agents = new List<EnvelopeAPI.APIRecipient> {
+						agent
+					};
+					rs.carbonCopies = new List<EnvelopeAPI.APIRecipient> {
+						cc
+					};
+					rs.certifiedDeliveries = new List<EnvelopeAPI.APIRecipient> {
+						cd
+					};
+					rs.editors = new List<EnvelopeAPI.APIRecipient> {
+						editor
+					};
+					rs.inPersonSigners = new List<EnvelopeAPI.APIRecipient> {
+						ips
+					};
+					rs.intermediaries = new List<EnvelopeAPI.APIRecipient> {
+						intermediary
+					};
+					rs.signers = new List<EnvelopeAPI.APIRecipient> {
+						signer
+					};
+					rs.seals = new List<EnvelopeAPI.APIRecipient> {
+						seal
+					};
+					rs.witnesses = new List<EnvelopeAPI.APIRecipient> {
+						witness
+					};
 					EnvelopeAPI.APITemplate t = new EnvelopeAPI.APITemplate(null);
 					t.envelopeTemplateDefinition = tid;
 					t.documents = new List<EnvelopeAPI.APIDocument> { d };
@@ -855,7 +937,9 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					t3.emailBlurb = 'message 3';
 					t3.lastModified = StringUtils.formatDatetime(Datetime.now().addDays(-3));
 					EnvelopeAPI.APITemplates ts = new EnvelopeAPI.APITemplates();
-					ts.envelopeTemplates = new List<EnvelopeAPI.APITemplateListResult> { t1, t2, t3 };
+					ts.envelopeTemplates = new List<EnvelopeAPI.APITemplateListResult> {
+						t1, t2, t3
+					};
 					ts.resultSetSize = '3';
 					ts.startPosition = '1';
 					ts.endPosition = '3';
@@ -885,9 +969,9 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		}
 	}
 
-	//noinspection ApexUnusedDeclaration
 	//TODO: Implement Documents Update mock based on implementation
 	//of error handling for multi-item PUT requests
+	//noinspection ApexUnusedDeclaration
 	public class DocumentsUpdateMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {

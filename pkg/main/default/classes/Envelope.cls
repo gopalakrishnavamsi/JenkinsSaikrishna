@@ -27,6 +27,16 @@ global class Envelope {
 	 */
 	global static final String STATUS_COMPLETED = 'completed';
 
+	// Document write-back name formats
+	public static final String FORMAT_NAME = 'Name';
+	public static final String FORMAT_NAME_ENVELOPE_STATUS = 'NameEnvStatus';
+	public static final String FORMAT_NAME_PDF = 'NamePDF';
+	public static final String FORMAT_NAME_PDF_REPLACE_EXTENSION = 'NamePDFReplaceExt';
+	public static final String FORMAT_NAME_ENVELOPE_STATUS_PDF = 'NameEnvStatusPDF';
+	public static final String FORMAT_NAME_ENVELOPE_STATUS_PDF_REPLACE_EXTENSION = 'NameEnvStatusPDFReplaceExt';
+	public static final String FORMAT_ENVELOPE_PDF = 'EnvelopePDF';
+	public static final String FORMAT_ENVELOPE_STATUS_PDF = 'EnvelopeEnvStatusPDF';
+
 	public static final Envelope.Permissions DEFAULT_PERMISSIONS = new Envelope.Permissions(
 		true,
 		true,
@@ -36,7 +46,13 @@ global class Envelope {
 		true);
 	public static final Envelope.Options DEFAULT_OPTIONS = new Envelope.Options(
 		true,
-		true);
+		new DocumentWriteBack(
+			null,
+			'NamePDF',
+			true,
+			true),
+		new Map<String, Map<String, Object>>(),
+		new Map<String, Map<String, Object>>());
 
 	/**
 	 * The ID of the associated dfsle__Envelope__c record.
@@ -347,6 +363,56 @@ global class Envelope {
 	}
 
 	/**
+	 * Options related to writing back completed envelope documents.
+	 */
+	public class DocumentWriteBack {
+		/**
+		 * Where to link the completed envelope documents. Defaults to the envelope source ID.
+		 */
+		public Id linkedEntityId { get; private set; }
+		/**
+		 * The naming format for the completed envelope documents.
+		 */
+		public String nameFormat { get; private set; }
+		/**
+		 * Whether to combine the documents into one PDF.
+		 */
+		public Boolean combineDocuments { get; private set; }
+		/**
+		 * Whether to include the Certificate of Completion (CoC).
+		 */
+		public Boolean includeCertificateOfCompletion { get; private set; }
+
+		/**
+		 * Constructs document write-back options.
+		 *
+		 * @param linkedEntityId Where to link the completed envelope documents. Defaults to the envelope source ID.
+		 * @param nameFormat The naming format for the completed envelope documents.
+		 * @param combineDocuments Whether to combine the documents into one PDF.
+		 * @param includeCertificateOfCompletion Whether to include the Certificate of Completion (CoC).
+		 */
+		public DocumentWriteBack(
+			final Id linkedEntityId,
+			final String nameFormat,
+			final Boolean combineDocuments,
+			final Boolean includeCertificateOfCompletion) {
+
+			this.linkedEntityId = linkedEntityId;
+			this.nameFormat = nameFormat;
+			this.combineDocuments = combineDocuments;
+			this.includeCertificateOfCompletion = includeCertificateOfCompletion;
+		}
+
+		public DocumentWriteBack copy() {
+			return new DocumentWriteBack(
+				this.linkedEntityId,
+				this.nameFormat,
+				this.combineDocuments,
+				this.includeCertificateOfCompletion);
+		}
+	}
+
+	/**
 	 * Representation of DocuSign envelope options.
 	 */
 	public class Options {
@@ -355,30 +421,86 @@ global class Envelope {
 		 */
 		public Boolean includeDefaultAutoPlaceTags { get; private set; }
 		/**
-		 * Whether to write the completed envelope back to the initiating Salesforce source object.
+		 * Document write-back options for completed envelopes.
 		 */
-		public Boolean writeBackCompletedEnvelope { get; private set; }
+		public DocumentWriteBack documentWriteBack { get; private set; }
+		/**
+		 * Data write-back for envelope events. Map of envelope status to map of field updates.
+		 */
+		public Map<String, Map<String, Object>> envelopeEventUpdates { get; private set; }
+		/**
+		 * Data write-back for recipient events. Map of recipient status to map of field updates.
+		 */
+		public Map<String, Map<String, Object>> recipientEventUpdates { get; private set; }
 
 		/**
 		 * Constructs DocuSign envelope options.
 		 *
 		 * @param includeDefaultAutoPlaceTags Whether to include default anchor tabs that map to recipient roles.
-		 * @param writeBackCompletedEnvelope Whether to write the completed envelope back to the initiating Salesforce
-		 * source object.
+		 * @param documentWriteBack Document write-back options for completed envelopes.
+		 * @param envelopeEventUpdates Data write-back for envelope events. Map of envelope status to map of field updates.
+		 * @param recipientEventUpdates Data write-back for recipient events. Map of recipient status to map of field updates.
 		 */
 		public Options(
 			final Boolean includeDefaultAutoPlaceTags,
-			final Boolean writeBackCompletedEnvelope) {
+			final DocumentWriteBack documentWriteBack,
+			final Map<String, Map<String, Object>> envelopeEventUpdates,
+			final Map<String, Map<String, Object>> recipientEventUpdates) {
 
 			this.includeDefaultAutoPlaceTags = includeDefaultAutoPlaceTags;
-			this.writeBackCompletedEnvelope = writeBackCompletedEnvelope;
+			this.documentWriteBack = documentWriteBack;
+			this.envelopeEventUpdates = envelopeEventUpdates == null
+				? new Map<String, Map<String, Object>>() : envelopeEventUpdates;
+			this.recipientEventUpdates = recipientEventUpdates == null
+				? new Map<String, Map<String, Object>>() : recipientEventUpdates;
 		}
 
 		public Envelope.Options copy() {
 			return new Envelope.Options(
 				this.includeDefaultAutoPlaceTags,
-				this.writeBackCompletedEnvelope);
+				this.documentWriteBack.copy(),
+				this.envelopeEventUpdates.clone(),
+				this.recipientEventUpdates.clone());
 		}
+	}
+
+	private static DocumentWriteBack reifyDocumentWriteBack(final Map<String, Object> documentWriteBack) {
+		if (documentWriteBack == null) return null;
+
+		return new DocumentWriteBack(
+			(Id)documentWriteBack.get('linkedEntityId'),
+			(String)documentWriteBack.get('nameFormat'),
+			(Boolean)documentWriteBack.get('combineDocuments'),
+			(Boolean)documentWriteBack.get('includeCertificateOfCompletion'));
+	}
+
+	private static Map<String, Map<String, Object>> reifyUpdateMap(final Map<String, Object> updates) {
+		Map<String, Map<String, Object>> result = new Map<String, Map<String, Object>>();
+
+		if (updates == null) return result;
+
+		for (String key : updates.keySet()) {
+			result.put(key, (Map<String, Object>)updates.get(key));
+		}
+
+		return result;
+	}
+
+	public static Envelope.Options deserializeOptions(final String optionsJson) {
+		Envelope.Options result = null;
+
+		if (String.isBlank(optionsJson)) return result;
+
+		Map<String, Object> m = (Map<String, Object>)JSON.deserializeUntyped(optionsJson);
+		if (m != null) {
+			result = new Envelope.Options(
+				Boolean.valueOf(m.get('includeDefaultAutoPlaceTags')),
+				reifyDocumentWriteBack((Map<String, Object>)m.get('documentWriteBack')),
+				reifyUpdateMap((Map<String, Object>)m.get('envelopeEventUpdates')),
+				reifyUpdateMap((Map<String, Object>)m.get('recipientEventUpdates')));
+		}
+
+		return result;
 	}
 
 	/**
@@ -839,6 +961,7 @@ global class Envelope {
 	global static Envelope newBulkCopy(final Recipient recipient) {
 		if (recipient == null) throw new DocuSignException(Label.AtLeastOneRecipientIsRequired);
 
-		return new Envelope(null, null, null, null).withRecipients(new List<Recipient> { recipient });
+		return new Envelope(null, null, null, null)
+			.withRecipients(new List<Recipient> { recipient });
 	}
 }

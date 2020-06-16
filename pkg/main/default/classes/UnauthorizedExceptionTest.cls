@@ -151,14 +151,14 @@ private class UnauthorizedExceptionTest {
 		UnauthorizedException ex1 = new UnauthorizedException('', null);
 		UnauthorizedException ex2 = new UnauthorizedException('Message1', null);
 		UnauthorizedException ex3 = new UnauthorizedException('Message1', new ValidationResult(new List<String> { 'Message2', 'Message3' }));
-		UnauthorizedException ex4 = new UnauthorizedException(new Permissions.FlsResults(
+		UnauthorizedException ex4 = new UnauthorizedException(String.valueOf(new Permissions.FlsResults(
 			Permissions.FlsAccess.Queryable,
 			false,
 			new Permissions.FlsResult('Unit', Permissions.FlsStatus.OK),
 			new List<Permissions.FlsResult> {
 				new Permissions.FlsResult('Test1', Permissions.FlsStatus.OK),
 				new Permissions.FlsResult('Test2', Permissions.FlsStatus.NotFound)
-			}).getErrorMessage());
+			})));
 		Test.stopTest();
 
 		System.assertEquals('', ex1.getMessage());

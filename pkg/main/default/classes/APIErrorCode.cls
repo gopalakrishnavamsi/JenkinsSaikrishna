@@ -65,10 +65,6 @@ global class APIErrorCode {
 	 */
 	global static final Integer INVALID_DOCUMENT = 1015;
 	/**
-	 * The envelope recipient signing group is invalid.
-	 */
-	global static final Integer INVALID_SIGNING_GROUP = 1015;
-	/**
 	 * The envelope recipient is invalid.
 	 */
 	global static final Integer INVALID_RECIPIENT = 1016;
@@ -78,4 +74,10 @@ global class APIErrorCode {
 	global static final Integer CONSENT_REQUIRED = 1017;
 	public static final Integer INVALID_GRANT = 1018;
 	public static final Integer INVALID_OPERATION = 1019;
+	public static final Integer UNDEFINED_REQUEST_BODY = 1020;
+	public static final Integer INVALID_JSON = 1021;
+	/**
+	 * The envelope recipient signing group is invalid.
+	 */
+	global static final Integer INVALID_SIGNING_GROUP = 1022;
 }

@@ -324,8 +324,7 @@ public with sharing class EnvelopeConfigurationService {
 					(List<Tab>)JSON.deserialize(ec.MergeFields__c, List<Tab>.class),
 				String.isBlank(ec.SenderPermissions__c) ? null :
 					(Envelope.Permissions)JSON.deserialize(ec.SenderPermissions__c, Envelope.Permissions.class),
-				String.isBlank(ec.Options__c) ? null :
-					(Envelope.Options)JSON.deserialize(ec.Options__c, Envelope.Options.class),
+				String.isBlank(ec.Options__c) ? null : Envelope.deserializeOptions(ec.Options__c),
 				ec.IsDraft__c == true);
 		}
 

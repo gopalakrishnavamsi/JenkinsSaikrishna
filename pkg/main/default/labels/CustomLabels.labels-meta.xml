@@ -2564,14 +2564,6 @@
 		<value>Undefined Signing Group.</value>
 	</labels>
 	<labels>
-		<fullName>UndefinedString</fullName>
-		<categories>General</categories>
-		<language>en_US</language>
-		<protected>true</protected>
-		<shortDescription>Undefined String</shortDescription>
-		<value>--</value>
-	</labels>
-	<labels>
 		<fullName>UndefinedType</fullName>
 		<categories>Errors</categories>
 		<language>en_US</language>
@@ -7229,7 +7221,6 @@
 	</labels>
 	<labels>
 		<fullName>InfoIcon</fullName>
-		<categories></categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>CLM - Image Alternative Text</shortDescription>
@@ -10412,6 +10403,62 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Opportunity Stage</shortDescription>
 		<value>Opportunity Stage</value>
+	</labels>
+	<labels>
+		<fullName>InvalidJson</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>JSON is invalid</shortDescription>
+		<value>JSON is invalid.</value>
+	</labels>
+	<labels>
+		<fullName>UnauthorizedOperation</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Unauthorized user</shortDescription>
+		<value>User is not authorized to perform this operation.</value>
+	</labels>
+	<labels>
+		<fullName>UndefinedRequestBody</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Undefined request body</shortDescription>
+		<value>Request body is undefined.</value>
+	</labels>
+	<labels>
+		<fullName>EventProcessingFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Event processing failed</shortDescription>
+		<value>Event processing failed.</value>
+	</labels>
+	<labels>
+		<fullName>DataUpdateFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Data update failed</shortDescription>
+		<value>Envelope data update failed.</value>
+	</labels>
+	<labels>
+		<fullName>StatusUpdateFailed</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Status update failed</shortDescription>
+		<value>Status update failed.</value>
+	</labels>
+	<labels>
+		<fullName>DataUpdateMissingSourceId</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Data update missing source ID</shortDescription>
+		<value>Cannot perform data updates because source ID is undefined for envelope.</value>
+	</labels>
+	<labels>
+		<fullName>GetMergeFieldsError</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Get merge fields error</shortDescription>
+		<value>Failed to retrieve merge fields for envelope.</value>
 	</labels>
 	<labels>
 		<fullName>AddAndNew</fullName>

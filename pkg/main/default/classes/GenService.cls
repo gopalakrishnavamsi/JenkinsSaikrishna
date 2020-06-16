@@ -6,7 +6,6 @@ public with sharing class GenService {
 	private static final SObjectType CONTENT_DOCUMENT_LINK_TYPE = ContentDocumentLink.getSObjectType();
 	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
 	private static final SObjectType GEN_TEMPLATE_TYPE = GenTemplate__c.getSObjectType();
-	private static final SObjectType AGREEMENT_CONFIGURATION_TYPE = AgreementConfiguration__c.getSObjectType();
 
 	private class Database {
 
@@ -237,7 +236,7 @@ public with sharing class GenService {
 			List<ContentVersion> cvs = new List<ContentVersion>();
 			for (ContentVersion cv : [
 				SELECT Id, Title, Description, PathOnClient, VersionData,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, Rule__C
+					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, Rule__c
 				FROM ContentVersion
 				WHERE IsLatest = TRUE
 				AND ContentDocumentId IN :(queryLinkedDocumentIds(templateId))
@@ -742,22 +741,13 @@ public with sharing class GenService {
 	}
 
 	public static Boolean checkDocumentRule(
-		final Id sourceId,
 		final String startingObject,
 		final Gen.Rule rule) {
 
-		Query q = new Query(
+		return System.Database.countQuery(String.format('SELECT COUNT() FROM {0} WHERE {1}', new List<Object> {
 			startingObject,
-			new List<String> { 'Id ' },
-			null,
-			null,
-			getRuleFilters(rule.ruleType == 'any' ? 'OR' : 'AND', rule.conditions),
-			null,
-			1,
-			null
-		);
-
-		return q.hasRecord(sourceId);
+			getRuleFilters(rule.ruleType == 'any' ? 'OR' : 'AND', rule.conditions)
+		})) > 0;
 	}
 
 	private static String getRuleFilters(final String conditionalType, List<Gen.RuleConditions> conditions) {

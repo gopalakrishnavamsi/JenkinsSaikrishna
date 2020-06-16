@@ -232,6 +232,7 @@ private class AccountAPITest {
 				null,
 				'text',
 				'tab1',
+				Tab.KEY_PREFIX + UUID.randomUUID().toString(),
 				'Account.Name',
 				false,
 				true,
@@ -245,6 +246,7 @@ private class AccountAPITest {
 			System.assertNotEquals(null, result.id);
 			System.assertEquals(t.type, result.type);
 			System.assertEquals(t.name, result.name);
+			System.assertEquals(t.key, result.key);
 			System.assertEquals(t.path, result.path);
 			System.assertEquals(t.writeBack, result.writeBack);
 			System.assertEquals(t.allowSenderToEdit, result.allowSenderToEdit);
@@ -259,6 +261,7 @@ private class AccountAPITest {
 				UUID.randomUUID(),
 				'text',
 				'tab1',
+				Tab.KEY_PREFIX + UUID.randomUUID().toString(),
 				'Account.Name',
 				false,
 				true,
@@ -272,6 +275,7 @@ private class AccountAPITest {
 			System.assertEquals(t.id, result.id);
 			System.assertEquals(t.type, result.type);
 			System.assertEquals(t.name, result.name);
+			System.assertEquals(t.key, result.key);
 			System.assertEquals(t.path, result.path);
 			System.assertEquals(t.writeBack, result.writeBack);
 			System.assertEquals(t.allowSenderToEdit, result.allowSenderToEdit);
@@ -286,6 +290,7 @@ private class AccountAPITest {
 				UUID.randomUUID(),
 				'text',
 				'tab1',
+				Tab.KEY_PREFIX + UUID.randomUUID().toString(),
 				'Account.Name',
 				false,
 				true,

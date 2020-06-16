@@ -39,7 +39,7 @@ private class LoggerServiceTest {
 	}
 
 	@IsTest
-	static void test_exception_blank_context() {
+	static void test_exception_blank_message() {
 		LoggerService logger = LoggerService.getInstance();
 
 		Test.startTest();
@@ -168,26 +168,45 @@ private class LoggerServiceTest {
 				new Version(2, 5, 1),
 				LoggingLevel.DEBUG,
 				'message1',
-				'class1',
-				'method1');
-			LoggerService.LogEntry le2 = new LoggerService.LogEntry(null,
+				new LoggerService.LogContext(
+					UUID.randomUUID(),
+					UUID.randomUUID(),
+					UserInfo.getUserId(),
+					'class1',
+					'method1'));
+			LoggerService.LogEntry le2 = new LoggerService.LogEntry(
+				null,
 				new Version(2, 5),
 				LoggingLevel.INFO,
 				'message2',
-				'class2',
-				'method2');
-			LoggerService.LogEntry le3 = new LoggerService.LogEntry(null,
+				new LoggerService.LogContext(
+					UUID.randomUUID(),
+					UUID.randomUUID(),
+					UserInfo.getUserId(),
+					'class2',
+					'method2'));
+			LoggerService.LogEntry le3 = new LoggerService.LogEntry(
+				null,
 				new Version(2, 6),
 				LoggingLevel.WARN,
 				'message3',
-				'class3',
-				'method3');
-			LoggerService.LogEntry le4 = new LoggerService.LogEntry(null,
+				new LoggerService.LogContext(
+					UUID.randomUUID(),
+					UUID.randomUUID(),
+					UserInfo.getUserId(),
+					'class3',
+					'method3'));
+			LoggerService.LogEntry le4 = new LoggerService.LogEntry(
+				null,
 				new Version(2, 6, 3),
 				LoggingLevel.ERROR,
 				'message4',
-				'class4',
-				'method4');
+				new LoggerService.LogContext(
+					UUID.randomUUID(),
+					UUID.randomUUID(),
+					UserInfo.getUserId(),
+					'class4',
+					'method4'));
 
 			Test.startTest();
 			List<LoggerService.LogEntry> result = LoggerService.DB.insertEntries(new List<LoggerService.LogEntry> {
@@ -212,44 +231,29 @@ private class LoggerServiceTest {
 	}
 
 	@IsTest
-	static void test_log_exception() {
-		System.runAs(UserMock.createUser()) {
-			LogSettings__c ls = LogSettings__c.getOrgDefaults();
-			ls.Level__c = LoggingLevel.WARN.name();
-			insert ls;
-			LoggerService.LogEntry le = new LoggerService.LogEntry(null,
-				new Version(2, 6),
-				LoggingLevel.WARN,
-				'message',
-				'class',
-				'method');
-
-			Test.startTest();
-			LoggerService.LogEntry result = LoggerService.getInstance().log(le);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(null, result.id);
-			System.assertEquals(0, Database.countQuery('SELECT COUNT() FROM ' + Application.namespacePrefix + 'Log__c'));
-		}
-	}
-
-	@IsTest
 	static void test_log_should_not_log() {
 		System.runAs(UserMock.createUser()) {
 			LogSettings__c ls = LogSettings__c.getOrgDefaults();
 			ls.Level__c = LoggingLevel.ERROR.name();
 			insert ls;
-			LoggerService.LogEntry le = new LoggerService.LogEntry(null,
+			LoggerService.LogEntry le = new LoggerService.LogEntry(
+				null,
 				new Version(2, 6),
 				LoggingLevel.WARN,
 				'message',
-				'class',
-				'method');
+				new LoggerService.LogContext(
+					UUID.randomUUID(),
+					UUID.randomUUID(),
+					UserInfo.getUserId(),
+					'class',
+					'method'));
+			LoggerService log = LoggerService.getInstance();
 
 			Test.startTest();
-			LoggerService.LogEntry result = LoggerService.getInstance().log(le);
+			LoggerService.LogEntry result = log.log(le);
 			Test.stopTest();
+
+			log.flush();
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(null, result.id);
@@ -263,19 +267,26 @@ private class LoggerServiceTest {
 			LogSettings__c ls = LogSettings__c.getOrgDefaults();
 			ls.Level__c = LoggingLevel.WARN.name();
 			insert ls;
-			LoggerService.LogEntry le = new LoggerService.LogEntry(null,
+			LoggerService.LogEntry le = new LoggerService.LogEntry(
+				null,
 				new Version(2, 6),
 				LoggingLevel.WARN,
 				'message',
-				'class',
-				'method');
+				new LoggerService.LogContext(
+					UUID.randomUUID(),
+					UUID.randomUUID(),
+					UserInfo.getUserId(),
+					'class',
+					'method'));
+			LoggerService log = LoggerService.getInstance();
 
 			Test.startTest();
-			LoggerService.LogEntry result = LoggerService.getInstance().log(le);
+			LoggerService.LogEntry result = log.log(le);
 			Test.stopTest();
 
+			log.flush();
+
 			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.id);
 			System.assertEquals(1, Database.countQuery('SELECT COUNT() FROM ' + Application.namespacePrefix + 'Log__c'));
 		}
 	}
@@ -284,20 +295,30 @@ private class LoggerServiceTest {
 	static void test_exception_log_entry() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			LogSettings__c ls = LogSettings__c.getOrgDefaults();
-			ls.Level__c = LoggingLevel.WARN.name();
+			ls.Level__c = LoggingLevel.DEBUG.name();
 			insert ls;
 			DocuSignException ex = new DocuSignException('exception message');
+			UUID transactionId = UUID.randomUUID(), entityId = UUID.randomUUID();
+			Id sourceId = UserInfo.getOrganizationId();
+			LoggerService log = LoggerService.getInstance();
 
 			Test.startTest();
-			LoggerService.getInstance().exception(
+			log.exception(
 				ex,
-				'context',
-				'class',
-				'method');
+				'msg',
+				new LoggerService.LogContext(
+					transactionId,
+					entityId,
+					sourceId,
+					'class',
+					'method'));
 			Test.stopTest();
 
+			log.flush();
+
 			LoggerService.LogEntry le = LoggerService.DB.convert((Log__c)Collection.head([
-				SELECT Id, Class__c, Message__c, Method__c, Severity__c, Version__c
+				SELECT Id, Class__c, EntityId__c, Message__c, Method__c, Severity__c, SourceId__c, TransactionId__c,
+					Version__c
 				FROM Log__c
 				LIMIT 1
 			]));
@@ -305,9 +326,13 @@ private class LoggerServiceTest {
 			System.assertNotEquals(null, le.id);
 			System.assertEquals(Application.version, le.version);
 			System.assertEquals(LoggingLevel.ERROR, le.severity);
-			System.assertEquals(LoggerService.getMessage(ex, 'context'), le.message);
-			System.assertEquals('class', le.className);
-			System.assertEquals('method', le.methodName);
+			System.assertEquals(LoggerService.getMessage(ex, 'msg'), le.message);
+			System.assertNotEquals(null, le.context);
+			System.assertEquals(transactionId, le.context.transactionId);
+			System.assertEquals(entityId, le.context.entityId);
+			System.assertEquals(sourceId, le.context.sourceId);
+			System.assertEquals('class', le.context.className);
+			System.assertEquals('method', le.context.methodName);
 		}
 	}
 
@@ -315,18 +340,29 @@ private class LoggerServiceTest {
 	static void test_error_log_entry() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			LogSettings__c ls = LogSettings__c.getOrgDefaults();
-			ls.Level__c = LoggingLevel.WARN.name();
+			ls.Level__c = LoggingLevel.DEBUG.name();
 			insert ls;
+			DocuSignException ex = new DocuSignException('exception message');
+			UUID transactionId = UUID.randomUUID(), entityId = UUID.randomUUID();
+			Id sourceId = UserInfo.getOrganizationId();
+			LoggerService log = LoggerService.getInstance();
 
 			Test.startTest();
-			LoggerService.getInstance().error(
-				'message',
-				'class',
-				'method');
+			log.error(
+				'msg',
+				new LoggerService.LogContext(
+					transactionId,
+					entityId,
+					sourceId,
+					'class',
+					'method'));
 			Test.stopTest();
 
+			log.flush();
+
 			LoggerService.LogEntry le = LoggerService.DB.convert((Log__c)Collection.head([
-				SELECT Id, Class__c, Message__c, Method__c, Severity__c, Version__c
+				SELECT Id, Class__c, EntityId__c, Message__c, Method__c, Severity__c, SourceId__c, TransactionId__c,
+					Version__c
 				FROM Log__c
 				LIMIT 1
 			]));
@@ -334,9 +370,13 @@ private class LoggerServiceTest {
 			System.assertNotEquals(null, le.id);
 			System.assertEquals(Application.version, le.version);
 			System.assertEquals(LoggingLevel.ERROR, le.severity);
-			System.assertEquals('message', le.message);
-			System.assertEquals('class', le.className);
-			System.assertEquals('method', le.methodName);
+			System.assertEquals('msg', le.message);
+			System.assertNotEquals(null, le.context);
+			System.assertEquals(transactionId, le.context.transactionId);
+			System.assertEquals(entityId, le.context.entityId);
+			System.assertEquals(sourceId, le.context.sourceId);
+			System.assertEquals('class', le.context.className);
+			System.assertEquals('method', le.context.methodName);
 		}
 	}
 
@@ -344,18 +384,29 @@ private class LoggerServiceTest {
 	static void test_warn_log_entry() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			LogSettings__c ls = LogSettings__c.getOrgDefaults();
-			ls.Level__c = LoggingLevel.WARN.name();
+			ls.Level__c = LoggingLevel.DEBUG.name();
 			insert ls;
+			DocuSignException ex = new DocuSignException('exception message');
+			UUID transactionId = UUID.randomUUID(), entityId = UUID.randomUUID();
+			Id sourceId = UserInfo.getOrganizationId();
+			LoggerService log = LoggerService.getInstance();
 
 			Test.startTest();
-			LoggerService.getInstance().warn(
-				'message',
-				'class',
-				'method');
+			log.warn(
+				'msg',
+				new LoggerService.LogContext(
+					transactionId,
+					entityId,
+					sourceId,
+					'class',
+					'method'));
 			Test.stopTest();
 
+			log.flush();
+
 			LoggerService.LogEntry le = LoggerService.DB.convert((Log__c)Collection.head([
-				SELECT Id, Class__c, Message__c, Method__c, Severity__c, Version__c
+				SELECT Id, Class__c, EntityId__c, Message__c, Method__c, Severity__c, SourceId__c, TransactionId__c,
+					Version__c
 				FROM Log__c
 				LIMIT 1
 			]));
@@ -363,9 +414,13 @@ private class LoggerServiceTest {
 			System.assertNotEquals(null, le.id);
 			System.assertEquals(Application.version, le.version);
 			System.assertEquals(LoggingLevel.WARN, le.severity);
-			System.assertEquals('message', le.message);
-			System.assertEquals('class', le.className);
-			System.assertEquals('method', le.methodName);
+			System.assertEquals('msg', le.message);
+			System.assertNotEquals(null, le.context);
+			System.assertEquals(transactionId, le.context.transactionId);
+			System.assertEquals(entityId, le.context.entityId);
+			System.assertEquals(sourceId, le.context.sourceId);
+			System.assertEquals('class', le.context.className);
+			System.assertEquals('method', le.context.methodName);
 		}
 	}
 
@@ -375,16 +430,27 @@ private class LoggerServiceTest {
 			LogSettings__c ls = LogSettings__c.getOrgDefaults();
 			ls.Level__c = LoggingLevel.DEBUG.name();
 			insert ls;
+			DocuSignException ex = new DocuSignException('exception message');
+			UUID transactionId = UUID.randomUUID(), entityId = UUID.randomUUID();
+			Id sourceId = UserInfo.getOrganizationId();
+			LoggerService log = LoggerService.getInstance();
 
 			Test.startTest();
-			LoggerService.getInstance().info(
-				'message',
-				'class',
-				'method');
+			log.info(
+				'msg',
+				new LoggerService.LogContext(
+					transactionId,
+					entityId,
+					sourceId,
+					'class',
+					'method'));
 			Test.stopTest();
 
+			log.flush();
+
 			LoggerService.LogEntry le = LoggerService.DB.convert((Log__c)Collection.head([
-				SELECT Id, Class__c, Message__c, Method__c, Severity__c, Version__c
+				SELECT Id, Class__c, EntityId__c, Message__c, Method__c, Severity__c, SourceId__c, TransactionId__c,
+					Version__c
 				FROM Log__c
 				LIMIT 1
 			]));
@@ -392,9 +458,13 @@ private class LoggerServiceTest {
 			System.assertNotEquals(null, le.id);
 			System.assertEquals(Application.version, le.version);
 			System.assertEquals(LoggingLevel.INFO, le.severity);
-			System.assertEquals('message', le.message);
-			System.assertEquals('class', le.className);
-			System.assertEquals('method', le.methodName);
+			System.assertEquals('msg', le.message);
+			System.assertNotEquals(null, le.context);
+			System.assertEquals(transactionId, le.context.transactionId);
+			System.assertEquals(entityId, le.context.entityId);
+			System.assertEquals(sourceId, le.context.sourceId);
+			System.assertEquals('class', le.context.className);
+			System.assertEquals('method', le.context.methodName);
 		}
 	}
 
@@ -404,16 +474,27 @@ private class LoggerServiceTest {
 			LogSettings__c ls = LogSettings__c.getOrgDefaults();
 			ls.Level__c = LoggingLevel.DEBUG.name();
 			insert ls;
+			DocuSignException ex = new DocuSignException('exception message');
+			UUID transactionId = UUID.randomUUID(), entityId = UUID.randomUUID();
+			Id sourceId = UserInfo.getOrganizationId();
+			LoggerService log = LoggerService.getInstance();
 
 			Test.startTest();
-			LoggerService.getInstance().debug(
-				'message',
-				'class',
-				'method');
+			log.debug(
+				'msg',
+				new LoggerService.LogContext(
+					transactionId,
+					entityId,
+					sourceId,
+					'class',
+					'method'));
 			Test.stopTest();
 
+			log.flush();
+
 			LoggerService.LogEntry le = LoggerService.DB.convert((Log__c)Collection.head([
-				SELECT Id, Class__c, Message__c, Method__c, Severity__c, Version__c
+				SELECT Id, Class__c, EntityId__c, Message__c, Method__c, Severity__c, SourceId__c, TransactionId__c,
+					Version__c
 				FROM Log__c
 				LIMIT 1
 			]));
@@ -421,9 +502,29 @@ private class LoggerServiceTest {
 			System.assertNotEquals(null, le.id);
 			System.assertEquals(Application.version, le.version);
 			System.assertEquals(LoggingLevel.DEBUG, le.severity);
-			System.assertEquals('message', le.message);
-			System.assertEquals('class', le.className);
-			System.assertEquals('method', le.methodName);
+			System.assertEquals('msg', le.message);
+			System.assertNotEquals(null, le.context);
+			System.assertEquals(transactionId, le.context.transactionId);
+			System.assertEquals(entityId, le.context.entityId);
+			System.assertEquals(sourceId, le.context.sourceId);
+			System.assertEquals('class', le.context.className);
+			System.assertEquals('method', le.context.methodName);
+		}
+	}
+
+	@IsTest
+	static void test_flush_unauthorized() {
+		System.runAs(UserMock.createUser()) {
+			LogSettings__c ls = LogSettings__c.getOrgDefaults();
+			ls.Level__c = LoggingLevel.DEBUG.name();
+			insert ls;
+			LoggerService.getInstance().debug(
+				'message',
+				null);
+
+			Test.startTest();
+			System.assertEquals(new List<LoggerService.LogEntry>(), LoggerService.getInstance().flush());
+			Test.stopTest();
 		}
 	}
 }

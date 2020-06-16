@@ -617,6 +617,11 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>Log__c.EntityId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>Log__c.Message__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -628,6 +633,16 @@
 	<fieldPermissions>
 		<editable>true</editable>
 		<field>Log__c.Severity__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Log__c.SourceId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Log__c.TransactionId__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>
@@ -1017,7 +1032,7 @@
 	</tabSettings>
 	<tabSettings>
 		<tab>EnvelopeStatus__c</tab>
-		<visibility>Available</visibility>
+		<visibility>Visible</visibility>
 	</tabSettings>
 	<tabSettings>
 		<tab>Envelope__c</tab>
@@ -1026,13 +1041,5 @@
 	<tabSettings>
 		<tab>Setup</tab>
 		<visibility>Visible</visibility>
-	</tabSettings>
-	<tabSettings>
-		<tab>GenTemplate__c</tab>
-		<visibility>Visible</visibility>
-	</tabSettings>
-	<tabSettings>
-		<tab>EnvelopeConfiguration__c</tab>
-		<visibility>Available</visibility>
 	</tabSettings>
 </PermissionSet>

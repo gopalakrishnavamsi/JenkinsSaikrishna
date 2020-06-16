@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
 	<externalId>true</externalId>
-	<fullName>Version__c</fullName>
-	<label>Class</label>
-	<length>20</length>
+	<fullName>EntityId__c</fullName>
+	<label>DocuSign entity ID</label>
+	<length>36</length>
 	<required>false</required>
 	<type>Text</type>
 	<unique>false</unique>

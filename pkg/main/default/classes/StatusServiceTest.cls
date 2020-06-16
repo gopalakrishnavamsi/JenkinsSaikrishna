@@ -433,8 +433,8 @@ private class StatusServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Datetime now = Datetime.now();
 			Envelope.Status e1 = StatusService.DB.convert(TestUtils.createEnvelopeStatus());
-			Recipient.Status e1r1 = StatusService.DB.convert(TestUtils.createRecipientStatus(e1.Id, 1));
-			Recipient.Status e1r2 = StatusService.DB.convert(TestUtils.createRecipientStatus(e1.Id, 2));
+			Recipient.Status e1r1 = StatusService.DB.convert(TestUtils.createRecipientStatus(e1.id, 1));
+			Recipient.Status e1r2 = StatusService.DB.convert(TestUtils.createRecipientStatus(e1.id, 2));
 			e1.addRecipients(new List<Recipient.Status> { e1r1, e1r2 });
 
 			Schema.Account a2 = TestUtils.createAccount();
@@ -552,7 +552,6 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_Database_deleteStatus_without_envelopes() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			Datetime now = Datetime.now();
 			UUID e1Id = UUID.randomUUID();
 			Envelope__c ee1 = TestUtils.createEnvelope(e1Id);
 			TestUtils.createEnvelopeDocument(ee1.Id);
@@ -592,7 +591,6 @@ private class StatusServiceTest {
 	@IsTest
 	static void test_Database_deleteStatus_with_envelopes() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			Datetime now = Datetime.now();
 			UUID e1Id = UUID.randomUUID();
 			Envelope__c ee1 = TestUtils.createEnvelope(e1Id);
 			TestUtils.createEnvelopeDocument(ee1.Id);
@@ -770,10 +768,10 @@ private class StatusServiceTest {
 	static void test_createStatus_valid() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
-			Recipient e1r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e1.Id));
-			Recipient e1r2 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e1.Id));
+			Recipient e1r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e1.id));
+			Recipient e1r2 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e1.id));
 			Envelope e2 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
-			Recipient e2r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e2.Id));
+			Recipient e2r1 = RecipientService.DB.convert(TestUtils.createEnvelopeRecipient(e2.id));
 			Envelope.Status es1 = e1.toEnvelopeStatus().addRecipients(new List<Recipient.Status> {
 				e1r1.toRecipientStatus(e1.sent),
 				e1r2.toRecipientStatus(e1.sent)
@@ -917,7 +915,7 @@ private class StatusServiceTest {
 			update new List<Envelope__c> {
 				e1, e2, e3, e4
 			};
-			Envelope.Status es1 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e1));
+			StatusService.DB.convert(TestUtils.createEnvelopeStatus(e1));
 			Envelope.Status es2 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e2));
 			Envelope.Status es3 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e3));
 			Envelope.Status es4 = StatusService.DB.convert(TestUtils.createEnvelopeStatus(e4));
@@ -1166,13 +1164,13 @@ private class StatusServiceTest {
 			System.assertNotEquals(null, result);
 			System.assertEquals(3, result.size());
 			System.assertNotEquals(null, result[0]);
-			System.assertEquals(es1.id, result[0].id);
+			System.assertEquals(es1.Id, result[0].id);
 			System.assertEquals(null, result[0].lastStatusUpdate);
 			System.assertNotEquals(null, result[1]);
-			System.assertEquals(es2.id, result[1].id);
+			System.assertEquals(es2.Id, result[1].id);
 			System.assertEquals(null, result[1].lastStatusUpdate);
 			System.assertNotEquals(null, result[2]);
-			System.assertEquals(es3.id, result[2].id);
+			System.assertEquals(es3.Id, result[2].id);
 			System.assertEquals(null, result[2].lastStatusUpdate);
 		}
 	}
@@ -1216,10 +1214,10 @@ private class StatusServiceTest {
 			System.assertNotEquals(null, result);
 			System.assertEquals(2, result.size());
 			System.assertNotEquals(null, result[0]);
-			System.assertEquals(es1.id, result[0].id);
+			System.assertEquals(es1.Id, result[0].id);
 			System.assertNotEquals(null, result[0].lastStatusUpdate);
 			System.assertNotEquals(null, result[1]);
-			System.assertEquals(es2.id, result[1].id);
+			System.assertEquals(es2.Id, result[1].id);
 			System.assertNotEquals(null, result[1].lastStatusUpdate);
 		}
 	}
@@ -1282,13 +1280,11 @@ private class StatusServiceTest {
 	static void test_deleteStatus_not_found() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			UUID dseId1 = UUID.randomUUID();
-			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
+			TestUtils.createEnvelopeStatus(dseId1);
 
 			Test.startTest();
 			try {
-				StatusService.deleteStatus(new Set<UUID> {
-					dseId1
-				}, false);
+				StatusService.deleteStatus(new Set<UUID> { dseId1 }, false);
 				throw new AssertException('Expected deleteStatus to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.EnvelopeNotFound, ex.getMessage());
@@ -1302,15 +1298,13 @@ private class StatusServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
 			UUID dseId1 = UUID.parse(e1.DocuSignId__c);
-			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(dseId1);
+			TestUtils.createEnvelopeStatus(dseId1);
 			Envelope__c e2 = TestUtils.createEnvelope();
 			UUID dseId2 = UUID.parse(e2.DocuSignId__c);
-			EnvelopeStatus__c es2 = TestUtils.createEnvelopeStatus(dseId2);
+			TestUtils.createEnvelopeStatus(dseId2);
 
 			Test.startTest();
-			Boolean result = StatusService.deleteStatus(new Set<UUID> {
-				dseId1, dseId2
-			}, false);
+			Boolean result = StatusService.deleteStatus(new Set<UUID> { dseId1, dseId2 }, false);
 			Test.stopTest();
 
 			System.assert(result);
@@ -1366,7 +1360,7 @@ private class StatusServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			UUID dseId = UUID.randomUUID();
 			Envelope__c e = TestUtils.createEnvelope(dseId);
-			EnvelopeStatus__c es = TestUtils.createEnvelopeStatus(e);
+			TestUtils.createEnvelopeStatus(e);
 
 			Test.startTest();
 			System.assert(StatusService.resendEnvelope(dseId));
@@ -1420,7 +1414,7 @@ private class StatusServiceTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			UUID dseId = UUID.randomUUID();
 			Envelope__c e = TestUtils.createEnvelope(dseId);
-			EnvelopeStatus__c es = TestUtils.createEnvelopeStatus(e);
+			TestUtils.createEnvelopeStatus(e);
 
 			Test.startTest();
 			List<Recipient.ResendResult> result = StatusService.resendRecipients(dseId, new List<Recipient> {
@@ -1615,13 +1609,316 @@ private class StatusServiceTest {
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Envelope__c e1 = TestUtils.createEnvelope();
-			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.parse(e1.DocuSignId__c));
+			TestUtils.createEnvelopeStatus(UUID.parse(e1.DocuSignId__c));
 
 			Test.startTest();
 			Url result = StatusService.getViewUrl(UUID.parse(e1.DocuSignId__c), new Url('https://unit.test/return'));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_updateStatus_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				StatusService.updateStatus(null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateStatus_empty() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			System.assertEquals(new List<Envelope.Status>(), StatusService.updateStatus(null));
+			System.assertEquals(new List<Envelope.Status>(), StatusService.updateStatus(new List<Envelope.Status>()));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateStatus_new() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Envelope.Status es = new Envelope.Status(
+				null,
+				new Entity(UserInfo.getUserId()),
+				UUID.randomUUID(),
+				Envelope.STATUS_COMPLETED,
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString() + '@unit.test',
+				new List<Recipient.Status> {
+					new Recipient.Status(
+						null,
+						null,
+						Recipient.TYPE_SIGNER,
+						1,
+						Recipient.STATUS_COMPLETED,
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						1,
+						Datetime.now().addDays(-1),
+						Datetime.now(),
+						null,
+						Datetime.now()),
+					new Recipient.Status(
+						null,
+						null,
+						Recipient.TYPE_CARBON_COPY,
+						2,
+						Recipient.STATUS_COMPLETED,
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						2,
+						Datetime.now().addDays(-1),
+						Datetime.now(),
+						null,
+						Datetime.now())
+				},
+				Datetime.now().addDays(-1),
+				Datetime.now().addDays(1),
+				Datetime.now(),
+				UUID.randomUUID().toString(),
+				null,
+				Datetime.now());
+
+			Test.startTest();
+			List<Envelope.Status> result = StatusService.updateStatus(new List<Envelope.Status> { es });
+			Test.stopTest();
+
+			System.assertEquals(1, Collection.size(result));
+
+			Envelope.Status e = result[0];
+			System.assertNotEquals(null, e);
+			System.assertNotEquals(null, e.id);
+			System.assertEquals(es.source, e.source);
+			System.assertEquals(es.docuSignId, e.docuSignId);
+			System.assertEquals(es.status, e.status);
+			System.assertEquals(es.senderName, e.senderName);
+			System.assertEquals(es.senderEmail, e.senderEmail);
+			System.assertEquals(es.sent, e.sent);
+			System.assertEquals(es.expires, e.expires);
+			System.assertEquals(es.completed, e.completed);
+			System.assertEquals(es.emailSubject, e.emailSubject);
+			System.assertEquals(es.reason, e.reason);
+
+			System.assertEquals(2, Collection.size(e.recipients));
+			for (Integer i = 0; i < e.recipients.size(); i++) {
+				Recipient.Status expected = es.recipients[i];
+				Recipient.Status actual = e.recipients[i];
+				System.assertNotEquals(null, actual);
+				System.assertNotEquals(null, actual.id);
+				System.assertEquals(expected.source, actual.source);
+				System.assertEquals(expected.type, actual.type);
+				System.assertEquals(expected.sequence, actual.sequence);
+				System.assertEquals(expected.status, actual.status);
+				System.assertEquals(expected.name, actual.name);
+				System.assertEquals(expected.email, actual.email);
+				System.assertEquals(expected.routingOrder, actual.routingOrder);
+				System.assertEquals(expected.sent, actual.sent);
+				System.assertEquals(expected.completed, actual.completed);
+				System.assertEquals(expected.reason, actual.reason);
+			}
+
+			System.assertEquals(1, [SELECT COUNT() FROM EnvelopeStatus__c WHERE Id = :e.id]);
+			System.assertEquals(2, [SELECT COUNT() FROM RecipientStatus__c WHERE EnvelopeStatus__c = :e.id]);
+		}
+	}
+
+	@IsTest
+	static void test_updateStatus_existing() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			EnvelopeStatus__c dbes1 = TestUtils.createEnvelopeStatus();
+			TestUtils.createRecipientStatus(dbes1.Id, 1);
+			TestUtils.createRecipientStatus(dbes1.Id, 2);
+			Envelope.Status es1 = new Envelope.Status(
+				null,
+				new Entity(UserInfo.getUserId()),
+				UUID.randomUUID(),
+				Envelope.STATUS_COMPLETED,
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString() + '@unit.test',
+				new List<Recipient.Status> {
+					new Recipient.Status(
+						null,
+						null,
+						Recipient.TYPE_SIGNER,
+						1,
+						Recipient.STATUS_COMPLETED,
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						1,
+						Datetime.now().addDays(-1),
+						Datetime.now(),
+						null,
+						Datetime.now()),
+					new Recipient.Status(
+						null,
+						null,
+						Recipient.TYPE_CARBON_COPY,
+						2,
+						Recipient.STATUS_COMPLETED,
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						2,
+						Datetime.now().addDays(-1),
+						Datetime.now(),
+						null,
+						Datetime.now())
+				},
+				Datetime.now().addDays(-1),
+				Datetime.now().addDays(1),
+				Datetime.now(),
+				UUID.randomUUID().toString(),
+				null,
+				Datetime.now());
+			Envelope.Status es2 = new Envelope.Status(
+				null,
+				new Entity(UserInfo.getUserId()),
+				UUID.parse(dbes1.DocuSignId__c),
+				Envelope.STATUS_VOIDED,
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString() + '@unit.test',
+				new List<Recipient.Status> {
+					new Recipient.Status(
+						null,
+						null,
+						Recipient.TYPE_SIGNER,
+						1,
+						Recipient.STATUS_SENT,
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						1,
+						Datetime.now().addDays(-1),
+						Datetime.now(),
+						null,
+						Datetime.now()),
+					new Recipient.Status(
+						null,
+						null,
+						Recipient.TYPE_CARBON_COPY,
+						2,
+						Recipient.STATUS_CREATED,
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + '@unit.test',
+						2,
+						Datetime.now().addDays(-1),
+						Datetime.now(),
+						null,
+						Datetime.now())
+				},
+				Datetime.now().addDays(-1),
+				Datetime.now().addDays(1),
+				Datetime.now(),
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString(),
+				Datetime.now());
+
+			Test.startTest();
+			List<Envelope.Status> result = StatusService.updateStatus(new List<Envelope.Status> { es1, es2 });
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+
+			Envelope.Status e = result[0];
+			System.assertNotEquals(null, e);
+			Boolean isExisting = e.id == dbes1.Id;
+			Envelope.Status ee = isExisting ? es2 : es1;
+			if (isExisting) {
+				System.assertEquals(dbes1.Id, e.id);
+				System.assertEquals(dbes1.DocuSignId__c, String.valueOf(e.docuSignId));
+			} else {
+				System.assertNotEquals(null, e.id);
+				System.assertEquals(ee.docuSignId, e.docuSignId);
+			}
+			System.assertEquals(ee.source, e.source);
+			System.assertEquals(ee.status, e.status);
+			System.assertEquals(ee.senderName, e.senderName);
+			System.assertEquals(ee.senderEmail, e.senderEmail);
+			System.assertEquals(ee.sent, e.sent);
+			System.assertEquals(ee.expires, e.expires);
+			System.assertEquals(ee.completed, e.completed);
+			System.assertEquals(ee.emailSubject, e.emailSubject);
+			System.assertEquals(ee.reason, e.reason);
+
+			System.assertEquals(2, Collection.size(e.recipients));
+			for (Integer i = 0; i < e.recipients.size(); i++) {
+				Recipient.Status expected = ee.recipients[i];
+				Recipient.Status actual = e.recipients[i];
+				System.assertNotEquals(null, actual);
+				System.assertNotEquals(null, actual.id);
+				if (isExisting) {
+					System.assertEquals(new Entity(UserInfo.getUserId()), actual.source);
+				} else {
+					System.assertEquals(expected.source, actual.source);
+				}
+				System.assertEquals(expected.type, actual.type);
+				System.assertEquals(expected.sequence, actual.sequence);
+				System.assertEquals(expected.status, actual.status);
+				System.assertEquals(expected.name, actual.name);
+				System.assertEquals(expected.email, actual.email);
+				System.assertEquals(expected.routingOrder, actual.routingOrder);
+				System.assertEquals(expected.sent, actual.sent);
+				System.assertEquals(expected.completed, actual.completed);
+				System.assertEquals(expected.reason, actual.reason);
+			}
+
+			System.assertEquals(1, [SELECT COUNT() FROM EnvelopeStatus__c WHERE Id = :e.id]);
+			System.assertEquals(2, [SELECT COUNT() FROM RecipientStatus__c WHERE EnvelopeStatus__c = :e.id]);
+
+			e = result[1];
+			isExisting = !isExisting;
+			ee = isExisting ? es2 : es1;
+			if (isExisting) {
+				System.assertEquals(dbes1.Id, e.id);
+				System.assertEquals(dbes1.DocuSignId__c, String.valueOf(e.docuSignId));
+			} else {
+				System.assertNotEquals(null, e.id);
+				System.assertEquals(ee.docuSignId, e.docuSignId);
+			}
+			System.assertNotEquals(null, e);
+			System.assertNotEquals(null, e.id);
+			System.assertEquals(ee.source, e.source);
+			System.assertEquals(ee.docuSignId, e.docuSignId);
+			System.assertEquals(ee.status, e.status);
+			System.assertEquals(ee.senderName, e.senderName);
+			System.assertEquals(ee.senderEmail, e.senderEmail);
+			System.assertEquals(ee.sent, e.sent);
+			System.assertEquals(ee.expires, e.expires);
+			System.assertEquals(ee.completed, e.completed);
+			System.assertEquals(ee.emailSubject, e.emailSubject);
+			System.assertEquals(ee.reason, e.reason);
+
+			System.assertEquals(2, Collection.size(e.recipients));
+			for (Integer i = 0; i < e.recipients.size(); i++) {
+				Recipient.Status expected = ee.recipients[i];
+				Recipient.Status actual = e.recipients[i];
+				System.assertNotEquals(null, actual);
+				System.assertNotEquals(null, actual.id);
+				if (isExisting) {
+					System.assertEquals(new Entity(UserInfo.getUserId()), actual.source);
+				} else {
+					System.assertEquals(expected.source, actual.source);
+				}
+				System.assertEquals(expected.type, actual.type);
+				System.assertEquals(expected.sequence, actual.sequence);
+				System.assertEquals(expected.status, actual.status);
+				System.assertEquals(expected.name, actual.name);
+				System.assertEquals(expected.email, actual.email);
+				System.assertEquals(expected.routingOrder, actual.routingOrder);
+				System.assertEquals(expected.sent, actual.sent);
+				System.assertEquals(expected.completed, actual.completed);
+				System.assertEquals(expected.reason, actual.reason);
+			}
+
+			System.assertEquals(1, [SELECT COUNT() FROM EnvelopeStatus__c WHERE Id = :e.id]);
+			System.assertEquals(2, [SELECT COUNT() FROM RecipientStatus__c WHERE EnvelopeStatus__c = :e.id]);
 		}
 	}
 }

@@ -242,7 +242,7 @@ private class GenServiceTest {
 			System.assertNotEquals(null, result);
 			System.assertEquals(1, Collection.size(result.generated));
 			System.assertNotEquals(null, result.generated.get(0).rule);
-			System.assertEquals(true, GenService.checkDocumentRule(acc.Id, 'Account', result.generated.get(0).rule));
+			System.assertEquals(true, GenService.checkDocumentRule('Account', result.generated.get(0).rule));
 		}
 	}
 

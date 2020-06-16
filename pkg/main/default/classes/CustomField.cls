@@ -5,6 +5,7 @@ global class CustomField {
 
 	private static final String TYPE_TEXT = 'text';
 	private static final String TYPE_LIST = 'list';
+	private static final String KEY_SOURCE = '##SFSource';
 
 	/**
 	 * The type of the custom field, list or text.
@@ -134,4 +135,37 @@ global class CustomField {
 		this.value = value;
 		return this;
 	}
+
+	public static CustomField forEnvelopeSource(final Id sourceId) {
+		if (String.isBlank(sourceId)) return null;
+
+		return newTextField(
+			KEY_SOURCE,
+			sourceId + '~' + sourceId.getSobjectType(),
+			false,
+			false);
+	}
+
+	public static Id getEnvelopeSourceId(final Map<String, String> customFields) {
+		if (customFields == null) return null;
+
+		String value = customFields.get(KEY_SOURCE);
+		return String.isBlank(value) ? null : (Id)value.substringBefore('~');
+	}
+
+	public static String forRecipientSource(final Id sourceId) {
+		return KEY_SOURCE + ':' + sourceId + '~' + sourceId.getSobjectType();
+	}
+
+	public static Id getRecipientSourceId(final List<String> customFields) {
+		if (customFields == null) return null;
+
+		for (String cf : customFields) {
+			if (cf.startsWith(KEY_SOURCE)) {
+				String s = cf.substringAfter(KEY_SOURCE + ':').substringBefore('~');
+				return String.isBlank(s) ? null : Id.valueOf(s.trim());
+			}
+		}
+		return null;
+ 	}
 }

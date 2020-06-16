@@ -494,6 +494,11 @@
 	</fieldPermissions>
 	<fieldPermissions>
 		<editable>true</editable>
+		<field>Log__c.EntityId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
 		<field>Log__c.Message__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
@@ -505,6 +510,16 @@
 	<fieldPermissions>
 		<editable>true</editable>
 		<field>Log__c.Severity__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Log__c.SourceId__c</field>
+		<readable>true</readable>
+	</fieldPermissions>
+	<fieldPermissions>
+		<editable>true</editable>
+		<field>Log__c.TransactionId__c</field>
 		<readable>true</readable>
 	</fieldPermissions>
 	<fieldPermissions>

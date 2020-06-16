@@ -844,10 +844,11 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	@TestVisible
 	private static List<String> getRecipientCustomFields(final Recipient r) {
 		List<String> customFields = null;
-		if (r != null && r.source != null && String.isNotBlank(r.source.id) && r.source.type != null) {
-			customFields = new List<String> {
-				String.format('##SF{0}:{1}', new List<String> { String.valueOf(r.source.type), r.source.id })
-			};
+		if (r != null && Entity.isValid(r.source)) {
+			String cf = CustomField.forRecipientSource(r.source.id);
+			if (String.isNotBlank(cf)) {
+				customFields = new List<String> { cf };
+			}
 		}
 		return customFields;
 	}
@@ -1012,6 +1013,33 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			}
 			return result;
 		}
+
+		private List<Tab> getMergeFields(
+			final List<APIRecipient> recipients,
+			final Boolean writeBackOnly) {
+
+			List<Tab> result = new List<Tab>();
+			if (recipients != null) {
+				for (APIRecipient r : recipients) {
+					if (r != null && r.tabs != null) result.addAll(r.tabs.toMergeFields(writeBackOnly));
+				}
+			}
+			return result;
+		}
+
+		public List<Tab> getMergeFields(final Boolean writeBackOnly) {
+			List<Tab> result = new List<Tab>();
+			result.addAll(getMergeFields(this.agents, writeBackOnly));
+			result.addAll(getMergeFields(this.carbonCopies, writeBackOnly));
+			result.addAll(getMergeFields(this.certifiedDeliveries, writeBackOnly));
+			result.addAll(getMergeFields(this.editors, writeBackOnly));
+			result.addAll(getMergeFields(this.inPersonSigners, writeBackOnly));
+			result.addAll(getMergeFields(this.intermediaries, writeBackOnly));
+			result.addAll(getMergeFields(this.seals, writeBackOnly));
+			result.addAll(getMergeFields(this.signers, writeBackOnly));
+			result.addAll(getMergeFields(this.witnesses, writeBackOnly));
+			return result;
+		}
 	}
 
 	@TestVisible
@@ -1032,7 +1060,6 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		}
 	}
 
-	// TODO: Fix and surface more tab properties.
 	@TestVisible
 	private class APITab {
 		public String customTabId;
@@ -1044,6 +1071,8 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public String anchorString;
 		public APIMergeField mergeField;
 		public String optional;
+		public String value;
+		public String selected; // checkbox value
 
 		public APITab(
 			final String documentId,
@@ -1071,21 +1100,49 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public APITab(
 			final String documentId,
 			final String recipientId,
-			final Tab tab) {
+			final Tab t) {
 
 			this.documentId = documentId;
 			this.recipientId = recipientId;
-			if (tab != null) {
-				this.name = String.isBlank(documentId) ? tab.name : (tab.name + documentId);
-				this.tabLabel = '_DAL_' + this.name;
-				if (String.isNotBlank(tab.path)) {
-					this.mergeField = new APIMergeField(tab);
+			if (t != null) {
+				if (UUID.isNotEmpty(t.id)) this.customTabId = String.valueOf(t.id);
+				this.name = String.isBlank(documentId) ? t.name : (t.name + '_' + documentId);
+				this.tabLabel = String.isBlank(t.key) ? '_DAL_ ' + this.name : t.key;
+				if (String.isNotBlank(t.path)) {
+					this.mergeField = new APIMergeField(t);
 				}
-				if (String.isNotBlank(tab.autoPlaceText)) {
-					this.anchorString = tab.autoPlaceText;
+				if (String.isNotBlank(t.autoPlaceText)) {
+					this.anchorString = t.autoPlaceText;
 					this.anchorIgnoreIfNotPresent = 'true';
 				}
+				if (t.value != null) {
+					if (t.type == Tab.TYPE_CHECKBOX) {
+						this.selected = String.valueOf(t.value);
+					} else if (t.value instanceof Datetime) {
+						this.value = StringUtils.formatDatetime((Datetime)t.value);
+					} else {
+						this.value = String.valueOf(t.value);
+					}
+				}
 			}
+		}
+
+		@TestVisible
+		private Object convertValue(final String type) {
+			// Don't try to convert values of a type that makes no sense to Salesforce
+			if (!Tab.isValidMergeFieldType(type)) return null;
+
+			Object result = null;
+			if (type == Tab.TYPE_NUMBER || type == Tab.TYPE_FORMULA) {
+				result = StringUtils.parseDecimal(this.value);
+			} else if (type == Tab.TYPE_CHECKBOX) {
+				result = StringUtils.parseBoolean(this.selected);
+			} else if (type == Tab.TYPE_DATE || type == Tab.TYPE_DATE_SIGNED) {
+				result = StringUtils.parseDate(this.value);
+			} else { // text type--just use string value
+				result = this.value;
+			}
+			return result;
 		}
 
 		public Tab toTab(final String type) {
@@ -1093,10 +1150,13 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				UUID.tryParse(this.customTabId),
 				type,
 				nullIfBlank(this.name),
+				this.tabLabel,
 				this.mergeField == null ? null : nullIfBlank(this.mergeField.path),
 				this.mergeField == null ? null : StringUtils.parseBoolean(this.mergeField.writeBack),
 				this.mergeField == null ? null : StringUtils.parseBoolean(this.mergeField.allowSenderToEdit),
-				this.anchorString);
+				this.anchorString)
+				.withValue(convertValue(type));
+
 		}
 	}
 
@@ -1400,6 +1460,57 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			}
 			return result;
 		}
+
+		private List<Tab> toMergeFields(
+			final String type,
+			final List<APITab> tabs,
+			final Boolean writeBackOnly) {
+
+			List<Tab> result = new List<Tab>();
+			if (tabs != null) {
+				for (APITab t : tabs) {
+					if (t == null || t.mergeField == null || t.mergeField.configurationType != 'salesforce' || String.isBlank(t.mergeField.path)) continue;
+
+					if (!writeBackOnly || t.mergeField.writeBack == 'true') {
+						Tab tt = t.toTab(type);
+						result.add(tt);
+					}
+				}
+			}
+			return result;
+		}
+
+		public List<Tab> toMergeFields(final Boolean writeBackOnly) {
+			List<Tab> result = new List<Tab>();
+			result.addAll(this.toMergeFields(Tab.TYPE_APPROVE, this.approveTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_CHECKBOX, this.checkboxTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_COMPANY, this.companyTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_DATE_SIGNED, this.dateSignedTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_DATE, this.dateTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_DECLINE, this.declineTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_EMAIL_ADDRESS, this.emailAddressTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_EMAIL, this.emailTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_ENVELOPE_ID, this.envelopeIdTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_FIRST_NAME, this.firstNameTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_FORMULA, this.formulaTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_FULL_NAME, this.fullNameTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_INITIAL_HERE, this.initialHereTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_LAST_NAME, this.lastNameTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_LIST, this.listTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_NOTARIZE, this.notarizeTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_NOTE, this.noteTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_NUMBER, this.numberTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_RADIO_GROUP, this.radioGroupTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_SIGNER_ATTACHMENT, this.signerAttachmentTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_SIGN_HERE, this.signHereTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_SMART_SECTION, this.smartSectionTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_SSN, this.ssnTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_TEXT, this.textTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_TITLE, this.titleTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_VIEW, this.viewTabs, writeBackOnly));
+			result.addAll(this.toMergeFields(Tab.TYPE_ZIP, this.zipTabs, writeBackOnly));
+			return result;
+		}
 	}
 
 	@TestVisible
@@ -1492,22 +1603,81 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	}
 
 	@TestVisible
+	private static APITextCustomField getDocumentWriteBackCustomField(
+		final Envelope.DocumentWriteBack documentWriteBack,
+		final Id sourceId) {
+
+		APITextCustomField result = null;
+		if (documentWriteBack != null
+			&& (String.isNotBlank(documentWriteBack.linkedEntityId)
+			|| String.isNotBlank(sourceId))) {
+
+			result = new APITextCustomField(
+				'##SFDocumentWriteBack',
+				String.format('{0}~{1}~{2}~{3}', new List<Object> {
+					String.isBlank(documentWriteBack.linkedEntityId)
+						? sourceId : documentWriteBack.linkedEntityId,
+					String.isBlank(documentWriteBack.nameFormat)
+						? Envelope.FORMAT_NAME_PDF : documentWriteBack.nameFormat,
+					documentWriteBack.combineDocuments ? 1 : 0,
+					documentWriteBack.includeCertificateOfCompletion ? 1 : 0
+				}),
+				false,
+				false);
+		}
+		return result;
+	}
+
+	@TestVisible
 	private static APICustomFields buildCustomFields(
 		final List<CustomField> customFields,
 		final Envelope.Options options,
 		final Entity source) {
 
-		// add our custom fields that identifies the sending app
-		// TODO: Determine if all these are really required or used by anyone.
-		final List<APIListCustomField> listCustomFields = new List<APIListCustomField>();
-		final List<APITextCustomField> textCustomFields = new List<APITextCustomField> {
-			new APITextCustomField('Company', UserInfo.getOrganizationName(), false, false),
-			new APITextCustomField('DSXPartnerApplication', Application.name + ' '
-				+ String.valueOf(Application.version), false, false),
-			new APITextCustomField('PlatformName', 'Salesforce', false, false),
-			new APITextCustomField('AppName', 'DocuSignForSalesforce', false, false)
+		// Add mandatory custom fields to identify user, app, company, and Salesforce org URLs
+		List<APIListCustomField> listCustomFields = new List<APIListCustomField>();
+		List<APITextCustomField> textCustomFields = new List<APITextCustomField> {
+			new APITextCustomField(
+				'##SFUsername',
+				UserInfo.getUserName(),
+				false,
+				false),
+			new APITextCustomField(
+				'##SFBaseUrl',
+				Salesforce.baseUrl.toExternalForm(),
+				false,
+				false),
+			new APITextCustomField(
+				'##SFTokenEndpoint',
+				Salesforce.oauthUrl.toExternalForm(),
+				false,
+				false),
+			new APITextCustomField(
+				'##SFApplication',
+				Application.name + ' ' + String.valueOf(Application.version),
+				false,
+				false),
+			new APITextCustomField(
+				'Company',
+				UserInfo.getOrganizationName(),
+				false,
+				false)
 		};
 
+		if (Entity.isValid(source)) {
+			CustomField cf = CustomField.forEnvelopeSource(source.id);
+			if (cf != null) textCustomFields.add(new APITextCustomField(cf));
+		}
+
+		// Create custom field for document write-back
+		if (options != null) {
+			APITextCustomField df = getDocumentWriteBackCustomField(
+				options.documentWriteBack,
+				source == null ? null : source.id);
+			if (df != null) textCustomFields.add(df);
+		}
+
+		// Add user-defined custom fields
 		if (customFields != null) {
 			for (CustomField cf : customFields) {
 				if (cf != null) {
@@ -1518,32 +1688,6 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					}
 				}
 			}
-		}
-
-		if (Entity.isValid(source)) {
-			// add our custom field to identify the object we started with so we can attach docs there via connect
-			textCustomFields.add(new APITextCustomField(
-				'DSFSSourceObjectId',
-				source.id + '~' + source.typeName,
-				false,
-				false));
-
-			// Add related object custom fields
-			textCustomFields.add(new APITextCustomField(
-				'##SF' + source.typeName,
-				source.id,
-				false,
-				false));
-
-			if (Entity.isValid(source.parent)) {
-				textCustomFields.add(new APITextCustomField(
-					'##SF' + source.parent.typeName,
-					source.parent.id,
-					false,
-					false));
-			}
-
-			// FIXME: Create custom fields for document write-back
 		}
 
 		return new APICustomFields(textCustomFields, listCustomFields);
@@ -1575,7 +1719,11 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					customFields,
 					os,
 					source));
-				os = new Envelope.Options(false, options.writeBackCompletedEnvelope);
+				os = new Envelope.Options(
+					false,
+					options.documentWriteBack,
+					options.envelopeEventUpdates,
+					options.recipientEventUpdates);
 			}
 		}
 		return compositeTemplates;
@@ -2160,6 +2308,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				JSON.serialize(new APITemplateUpdateDocuments(updateTemplateDocumentsRequest), true),
 				timeout);
 			if (documentsResponse.hasError) {
+				// FIXME: Add unit test for when template update is successful but document update is not.
 				this.log.error('Failed to update template documents: ' + documentsResponse.error);
 				throw new APIException(documentsResponse.error);
 			}
@@ -2192,5 +2341,31 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		}
 
 		return response.error == APIError.none;
+	}
+
+	public List<Tab> getEnvelopeMergeFields(
+		final UUID envelopeId,
+		final Boolean writeBackOnly) {
+
+		return this.getEnvelopeMergeFields(envelopeId, writeBackOnly, RestAPI.defaultTimeout);
+	}
+
+	public List<Tab> getEnvelopeMergeFields(
+		final UUID envelopeId,
+		final Boolean writeBackOnly,
+		final Integer timeout) {
+
+		if (UUID.isEmpty(envelopeId)) throw new DocuSignException(Label.UndefinedDocuSignEnvelopeId);
+
+		RestAPI.Response response = this.get(
+			new List<Object> { 'envelopes', envelopeId, 'recipients' },
+			new QueryString('include_tabs', 'true'),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to get envelope merge fields: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APIRecipients)JSON.deserialize(response.body, APIRecipients.class)).getMergeFields(writeBackOnly);
 	}
 }

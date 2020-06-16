@@ -904,32 +904,42 @@ private class SetupControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			EnvelopeConfiguration__c config1 = TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
 			EnvelopeConfiguration__c config2 = TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
-	
+
 			Test.startTest();
 			List<EnvelopeConfiguration.Listing> listings = SetupController.getEnvelopeConfigurations();
 			Test.stopTest();
 
-			System.assertNotEquals(listings, null);
-			System.assertEquals(listings.size(), 2);
-			System.assertNotEquals(listings[0], null);
-			System.assertEquals(listings[0].id, config1.id);
-			System.assertEquals(listings[0].name, config1.name);
-			System.assertEquals(listings[0].sourceObject, config1.sourceObject__c);
-			System.assertNotEquals(listings[1], null);
-			System.assertEquals(listings[1].id, config2.id);
-			System.assertEquals(listings[1].name, config2.name);
-			System.assertEquals(listings[1].sourceObject, config2.sourceObject__c);			
+			System.assertEquals(2, Collection.size(listings));
+			Boolean found1 = false, found2 = false;
+			// Cannot depend on implicit ordering. This causes the unit test to fail intermittently.
+			for (EnvelopeConfiguration.Listing l : listings) {
+				EnvelopeConfiguration__c expected;
+				System.assertNotEquals(null, l);
+				if (l.id == config1.Id) {
+					found1 = true;
+					expected = config1;
+				} else if (l.id == config2.Id) {
+					found2 = true;
+					expected = config2;
+				} else {
+					throw new AssertException('Unexpected listing: ' + l);
+				}
+				System.assertEquals(expected.Name, l.name);
+				System.assertEquals(expected.SourceObject__c, l.sourceObject);
+			}
+			System.assert(found1);
+			System.assert(found2);
 		}
 	}
 
 	@IsTest
 	static void test_queryEnvelopeConfigurationsForDisplay_failure() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
-			EnvelopeConfiguration__c config1 = TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
-			EnvelopeConfiguration__c config2 = TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
+			TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
+			TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
 			Test.startTest();
 			try {
-				List<EnvelopeConfiguration.Listing> listings = SetupController.getEnvelopeConfigurations();
+				SetupController.getEnvelopeConfigurations();
 				throw new AssertException('Expected failure');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());

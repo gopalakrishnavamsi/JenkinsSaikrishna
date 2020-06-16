@@ -1,0 +1,105 @@
+[
+  {
+    "success": true,
+    "status": "sent",
+    "recipients": {
+      "sent": [
+        {
+          "success": false,
+          "recipientId": "5f42a974-e094-52e5-d1d4-463962e1439e"
+        }
+      ],
+      "created": [
+        {
+          "success": false,
+          "recipientId": "eda18b10-b5f5-1068-e991-d30371ca48d8"
+        }
+      ]
+    },
+    "envelopeId": "a49f72a9-ca27-5547-a212-aae82195d39f"
+  },
+  {
+    "success": false,
+    "status": "delivered",
+    "recipients": {
+      "delivered": [
+        {
+          "success": false,
+          "recipientId": "aa5d7fa2-e374-2733-35d3-3d8d0302db14"
+        }
+      ],
+      "created": [
+        {
+          "success": false,
+          "recipientId": "afb8d5a9-2014-a417-74ea-ae33fe8d1caf"
+        }
+      ]
+    },
+    "envelopeId": "a49f72a9-ca27-5547-a212-aae82195d39f"
+  },
+  {
+    "success": false,
+    "status": "completed",
+    "recipients": {
+      "completed": [
+        {
+          "success": false,
+          "recipientId": "af636b66-a128-215d-2d8c-ecab78065fcc"
+        },
+        {
+          "success": false,
+          "recipientId": "9b6d85e3-5428-8571-ba9c-3963c809c17a"
+        }
+      ]
+    },
+    "envelopeId": "a49f72a9-ca27-5547-a212-aae82195d39f"
+  },
+  {
+    "success": false,
+    "status": "delivered",
+    "recipients": {
+      "delivered": [
+        {
+          "success": false,
+          "recipientId": "5faeaf1b-2504-c1dd-19cd-9e2a29fbb5d5"
+        }
+      ],
+      "created": [
+        {
+          "success": false,
+          "recipientId": "5577c851-d4f4-ba85-4e4c-a0ac66a9108b"
+        },
+        {
+          "success": false,
+          "recipientId": "1c2335a7-68b5-6307-933c-23f4819c43e9"
+        }
+      ]
+    },
+    "envelopeId": "097cb775-f6a3-9732-b721-9633c9b50834"
+  },
+  {
+    "success": false,
+    "status": "voided",
+    "recipients": {
+      "completed": [
+        {
+          "success": false,
+          "recipientId": "4e58c87d-90d5-7b60-b96a-58f9b461d121"
+        }
+      ],
+      "delivered": [
+        {
+          "success": false,
+          "recipientId": "501f5aa1-503c-506c-e138-bdf95ccaf915"
+        }
+      ],
+      "created": [
+        {
+          "success": false,
+          "recipientId": "4366eaf2-dc3f-da87-1b8c-97e5cb8d3554"
+        }
+      ]
+    },
+    "envelopeId": "097cb775-f6a3-9732-b721-9633c9b50834"
+  }
+]

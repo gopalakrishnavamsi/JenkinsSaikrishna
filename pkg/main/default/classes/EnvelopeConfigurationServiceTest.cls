@@ -30,7 +30,9 @@ private class EnvelopeConfigurationServiceTest {
 				false),
 			new Envelope.Options(
 				true,
-				false),
+				null,
+				null,
+				null),
 			true);
 
 		Test.startTest();
@@ -80,7 +82,9 @@ private class EnvelopeConfigurationServiceTest {
 				false),
 			new Envelope.Options(
 				true,
-				false),
+				null,
+				null,
+				null),
 			false);
 
 		Test.startTest();

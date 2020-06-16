@@ -1,15 +1,14 @@
 public virtual class RestAPI {
 
-	private static final Integer DEFAULT_TIMEOUT;
-	public static Integer defaultTimeout {
-		get {
-			return DEFAULT_TIMEOUT;
-		}
-	}
+	@TestVisible
+	private static final Integer MAX_TIMEOUT = 120000;
+	@TestVisible
+	private static final Integer DEFAULT_TIMEOUT = 10000;
+	public static Integer defaultTimeout { get; private set; }
 
 	static {
 		Integer timeout = Integer.valueOf(AccountSettings__c.getOrgDefaults().CalloutTimeout__c);
-		DEFAULT_TIMEOUT = timeout == null ? 60000 : timeout;
+		defaultTimeout = timeout == null || timeout <= 0 || timeout > MAX_TIMEOUT ? DEFAULT_TIMEOUT : timeout;
 	}
 
 	private transient final Http http;
@@ -65,14 +64,6 @@ public virtual class RestAPI {
 		return sendRequest('PUT', baseUrl, path, queryString, null, headers, body, timeout);
 	}
 
-	/**
-     * Make a http request
-	 * @param Url  the request endpoint
-	 * @param method  the http request method
-	 * @param headers  a list of request headers
-	 * @param reqBody  the request body
-	 * @return HttpResponse  the http response of the request
-     */
 	@TestVisible
 	private Response sendRequest(
 		final String method,
@@ -109,7 +100,7 @@ public virtual class RestAPI {
 
 		final HttpRequest request = new HttpRequest();
 		request.setEndpoint(new Url(baseUrl, spec).toExternalForm());
-		request.setTimeout(timeout);
+		request.setTimeout(timeout == null || timeout <= 0 || timeout > MAX_TIMEOUT ? DEFAULT_TIMEOUT : timeout);
 		request.setMethod(method);
 
 		if (String.isNotBlank(reqBody)) {

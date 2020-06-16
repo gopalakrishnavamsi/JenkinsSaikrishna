@@ -2,6 +2,8 @@
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
 	<columns>CREATED_DATE</columns>
 	<columns>CREATEDBY_USER</columns>
+	<columns>EntityId__c</columns>
+	<columns>SourceId__c</columns>
 	<columns>Severity__c</columns>
 	<columns>Message__c</columns>
 	<fullName>All</fullName>

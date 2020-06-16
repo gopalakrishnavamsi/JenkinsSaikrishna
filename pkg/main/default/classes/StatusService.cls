@@ -565,7 +565,10 @@ global with sharing class StatusService {
 	 *
 	 * @return A list of recipient resend results.
 	 */
-	global static List<Recipient.ResendResult> resendRecipients(final UUID docuSignId, final List<Recipient> recipients) {
+	global static List<Recipient.ResendResult> resendRecipients(
+		final UUID docuSignId,
+		final List<Recipient> recipients) {
+
 		Permissions.verifyIsOwner(docuSignId);
 
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
@@ -589,7 +592,10 @@ global with sharing class StatusService {
 	 *
 	 * @return <code>true</code> if the void operation was successful, <code>false</code> otherwise.
 	 */
-	global static Boolean voidEnvelope(final UUID docuSignId, final String reason) {
+	global static Boolean voidEnvelope(
+		final UUID docuSignId,
+		final String reason) {
+
 		Permissions.verifyIsOwner(docuSignId);
 
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
@@ -621,7 +627,10 @@ global with sharing class StatusService {
 	 *
 	 * @return The envelope correction URL.
 	 */
-	global static Url getCorrectUrl(final UUID docuSignId, final Url returnUrl) {
+	global static Url getCorrectUrl(
+		final UUID docuSignId,
+		final Url returnUrl) {
+
 		Permissions.verifyIsOwner(docuSignId);
 
 		List<Envelope.Status> ess = DB.queryStatus(new Set<UUID> { docuSignId });
@@ -647,7 +656,10 @@ global with sharing class StatusService {
 	 *
 	 * @return The envelope view URL.
 	 */
-	global static Url getViewUrl(final UUID docuSignId, final Url returnUrl) {
+	global static Url getViewUrl(
+		final UUID docuSignId,
+		final Url returnUrl) {
+
 		// Don't check envelope permissions here. Let DS platform handle this.
 		if (docuSignId == null) throw new DocuSignException(Label.InvalidStatus);
 
@@ -656,5 +668,99 @@ global with sharing class StatusService {
 		} finally {
 			Credentials.save();
 		}
+	}
+
+	private static Recipient.Status mergeStatus(
+		final Recipient.Status oldStatus,
+		final Recipient.Status newStatus) {
+
+		if (newStatus == null) return oldStatus;
+		if (oldStatus == null) return newStatus;
+
+		return new Recipient.Status(
+			oldStatus.id,
+			newStatus.source == null ? oldStatus.source : newStatus.source,
+			String.isBlank(newStatus.type) ? oldStatus.type : newStatus.type,
+			newStatus.sequence == null ? oldStatus.sequence : newStatus.sequence,
+			String.isBlank(newStatus.status) ? oldStatus.status : newStatus.status,
+			String.isBlank(newStatus.name) ? oldStatus.name : newStatus.name,
+			String.isBlank(newStatus.email) ? oldStatus.email : newStatus.email,
+			newStatus.routingOrder == null ? oldStatus.routingOrder : newStatus.routingOrder,
+			newStatus.sent == null ? oldStatus.sent : newStatus.sent,
+			newStatus.completed == null ? oldStatus.completed : newStatus.completed,
+			String.isBlank(newStatus.reason) ? oldStatus.reason : newStatus.reason,
+			newStatus.lastStatusUpdate == null ? oldStatus.lastStatusUpdate : newStatus.lastStatusUpdate);
+	}
+
+	private static List<Recipient.Status> mergeStatus(
+		final List<Recipient.Status> oldStatus,
+		final List<Recipient.Status> newStatus) {
+
+		if (Collection.isEmpty(oldStatus)) return newStatus;
+		if (Collection.isEmpty(newStatus)) return oldStatus;
+
+		Map<Integer, Recipient.Status> os = new Map<Integer, Recipient.Status>();
+		for (Recipient.Status rs : oldStatus) {
+			if (rs != null && rs.sequence != null) os.put(rs.sequence, rs);
+		}
+
+		List<Recipient.Status> result = new List<Recipient.Status>();
+		for (Recipient.Status ns : newStatus) {
+			result.add(mergeStatus(
+				os.get(ns.sequence),
+				ns));
+		}
+
+		return result;
+	}
+
+	private static Envelope.Status mergeStatus(
+		final Envelope.Status oldStatus,
+		final Envelope.Status newStatus) {
+
+		if (newStatus == null) return oldStatus;
+		if (oldStatus == null) return newStatus;
+
+		return new Envelope.Status(
+			oldStatus.id,
+			newStatus.source == null ? oldStatus.source : newStatus.source,
+			newStatus.docuSignId == null ? oldStatus.docuSignId : newStatus.docuSignId,
+			String.isBlank(newStatus.status) ? oldStatus.status : newStatus.status,
+			String.isBlank(newStatus.senderName) ? oldStatus.senderName : newStatus.senderName,
+			String.isBlank(newStatus.senderEmail) ? oldStatus.senderEmail : newStatus.senderEmail,
+			mergeStatus(oldStatus.recipients, newStatus.recipients),
+			newStatus.sent == null ? oldStatus.sent : newStatus.sent,
+			newStatus.expires == null ? oldStatus.expires : newStatus.expires,
+			newStatus.completed == null ? oldStatus.completed : newStatus.completed,
+			String.isBlank(newStatus.emailSubject) ? oldStatus.emailSubject : newStatus.emailSubject,
+			String.isBlank(newStatus.reason) ? oldStatus.reason : newStatus.reason,
+			newStatus.lastStatusUpdate == null ? oldStatus.lastStatusUpdate : newStatus.lastStatusUpdate);
+	}
+
+	public static List<Envelope.Status> updateStatus(final List<Envelope.Status> envelopes) {
+		Permissions.verifyIsDocuSignAdministrator();
+
+		if (Collection.isEmpty(envelopes)) return new List<Envelope.Status>();
+
+		// Build map of DS ID to status
+		Map<UUID, Envelope.Status> newStatus = new Map<UUID, Envelope.Status>();
+		for (Envelope.Status e : envelopes) {
+			if (e != null && e.docuSignId != null) newStatus.put(e.docuSignId, e);
+		}
+
+		// Query existing status and merge with new
+		List<Envelope.Status> toUpsert = new List<Envelope.Status>();
+		for (Envelope.Status oldStatus : DB.queryStatus(newStatus.keySet())) {
+			if (oldStatus != null && oldStatus.docuSignId != null) {
+				toUpsert.add(mergeStatus(
+					oldStatus,
+					newStatus.remove(oldStatus.docuSignId)));
+			}
+		}
+
+		// Add any statuses that do not already exist in DB
+		toUpsert.addAll(newStatus.values());
+
+		return DB.upsertStatus(toUpsert);
 	}
 }

@@ -1218,10 +1218,6 @@
 		<name>UndefinedSigningGroup</name>
 	</customLabels>
 	<customLabels>
-		<label>--</label>
-		<name>UndefinedString</name>
-	</customLabels>
-	<customLabels>
 		<label>类型未定义</label>
 		<name>UndefinedType</name>
 	</customLabels>

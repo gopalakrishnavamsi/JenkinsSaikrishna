@@ -83,8 +83,10 @@ public with sharing class Query {
 	@TestVisible
 	private String soql;
 
+	// Use public static factory methods to construct queries. We want to ensure validity and check FLS in some cases.
+	// This won't happen by default with the Query constructor.
 	@TestVisible
-	public Query(
+	private Query(
 		final String type,
 		final List<String> fields,
 		final String relationship,
@@ -215,6 +217,22 @@ public with sharing class Query {
 			orderBy,
 			maximumRecords,
 			null);
+	}
+
+	public static Query forUpdate(
+		final String type,
+		final List<String> fields,
+		final List<Query> subQueries) {
+
+		return new Query(
+			type,
+			fields,
+			null,
+			null,
+			null,
+			null,
+			1,
+			subQueries);
 	}
 
 	private static String getReferencePath(String name) {
@@ -419,10 +437,5 @@ public with sharing class Query {
 		}
 
 		return new Result(result, children);
-	}
-
-	//noinspection ApexUnusedDeclaration // sourceId is SOQL variable
-	public Boolean hasRecord(final Id sourceId) {
-		return Database.query(this.getSoql()).size() > 0;
 	}
 }

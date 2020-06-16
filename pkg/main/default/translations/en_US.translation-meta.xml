@@ -1222,10 +1222,6 @@
 		<name>UndefinedSigningGroup</name>
 	</customLabels>
 	<customLabels>
-		<label>--</label>
-		<name>UndefinedString</name>
-	</customLabels>
-	<customLabels>
 		<label>Undefined type</label>
 		<name>UndefinedType</name>
 	</customLabels>
@@ -5062,7 +5058,7 @@
 	<customLabels>
 		<label>Example: Owner.Name = 'John Smith'</label>
 		<name>ExampleFilterByClause</name>	
-	</customLabels>	
+	</customLabels>
 	<customLabels>
 		<label>Example: CreatedDate ASC</label>
 		<name>ExampleOrderByClause</name>	
@@ -5394,6 +5390,38 @@
 	<customLabels>
 		<label>Opportunity Stage</label>
 		<name>OpportunityStage</name>
+	</customLabels>
+	<customLabels>
+		<label>JSON is invalid.</label>
+		<name>InvalidJson</name>
+	</customLabels>
+	<customLabels>
+		<label>User is not authorized to perform this operation.</label>
+		<name>UnauthorizedOperation</name>
+	</customLabels>
+	<customLabels>
+		<label>Request body is undefined.</label>
+		<name>UndefinedRequestBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Event processing failed.</label>
+		<name>EventProcessingFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Data update failed.</label>
+		<name>DataUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Status update failed.</label>
+		<name>StatusUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Cannot perform data updates because source ID is undefined for envelope.</label>
+		<name>DataUpdateMissingSourceId</name>
+	</customLabels>
+	<customLabels>
+		<label>Failed to retrieve merge fields for envelope.</label>
+		<name>GetMergeFieldsError</name>
 	</customLabels>
 	<customLabels>
 		<label>Add &amp; New</label>

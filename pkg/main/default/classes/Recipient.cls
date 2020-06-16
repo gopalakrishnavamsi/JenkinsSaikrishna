@@ -820,6 +820,10 @@ global virtual class Recipient implements Comparable {
 		@AuraEnabled
 		global Entity source { get; private set; }
 		/**
+		 * The DocuSign recipient ID.
+		 */
+		public UUID docuSignId { get; private set; }
+		/**
 		 * The recipient sequence.
 		 */
 		@AuraEnabled
@@ -887,6 +891,54 @@ global virtual class Recipient implements Comparable {
 		 *
 		 * @param id The ID of the underlying dfsle__RecipientStatus__c record.
 		 * @param source The Salesforce source entity.
+		 * @param docuSignId The DocuSign recipient ID.
+		 * @param type The DocuSign recipient type.
+		 * @param sequence The recipient sequence.
+		 * @param status The current status.
+		 * @param name The name of the recipient.
+		 * @param email The email address of the recipient.
+		 * @param routingOrder The routing order of the recipient.
+		 * @param sent Date and time when the recipient received the envelope.
+		 * @param completed Date and time when the recipient completed signing the envelope.
+		 * @param reason The reason the recipient declined signing the envelope.
+		 * @param lastStatusUpdate Date and time when the status was last updated.
+		 */
+		public Status(
+			final Id id,
+			final Entity source,
+			final UUID docuSignId,
+			final String type,
+			final Integer sequence,
+			final String status,
+			final String name,
+			final String email,
+			final Integer routingOrder,
+			final Datetime sent,
+			final Datetime completed,
+			final String reason,
+			final Datetime lastStatusUpdate) {
+
+			this.id = id;
+			this.source = source;
+			this.docuSignId = docuSignId;
+			this.sequence = sequence;
+			this.type = type;
+			this.status = status;
+			this.name = name;
+			this.email = email;
+			this.routingOrder = routingOrder;
+			this.sent = sent;
+			this.completed = completed;
+			this.reason = reason;
+			this.lastStatusUpdate = lastStatusUpdate;
+		}
+
+		/**
+		 * Constructs a DocuSign recipient status.
+		 *
+		 *
+		 * @param id The ID of the underlying dfsle__RecipientStatus__c record.
+		 * @param source The Salesforce source entity.
 		 * @param type The DocuSign recipient type.
 		 * @param sequence The recipient sequence.
 		 * @param status The current status.
@@ -912,18 +964,20 @@ global virtual class Recipient implements Comparable {
 			final String reason,
 			final Datetime lastStatusUpdate) {
 
-			this.id = id;
-			this.source = source;
-			this.sequence = sequence;
-			this.type = type;
-			this.status = status;
-			this.name = name;
-			this.email = email;
-			this.routingOrder = routingOrder;
-			this.sent = sent;
-			this.completed = completed;
-			this.reason = reason;
-			this.lastStatusUpdate = lastStatusUpdate;
+			this(
+				id,
+				source,
+				null,
+				type,
+				sequence,
+				status,
+				name,
+				email,
+				routingOrder,
+				sent,
+				completed,
+				reason,
+				lastStatusUpdate);
 		}
 
 		/**

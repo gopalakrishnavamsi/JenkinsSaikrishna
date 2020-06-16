@@ -18,12 +18,12 @@ private class OrganizationServiceTest {
 	static void test_getEvents() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			insert new List<Log__c> { // 3 warnings, 1 error
-				new Log__c(Severity__c = 'WARN'),
-				new Log__c(Severity__c = 'WARN'),
-				new Log__c(Severity__c = 'ERROR'),
-				new Log__c(Severity__c = 'INFO'),
-				new Log__c(Severity__c = 'DEBUG'),
-				new Log__c(Severity__c = 'WARN')
+				new Log__c(TransactionId__c = String.valueOf(UUID.randomUUID()), Severity__c = 'WARN'),
+				new Log__c(TransactionId__c = String.valueOf(UUID.randomUUID()), Severity__c = 'WARN'),
+				new Log__c(TransactionId__c = String.valueOf(UUID.randomUUID()), Severity__c = 'ERROR'),
+				new Log__c(TransactionId__c = String.valueOf(UUID.randomUUID()), Severity__c = 'INFO'),
+				new Log__c(TransactionId__c = String.valueOf(UUID.randomUUID()), Severity__c = 'DEBUG'),
+				new Log__c(TransactionId__c = String.valueOf(UUID.randomUUID()), Severity__c = 'WARN')
 			};
 
 			Test.startTest();
@@ -92,6 +92,8 @@ private class OrganizationServiceTest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, RestContext.response);
+			System.assertNotEquals(null, RestContext.response.headers);
+			System.assertEquals('application/json', RestContext.response.headers.get('Content-Type'));
 			System.assertNotEquals(null, RestContext.response.responseBody);
 			Map<String, Object> oi = (Map<String, Object>)JSON.deserializeUntyped(RestContext.response.responseBody.toString());
 			System.assertNotEquals(null, oi);

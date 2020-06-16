@@ -119,7 +119,7 @@ global with sharing class OrganizationService {
 		QueryString requestParameters = new QueryString(request.params);
 		OrganizationInfo orgInfo = buildOrganizationInfo(
 			requestParameters.getInteger(KEY_EVENT_PERIOD_DAYS, DEFAULT_EVENT_PERIOD_DAYS));
-		RestResponse response = RestContext.response;
-		response.responseBody = Blob.valueOf(JSON.serialize(orgInfo));
+		RestContext.response.headers.put('Content-Type', 'application/json');
+		RestContext.response.responseBody = Blob.valueOf(JSON.serialize(orgInfo));
 	}
 }

@@ -8,29 +8,51 @@ public with sharing class LoggerService {
 	private static final LoggerService.Database DB = new LoggerService.Database();
 	private static Pattern versionPattern = null;
 	private static LoggingLevel level = null;
+	@TestVisible
+	private final List<LogEntry> logEntries = new List<LogEntry>();
 
-	public class LogEntry {
+	public class LogContext {
+		public UUID transactionId { get; private set; }
+		public UUID entityId { get; private set; }
+		public Id sourceId { get; private set; }
+		public String className { get; private set; }
+		public String methodName { get; private set; }
+
+		public LogContext(
+			final UUID transactionId,
+			final UUID entityId,
+			final Id sourceId,
+			final String className,
+			final String methodName) {
+
+			this.transactionId = transactionId;
+			this.entityId = entityId;
+			this.sourceId = sourceId;
+			this.className = className;
+			this.methodName = methodName;
+		}
+	}
+
+	@TestVisible
+	private class LogEntry {
 		public Id id { get; private set; }
 		public Version version { get; private set; }
 		public LoggingLevel severity { get; private set; }
 		public String message { get; private set; }
-		public String className { get; private set; }
-		public String methodName { get; private set; }
+		public LogContext context { get; private set; }
 
 		public LogEntry(
 			final Id id,
 			final Version version,
 			final LoggingLevel severity,
 			final String message,
-			final String className,
-			final String methodName) {
+			final LogContext context) {
 
 			this.id = id;
 			this.version = version;
 			this.severity = severity;
 			this.message = message;
-			this.className = className;
-			this.methodName = methodName;
+			this.context = context;
 		}
 	}
 
@@ -78,10 +100,14 @@ public with sharing class LoggerService {
 			if (logEntry == null) return null;
 
 			return new Log__c(
-				Class__c = logEntry.className,
+				Class__c = logEntry.context == null ? null : logEntry.context.className,
+				EntityId__c = logEntry.context == null ? null : String.valueOf(logEntry.context.entityId),
 				Message__c = logEntry.message,
-				Method__c = logEntry.methodName,
+				Method__c = logEntry.context == null ? null : logEntry.context.methodName,
 				Severity__c = String.valueOf(logEntry.severity),
+				SourceId__c = logEntry.context == null ? null : logEntry.context.sourceId,
+				TransactionId__c = logEntry.context == null || UUID.isEmpty(logEntry.context.transactionId)
+					? UUID.randomUUID().toString() : String.valueOf(logEntry.context.transactionId),
 				Version__c = String.valueOf(logEntry.version));
 		}
 
@@ -104,8 +130,12 @@ public with sharing class LoggerService {
 				parseVersion(log.Version__c),
 				parseLoggingLevel(log.Severity__c),
 				log.Message__c,
-				log.Class__c,
-				log.Method__c);
+				new LogContext(
+					UUID.tryParse(log.TransactionId__c),
+					UUID.tryParse(log.EntityId__c),
+					log.SourceId__c,
+					log.Class__c,
+					log.Method__c));
 		}
 
 		private List<LogEntry> convert(final List<Log__c> logs) {
@@ -121,9 +151,12 @@ public with sharing class LoggerService {
 		public List<LogEntry> insertEntries(final List<LogEntry> logEntries) {
 			Permissions.verifyIsCreateable(Log__c.getSObjectType(), new List<String> {
 				Application.namespacePrefix + 'Class__c',
+				Application.namespacePrefix + 'EntityId__c',
 				Application.namespacePrefix + 'Message__c',
 				Application.namespacePrefix + 'Method__c',
 				Application.namespacePrefix + 'Severity__c',
+				Application.namespacePrefix + 'SourceId__c',
+				Application.namespacePrefix + 'TransactionId__c',
 				Application.namespacePrefix + 'Version__c'
 			});
 
@@ -146,11 +179,11 @@ public with sharing class LoggerService {
 	@TestVisible
 	private static String getMessage(
 		final Exception ex,
-		final String context) {
+		final String message) {
 
 		String result = '';
-		if (String.isNotBlank(context)) {
-			result += context + '\n';
+		if (String.isNotBlank(message)) {
+			result += message + '\n';
 		}
 		if (ex != null) {
 			result += String.format('{0}: {1}\n{2}', new List<String> {
@@ -163,9 +196,9 @@ public with sharing class LoggerService {
 	}
 
 	/**
- * This method builds and logs a message at error logging level using the provided Exception.
- * @param ex Exception object to log
- */
+ 	 * This method builds and logs a message at error logging level using the provided Exception.
+ 	 * @param ex Exception object to log
+ 	 */
 	public void exception(final Exception ex) {
 		this.exception(ex, '');
 	}
@@ -174,16 +207,14 @@ public with sharing class LoggerService {
 	 * This method builds and logs a message at error logging level using the provided exception and additional context.
 	 *
 	 * @param ex The exception to log.
-	 * @param context Additional context to log.
+	 * @param message Message to log.
 	 */
 	public void exception(
 		final Exception ex,
-		final String context) {
+		final String message) {
 
-		String message = getMessage(ex, context);
-		if (String.isNotBlank(message)) {
-			this.error(message);
-		}
+		String msg = getMessage(ex, message);
+		if (String.isNotBlank(msg)) this.error(msg);
 	}
 
 	/**
@@ -191,25 +222,22 @@ public with sharing class LoggerService {
 	 * rolled back because of unhandled exceptions.
 	 *
 	 * @param ex The exception to log.
+	 * @param message Message to log.
 	 * @param context Additional context to log.
-	 * @param className The class logging the message.
-	 * @param methodName The method logging the message.
 	 */
 	public void exception(
 		final Exception ex,
-		final String context,
-		final String className,
-		final String methodName) {
+		final String message,
+		final LogContext context) {
 
-		String message = getMessage(ex, context);
-		if (String.isNotBlank(message)) {
+		String msg = getMessage(ex, message);
+		if (String.isNotBlank(msg)) {
 			this.log(new LogEntry(
 				null,
 				Application.version,
 				LoggingLevel.ERROR,
-				message,
-				className,
-				methodName));
+				msg,
+				context));
 		}
 	}
 
@@ -226,13 +254,11 @@ public with sharing class LoggerService {
 	 * rolled back because of unhandled exceptions.
 	 *
 	 * @param message The message to log.
-	 * @param className The class logging the message.
-	 * @param methodName The method logging the message.
+	 * @param context Additional context to log.
 	 */
 	public void error(
 		final String message,
-		final String className,
-		final String methodName) {
+		final LogContext context) {
 
 		if (String.isNotBlank(message)) {
 			this.log(new LogEntry(
@@ -240,8 +266,7 @@ public with sharing class LoggerService {
 				Application.version,
 				LoggingLevel.ERROR,
 				message,
-				className,
-				methodName));
+				context));
 		}
 	}
 
@@ -258,13 +283,11 @@ public with sharing class LoggerService {
 	 * rolled back because of unhandled exceptions.
 	 *
 	 * @param message The message to log.
-	 * @param className The class logging the message.
-	 * @param methodName The method logging the message.
+	 * @param context Additional context to log.
 	 */
 	public void warn(
 		final String message,
-		final String className,
-		final String methodName) {
+		final LogContext context) {
 
 		if (String.isNotBlank(message)) {
 			this.log(new LogEntry(
@@ -272,8 +295,7 @@ public with sharing class LoggerService {
 				Application.version,
 				LoggingLevel.WARN,
 				message,
-				className,
-				methodName));
+				context));
 		}
 	}
 
@@ -290,13 +312,11 @@ public with sharing class LoggerService {
 	 * rolled back because of unhandled exceptions.
 	 *
 	 * @param message The message to log.
-	 * @param className The class logging the message.
-	 * @param methodName The method logging the message.
+	 * @param context Additional context to log.
 	 */
 	public void info(
 		final String message,
-		final String className,
-		final String methodName) {
+		final LogContext context) {
 
 		if (String.isNotBlank(message)) {
 			this.log(new LogEntry(
@@ -304,8 +324,7 @@ public with sharing class LoggerService {
 				Application.version,
 				LoggingLevel.INFO,
 				message,
-				className,
-				methodName));
+				context));
 		}
 	}
 
@@ -322,13 +341,11 @@ public with sharing class LoggerService {
 	 * rolled back because of unhandled exceptions.
 	 *
 	 * @param message The message to log.
-	 * @param className The class logging the message.
-	 * @param methodName The method logging the message.
+	 * @param context Additional context to log.
 	 */
 	public void debug(
 		final String message,
-		final String className,
-		final String methodName) {
+		final LogContext context) {
 
 		if (String.isNotBlank(message)) {
 			this.log(new LogEntry(
@@ -336,8 +353,7 @@ public with sharing class LoggerService {
 				Application.version,
 				LoggingLevel.DEBUG,
 				message,
-				className,
-				methodName));
+				context));
 		}
 	}
 
@@ -370,11 +386,21 @@ public with sharing class LoggerService {
 
 		if (!shouldLog(logEntry.severity)) return logEntry;
 
+		this.logEntries.add(logEntry);
+		return logEntry;
+	}
+
+	public List<LogEntry> flush() {
+		if (Collection.isEmpty(this.logEntries)) return new List<LogEntry>();
+
+		List<LogEntry> result = null;
 		try {
-			return (LogEntry)Collection.head(DB.insertEntries(new List<LogEntry> { logEntry }));
+			result = DB.insertEntries(this.logEntries);
+			this.logEntries.clear();
 		} catch (Exception ex) {
-			this.log(LoggingLevel.ERROR, getMessage(ex, 'Failed to create log record.'));
-			return logEntry;
+			this.log(LoggingLevel.ERROR, getMessage(ex, 'Failed to create log records.'));
+			result = new List<LogEntry>();
 		}
+		return result;
 	}
 }

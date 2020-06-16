@@ -96,7 +96,7 @@ global class ValidationResult {
 	 */
 	public ValidationResult add(final Permissions.FlsResults flsResults) {
 		if (flsResults != null && !flsResults.isAuthorized) {
-			this.messages.add(flsResults.getErrorMessage());
+			this.messages.add(String.valueOf(flsResults));
 		}
 		return this;
 	}

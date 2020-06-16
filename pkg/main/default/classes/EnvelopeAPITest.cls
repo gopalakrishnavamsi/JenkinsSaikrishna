@@ -111,7 +111,15 @@ private class EnvelopeAPITest {
 			Test.startTest();
 			EnvelopeAPI.APICustomFields result = EnvelopeAPI.buildCustomFields(
 				new List<CustomField> { cf1, cf2, cf3 },
-				new Envelope.Options(false, true), // TODO: Implement and validate document write-back
+				new Envelope.Options(
+					false,
+					new Envelope.DocumentWriteBack(
+						o.Id,
+						Envelope.FORMAT_NAME_PDF,
+						true,
+						false),
+					null,
+					null),
 				Entity.resolve(o.Id));
 			Test.stopTest();
 
@@ -919,7 +927,11 @@ private class EnvelopeAPITest {
 				},
 				content,
 				cfs,
-				new Envelope.Options(false, false),
+				new Envelope.Options(
+					false,
+					null,
+					null,
+					null),
 				new Entity(o.Id));
 			Test.stopTest();
 
@@ -1345,7 +1357,8 @@ private class EnvelopeAPITest {
 			Test.startTest();
 			System.assertEquals(null, EnvelopeAPI.getRecipientCustomFields(null));
 			System.assertEquals(null, EnvelopeAPI.getRecipientCustomFields(r));
-			System.assertEquals(new List<String> { '##SFUser:' + UserInfo.getUserId() }, EnvelopeAPI.getRecipientCustomFields(r.withSource(e)));
+			System.assertEquals(new List<String> { '##SFSource:' + UserInfo.getUserId() + '~User' },
+				EnvelopeAPI.getRecipientCustomFields(r.withSource(e)));
 			Test.stopTest();
 		}
 	}
@@ -2669,5 +2682,91 @@ private class EnvelopeAPITest {
 		System.assertNotEquals(null, result2[1]);
 		System.assertEquals(Recipient.TYPE_WITNESS, result2[1].type);
 		System.assertEquals(0, Collection.size(result2[1].tabs));
+	}
+
+	@IsTest
+	static void test_getEnvelopeMergeFields_all() {
+		ESignatureAPIMock.success(); // Should return 9 merge fields
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Tab> result = client.getEnvelopeMergeFields(UUID.randomUUID(), false);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(9, Collection.size(result));
+			for (Tab t : result) {
+				System.assertNotEquals(null, t);
+				System.assert(String.isNotBlank(t.type));
+				System.assert(String.isNotBlank(t.name));
+				System.assert(String.isNotBlank(t.key));
+				System.assert(String.isNotBlank(t.path));
+				if (t.type == Tab.TYPE_CHECKBOX) {
+					System.assertNotEquals(null, t.value);
+					System.assert(t.value instanceof Boolean);
+				} else if (t.type == Tab.TYPE_DATE || t.type == Tab.TYPE_DATE_SIGNED) {
+					System.assertNotEquals(null, t.value);
+					System.assert(t.value instanceof Date);
+				} else if (t.type == Tab.TYPE_NUMBER || t.type == Tab.TYPE_FORMULA) {
+					System.assertNotEquals(null, t.value);
+					System.assert(t.value instanceof Decimal);
+				} else if (Tab.isValidMergeFieldType(t.type)) {
+					System.assertNotEquals(null, t.value);
+					System.assert(t.value instanceof String);
+				}
+			}
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeMergeFields_write_back_only() {
+		ESignatureAPIMock.success(); // Should return 5 merge fields
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Tab> result = client.getEnvelopeMergeFields(UUID.randomUUID(), true);
+			Test.stopTest();
+
+			System.assertEquals(5, Collection.size(result));
+			for (Tab t : result) {
+				System.assertNotEquals(null, t);
+				System.assert(String.isNotBlank(t.type));
+				System.assert(String.isNotBlank(t.name));
+				System.assert(String.isNotBlank(t.key));
+				System.assert(String.isNotBlank(t.path));
+				if (t.type == Tab.TYPE_CHECKBOX) {
+					System.assertNotEquals(null, t.value);
+					System.assert(t.value instanceof Boolean);
+				} else if (t.type == Tab.TYPE_DATE || t.type == Tab.TYPE_DATE_SIGNED) {
+					System.assertNotEquals(null, t.value);
+					System.assert(t.value instanceof Date);
+				} else if (t.type == Tab.TYPE_NUMBER || t.type == Tab.TYPE_FORMULA) {
+					System.assertNotEquals(null, t.value);
+					System.assert(t.value instanceof Decimal);
+				} else if (Tab.isValidMergeFieldType(t.type)) {
+					System.assertNotEquals(null, t.value);
+					System.assert(t.value instanceof String);
+				}
+			}
+		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeMergeFields_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.getEnvelopeMergeFields(UUID.randomUUID(), false);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
 	}
 }

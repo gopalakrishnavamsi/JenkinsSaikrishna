@@ -31,7 +31,7 @@ private class RestAPITest {
 	@IsTest
 	static void test_defaultTimeout() {
 		Test.startTest();
-		System.assertEquals(60000, RestAPI.defaultTimeout);
+		System.assertEquals(RestAPI.DEFAULT_TIMEOUT, RestAPI.defaultTimeout);
 		Test.stopTest();
 	}
 

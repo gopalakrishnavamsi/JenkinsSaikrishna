@@ -59,15 +59,6 @@ private class StringUtilsTest {
 	}
 
 	@IsTest
-	static void test_fromString() {
-		System.assertEquals(null, StringUtils.fromString(null));
-		System.assertEquals(null, StringUtils.fromString(''));
-		System.assertEquals(null, StringUtils.fromString('\r'));
-		System.assertEquals(null, StringUtils.fromString(Label.UndefinedString));
-		System.assertEquals('test', StringUtils.fromString('test'));
-	}
-
-	@IsTest
 	static void test_parseDatetime() {
 		System.assertEquals(
 			Datetime.newInstanceGmt(2017, 6, 17, 10, 59, 34),
@@ -103,6 +94,9 @@ private class StringUtilsTest {
 
 	@IsTest
 	static void test_parseDate() {
+		System.assertEquals(
+			Date.newInstance(2017, 6, 17),
+			StringUtils.parseDate('2017-06-17'));
 		System.assertEquals(
 			Date.newInstance(2017, 6, 17),
 			StringUtils.parseDate('2017-06-17T10:59:34.823Z'));

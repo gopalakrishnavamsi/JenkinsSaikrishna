@@ -26,6 +26,18 @@
 			</layoutItems>
 			<layoutItems>
 				<behavior>Edit</behavior>
+				<field>EntityId__c</field>
+			</layoutItems>
+			<layoutItems>
+				<behavior>Edit</behavior>
+				<field>SourceId__c</field>
+			</layoutItems>
+			<layoutItems>
+				<behavior>Edit</behavior>
+				<field>TransactionId__c</field>
+			</layoutItems>
+			<layoutItems>
+				<behavior>Edit</behavior>
 				<field>Class__c</field>
 			</layoutItems>
 			<layoutItems>

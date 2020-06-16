@@ -27,6 +27,21 @@ public class Tab {
 	public static final String TYPE_TITLE = 'Title';
 	public static final String TYPE_VIEW = 'View';
 	public static final String TYPE_ZIP = 'ZIP';
+	@TestVisible
+	private static final String KEY_PREFIX = '_DAL_ ';
+	private static final Set<String> MERGE_FIELD_BLACKLIST = new Set<String> {
+		Tab.TYPE_APPROVE,
+		Tab.TYPE_DECLINE,
+		Tab.TYPE_ENVELOPE_ID,
+		Tab.TYPE_INITIAL_HERE,
+		Tab.TYPE_NOTARIZE,
+		Tab.TYPE_RADIO_GROUP,
+		Tab.TYPE_SIGNER_ATTACHMENT,
+		Tab.TYPE_SIGN_HERE,
+		Tab.TYPE_SMART_SECTION,
+		Tab.TYPE_VIEW,
+		Tab.TYPE_ZIP
+	};
 
 	@AuraEnabled
 	public UUID id { get; private set; }
@@ -35,6 +50,8 @@ public class Tab {
 	@AuraEnabled
 	public String name { get; private set; }
 	@AuraEnabled
+	public String key { get; private set; }
+	@AuraEnabled
 	public String path { get; private set; }
 	@AuraEnabled
 	public Boolean writeBack { get; private set; }
@@ -42,11 +59,13 @@ public class Tab {
 	public Boolean allowSenderToEdit { get; private set; }
 	@AuraEnabled
 	public String autoPlaceText { get; private set; }
+	public Object value { get; private set; }
 
 	public Tab(
 		final UUID id,
 		final String type,
 		final String name,
+		final String key,
 		final String path,
 		final Boolean writeBack,
 		final Boolean allowSenderToEdit,
@@ -55,6 +74,7 @@ public class Tab {
 		this.id = id;
 		this.type = type;
 		this.name = name;
+		this.key = key;
 		this.path = path;
 		this.writeBack = writeBack;
 		this.allowSenderToEdit = allowSenderToEdit;
@@ -71,7 +91,8 @@ public class Tab {
 		return new Tab(
 			null,
 			type,
-			null,
+			path,
+			KEY_PREFIX + UUID.randomUUID().toString(),
 			path,
 			writeBack,
 			allowSenderToEdit,
@@ -83,13 +104,17 @@ public class Tab {
 		return this;
 	}
 
-	public Tab withName(final String name) {
-		this.name = name;
-		return this;
-	}
-
 	public Tab withAutoPlaceText(final String autoPlaceText) {
 		this.autoPlaceText = autoPlaceText;
 		return this;
+	}
+
+	public Tab withValue(final Object value) {
+		this.value = value;
+		return this;
+	}
+
+	public static Boolean isValidMergeFieldType(final String type) {
+		return String.isNotBlank(type) && !MERGE_FIELD_BLACKLIST.contains(type);
 	}
 }

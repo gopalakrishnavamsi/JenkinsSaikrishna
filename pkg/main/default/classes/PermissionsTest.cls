@@ -117,41 +117,41 @@ private class PermissionsTest {
 		System.assertNotEquals(null, r1);
 		System.assert(!r1.isAuthorized);
 		System.assertEquals(0, r1.filterUnauthorizedFields().size());
-		System.assertEquals(Label.CannotQueryObject + ' ' + Label.Unknown, r1.getErrorMessage());
+		System.assertEquals(Label.CannotQueryObject + ' ' + Label.Unknown, String.valueOf(r1));
 		System.assertNotEquals(null, r2);
 		System.assert(!r2.isAuthorized);
 		System.assertEquals(1, r2.filterUnauthorizedFields().size());
-		System.assertEquals(Label.CannotDeleteObject + ' Unit', r2.getErrorMessage());
+		System.assertEquals(Label.CannotDeleteObject + ' Unit', String.valueOf(r2));
 		System.assertNotEquals(null, r3);
 		System.assert(!r3.isAuthorized);
 		System.assertEquals(1, r3.filterUnauthorizedFields().size());
-		System.assertEquals(String.format(Label.CannotCreateFields_2, new List<String> { 'Unit', 'Test1' }), r3.getErrorMessage());
+		System.assertEquals(String.format(Label.CannotCreateFields_2, new List<String> { 'Unit', 'Test1' }), String.valueOf(r3));
 		System.assertNotEquals(null, r4);
 		System.assert(r4.isAuthorized);
 		System.assertEquals(0, r4.filterUnauthorizedFields().size());
-		System.assertEquals('', r4.getErrorMessage());
+		System.assertEquals('', String.valueOf(r4));
 		System.assertNotEquals(null, r5);
 		System.assert(!r5.isAuthorized);
 		System.assertEquals(0, r5.filterUnauthorizedFields().size());
-		System.assertEquals(Label.CannotCreateObject + ' Unit', r5.getErrorMessage());
+		System.assertEquals(Label.CannotCreateObject + ' Unit', String.valueOf(r5));
 		System.assertNotEquals(null, r6);
 		System.assert(!r6.isAuthorized);
 		System.assertEquals(0, r6.filterUnauthorizedFields().size());
-		System.assertEquals(Label.CannotUpdateObject + ' Unit', r6.getErrorMessage());
+		System.assertEquals(Label.CannotUpdateObject + ' Unit', String.valueOf(r6));
 		System.assertNotEquals(null, r7);
 		System.assert(!r7.isAuthorized);
 		System.assertEquals(1, r7.filterUnauthorizedFields().size());
-		System.assertEquals(String.format(Label.CannotUpdateFields_2, new List<String> { 'Unit', 'Test1 (NotFound)' }), r7.getErrorMessage());
+		System.assertEquals(String.format(Label.CannotUpdateFields_2, new List<String> { 'Unit', 'Test1 (NotFound)' }), String.valueOf(r7));
 		System.assertNotEquals(null, r8);
 		System.assert(!r8.isAuthorized);
 		System.assertEquals(2, r8.filterUnauthorizedFields().size());
-		System.assertEquals(String.format(Label.CannotQueryFields_2, new List<String> { 'Unit', 'Test1, Test2' }), r8.getErrorMessage());
+		System.assertEquals(String.format(Label.CannotQueryFields_2, new List<String> { 'Unit', 'Test1, Test2' }), String.valueOf(r8));
 		System.assert(!r9.isAuthorized);
 		System.assertEquals(2, r9.filterUnauthorizedFields().size());
-		System.assertEquals(String.format(Label.CannotFilterFields_2, new List<String> { 'Unit', 'Test1, Test2' }), r9.getErrorMessage());
+		System.assertEquals(String.format(Label.CannotFilterFields_2, new List<String> { 'Unit', 'Test1, Test2' }), String.valueOf(r9));
 		System.assert(!r10.isAuthorized);
 		System.assertEquals(2, r10.filterUnauthorizedFields().size());
-		System.assertEquals(String.format(Label.EncryptedFields_2, new List<String> { 'Unit', 'Test1, Test2' }), r10.getErrorMessage());
+		System.assertEquals(String.format(Label.EncryptedFields_2, new List<String> { 'Unit', 'Test1, Test2' }), String.valueOf(r10));
 	}
 
 	@IsTest
@@ -1198,13 +1198,12 @@ private class PermissionsTest {
 
 	@IsTest
 	static void test_getIsCurrentUserDocuSignIntegrationAdmin_negative() {
-		User u1 = UserMock.createDocuSignAdministrator(true);
+		UserMock.createDocuSignAdministrator(true);
 		User u2 = UserMock.createDocuSignAdministrator(false);
 		System.runAs(u2) {
 			Test.startTest();
-			Boolean result = Permissions.isDocuSignIntegrationUser();
+			System.assert(!Permissions.isDocuSignIntegrationUser());
 			Test.stopTest();
-			System.assertEquals(result, false);
 		}
 	}
 
@@ -2128,7 +2127,6 @@ private class PermissionsTest {
 		DescribeSObjectResult acctDesc = Schema.Account.getSObjectType().getDescribe();
 		DescribeSObjectResult userDesc = Schema.User.getSObjectType().getDescribe();
 
-
 		Test.startTest();
 		Permissions.FlsResults result1 = Permissions.getFlsResults(
 			Permissions.FlsAccess.Queryable,
@@ -2147,7 +2145,7 @@ private class PermissionsTest {
 			'User',
 			userDesc,
 			new List<String> { 'Name', 'Manager' },
-			userDesc.fields.getMap());		
+			userDesc.fields.getMap());
 		Test.stopTest();
 
 		System.assertNotEquals(null, result1);
@@ -2157,7 +2155,7 @@ private class PermissionsTest {
 		System.assert(result2.isAuthorized);
 
 		System.assertNotEquals(null, result2);
-		System.assert(result3.isAuthorized);		
+		System.assert(result3.isAuthorized);
 	}
 
 	@IsTest
@@ -2186,5 +2184,31 @@ private class PermissionsTest {
 		Permissions.sessionParameters.put(Permissions.KEY_API_ENABLED, false);
 		System.assertEquals(false, Permissions.isApiEnabled());
 		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_checkAccess() {
+		System.runAs(UserMock.createUser()) {
+			Permissions.FlsAccess requestedAccess = Permissions.FlsAccess.Queryable;
+			Map<SObjectType, Set<String>> accessMap = new Map<SObjectType, Set<String>> {
+				User.getSObjectType() => new Set<String> { 'Name', 'Email', 'Phone' },
+				Envelope__c.getSObjectType() => new Set<String> { 'DocuSignId__c' }
+			};
+
+			Test.startTest();
+			List<Permissions.FlsResults> result = Permissions.checkAccess(
+				requestedAccess,
+				accessMap);
+			Test.stopTest();
+
+			System.assertEquals(1, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(requestedAccess, result[0].requestedAccess);
+			System.assert(!result[0].isAuthorized);
+			System.assertNotEquals(null, result[0].objectResult);
+			System.assertEquals(String.valueOf(Envelope__c.getSObjectType()), result[0].objectResult.name);
+			System.assertEquals(Permissions.FlsStatus.Unauthorized, result[0].objectResult.status);
+			System.assert(!result[0].objectResult.isAuthorized);
+		}
 	}
 }

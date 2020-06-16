@@ -56,13 +56,25 @@ global class TestUtils {
 		return createEnvelope(null, docuSignId);
 	}
 
-	public static Envelope__c createEnvelope(final Id sourceId, final UUID docuSignId) {
+	public static Envelope__c createEnvelope(
+		final Id sourceId,
+		final UUID docuSignId) {
+
+		return createEnvelope(sourceId, docuSignId, null);
+	}
+
+	public static Envelope__c createEnvelope(
+		final Id sourceId,
+		final UUID docuSignId,
+		final Envelope.Options options) {
+
 		Envelope__c e = new Envelope__c(
 			SourceId__c = sourceId,
 			DocuSignId__c = String.valueOf(docuSignId),
 			EmailSubject__c = 'Subject',
 			EmailMessage__c = 'Message',
-			Sent__c = docuSignId == null ? null : Datetime.now());
+			Sent__c = docuSignId == null ? null : Datetime.now(),
+			Options__c = options == null ? null : JSON.serialize(options));
 		insert e;
 		return e;
 	}
@@ -151,15 +163,29 @@ global class TestUtils {
 		return createEnvelopeRecipient(envelopeId, 1);
 	}
 
-	public static Recipient__c createEnvelopeRecipient(final Id envelopeId, final Integer sequence) {
+	public static Recipient__c createEnvelopeRecipient(
+		final Id envelopeId,
+		final Integer sequence) {
+
+		return createEnvelopeRecipient(envelopeId, sequence, null);
+	}
+
+	public static Recipient__c createEnvelopeRecipient(
+		final Id envelopeId,
+		final Integer sequence,
+		final SObject source) {
+
 		Recipient__c r = new Recipient__c(
 			Envelope__c = envelopeId,
 			Type__c = Recipient.TYPE_SIGNER,
 			Sequence__c = sequence,
 			RoutingOrder__c = sequence,
 			Role__c = 'rr' + sequence,
-			Name = UUID.randomUUID().toString(),
-			Email__c = UUID.randomUUID().toString() + '@unit.test');
+			Name = source != null && source.isSet('Name')
+				? (String)source.get('Name') : UUID.randomUUID().toString(),
+			Email__c = source != null && source.isSet('Email')
+				? (String)source.get('Email') : UUID.randomUUID().toString() + '@unit.test',
+			SourceId__c = source != null ? source.Id : null);
 		insert r;
 		return r;
 	}
@@ -293,7 +319,7 @@ global class TestUtils {
 		return createDocument(UserInfo.getUserId());
 	}
 
-	public static SObject createAgreementConfiguration(final Id sourceObjectId, final String folderId,final String tempFolderId) {
+	public static SObject createAgreementConfiguration(final Id sourceObjectId, final String folderId, final String tempFolderId) {
 
 		AgreementConfiguration__c configuration = new AgreementConfiguration__c();
 		configuration.FolderId__c = folderId;
@@ -389,7 +415,10 @@ global class TestUtils {
 		return es;
 	}
 
-	public static RecipientStatus__c createRecipientStatus(final Id esId, final Integer sequence) {
+	public static RecipientStatus__c createRecipientStatus(
+		final Id esId,
+		final Integer sequence) {
+
 		RecipientStatus__c rs = new RecipientStatus__c(
 			EnvelopeStatus__c = esId,
 			SourceId__c = UserInfo.getUserId(),
@@ -404,7 +433,10 @@ global class TestUtils {
 		return rs;
 	}
 
-	public static RecipientStatus__c createRecipientStatus(final Id esId, final Recipient__c r) {
+	public static RecipientStatus__c createRecipientStatus(
+		final Id esId,
+		final Recipient__c r) {
+
 		RecipientStatus__c rs = new RecipientStatus__c(
 			EnvelopeStatus__c = esId,
 			SourceId__c = r.SourceId__c,

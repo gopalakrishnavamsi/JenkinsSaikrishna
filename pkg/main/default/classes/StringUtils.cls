@@ -38,7 +38,7 @@ public class StringUtils {
 	}
 
 	/**
-	 * Parses a string as a boolean value. Input strings of 'true' or '1' will evaluate to <code>true`; anything
+	 * Parses a string as a boolean value. Input strings of 'true' or '1' will evaluate to <code>true</code>; anything
 	 * else evaluates to <code>false</code>.
 	 *
 	 * @param s The input string.
@@ -110,17 +110,6 @@ public class StringUtils {
 	}
 
 	/**
-	 * Converts a blank or placeholder string to null. All other input values are returned unchanged.
-	 *
-	 * @param s The input string.
-	 *
-	 * @return The unmodified input string if not blank or does not equal placeholder text, <code>null</code> otherwise.
-	 */
-	public static String fromString(final String s) {
-		return String.isBlank(s) || s == Label.UndefinedString ? null : s;
-	}
-
-	/**
 	 * Parses an ISO 8601 formatted string as <code>Datetime</code>.
 	 *
 	 * @param s The input string.
@@ -140,7 +129,7 @@ public class StringUtils {
 	 */
 	public static Date parseDate(final String s) {
 		Datetime dt = parseDatetime(s);
-		return dt == null ? null : dt.date();
+		return dt == null ? null : dt.dateGmt();
 	}
 
 	/**

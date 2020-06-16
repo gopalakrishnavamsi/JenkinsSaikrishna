@@ -235,9 +235,9 @@ public with sharing class AccountAPI extends ESignatureAPI {
 				this.customTabId = String.valueOf(tab.id);
 				this.type = tab.type;
 				this.name = tab.name;
-				this.tabLabel = StringUtils.fromString(tab.path);
+				this.tabLabel = tab.key;
 				this.mergeField = new APIMergeField(tab);
-				this.anchor = StringUtils.fromString(tab.autoPlaceText);
+				this.anchor = tab.autoPlaceText;
 			}
 		}
 
@@ -246,6 +246,7 @@ public with sharing class AccountAPI extends ESignatureAPI {
 				UUID.tryParse(this.customTabId),
 				this.type,
 				this.name,
+				this.tabLabel,
 				this.mergeField == null ? null : this.mergeField.path,
 				this.mergeField == null ? null : StringUtils.parseBoolean(this.mergeField.writeBack),
 				this.mergeField == null ? null : StringUtils.parseBoolean(this.mergeField.allowSenderToEdit),
