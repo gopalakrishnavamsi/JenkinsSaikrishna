@@ -1,0 +1,21 @@
+.ds-customButton-information-section {
+    height:91px;
+}
+.ds-customButton-information-header {
+    color: var(--lwc-colorTextActionLabelActive);
+    font-size: var(--lwc-fontSize7);
+    font-weight: var(--lwc-fontWeightBold);
+}
+.ds-customButton-information-text {
+    color: rgb(62, 62, 60);
+    font-size: var(--lwc-fontSize3);
+    width: 729px;
+}
+.ds-customButton-label {
+    color: rgb(8, 7, 7);
+    font-size: var(--lwc-fontSize3);
+}
+.ds-content {
+    margin-left: 170px;
+    margin-right: 170px;
+}

@@ -6,7 +6,9 @@ public class Layout implements Comparable {
 	public static final String ACTION_TYPE_SEND = 'SEND';
 	public static final String ACTION_NAME_SEND = MetadataAPI.NAMESPACE_PREFIX + 'SendWithDocuSign';
 	public static final String ACTION_NAME_GEN = MetadataAPI.NAMESPACE_PREFIX + 'Generate';
+	public static final String ACTION_NAME_DEC = MetadataAPI.NAMESPACE_PREFIX + 'Dec';
 	public static final String ACTION_TYPE_GEN = 'GEN';
+	public static final String ACTION_TYPE_DEC = 'DEC';
 	public static final String ACTION_TYPE_OTHER = 'OTHER';
 	public static final String ACTION_TYPE_ONLINEEDITOR = 'ONLINEEDITOR';
 	public static final String ACTION_NAME_ONLINEEDITOR = MetadataAPI.NAMESPACE_PREFIX + 'OnlineEditor';
@@ -138,6 +140,19 @@ public class Layout implements Comparable {
 		if (this.actions != null) {
 			for (Action a : this.actions) {
 				if (a.name.startsWith(ACTION_NAME_GEN)) {
+					result = true;
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	public Boolean hasDecAction() {
+		Boolean result = false;
+		if (this.actions != null) {
+			for (Action a : this.actions) {
+				if (a.name.startsWith(ACTION_NAME_DEC)) {
 					result = true;
 					break;
 				}

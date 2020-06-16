@@ -40,7 +40,9 @@
                 notifications={notifications}>
             </c-dec-options>
             <template if:true={customButtonStep}>
-                Step 6
+                <c-dec-custom-button
+                        record-id={recordId}
+                        source-object={sourceObject}></c-dec-custom-button>
             </template>
         </div>
     </div>

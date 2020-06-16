@@ -10196,6 +10196,38 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Action</value>
 	</labels>
 	<labels>
+		<fullName>DecCreateCustomButton</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Create Custom Button</shortDescription>
+		<value>Create Custom Button</value>
+	</labels>
+	<labels>
+		<fullName>DecLayoutDescription</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Layouts Description</shortDescription>
+		<value>Pick the layouts from your Source Object where you'd like to add the button</value>
+	</labels>
+	<labels>
+		<fullName>DecCreateCustomButtonDescription</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Create Custom Button Description</shortDescription>
+		<value>Creating a custom button will let your users begin to send this template. You can choose which layouts to add the button too. </value>
+	</labels>
+	<labels>
+		<fullName>DecPageLayouts</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Dec Page Layouts</shortDescription>
+		<value>Pick the layouts from you Source Object where you'd like to add the button. </value>
+	</labels>
+	<labels>
 		<fullName>InPersonSignerLabel</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>

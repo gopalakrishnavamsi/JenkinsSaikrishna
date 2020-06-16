@@ -75,7 +75,6 @@
         if (action.type === 'GEN' && action.name === component.get('v.genActionAPIName')) {
           if (update) {
             component.set('v.genButtonLabel', action.label);
-            component.set('v.genButtonExists', true);
           }
           return true;
         }

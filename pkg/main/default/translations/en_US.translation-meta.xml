@@ -5252,6 +5252,22 @@
 		<name>DecRecipientAction</name>
 	</customLabels>
 	<customLabels>
+		<label>Create Custom Button</label>
+		<name>DecCreateCustomButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Pick the layouts from your Source Object where you'd like to add the button</label>
+		<name>DecLayoutDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Creating a custom button will let your users begin to send this template. You can choose which layouts to add the button too. </label>
+		<name>DecCreateCustomButtonDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Pick the layouts from you Source Object where you'd like to add the button.</label>
+		<name>DecPageLayouts</name>
+	</customLabels>
+	<customLabels>
 		<label>In Person Signer</label>
 		<name>InPersonSignerLabel</name>
 	</customLabels>

@@ -6,6 +6,9 @@
     <lightning:messageChannel type="DecError__c"
                               onMessage="{!c.handleDecErrorMessage}"
                               scope="APPLICATION"/>
+    <lightning:messageChannel type="DecSuccess__c"
+                              onMessage="{!c.handleDecSuccessMessage}"
+                              scope="APPLICATION"/>
 
     <aura:attribute type="Id" name="recordId"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>

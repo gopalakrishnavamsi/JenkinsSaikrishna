@@ -19,6 +19,8 @@ public with sharing class MetadataService {
 		= new Map<SObjectType, MetadataAPI.WebLink>();
 	private static final Map<SObjectType, MetadataAPI.WebLink> GEN_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
+	private static final Map<SObjectType, MetadataAPI.WebLink> DEC_ACTIONS
+		= new Map<SObjectType, MetadataAPI.WebLink>();
 	private static final Map<SObjectType, MetadataAPI.WebLink> ONLINE_EDITOR_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
 	private static final List<String> PARAMETERS_ADD_QUOTES = new List<String> {
@@ -157,8 +159,8 @@ public with sharing class MetadataService {
 		List<Query.Relationship> result = new List<Query.Relationship>();
 		DescribeSObjectResult typeDesc = type.getDescribe();
 		for (SObjectField f : typeDesc.fields.getMap().values()) {
-			DescribeFieldResult fieldDesc = f.getDescribe();           	
-            SObjectType fieldSourceType = (SObjectType) Collection.head(fieldDesc.getReferenceTo());
+			DescribeFieldResult fieldDesc = f.getDescribe();
+			SObjectType fieldSourceType = (SObjectType)Collection.head(fieldDesc.getReferenceTo());
 			if (RecipientService.canResolveRecipientType(fieldSourceType)) {
 				result.add(
 					new Query.Relationship(
@@ -171,7 +173,7 @@ public with sharing class MetadataService {
 			}
 		}
 
-		return result;		
+		return result;
 	}
 
 	public static List<Query.Relationship> getChildRelationships(final SObjectType type) {
@@ -179,7 +181,7 @@ public with sharing class MetadataService {
 		if (type == null) throw new DocuSignException(Label.InvalidType);
 		List<Query.Relationship> result = new List<Query.Relationship>();
 		DescribeSObjectResult typeDesc = type.getDescribe();
-        for (Schema.ChildRelationship cr : typeDesc.getChildRelationships()) {
+		for (Schema.ChildRelationship cr : typeDesc.getChildRelationships()) {
 			DescribeFieldResult sourceField = cr.getField().getDescribe();
 			SObjectType childType = cr.getChildSObject();
 			if (RecipientService.canResolveRelatedRecipients(childType) && String.isNotBlank(cr.getRelationshipName())) {
@@ -189,13 +191,13 @@ public with sharing class MetadataService {
 						cr.getRelationshipName(),
 						cr.getRelationshipName(),
 						String.valueOf(childType)
-					)					
+					)
 				);
 			}
 		}
 
 		return result;
-	}	
+	}
 
 	@TestVisible
 	private static String getErrorMessage(final MetadataAPI.SaveResult saveResult) {
@@ -438,6 +440,8 @@ public with sharing class MetadataService {
 			return Layout.ACTION_TYPE_GEN;
 		} else if (apiName.contains(Layout.ACTION_NAME_ONLINEEDITOR)) {
 			return Layout.ACTION_TYPE_ONLINEEDITOR;
+		} else if (apiName.contains(Layout.ACTION_NAME_DEC)) {
+			return Layout.ACTION_TYPE_DEC;
 		} else {
 			return Layout.ACTION_TYPE_OTHER;
 		}
@@ -758,13 +762,15 @@ public with sharing class MetadataService {
 
 		if (newLayout == null || currentLayout == null) throw new DocuSignException(Label.LayoutsNotFound);
 
+		Boolean hasDecAction = false;
 		Boolean hasSendAction = false;
 		Boolean hasGenAction = false;
 		Boolean hasOnlineEditorAction = false;
+		Boolean showAction;
+		String actionName;
 		Gen.LayoutParameters genLayoutParameters;
-		if (String.isNotBlank(parameters)) {
-			genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
-		}
+		EnvelopeConfigurationController.LayoutParameters decLayoutParameters;
+
 		for (Layout.Action a : (newLayout.actions == null ? new List<Layout.Action>() : newLayout.actions)) {
 			if (a.type == Layout.ACTION_TYPE_SEND) {
 				hasSendAction = true;
@@ -772,21 +778,45 @@ public with sharing class MetadataService {
 			} else if (a.type == Layout.ACTION_TYPE_GEN) {
 				hasGenAction = true;
 				break;
+			} else if (a.type == Layout.ACTION_TYPE_DEC) {
+				hasDecAction = true;
+				break;
 			} else if (a.type == Layout.ACTION_TYPE_ONLINEEDITOR) {
 				hasOnlineEditorAction = true;
 				break;
 			}
 		}
 
+		if (String.isNotBlank(parameters)) {
+			if (parameters.contains('genButtonApiName')) {
+				genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
+			} else if (parameters.contains('decButtonApiName')) {
+				decLayoutParameters = (EnvelopeConfigurationController.LayoutParameters)JSON.deserialize(
+					parameters,
+					EnvelopeConfigurationController.LayoutParameters.class);
+			}
+		}
+
+		if (genLayoutParameters != null) {
+			showAction = hasGenAction || hasOnlineEditorAction;
+			actionName = genLayoutParameters.genButtonApiName;
+		} else if (decLayoutParameters != null) {
+			showAction = hasDecAction;
+			actionName = decLayoutParameters.decButtonApiName;
+		} else {
+			showAction = hasSendAction;
+			actionName = Layout.ACTION_NAME_SEND;
+		}
+
 		currentLayout.customButtons = getCustomButtons(
-			genLayoutParameters != null ? (hasGenAction || hasOnlineEditorAction) : hasSendAction,
-			genLayoutParameters != null ? genLayoutParameters.genButtonApiName : Layout.ACTION_NAME_SEND,
+			showAction,
+			actionName,
 			currentLayout.customButtons);
 		if (currentLayout.platformActionList != null) {
 			currentLayout.platformActionList.platformActionListItems = getPlatformActionListItems(
 				type,
-				genLayoutParameters != null ? (hasGenAction || hasOnlineEditorAction) : hasSendAction,
-				genLayoutParameters != null ? genLayoutParameters.genButtonApiName : Layout.ACTION_NAME_SEND,
+				showAction,
+				actionName,
 				currentLayout.platformActionList.platformActionListItems);
 		}
 		return currentLayout;
@@ -795,29 +825,10 @@ public with sharing class MetadataService {
 	@TestVisible
 	private static MetadataAPI.WebLink getWebLink(
 		final SObjectType type,
-		final String actionName) {
-
-		if (type == null || String.isBlank(actionName)) return null;
-
-		MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)Collection.head(MetadataAPI.getInstance().readMetadata(
-			'WebLink', new List<String> { getActionFullName(type, actionName) }));
-		if (webLink == null) {
-			webLink = createWebLink(
-				type,
-				actionName,
-				Label.SendWithDocuSign,
-				Page.Sending,
-				null);
-		}
-		return webLink;
-	}
-
-	@TestVisible
-	private static MetadataAPI.WebLink getGenWebLink(
-		final SObjectType type,
 		final String actionName,
 		final String actionLabel,
-		final Id genTemplateId) {
+		final Id templateId,
+		final PageReference pageRef) {
 
 		if (type == null || String.isBlank(actionName)) return null;
 
@@ -825,17 +836,22 @@ public with sharing class MetadataService {
 			'WebLink', new List<String> { getActionFullName(type, actionName) }));
 		if (webLink == null) {
 			Map <String, String> parametersMap = new Map<String, String>();
-			parametersMap.put('templateId', genTemplateId);
-			parametersMap.put('recordId', type + '.Id');
-			parametersMap.put('recordName', type + '.' + Salesforce.getNameField(type));
-			parametersMap.put('title', actionLabel);
+			if (templateId != null) {
+				parametersMap.put('templateId', templateId);
+				parametersMap.put('recordId', type + '.Id');
+				parametersMap.put('recordName', type + '.' + Salesforce.getNameField(type));
+				parametersMap.put('title', actionLabel);
+			}
 			webLink = createWebLink(
 				type,
 				actionName,
 				actionLabel,
-				Page.GenDocumentGenerator,
+				pageRef,
 				parametersMap);
-		} else if (webLink != null && String.isNotBlank(webLink.masterLabel) && webLink.masterLabel != actionLabel) {
+		} else if (webLink != null &&
+			templateId != null &&
+			String.isNotBlank(webLink.masterLabel) &&
+			webLink.masterLabel != actionLabel) {
 			webLink.masterLabel = actionLabel;
 			validateResults(MetadataAPI.getInstance().updateMetadata(new List<MetadataAPI.Metadata> { webLink }));
 		}
@@ -848,7 +864,7 @@ public with sharing class MetadataService {
 
 		MetadataAPI.WebLink result = SEND_ACTIONS.get(type);
 		if (result == null) {
-			result = getWebLink(type, Layout.ACTION_NAME_SEND);
+			result = getWebLink(type, Layout.ACTION_NAME_SEND, Label.SendWithDocuSign, null, Page.Sending);
 			SEND_ACTIONS.put(type, result);
 		}
 		return result;
@@ -864,8 +880,35 @@ public with sharing class MetadataService {
 		MetadataAPI.WebLink result = GEN_ACTIONS.get(type);
 		if (result == null) {
 			Gen.LayoutParameters genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
-			result = getGenWebLink(type, genLayoutParameters.genButtonApiName, genLayoutParameters.genButtonLabel, genLayoutParameters.genTemplateId);
+			result = getWebLink(type,
+				genLayoutParameters.genButtonApiName,
+				genLayoutParameters.genButtonLabel,
+				genLayoutParameters.genTemplateId,
+				Page.GenDocumentGenerator);
 			GEN_ACTIONS.put(type, result);
+		}
+		return result;
+	}
+
+	@TestVisible
+	private static MetadataAPI.WebLink getDecAction(
+		final SObjectType type,
+		final String parameters) {
+
+		if (type == null) return null;
+
+		MetadataAPI.WebLink result = DEC_ACTIONS.get(type);
+		if (result == null) {
+			EnvelopeConfigurationController.LayoutParameters decLayoutParameters =
+				(EnvelopeConfigurationController.LayoutParameters)JSON.deserialize(
+					parameters,
+					EnvelopeConfigurationController.LayoutParameters.class);
+			result = getWebLink(type,
+				decLayoutParameters.decButtonApiName,
+				decLayoutParameters.decButtonLabel,
+				decLayoutParameters.decTemplateId,
+				Page.Sending);
+			DEC_ACTIONS.put(type, result);
 		}
 		return result;
 	}
@@ -878,7 +921,6 @@ public with sharing class MetadataService {
 		final UUID scmTemplateId) {
 
 		Permissions.verifyIsDocuSignAdministrator();
-
 		if (type == null || Collection.isEmpty(layouts)) throw new DocuSignException(Label.UndefinedArgument);
 
 		Map<String, Layout> ls = new Map<String, Layout>();
@@ -889,6 +931,8 @@ public with sharing class MetadataService {
 				getSendAction(type);
 			} else if (l.hasGenAction()) {
 				getGenAction(type, parameters);
+			} else if (l.hasDecAction()) {
+				getDecAction(type, parameters);
 			} else if (l.hasOnlineEditorAction()) {
 				getOnlineEditorAction(type, parameters, scmTemplateId);
 			}

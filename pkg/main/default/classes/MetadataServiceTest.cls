@@ -783,7 +783,12 @@ private class MetadataServiceTest {
 		Test.setMock(WebServiceMock.class, new WebLinkNotFoundMock());
 
 		Test.startTest();
-		MetadataAPI.WebLink result = MetadataService.getWebLink(Lead.getSObjectType(), 'TestAction');
+		MetadataAPI.WebLink result = MetadataService.getWebLink(
+			Lead.getSObjectType(),
+			'TestAction',
+			Label.SendWithDocuSign,
+			null,
+			Page.Sending);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -794,7 +799,28 @@ private class MetadataServiceTest {
 		Test.setMock(WebServiceMock.class, new WebLinkNotFoundMock());
 
 		Test.startTest();
-		MetadataAPI.WebLink result = MetadataService.getGenWebLink(Lead.getSObjectType(), 'TestAction', 'TestLabel', UserInfo.getUserId());
+		MetadataAPI.WebLink result = MetadataService.getWebLink(
+			Lead.getSObjectType(),
+			'TestAction',
+			'TestLabel',
+			UserInfo.getUserId(),
+			Page.GenDocumentGenerator);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+	}
+
+	@IsTest
+	static void test_getDecWebLink_not_found() {
+		Test.setMock(WebServiceMock.class, new WebLinkNotFoundMock());
+
+		Test.startTest();
+		MetadataAPI.WebLink result = MetadataService.getWebLink(
+			Lead.getSObjectType(),
+			'TestAction',
+			'TestLabel',
+			UserInfo.getUserId(),
+			Page.Sending);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -805,9 +831,13 @@ private class MetadataServiceTest {
 		MetadataAPIMock.success();
 
 		Test.startTest();
-		MetadataAPI.WebLink result = MetadataService.getWebLink(Lead.getSObjectType(), 'TestAction');
+		MetadataAPI.WebLink result = MetadataService.getWebLink(
+			Lead.getSObjectType(),
+			'TestAction',
+			Label.SendWithDocuSign,
+			null,
+			Page.Sending);
 		Test.stopTest();
-
 		System.assertNotEquals(null, result);
 	}
 
@@ -816,7 +846,28 @@ private class MetadataServiceTest {
 		MetadataAPIMock.success();
 
 		Test.startTest();
-		MetadataAPI.WebLink result = MetadataService.getGenWebLink(Lead.getSObjectType(), 'TestAction', 'TestLabel', UserInfo.getUserId());
+		MetadataAPI.WebLink result = MetadataService.getWebLink(
+			Lead.getSObjectType(),
+			'TestAction',
+			'TestLabel',
+			UserInfo.getUserId(),
+			Page.GenDocumentGenerator);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+	}
+
+	@IsTest
+	static void test_getDecWebLink_already_exists() {
+		MetadataAPIMock.success();
+
+		Test.startTest();
+		MetadataAPI.WebLink result = MetadataService.getWebLink(
+			Lead.getSObjectType(),
+			'TestAction',
+			'TestLabel',
+			UserInfo.getUserId(),
+			Page.Sending);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
@@ -981,6 +1032,46 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
+	static void test_updateDecLayouts_success() {
+		MetadataAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Layout l1 = new Layout(
+				Contact.getSObjectType(),
+				UserInfo.getOrganizationId(),
+				'ns',
+				'n1',
+				new List<Layout.Action> {
+					new Layout.Action(
+						Layout.ACTION_TYPE_DEC,
+						Layout.ACTION_NAME_DEC,
+						'testLabel')
+				});
+			Layout l2 = new Layout(
+				Contact.getSObjectType(),
+				UserInfo.getOrganizationId(),
+				'ns',
+				'n2',
+				new List<Layout.Action> {
+					new Layout.Action(
+						Layout.ACTION_TYPE_DEC,
+						Layout.ACTION_NAME_DEC,
+						'testLabel')
+				});
+
+			Test.startTest();
+			String parameters = '{"decButtonApiName":"testdecbutton","decButtonLabel":"testdeclabel", "decTemplateId":"01pL0000002LXwu"}';
+			List<Layout> result = MetadataService.updateLayouts(
+				Contact.getSObjectType(),
+				new List<Layout> { l1, l2 },
+				parameters,
+				null);
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+		}
+	}
+
+	@IsTest
 	static void test_fixActionName() {
 		System.assertEquals(null, MetadataService.fixActionName(null, null));
 		System.assertEquals('test', MetadataService.fixActionName(null, 'test'));
@@ -1024,7 +1115,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_getLookups_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(true)) { 
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			List<Query.Relationship> results = MetadataService.getLookups(opportunityType);
@@ -1039,7 +1130,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_childRelationships_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(true)) { 
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			List<Query.Relationship> results = MetadataService.getChildRelationships(opportunityType);
@@ -1050,11 +1141,11 @@ private class MetadataServiceTest {
 			System.assert(String.isNotEmpty(results[0].relatesTo));
 			System.assertEquals(results[0].isLookup, false);
 		}
-	}	
+	}
 
 	@IsTest
 	static void test_getLookups_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser()) { 
+		System.runAs(UserMock.createDocuSignUser()) {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			try {
@@ -1069,7 +1160,7 @@ private class MetadataServiceTest {
 
 	@IsTest
 	static void test_getLookups_invalid() {
-		System.runAs(UserMock.createDocuSignAdministrator()) { 
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
 				SObjectType type = null;
@@ -1080,11 +1171,11 @@ private class MetadataServiceTest {
 			}
 			Test.stopTest();
 		}
-	}	
+	}
 
 	@IsTest
 	static void test_getChildRelationships_invalid() {
-		System.runAs(UserMock.createDocuSignAdministrator()) { 
+		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
 				SObjectType type = null;
@@ -1095,11 +1186,11 @@ private class MetadataServiceTest {
 			}
 			Test.stopTest();
 		}
-	}		
-	
+	}
+
 	@IsTest
 	static void test_getChildRelationships_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser()) { 
+		System.runAs(UserMock.createDocuSignUser()) {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			try {
@@ -1110,5 +1201,5 @@ private class MetadataServiceTest {
 			}
 			Test.stopTest();
 		}
-	}	
+	}
 }

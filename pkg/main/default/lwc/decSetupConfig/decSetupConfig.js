@@ -1,13 +1,12 @@
 import {LightningElement, api, wire} from 'lwc';
 
 // Lightning message service
-import {
-  createMessageContext,
-  releaseMessageContext,
-  publish
-} from 'lightning/messageService';
+import { createMessageContext,
+         releaseMessageContext,
+         publish } from 'lightning/messageService';
 // Publisher
 import DEC_ERROR from '@salesforce/messageChannel/DecError__c';
+import DEC_UPDATE_PAGE_LAYOUTS from '@salesforce/messageChannel/DecUpdatePageLayouts__c';
 // Subscriber
 import DEC_UPDATE_SOURCE_FILES from '@salesforce/messageChannel/DecUpdateSourceFiles__c';
 import DEC_RENAME_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecRenameTemplateDocument__c';
@@ -15,11 +14,12 @@ import DEC_DELETE_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecDeleteTe
 import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEnvelopeTemplate__c';
 import DEC_UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/DecUpdateNotifications__c';
 
-
 // utility functions
-import {isEmpty, subscribeToMessageChannel} from 'c/utils';
-import {DOCUMENT_TYPE_SOURCE_FILES} from 'c/documentUtils';
-import {LABEL} from 'c/setupUtils';
+import { isEmpty,
+         subscribeToMessageChannel,
+         showError } from 'c/utils';
+import { DOCUMENT_TYPE_SOURCE_FILES } from 'c/documentUtils';
+import { LABEL } from 'c/setupUtils';
 
 //apex methods
 import updateEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.updateEnvelopeConfiguration';
@@ -115,7 +115,8 @@ export default class DecSetupConfig extends LightningElement {
   })
   getEnvelopeConfigurationData({error, data}) {
     if (error) {
-      this.showError(error);
+      showError(this.context, error, DEC_ERROR);
+      this.setLoading(false);
     } else if (data) {
       this.attachSourceFiles = !isEmpty(data.documents.find(d => d.type === DOCUMENT_TYPE_SOURCE_FILES));
       this.envelopeConfigurationData = data;
@@ -193,7 +194,14 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleSaveAndClose() {
-    this.updateEnvelopeConfiguration();
+    if(this.currentStep === PROGRESS_STEP.CUSTOM_BUTTON) {
+      const msg = {
+        recordId: this.recordId
+      }
+      publish(this.context, DEC_UPDATE_PAGE_LAYOUTS, msg);
+    } else {
+      this.updateEnvelopeConfiguration();
+    }
   }
 
   handleRenameEnvelopeTemplate(message) {
@@ -271,7 +279,10 @@ export default class DecSetupConfig extends LightningElement {
         this.currentStep = isEmpty(step) ? this.currentStep : step;
         this.setLoading(false);
       })
-      .catch(this.showError.bind(this));
+      .catch(error => {
+        showError(this.context, error, DEC_ERROR);
+        this.setLoading(false);
+      });
   }
 
   // Process configuration data before updating it in server
@@ -293,15 +304,5 @@ export default class DecSetupConfig extends LightningElement {
       ...configurationData,
       ...processedFields
     });
-  }
-
-  showError(error) {
-    if (!isEmpty(error.body)) {
-      const msg = {
-        errorMessage: error.body.message
-      };
-      publish(this.context, DEC_ERROR, msg);
-    }
-    this.setLoading(false);
   }
 }

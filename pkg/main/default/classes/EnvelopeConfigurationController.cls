@@ -3,6 +3,12 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	public String objectHomeUrl { get; private set; }
 	public Id envelopeConfigId { get; set; }
 
+	public class LayoutParameters {
+		public String decButtonApiName { get; private set; }
+		public String decButtonLabel { get; private set; }
+		public String decTemplateId { get; private set; }
+	}
+
 	public EnvelopeConfigurationController() {
 		this.objectHomeUrl = '/' + EnvelopeConfiguration__c.getSObjectType().getDescribe().getKeyPrefix() + '/o';
 	}

@@ -42,6 +42,16 @@ public with sharing class MetadataController extends Controller {
 	}
 
 	@AuraEnabled(Cacheable = true)
+	public static String getDecActionName() {
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+			return Layout.ACTION_NAME_DEC;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to retrieve DecAction Name');
+		}
+	}
+
+	@AuraEnabled(Cacheable = true)
 	public static List<Layout> getLayouts(final String sObjectType) {
 		try {
 			return MetadataService.getLayouts(Salesforce.getSObjectType(sObjectType));
@@ -55,7 +65,6 @@ public with sharing class MetadataController extends Controller {
 		final String sObjectType,
 		final String layoutsJson,
 		final String parameters) {
-
 		try {
 			return MetadataService.updateLayouts(
 				Salesforce.getSObjectType(sObjectType),

@@ -1,5 +1,9 @@
 // Lightning message service
-import {APPLICATION_SCOPE, subscribe} from 'lightning/messageService';
+
+import { APPLICATION_SCOPE,
+         subscribe,
+         publish } from 'lightning/messageService';
+
 const UNKNOWN_ICON_NAME = 'doctype:unknown';
 const SUCCESS_EVENT_LABEL = 'success';
 const ERROR_EVENT_LABEL = 'error';
@@ -108,6 +112,15 @@ const subscribeToMessageChannel = (context, subscription, channel, handler) => {
   return subscribe(context, channel, handler, {scope: APPLICATION_SCOPE});
 };
 
+const showError = (context, error, channel) => {
+  if (!isEmpty(error.body)) {
+    const msg = {
+      errorMessage: error.body.message
+    }
+    publish(context, channel, msg);
+  }
+}
+
 const proxify = (source) => {
   if (isEmpty(source)) return null;
   return new Proxy(source, {
@@ -134,6 +147,15 @@ let groupBy = function (xs, key) {
 };
 
 
+const showSuccess = (context, message, channel) => {
+  if (!isEmpty(message)) {
+    const msg = {
+      successMessage: message
+    }
+    publish(context, channel, msg);
+  }
+}
+
 export {
   FILE_EXTENSION_TO_ICON_NAME_MAPPING,
   UNKNOWN_ICON_NAME,
@@ -147,5 +169,7 @@ export {
   getRandomKey,
   proxify,
   subscribeToMessageChannel,
-  groupBy
+  groupBy,
+  showError,
+  showSuccess
 };

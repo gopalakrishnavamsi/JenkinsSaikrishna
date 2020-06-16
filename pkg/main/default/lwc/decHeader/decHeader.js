@@ -9,8 +9,8 @@ import {createMessageContext,
     releaseMessageContext,
     publish
   } from 'lightning/messageService';
-  // Publisher
-  import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEnvelopeTemplate__c';
+// Publisher
+import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEnvelopeTemplate__c';
 
 export default class DecHeader extends LightningElement {
     showRenameModal = false;

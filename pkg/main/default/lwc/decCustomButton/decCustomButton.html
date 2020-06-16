@@ -1,0 +1,45 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+    </template>
+    <div class="slds-m-top_x-large">
+        <span class="slds-float_right">
+            <c-help-video-image-box video-link={label.helpVideoLink}
+                                    video-text={label.helpVideoText}
+                                    video-length={label.helpVideoLength}>
+            </c-help-video-image-box>
+        </span>
+        <div class="ds-customButton-information-section">
+            <div class="ds-customButton-information-header">
+                {label.decCreateCustomButton}
+            </div>
+            <div class="slds-m-top_small ds-customButton-information-text">
+                {label.decCreateCustomButtonDescription}
+            </div>
+        </div>
+        <div class="ds-content">
+            <lightning-input
+                    type="text"
+                    label={label.buttonLabel}
+                    maxlength="40"
+                    value={decButtonLabel}
+                    pattern="^(&#063;&#033;\s)[^\.\/\\&#060;&#062;&#063;&#058;&#124;&#034;&#042;]+"
+                    message-when-pattern-mismatch={label.invalidCharacters}
+                    onchange={handleButtonLabelChange}
+                    class="slds-m-top_medium"
+                    required>
+            </lightning-input>
+            <div class="ds-customButton-label slds-m-top_medium">
+                {label.decLayoutDescription}
+            </div>
+            <div class="slds-m-top_medium slds-border_left slds-border_right slds-border_top">
+                <lightning-datatable
+                        key-field="id"
+                        data={layouts}
+                        columns={pageLayoutColumns}
+                        selected-rows={selectedPageLayouts}>
+                </lightning-datatable>
+            </div>
+        </div>
+    </div>
+</template>
