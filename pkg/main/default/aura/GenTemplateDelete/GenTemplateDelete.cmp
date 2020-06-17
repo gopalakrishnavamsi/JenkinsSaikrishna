@@ -26,10 +26,10 @@
                 <c:BlueSpinner/>
             </div>
         </aura:if>
-        <div class="slds-scope slds-p-horizontal--xx-large">
+        <div class="slds-scope slds-p-horizontal_xx-large">
             <div class="slds-grid slds-grid_vertical">
                 <div class="slds-col">
-                    <div class="slds-text-align--center slds-text-body_regular">
+                    <div class="slds-text-align_center slds-text-body_regular">
                         {!$Label.c.DeleteTemplateMessage}
                     </div>
                 </div>

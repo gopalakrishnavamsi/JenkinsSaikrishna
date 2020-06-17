@@ -67,8 +67,8 @@ License: BSD 3-Clause License
 
     <div class="{!'slds-form-element ' + v.class}">
         <aura:if isTrue="{!v.type == 'toggle'}">
-            <label class="slds-checkbox--toggle slds-grid slds-grid_vertical-align-start" for="{!'strike-input-' + v.idNumber}">
-                <span class="{!'slds-form-element__label' + if (not(empty(v.helpText)), ' slds-m-right--none', '')}">
+            <label class="slds-checkbox_toggle slds-grid slds-grid_vertical-align-start" for="{!'strike-input-' + v.idNumber}">
+                <span class="{!'slds-form-element__label' + if (not(empty(v.helpText)), ' slds-m-right_none', '')}">
                     {!v.label}
                 </span>
                 <aura:if isTrue="{!not(empty(v.helpText))}">
@@ -81,10 +81,10 @@ License: BSD 3-Clause License
                     name="{!v.name}"
                     tabindex="{!v.tabindex}"
                     aria-describedby="toggle-desc" />
-                <span id="toggle-desc" class="slds-checkbox--faux_container" aria-live="assertive">
-                    <span class="slds-checkbox--faux"></span>
-                    <span class="slds-checkbox--on">Enabled</span>
-                    <span class="slds-checkbox--off">Disabled</span>
+                <span id="toggle-desc" class="slds-checkbox_faux_container" aria-live="assertive">
+                    <span class="slds-checkbox_faux"></span>
+                    <span class="slds-checkbox_on">Enabled</span>
+                    <span class="slds-checkbox_off">Disabled</span>
                 </span>
             </label>
 
@@ -139,7 +139,7 @@ License: BSD 3-Clause License
                            
                             <aura:if isTrue="{!or(v.type == 'checkbox', v.type == 'radio')}">
                                 <label class="{!'slds-' + v.type + '__label'}" for="{!'strike-input-' + v.idNumber}">
-                                    <span class="{!'slds-' + v.type + '--faux'}"></span>
+                                    <span class="{!'slds-' + v.type + '_faux'}"></span>
                                     <aura:if isTrue="{!not(empty(v.helpText))}">
                                         <div>
                                             <span class="slds-form-element__label si-has-help-text">{!v.label}</span>
@@ -155,10 +155,10 @@ License: BSD 3-Clause License
                             </aura:if>
                             
                             <aura:if isTrue="{!v.type == 'search'}">
-                                <lightning:icon iconName="utility:search" size="x-small" class="slds-input__icon slds-input__icon--left slds-icon-text-light"/>
-                                <div class="slds-input--icon-group slds-input__icon-group--right">
+                                <lightning:icon iconName="utility:search" size="x-small" class="slds-input__icon slds-input__icon_left slds-icon-text-light"/>
+                                <div class="slds-input_icon-group slds-input__icon-group_right">
                                     <aura:if isTrue="{!and(not(empty(v.value)), not(v.readonly))}">
-                                        <button onclick="{!c.clearInput}" id="{!v.idNumber}" class="slds-input__icon slds-input__icon--right slds-button slds-button--icon" title="Remove" disabled="{!v.disabled}">
+                                        <button onclick="{!c.clearInput}" id="{!v.idNumber}" class="slds-input__icon slds-input__icon_right slds-button slds-button_icon" title="Remove" disabled="{!v.disabled}">
                                                 <lightning:icon iconName="utility:clear" size="xx-small"/>
                                             <span class="slds-assistive-text">Remove</span>
                                         </button>

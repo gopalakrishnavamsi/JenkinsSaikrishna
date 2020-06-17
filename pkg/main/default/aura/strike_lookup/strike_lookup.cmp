@@ -88,7 +88,7 @@ License: BSD 3-Clause License
     <aura:dependency resource="force:createRecord" type="EVENT"/>
 
     <!-- Strike Lookup -->
-    <ui:scrollerWrapper aura:id="lookup" class="{!'slds-form-element slds-lookup slds-is-open ' + if(v.error, 'slds-has-error ', '') + if(v.isMobile, 'sl-lookup--mobile ', '') + if(v.openMenu, 'sl-lookup--open ', '') + v.class}">
+    <ui:scrollerWrapper aura:id="lookup" class="{!'slds-form-element slds-lookup slds-is-open ' + if(v.error, 'slds-has-error ', '') + if(v.isMobile, 'sl-lookup_mobile ', '') + if(v.openMenu, 'sl-lookup_open ', '') + v.class}">
         <aura:if isTrue="{!not(empty(v.label))}">
             <label class="slds-form-element__label" for="{!'strike-lookup-' + v.idNumber}">
                 <aura:if isTrue="{!v.required}">
@@ -100,20 +100,20 @@ License: BSD 3-Clause License
         <aura:if isTrue="{!not(empty(v.helpText))}">
             <lightning:helptext content="{!v.helpText}" />
         </aura:if>
-        <div class="{!'slds-form-element__control slds-input-has-icon slds-input-has-icon--right' + if(v.disabled, ' sl-disabled', '')}" onclick="{!c.cancelLookup}">
+        <div class="{!'slds-form-element__control slds-input-has-icon slds-input-has-icon_right' + if(v.disabled, ' sl-disabled', '')}" onclick="{!c.cancelLookup}">
             <div class="{!'slds-pill_container' + if(or(not(empty(v.value)), greaterthan(v.initCallsRunning, 0)), '', ' slds-hide')}">
-                <span class="{!'slds-pill slds-size--1-of-1' + if(greaterthan(v.initCallsRunning, 0), ' sl-pill--loading', '')}">
+                <span class="{!'slds-pill slds-size_1-of-1' + if(greaterthan(v.initCallsRunning, 0), ' sl-pill_loading', '')}">
                     <aura:if isTrue="{!and(not(empty(v.iconName)), equals(v.initCallsRunning, 0))}">
                         <lightning:icon class="slds-pill__icon_container" iconName="{!v.iconName}" size="small"/>
                     </aura:if>
                     <span class="slds-pill__label sl-pill__label" title="{!if(v.initCallsRunning > 0, v.loadingMessage, v.valueLabel)}">{!if(v.initCallsRunning > 0, v.loadingMessage, v.valueLabel)}</span>
-                    <button class="{!'slds-button slds-button--icon slds-pill__remove' + if(or(v.disabled, greaterthan(v.initCallsRunning, 0)), ' slds-hide', '')}" title="Remove" onclick="{!c.handlePillClick}">
+                    <button class="{!'slds-button slds-button_icon slds-pill__remove' + if(or(v.disabled, greaterthan(v.initCallsRunning, 0)), ' slds-hide', '')}" title="Remove" onclick="{!c.handlePillClick}">
                         <lightning:icon iconName="utility:close" size="xx-small"/>
                     </button>
                 </span>
             </div>
-            <div class="{!'sl-lookup__input_container' + if(v.isMobile == true, ' slds-grid slds-grid--pull-padded-xx-small', '') + if(and(equals(v.initCallsRunning, 0), empty(v.value)), '', ' slds-hide')}">
-                <div class="{!'sl-lookup__input' + if(v.isMobile == true, ' slds-col slds-p-horizontal--xx-small', '')}">
+            <div class="{!'sl-lookup__input_container' + if(v.isMobile == true, ' slds-grid slds-grid_pull-padded-xx-small', '') + if(and(equals(v.initCallsRunning, 0), empty(v.value)), '', ' slds-hide')}">
+                <div class="{!'sl-lookup__input' + if(v.isMobile == true, ' slds-col slds-p-horizontal_xx-small', '')}">
                     <lightning:icon iconName="utility:search" size="x-small" class="sl-search-icon"/>
                     <input
                         aura:id="lookupInput"
@@ -133,8 +133,8 @@ License: BSD 3-Clause License
                         disabled='{!v.disabled}'/>
                 </div>
                 <aura:if isTrue="{!v.isMobile}">
-                    <div class="sl-lookup--mobile__cancel slds-col slds-no-flex slds-p-horizontal--xx-small">
-                        <button class="slds-button slds-button--neutral" onclick="{!c.cancelLookup}">Cancel</button>
+                    <div class="sl-lookup_mobile__cancel slds-col slds-no-flex slds-p-horizontal_xx_small">
+                        <button class="slds-button slds-button_neutral" onclick="{!c.cancelLookup}">Cancel</button>
                     </div>
                 </aura:if>
             </div>
@@ -174,14 +174,14 @@ License: BSD 3-Clause License
                                 </aura:if>
                                 <div class="slds-media__body">
                                     <div class="slds-lookup__result-text">{!record.label}</div>
-                                    <span class="{!'slds-lookup__result-meta slds-text-body--small' + if(empty(record.sublabel, ' slds-hide', ''))}">{!record.sublabel}</span>
+                                    <span class="{!'slds-lookup__result-meta slds-text-body_small' + if(empty(record.sublabel, ' slds-hide', ''))}">{!record.sublabel}</span>
                                 </div>
                             </span>
                         </li>
                     </aura:iteration>
                     <aura:if isTrue="{!v.allowNewRecords}">
                         <li role="presentation" class="{!'sl-lookup__new' + if(index == -1, ' slds-has-focus', '')}" onclick="{!c.handleNewRecordClick}">
-                            <span class="slds-lookup__item-action slds-lookup__item-action--label" role="option">
+                            <span class="slds-lookup__item-action slds-lookup__item-action_label" role="option">
                                 <lightning:icon iconName="utility:add" size="x-small"/>
                                 <span class="slds-truncate">Add New {!v.objectLabel}</span>
                             </span>

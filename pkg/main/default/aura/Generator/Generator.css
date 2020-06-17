@@ -24,7 +24,7 @@
     display: none;
 }
 
-.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox--faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox_faux,
 .THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox_faux {
     margin: 0;
 }

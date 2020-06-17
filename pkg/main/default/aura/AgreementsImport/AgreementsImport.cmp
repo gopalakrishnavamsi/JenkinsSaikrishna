@@ -54,12 +54,12 @@
             </div>
         </aura:if>
 
-        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
+        <div class="{!'slds-scope slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <aura:if isTrue="{!and(v.currentStep == '1', not(v.loading))}">
                     <div class="slds-col">
-                        <div class="slds-text-align--center">
-                            {!$Label.c.ChooseFile}
+                        <div class="slds-text-align_center">
+                                {!$Label.c.ChooseFile}
                         </div>
                     </div>
                     <div class="slds-col slds-p-top_medium">
@@ -102,7 +102,7 @@
                 </aura:if>
 
                 <aura:if isTrue="{!and(v.currentStep == '2', not(v.loading))}">
-                    <div class="slds-col slds-p-horizontal_large ds-salesForceFileSelction_container slds-m-bottom_small">
+                    <div class="slds-col slds-p-horizontal_large ds-salesForceFileSelection_container slds-m-bottom_small">
                         <div class=" slds-text-align_center">
                             {!$Label.c.ChooseSalesforceFiles2}
                         </div>
@@ -140,7 +140,7 @@
 
                 <aura:if isTrue="{!and(v.currentStep == '4', not(v.loading))}">
                     <div class="slds-col">
-                        <div class="slds-text-align--center">
+                        <div class="slds-text-align_center">
                             {!v.uploadCompleteMessage}
                         </div>
                     </div>
@@ -239,7 +239,7 @@
         <aura:set attribute="footerButtons">
             <aura:if isTrue="{!v.currentStep == '2'}">
                 <div class="slds-grid slds-grid_align-spread">
-                    <lightning:button class="slds-button slds-button--neutral" onclick="{!c.backButtonClicked}"
+                    <lightning:button class="slds-button slds-button_neutral" onclick="{!c.backButtonClicked}"
                                       label="{!$Label.c.Back}" disabled="{!v.loading}">
                     </lightning:button>
                     <lightning:button class="slds-button slds-button_brand"
@@ -251,10 +251,10 @@
 
             <aura:if isTrue="{!v.currentStep == '3'}">
                 <div class="slds-grid slds-grid_align-spread">
-                    <lightning:button class="slds-button slds-button--neutral" onclick="{!c.navigateToFirstStep}"
+                    <lightning:button class="slds-button slds-button_neutral" onclick="{!c.navigateToFirstStep}"
                                       label="{!$Label.c.Back}" disabled="{!v.loading}">
                     </lightning:button>
-                    <lightning:button class="slds-button slds-button--brand"
+                    <lightning:button class="slds-button slds-button_brand"
                                       onclick="{!c.pcFileImportTriggered}"
                                       label="{!$Label.c.ImportButtonLabel}"
                                       disabled="{!if(or(v.disableSalesforceFileImport, v.loading), true , false)}"></lightning:button>

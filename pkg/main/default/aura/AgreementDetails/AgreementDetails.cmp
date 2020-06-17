@@ -24,7 +24,7 @@
 
     <!-- body -->
     <div class="slds-grid slds-grid_vertical-align-center slds-wrap slds-p-top_medium slds-p-bottom_medium slds-has-flexi-truncate">
-        <div class="slds-col slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-bottom--small">
+        <div class="slds-col slds-medium-size_6-of-12 slds-large-size_6-of-12 slds-p-bottom_small">
             <article class="slds-tile slds-media">
                 <div class="slds-media__figure">
                         <span class="slds-icon_container" title="description of icon when needed">
@@ -73,7 +73,7 @@
             </article>
         </div>
         <div class="slds-col slds-text-align_right slds-medium-size_6-of-12 slds-large-size_6-of-12">
-            <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit" class="slds-p-left--xx-small"
+            <lightning:buttonMenu aura:id="editMenu" iconName="utility:edit" class="slds-p-left_xx-small"
                                   menuAlignment="right">
 
                 <lightning:menuItem label="{!$Label.c.Download}" value="{!$Label.c.Download}"

@@ -62,9 +62,9 @@ License: BSD 3-Clause License
                 <aura:if isTrue="{!v.showFooter}">
                     <div class="{!'slds-modal__footer' + if(empty(v.variant), '', ' slds-theme--default')}">
                         <aura:if isTrue="{!empty(v.footerButtons)}">
-                            <lightning:button class="slds-button slds-button--neutral"
+                            <lightning:button class="slds-button slds-button_neutral"
                                               onclick="{!c.clickedSecondary}">{!v.secondaryButtonLabel}</lightning:button>
-                            <lightning:button class="slds-button slds-button--brand"
+                            <lightning:button class="slds-button slds-button_brand"
                                               onclick="{!c.clickedPrimary}">{!v.primaryButtonLabel}</lightning:button>
                             <aura:set attribute="else">
                                 {!v.footerButtons}

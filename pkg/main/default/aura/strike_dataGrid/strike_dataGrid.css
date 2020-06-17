@@ -21,19 +21,19 @@ License: BSD 3-Clause License
     min-width: t(spacingMedium);
 }
 
-.THIS .slds-table.slds-table--cell-buffer thead th:not(.slds-is-sortable) {
+.THIS .slds-table.slds-table_cell-buffer thead th:not(.slds-is-sortable) {
     padding: t(spacingXSmall);
 }
 
-.THIS .slds-table.slds-table--cell-buffer tr>th:first-child {
+.THIS .slds-table.slds-table_cell-buffer tr>th:first-child {
     padding-left: t(spacingLarge);
 }
 
-.THIS .slds-table.slds-table--cell-buffer tr>th:first-child {
+.THIS .slds-table.slds-table_cell-buffer tr>th:first-child {
     padding-left: t(spacingMedium);
 }
 
-.THIS .slds-table.slds-table--cell-buffer tr>th:last-child {
+.THIS .slds-table.slds-table_cell-buffer tr>th:last-child {
     padding-right: t(spacingMedium);
 }
 /*

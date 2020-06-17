@@ -15,12 +15,12 @@
                     title="{!$Label.c.ShareAgreementLinkHeader}"
                     showModal="{!v.showModal}"
                     showFooter="false">
-        <div class="slds-scope slds-p-horizontal--xx-large">
-            <div class="slds-text-body_small slds-text-align--center">
+        <div class="slds-scope slds-p-horizontal_xx-large">
+            <div class="slds-text-body_small slds-text-align_center">
                 Users with permission to access your DocuSign Agreements can use this link to view, download and
                 edit this agreement.
             </div>
-            <div class="slds-grid slds-wrap slds-grid--pull-padded slds-p-top_medium slds-p-bottom_medium">
+            <div class="slds-grid slds-wrap slds-grid_pull-padded slds-p-top_medium slds-p-bottom_medium">
                 <div class="slds-large-size_3-of-4">
                     <lightning:input aura:id="copyLinkTextBox"
                                      type="text"

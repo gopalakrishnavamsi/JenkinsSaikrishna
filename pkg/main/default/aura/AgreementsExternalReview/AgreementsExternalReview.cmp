@@ -153,10 +153,10 @@
 
         <aura:set attribute="footerButtons">
             <div class="slds-grid slds-grid_align-spread">
-                <lightning:button class="slds-button slds-button--neutral"
+                <lightning:button class="slds-button slds-button_neutral"
                                   onclick="{!c.backButtonClicked}"
                                   disabled="{!v.loading}">{!$Label.c.Back}</lightning:button>
-                <lightning:button class="slds-button slds-button--brand" onclick="{!c.nextButtonClicked}"
+                <lightning:button class="slds-button slds-button_brand" onclick="{!c.nextButtonClicked}"
                                   disabled="{!if(v.recipients[0].name == null || v.loading || lessthanorequal(v.requestExpirationDays, 0), true, false)}"
                                   label="{!if(v.currentStep == '1', $Label.c.Next, $Label.c.Send)}"></lightning:button>
             </div>

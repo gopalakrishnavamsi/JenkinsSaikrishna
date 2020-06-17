@@ -24,7 +24,7 @@
             </div>
         </aura:if>
         <!--modal body -->
-        <div class="{!'slds-scope slds-p-horizontal--xx-large' + if(v.loading, ' ds-fadeBackground')}">
+        <div class="{!'slds-scope slds-p-horizontal_xx-large' + if(v.loading, ' ds-fadeBackground')}">
             <div class="slds-grid slds-grid_vertical">
                 <div class="slds-col">
                     <div class="slds-text-align_center">

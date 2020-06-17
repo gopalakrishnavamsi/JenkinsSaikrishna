@@ -123,8 +123,8 @@
                     </div>
                 </div>
             </aura:if>
-            <div class="slds-m-top--small slds-m-bottom--x-large">
-                <div class="soql-text-header slds-m-bottom--xx-small">{!$Label.c.FilterByOption}</div>
+            <div class="slds-m-top_small slds-m-bottom_x-large">
+                <div class="soql-text-header slds-m-bottom_xx-small">{!$Label.c.FilterByOption}</div>
                 <lightning:textarea class="slds-form-element"
                                     placeholder="{!$Label.c.ExampleFilterByClause}"
                                     value="{!v.clonedFieldMapping.filterBy}"
@@ -136,8 +136,8 @@
                             target="_blank"/>
                 </p>
             </div>
-            <div class="slds-m-top--medium slds-m-bottom--medium">
-                <div class="soql-text-header slds-m-bottom--xx-small">{!$Label.c.OrderByOption}</div>
+            <div class="slds-m-top_medium slds-m-bottom_medium">
+                <div class="soql-text-header slds-m-bottom_xx-small">{!$Label.c.OrderByOption}</div>
                 <lightning:textarea class="slds-form-element"
                                     placeholder="{!$Label.c.ExampleOrderByClause}"
                                     value="{!v.clonedFieldMapping.orderBy}"
@@ -149,8 +149,8 @@
                             target="_blank"/>
                 </p>
             </div>
-            <div class="slds-show_inline-block slds-m-top--medium slds-m-bottom--medium">
-                <div class="soql-text-header slds-m-bottom--xx-small">{!$Label.c.LimitByOption}</div>
+            <div class="slds-show_inline-block slds-m-top_medium slds-m-bottom_medium">
+                <div class="soql-text-header slds-m-bottom_xx-small">{!$Label.c.LimitByOption}</div>
                 <lightning:input aura:id="limitByInput"
                                  type="text"
                                  class="slds-form-element"

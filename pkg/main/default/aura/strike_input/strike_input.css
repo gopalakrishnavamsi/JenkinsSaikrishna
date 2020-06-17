@@ -15,7 +15,7 @@ License: BSD 3-Clause License
     cursor: default;
 }
 
-.THIS .si-help-text-icon--negate-spacing {
+.THIS .si-help-text-icon_negate-spacing {
     margin-left: -0.25rem;
 }
 
@@ -27,11 +27,11 @@ License: BSD 3-Clause License
     width: 100%;
 }
 
-.THIS label.slds-checkbox--toggle {
+.THIS label.slds-checkbox_toggle {
     pointer-events: none;
 }
 
-.THIS label.slds-checkbox--toggle > * {
+.THIS label.slds-checkbox_toggle > * {
     pointer-events: auto;
 }
 
@@ -50,14 +50,14 @@ License: BSD 3-Clause License
     display: inline-flex;
 }
 
-.THIS .slds-checkbox__label .slds-checkbox--faux,
-.THIS .slds-radio__label .slds-radio--faux {
+.THIS .slds-checkbox__label .slds-checkbox_faux,
+.THIS .slds-radio__label .slds-radio_faux {
     min-width: t(spacingMedium);
     min-height: t(spacingMedium);
 }
 
-.THIS .slds-checkbox__label .slds-checkbox--faux,
-.THIS .slds-radio__label .slds-radio--faux {
+.THIS .slds-checkbox__label .slds-checkbox_faux,
+.THIS .slds-radio__label .slds-radio_faux {
     min-width: t(spacingMedium);
     min-height: t(spacingMedium);
 }

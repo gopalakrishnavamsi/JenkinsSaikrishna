@@ -12,7 +12,7 @@
     display: none;
 }
 
-.THIS.slds-tile .slds-form-element .slds-checkbox [type="checkbox"]+.slds-checkbox__label .slds-checkbox--faux {
+.THIS.slds-tile .slds-form-element .slds-checkbox [type="checkbox"]+.slds-checkbox__label .slds-checkbox_faux {
     margin-right: 0;
 }
 

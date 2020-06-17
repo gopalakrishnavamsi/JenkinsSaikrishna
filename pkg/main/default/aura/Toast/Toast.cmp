@@ -27,7 +27,7 @@
                 <lightning:icon class="slds-no-flex slds-m-right_small" size="small"
                                 iconName="{!if(v.mode == 'success', 'utility:success', if(v.mode == 'warning', 'utility:warning', 'utility:error'))}"
                                 variant="inverse"/>
-                <lightning:buttonIcon class="slds-button--icon-inverse slds-notify__close slds-m-left_small"
+                <lightning:buttonIcon class="slds-button_icon-inverse slds-notify__close slds-m-left_small"
                                       alternativeText="close"
                                       iconName="utility:close"
                                       size="large"

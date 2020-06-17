@@ -16,7 +16,7 @@
     position: relative;
 }
 
-.THIS .ds-salesForceFileSelction_container {
+.THIS .ds-salesForceFileSelection_container {
     max-height: 300px;
 }
 
@@ -66,10 +66,10 @@
     display: none;
 }
 
-.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox--faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox_faux,
 .THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox_faux,
 .THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-radio_faux,
-.THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-radio--faux {
+.THIS .ds-no-label .slds-form-element__control > .slds-radio > .slds-radio__label > .slds-radio_faux {
     margin: 0;
 }
 

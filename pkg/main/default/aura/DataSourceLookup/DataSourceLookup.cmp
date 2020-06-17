@@ -104,7 +104,7 @@
                                         </span>
                                         <span class="slds-media__body">
                                             <span class="slds-truncate" title="All Data Sources">
-                                                <span class="slds-text-body_regular slds-m-top--xxx-small">{!obj.label}</span>
+                                                <span class="slds-text-body_regular slds-m-top_xxx-small">{!obj.label}</span>
                                             </span>
                                         </span>
                                     </div>
