@@ -1,7 +1,7 @@
 import {LightningElement, api} from 'lwc';
-import {Labels, Recipient,StandardEvents} from 'c/recipientUtils';
-import {isEmpty,proxify,removeArrayElement,subscribeToMessageChannel,editArrayElement,groupBy} from 'c/utils';
-import {createMessageContext,releaseMessageContext} from 'lightning/messageService';
+import {Labels, Recipient, StandardEvents} from 'c/recipientUtils';
+import {isEmpty, proxify, removeArrayElement, subscribeToMessageChannel, editArrayElement, groupBy} from 'c/utils';
+import {createMessageContext, releaseMessageContext} from 'lightning/messageService';
 
 const DEFAULT_ROUTING_ORDER = 1;
 
@@ -27,8 +27,8 @@ export default class DecRecipients extends LightningElement {
     return this.privateRecipients;
   }
 
-  set recipients(val = []) {
-    this.privateRecipients = proxify(val.map(r => Recipient.fromObject(r)))
+  set recipients(val) {
+    this.privateRecipients = proxify(!isEmpty(val) ? val.map(r => Recipient.fromObject(r)) : []);
   }
 
   connectedCallback() {
@@ -45,7 +45,7 @@ export default class DecRecipients extends LightningElement {
       StandardEvents.Edit,
       this.handleEditRecipient
     );
-    
+
     if (!isEmpty(this.recipients)) {
       let recipientsGroup = groupBy(this.recipients, 'routingOrder');
       Object.keys(recipientsGroup).forEach(function (key) {
@@ -58,7 +58,7 @@ export default class DecRecipients extends LightningElement {
 
   disconnectedCallback() {
     releaseMessageContext(this.context);
-  }  
+  }
 
   @api
   fetchRecipients = () => {
@@ -78,7 +78,7 @@ export default class DecRecipients extends LightningElement {
   }
 
   set editRecipient(val) {
-    this.recipients = editArrayElement(this.recipients, this.editRecipientIndex, val)
+    this.recipients = editArrayElement(this.recipients, this.editRecipientIndex, val);
   }
 
   closeRecipientsModal = () => {
@@ -92,7 +92,7 @@ export default class DecRecipients extends LightningElement {
 
   removeRecipient = (index) => {
     this.recipients = removeArrayElement(this.recipients, index);
-  }
+  };
 
   addRecipient = (recipient, isAddNew = false) => {
     const isEdit = !isEmpty(this.editRecipientIndex);
@@ -100,26 +100,25 @@ export default class DecRecipients extends LightningElement {
       const maxRoutingOrder = Math.max(...this.recipients.map(r => r.routingOrder), 0);
       recipient.routingOrder = maxRoutingOrder + 1;
     } else if (!isEdit) recipient.routingOrder = DEFAULT_ROUTING_ORDER;
-    
+
     if (isEdit) {
-      this.editRecipient = recipient; 
+      this.editRecipient = recipient;
       this.editRecipientIndex = null;
-    }
-    else this.recipients = [...this.recipients, recipient];
+    } else this.recipients = [...this.recipients, recipient];
 
     this.closeRecipientsModal();
-    if(isAddNew) this.handleRecipientsModalOpen();
+    if (isAddNew) this.handleRecipientsModalOpen();
   };
 
-  handleDeleteRecipient = ({ index }) => {
+  handleDeleteRecipient = ({index}) => {
     if (isEmpty(index) || isEmpty(this.recipients) || isEmpty(this.recipients[index])) return;
     this.recipients = removeArrayElement(this.recipients, index);
-  }
+  };
 
-  handleEditRecipient = ({ index }) => {
+  handleEditRecipient = ({index}) => {
     this.editRecipientIndex = index;
     this.showAddRecipientsModal = true;
-  }
+  };
 
   handleSigningOrderModalOpen = () => {
     const signingOrderDiagramComponent = this.template.querySelector('c-signing-order');
@@ -135,7 +134,7 @@ export default class DecRecipients extends LightningElement {
   };
 
   handleRecipientsUpdate = (event) => {
-    if(event.detail.data) {
+    if (event.detail.data) {
       this.recipients = event.detail.data.sort(function (x, y) {
         return x.routingOrder - y.routingOrder;
       });
@@ -143,7 +142,7 @@ export default class DecRecipients extends LightningElement {
   };
 
   handleDragRecipientsUpdate = (event) => {
-    if(event.detail.data) {
+    if (event.detail.data) {
       this.recipients = event.detail.data;
     }
   };

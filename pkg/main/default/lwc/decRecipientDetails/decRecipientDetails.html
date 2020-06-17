@@ -1,24 +1,55 @@
 <template>
     <template if:true={isRecordFieldsLookup}>
-        <c-dec-record-fields-recipient relationship={relationship} source-object={sourceObject} onrelationshipupdate={handleRelationshipUpdate}></c-dec-record-fields-recipient>
+        <c-dec-record-fields-recipient
+                relationship={relationship}
+                source-object={sourceObject}
+                onrelationshipupdate={handleRelationshipUpdate}>
+        </c-dec-record-fields-recipient>
     </template>
     <template if:true={isRelatedRecipient}>
-        <c-dec-related-recipient filter={filter} relationship={relationship} source-object={sourceObject} onrelationshipupdate={handleRelationshipUpdate} onfilterchange={handleFilterChange}></c-dec-related-recipient>
+        <c-dec-related-recipient
+                filter={filter}
+                relationship={relationship}
+                source-object={sourceObject}
+                onrelationshipupdate={handleRelationshipUpdate}
+                onfilterchange={handleFilterChange}>
+        </c-dec-related-recipient>
     </template>
     <template if:true={isEntityLookup}>
-        <c-dec-recipient-lookup lookup-record={lookupRecord} onrecordselection={handleSourceChange}></c-dec-recipient-lookup>
+        <c-dec-recipient-lookup
+                lookup-record={lookupRecord}
+                onrecordselection={handleSourceChange}>
+        </c-dec-recipient-lookup>
     </template>
     <template if:true={isRoleRecipient}>
-        <c-dec-role-recipient onrolechange={handleRoleRecipientChange}></c-dec-role-recipient>
+        <c-dec-role-recipient
+                onrolechange={handleRoleRecipientChange}
+                role-name={roleName}
+                name={recipient.name}
+                email={recipient.email}>
+        </c-dec-role-recipient>
     </template>
     <template if:true={isSigningGroup}>
-        <c-dec-signing-group-recipient onsigninggroupchange={handleSigningGroupChange} signing-group={recipient.signingGroup}></c-dec-signing-group-recipient>
+        <c-dec-signing-group-recipient
+                onsigninggroupchange={handleSigningGroupChange}
+                signing-group={recipient.signingGroup}>
+        </c-dec-signing-group-recipient>
     </template>
     <section>
-        <c-dec-recipient-action onactionchange={updateAction}></c-dec-recipient-action>
+        <c-dec-recipient-action
+                onactionchange={updateAction}
+                value={recipient.type}>
+        </c-dec-recipient-action>
 
-        <c-dec-recipient-authentication value={authentication} type={type} onauthenticationchange={handleAuthenticationChange}></c-dec-recipient-authentication>
+        <c-dec-recipient-authentication
+                value={authentication}
+                type={type}
+                onauthenticationchange={handleAuthenticationChange}>
+        </c-dec-recipient-authentication>
 
-        <c-dec-recipient-private-message onnotechange={updateNote} recipient-note={recipient.note}></c-dec-recipient-private-message>
+        <c-dec-recipient-private-message
+                onnotechange={updateNote}
+                recipient-note={recipient.note}>
+        </c-dec-recipient-private-message>
     </section>
 </template>

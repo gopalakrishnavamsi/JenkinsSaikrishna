@@ -1,44 +1,33 @@
-import {LightningElement,api} from 'lwc';
+import {LightningElement, api} from 'lwc';
 import {Labels} from 'c/recipientUtils';
+import {isEmpty} from 'c/utils';
 
 export default class DecRoleRecipient extends LightningElement {
   Labels = Labels;
-  @api role = null;
+  @api roleName = null;
   @api name = null;
   @api email = null;
 
-  roleDetails = null;
-
-  connectedCallback() {
-    if (!this.roleDetails) {
-      this.roleDetails = {
-        role: this.role,
-        name: this.name,
-        email: this.email
-      }
-    }
+  get hasNameOrEmail() {
+    return !isEmpty(this.name) || !isEmpty(this.email);
   }
 
-  handleChange = ({ target }) => {
+  handleChange = ({target}) => {
     const paramName = target.name;
     const paramValue = target.value;
-    switch(paramName) {
-      case 'name':
-        this.roleDetails.name = paramValue;
-        break;
-      case 'email':
-        this.roleDetails.email = paramValue;
-        break;
-      case 'role':
-        this.roleDetails.role = paramValue;
-        break;
-    }
+    let payLoad = {
+      roleName: this.roleName,
+      name: this.name,
+      email: this.email
+    };
+
+    payLoad[paramName] = paramValue;
 
     this.dispatchEvent(new CustomEvent(
       'rolechange',
       {
-        detail: this.roleDetails
+        detail: payLoad
       }
     ));
-  }
+  };
 }

@@ -1,9 +1,10 @@
-import {LightningElement} from 'lwc';
+import {LightningElement,api} from 'lwc';
 import {Labels, Actions} from 'c/recipientUtils';
 
 export default class DecRecipientAction extends LightningElement {
   Labels = Labels;
   Actions = Actions;
+  @api
   value = 'Signer';
 
   get options() {

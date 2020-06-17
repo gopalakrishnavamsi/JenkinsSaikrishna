@@ -1,6 +1,8 @@
 import {api, LightningElement} from 'lwc';
 import {Types, AuthenticationTypes} from 'c/recipientUtils';
 import getEntityPhone from '@salesforce/apex/EnvelopeConfigurationController.getEntityPhone';
+import {isEmpty} from 'c/utils';
+
 const DEFAULT_TYPE = Types.LookupRecipient.value;
 
 export default class DecRecipientDetails extends LightningElement {
@@ -16,6 +18,9 @@ export default class DecRecipientDetails extends LightningElement {
   @api
   recipient = {};
 
+  get roleName() {
+    return !isEmpty(this.recipient.role) && !isEmpty(this.recipient.role.name) ? this.recipient.role.name : null;
+  }
 
   get isRecordFieldsLookup() {
     return this.type === this.Types.LookupRecipient.value;
@@ -65,32 +70,32 @@ export default class DecRecipientDetails extends LightningElement {
           detail: isValid
         }
       )
-    )
+    );
   }
 
-  handleFilterChange({ detail }) {
+  handleFilterChange({detail}) {
     this.recipient.filter = detail;
   }
 
-  handleRoleRecipientChange({ detail }) {
-    const { name = null, email = null, role = null } = detail;
-    this.recipient.addRole(role);
+  handleRoleRecipientChange({detail}) {
+    const {name = null, email = null, roleName = null} = detail;
+    this.recipient.addRole(roleName);
     this.recipient.name = name;
     this.recipient.email = email;
     this.sendValidationEvent(this.recipient.isValid);
-  }  
+  }
 
-  handleRelationshipUpdate = ({ detail }) => {
+  handleRelationshipUpdate = ({detail}) => {
     this.recipient.relationship = detail;
     this.sendValidationEvent(this.recipient.isValid);
-  }
+  };
 
-  updateAction = ({ detail }) => {
+  updateAction = ({detail}) => {
     this.recipient.type = detail;
-  }
+  };
 
-  handleAuthenticationChange = async ({ detail = {} }) => {
-    const { type, data = null, isRemove = false } = detail;
+  handleAuthenticationChange = async ({detail = {}}) => {
+    const {type, data = null, isRemove = false} = detail;
 
     if (isRemove) {
       this.recipient.authentication = null;
@@ -98,12 +103,12 @@ export default class DecRecipientDetails extends LightningElement {
     } else if (type === AuthenticationTypes.AccessCode.value) {
       this.recipient.addAccessCode(data);
       return;
-    } 
+    }
 
-    switch(this.type) {
+    switch (this.type) {
       case this.Types.EntityLookup.value: {
         const sourceId = this.recipient.sourceId;
-        const phone = await getEntityPhone({ entityId: sourceId});
+        const phone = await getEntityPhone({entityId: sourceId});
         this.recipient.addSMSAuthentication(phone);
         break;
       }
@@ -115,19 +120,19 @@ export default class DecRecipientDetails extends LightningElement {
         this.recipient.addSMSAuthentication(data);
         break;
     }
-  }
+  };
 
-  updateNote = ({ detail }) => {
+  updateNote = ({detail}) => {
     this.recipient.note = detail;
-  }
+  };
 
-  handleSourceChange = ({ detail = {}}) => {
+  handleSourceChange = ({detail = {}}) => {
     this.recipient.lookupRecord = detail;
     this.sendValidationEvent(this.recipient.isValid);
-  }
+  };
 
-  handleSigningGroupChange = ({ detail }) => {
+  handleSigningGroupChange = ({detail}) => {
     this.recipient.signingGroup = detail;
     this.sendValidationEvent(this.recipient.isValid);
-  }
+  };
 }

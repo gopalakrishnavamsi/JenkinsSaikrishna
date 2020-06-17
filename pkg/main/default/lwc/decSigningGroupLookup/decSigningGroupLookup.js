@@ -14,6 +14,7 @@ export default class DecSigningGroupLookup extends LightningElement {
   @api
   isLookup = false;
 
+  @api
   selectedSigningGroup = null;
 
   signingGroups = [];

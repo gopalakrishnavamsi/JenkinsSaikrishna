@@ -64,6 +64,7 @@ export default class DecRecipientsList extends LightningElement {
 
   itemDragStart(evt) {
     this.fromRecipientIndex = parseInt(evt.currentTarget.dataset.index);
+    this.fromIndex = this.fromRecipientIndex;
     itemDragStart(this, evt.currentTarget.dataset.id);
   }
 

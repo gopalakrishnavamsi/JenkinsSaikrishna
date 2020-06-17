@@ -8,11 +8,10 @@ export default class DecSigningGroupRecipient extends LightningElement {
   signingGroup;
 
   handleSelect = ({detail}) => {
-    this.signingGroup = detail;
     this.dispatchEvent(new CustomEvent(
       'signinggroupchange',
       {
-        detail: this.signingGroup
+        detail: detail
       }
     ));
   };

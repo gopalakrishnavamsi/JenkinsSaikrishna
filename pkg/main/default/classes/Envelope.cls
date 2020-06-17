@@ -489,15 +489,15 @@ global class Envelope {
 	public static Envelope.Options deserializeOptions(final String optionsJson) {
 		Envelope.Options result = null;
 
-		if (optionsJson != null && String.isNotBlank(optionsJson)) {
-			Map<String, Object> m = (Map<String, Object>)JSON.deserializeUntyped(optionsJson);
-			if (m != null) {
-				result = new Envelope.Options(
-					m.containsKey('includeDefaultAutoPlaceTags') && m.get('includeDefaultAutoPlaceTags') != null ? Boolean.valueOf(m.get('includeDefaultAutoPlaceTags')) : false,
-					m.containsKey('documentWriteBack') ? reifyDocumentWriteBack((Map<String, Object>)m.get('documentWriteBack')) : null,
-					m.containsKey('envelopeEventUpdates') ? reifyUpdateMap((Map<String, Object>)m.get('envelopeEventUpdates')) : null,
-					m.containsKey('recipientEventUpdates') ? reifyUpdateMap((Map<String, Object>)m.get('recipientEventUpdates')) : null);
-			}
+		if (String.isBlank(optionsJson)) return result;
+
+		Map<String, Object> m = (Map<String, Object>)JSON.deserializeUntyped(optionsJson);
+		if (m != null) {
+			result = new Envelope.Options(
+				StringUtils.parseBoolean(String.valueOf(m.get('includeDefaultAutoPlaceTags'))),
+				reifyDocumentWriteBack((Map<String, Object>)m.get('documentWriteBack')),
+				reifyUpdateMap((Map<String, Object>)m.get('envelopeEventUpdates')),
+				reifyUpdateMap((Map<String, Object>)m.get('recipientEventUpdates')));
 		}
 
 		return result;

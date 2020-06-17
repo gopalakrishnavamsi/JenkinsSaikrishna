@@ -1,6 +1,6 @@
 import {LightningElement, api} from 'lwc';
-import {Labels,Actions,StandardEvents} from 'c/recipientUtils';
-import {createMessageContext,releaseMessageContext,publish} from 'lightning/messageService';
+import {Labels, Actions, StandardEvents} from 'c/recipientUtils';
+import {createMessageContext, releaseMessageContext, publish} from 'lightning/messageService';
 import {genericEvent, isEmpty} from 'c/utils';
 import EditLabel from '@salesforce/label/c.Edit';
 import DeleteLabel from '@salesforce/label/c.DeleteButtonLabel';
@@ -19,7 +19,7 @@ export default class DecRecipient extends LightningElement {
   Labels = {
     Edit: EditLabel,
     Delete: DeleteLabel
-  }
+  };
 
   context = createMessageContext();
 
@@ -31,10 +31,10 @@ export default class DecRecipient extends LightningElement {
     if (isEmpty(this.recipient)) return '';
     if (!isEmpty(this.recipient.relationship)) {
       return this.recipient.relationship.label;
-    } else if (!isEmpty(this.recipient.name)) {
-      return this.recipient.name;
     } else if (!isEmpty(this.recipient.role)) {
       return this.recipient.role.name;
+    } else if (!isEmpty(this.recipient.name)) {
+      return this.recipient.name;
     } else if (!isEmpty(this.recipient.signingGroup)) {
       return this.recipient.signingGroup.name;
     } else {
@@ -67,9 +67,9 @@ export default class DecRecipient extends LightningElement {
     return 'slds-col ds-recipient-item ds-recipient-color-' + colorSequence;
   }
 
-  handleRecipientAction = ({ target }) => {
+  handleRecipientAction = ({target}) => {
     const action = target.value;
-    switch(action){
+    switch (action) {
       case 'edit':
         this.sendRecipientAction(StandardEvents.Edit);
         break;
@@ -77,13 +77,13 @@ export default class DecRecipient extends LightningElement {
         this.sendRecipientAction(StandardEvents.Delete);
         break;
     }
-  }
+  };
 
   sendRecipientAction(event) {
     if (!event) return;
     publish(
-      this.context, 
-      event, 
+      this.context,
+      event,
       {
         index: this.index
       }
@@ -94,5 +94,5 @@ export default class DecRecipient extends LightningElement {
     if (isEmpty(event.target.value)) return;
     let payload = {'currentIndex': this.index, 'newRoutingOrder': event.target.value};
     genericEvent('routingorderupdate', payload, this, false);
-  }
+  };
 }
