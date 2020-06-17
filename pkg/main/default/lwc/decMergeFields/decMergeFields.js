@@ -1,8 +1,8 @@
 import {LightningElement} from 'lwc';
-import AddMergeFieldsVideoImageStaticResource from '@salesforce/resourceUrl/DecAddMergeFieldsVideo';
-import AddRecipientsVideoLink from '@salesforce/label/c.ComponentsDocuSignFilesVideo';
+import {LABELS, IMAGES} from 'c/decMergeFieldsUtils';
+
 
 export default class DecMergeFields extends LightningElement {
-  addMergeFieldsVideoImage = AddMergeFieldsVideoImageStaticResource;
-  addMergeFieldsVideoLink = AddRecipientsVideoLink;
+  labels = LABELS;
+  images = IMAGES;
 }

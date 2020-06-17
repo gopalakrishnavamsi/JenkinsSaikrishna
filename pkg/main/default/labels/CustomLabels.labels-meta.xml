@@ -9995,6 +9995,182 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>https://docusign.wistia.com/medias/elojgoj4cu</value>
 	</labels>
 	<labels>
+		<fullName>DecMergeFieldsVideoText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>Merge Fields Management</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsVideoLength</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>2 min video</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsVideoLink</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>https://docusign.wistia.com/medias/elojgoj4cu</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsHeader</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>Prepare Fields for Placement</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsSubHeader</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>Place your DocuSign and Salesforce fields in your envelope template next. You can also add custom Salesforce fields during the next step.</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceHeader</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>How to Add Custom Merge Fields</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceInformation</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>New accounts may not have merge fields. If that's the case, a Salesforce admin can add them by using the data in mapped Salesforce fields and adding them to a DocuSign custom field. After they do that, they can place the custom fields on the document. Here's how:</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep1Header</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>1. Select the Salesforce Merge Fields tab</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep1ImageInformation</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>The Salesforce merge fields menu will open</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep2Header</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>2. Select the plus button</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep2ImageInformation</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>The add custom field modal will open</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep3Header</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>3. Add the merge field's information</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep3ImageInformation1</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>&lt;b&gt;Name&lt;/b&gt;: Type a descriptive name for the field (Account Name, Close Date, etc.)</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep3ImageInformation2</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>&lt;b&gt;Set as Salesforce merge field&lt;/b&gt;: Select this check box and then, from the menu that appears, select a Salesforce object to which this field relates.</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep3ImageInformation3</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>•	&lt;b&gt;Allow sender to edit&lt;/b&gt; (Optional) : Allow senders to modify the value of the custom tag.</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep3ImageInformation4</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>•	&lt;b&gt;Writeback&lt;/b&gt; (Optional) : Update Salesforce data when data is changed by a signer.</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep3ImageInformation5</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>•	&lt;b&gt;Select –&lt;/b&gt; : Click dropdown and select a Salesforce parent object (Account, Opportunity, etc.)</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep3ImageInformation6</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>•	&lt;b&gt;Select –&lt;/b&gt; : Click dropdown and select a field from the parent (Opportunity Name, Close Date, etc.)</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep3ImageInformation7</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>Click here for a list of additional &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;custom field details options&lt;/a&gt;.</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep4Header</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>4. Select the save button</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceStep4ImageInformation</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>The custom field is ready to be merged into the envelope template.</value>
+	</labels>
+	<labels>
+		<fullName>DecMergeFieldsGuidanceLearnMore</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Configuration Setup</shortDescription>
+		<value>Would like to learn more about the merge fields? Check out the &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;documentation&lt;/a&gt;.</value>
+	</labels>
+	<labels>
 		<fullName>DecAddRecipients</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>

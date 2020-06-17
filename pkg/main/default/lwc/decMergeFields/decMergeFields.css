@@ -13,3 +13,50 @@
     font-size: var(--lwc-fontSize3);
     width: 729px;
 }
+
+.ds-addMergeFields-guidance-header {
+    color: rgb(8, 7, 7);
+    font-size: var(--lwc-fontSize5);
+    font-weight: var(--lwc-fontWeightBold);
+    letter-spacing: 0px;
+}
+
+.ds-addMergeFields-guidance-information {
+    color: rgb(6, 6, 6);
+    font-size: var(--lwc-fontSize3);
+    letter-spacing: 0px;
+    line-height: 20px;
+}
+
+.ds-addMergeFields-guidance-imageHeader {
+    color: rgb(8, 7, 7);
+    font-size: var(--lwc-fontSize5);
+    font-weight: normal;
+    letter-spacing: 0px;
+    line-height: 24px;
+}
+
+.ds-addMergeFields-guidance-imageInformation {
+    color: rgb(8, 7, 7);
+    font-size: var(--lwc-fontSize3);
+    letter-spacing: 0px;
+    line-height: 20px;
+    margin-left: 18px;
+}
+
+.ds-addMergeFields-guidance-image {
+    height: 190px;
+    width: 240px;
+}
+
+.ds-addMergeFields-guidance-noImage {
+    width: 240px;
+    height: 10px;
+}
+
+.ds-addMergeFields-guidance-learnMore {
+    color: rgb(8, 7, 7);
+    font-size: var(--lwc-fontSize3);
+    letter-spacing: 0px;
+    line-height: 20px;
+}

@@ -5160,6 +5160,94 @@
 		<name>DecSetupTemplatesVideoLink</name>
 	</customLabels>
 	<customLabels>
+		<label>Merge Fields Management</label>
+		<name>DecMergeFieldsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 min video</label>
+		<name>DecMergeFieldsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<name>DecMergeFieldsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Prepare Fields for Placement</label>
+		<name>DecMergeFieldsHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Place your DocuSign and Salesforce fields in your envelope template next. You can also add custom Salesforce fields during the next step.</label>
+		<name>DecMergeFieldsSubHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>How to Add Custom Merge Fields</label>
+		<name>DecMergeFieldsGuidanceHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>New accounts may not have merge fields. If that's the case, a Salesforce admin can add them by using the data in mapped Salesforce fields and adding them to a DocuSign custom field. After they do that, they can place the custom fields on the document. Here's how:</label>
+		<name>DecMergeFieldsGuidanceInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>1. Select the Salesforce Merge Fields tab</label>
+		<name>DecMergeFieldsGuidanceStep1Header</name>
+	</customLabels>
+	<customLabels>
+		<label>The Salesforce merge fields menu will open</label>
+		<name>DecMergeFieldsGuidanceStep1ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Select the plus button</label>
+		<name>DecMergeFieldsGuidanceStep2Header</name>
+	</customLabels>
+	<customLabels>
+		<label>The add custom field modal will open</label>
+		<name>DecMergeFieldsGuidanceStep2ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Add the merge field's information</label>
+		<name>DecMergeFieldsGuidanceStep3Header</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;Name&lt;/b&gt;: Type a descriptive name for the field (Account Name, Close Date, etc.)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;Set as Salesforce merge field&lt;/b&gt;: Select this check box and then, from the menu that appears, select a Salesforce object to which this field relates.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation2</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Allow sender to edit&lt;/b&gt; (Optional) : Allow senders to modify the value of the custom tag.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation3</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Writeback&lt;/b&gt; (Optional) : Update Salesforce data when data is changed by a signer.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation4</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Select –&lt;/b&gt; : Click dropdown and select a Salesforce parent object (Account, Opportunity, etc.)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation5</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Select –&lt;/b&gt; : Click dropdown and select a field from the parent (Opportunity Name, Close Date, etc.)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation6</name>
+	</customLabels>
+	<customLabels>
+		<label>Click here for a list of additional &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;custom field details options&lt;/a&gt;.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation7</name>
+	</customLabels>
+	<customLabels>
+		<label>4. Select the save button</label>
+		<name>DecMergeFieldsGuidanceStep4Header</name>
+	</customLabels>
+	<customLabels>
+		<label>The custom field is ready to be merged into the envelope template.</label>
+		<name>DecMergeFieldsGuidanceStep4ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>Would like to learn more about the merge fields? Check out the &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;documentation&lt;/a&gt;.</label>
+		<name>DecMergeFieldsGuidanceLearnMore</name>
+	</customLabels>
+	<customLabels>
 		<label>Add Recipients</label>
 		<name>DecAddRecipients</name>
 	</customLabels>
