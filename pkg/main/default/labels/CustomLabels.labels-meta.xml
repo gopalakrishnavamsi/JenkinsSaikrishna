@@ -10644,4 +10644,52 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Add and New</shortDescription>
 		<value>Add &amp; New</value>
 	</labels>
+	<labels>
+		<fullName>MaximumRecordsPulled</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Maximum Records Pulled</shortDescription>
+		<value>Maximum Records Pulled</value>	
+	</labels>
+	<labels>
+		<fullName>RecentDateCreated</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Recent Date Created</shortDescription>
+		<value>Recent Date Created</value>	
+	</labels>	
+	<labels>
+		<fullName>RecentDateModified</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Recent Date Modified</shortDescription>
+		<value>Recent Date Modified</value>	
+	</labels>
+	<labels>
+		<fullName>OtherCustomSOQL</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Other (Custom SOQL)</shortDescription>
+		<value>Other (Custom SOQL)</value>	
+	</labels>
+	<labels>
+		<fullName>AddNameAndEmail</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add Name and Email</shortDescription>
+		<value>Add Name and Email</value>	
+	</labels>
+	<labels>
+		<fullName>OrderedBy</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Ordered By</shortDescription>
+		<value>Ordered By</value>	
+	</labels>	
 </CustomLabels>

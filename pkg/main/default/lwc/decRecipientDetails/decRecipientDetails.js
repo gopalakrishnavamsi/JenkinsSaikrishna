@@ -78,10 +78,14 @@ export default class DecRecipientDetails extends LightningElement {
   }
 
   handleRoleRecipientChange({detail}) {
-    const {name = null, email = null, roleName = null} = detail;
-    this.recipient.addRole(roleName);
-    this.recipient.name = name;
-    this.recipient.email = email;
+    const {name = null, value = null, isRoleDetailReset = false} = detail;
+    if (isRoleDetailReset) {
+      this.recipient.name = null;
+      this.recipient.email = null;
+    } else {
+      if (name === 'roleName')  this.recipient.addRole(value);
+      else if (name === 'email' || name === 'name') this.recipient[name] = value;
+    }
     this.sendValidationEvent(this.recipient.isValid);
   }
 

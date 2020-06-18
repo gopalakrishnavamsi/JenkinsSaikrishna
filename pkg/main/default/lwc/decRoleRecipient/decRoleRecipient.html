@@ -8,7 +8,11 @@
                 <lightning-input name="roleName" label={Labels.recipientRoleLabel} value={roleName} onchange={handleChange}></lightning-input>
             </div>
         </div>
-        <c-expandable-link label={Labels.decAddAccessAuthentication} icon-name="utility:add" is-visible={hasNameOrEmail}>
+        <c-expandable-link 
+            label={Labels.addNameAndEmailLabel} 
+            icon-name="utility:add" 
+            is-visible={hasNameOrEmail}
+            oncollapse={resetRoleDetails}>
                 <div class="slds-grid slds-gutters slds-p-left_xxx-small" slot="content">
                     <div class="slds-col slds-size_1-of-2 slds-p-left_none">
                         <div class="slds-form-element">

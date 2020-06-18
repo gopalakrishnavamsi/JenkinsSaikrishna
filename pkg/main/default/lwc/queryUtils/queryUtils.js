@@ -7,7 +7,12 @@ import greaterThanLabel from '@salesforce/label/c.GreaterThanLabel';
 import lessThanLabel from '@salesforce/label/c.LessThanLabel';
 import greaterThanOrEqualsLabel from '@salesforce/label/c.GreaterThanOrEqualsLabel';
 import lessThanOrEqualsLabel from '@salesforce/label/c.LessThanOrEqualsLabel';
-
+import soqlSortingLabel from '@salesforce/label/c.OrderByOption';
+import maximumRecordsPulledLabel from '@salesforce/label/c.MaximumRecordsPulled';
+import orderedByLabel from '@salesforce/label/c.OrderedBy';
+import recentDateCreatedLabel from '@salesforce/label/c.RecentDateCreated';
+import recentDateModifiedLabel from '@salesforce/label/c.RecentDateModified';
+import otherCustomSOQLLabel from '@salesforce/label/c.OtherCustomSOQL';
 
 import { isEmpty, getRandomKey } from 'c/utils';
 
@@ -71,6 +76,30 @@ const LogicOperators = {
     '<=' : OperatorOptions.LessThanOrEquals.value 
 };
 
+export const Labels = {
+    soqlSortingLabel,
+    maximumRecordsPulledLabel,
+    orderedByLabel
+}
+
+export const OrderByQueriesOptions = {
+    MostRecent : {
+        label: recentDateCreatedLabel,
+        value: 'MostRecent',
+        query: 'CreatedDate DESC'
+    },
+    LastModified : {
+        label: recentDateModifiedLabel,
+        value: 'LastModified',
+        query: 'LastModifiedDate DESC'
+    },
+    Custom : {
+        label: otherCustomSOQLLabel,
+        value: 'Custom',
+        query: null
+    }
+}
+
 export class Relationship {
     constructor(isLookup = true, name = null, label = null, relatesTo = null) {
         this.isLookup = isLookup;
@@ -105,6 +134,14 @@ export class Filter {
 
     get isEmpty() {
         return isEmpty(this.filterBy) && isEmpty(this.orderBy) && isEmpty(this.maximumRecords);
+    }
+
+    get orderByType() {
+        if (isEmpty(this.orderBy)) return null;
+        const orderByValue = this.orderBy.toUpperCase();
+        if (orderByValue === OrderByQueriesOptions.MostRecent.query.toUpperCase()) return OrderByQueriesOptions.MostRecent.value;
+        else if (orderByValue === OrderByQueriesOptions.LastModified.query.toUpperCase()) return OrderByQueriesOptions.LastModified.value;
+        return OrderByQueriesOptions.Custom.value;
     }
 
     getConditionalLogic() {

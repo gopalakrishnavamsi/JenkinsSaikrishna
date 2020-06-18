@@ -12,22 +12,27 @@ export default class DecRoleRecipient extends LightningElement {
     return !isEmpty(this.name) || !isEmpty(this.email);
   }
 
-  handleChange = ({target}) => {
-    const paramName = target.name;
-    const paramValue = target.value;
-    let payLoad = {
-      roleName: this.roleName,
-      name: this.name,
-      email: this.email
-    };
-
-    payLoad[paramName] = paramValue;
-
+  resetRoleDetails() {
     this.dispatchEvent(new CustomEvent(
       'rolechange',
       {
-        detail: payLoad
+        detail: { 
+          isRoleDetailReset: true
+        } 
       }
     ));
-  };
+  }
+
+  handleChange({target}) {
+    const { name = null, value = null} = target;
+    this.dispatchEvent(new CustomEvent(
+      'rolechange',
+      {
+        detail: { 
+          name, 
+          value
+        } 
+      }
+    ));
+  }
 }

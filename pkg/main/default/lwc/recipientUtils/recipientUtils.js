@@ -55,6 +55,8 @@ import recipientRoleLabel from '@salesforce/label/c.RecipientRoleLabel';
 import recipientRecordFieldLabel from '@salesforce/label/c.RecipientRecordFieldLabel';
 import view from '@salesforce/label/c.View';
 import addAndNew from '@salesforce/label/c.AddAndNew';
+import addNameAndEmailLabel from '@salesforce/label/c.AddNameAndEmail';
+//Events
 import DEC_DELETE_RECIPIENT from '@salesforce/messageChannel/DecDeleteRecipient__c';
 import DEC_EDIT_RECIPIENT from '@salesforce/messageChannel/DecEditRecipient__c';
 
@@ -191,8 +193,8 @@ export class Recipient {
     };
   }
 
-  addRole(name) {
-    this.role = new Role(name, this.routingOrder);
+  addRole(roleName) {
+    this.role = new Role(roleName, this.routingOrder);
   }
 
   addSMSAuthentication(phone = null) {
@@ -310,7 +312,8 @@ export const Labels = {
   addAndNew: addAndNew,
   accessCodeLabel: accessCodeLabel,
   decSMSorPhone: decSMSorPhone,
-  decSigningGroup: decSigningGroup
+  decSigningGroup: decSigningGroup,
+  addNameAndEmailLabel: addNameAndEmailLabel
 };
 
 export const Actions = {

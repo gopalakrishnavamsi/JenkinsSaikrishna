@@ -5515,6 +5515,30 @@
 		<label>Add &amp; New</label>
 		<name>AddAndNew</name>
 	</customLabels>
+	<customLabels>
+		<label>Maximum Records Pulled</label>	
+		<name>MaximumRecordsPulled</name>
+	</customLabels>
+	<customLabels>
+		<label>Recent Date Created</label>	
+		<name>RecentDateCreated</name>
+	</customLabels>	
+	<customLabels>
+		<label>Recent Date Modified</label>	
+		<name>RecentDateModified</name>
+	</customLabels>
+	<customLabels>
+		<label>Other (Custom SOQL)</label>	
+		<name>OtherCustomSOQL</name>
+	</customLabels>
+	<customLabels>
+		<label>Add Name and Email</label>	
+		<name>AddNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>Ordered By</label>	
+		<name>OrderedBy</name>
+	</customLabels>		
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

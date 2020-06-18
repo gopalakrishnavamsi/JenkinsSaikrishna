@@ -34,8 +34,35 @@
             <div class="slds-col slds-size_1-of-12 slds-p-top_xxx-small">
                 <lightning-icon size="xx-small" icon-name='utility:clear' onclick={removeFilter}
                 class="ds-clear-icon"></lightning-icon>
-            </div>                                             
-        </section>     
+            </div>                                                        
+        </section>  
+        <section if:true={showFilterPill}>
+            <lightning-combobox
+            name='type'
+            label={Labels.orderedByLabel}
+            value={orderByType}
+            placeholder=""
+            options={orderByOptions}
+            onchange={handleFilterPropertyChange}
+            class="slds-p-vertical_x-small slds-p-horizontal_x-small"
+            ></lightning-combobox>
+            <lightning-textarea
+            name='orderBy'
+            if:true={isCustomOrderBy}
+            label={Labels.soqlSortingLabel}
+            value={filter.orderBy}
+            onchange={handleFilterPropertyChange}
+            class="slds-p-vertical_x-small slds-p-horizontal_x-small"
+            >
+            </lightning-textarea>
+            <lightning-input 
+            name='maximumRecords'
+            type='number' 
+            label={Labels.maximumRecordsPulledLabel}
+            onchange={handleFilterPropertyChange}
+            class="slds-p-vertical_x-small slds-p-horizontal_x-small"
+            value={filter.maximumRecords}></lightning-input>
+        </section>  
     </section>
     <c-conditional-logic-modal is-open={isLogicModalOpen} source-object={relatedObject} filter={privateFilter} onclose={handleFilterByChange}></c-conditional-logic-modal>
 </template>
