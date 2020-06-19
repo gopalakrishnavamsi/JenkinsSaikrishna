@@ -2159,6 +2159,28 @@ private class PermissionsTest {
 	}
 
 	@IsTest
+	static void test_getFlsResults_customLookups() {
+		DescribeSObjectResult envDesc = OBJECT_TYPE.getDescribe();
+		String envelopeObjectName = Application.namespacePrefix + 'Envelope__c';
+		//envelopeConfigurationLookupFieldName represents how the field name will appear in a SOQL query when referring the lookup object
+		String envelopeConfigurationLookupFieldName = Application.namespacePrefix + 'EnvelopeConfiguration__r';
+
+		Test.startTest();
+
+		Permissions.FlsResults result1 = Permissions.getFlsResults(
+			Permissions.FlsAccess.Queryable,
+			envelopeObjectName,
+			envDesc,
+			new List<String> { envelopeConfigurationLookupFieldName },
+			envDesc.fields.getMap());
+
+		Test.stopTest();
+
+		System.assertNotEquals(null, result1);
+		System.assert(result1.isAuthorized);
+	}
+
+	@IsTest
 	static void test_isSpecialCaseField() {
 		DescribeSObjectResult userDesc = Schema.User.getSObjectType().getDescribe();
 
@@ -2166,11 +2188,33 @@ private class PermissionsTest {
 
 		Boolean result1 = Permissions.isSpecialCaseField('Manager', userDesc.fields.getMap());
 		Boolean result2 = Permissions.isSpecialCaseField('Name', userDesc.fields.getMap());
+		Boolean result3 = Permissions.isSpecialCaseField(null, userDesc.fields.getMap());
 
 		Test.stopTest();
 
 		System.assertEquals(result1, true);
 		System.assertEquals(result2, false);
+		System.assertEquals(result3, false);
+
+	}
+
+	@IsTest
+	static void test_isCustomLookupField() {
+		DescribeSObjectResult envDesc = OBJECT_TYPE.getDescribe();
+		//envelopeConfigurationLookupFieldName represents how the field name will appear in a SOQL query when referring the lookup object
+		String envelopeConfigurationLookupFieldName = Application.namespacePrefix + 'EnvelopeConfiguration__r';
+
+		Test.startTest();
+
+		Boolean result1 = Permissions.isCustomLookupField(envelopeConfigurationLookupFieldName, envDesc.fields.getMap());
+		Boolean result2 = Permissions.isCustomLookupField(FIELD_NAME, envDesc.fields.getMap());
+		Boolean result3 = Permissions.isCustomLookupField(null, envDesc.fields.getMap());
+
+		Test.stopTest();
+
+		System.assertEquals(result1, true);
+		System.assertEquals(result2, false);
+		System.assertEquals(result3, false);
 
 	}
 

@@ -981,14 +981,36 @@ public with sharing class Permissions {
 
 	@TestVisible
 	private static String formatIdPointingField(final String fieldName) {
-		return String.format('{0}Id', new List<String> { fieldName }).toLowerCase();
+		String formattedIdPointingFieldName = null;
+		if (String.isNotBlank(fieldName)) {
+			formattedIdPointingFieldName = String.format('{0}Id', new List<String> { fieldName }).toLowerCase();
+		}
+		return formattedIdPointingFieldName;
 	}
 
 	@TestVisible
 	private static Boolean isSpecialCaseField(final String fieldName, final Map<String, SObjectField> fieldMap) {
 		if (String.isBlank(fieldName) || fieldMap.containsKey(fieldName)) return false;
-		String formmatedFieldName = formatIdPointingField(fieldName);
-		return fieldMap.containsKey(formmatedFieldName) && fieldMap.get(formmatedFieldName).getDescribe().getReferenceTo() != null;
+		String formattedFieldName = formatIdPointingField(fieldName);
+		return fieldMap.containsKey(formattedFieldName) && fieldMap.get(formattedFieldName).getDescribe().getReferenceTo() != null;
+	}
+
+	@TestVisible
+	private static String formatCustomLookupField(final String fieldName) {
+		String formattedCustomLookupFieldName = null;
+		if (String.isNotBlank(fieldName)) {
+			formattedCustomLookupFieldName = fieldName.replace('__r', '__c').toLowerCase();
+		}
+		return formattedCustomLookupFieldName;
+	}
+
+	@TestVisible
+	private static Boolean isCustomLookupField(final String fieldName, final Map<String, SObjectField> fieldMap) {
+		if (String.isBlank(fieldName) || fieldMap.containsKey(fieldName)) return false;
+		String formattedFieldName = formatCustomLookupField(fieldName);
+		return fieldMap.containsKey(formattedFieldName)
+			&& fieldMap.get(formattedFieldName).getDescribe().getType().name() == 'REFERENCE'
+			&& fieldMap.get(formattedFieldName).getDescribe().getRelationshipName().toLowerCase() == fieldName.toLowerCase();
 	}
 
 	@TestVisible
@@ -1013,7 +1035,11 @@ public with sharing class Permissions {
 					isAuthorized = false;
 					fieldResults.add(new FlsResult(Label.Unknown, FlsStatus.BadRequest));
 				} else {
-					if (isSpecialCaseField(f, fieldMap)) f = formatIdPointingField(f);
+					if (isSpecialCaseField(f, fieldMap)) {
+						f = formatIdPointingField(f);
+					} else if (isCustomLookupField(f, fieldMap)) {
+						f = formatCustomLookupField(f);
+					}
 					SObjectField sof = fieldMap.get(f);
 					if (sof == null && !objectDescribe.isCustom() && !f.endsWith('__c') && Salesforce.exists(f)) {
 						// In the event we have a lookup field with the same name as the master object.
