@@ -5512,6 +5512,18 @@
 		<name>GetMergeFieldsError</name>
 	</customLabels>
 	<customLabels>
+		<label>Email Subject</label>
+		<name>EmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Message to All Recipients</label>
+		<name>MessageToAllHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>This will be sent as an email to all recipients. You can use  &lt;a href=&quot;https://placeholder&quot; target=&quot;_blank&quot;&gt;merge tags&lt;/a&gt; to personalize the message.</label>
+		<name>MessageToAllDescription</name>
+	</customLabels>
+	<customLabels>
 		<label>Add &amp; New</label>
 		<name>AddAndNew</name>
 	</customLabels>

@@ -10637,6 +10637,27 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Failed to retrieve merge fields for envelope.</value>
 	</labels>
 	<labels>
+		<fullName>EmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Email Subject</shortDescription>
+		<value>Email Subject</value>
+	</labels>
+	<labels>
+		<fullName>MessageToAllHeader</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Message To All Header</shortDescription>
+		<value>Message to All Recipients</value>
+	</labels>
+	<labels>
+		<fullName>MessageToAllDescription</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Message To All Description</shortDescription>
+		<value>This will be sent as an email to all recipients. You can use  &lt;a href=&quot;https://placeholder&quot; target=&quot;_blank&quot;&gt;merge tags&lt;/a&gt; to personalize the message.</value>
+	</labels>
+	<labels>
 		<fullName>AddAndNew</fullName>
 		<categories>General</categories>
 		<language>en_US</language>

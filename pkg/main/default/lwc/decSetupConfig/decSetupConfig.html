@@ -31,13 +31,19 @@
                               source-object={sourceObject}
                               recipients={recipients}>
             </c-dec-recipients>
+            <c-dec-recipient-message
+                    if:true={recipientsStep}
+                    email-subject={emailSubject}
+                    email-message={emailMessage}
+                    onemailchange={handleEmailChange}>
+            </c-dec-recipient-message>
             <c-dec-merge-fields if:true={mergeFieldsStep}></c-dec-merge-fields>
             <template if:true={taggerStep}>
                 Step 4
             </template>
             <c-dec-options
-                if:true={optionsStep}
-                notifications={notifications}>
+                    if:true={optionsStep}
+                    notifications={notifications}>
             </c-dec-options>
             <template if:true={customButtonStep}>
                 <c-dec-custom-button

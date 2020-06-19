@@ -1,9 +1,11 @@
 import {LightningElement, api, wire} from 'lwc';
 
 // Lightning message service
-import { createMessageContext,
-         releaseMessageContext,
-         publish } from 'lightning/messageService';
+import {
+  createMessageContext,
+  releaseMessageContext,
+  publish
+} from 'lightning/messageService';
 // Publisher
 import DEC_ERROR from '@salesforce/messageChannel/DecError__c';
 import DEC_UPDATE_PAGE_LAYOUTS from '@salesforce/messageChannel/DecUpdatePageLayouts__c';
@@ -15,11 +17,13 @@ import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEn
 import DEC_UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/DecUpdateNotifications__c';
 
 // utility functions
-import { isEmpty,
-         subscribeToMessageChannel,
-         showError } from 'c/utils';
-import { DOCUMENT_TYPE_SOURCE_FILES } from 'c/documentUtils';
-import { LABEL } from 'c/setupUtils';
+import {
+  isEmpty,
+  subscribeToMessageChannel,
+  showError
+} from 'c/utils';
+import {DOCUMENT_TYPE_SOURCE_FILES} from 'c/documentUtils';
+import {LABEL} from 'c/setupUtils';
 
 //apex methods
 import updateEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.updateEnvelopeConfiguration';
@@ -131,6 +135,14 @@ export default class DecSetupConfig extends LightningElement {
     return isEmpty(this.envelopeConfigurationData) ? [] : this.envelopeConfigurationData.recipients;
   }
 
+  get emailMessage() {
+    return isEmpty(this.envelopeConfigurationData) ? [] : this.envelopeConfigurationData.emailMessage;
+  }
+
+  get emailSubject() {
+    return isEmpty(this.envelopeConfigurationData) ? [] : this.envelopeConfigurationData.emailSubject;
+  }
+
   get notifications() {
     return isEmpty(this.envelopeConfigurationData) || isEmpty(this.envelopeConfigurationData.notifications) ? null : this.envelopeConfigurationData.notifications;
   }
@@ -194,10 +206,10 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleSaveAndClose() {
-    if(this.currentStep === PROGRESS_STEP.CUSTOM_BUTTON) {
+    if (this.currentStep === PROGRESS_STEP.CUSTOM_BUTTON) {
       const msg = {
         recordId: this.recordId
-      }
+      };
       publish(this.context, DEC_UPDATE_PAGE_LAYOUTS, msg);
     } else {
       this.updateEnvelopeConfiguration();
@@ -219,8 +231,8 @@ export default class DecSetupConfig extends LightningElement {
 
   updateLocalConfiguration(fieldsToUpdate) {
     this.envelopeConfigurationData = {
-      ... this.envelopeConfigurationData,
-      ... fieldsToUpdate
+      ...this.envelopeConfigurationData,
+      ...fieldsToUpdate
     };
   }
 
@@ -231,13 +243,13 @@ export default class DecSetupConfig extends LightningElement {
   handleUpdateDocument(event) {
     let docs = this.envelopeConfigurationData.documents;
     docs = [...docs, {...event.detail.data}];
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData,documents:docs};
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents: docs};
   }
 
   handleUpdateRecipient(event) {
     let recipients = this.envelopeConfigurationData.recipients;
     recipients = [...recipients, {...event.detail.data}];
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData,recipients:recipients};
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, recipients: recipients};
   }
 
   handleOnClickProgressStep(event) {
@@ -262,8 +274,16 @@ export default class DecSetupConfig extends LightningElement {
 
   handleDeleteTemplateDocument(message) {
     const documents = this.envelopeConfigurationData.documents.filter((d, i) => i !== message.index);
-    this.envelopeConfigurationData = {... this.envelopeConfigurationData, documents};
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents};
     this.contentDocumentIdsToDelete.push(message.contentDocumentId);
+  }
+
+  handleEmailChange({detail}) {
+    const {emailMessage = null, emailSubject = null} = detail.data;
+    this.updateLocalConfiguration({
+      emailMessage: emailMessage,
+      emailSubject: emailSubject
+    });
   }
 
   updateEnvelopeConfiguration(step, configurationData = this.envelopeConfigurationData) {

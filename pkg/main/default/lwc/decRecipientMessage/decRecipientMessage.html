@@ -1,0 +1,26 @@
+<template>
+
+    <div class="slds-m-bottom_large">
+        <div class="slds-text-heading_large slds-text-title_bold slds-m-bottom-x_small">
+            {Labels.messageToAllHeaderLabel}
+        </div>
+        <lightning-formatted-rich-text value={Labels.messageToAllDescriptionLabel}></lightning-formatted-rich-text>
+    </div>
+
+    <div class="row">
+        <lightning-input
+                class="slds-m-bottom_large"
+                name="emailSubject"
+                type="text"
+                value={emailSubject}
+                onchange={handleEmailChange}
+                label={Labels.emailSubjectLabel}>
+        </lightning-input>
+        <lightning-textarea
+                name="emailMessage"
+                value={emailMessage}
+                onchange={handleEmailChange}
+                label={Labels.emailMessageLabel}>
+        </lightning-textarea>
+    </div>
+</template>
