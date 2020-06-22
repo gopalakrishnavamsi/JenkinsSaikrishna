@@ -93,6 +93,6 @@ export default class DecRecipient extends LightningElement {
   handleRoutingOrderChange = (event) => {
     if (isEmpty(event.target.value)) return;
     let payload = {'currentIndex': this.index, 'newRoutingOrder': event.target.value};
-    genericEvent('routingorderupdate', payload, this, false);
+    genericEvent.call(this, 'routingorderupdate', payload, false);
   };
 }

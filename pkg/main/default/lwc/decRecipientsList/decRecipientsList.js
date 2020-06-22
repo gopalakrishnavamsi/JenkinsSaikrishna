@@ -41,7 +41,7 @@ export default class DecRecipientsList extends LightningElement {
 
   handleDragEnter(evt) {
     if (!this.isSigningOrder) {
-      genericEvent('signingorderchecked', {}, this, false);
+      genericEvent.call(this, 'signingorderchecked', {}, false);
     }
     handleDragEnter(this, evt);
   }
@@ -98,7 +98,7 @@ export default class DecRecipientsList extends LightningElement {
         }
         : r
     );
-    genericEvent('dragrecipientupdate', updatedRecs, this, false);
+    genericEvent.call(this, 'dragrecipientupdate', updatedRecs, false);
   };
 
   handleRoutingOrderUpdate = (event) => {
@@ -107,6 +107,6 @@ export default class DecRecipientsList extends LightningElement {
       ...r,
       routingOrder: index === data.currentIndex ? data.newRoutingOrder : r.routingOrder
     }));
-    genericEvent('updaterecipient', this.privateRecipients, this, false);
+    genericEvent.call(this, 'updaterecipient', this.privateRecipients, false);
   };
 }

@@ -1,0 +1,71 @@
+<template>
+    <div class="ds-sending-header-container slds-page-header slds-m-bottom_medium">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <img class="slds-is-relative slds-icon" src={sendingIcon} />
+                    </div>
+                    <div class="slds-media__body">
+                        <nav>
+                            <ol class="slds-breadcrumb slds-line-height_reset">
+                                <li class="slds-breadcrumb__item">
+                                    <span>{label.docuSign}</span>
+                                </li>
+                            </ol>
+                        </nav>
+                        <h1 class="slds-page-header__title slds-m-right_small slds-align-middle">{label.sendWithDocuSign}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <lightning-button
+                            label={label.cancel}
+                            variant="neutral"
+                            onclick={openExitModal}>
+                        </lightning-button>
+                        <lightning-button
+                            label={label.back}
+                            variant="neutral"
+                            class="slds-p-left_large"
+                            onclick={handleBack}
+                            disabled={isFirstStep}>
+                        </lightning-button>
+                        <lightning-button
+                            label={nextStepButtonText}
+                            variant="brand"
+                            class="slds-p-left_xx-small"
+                            onclick={handleNext}
+                            disabled={isFinalStep}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <c-modal
+            header={label.exit}
+            show-modal={showExitModal}
+            onclose={closeExitModal}>
+        <div slot="content" class="slds-p-around_medium">
+            <div class="slds-form-element ds-sending-center-text">
+                <p>{label.exitSendForSignature}</p>
+                <p>{label.progressLostOnExit}</p>
+            </div>
+        </div>
+        <div slot="footer">
+            <lightning-button
+                label={label.cancel}
+                onclick={closeExitModal}>
+            </lightning-button>
+            <lightning-button
+                variant="brand"
+                label={label.exit}
+                onclick={exitWorkflow}
+                class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+    </c-modal>
+</template>

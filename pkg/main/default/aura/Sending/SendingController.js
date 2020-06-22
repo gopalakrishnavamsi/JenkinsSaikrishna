@@ -14,6 +14,15 @@
     helper.createEnvelope(component, component.get('v.recordId'), component.get('v.sObjectName'));
   },
 
+  handleErrorMessage: function (component, message) {
+    if (message !== null && message.getParam('errorMessage') !== null) {
+      var toast = component.find('ds-toast');
+      if (toast) {
+        toast.show('error', message.getParam('errorMessage'));
+      }
+    }
+  },
+
   setExpirationDate: function (component, event, helper) {
     var expireAfterDays = component.get('v.envelope.notifications.expireAfterDays');
     if (!$A.util.isUndefinedOrNull(expireAfterDays)) {

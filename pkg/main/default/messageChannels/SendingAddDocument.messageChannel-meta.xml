@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+	<masterLabel>SendingAddDocument</masterLabel>
+	<isExposed>true</isExposed>
+	<description>Adds a new document to the list of documents of an envelope</description>
+	<lightningMessageFields>
+		<fieldName>document</fieldName>
+		<description>The document to add</description>
+	</lightningMessageFields>
+</LightningMessageChannel>

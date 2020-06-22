@@ -86,11 +86,33 @@
           );
           if (updated) {
             component.set('v.disableNext', false);
-            self.handleFilesChange(component);
+            /*
+            self.handleFilesChange(component); // Uncomment this line for EXISTING sending experience
+            */
           }
+
+          // Renders LWC component for NEW sending experience
+          self.beginSendForSignature(component); // Comment this line for EXISTING sending experience
         }
       );
     }
+  },
+
+  beginSendForSignature: function (component) {
+    this.createComponent(
+      'sendingExperience',
+      component,
+      'c:sendingConfig',
+      {
+        recordId: component.get('v.recordId'),
+        envelope: component.get('v.envelope'),
+        documents: component.get('v.documents'),
+        recipients: component.get('v.recipients'),
+        defaultRoles: component.get('v.defaultRoles'),
+        files: component.get('v.files'),
+        sendNow: component.get('v.sendNow'),
+        forbidEnvelopeChanges: component.get('v.lock')
+      });
   },
 
   addPlaceholderProperties: function (placeholder, routingOrder, defaultRoles) {

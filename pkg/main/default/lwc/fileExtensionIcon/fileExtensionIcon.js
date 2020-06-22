@@ -11,7 +11,7 @@ export default class FileExtensionIcon extends LightningElement {
   adfLogoUrl = ADF_LOGO;
 
   get isWebExtension() {
-    return WEB_EXTENSIONS.includes('$this.extension');
+    return WEB_EXTENSIONS.includes(this.extension);
   }
 
   get iconName() {

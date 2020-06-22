@@ -1,0 +1,17 @@
+.ds-sending {
+    background: rgb(255, 255, 255);
+    border-radius: 4px;
+}
+
+.ds-sending-margin {
+    margin-left: 181px;
+    margin-right: 181px;
+}
+
+.ds-sending-tagger {
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% + 35px));
+    z-index: 9999;
+    width: 80%;
+}

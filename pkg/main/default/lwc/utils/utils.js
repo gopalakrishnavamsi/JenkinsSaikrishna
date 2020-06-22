@@ -44,18 +44,18 @@ const FILE_EXTENSION_TO_ICON_NAME_MAPPING = new Map([
 const isEmpty = (value) => value === undefined || value === null || value === '';
 
 /**
- * Dispatches a generic custom event
+ * Dispatches a generic custom event. Requires 'this' object designation prior to use.
  * @param eventName {string} Name of the event - success, update, error, etc..
  * @param message {string} Data that needs to be passed.
- * @param thisProperty {object} this property of the component that wants to dispatch the event
  * @param isBubbles {boolean} Does event bubble up the chain
  */
-const genericEvent = (eventName, message, thisProperty, isBubbles) =>
-  thisProperty.dispatchEvent(
+const genericEvent = function (eventName, message, isBubbles) {
+  this.dispatchEvent(
     new CustomEvent(eventName, {
       detail: {data: message},
       bubbles: isBubbles ? true : false
     }));
+};
 
 /**
  * Formats a byte size. For example, 2048 bytes will be formatted as '2 kB'.

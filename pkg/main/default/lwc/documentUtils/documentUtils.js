@@ -21,6 +21,8 @@ import renameDocument from '@salesforce/label/c.Rename';
 import deleteDocument from '@salesforce/label/c.DeleteButtonLabel';
 import cancel from '@salesforce/label/c.Cancel';
 import renameModalTitle from '@salesforce/label/c.RenameAgreement';
+import selectedDocuments from '@salesforce/label/c.SelectedDocuments';
+import addFromSalesforce from '@salesforce/label/c.AddFromSalesforce';
 
 const DOCUMENT_TYPE_TEMPLATE_DOCUMENT = 'TemplateDocument';
 const DOCUMENT_TYPE_SOURCE_FILES = 'SourceFiles';
@@ -46,7 +48,9 @@ const LABEL = {
   renameDocument,
   deleteDocument,
   cancel,
-  renameModalTitle
+  renameModalTitle,
+  selectedDocuments,
+  addFromSalesforce
 };
 
 const TEMPLATE_DOCUMENT_ACTIONS = [

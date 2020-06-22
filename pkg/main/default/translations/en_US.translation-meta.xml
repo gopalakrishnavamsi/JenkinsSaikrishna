@@ -1418,6 +1418,14 @@
 		<name>SendWithDocuSign</name>
 	</customLabels>
 	<customLabels>
+		<label>Are you sure you want to exit?</label>
+		<name>ExitSendForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>Your progress will not be saved.</label>
+		<name>ProgressLostOnExit</name>
+	</customLabels>
+	<customLabels>
 		<label>One or more layouts not found.</label>
 		<name>LayoutsNotFound</name>
 	</customLabels>
@@ -5454,6 +5462,18 @@
 	<customLabels>
 		<label>Envelope expires {0} days after sending</label>
 		<name>ExpiresAfterSending</name>
+	</customLabels>
+	<customLabels>
+		<label>Prepare &amp; Send</label>
+		<name>PrepareAndSend</name>
+	</customLabels>
+	<customLabels>
+		<label>Selected Documents ({0})</label>
+		<name>SelectedDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Add from Salesforce</label>
+		<name>AddFromSalesforce</name>
 	</customLabels>
 	<customLabels>
 		<label>You can tweak the settings used in this template before and after sending.</label>

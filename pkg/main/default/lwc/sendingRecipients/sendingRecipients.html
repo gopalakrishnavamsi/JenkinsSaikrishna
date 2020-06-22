@@ -1,0 +1,10 @@
+<template>
+    <template
+        for:each={recipients}
+        for:item="recipient">
+        <div key={recipient.name}>
+            <div>{recipient.name}</div>
+            <div>{recipient.type}</div>
+        </div>
+    </template>
+</template>

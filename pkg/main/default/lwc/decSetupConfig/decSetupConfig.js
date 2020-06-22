@@ -7,7 +7,7 @@ import {
   publish
 } from 'lightning/messageService';
 // Publisher
-import DEC_ERROR from '@salesforce/messageChannel/DecError__c';
+import ERROR from '@salesforce/messageChannel/Error__c';
 import DEC_UPDATE_PAGE_LAYOUTS from '@salesforce/messageChannel/DecUpdatePageLayouts__c';
 // Subscriber
 import DEC_UPDATE_SOURCE_FILES from '@salesforce/messageChannel/DecUpdateSourceFiles__c';
@@ -119,7 +119,7 @@ export default class DecSetupConfig extends LightningElement {
   })
   getEnvelopeConfigurationData({error, data}) {
     if (error) {
-      showError(this.context, error, DEC_ERROR);
+      showError(this.context, error, ERROR);
       this.setLoading(false);
     } else if (data) {
       this.attachSourceFiles = !isEmpty(data.documents.find(d => d.type === DOCUMENT_TYPE_SOURCE_FILES));
@@ -300,7 +300,7 @@ export default class DecSetupConfig extends LightningElement {
         this.setLoading(false);
       })
       .catch(error => {
-        showError(this.context, error, DEC_ERROR);
+        showError(this.context, error, ERROR);
         this.setLoading(false);
       });
   }

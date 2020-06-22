@@ -2924,6 +2924,20 @@
 		<value>Send with DocuSign</value>
 	</labels>
 	<labels>
+		<fullName>ExitSendForSignature</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Send with DocuSign on exit text</shortDescription>
+		<value>Are you sure you want to exit?</value>
+	</labels>
+	<labels>
+		<fullName>ProgressLostOnExit</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Send with DocuSign on exit text</shortDescription>
+		<value>Your progress will not be saved.</value>
+	</labels>
+	<labels>
 		<fullName>LayoutsNotFound</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
@@ -10531,6 +10545,30 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Expiration inner text for Envelope Templates</shortDescription>
 		<value>Envelope expires {0} days after sending</value>
+	</labels>
+	<labels>
+		<fullName>PrepareAndSend</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Prepare and Send Envelope</shortDescription>
+		<value>Prepare &amp; Send</value>
+	</labels>
+	<labels>
+		<fullName>SelectedDocuments</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Selected Documents to send</shortDescription>
+		<value>Selected Documents ({0})</value>
+	</labels>
+	<labels>
+		<fullName>AddFromSalesforce</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Add related items from Salesforce record</shortDescription>
+		<value>Add from Salesforce</value>
 	</labels>
 	<labels>
 		<fullName>OptionsInfoText</fullName>

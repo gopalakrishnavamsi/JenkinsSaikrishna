@@ -20,8 +20,8 @@ import {
 import {LABEL} from 'c/customButtonUtils';
 
 // Publisher
-import DEC_ERROR from '@salesforce/messageChannel/DecError__c';
-import DEC_SUCCESS from '@salesforce/messageChannel/DecSuccess__c';
+import ERROR from '@salesforce/messageChannel/Error__c';
+import SUCCESS from '@salesforce/messageChannel/Success__c';
 
 // Subscriber
 import DEC_UPDATE_PAGE_LAYOUTS from '@salesforce/messageChannel/DecUpdatePageLayouts__c';
@@ -67,7 +67,7 @@ export default class DecCustomButton extends LightningElement {
   })
   getLayouts({error, data}) {
     if (error) {
-      showError(this.context, error, DEC_ERROR);
+      showError(this.context, error, ERROR);
     } else if (data) {
       this.parseLayouts(data);
       this.isLoading = false;
@@ -79,7 +79,7 @@ export default class DecCustomButton extends LightningElement {
   })
   getDecActionName({error, data}) {
     if (error) {
-      showError(this.context, error, DEC_ERROR);
+      showError(this.context, error, ERROR);
     } else if (data) {
       this.decButtonApiName = data + this.recordId;
     }
@@ -191,11 +191,11 @@ export default class DecCustomButton extends LightningElement {
       parameters: JSON.stringify(parameters)
     })
       .then(() => {
-        showSuccess(this.context, this.label.successfullyModifiedLayouts, DEC_SUCCESS);
+        showSuccess(this.context, this.label.successfullyModifiedLayouts, SUCCESS);
         this.setLoading(false);
       })
       .catch(error => {
-        showError(this.context, error, DEC_ERROR);
+        showError(this.context, error, ERROR);
         this.setLoading(false);
       });
   }

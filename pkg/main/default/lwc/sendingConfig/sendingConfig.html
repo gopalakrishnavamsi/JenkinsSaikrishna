@@ -1,0 +1,38 @@
+<template>
+    <div class="ds-sending">
+        <template if:true={isLoading}>
+            <div class="ds-sending-tagger slds-is-absolute slds-text-align_center">
+                {taggerLoadingMessage}
+            </div>
+            <lightning-spinner
+                size="medium"
+                variant="brand">
+            </lightning-spinner>
+        </template>
+        <c-sending-header
+            is-first-step={isFirstStep}
+            is-final-step={isFinalStep}
+            next-step-button-text={nextStepButtonText}
+            onclickprogressstep={handleOnClickProgressStep}
+            onexitworkflow={handleExitWorkflow}>
+        </c-sending-header>
+        <div class="slds-m-top_large slds-m-bottom_xx-large ds-sending-margin">
+            <c-progress-bar
+                    current-step={currentStep}
+                    steps={steps}
+                    onclickprogressstep={handleOnClickProgressStep}>
+            </c-progress-bar>
+            <c-sending-documents
+                if:true={documentsStep}
+                record-id={recordId}
+                documents={documents}
+                forbid-envelope-changes={forbidEnvelopeChanges}>
+            </c-sending-documents>
+            <c-sending-recipients
+                if:true={recipientsStep}
+                recipients={recipients}
+                forbid-envelope-changes={forbidEnvelopeChanges}>
+            </c-sending-recipients>
+        </div>
+    </div>
+</template>

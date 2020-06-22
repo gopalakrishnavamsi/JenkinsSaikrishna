@@ -49,7 +49,7 @@ export default class FileUpload extends LightningElement {
       this.file = event.target.files[0];
       this.fileName = event.target.files[0].name;
       if (this.file.size > MAX_FILE_SIZE) {
-        genericEvent(ERROR_EVENT_LABEL,this.label.fileSizeLimitReached,this,false);
+        genericEvent.call(this, ERROR_EVENT_LABEL, this.label.fileSizeLimitReached, false);
         return;
       }
       this.extension = this.file.name.split('.').pop();
@@ -85,11 +85,11 @@ export default class FileUpload extends LightningElement {
       base64Data: encodeURIComponent(this.fileContents.substring(start, end))})
       .then(result => {
         this.progress = MAX_PROGRESS;
-        genericEvent(SUCCESS_EVENT_LABEL, result, this, false);
+        genericEvent.call(this, SUCCESS_EVENT_LABEL, result, false);
       })
       .catch(error => {
         if (error.body !== null) {
-          genericEvent(ERROR_EVENT_LABEL, error.body.message, this, false);
+          genericEvent.call(this, ERROR_EVENT_LABEL, error.body.message, false);
         }
       });
   }
