@@ -14,7 +14,7 @@
       }))
       .catch(function (error) {
         helper.showToast(component, error, 'error');
-        helper._getUserEvents(component).error(helper.PUBLISH_BUTTON, {}, error);
+        helper._getUserEvents(component).error(helper.PUBLISH_BUTTON, {}, 'Initialization error');
       });
   },
 
@@ -24,7 +24,7 @@
     userEvents.addProperties({
       'Product': 'Gen',
       'Template Type': 'Word',
-      'Source Object': config ? config.sourceObject : null
+      'Source Object': stringUtils.sanitizeObjectName(config ? config.sourceObject : null)
     });
   },
 
@@ -62,7 +62,7 @@
       } else {
         var errMsg = stringUtils.getErrorMessage(response);
         helper.showToast(component, errMsg, 'error');
-        helper._getUserEvents(component).error(helper.PUBLISH_BUTTON, {}, errMsg);
+        helper._getUserEvents(component).error(helper.PUBLISH_BUTTON, {}, 'Get layouts error');
       }
     }));
     $A.enqueueAction(getLayoutsAction);
@@ -221,7 +221,7 @@
       } else {
         var errMsg = stringUtils.getErrorMessage(response);
         helper.showToast(component, errMsg, 'error');
-        helper._getUserEvents(component).error(helper.PUBLISH_BUTTON, evtProps, errMsg);
+        helper._getUserEvents(component).error(helper.PUBLISH_BUTTON, evtProps, 'Button publish error');
       }
       component.set('v.creatingButtons', false);
     });

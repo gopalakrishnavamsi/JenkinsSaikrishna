@@ -125,29 +125,33 @@ window.UserEvents = function (application, version, environment, accountIdHash, 
         if (/(BlackBerry|PlayBook|BB10)/i.test(ua)) return 'BlackBerry';
         if (/Android/.test(ua)) return 'Android';
         return '';
-      })(),
-      referringDomain: (function () {
-        var toks = String(document.referrer || '').split('/');
-        if (toks.length >= 3) {
-          return toks[2];
-        }
-        return '';
       })()
     });
+  })();
+
+  var currentUrl = (function () {
+    if (!window.location.href) return 'undefined';
+
+    // Anonymize URL
+    var url = window.location.href.split(/[?#]/)[0];
+    var index = url.indexOf('://');
+    if (index >= 0 && (index + 3) < url.length) url = url.substring(index + 3);
+    index = url.indexOf('/');
+    return 'https://salesforce.com' + (index >= 0 ? url.substring(index) : '/');
   })();
 
   var baseProperties = Object.freeze({
     token: '92d714bc30f2a218ea91d4b6ed23cac8',
     distinct_id: userIdHash,
-    $current_url: window.location.href,
+    $current_url: currentUrl,
     $os: deviceProperties.os,
     $browser: deviceProperties.browser,
     $browser_version: deviceProperties.browserVersion,
     $device: deviceProperties.device,
     $screen_height: screen.height,
     $screen_width: screen.width,
-    $referrer: document.referrer,
-    $referring_domain: deviceProperties.referringDomain,
+    $referrer: 'https://salesforce.com',
+    $referring_domain: 'salesforce.com',
     $device_id: userIdHash,
     mp_lib: application,
     $lib_version: version,
@@ -170,8 +174,22 @@ window.UserEvents = function (application, version, environment, accountIdHash, 
     _key: application,
     _timers: {},
 
-    values: function () {
-      return JSON.parse(localStorage.getItem(PendingEvents._key) || '[]');
+    /**
+     * Adds an event to be sent.
+     * @param events {UserEvent[]} The events to queue.
+     */
+    enqueue: function (events) {
+      if (!events) return;
+
+      var evts = PendingEvents.dequeue();
+      Array.prototype.push.apply(evts, events);
+      localStorage.setItem(PendingEvents._key, JSON.stringify(evts));
+    },
+
+    dequeue: function () { // Get and remove values here to prevent race condition with pending http callout
+      var vals = localStorage.getItem(PendingEvents._key);
+      localStorage.removeItem(PendingEvents._key);
+      return JSON.parse(vals || '[]');
     },
 
     /**
@@ -194,15 +212,11 @@ window.UserEvents = function (application, version, environment, accountIdHash, 
           event.properties['$duration'] = parseFloat((msDuration / 1000).toFixed(3));
           delete PendingEvents._timers[event.event];
         }
-        var events = PendingEvents.values();
+        var events = PendingEvents.dequeue();
         events.push(event);
         localStorage.setItem(PendingEvents._key, JSON.stringify(events));
       }
     },
-
-    // replace: function (events) {
-    //   localStorage.setItem(PendingEvents._key, JSON.stringify(events || []));
-    // },
 
     /**
      * Clears all pending events from the queue.
@@ -217,12 +231,11 @@ window.UserEvents = function (application, version, environment, accountIdHash, 
    * @returns {Promise<Object>} A promise for the result of posting the event.
    */
   function sendEvents() {
-    return httpPost(PendingEvents.values())
-      .then(function () {
-        PendingEvents.clear(); // FIXME: potential race condition if new events were queued in the interim.
-      })
+    var events = PendingEvents.dequeue();
+    return httpPost(events)
       .catch(function (error) {
         if ($A && $A.log) $A.log(error);
+        PendingEvents.enqueue(events);
       });
   }
 

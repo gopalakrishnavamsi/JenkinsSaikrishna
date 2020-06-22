@@ -4,11 +4,20 @@ public with sharing class SendingController extends Controller {
 
 	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
 
+	public String sObjectName { get; private set; }
+
 	public SendingController() {
+		QueryString params = QueryString.fromCurrentPage();
+		Id id = params.getId('sId', null);
+		if (id != null) this.sObjectName = id.getSobjectType().getDescribe().getName();
 	}
 
 	//noinspection ApexUnusedDeclaration
 	public SendingController(final ApexPages.StandardController c) {
+		if (c != null) {
+			Id id = c.getId();
+			if (id != null) this.sObjectName = id.getSobjectType().getDescribe().getName();
+		}
 	}
 
 	public class DraftEnvelope {

@@ -1,6 +1,6 @@
 <aura:component controller="SendingController"
                 extends="c:RootContainer"
-                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId,force:hasSObjectName">
 
     <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
 

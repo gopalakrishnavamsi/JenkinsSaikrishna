@@ -11,7 +11,7 @@
         });
       }
     }
-    helper.createEnvelope(component, component.get('v.recordId'));
+    helper.createEnvelope(component, component.get('v.recordId'), component.get('v.sObjectName'));
   },
 
   setExpirationDate: function (component, event, helper) {

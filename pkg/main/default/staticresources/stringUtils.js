@@ -112,12 +112,45 @@ window.stringUtils = (function () {
 
   /**
    * Formats a message as HTML.
-   * @param agreement {agreement} agreement details
+   * @param fileGuid {string} The SCM file ID.
+   * @param fileName {string} The name of the file.
+   * @param extension {string} The file extension.
+   * @param size {number} The file size.
    * @returns {string} The formatter SCM file string containing all information
    */
   var formatSCMFile = function (fileGuid, fileName, extension, size) {
     return format('scm;{0};{1};{2};{3}', fileGuid || '', fileName || '', extension || '', size || '');
   };
+
+  if (!String.prototype.startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+      value: function(search, rawPos) {
+        var pos = rawPos > 0 ? rawPos|0 : 0;
+        return this.substring(pos, pos + search.length) === search;
+      }
+    });
+  }
+
+  if (!String.prototype.endsWith) {
+    String.prototype.endsWith = function(search, this_len) {
+      if (this_len === undefined || this_len > this.length) {
+        this_len = this.length;
+      }
+      return this.substring(this_len - search.length, this_len) === search;
+    };
+  }
+
+  /**
+   * Sanitizes custom object names to respect customer privacy.
+   * @param objName The Salesforce object name.
+   * @returns {string} The sanitized object name.
+   */
+  var sanitizeObjectName = function (objName) {
+    if (!objName) return 'Unknown Object';
+
+    var lcn = objName.toLowerCase();
+    return lcn.endsWith('__c') && !lcn.startsWith('sbqq') && !lcn.startsWith('blng') ? 'Custom Object' : objName;
+  }
 
   return Object.freeze({
     format: format,
@@ -126,6 +159,7 @@ window.stringUtils = (function () {
     escapeHtml: escapeHtml,
     unescapeHtml: unescapeHtml,
     getErrorMessage: getErrorMessage,
-    formatSCMFile: formatSCMFile
+    formatSCMFile: formatSCMFile,
+    sanitizeObjectName: sanitizeObjectName
   });
 }());

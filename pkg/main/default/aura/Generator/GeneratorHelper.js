@@ -40,7 +40,7 @@
         var errMsg = stringUtils.getErrorMessage(response);
         component.set('v.errType', 'error');
         component.set('v.errMsg', errMsg);
-        self.endGenerationError(component, errMsg);
+        self.endGenerationError(component, 'Error while checking multi-currency support');
       }
     });
     $A.enqueueAction(action);
@@ -56,7 +56,7 @@
     var numFiles = $A.util.isEmpty(templateFiles) ? 0 : templateFiles.length;
     this._getUserEvents(component).addProperties({
       'Template Type': 'Word',
-      'Source Object': config ? config.sourceObject : null,
+      'Source Object': stringUtils.sanitizeObjectName(config ? config.sourceObject : null),
       'Template Files': numFiles
     });
 
@@ -65,7 +65,7 @@
       var errMsg = $A.get('$Label.c.NoDocForTemplateMsg');
       component.set('v.errMsg', errMsg);
       component.set('v.errType', 'warning');
-      this.endGenerationError(component, errMsg);
+      this.endGenerationError(component, 'No template files to generate');
     } else {
       templateFiles.forEach(function (file) {
         helper.addDocumentProperties(file, true);
@@ -350,18 +350,18 @@
                 if (docsToGenerate.length > 0) {
                   helper.generateDocuments(component, objIds[0], xmlRoot, docsToGenerate);
                 } else {
-                  helper.endGenerationWithErrorMessage(component, $A.get('$Label.c.NoDocumentsToGenerate'));
+                  helper.endGenerationWithErrorMessage(component, $A.get('$Label.c.NoDocumentsToGenerate'), 'No documents to generate');
                 }
               }))
               .catch(function (error) {
-                helper.endGenerationWithErrorMessage(component, error);
+                helper.endGenerationWithErrorMessage(component, error, 'Document rule error');
               });
           }
         })
       )
       .catch(
         $A.getCallback(function (error) {
-          helper.endGenerationWithErrorMessage(component, error);
+          helper.endGenerationWithErrorMessage(component, error, 'Merge XML generation error');
         })
       );
   },
@@ -661,17 +661,16 @@
         //iterate Gen.Job results object and set populate jobIds, cvTitleByJobId, failedJobs
         results.forEach(function (object) {
           if (object.status === $A.get('$Label.c.Failure')) {
-            var failedJobDetail = {message: object.message, cv: object.file};
-            failedJobs.push(failedJobDetail);
-            helper.endGenerationError(component, object.message);
+            failedJobs.push({message: object.message, cv: object.file});
           } else {
             jobIds.push(object.id.value);
             cvTitleByJobId[object.id.value] = object.file.title;
           }
         });
 
+        var remainingJobIds;
         if (!$A.util.isEmpty(jobIds)) {
-          var remainingJobIds = jobIds.slice(0);
+          remainingJobIds = jobIds.slice(0);
         }
 
         helper.genFileCheckboxToggle(component);
@@ -681,12 +680,11 @@
         //completionPoll should only be called if remainingJobIds is defined
         if (!$A.util.isUndefinedOrNull(remainingJobIds)) {
           helper.completionPoll(component, jobIds, remainingJobIds, 0);
-        }
-        //remainingJobIds is not defined indicates document generation job was not successfully triggered
-        else {
+        } else if (!$A.util.isEmpty(failedJobs)) {
+          helper.endGenerationError(component, 'Job enqueue failed');
+        } else { //remainingJobIds is not defined indicates document generation job was not successfully triggered
           helper.handleUndefinedJobIdResponse(component, failedJobs);
         }
-
       } else {
         helper.handleExceptionInQueueDocumentGeneration(component, response, helper);
       }
@@ -697,14 +695,14 @@
 
   handleExceptionInQueueDocumentGeneration: function (component, response, helper) {
     var errorMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.FailedInitiateDocGeneration'), stringUtils.getErrorMessage(response));
-    helper.endGenerationWithErrorMessage(component, errorMessage);
+    helper.endGenerationWithErrorMessage(component, errorMessage, 'Failed to initiate generation');
   },
 
-  endGenerationWithErrorMessage: function (component, errorMessage) {
+  endGenerationWithErrorMessage: function (component, errorMessage, eventMessage) {
     component.set('v.errMsg', errorMessage);
     component.set('v.errType', 'error');
     component.set('v.isGenerating', false);
-    this.endGenerationError(component, errorMessage);
+    this.endGenerationError(component, eventMessage);
   },
 
   handleUndefinedJobIdResponse: function (component, failedJobs) {
@@ -722,6 +720,7 @@
     if (runCount === 16) {
       component.set('v.showTakingTooLongMessage', true);
       component.getEvent('generatedDocs').fire();
+      this.endGenerationError(component, 'Document generation is taking too long');
       return;
     }
 
@@ -746,13 +745,11 @@
         results.forEach(function (object) {
           if (object.status === 'Success') {
             finishedJobs.push({cv: object.file, jobId: object.id.value});
-            helper.endGenerationSuccess(component);
           } else if (object.status === 'Failure') {
             failedJobs.push({
               jobId: object.id.value,
               message: object.message
             });
-            helper.endGenerationError(component, object.message);
           }
         });
 
@@ -804,10 +801,12 @@
               'v.bannerMsg',
               $A.get('$Label.c.GeneratorBannerErrorMsg')
             );
+            helper.endGenerationError(component, 'Failed to generate ' + failedFiles.length + ' file(s)');
           } else {
             var bannerMsg = $A.get('$Label.c.GeneratorBannerSuccessMsg');
             component.set('v.bannerState', 'success');
             component.set('v.bannerMsg', bannerMsg);
+            helper.endGenerationSuccess(component);
           }
         }
       } else {
@@ -816,7 +815,7 @@
         component.set('v.isGenerating', false);
         component.set('v.bannerState', 'error');
         component.set('v.bannerMsg', errorMessage);
-        helper.endGenerationError(component, errorMessage);
+        helper.endGenerationError(component, 'Error while polling for job completion status');
       }
     });
     $A.enqueueAction(action);

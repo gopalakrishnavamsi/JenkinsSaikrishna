@@ -1,10 +1,11 @@
 ({
   SEND_FOR_SIGNATURE: 'Send for Signature',
 
-  createEnvelope: function (component, sourceId) {
+  createEnvelope: function (component, sourceId, sourceType) {
     this.timeEvent(component, this.SEND_FOR_SIGNATURE);
     this.addEventProperties(component, {
-      'Product': 'eSignature'
+      'Product': 'eSignature',
+      'Source Object': stringUtils.sanitizeObjectName(sourceType)
     });
     var self = this;
     if (component.get('v.isESignatureEnabled')) {
@@ -418,6 +419,7 @@
       if (response1.getState() === 'SUCCESS') {
         if (sendNow) {
           self.deleteDocument(component);
+          self.trackSuccess(component, self.SEND_FOR_SIGNATURE, eventParams);
           navUtils.navigateToSObject(component.get('v.recordId'));
         } else {
           var getTaggerUrl = component.get('c.getTaggerUrl');
@@ -430,7 +432,7 @@
               navUtils.navigateToUrl(response2.getReturnValue());
             } else {
               error = self.getErrorMessage(response2);
-              self.trackError(component, self.SEND_FOR_SIGNATURE, eventParams, error);
+              self.trackError(component, self.SEND_FOR_SIGNATURE, eventParams, 'Get tagger URL error');
               self.showToast(component, error, 'error');
             }
           });
@@ -438,7 +440,7 @@
         }
       } else {
         error = self.getErrorMessage(response1);
-        self.trackError(component, self.SEND_FOR_SIGNATURE, eventParams, error);
+        self.trackError(component, self.SEND_FOR_SIGNATURE, eventParams, 'Create envelope error');
         self.showToast(component, error, 'error');
       }
     });

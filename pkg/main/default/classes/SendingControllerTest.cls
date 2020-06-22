@@ -5,6 +5,9 @@ private class SendingControllerTest {
 	static void test_constructor() {
 		System.runAs(UserMock.createUser()) {
 			SObject a = TestUtils.createAccount();
+			PageReference pg = Page.Sending;
+			pg.getParameters().put('sId', a.Id);
+			Test.setCurrentPage(pg);
 
 			Test.startTest();
 			SendingController result1 = new SendingController();
@@ -12,7 +15,9 @@ private class SendingControllerTest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
+			System.assertEquals(a.getSObjectType().getDescribe().getName(), result1.sObjectName);
 			System.assertNotEquals(null, result2);
+			System.assertEquals(a.getSObjectType().getDescribe().getName(), result2.sObjectName);
 		}
 	}
 

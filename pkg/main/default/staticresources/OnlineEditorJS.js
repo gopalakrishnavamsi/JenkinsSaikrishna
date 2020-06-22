@@ -22,9 +22,7 @@ jQuery(document).ready(function ($) {
     UPDATE_TEMPLATE: 'Update Gen Template',
     PUBLISH_BUTTON: 'Publish Gen Button',
     PREVIEW_DOCUMENT: 'Preview Gen Document',
-    GENERATE_DOCUMENT: 'Generate Gen Document',
-    templateUndefined: 'Template Undefined',
-    navigationError: 'Handle Navigation error'
+    GENERATE_DOCUMENT: 'Generate Gen Document'
   });
 
   var Elements = Object.freeze({
@@ -69,7 +67,7 @@ jQuery(document).ready(function ($) {
         _userEvents.error(
           _sessionType,
           {},
-          Configuration.initError
+          'Initialization error'
         );
       } else if (!Configuration.isGenerating) handleStepNavigation(1).onStart();
     })
@@ -132,7 +130,7 @@ jQuery(document).ready(function ($) {
               userEvents.addProperties({
                 'Product': 'Gen',
                 'Template Type': 'Online Editor',
-                'Source Object': sourceObject
+                'Source Object': stringUtils.sanitizeObjectName(sourceObject)
               });
               resolve(userEvents);
             } else {
@@ -160,7 +158,7 @@ jQuery(document).ready(function ($) {
                 _userEvents.error(
                   EventLabels.PREVIEW_DOCUMENT,
                   {},
-                  event.message
+                  'Failed to preview'
                 );
                 createToastComponent(event.message, 'error');
                 reject(event.message);
@@ -170,7 +168,7 @@ jQuery(document).ready(function ($) {
           _userEvents.error(
             EventLabels.PREVIEW_DOCUMENT,
             {},
-            err
+            'Failed to preview'
           );
           createToastComponent(err, 'error');
           reject(err);
@@ -195,7 +193,7 @@ jQuery(document).ready(function ($) {
                 _userEvents.error(
                   EventLabels.PREVIEW_DOCUMENT,
                   {},
-                  event.message
+                  'Get merge data error'
                 );
                 createToastComponent(event.message, 'error', Labels.UnauthorizedQueryMessage);
                 reject(event.message);
@@ -205,7 +203,7 @@ jQuery(document).ready(function ($) {
           _userEvents.error(
             EventLabels.PREVIEW_DOCUMENT,
             {},
-            err
+            'Get merge data error'
           );
           createToastComponent(err, 'error');
           reject(err);
@@ -235,7 +233,7 @@ jQuery(document).ready(function ($) {
                 _userEvents.error(
                   EventLabels.PREVIEW_DOCUMENT,
                   {},
-                  event.message
+                  'Get entity records error'
                 );
                 createToastComponent(event.message, 'error');
                 reject(event.message);
@@ -248,7 +246,7 @@ jQuery(document).ready(function ($) {
           _userEvents.error(
             EventLabels.PREVIEW_DOCUMENT,
             {},
-            err
+            'Get entity records error'
           );
           createToastComponent(err, 'error');
           reject(err);
@@ -504,7 +502,7 @@ jQuery(document).ready(function ($) {
       _userEvents.error(
         _sessionType,
         {},
-        EventLabels.navigationError
+        'Navigation step error'
       );
       return;
     }
@@ -654,7 +652,7 @@ jQuery(document).ready(function ($) {
         _userEvents.error(
           _sessionType,
           {},
-          error && error.message ? error.message : error
+          'Cancel template error'
         );
       });
   });
@@ -718,9 +716,7 @@ jQuery(document).ready(function ($) {
         createToastComponent((isEditing ? Labels.templateUpdatedLabel : Labels.templateCreatedLabel).replace('{0}', Configuration.template.name), 'success');
         _userEvents.success(
           _sessionType,
-          {
-            springTemplateId: springTemplateId
-          }
+          {}
         );
         navStep.onEnd();
       })
@@ -729,7 +725,7 @@ jQuery(document).ready(function ($) {
         _userEvents.error(
           _sessionType,
           {},
-          error && error.message ? error.message : error
+          'Save error'
         );
         createToastComponent(error, 'error');
       });
@@ -785,7 +781,7 @@ jQuery(document).ready(function ($) {
         _userEvents.error(
           _sessionType,
           {},
-          error && error.message ? error.message : error
+          'Cancel publish error'
         );
         createToastComponent(error, 'error');
       });
@@ -820,7 +816,7 @@ jQuery(document).ready(function ($) {
         _userEvents.error(
           _sessionType,
           {},
-          error && error.message ? error.message : error
+          'Button publish error'
         );
         createToastComponent(error, 'error');
       });
@@ -841,7 +837,7 @@ jQuery(document).ready(function ($) {
       _userEvents.error(
         _sessionType,
         {},
-        EventLabels.templateUndefined
+        'Template undefined'
       );
       createToastComponent(Labels.templateSaveValidationLabel, 'error');
       return;
@@ -867,7 +863,7 @@ jQuery(document).ready(function ($) {
             {
               layouts: Object.keys(_layoutMap)
             },
-            error && error.message ? error.message : error
+            'Button publish error'
           );
         });
     }
@@ -892,7 +888,7 @@ jQuery(document).ready(function ($) {
               _userEvents.error(
                 _sessionType,
                 {},
-                err && err.message ? err.message : err);
+                'Failed to initialize online editor');
               reject(err);
             });
         } else {
@@ -900,7 +896,7 @@ jQuery(document).ready(function ($) {
           _userEvents.error(
             _sessionType,
             {},
-            EventLabels.templateUndefined
+            'Template undefined'
           );
           reject(Labels.templateUndefinedLabel);
         }
