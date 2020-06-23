@@ -87,7 +87,7 @@ public with sharing class ESignatureProductAPI extends ESignatureAPI {
 		public String suspensionDate;
 
 		@TestVisible
-		private Account.ConnectPermission connectPermissionExternalForm() {
+		private Account.ConnectPermission getConnectPermission() {
 			if (this.connectPermission == 'full') {
 				return Account.ConnectPermission.Full;
 			} else if (this.connectPermission == 'sendOnly') {
@@ -97,7 +97,7 @@ public with sharing class ESignatureProductAPI extends ESignatureAPI {
 			}
 		}
 
-		public Account toExternalForm() {
+		public Account toAccount() {
 			Date psd = StringUtils.parseDate(this.planStartDate);
 			Date sd = String.isBlank(this.suspensionDate) ? null : StringUtils.parseDate(this.suspensionDate);
 			return new Account(
@@ -113,7 +113,7 @@ public with sharing class ESignatureProductAPI extends ESignatureAPI {
 				new Account.Billing(
 					sd == null ? StringUtils.parseDate(this.billingPeriodStartDate) : psd,
 					sd == null ? StringUtils.parseDate(this.billingPeriodEndDate) : sd),
-				this.connectPermissionExternalForm());
+				this.getConnectPermission());
 		}
 	}
 
@@ -128,7 +128,7 @@ public with sharing class ESignatureProductAPI extends ESignatureAPI {
 		}
 
 		return this.addPlanId(
-			((APIAccount)JSON.deserialize(response.body, APIAccount.class)).toExternalForm(),
+			((APIAccount)JSON.deserialize(response.body, APIAccount.class)).toAccount(),
 			timeout);
 	}
 
@@ -143,7 +143,7 @@ public with sharing class ESignatureProductAPI extends ESignatureAPI {
 	private class ApiProduct {
 		public List<ApiFeature> accountSettings;
 
-		public ESignatureProduct toExternalForm(final Account account) {
+		public ESignatureProduct toProduct(final Account acct) {
 			Set<ESignatureProduct.Feature> features = new Set<ESignatureProduct.Feature>();
 			if (Collection.isNotEmpty(this.accountSettings)) {
 				for (ApiFeature accountSetting : this.accountSettings) {
@@ -160,10 +160,13 @@ public with sharing class ESignatureProductAPI extends ESignatureAPI {
 					}
 				}
 			}
+			if (acct != null && acct.connect == Account.ConnectPermission.Full) {
+				features.add(ESignatureProduct.Feature.Connect);
+			}
 			return new ESignatureProduct(
-				account == null ? null : account.status,
-				account != null && account.isTrial,
-				account == null || account.billing == null || !account.isTrial ? null : account.billing.endDate,
+				acct == null ? null : acct.status,
+				acct != null && acct.isTrial,
+				acct == null || acct.billing == null || !acct.isTrial ? null : acct.billing.endDate,
 				features);
 		}
 	}
@@ -179,6 +182,6 @@ public with sharing class ESignatureProductAPI extends ESignatureAPI {
 			throw new APIException(response.error);
 		}
 		return ((ApiProduct)JSON.deserialize(response.body, ApiProduct.class))
-			.toExternalForm(this.getAccount(timeout));
+			.toProduct(this.getAccount(timeout));
 	}
 }

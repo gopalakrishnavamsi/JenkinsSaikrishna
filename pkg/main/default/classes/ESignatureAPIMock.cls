@@ -25,6 +25,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		'billing_plan' => Application.classNamespacePrefix + 'ESignatureAPIMock.BillingPlanMock',
 		'bulk_envelopes' => Application.classNamespacePrefix + 'ESignatureAPIMock.BulkEnvelopesMock',
 		'bulk_send_lists' => Application.classNamespacePrefix + 'ESignatureAPIMock.BulkSendListsMock',
+		'connect' => Application.classNamespacePrefix + 'ESignatureAPIMock.ConnectMock',
 		'custom_fields' => Application.classNamespacePrefix + 'ESignatureAPIMock.CustomFieldsMock',
 		'envelopes' => Application.classNamespacePrefix + 'ESignatureAPIMock.EnvelopesMock',
 		'folders' => Application.classNamespacePrefix + 'ESignatureAPIMock.FoldersMock',
@@ -199,6 +200,30 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 				response = MockResponse.ok(request.body);
 			} else if (request.method == 'DELETE') {
 				response = MockResponse.ok('{}');
+			}
+			return response;
+		}
+	}
+
+	//noinspection ApexUnusedDeclaration
+	public class ConnectMock implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			if (request.method == 'GET') {
+				ConnectAPI.APIConfiguration c = new ConnectAPI.APIConfiguration(
+					UUID.randomUUID().toString(),
+					new Url('https://unit.test'));
+				c.connectId = String.valueOf(TestUtils.randomInteger(1000000));
+				ConnectAPI.APIConfigurations cs = new ConnectAPI.APIConfigurations();
+				cs.configurations = new List<ConnectAPI.APIConfiguration> { c };
+				response = MockResponse.ok(cs);
+			} else if (request.method == 'POST') {
+				ConnectAPI.APIConfiguration c = (ConnectAPI.APIConfiguration)JSON.deserialize(
+					request.body,
+					ConnectAPI.APIConfiguration.class);
+				c.connectId = String.valueOf(TestUtils.randomInteger(1000000));
+				response = MockResponse.created(c);
 			}
 			return response;
 		}

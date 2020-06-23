@@ -40,26 +40,26 @@ private class ESignatureProductAPITest {
 	}
 
 	@IsTest
-	static void test_stringToConnectPermission() {
+	static void test_getConnectPermission() {
 		ESignatureProductAPI.APIAccount a = new ESignatureProductAPI.APIAccount();
 
 		Test.startTest();
 		a.connectPermission = null;
-		System.assertEquals(Account.ConnectPermission.None, a.connectPermissionExternalForm());
+		System.assertEquals(Account.ConnectPermission.None, a.getConnectPermission());
 		a.connectPermission = '';
-		System.assertEquals(Account.ConnectPermission.None, a.connectPermissionExternalForm());
+		System.assertEquals(Account.ConnectPermission.None, a.getConnectPermission());
 		a.connectPermission = '  ';
-		System.assertEquals(Account.ConnectPermission.None, a.connectPermissionExternalForm());
+		System.assertEquals(Account.ConnectPermission.None, a.getConnectPermission());
 		a.connectPermission = 'NONE';
-		System.assertEquals(Account.ConnectPermission.None, a.connectPermissionExternalForm());
+		System.assertEquals(Account.ConnectPermission.None, a.getConnectPermission());
 		a.connectPermission = 'none';
-		System.assertEquals(Account.ConnectPermission.None, a.connectPermissionExternalForm());
+		System.assertEquals(Account.ConnectPermission.None, a.getConnectPermission());
 		a.connectPermission = 'whatever';
-		System.assertEquals(Account.ConnectPermission.None, a.connectPermissionExternalForm());
+		System.assertEquals(Account.ConnectPermission.None, a.getConnectPermission());
 		a.connectPermission = 'Full';
-		System.assertEquals(Account.ConnectPermission.Full, a.connectPermissionExternalForm());
+		System.assertEquals(Account.ConnectPermission.Full, a.getConnectPermission());
 		a.connectPermission = 'SendOnly';
-		System.assertEquals(Account.ConnectPermission.SendOnly, a.connectPermissionExternalForm());
+		System.assertEquals(Account.ConnectPermission.SendOnly, a.getConnectPermission());
 		Test.stopTest();
 	}
 
@@ -243,6 +243,7 @@ private class ESignatureProductAPITest {
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
+		System.assert(result.connect);
 	}
 
 	@IsTest
@@ -257,5 +258,67 @@ private class ESignatureProductAPITest {
 			System.assertEquals(APIError.badRequest, ex.error);
 		}
 		Test.stopTest();
+	}
+
+	class ConnectDisabledMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setStatusCode(200);
+			response.setStatus('OK');
+
+			if (request.getMethod() == 'GET') {
+				if (request.getEndpoint().contains('/settings')) {
+					response.setBody(JSON.serialize(new Map<String, Object> {
+						'accountSettings' => new List<UserAPI.APISetting> {
+							new UserAPI.APISetting('allowMergeFields', 'true'),
+							new UserAPI.APISetting('sharedCustomTabsEnabled', 'true'),
+							new UserAPI.APISetting('savingCustomTabsEnabled', 'true'),
+							new UserAPI.APISetting('dataFieldRegexEnabled', 'true'),
+							new UserAPI.APISetting('dataFieldSizeEnabled', 'true'),
+							new UserAPI.APISetting('tabTextFormattingEnabled', 'true'),
+							new UserAPI.APISetting('allowSigningGroups', 'true'),
+							new UserAPI.APISetting('tabDataLabelEnabled', 'true'),
+							new UserAPI.APISetting('enableSMSAuthentication', 'true'),
+							new UserAPI.APISetting('allowServerTemplates', 'true'),
+							new UserAPI.APISetting('allowBulkSend', 'true')
+						}
+					}));
+				} else { // GET account
+					ESignatureProductAPI.APIAccount a = new ESignatureProductAPI.APIAccount();
+					a.currentPlanId = 'd1d8e549-4f0f-464a-a474-813b21c659da';
+					a.planName = 'DEVCENTER_DEMO_APRIL2013';
+					a.planStartDate = StringUtils.formatDatetime(Datetime.now().addDays(-10));
+					a.planEndDate = StringUtils.formatDatetime(Datetime.now().addYears(1));
+					a.billingPeriodStartDate = StringUtils.formatDatetime(Datetime.now().addDays(-10));
+					a.billingPeriodEndDate = StringUtils.formatDatetime(Datetime.now().addYears(1));
+					a.accountName = UUID.randomUUID().toString();
+					a.accountIdGuid = UUID.randomUUID().toString();
+					a.externalAccountId = String.valueOf(TestUtils.randomInteger(1000000));
+					a.connectPermission = 'sendOnly'; // "full" is required as we have to create a Connect config
+					a.suspensionStatus = null;
+					a.suspensionDate = null;
+					response.setBody(JSON.serialize(a));
+				}
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getProduct_connect_disabled() {
+		Test.setMock(HttpCalloutMock.class, new ConnectDisabledMock());
+		ESignatureProductAPI client = ESignatureProductAPI.getInstance(
+			new Url('https://unit.test.docusign.com'),
+			UUID.randomUUID(),
+			'unit.test');
+
+		Test.startTest();
+		ESignatureProduct result = client.getProduct();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assert(!result.connect);
 	}
 }

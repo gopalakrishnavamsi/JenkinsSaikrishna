@@ -4,7 +4,7 @@ public class ESignatureProduct extends Product {
 	public static final String ROLE_USER = 'User';
 	public static final String ROLE_SENDER = 'Sender';
 
-	public enum Feature { MergeFields, Templates, SigningGroups, SmsAuthentication, BulkSending }
+	public enum Feature { MergeFields, Templates, SigningGroups, SmsAuthentication, BulkSending, Connect }
 
 	public Set<Feature> features { get; private set; }
 
@@ -36,6 +36,12 @@ public class ESignatureProduct extends Product {
 	public Boolean templates {
 		get {
 			return this.features.contains(Feature.Templates);
+		}
+	}
+	@AuraEnabled
+	public Boolean connect {
+		get {
+			return this.features.contains(Feature.Connect);
 		}
 	}
 

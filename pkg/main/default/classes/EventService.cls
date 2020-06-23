@@ -345,10 +345,11 @@ global with sharing class EventService {
 					UUID.parse(r.recipientId),
 					r.getSourceId(),
 					null);
-				if (recipients.containsKey(r.status)) {
-					recipients.get(r.status).add(rus);
+				String rStatus = r.status.toLowerCase();
+				if (recipients.containsKey(rStatus)) {
+					recipients.get(rStatus).add(rus);
 				} else {
-					recipients.put(r.status, new List<RecipientUpdates> { rus });
+					recipients.put(rStatus, new List<RecipientUpdates> { rus });
 				}
 			}
 

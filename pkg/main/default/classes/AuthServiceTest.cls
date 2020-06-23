@@ -2231,14 +2231,349 @@ private class AuthServiceTest {
 	@IsTest
 	static void test_resetAccount_invalid() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			User u = UserMock.createDocuSignUser(false);
+			UserMock.createDocuSignUser(false);
 
 			Test.startTest();
 			Set<Id> result = AuthService.resetAccount(true);
 			Test.stopTest();
 
 			System.assert(Collection.isNotEmpty(result));
-
 		}
+	}
+
+	@IsTest
+	static void test_createConnectConfiguration_invalid_arguments() {
+		Url baseUrl = new Url('https://unit.test.docusign.net/');
+		UUID accountId = UUID.randomUUID();
+		String accessToken = 'unit.test';
+
+		Test.startTest();
+		try {
+			AuthService.createConnectConfiguration(null, accountId, accessToken);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AuthService.createConnectConfiguration(baseUrl, null, accessToken);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AuthService.createConnectConfiguration(null, UUID.empty, accessToken);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_createConnectConfiguration_invalid_site() {
+		Url baseUrl = new Url('https://unit.test.docusign.net/');
+		UUID accountId = UUID.randomUUID();
+		String accessToken = 'unit.test';
+
+		Test.startTest();
+		System.assertEquals(null, AuthService.createConnectConfiguration(
+			baseUrl,
+			accountId,
+			accessToken));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_createConnectConfiguration_prod_na() {
+		ESignatureAPIMock.success();
+		UUID accountId = UUID.randomUUID();
+		String accessToken = 'unit.test';
+		String listenerUrl = 'https://na.act-event.docusign.com/listeners/connect-salesforce';
+
+		Test.startTest();
+		Url result1 = AuthService.createConnectConfiguration(
+			new Url('https://www.docusign.net/'),
+			accountId,
+			accessToken);
+		Url result2 = AuthService.createConnectConfiguration(
+			new Url('https://na1.docusign.net/'),
+			accountId,
+			accessToken);
+		Url result3 = AuthService.createConnectConfiguration(
+			new Url('https://na2.docusign.net/'),
+			accountId,
+			accessToken);
+		Url result4 = AuthService.createConnectConfiguration(
+			new Url('https://na3.docusign.net/'),
+			accountId,
+			accessToken);
+		Url result5 = AuthService.createConnectConfiguration(
+			new Url('https://na4.docusign.net/'),
+			accountId,
+			accessToken);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result1);
+		System.assertEquals(listenerUrl, result1.toExternalForm());
+
+		System.assertNotEquals(null, result2);
+		System.assertEquals(listenerUrl, result2.toExternalForm());
+
+		System.assertNotEquals(null, result3);
+		System.assertEquals(listenerUrl, result3.toExternalForm());
+
+		System.assertNotEquals(null, result4);
+		System.assertEquals(listenerUrl, result4.toExternalForm());
+
+		System.assertNotEquals(null, result5);
+		System.assertEquals(listenerUrl, result5.toExternalForm());
+	}
+
+	@IsTest
+	static void test_createConnectConfiguration_prod_eu() {
+		ESignatureAPIMock.success();
+		UUID accountId = UUID.randomUUID();
+		String accessToken = 'unit.test';
+		String listenerUrl = 'https://eu.act-event.docusign.com/listeners/connect-salesforce';
+
+		Test.startTest();
+		Url result = AuthService.createConnectConfiguration(
+			new Url('https://eu.docusign.net/'),
+			accountId,
+			accessToken);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(listenerUrl, result.toExternalForm());
+	}
+
+	@IsTest
+	static void test_createConnectConfiguration_prod_au() {
+		ESignatureAPIMock.success();
+		UUID accountId = UUID.randomUUID();
+		String accessToken = 'unit.test';
+		String listenerUrl = 'https://au.act-event.docusign.com/listeners/connect-salesforce';
+
+		Test.startTest();
+		Url result = AuthService.createConnectConfiguration(
+			new Url('https://au.docusign.net/'),
+			accountId,
+			accessToken);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(listenerUrl, result.toExternalForm());
+	}
+
+	@IsTest
+	static void test_createConnectConfiguration_prod_ca() {
+		ESignatureAPIMock.success();
+		UUID accountId = UUID.randomUUID();
+		String accessToken = 'unit.test';
+		String listenerUrl = 'https://ca.act-event.docusign.com/listeners/connect-salesforce';
+
+		Test.startTest();
+		Url result = AuthService.createConnectConfiguration(
+			new Url('https://ca.docusign.net/'),
+			accountId,
+			accessToken);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(listenerUrl, result.toExternalForm());
+	}
+
+	@IsTest
+	static void test_createConnectConfiguration_demo() {
+		ESignatureAPIMock.success();
+		UUID accountId = UUID.randomUUID();
+		String accessToken = 'unit.test';
+		String listenerUrl = 'https://act-event-d.docusign.com/listeners/connect-salesforce';
+
+		Test.startTest();
+		Url result = AuthService.createConnectConfiguration(
+			new Url('https://dEmO.docusign.net/'),
+			accountId,
+			accessToken);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(listenerUrl, result.toExternalForm());
+	}
+
+	@IsTest
+	static void test_createConnectConfiguration_stage() {
+		ESignatureAPIMock.success();
+		UUID accountId = UUID.randomUUID();
+		String accessToken = 'unit.test';
+		String listenerUrl = 'https://act-event-s.docusign.com/listeners/connect-salesforce';
+
+		Test.startTest();
+		Url result = AuthService.createConnectConfiguration(
+			new Url('https://Stage.docusign.net/'),
+			accountId,
+			accessToken);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(listenerUrl, result.toExternalForm());
+	}
+
+	@IsTest
+	static void test_createConnectConfiguration_hqtest() {
+		ESignatureAPIMock.success();
+		UUID accountId = UUID.randomUUID();
+		String accessToken = 'unit.test';
+		String listenerUrl = 'https://act-event.dev.docusign.net/listeners/connect-salesforce';
+
+		Test.startTest();
+		Url result1 = AuthService.createConnectConfiguration(
+			new Url('https://HQTEST0.dev.docusign.net/'),
+			accountId,
+			accessToken);
+		Url result2 = AuthService.createConnectConfiguration(
+			new Url('https://HQTEST1.dev.docusign.net/'),
+			accountId,
+			accessToken);
+		Url result3 = AuthService.createConnectConfiguration(
+			new Url('https://HQTEST2.dev.docusign.net/'),
+			accountId,
+			accessToken);
+		Url result4 = AuthService.createConnectConfiguration(
+			new Url('https://HQTEST3.dev.docusign.net/'),
+			accountId,
+			accessToken);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result1);
+		System.assertEquals(listenerUrl, result1.toExternalForm());
+
+		System.assertNotEquals(null, result2);
+		System.assertEquals(listenerUrl, result2.toExternalForm());
+
+		System.assertNotEquals(null, result3);
+		System.assertEquals(listenerUrl, result3.toExternalForm());
+
+		System.assertNotEquals(null, result4);
+		System.assertEquals(listenerUrl, result4.toExternalForm());
+	}
+
+	@IsTest
+	static void test_completeSetup_undefined_arguments() {
+		AuthService.RootCredentials rootCredentials = new AuthService.RootCredentials(
+			DocuSign.Environment.HQTEST0,
+			new Url('https://account-hqtest0.dev.docusign.net'),
+			new Url('https://api-hqtest0.dev.docusign.net'),
+			UUID.randomUUID().toString(),
+			UUID.randomUUID().toString());
+		LoginInformation loginInfo = new LoginInformation(
+			UUID.randomUUID(),
+			UUID.randomUUID().toString(),
+			UUID.randomUUID() + '@unit.test',
+			true,
+			new List<LoginInformation.Account> {
+				new LoginInformation.Account(
+					UUID.randomUUID(),
+					(Long)TestUtils.randomInteger(10000000),
+					UUID.randomUUID().toString(),
+					'https://hqtest0.dev.docusign.net',
+					true)
+			});
+		LoginInformation.Account account = loginInfo.accounts[0];
+		Credentials.AccessToken accessToken = new Credentials.AccessToken(
+			'unit.test',
+			Datetime.now().addHours(1));
+
+		Test.startTest();
+		try {
+			AuthService.completeSetup(
+				null,
+				loginInfo,
+				account,
+				accessToken);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AuthService.completeSetup(
+				rootCredentials,
+				null,
+				account,
+				accessToken);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AuthService.completeSetup(
+				rootCredentials,
+				loginInfo,
+				null,
+				accessToken);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AuthService.completeSetup(
+				rootCredentials,
+				loginInfo,
+				account,
+				null);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			AuthService.completeSetup(
+				rootCredentials,
+				loginInfo,
+				account,
+				new Credentials.AccessToken(
+					'unit.test',
+					Datetime.now().addHours(-1)));
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_completeSetup_success() {
+		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
+		AuthService.RootCredentials rootCredentials = new AuthService.RootCredentials(
+			DocuSign.Environment.HQTEST0,
+			new Url('https://account-hqtest0.dev.docusign.net'),
+			new Url('https://api-hqtest0.dev.docusign.net'),
+			UUID.randomUUID().toString(),
+			UUID.randomUUID().toString());
+		LoginInformation loginInfo = new LoginInformation(
+			UUID.randomUUID(),
+			UUID.randomUUID().toString(),
+			UUID.randomUUID() + '@unit.test',
+			true,
+			new List<LoginInformation.Account> {
+				new LoginInformation.Account(
+					UUID.randomUUID(),
+					(Long)TestUtils.randomInteger(10000000),
+					UUID.randomUUID().toString(),
+					'https://hqtest0.dev.docusign.net',
+					true)
+			});
+		LoginInformation.Account account = loginInfo.accounts[0];
+		Credentials.AccessToken accessToken = new Credentials.AccessToken(
+			'unit.test',
+			Datetime.now().addHours(1));
+
+		Test.startTest();
+		System.assert(AuthService.completeSetup(
+			rootCredentials,
+			loginInfo,
+			account,
+			accessToken));
+		Test.stopTest();
 	}
 }

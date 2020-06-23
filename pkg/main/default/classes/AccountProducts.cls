@@ -334,6 +334,11 @@ public with sharing class AccountProducts {
 		return p != null && !p.isExpired;
 	}
 
+	public Boolean isConnectEnabled() {
+		ESignatureProduct p = (ESignatureProduct)this.products.get(Product.ESIGNATURE);
+		return p != null && !p.isExpired && p.connect;
+	}
+
 	public Boolean isGenEnabled() {
 		Product p = this.products.get(Product.GEN);
 		return p != null && !p.isExpired;

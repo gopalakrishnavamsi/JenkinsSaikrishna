@@ -70,6 +70,14 @@ global virtual class Recipient implements Comparable {
 	 * Canceled status constant.
 	 */
 	global static final String STATUS_CANCELED = 'canceled';
+	/**
+	 * Authentication failed status constant
+	 */
+	public static final String STATUS_AUTHENTICATION_FAILED = 'authenticationfailed';
+	/**
+	 * Auto-responded status constant.
+	 */
+	public static final String STATUS_AUTO_RESPONDED = 'authenticationfailed';
 
 	/**
 	 * The ID of the associated dfsle__Recipient__c record.

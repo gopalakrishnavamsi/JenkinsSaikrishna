@@ -1075,6 +1075,104 @@ global with sharing class AuthService {
 		Permissions.assignPermissionSets(new Set<Id> { userId }, new Set<String> { Permissions.CLM_ADMINISTRATOR });
 	}
 
+	/*
+	This is a hack-y way to determine the appropriate Connect listener endpoint. Ideally, the endpoint would be
+	returned in the e_sign product activation properties or the OAuth userinfo response. Or if the URLs
+	were not site-specific in prod and we can just use Environment custom metadata.
+ 	*/
+	@TestVisible
+	private static Url createConnectConfiguration(
+		final Url eSignatureBaseUrl,
+		final UUID accountId,
+		final String accessToken) {
+
+		if (eSignatureBaseUrl == null || UUID.isEmpty(accountId)) throw new DocuSignException(Label.UndefinedArgument);
+
+		String site = eSignatureBaseUrl.getHost().substringBefore('.').toLowerCase();
+		Url listenerUrl = null;
+		switch on site {
+			when 'www', 'na1', 'na2', 'na3', 'na4' {
+				listenerUrl = new Url('https://na.act-event.docusign.com/listeners/connect-salesforce');
+			} when 'eu' {
+				listenerUrl = new Url('https://eu.act-event.docusign.com/listeners/connect-salesforce');
+			} when 'au' {
+				listenerUrl = new Url('https://au.act-event.docusign.com/listeners/connect-salesforce');
+			} when 'ca' {
+				listenerUrl = new Url('https://ca.act-event.docusign.com/listeners/connect-salesforce');
+			} when 'demo' {
+				listenerUrl = new Url('https://act-event-d.docusign.com/listeners/connect-salesforce');
+			} when 'stage' {
+				listenerUrl = new Url('https://act-event-s.docusign.com/listeners/connect-salesforce');
+			} when 'hqtest0', 'hqtest1', 'hqtest2', 'hqtest3' {
+				listenerUrl = new Url('https://act-event.dev.docusign.net/listeners/connect-salesforce');
+			} when else {
+				LOG.warn('Could not map eSignature site ' + site + ' to an ACT Framework Connect listener.');
+			}
+		}
+
+		if (listenerUrl != null) {
+			ConnectAPI.getInstance(
+				eSignatureBaseUrl,
+				accountId,
+				accessToken)
+				.createConfiguration(Application.name, listenerUrl);
+		}
+
+		return listenerUrl;
+	}
+
+	@TestVisible
+	private static Boolean completeSetup(
+		final RootCredentials rootCredentials,
+		final LoginInformation loginInfo,
+		final LoginInformation.Account account,
+		final Credentials.AccessToken accessToken) {
+
+		if (rootCredentials == null
+			|| loginInfo == null
+			|| account == null
+			|| accessToken == null
+			|| !accessToken.isValid) {
+
+			throw new DocuSignException(Label.UndefinedArgument);
+		}
+
+		// Create remote site for eSignature
+		Url eSignatureBaseUrl = UrlUtils.canonicalizeBaseUrl(new Url(account.eSignatureBaseUrl));
+		createRemoteSite(rootCredentials.environment, eSignatureBaseUrl);
+
+		Boolean result = false;
+		try {
+			AccountProducts aps = AccountProducts.initialize(
+				rootCredentials.environment,
+				rootCredentials.provisioningBaseUrl,
+				eSignatureBaseUrl,
+				account.id,
+				accessToken.token);
+
+			if (aps.isConnectEnabled()) createConnectConfiguration(eSignatureBaseUrl, account.id, accessToken.token);
+
+			save(
+				rootCredentials.environment,
+				rootCredentials.accountBaseUrl,
+				rootCredentials.provisioningBaseUrl,
+				eSignatureBaseUrl,
+				rootCredentials.clientId,
+				loginInfo,
+				account,
+				accessToken);
+
+			// DFS-6068: Make sure setup user has CLM Administrator role; DFS-6296: Assign CLM admin perm set only if not already assigned
+			if (aps.isClmEnabled() && !Permissions.isClmAdministrator()) {
+				assignClmAdministratorPermissionSet(UserInfo.getUserId());
+			}
+		} finally {
+			result = AccountProducts.save();
+		}
+
+		return result;
+	}
+
 	@TestVisible
 	private static LoginInformation saveSetupCredentials(
 		final String authorizationCode,
@@ -1093,34 +1191,11 @@ global with sharing class AuthService {
 			&& l.loginInformation.accounts[0] != null
 			&& l.loginInformation.status == LoginInformation.STATUS_SUCCESS) {
 
-			// Create remote site for eSignature
-			Url eSignatureBaseUrl = UrlUtils.canonicalizeBaseUrl(
-				new Url(l.loginInformation.accounts[0].eSignatureBaseUrl));
-			createRemoteSite(rc.environment, eSignatureBaseUrl);
-
-			try {
-				AccountProducts aps = AccountProducts.initialize(
-					rc.environment,
-					rc.provisioningBaseUrl,
-					eSignatureBaseUrl,
-					l.loginInformation.accounts[0].id,
-					l.token.token);
-				save(
-					rc.environment,
-					rc.accountBaseUrl,
-					rc.provisioningBaseUrl,
-					eSignatureBaseUrl,
-					rc.clientId,
-					l.loginInformation,
-					l.loginInformation.accounts[0],
-					l.token);
-				// DFS-6068: Make sure setup user has CLM Administrator role; DFS-6296: Assign CLM admin perm set only if not already assigned
-				if (aps.isClmEnabled() && !Permissions.isClmAdministrator()) {
-					assignClmAdministratorPermissionSet(UserInfo.getUserId());
-				}
-			} finally {
-				AccountProducts.save();
-			}
+			completeSetup(
+				rc,
+				l.loginInformation,
+				l.loginInformation.accounts[0],
+				l.token);
 		} else if (l.token != null) { // Multiple accounts. Save root access token for subsequent calls.
 			Credentials.setToken(l.token);
 			Credentials.save();
@@ -1272,28 +1347,11 @@ global with sharing class AuthService {
 
 		if (selected == null) throw new DocuSignException(Label.AccountNotFound);
 
-		Url eSignatureBaseUrl = UrlUtils.canonicalizeBaseUrl(new Url(selected.eSignatureBaseUrl));
-		createRemoteSite(rc.environment, eSignatureBaseUrl);
-
-		try {
-			AccountProducts.initialize(
-				rc.environment,
-				rc.provisioningBaseUrl,
-				eSignatureBaseUrl,
-				selected.id,
-				token.token);
-			save(
-				rc.environment,
-				rc.accountBaseUrl,
-				rc.provisioningBaseUrl,
-				eSignatureBaseUrl,
-				rc.clientId,
-				result,
-				selected,
-				token);
-		} finally {
-			AccountProducts.save();
-		}
+		completeSetup(
+			rc,
+			result,
+			selected,
+			token);
 
 		AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 

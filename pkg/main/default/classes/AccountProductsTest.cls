@@ -1172,4 +1172,91 @@ private class AccountProductsTest {
 			System.assertEquals(new Set<String> { Product.GEN, Product.NEGOTIATE }, new Set<String> { result[0].name, result[1].name });
 		}
 	}
+
+	class ConnectMock extends OAuthTokenMock {
+
+		private Boolean enabled;
+
+		public ConnectMock(final Boolean enabled) {
+			this.enabled = enabled;
+		}
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setStatusCode(200);
+			response.setStatus('OK');
+
+			if (request.getMethod() == 'GET') {
+				if (request.getEndpoint().contains('/provision')) {
+					ProductAPI.APIProducts ps = new ProductAPI.APIProducts();
+					ps.id = UUID.randomUUID().toString();
+					ps.name = UUID.randomUUID().toString();
+					response.setBody(JSON.serialize(ps));
+				} else if (request.getEndpoint().contains('/settings')) {
+					response.setBody(JSON.serialize(new Map<String, Object> {
+						'accountSettings' => new List<UserAPI.APISetting> {
+							new UserAPI.APISetting('allowMergeFields', 'true'),
+							new UserAPI.APISetting('sharedCustomTabsEnabled', 'true'),
+							new UserAPI.APISetting('savingCustomTabsEnabled', 'true'),
+							new UserAPI.APISetting('dataFieldRegexEnabled', 'true'),
+							new UserAPI.APISetting('dataFieldSizeEnabled', 'true'),
+							new UserAPI.APISetting('tabTextFormattingEnabled', 'true'),
+							new UserAPI.APISetting('allowSigningGroups', 'true'),
+							new UserAPI.APISetting('tabDataLabelEnabled', 'true'),
+							new UserAPI.APISetting('enableSMSAuthentication', 'true'),
+							new UserAPI.APISetting('allowServerTemplates', 'true'),
+							new UserAPI.APISetting('allowBulkSend', 'true')
+						}
+					}));
+				} else { // GET account
+					ESignatureProductAPI.APIAccount a = new ESignatureProductAPI.APIAccount();
+					a.currentPlanId = 'd1d8e549-4f0f-464a-a474-813b21c659da';
+					a.planName = 'DEVCENTER_DEMO_APRIL2013';
+					a.planStartDate = StringUtils.formatDatetime(Datetime.now().addDays(-10));
+					a.planEndDate = StringUtils.formatDatetime(Datetime.now().addYears(1));
+					a.billingPeriodStartDate = StringUtils.formatDatetime(Datetime.now().addDays(-10));
+					a.billingPeriodEndDate = StringUtils.formatDatetime(Datetime.now().addYears(1));
+					a.accountName = UUID.randomUUID().toString();
+					a.accountIdGuid = UUID.randomUUID().toString();
+					a.externalAccountId = String.valueOf(TestUtils.randomInteger(1000000));
+					a.connectPermission = this.enabled ? 'full' : 'sendOnly'; // "full" is required as we have to create a Connect config
+					a.suspensionStatus = null;
+					a.suspensionDate = null;
+					response.setBody(JSON.serialize(a));
+				}
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_isConnectEnabled_enabled() {
+		Test.setMock(HttpCalloutMock.class, new ConnectMock(true));
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			delete ProductSettings__c.getAll().values();
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.ProductsLastChecked__c = null;
+			update s;
+
+			Test.startTest();
+			System.assert(AccountProducts.getInstance().isConnectEnabled());
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_isConnectEnabled_disabled() {
+		Test.setMock(HttpCalloutMock.class, new ConnectMock(false));
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			delete ProductSettings__c.getAll().values();
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.ProductsLastChecked__c = null;
+			update s;
+
+			Test.startTest();
+			System.assert(!AccountProducts.getInstance().isConnectEnabled());
+			Test.stopTest();
+		}
+	}
 }
