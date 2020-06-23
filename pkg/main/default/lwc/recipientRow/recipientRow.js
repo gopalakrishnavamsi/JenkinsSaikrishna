@@ -5,7 +5,10 @@ import {genericEvent, isEmpty} from 'c/utils';
 import EditLabel from '@salesforce/label/c.Edit';
 import DeleteLabel from '@salesforce/label/c.DeleteButtonLabel';
 
-export default class DecRecipient extends LightningElement {
+export default class RecipientRow extends LightningElement {
+
+  @api
+  isSending;
 
   @api
   recipient = {};
@@ -31,7 +34,7 @@ export default class DecRecipient extends LightningElement {
     if (isEmpty(this.recipient)) return '';
     if (!isEmpty(this.recipient.relationship)) {
       return this.recipient.relationship.label;
-    } else if (!isEmpty(this.recipient.role)) {
+    } else if (!isEmpty(this.recipient.role) && !this.isSending) {
       return this.recipient.role.name;
     } else if (!isEmpty(this.recipient.name)) {
       return this.recipient.name;

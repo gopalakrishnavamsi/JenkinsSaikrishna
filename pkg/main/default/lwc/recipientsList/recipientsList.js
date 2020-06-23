@@ -14,7 +14,10 @@ import {genericEvent, getRandomKey} from 'c/utils';
 
 const DEFAULT_ROUTING_ORDER = 1;
 
-export default class DecRecipientsList extends LightningElement {
+export default class RecipientsList extends LightningElement {
+
+  @api
+  isSending
 
   privateRecipients = [];
 

@@ -2,10 +2,16 @@ import {LightningElement, api} from 'lwc';
 import {Labels, Recipient, StandardEvents} from 'c/recipientUtils';
 import {isEmpty, proxify, removeArrayElement, subscribeToMessageChannel, editArrayElement, groupBy} from 'c/utils';
 import {createMessageContext, releaseMessageContext} from 'lightning/messageService';
+import decTemplate from './decRecipients.html';
+import sendingTemplate from './sendingRecipients.html';
 
 const DEFAULT_ROUTING_ORDER = 1;
 
-export default class DecRecipients extends LightningElement {
+export default class Recipients extends LightningElement {
+
+  @api isSending;
+
+  @api forbidEnvelopeChanges;
 
   Labels = Labels;
 
@@ -146,4 +152,8 @@ export default class DecRecipients extends LightningElement {
       this.recipients = event.detail.data;
     }
   };
+
+  render() {
+    return this.isSending ? sendingTemplate : decTemplate;
+  }
 }

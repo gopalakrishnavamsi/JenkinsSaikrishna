@@ -32,7 +32,12 @@
                 </lightning-layout-item>
                 <div class="ds-panel-separator"></div>
                 <lightning-layout-item class="slds-p-around_small">
-                    <c-dec-recipient-details source-object={sourceObject} recipient={recipient} type={selectedType} onvalidationchange={handleValidationChange}></c-dec-recipient-details>
+                    <c-recipient-details 
+                        source-object={sourceObject} 
+                        recipient={recipient} 
+                        type={selectedType} 
+                        onvalidationchange={handleValidationChange}>
+                    </c-recipient-details>
                 </lightning-layout-item>
             </lightning-layout>
         </div>

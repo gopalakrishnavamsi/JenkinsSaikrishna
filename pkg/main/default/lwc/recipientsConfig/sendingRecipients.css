@@ -1,0 +1,52 @@
+.ds-addRecipients-information-section {
+    height: 91px;
+}
+
+.ds-addRecipients-information-header {
+    color: var(--lwc-colorTextActionLabelActive);
+    font-size: var(--lwc-fontSize7);
+    font-weight: var(--lwc-fontWeightBold);
+}
+
+.ds-addRecipients-information-text {
+    color: rgb(62, 62, 60);
+    font-size: var(--lwc-fontSize3);
+    width: 729px;
+}
+
+.ds-addRecipients-details-section {
+    background: rgb(255, 255, 255);
+    border-radius: 4px;
+    border: 1px solid rgb(221, 219, 218);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.ds-addRecipients-details-header {
+    background: rgb(243, 242, 242);
+    border-radius: 4px 4px 0px 0px;
+    height: 66px;
+}
+
+.ds-addRecipients-details-header-text {
+    color: rgb(5, 5, 5);
+    font-size: var(--lwc-fontSize5);
+    font-weight: bold;
+}
+
+.ds-addRecipients-details-body {
+    border-radius: 4px;
+    border: 1px solid rgb(221, 219, 218);
+    height: 304px;
+}
+
+.ds-addRecipients-details-noRecipients-header {
+    font-size: var(--lwc-fontSize5);
+}
+
+.ds-addRecipients-details-noRecipients-text {
+    font-size: var(--lwc-fontSize3);
+}
+
+.ds-addRecipients-details-noRecipients-center {
+    align-self: center;
+}

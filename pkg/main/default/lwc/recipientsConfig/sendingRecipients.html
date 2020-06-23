@@ -1,19 +1,5 @@
 <template>
     <div class="slds-m-top_x-large">
-        <!-- Add Recipients Information section -->
-        <div class="slds-grid slds-grid_align-spread ds-addRecipients-information-section">
-            <div class="slds-col">
-                <div class="ds-addRecipients-information-header">{Labels.decAddRecipients}</div>
-                <div class="slds-m-top_small ds-addRecipients-information-text">{Labels.decAddRecipientsDescription}
-                </div>
-            </div>
-            <div class="slds-col">
-                <c-help-video-image-box video-link={Labels.helpVideoLink}
-                                        video-text={Labels.helpVideoText}
-                                        video-length={Labels.helpVideoLength}>
-                </c-help-video-image-box>
-            </div>
-        </div>
         <!-- Recipient details section -->
         <div class="slds-m-top_large slds-m-bottom_xx-large">
             <div class="ds-addRecipients-details-section">
@@ -59,16 +45,15 @@
                         </div>
                     </div>
                 </div>
-
-                <c-dec-recipients-list
-                        if:true={hasRecipients}
+                <c-recipients-list
+                        if:true={hasRecipients} 
+                        is-sending={isSending}
                         is-signing-order={isSigningOrder}
                         list={recipients}
                         onupdaterecipient={handleRecipientsUpdate}
                         ondragrecipientupdate={handleDragRecipientsUpdate}
                         onsigningorderchecked={handleRecipientSigningOrder}
-                ></c-dec-recipients-list>
-
+                ></c-recipients-list>
             </div>
         </div>
     </div>

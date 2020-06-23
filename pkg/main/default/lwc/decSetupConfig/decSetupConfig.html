@@ -27,10 +27,10 @@
                     attach-source-files={attachSourceFiles}
                     record-id={recordId}>
             </c-dec-documents>
-            <c-dec-recipients if:true={recipientsStep}
+            <c-recipients-config if:true={recipientsStep}
                               source-object={sourceObject}
                               recipients={recipients}>
-            </c-dec-recipients>
+            </c-recipients-config>
             <c-dec-recipient-message
                     if:true={recipientsStep}
                     email-subject={emailSubject}

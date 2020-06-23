@@ -1,0 +1,85 @@
+<template>
+    <div class="slds-m-top_x-large">
+        <!-- Add Recipients Information section -->
+        <div class="slds-grid slds-grid_align-spread ds-addRecipients-information-section">
+            <div class="slds-col">
+                <div class="ds-addRecipients-information-header">{Labels.decAddRecipients}</div>
+                <div class="slds-m-top_small ds-addRecipients-information-text">{Labels.decAddRecipientsDescription}
+                </div>
+            </div>
+            <div class="slds-col">
+                <c-help-video-image-box video-link={Labels.helpVideoLink}
+                                        video-text={Labels.helpVideoText}
+                                        video-length={Labels.helpVideoLength}>
+                </c-help-video-image-box>
+            </div>
+        </div>
+        <!-- Recipient details section -->
+        <div class="slds-m-top_large slds-m-bottom_xx-large">
+            <div class="ds-addRecipients-details-section">
+                <!-- details header section -->
+                <div class="ds-addRecipients-details-header slds-p-around_medium">
+                    <div class="slds-grid slds-grid_align-spread">
+                        <div class="slds-col">
+                            <div class="ds-addRecipients-details-header-text">{Labels.recipients}</div>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button-group>
+                                <lightning-button label={Labels.signingOrderLabel}
+                                                  icon-name={signingOrderButtonIcon}
+                                                  onclick={handleRecipientSigningOrder}></lightning-button>
+                                <lightning-button label={Labels.view}
+                                                  onclick={handleSigningOrderModalOpen}></lightning-button>
+                            </lightning-button-group>
+                            <lightning-button label={Labels.addRecipient}
+                                              class="slds-p-left_x-small"
+                                              onclick={handleRecipientsModalOpen}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+                <!-- details body section -->
+                <div class="ds-addRecipients-details-body slds-m-around_medium" if:false={hasRecipients}>
+                    <div class="slds-grid slds-grid_vertical">
+                        <div class="slds-col slds-m-top_large ds-addRecipients-details-noRecipients-center">
+                            <img src={Labels.addRecipientsEmptyImage}/>
+                        </div>
+                        <div class="slds-col ds-addRecipients-details-noRecipients-center">
+                            <div class="ds-addRecipients-details-noRecipients-header">
+                                {Labels.decAddRecipients}
+                            </div>
+                        </div>
+                        <div class="slds-col slds-m-top_medium ds-addRecipients-details-noRecipients-center">
+                            <div class="ds-addRecipients-details-noRecipients-text">
+                                {Labels.decAddRecipientsDescription2}
+                            </div>
+                        </div>
+                        <div class="slds-col slds-m-top_medium ds-addRecipients-details-noRecipients-center">
+                            <lightning-button label={Labels.addRecipient}
+                                              onclick={handleRecipientsModalOpen}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+
+                <c-recipients-list
+                        if:true={hasRecipients}
+                        is-signing-order={isSigningOrder}
+                        list={recipients}
+                        onupdaterecipient={handleRecipientsUpdate}
+                        ondragrecipientupdate={handleDragRecipientsUpdate}
+                        onsigningorderchecked={handleRecipientSigningOrder}
+                ></c-recipients-list>
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <c-signing-order recipients={recipients}></c-signing-order>
+    </div>
+    <c-dec-recipients-modal is-open={showAddRecipientsModal}
+                            handle-save={addRecipient}
+                            handle-close={closeRecipientsModal}
+                            recipient={editRecipient}
+                            source-object={sourceObject}
+                            if:true={showAddRecipientsModal}>
+    </c-dec-recipients-modal>
+</template>

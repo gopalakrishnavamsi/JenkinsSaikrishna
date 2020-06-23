@@ -28,11 +28,18 @@
                 documents={documents}
                 forbid-envelope-changes={forbidEnvelopeChanges}>
             </c-sending-documents>
-            <c-sending-recipients
+            <c-recipients-config
                 if:true={recipientsStep}
+                is-sending={recipientsStep}
                 recipients={recipients}
                 forbid-envelope-changes={forbidEnvelopeChanges}>
-            </c-sending-recipients>
+            </c-recipients-config>
+            <c-dec-recipient-message
+                if:true={recipientsStep}
+                email-subject={emailSubject}
+                email-message={emailMessage}
+                onemailchange={handleEmailChange}>
+            </c-dec-recipient-message>
         </div>
     </div>
 </template>

@@ -14,12 +14,13 @@
              ondragleave={handleDragLeave}
              ondragstart={itemDragStart}
              ondragend={itemDragEnd}>
-            <c-dec-recipient
+            <c-recipient-row
+                    is-sending={isSending}
                     recipient={item}
                     index={index}
                     is-signing-order={isSigningOrder}
                     onroutingorderupdate={handleRoutingOrderUpdate}>
-            </c-dec-recipient>
+            </c-recipient-row>
         </div>
     </template>
 </template>
