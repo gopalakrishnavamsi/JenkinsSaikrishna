@@ -123,11 +123,19 @@ export default class SendingConfig extends LightningElement {
     handleOnClickProgressStep(event) {
         let toStep = event.detail.data;
 
+        if (this.currentStep === PROGRESS_STEP.RECIPIENTS) {
+            let recipientsSelector = this.template.querySelector('c-recipients-config');
+            if (!isEmpty(recipientsSelector)) {
+              let recipients = recipientsSelector.fetchRecipients();
+              if (recipients) this.recipients = recipients;
+            }
+        }
+
         if (toStep === OPERATION.BACK) {
             toStep = (parseInt(this.currentStep, 10) - 1).toString();
         } else if (toStep === OPERATION.NEXT) {
             toStep = (parseInt(this.currentStep, 10) + 1).toString();
-        }
+        } 
         
         if (!this.validateCurrentStep(toStep)) {
             return;
