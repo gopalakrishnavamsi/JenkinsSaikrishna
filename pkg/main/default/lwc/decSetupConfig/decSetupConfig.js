@@ -48,7 +48,7 @@ const OPERATION = {
 
 export default class DecSetupConfig extends LightningElement {
   @api recordId;
-  currentStep = MIN_STEP;
+  @api currentStep;
   envelopeConfigurationData;
   isLoading = false;
   context = createMessageContext();

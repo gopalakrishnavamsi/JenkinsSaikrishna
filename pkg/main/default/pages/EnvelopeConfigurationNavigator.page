@@ -48,7 +48,12 @@
       };
       var ns = '{!JSENCODE(namespace)}';
       var configIdParameter = '{!JSENCODE($CurrentPage.parameters.id)}';
-
+      //capture step from url parameter
+      var step = '{!JSENCODE($CurrentPage.parameters.step)}';
+      //if step is not defined then assign it to a default value of '1'
+      if (typeof step === 'undefined' || step === null || step === '') {
+        step = '1';
+      }
       $Lightning.use(ns + ':DECNavigatorApp', function () {
         if (configIdParameter == null || configIdParameter == '') {
           //if config id not in url then load navigator component ( new config )
@@ -67,7 +72,8 @@
         } else {
           //if config id exist in url then load wizard component
           $Lightning.createComponent(ns + ':DECWizard', {
-            recordId: configIdParameter
+            recordId: configIdParameter,
+            currentStep: step
           }, 'decWizard', function (component, status) {
             if (status === 'SUCCESS') {
               document.getElementById('ds-spinner').style.display = 'none';

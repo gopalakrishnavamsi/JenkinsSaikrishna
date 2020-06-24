@@ -11,6 +11,7 @@
                               scope="APPLICATION"/>
 
     <aura:attribute type="Id" name="recordId"/>
+    <aura:attribute type="String" name="currentStep"/>
     <aura:attribute name="fetchingOAuthStatus" type="Boolean" default="true" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
@@ -37,7 +38,7 @@
                                 products="{!v.products}" permission="{!v.permission}"/>
         <aura:set attribute="else">
             <!-- all lwc child component will be here -->
-            <c:decSetupConfig recordId ="{!v.recordId}"/>
+            <c:decSetupConfig recordId ="{!v.recordId}" currentStep="{!v.currentStep}"/>
         </aura:set>
     </aura:if>
 </aura:component>

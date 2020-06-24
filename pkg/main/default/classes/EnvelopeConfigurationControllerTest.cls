@@ -823,4 +823,45 @@ private class EnvelopeConfigurationControllerTest {
 		}
 	}
 
+	@IsTest
+	static void test_getDecTaggerUrl_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				EnvelopeConfigurationController.getDecTaggerUrl(null);
+				throw new AssertException('Expected getDecTaggerUrl to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getDecTaggerUrl_envelopeConfigurationNotFound() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				EnvelopeConfigurationController.getDecTaggerUrl(UserInfo.getUserId());
+				throw new AssertException('Expected getDecTaggerUrl to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.EnvelopeConfigurationNotFound, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getDecTaggerUrl_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			EnvelopeConfiguration__c envConfig = TestUtils.createEnvelopeConfiguration();
+			System.assertNotEquals(envConfig.Id, null);
+			String result;
+			Test.startTest();
+			result = EnvelopeConfigurationController.getDecTaggerUrl(envConfig.Id);
+			Test.stopTest();
+			System.assertNotEquals(null, result);
+		}
+	}
 }

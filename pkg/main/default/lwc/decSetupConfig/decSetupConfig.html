@@ -37,14 +37,20 @@
                     email-message={emailMessage}
                     onemailchange={handleEmailChange}>
             </c-dec-recipient-message>
-            <c-dec-merge-fields if:true={mergeFieldsStep}></c-dec-merge-fields>
-            <template if:true={taggerStep}>
-                Step 4
-            </template>
+            <!-- merge fields step -->
+            <c-dec-merge-fields if:true={mergeFieldsStep}>
+            </c-dec-merge-fields>
+            <!-- tagger step -->
+            <c-dec-tagger if:true={taggerStep}
+                          record-id={recordId}>
+
+            </c-dec-tagger>
+            <!-- options step -->
             <c-dec-options
                     if:true={optionsStep}
                     notifications={notifications}>
             </c-dec-options>
+            <!-- custom buttons step -->
             <template if:true={customButtonStep}>
                 <c-dec-custom-button
                         record-id={recordId}

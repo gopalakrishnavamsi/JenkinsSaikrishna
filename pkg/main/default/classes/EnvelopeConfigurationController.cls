@@ -219,6 +219,30 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	}
 
 	@AuraEnabled
+	public static String getDecTaggerUrl(final Id decTemplateId) {
+		try {
+			EnvelopeConfiguration ec = EnvelopeConfigurationService.getEnvelopeConfiguration(decTemplateId);
+
+			return EnvelopeConfigurationService.getTemplateEditUrl(
+				ec.docuSignId,
+				getDecTaggerReturnUrl(ec.id))
+				.toExternalForm();
+
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get DEC tagger URL');
+		}
+	}
+
+	@TestVisible
+	private static Url getDecTaggerReturnUrl(final Id decTemplateId) {
+		PageReference pg = Page.DecReturnFromDocuSign;
+		pg.setRedirect(true);
+		Map<String, String> params = pg.getParameters();
+		params.put(QueryString.PARAM_SOURCE_ID, decTemplateId);
+		return new Url(Salesforce.baseUrl, pg.getUrl());
+	}
+
+	@AuraEnabled
 	public static String getEntityPhone(final String entityId) {
 		try {
 			return queryEntityPhone((Id) entityId);

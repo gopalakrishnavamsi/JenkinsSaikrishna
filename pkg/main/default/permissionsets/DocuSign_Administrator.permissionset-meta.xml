@@ -41,6 +41,10 @@
 		<enabled>true</enabled>
 	</classAccesses>
 	<classAccesses>
+		<apexClass>DecReturnFromDocuSignController</apexClass>
+		<enabled>true</enabled>
+	</classAccesses>
+	<classAccesses>
 		<apexClass>SendingController</apexClass>
 		<enabled>true</enabled>
 	</classAccesses>
@@ -992,6 +996,10 @@
 	</pageAccesses>
 	<pageAccesses>
 		<apexPage>ReturnFromDocuSign</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
+		<apexPage>DecReturnFromDocuSign</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
 	<pageAccesses>

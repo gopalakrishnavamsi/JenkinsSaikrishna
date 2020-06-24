@@ -1,0 +1,12 @@
+<template>
+    <div class="slds-m-top_x-large">
+        <template if:true={isLoading}>
+            <div class="ds-dec-tagger-section">
+                <lightning-spinner
+                        size="medium"
+                        variant="brand">
+                </lightning-spinner>
+            </div>
+        </template>
+    </div>
+</template>
