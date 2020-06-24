@@ -25,6 +25,6 @@ export default class DecRecipientMessage extends LightningElement {
       emailMessage: this.emailMessage,
     };
     payLoad[paramName] = paramValue;
-    genericEvent('emailchange', payLoad, this, false);
+    genericEvent.call(this, 'emailchange', payLoad, false);
   };
 }
