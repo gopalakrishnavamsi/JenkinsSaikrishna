@@ -77,7 +77,7 @@ global virtual class Recipient implements Comparable {
 	/**
 	 * Auto-responded status constant.
 	 */
-	public static final String STATUS_AUTO_RESPONDED = 'authenticationfailed';
+	public static final String STATUS_AUTO_RESPONDED = 'autoresponded';
 
 	/**
 	 * The ID of the associated dfsle__Recipient__c record.
