@@ -5570,6 +5570,10 @@
 	<customLabels>
 		<label>Ordered By</label>	
 		<name>OrderedBy</name>
+	</customLabels>	
+	<customLabels>
+		<label>Select Recipient</label>	
+		<name>SelectRecipient</name>
 	</customLabels>		
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

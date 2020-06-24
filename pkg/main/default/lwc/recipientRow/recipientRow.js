@@ -4,6 +4,7 @@ import {createMessageContext, releaseMessageContext, publish} from 'lightning/me
 import {genericEvent, isEmpty} from 'c/utils';
 import EditLabel from '@salesforce/label/c.Edit';
 import DeleteLabel from '@salesforce/label/c.DeleteButtonLabel';
+import SelectRecipientLabel from '@salesforce/label/c.SelectRecipient';
 
 export default class RecipientRow extends LightningElement {
 
@@ -21,13 +22,18 @@ export default class RecipientRow extends LightningElement {
 
   Labels = {
     Edit: EditLabel,
-    Delete: DeleteLabel
+    Delete: DeleteLabel,
+    SelectRecipient: SelectRecipientLabel
   };
 
   context = createMessageContext();
 
   disconnectedCallback() {
     releaseMessageContext(this.context);
+  }
+
+  get showPlaceholderEdit() {
+    return this.isSending && this.recipient && (isEmpty(this.recipient.name) && isEmpty(this.recipient.email))
   }
 
   get recipientLabel() {
@@ -68,6 +74,10 @@ export default class RecipientRow extends LightningElement {
     if (isEmpty(this.recipient)) return '';
     let colorSequence = this.index > 9 ? this.index % 10 : this.index;
     return 'slds-col ds-recipient-item ds-recipient-color-' + colorSequence;
+  }
+
+  handleEdit() {
+    this.sendRecipientAction(StandardEvents.Edit);
   }
 
   handleRecipientAction = ({target}) => {

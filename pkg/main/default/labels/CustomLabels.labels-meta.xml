@@ -10750,5 +10750,13 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Ordered By</shortDescription>
 		<value>Ordered By</value>	
-	</labels>	
+	</labels>
+	<labels>
+		<fullName>SelectRecipient</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Select Recipient</shortDescription>
+		<value>Select Recipient</value>	
+	</labels>		
 </CustomLabels>
