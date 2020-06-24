@@ -312,7 +312,7 @@ export default class DecSetupConfig extends LightningElement {
     }
     const processedFields = {};
 
-    let recipientsSelector = this.template.querySelector('c-dec-recipients');
+    let recipientsSelector = this.template.querySelector('c-recipients-config');
     if (!isEmpty(recipientsSelector)) {
       let recipients = recipientsSelector.fetchRecipients();
       if (recipients) processedFields.recipients = recipients.map(r => ({...r, id: null}));
