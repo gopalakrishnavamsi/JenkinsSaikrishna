@@ -7,6 +7,8 @@ export default class DecSigningGroupRecipient extends LightningElement {
   @api
   signingGroup;
 
+  @api isSending = false;
+
   handleSelect = ({detail}) => {
     this.dispatchEvent(new CustomEvent(
       'signinggroupchange',

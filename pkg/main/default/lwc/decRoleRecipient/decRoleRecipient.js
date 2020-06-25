@@ -7,6 +7,7 @@ export default class DecRoleRecipient extends LightningElement {
   @api roleName = null;
   @api name = null;
   @api email = null;
+  @api isSending = false;
 
   get hasNameOrEmail() {
     return !isEmpty(this.name) || !isEmpty(this.email);

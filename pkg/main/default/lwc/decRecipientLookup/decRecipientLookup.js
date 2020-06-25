@@ -6,6 +6,8 @@ export default class DecRecipientLookup extends LightningElement {
 
   privateSource;
 
+  @api isSending = false;
+
   @api
   get lookupRecord() {
     return this.privateSource;

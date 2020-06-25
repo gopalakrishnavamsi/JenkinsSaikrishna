@@ -56,6 +56,7 @@ import recipientRecordFieldLabel from '@salesforce/label/c.RecipientRecordFieldL
 import view from '@salesforce/label/c.View';
 import addAndNew from '@salesforce/label/c.AddAndNew';
 import addNameAndEmailLabel from '@salesforce/label/c.AddNameAndEmail';
+import byNameAndEmailLabel from '@salesforce/label/c.ByNameAndEmail';
 //Events
 import DEC_DELETE_RECIPIENT from '@salesforce/messageChannel/DecDeleteRecipient__c';
 import DEC_EDIT_RECIPIENT from '@salesforce/messageChannel/DecEditRecipient__c';
@@ -367,6 +368,14 @@ export const Types = {
   SigningGroup: {
     value: 'SigningGroup',
     label: decSigningGroup
+  },
+  RoleSending: {
+    value: 'Role',
+    label: byNameAndEmailLabel
+  },
+  EntityLookupSending: {
+    value: 'Entity',
+    label: decFromSalesforce
   }
 };
 

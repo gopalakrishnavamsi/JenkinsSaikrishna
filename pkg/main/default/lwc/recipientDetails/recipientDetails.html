@@ -18,7 +18,8 @@
     <template if:true={isEntityLookup}>
         <c-dec-recipient-lookup
                 lookup-record={lookupRecord}
-                onrecordselection={handleSourceChange}>
+                onrecordselection={handleSourceChange}
+                is-sending={isSending}>
         </c-dec-recipient-lookup>
     </template>
     <template if:true={isRoleRecipient}>
@@ -26,13 +27,15 @@
                 onrolechange={handleRoleRecipientChange}
                 role-name={roleName}
                 name={recipient.name}
-                email={recipient.email}>
+                email={recipient.email}
+                is-sending={isSending}>
         </c-dec-role-recipient>
     </template>
     <template if:true={isSigningGroup}>
         <c-dec-signing-group-recipient
                 onsigninggroupchange={handleSigningGroupChange}
-                signing-group={recipient.signingGroup}>
+                signing-group={recipient.signingGroup}
+                is-sending={isSending}>
         </c-dec-signing-group-recipient>
     </template>
     <section>

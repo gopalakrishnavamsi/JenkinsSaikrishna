@@ -5570,7 +5570,11 @@
 	<customLabels>
 		<label>Ordered By</label>	
 		<name>OrderedBy</name>
-	</customLabels>	
+	</customLabels>
+	<customLabels>
+		<label>By Name &amp; Email</label>
+		<name>ByNameAndEmail</name>
+	</customLabels>
 	<customLabels>
 		<label>Select Recipient</label>	
 		<name>SelectRecipient</name>

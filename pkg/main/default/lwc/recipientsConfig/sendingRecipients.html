@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <c-recipients-list
-                        if:true={hasRecipients} 
+                        if:true={hasRecipients}
                         is-sending={isSending}
                         is-signing-order={isSigningOrder}
                         list={recipients}
@@ -60,11 +60,11 @@
     <div>
         <c-signing-order recipients={recipients}></c-signing-order>
     </div>
-    <c-dec-recipients-modal is-open={showAddRecipientsModal}
-                            handle-save={addRecipient}
-                            handle-close={closeRecipientsModal}
-                            recipient={editRecipient}
-                            source-object={sourceObject}
-                            if:true={showAddRecipientsModal}>
-    </c-dec-recipients-modal>
+    <c-sending-recipients-modal is-open={showAddRecipientsModal}
+                                handle-save={addRecipient}
+                                handle-close={closeRecipientsModal}
+                                recipient={editRecipient}
+                                source-object={sourceObject}
+                                if:true={isSending}>
+    </c-sending-recipients-modal>
 </template>

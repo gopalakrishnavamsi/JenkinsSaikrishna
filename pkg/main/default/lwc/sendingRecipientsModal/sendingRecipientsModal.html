@@ -1,0 +1,57 @@
+<template>
+    <c-modal
+            header={Labels.addRecipient}
+            show-modal={isOpen}
+            onclose={closeModal}>
+        <div slot="content">
+            <lightning-layout>
+                <lightning-layout-item>
+                    <div class="ds-recipient-type-selection">
+                        <lightning-vertical-navigation onselect={handleTypeChange} selected-item={selectedType}>
+                            <lightning-vertical-navigation-item label={Types.EntityLookupSending.label}
+                                                                name={Types.EntityLookupSending.value}>
+                            </lightning-vertical-navigation-item>
+                            <lightning-vertical-navigation-item label={Types.RoleSending.label}
+                                                                name={Types.RoleSending.value}>
+                            </lightning-vertical-navigation-item>
+                            <lightning-vertical-navigation-item label={Types.SigningGroup.label}
+                                                                name={Types.SigningGroup.value}>
+                            </lightning-vertical-navigation-item>
+                        </lightning-vertical-navigation>
+                    </div>
+                </lightning-layout-item>
+                <div class="ds-panel-separator"></div>
+                <lightning-layout-item class="slds-p-around_small ds-sending-recipient-details">
+                    <c-recipient-details
+                            source-object={sourceObject}
+                            recipient={recipient}
+                            type={selectedType}
+                            onvalidationchange={handleValidationChange}
+                            is-sending= "true">
+                    </c-recipient-details>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <div slot="footer">
+            <lightning-button
+                    label={Labels.cancel}
+                    variant="neutral"
+                    onclick={closeModal}>
+            </lightning-button>
+            <span class="slds-p-left_xx-small"></span>
+            <lightning-button
+                    label={Labels.addAndNew}
+                    onclick={saveRecipientAndOpenNew}
+                    disabled={isSaveDisabled}
+                    variant="neutral">
+            </lightning-button>
+            <span class="slds-p-left_xx-small"></span>
+            <lightning-button
+                    label={Labels.add}
+                    disabled={isSaveDisabled}
+                    onclick={saveRecipient}
+                    variant="brand">
+            </lightning-button>
+        </div>
+    </c-modal>
+</template>

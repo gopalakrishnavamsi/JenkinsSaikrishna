@@ -10752,6 +10752,14 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Ordered By</value>	
 	</labels>
 	<labels>
+		<fullName>ByNameAndEmail</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>ByNameAndEmail</shortDescription>
+		<value>By Name &amp; Email</value>
+	</labels>
+	<labels>
 		<fullName>SelectRecipient</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>

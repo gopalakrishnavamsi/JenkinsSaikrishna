@@ -3,14 +3,18 @@ import {Types, AuthenticationTypes} from 'c/recipientUtils';
 import getEntityPhone from '@salesforce/apex/EnvelopeConfigurationController.getEntityPhone';
 import {isEmpty} from 'c/utils';
 
-const DEFAULT_TYPE = Types.LookupRecipient.value;
+const DEC_DEFAULT_TYPE = Types.LookupRecipient.value;
+const SENDING_DEFAULT_TYPE = Types.EntityLookupSending.value;
 
 export default class DecRecipientDetails extends LightningElement {
+
+  @api
+  isSending = false;
 
   Types = Types;
 
   @api
-  type = DEFAULT_TYPE;
+  type = this.isSending ? SENDING_DEFAULT_TYPE : DEC_DEFAULT_TYPE;
 
   @api
   sourceObject;
