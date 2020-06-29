@@ -33,19 +33,41 @@
             <div class="slds-page-header__col-actions">
                 <div class="slds-page-header__controls">
                     <div class="slds-page-header__control">
-                        <lightning-button label={saveLabel}
-                                          variant={saveLabelClass}
-                                          onclick={handleSaveAndClose}></lightning-button>
-                        <lightning-button label={label.back}
-                                          variant="neutral"
-                                          class="slds-p-left_large"
-                                          onclick={handleBack}
-                                          disabled={isFirstStep}></lightning-button>
-                        <lightning-button label={label.next}
-                                          variant="brand"
-                                          class="slds-p-left_xx-small"
-                                          onclick={handleNext}
-                                          disabled={isFinalStep}></lightning-button>
+                        <template if:false={isFinalStep}>
+                            <lightning-button
+                                label={saveLabel}
+                                variant={saveLabelClass}
+                                onclick={handleSaveAndClose}>
+                            </lightning-button>
+                            <lightning-button
+                                label={label.back}
+                                variant="neutral"
+                                class="slds-p-left_large"
+                                onclick={handleBack}
+                                disabled={isFirstStep}>
+                            </lightning-button>
+                            <lightning-button
+                                label={label.next}
+                                variant="brand"
+                                class="slds-p-left_x-small"
+                                onclick={handleNext}
+                                disabled={isFinalStep}>
+                            </lightning-button>
+                        </template>
+                        <template if:true={isFinalStep}>
+                            <lightning-button
+                                label={label.back}
+                                variant="neutral"
+                                onclick={handleBack}
+                                disabled={isFirstStep}>
+                            </lightning-button>
+                            <lightning-button
+                                label={saveLabel}
+                                variant={saveLabelClass}
+                                class="slds-p-left_x-small"
+                                onclick={handleSaveAndClose}>
+                            </lightning-button>
+                        </template>
                     </div>
                 </div>
             </div>

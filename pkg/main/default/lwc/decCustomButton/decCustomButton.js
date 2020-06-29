@@ -192,11 +192,11 @@ export default class DecCustomButton extends LightningElement {
     })
       .then(() => {
         showSuccess(this.context, this.label.successfullyModifiedLayouts, SUCCESS);
-        this.setLoading(false);
+        setTimeout(window.navUtils.navigateToSObject.bind(this, this.recordId), 2000);
       })
       .catch(error => {
         showError(this.context, error, ERROR);
-        this.setLoading(false);
-      });
+      })
+      .finally(() => this.setLoading(false));
   }
 }

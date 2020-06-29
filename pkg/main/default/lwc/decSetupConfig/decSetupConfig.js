@@ -216,7 +216,7 @@ export default class DecSetupConfig extends LightningElement {
       };
       publish(this.context, DEC_UPDATE_PAGE_LAYOUTS, msg);
     } else {
-      this.updateEnvelopeConfiguration();
+      this.updateEnvelopeConfiguration().then(window.navUtils.navigateToSObject.bind(this, this.recordId))
     }
   }
 
@@ -292,28 +292,29 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   updateEnvelopeConfiguration(step, configurationData = this.envelopeConfigurationData) {
-    this.setLoading(true);
     const updatedConfiguration = this.getFilteredConfigurationData(configurationData);
-    if (this.isDirty === false) {
-      this.currentStep = isEmpty(step) ? this.currentStep : step;
-      this.setLoading(false);
-      return;
-    }
-    updateEnvelopeConfiguration({
-      envelopeConfigurationJSON: updatedConfiguration,
-      attachSourceFiles: this.attachSourceFiles,
-      contentDocumentIdsToDelete: this.contentDocumentIdsToDelete
-    })
-      .then(result => {
-        this.isDirty = false;
-        this.envelopeConfigurationData = result;
-        this.currentStep = isEmpty(step) ? this.currentStep : step;
-        this.setLoading(false);
+    if (this.isDirty) {
+      this.setLoading(true);
+      return updateEnvelopeConfiguration({
+        envelopeConfigurationJSON: updatedConfiguration,
+        attachSourceFiles: this.attachSourceFiles,
+        contentDocumentIdsToDelete: this.contentDocumentIdsToDelete
       })
-      .catch(error => {
-        showError(this.context, error, ERROR);
-        this.setLoading(false);
-      });
+        .then(result => {
+          this.isDirty = false;
+          this.currentStep = isEmpty(step) ? this.currentStep : step;
+          this.envelopeConfigurationData = result;
+          return Promise.resolve(true);
+        })
+        .catch(error => {
+          showError(this.context, error, ERROR);
+          return Promise.reject(false);
+        })
+        .finally(() => this.setLoading(false));
+    } else {
+      this.currentStep = isEmpty(step) ? this.currentStep : step;
+      return Promise.resolve(true);
+    }
   }
 
   // Process configuration data before updating it in server
