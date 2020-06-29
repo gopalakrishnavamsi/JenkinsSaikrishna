@@ -49,6 +49,8 @@ const OPERATION = {
 export default class DecSetupConfig extends LightningElement {
   @api recordId;
   @api currentStep;
+
+  isDirty = false;
   envelopeConfigurationData;
   isLoading = false;
   context = createMessageContext();
@@ -185,6 +187,7 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleToggleSourceFiles(message) {
+    this.isDirty = true;
     this.attachSourceFiles = message.isSourceFilesSelected;
   }
 
@@ -207,6 +210,7 @@ export default class DecSetupConfig extends LightningElement {
 
   handleSaveAndClose() {
     if (this.currentStep === PROGRESS_STEP.CUSTOM_BUTTON) {
+      this.isDirty = true;
       const msg = {
         recordId: this.recordId
       };
@@ -217,6 +221,7 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleRenameEnvelopeTemplate(message) {
+    this.isDirty = true;
     this.updateEnvelopeConfiguration(null, {
       ...this.envelopeConfigurationData,
       name: message.name
@@ -224,12 +229,14 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleUpdateNotifications(message) {
+    this.isDirty = true;
     this.updateLocalConfiguration({
       notifications: message.notifications
     });
   }
 
   updateLocalConfiguration(fieldsToUpdate) {
+    this.isDirty = true;
     this.envelopeConfigurationData = {
       ...this.envelopeConfigurationData,
       ...fieldsToUpdate
@@ -241,15 +248,10 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleUpdateDocument(event) {
+    this.isDirty = true;
     let docs = this.envelopeConfigurationData.documents;
     docs = [...docs, {...event.detail.data}];
     this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents: docs};
-  }
-
-  handleUpdateRecipient(event) {
-    let recipients = this.envelopeConfigurationData.recipients;
-    recipients = [...recipients, {...event.detail.data}];
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData, recipients: recipients};
   }
 
   handleOnClickProgressStep(event) {
@@ -261,6 +263,7 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleRenameTemplateDocument(message) {
+    this.isDirty = true;
     const documentName = message.name;
     const documentIndex = message.index;
     const documents = this.envelopeConfigurationData.documents.map((d, i) => {
@@ -273,12 +276,14 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleDeleteTemplateDocument(message) {
+    this.isDirty = true;
     const documents = this.envelopeConfigurationData.documents.filter((d, i) => i !== message.index);
     this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents};
     this.contentDocumentIdsToDelete.push(message.contentDocumentId);
   }
 
   handleEmailChange({detail}) {
+    this.isDirty = true;
     const {emailMessage = null, emailSubject = null} = detail.data;
     this.updateLocalConfiguration({
       emailMessage: emailMessage,
@@ -289,12 +294,18 @@ export default class DecSetupConfig extends LightningElement {
   updateEnvelopeConfiguration(step, configurationData = this.envelopeConfigurationData) {
     this.setLoading(true);
     const updatedConfiguration = this.getFilteredConfigurationData(configurationData);
+    if (this.isDirty === false) {
+      this.currentStep = isEmpty(step) ? this.currentStep : step;
+      this.setLoading(false);
+      return;
+    }
     updateEnvelopeConfiguration({
       envelopeConfigurationJSON: updatedConfiguration,
       attachSourceFiles: this.attachSourceFiles,
       contentDocumentIdsToDelete: this.contentDocumentIdsToDelete
     })
       .then(result => {
+        this.isDirty = false;
         this.envelopeConfigurationData = result;
         this.currentStep = isEmpty(step) ? this.currentStep : step;
         this.setLoading(false);
@@ -314,8 +325,13 @@ export default class DecSetupConfig extends LightningElement {
 
     let recipientsSelector = this.template.querySelector('c-recipients-config');
     if (!isEmpty(recipientsSelector)) {
-      let recipients = recipientsSelector.fetchRecipients();
-      if (recipients) processedFields.recipients = recipients.map(r => ({...r, id: null}));
+      let fetchRecipients = recipientsSelector.fetchRecipients();
+      if (fetchRecipients && fetchRecipients.data) {
+        processedFields.recipients = fetchRecipients.data.map(r => ({...r, id: null}));
+      }
+      if (fetchRecipients.isDirtyRecipients === true) {
+        this.isDirty = true;
+      }
     } else {
       processedFields.recipients = configurationData.recipients.map(r => ({...r, id: null}));
     }

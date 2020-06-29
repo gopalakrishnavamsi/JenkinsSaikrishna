@@ -1,6 +1,13 @@
 import {LightningElement, api} from 'lwc';
 import {Labels, Recipient, StandardEvents} from 'c/recipientUtils';
-import {isEmpty, proxify, removeArrayElement, subscribeToMessageChannel, editArrayElement, groupBy} from 'c/utils';
+import {
+  isEmpty,
+  proxify,
+  removeArrayElement,
+  subscribeToMessageChannel,
+  editArrayElement,
+  groupBy
+} from 'c/utils';
 import {createMessageContext, releaseMessageContext} from 'lightning/messageService';
 import decTemplate from './decRecipients.html';
 import sendingTemplate from './sendingRecipients.html';
@@ -22,6 +29,8 @@ export default class Recipients extends LightningElement {
   editRecipientIndex = null;
 
   isSigningOrder = false;
+
+  isDirtyRecipients = false;
 
   @api
   sourceObject;
@@ -68,7 +77,7 @@ export default class Recipients extends LightningElement {
 
   @api
   fetchRecipients = () => {
-    return this.privateRecipients;
+    return {'data': this.privateRecipients, 'isDirtyRecipients': this.isDirtyRecipients};
   };
 
   get signingOrderButtonIcon() {
@@ -97,10 +106,12 @@ export default class Recipients extends LightningElement {
   };
 
   removeRecipient = (index) => {
+    this.isDirtyRecipients = true;
     this.recipients = removeArrayElement(this.recipients, index);
   };
 
   addRecipient = (recipient, isAddNew = false) => {
+    this.isDirtyRecipients = true;
     const isEdit = !isEmpty(this.editRecipientIndex);
     if (this.isSigningOrder && !isEdit) {
       const maxRoutingOrder = Math.max(...this.recipients.map(r => r.routingOrder), 0);
@@ -117,6 +128,7 @@ export default class Recipients extends LightningElement {
   };
 
   handleDeleteRecipient = ({index}) => {
+    this.isDirtyRecipients = true;
     if (isEmpty(index) || isEmpty(this.recipients) || isEmpty(this.recipients[index])) return;
     this.recipients = removeArrayElement(this.recipients, index);
   };
@@ -132,6 +144,7 @@ export default class Recipients extends LightningElement {
   };
 
   handleRecipientSigningOrder = () => {
+    this.isDirtyRecipients = true;
     this.isSigningOrder = !this.isSigningOrder;
     this.recipients = this.recipients.map((r, index) => ({
       ...r,
@@ -140,6 +153,7 @@ export default class Recipients extends LightningElement {
   };
 
   handleRecipientsUpdate = (event) => {
+    this.isDirtyRecipients = true;
     if (event.detail.data) {
       this.recipients = event.detail.data.sort(function (x, y) {
         return x.routingOrder - y.routingOrder;
@@ -148,6 +162,7 @@ export default class Recipients extends LightningElement {
   };
 
   handleDragRecipientsUpdate = (event) => {
+    this.isDirtyRecipients = true;
     if (event.detail.data) {
       this.recipients = event.detail.data;
     }

@@ -7,3 +7,7 @@
     background: var(--lwc-colorBorder);
     width: 1px;
 }
+
+.ds-dec-recipient-details {
+    width: 100%;
+}
