@@ -76,9 +76,9 @@ export default class Recipients extends LightningElement {
   }
 
   @api
-  fetchRecipients = () => {
+  fetchRecipients() {
     return {'data': this.privateRecipients, 'isDirtyRecipients': this.isDirtyRecipients};
-  };
+  }
 
   get signingOrderButtonIcon() {
     return this.isSigningOrder ? 'utility:check' : 'utility:add';

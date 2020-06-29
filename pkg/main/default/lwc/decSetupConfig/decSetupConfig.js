@@ -326,11 +326,13 @@ export default class DecSetupConfig extends LightningElement {
     let recipientsSelector = this.template.querySelector('c-recipients-config');
     if (!isEmpty(recipientsSelector)) {
       let fetchRecipients = recipientsSelector.fetchRecipients();
-      if (fetchRecipients && fetchRecipients.data) {
-        processedFields.recipients = fetchRecipients.data.map(r => ({...r, id: null}));
-      }
-      if (fetchRecipients.isDirtyRecipients === true) {
-        this.isDirty = true;
+      if (fetchRecipients) {
+        if (fetchRecipients.data) {
+          processedFields.recipients = fetchRecipients.data.map(r => ({...r, id: null}));
+        }
+        if (fetchRecipients.isDirtyRecipients === true) {
+          this.isDirty = true;
+        }
       }
     } else {
       processedFields.recipients = configurationData.recipients.map(r => ({...r, id: null}));
