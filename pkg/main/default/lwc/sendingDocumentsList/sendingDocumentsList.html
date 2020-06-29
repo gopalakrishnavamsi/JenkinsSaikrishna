@@ -1,4 +1,12 @@
 <template>
+    <lightning-spinner if:true={isLoading}
+                       alternative-text="Loading"
+                       size="medium"
+                       variant="brand">
+    </lightning-spinner>
+    <c-select-files-modal soure-record-id={recordId}
+                          onsuccess={addUploadedDocument}>
+    </c-select-files-modal>
     <div class="ds-addDocuments-details-section">
         <div class="ds-addDocuments-details-header slds-p-around_medium">
             <div class="slds-grid slds-grid_align-spread">
@@ -8,7 +16,8 @@
                 <template if:false={forbidEnvelopeChanges}>
                     <div class="slds-col">
                         <lightning-button
-                            label={label.addFromSalesforce}>
+                            label={label.addFromSalesforce}
+                            onclick={handleAddFromSalesforce}>
                         </lightning-button>
                         <c-file-upload
                             record-id={recordId}

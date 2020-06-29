@@ -1,0 +1,29 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+            <span>
+                <lightning-input type="checkbox"
+                                 label="Select"
+                                 variant="label-hidden"
+                                 name="input1"
+                                 onchange={handleSelection}>
+                </lightning-input>
+            </span>
+        </div>
+        <div class="slds-col">
+            <span>
+                <div class="slds-media slds-media_center">
+                    <div class="slds-media__figure">
+                        <c-file-extension-icon extension={extension} size="medium"></c-file-extension-icon>
+                    </div>
+                    <div class="slds-media__content slds-has-flexi-truncate">
+                        <p class="slds-truncate" title={name}>
+                            <a href="javascript:void(0)" onclick={previewFile}>{name}</a>
+                        </p>
+                        <p class="slds-text-body__small slds-text-color_weak">{formattedFileSize} &bull; {extension}</p>
+                    </div>
+                </div>
+            </span>
+        </div>
+    </div>
+</template>

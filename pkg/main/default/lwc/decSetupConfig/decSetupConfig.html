@@ -1,8 +1,11 @@
 <template>
     <div class="ds-envelopeConfig-setup"
          onupdate={updateLocalData}>
-        <lightning-spinner if:true={isLoading} alternative-text="Loading" size="medium"
-                           variant="brand"></lightning-spinner>
+        <lightning-spinner if:true={isLoading}
+                           alternative-text="Loading"
+                           size="medium"
+                           variant="brand">
+        </lightning-spinner>
         <c-dec-header
                 icon="standard:email_chatter"
                 header-name={label.envelopeConfiguration}

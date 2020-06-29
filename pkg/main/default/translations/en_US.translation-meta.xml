@@ -5572,6 +5572,34 @@
 		<name>OrderedBy</name>
 	</customLabels>
 	<customLabels>
+		<label>Recent</label>
+		<name>Recent</name>
+	</customLabels>
+	<customLabels>
+		<label>Owned by Me</label>
+		<name>OwnedByMe</name>
+	</customLabels>
+	<customLabels>
+		<label>Shared with Me</label>
+		<name>SharedWithMe</name>
+	</customLabels>
+	<customLabels>
+		<label>Following</label>
+		<name>Following</name>
+	</customLabels>
+	<customLabels>
+		<label>Libraries</label>
+		<name>Libraries</name>
+	</customLabels>
+	<customLabels>
+		<label>Search Files...</label>
+		<name>SearchFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Your search term must have 2 or more characters.</label>
+		<name>SearchTermMinLengthMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>By Name &amp; Email</label>
 		<name>ByNameAndEmail</name>
 	</customLabels>

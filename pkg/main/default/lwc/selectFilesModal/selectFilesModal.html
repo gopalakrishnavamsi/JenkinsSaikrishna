@@ -1,0 +1,149 @@
+<template>
+    <lightning-spinner if:true={isLoading}
+                       alternative-text="Loading"
+                       size="medium"
+                       variant="brand">
+    </lightning-spinner>
+    <c-modal header={label.addFromSalesforce}
+             show-modal={showSelectFiles}
+             onclose={handleClose}>
+        <div slot="content">
+            <lightning-layout>
+                <lightning-layout-item>
+                    <div class="ds-select-files-selection">
+                        <lightning-vertical-navigation onselect={handleTypeChange} selected-item={selectedType}>
+                            <lightning-vertical-navigation-section label="">
+                                <div class="slds-p-left_small">
+                                    <c-file-upload record-id={soureRecordId}
+                                                   onsuccess={handleFileUpload}
+                                                   file-upload-label='Upload Documents'>
+                                    </c-file-upload>
+                                </div>
+                            </lightning-vertical-navigation-section>
+                            <lightning-vertical-navigation-section label="">
+                                <lightning-vertical-navigation-item label={types.OwnedByMe.label}
+                                                                    name={types.OwnedByMe.value}>
+                                </lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label={types.SharedWithMe.label}
+                                                                    name={types.SharedWithMe.label}>
+                                </lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label={types.Recent.label}
+                                                                    name={types.Recent.label}>
+                                </lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label={types.Following.label}
+                                                                    name={types.Following.label}>
+                                </lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label={types.Libraries.label}
+                                                                    name={types.Libraries.label}>
+                                </lightning-vertical-navigation-item>
+                            </lightning-vertical-navigation-section>
+                        </lightning-vertical-navigation>
+                    </div>
+                </lightning-layout-item>
+                <div class="ds-panel-separator"></div>
+                <lightning-layout-item class="slds-p-around_small">
+                    <lightning-input name="searchDocumentsInput"
+                                     label=""
+                                     type="search"
+                                     placeholder={label.SearchFiles}
+                                     minlength="2"
+                                     message-when-too-short={label.searchTermMinLengthMessage}
+                                     onchange={handleChangeOfSearchInput}
+                                     class="ds-input-width">
+                    </lightning-input>
+                    <template if:true={isDocumentsOwnedByUserStep}>
+                        <div class="ds-table-height">
+                            <c-datatable-without-select-all key-field="Id"
+                                                            columns={documentColumns}
+                                                            data={documentsOwnedByUser}
+                                                            enable-infinite-loading
+                                                            onloadmore={loadMoreDocumentsOwnedByUser}
+                                                            onselectedrow={handleSelectedRow}
+                                                            hide-checkbox-column>
+                             </c-datatable-without-select-all>
+                        </div>
+                    </template>
+                    <template if:true={isDocumentsSharedWithUserStep}>
+                        <div class="ds-table-height">
+                            <c-datatable-without-select-all key-field="Id"
+                                                            columns={documentColumns}
+                                                            data={documentsSharedWithUser}
+                                                            enable-infinite-loading
+                                                            onloadmore={loadMoreDocumentsSharedWithUser}
+                                                            onselectedrow={handleSelectedRow}
+                                                            hide-checkbox-column>
+                            </c-datatable-without-select-all>
+                        </div>
+                    </template>
+                    <template if:true={isDocumentsRecentlyViewedByUserStep}>
+                        <div class="ds-table-height">
+                            <c-datatable-without-select-all key-field="Id"
+                                                            columns={documentColumns}
+                                                            data={documentsRecentlyViewedByUser}
+                                                            onselectedrow={handleSelectedRow}
+                                                            hide-checkbox-column>
+                            </c-datatable-without-select-all>
+                        </div>
+                    </template>
+                    <template if:true={isDocumentsFollowedByUserStep}>
+                        <div class="ds-table-height">
+                            <c-datatable-without-select-all key-field="Id"
+                                                            columns={documentColumns}
+                                                            data={documentsFollowedByUser}
+                                                            enable-infinite-loading
+                                                            onloadmore={loadMoreDocumentsFollowedByUser}
+                                                            onselectedrow={handleSelectedRow}
+                                                            hide-checkbox-column>
+                            </c-datatable-without-select-all>
+                        </div>
+                    </template>
+                    <template if:true={isContentWorkspacesStep}>
+                        <div class="ds-table-height">
+                            <template if:false={isContentDocumentInWorkspaceStep}>
+                                <c-datatable-content-workspace key-field="Id"
+                                                               columns={contentWorkspaceColumns}
+                                                               data={contentWorkspaces}
+                                                               enable-infinite-loading
+                                                               onloadmore={loadMoreContentWorkspaces}
+                                                               ondisplaycontentdocumentsinworkspace={loadContentDocumentsInWorkspace}
+                                                               min-column-width="200"
+                                                               hide-checkbox-column>
+                                </c-datatable-content-workspace>
+                            </template>
+                            <template if:true={isContentDocumentInWorkspaceStep}>
+                                <div class="slds-p-top_medium">
+                                    <lightning-icon icon-name="utility:left"
+                                                size="xx-small"
+                                                title="Back">
+                                    </lightning-icon>
+                                    <span class="slds-p-left_x-small">
+                                        <a onclick={handleBackFromContentWorkspace}>{label.back}</a>
+                                    </span>
+                                </div>
+                                <c-datatable-without-select-all key-field="Id"
+                                                                columns={documentColumns}
+                                                                data={documentsInWorkspace}
+                                                                onselectedrow={handleSelectedRow}
+                                                                enable-infinite-loading
+                                                                onloadmore={loadMoreContentDocumentsInWorkspace}
+                                                                hide-checkbox-column>
+                                </c-datatable-without-select-all>
+                            </template>
+                        </div>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <div slot="footer">
+            <lightning-button label={label.cancel}
+                              variant="neutral"
+                              onclick={handleClose}>
+            </lightning-button>
+            <lightning-button label={label.add}
+                              variant="brand"
+                              class="slds-p-left_small"
+                              onclick={handleAddFiles}>
+            </lightning-button>
+        </div>
+    </c-modal>
+</template>

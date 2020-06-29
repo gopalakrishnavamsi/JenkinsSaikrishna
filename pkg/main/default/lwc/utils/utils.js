@@ -49,11 +49,13 @@ const isEmpty = (value) => value === undefined || value === null || value === ''
  * @param message {string} Data that needs to be passed.
  * @param isBubbles {boolean} Does event bubble up the chain
  */
-const genericEvent = function (eventName, message, isBubbles) {
+const genericEvent = function (eventName, message, isBubbles, isComposed, isCancelable) {
   this.dispatchEvent(
     new CustomEvent(eventName, {
       detail: {data: message},
-      bubbles: isBubbles ? true : false
+      bubbles: isBubbles ? true : false,
+      composed: isComposed ? true : false,
+      cancelable: isCancelable ? true : false
     }));
 };
 
@@ -161,6 +163,13 @@ const showSuccess = (context, message, channel) => {
   }
 }
 
+const spliceArray = (arr) => {
+  if(!isEmpty(arr) && arr.length > 0) {
+    arr = arr.splice(0, arr.length);
+  }
+  return arr;
+}
+
 export {
   FILE_EXTENSION_TO_ICON_NAME_MAPPING,
   UNKNOWN_ICON_NAME,
@@ -178,5 +187,6 @@ export {
   removeArrayElement,
   editArrayElement,
   showError,
-  showSuccess
+  showSuccess,
+  spliceArray
 };

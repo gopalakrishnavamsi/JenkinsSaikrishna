@@ -10752,6 +10752,62 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Ordered By</value>	
 	</labels>
 	<labels>
+		<fullName>Recent</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Recent</shortDescription>
+		<value>Recent</value>
+	</labels>
+	<labels>
+		<fullName>OwnedByMe</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>OwnedByMe</shortDescription>
+		<value>Owned by Me</value>
+	</labels>
+	<labels>
+		<fullName>SharedWithMe</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SharedWithMe</shortDescription>
+		<value>Shared with Me</value>
+	</labels>
+	<labels>
+		<fullName>Following</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Following</shortDescription>
+		<value>Following</value>
+	</labels>
+	<labels>
+		<fullName>Libraries</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Libraries</shortDescription>
+		<value>Libraries</value>
+	</labels>
+	<labels>
+		<fullName>SearchFiles</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SearchFiles</shortDescription>
+		<value>Search Files...</value>
+	</labels>
+	<labels>
+		<fullName>SearchTermMinLengthMessage</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SearchTermMinLengthMessage</shortDescription>
+		<value>Your search term must have 2 or more characters.</value>
+	</labels>
+  <labels>
 		<fullName>ByNameAndEmail</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>

@@ -21,6 +21,7 @@ export default class SendingDocumentsList extends LightningElement {
     @api recordId;
     @api documents;
     @api forbidEnvelopeChanges;
+    isLoading = false;
 
     label = LABEL;
 
@@ -40,6 +41,7 @@ export default class SendingDocumentsList extends LightningElement {
     }
 
     addUploadedDocument(event) {
+        this.setLoading(true);
         getLinkedDocuments({
             sourceId: this.recordId
         })
@@ -49,11 +51,13 @@ export default class SendingDocumentsList extends LightningElement {
                 const newDocument = this.addDocumentProperties(uploadedDocument, true);
                 this.addNewDocument(newDocument);
             }
+            this.setLoading(false);
         })
         .catch(error => {
             if (!isEmpty(error.body)) {
                 this.showError(error.body.message);
             }
+            this.setLoading(false);
         });
     }
 
@@ -79,5 +83,14 @@ export default class SendingDocumentsList extends LightningElement {
 
     showError(errorMessage) {
         publish(this.context, ERROR, { errorMessage });
+    }
+
+    handleAddFromSalesforce() {
+        const selectFilesModalComponent = this.template.querySelector('c-select-files-modal');
+        selectFilesModalComponent.handleShow();
+    }
+
+    setLoading(value) {
+        this.isLoading = value;
     }
 }
