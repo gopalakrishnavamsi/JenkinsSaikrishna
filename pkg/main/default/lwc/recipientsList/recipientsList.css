@@ -8,3 +8,8 @@
     border-style: dashed;
     border-color: green;
 }
+
+.listHeader {
+    padding-left: 70px;
+    border-radius: 0;
+}

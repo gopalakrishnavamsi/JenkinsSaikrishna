@@ -10822,5 +10822,21 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Select Recipient</shortDescription>
 		<value>Select Recipient</value>	
-	</labels>		
+	</labels>
+	<labels>
+		<fullName>RecipientRoleDecTableHeader</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Recipient / Role</shortDescription>
+		<value>Recipient / Role</value>	
+	</labels>	
+	<labels>
+		<fullName>RecipientLabel</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Recipient</shortDescription>
+		<value>Recipient</value>	
+	</labels>				
 </CustomLabels>

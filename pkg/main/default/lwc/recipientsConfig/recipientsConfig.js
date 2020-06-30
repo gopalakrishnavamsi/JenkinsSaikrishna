@@ -18,7 +18,7 @@ export default class Recipients extends LightningElement {
 
   @api isSending;
 
-  @api forbidEnvelopeChanges;
+  @api readOnly;
 
   Labels = Labels;
 
@@ -43,7 +43,7 @@ export default class Recipients extends LightningElement {
   }
 
   set recipients(val) {
-    this.privateRecipients = proxify(!isEmpty(val) ? val.map(r => Recipient.fromObject(r)) : []);
+    this.privateRecipients = proxify(!isEmpty(val) ? val.map(r => Recipient.fromObject({ ...r, isPlaceHolder: r.isPlaceHolder })) : []);
   }
 
   connectedCallback() {
@@ -96,6 +96,10 @@ export default class Recipients extends LightningElement {
     this.recipients = editArrayElement(this.recipients, this.editRecipientIndex, val);
   }
 
+  get isPlaceHolder() {
+    return !isEmpty(this.editRecipient) && this.editRecipient.isPlaceHolder
+  }
+
   closeRecipientsModal = () => {
     this.showAddRecipientsModal = false;
     if (!isEmpty(this.editRecipientIndex)) this.editRecipientIndex = null;
@@ -113,6 +117,7 @@ export default class Recipients extends LightningElement {
   addRecipient = (recipient, isAddNew = false) => {
     this.isDirtyRecipients = true;
     const isEdit = !isEmpty(this.editRecipientIndex);
+
     if (this.isSigningOrder && !isEdit) {
       const maxRoutingOrder = Math.max(...this.recipients.map(r => r.routingOrder), 0);
       recipient.routingOrder = maxRoutingOrder + 1;

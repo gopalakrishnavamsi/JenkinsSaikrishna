@@ -28,7 +28,6 @@ export default class SendingConfig extends LightningElement {
     // This may need to be divided into different flags later
     @api forbidEnvelopeChanges;
     @api files;
-    @api defaultRoles;
     @api sendNow;
 
     isLoading = false;
@@ -127,7 +126,7 @@ export default class SendingConfig extends LightningElement {
             let recipientsSelector = this.template.querySelector('c-recipients-config');
             if (!isEmpty(recipientsSelector)) {
               let recipients = recipientsSelector.fetchRecipients();
-              if (recipients) this.recipients = recipients;
+              if (recipients) this.recipients = recipients.data;
             }
         }
 

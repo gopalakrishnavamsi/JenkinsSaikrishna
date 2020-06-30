@@ -63,10 +63,13 @@ import DEC_EDIT_RECIPIENT from '@salesforce/messageChannel/DecEditRecipient__c';
 
 //eslint-disable-next-line
 const emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const isPlaceHolderSymbol = Symbol('isPlaceHolder');
 
 export class Recipient {
-  constructor({id = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = 'Signer', signingGroup = null}, role, routingOrder = 1) {
+  constructor({id = null, envelopeRecipientId = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = 'Signer', signingGroup = null, isPlaceHolder = false}, role, routingOrder = 1) {
     this.id = id;
+    this[isPlaceHolderSymbol] = isPlaceHolder;
+    this.envelopeRecipientId = envelopeRecipientId;
     this.name = name;
     this.email = email;
     this.phone = phone;
@@ -117,13 +120,13 @@ export class Recipient {
         ...recipientDetails,
         authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
       },
-      recipientDetails.role,
+      typeof recipientDetails.role === 'string' ? new Role(recipientDetails.role) : recipientDetails.role,
       recipientDetails.routingOrder
     );
   }
 
   get isPlaceHolder() {
-    return this.constructor === Recipient && !isEmpty(this.role) && isEmpty(this.signingGroup) && isEmpty(this.name) && isEmpty(this.email);
+    return this[isPlaceHolderSymbol];
   }
 
   get sourceId() {

@@ -13,6 +13,7 @@ import {
 export default class SendingDocument extends LightningElement {
     @api document;
     @api index;
+    @api forbidEnvelopeChanges;
 
     context = createMessageContext();
 

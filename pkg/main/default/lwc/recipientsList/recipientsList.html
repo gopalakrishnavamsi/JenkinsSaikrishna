@@ -1,4 +1,23 @@
 <template>
+    <div if:true={isSending} class="slds-box slds-theme_shade slds-grid slds-box_x-small listHeader">
+            <div class="slds-col slds-size_1-of-5 slds-text-title_bold slds-m-left_large">
+                {Labels.recipientLabel}
+            </div>
+            <div class="slds-col slds-size_1-of-5 slds-text-title_bold slds-m-left_large">
+                {Labels.recipientRoleLabel}
+            </div>
+            <div class="slds-col slds-size_1-of-5 slds-text-title_bold slds-m-left_large">
+                {Labels.actionLabel}
+            </div>
+    </div>
+    <div if:false={isSending} class="slds-box slds-theme_shade slds-grid slds-box_x-small listHeader">
+        <div class="slds-col slds-size_1-of-3 slds-text-title_bold slds-m-left_large">
+            {Labels.recipientRoleDecTableHeaderLabel}
+        </div>
+        <div class="slds-col slds-size_1-of-5 slds-text-title_bold slds-m-left_large">
+            {Labels.actionLabel}
+        </div>
+    </div>    
     <template
             for:each={privateRecipients}
             for:item="item"

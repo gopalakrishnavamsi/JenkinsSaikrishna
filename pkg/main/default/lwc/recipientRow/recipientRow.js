@@ -5,6 +5,8 @@ import {genericEvent, isEmpty} from 'c/utils';
 import EditLabel from '@salesforce/label/c.Edit';
 import DeleteLabel from '@salesforce/label/c.DeleteButtonLabel';
 import SelectRecipientLabel from '@salesforce/label/c.SelectRecipient';
+import decTemplate from './decRow.html';
+import sendingTemplate from './sendingRow.html';
 
 export default class RecipientRow extends LightningElement {
 
@@ -30,6 +32,14 @@ export default class RecipientRow extends LightningElement {
 
   disconnectedCallback() {
     releaseMessageContext(this.context);
+  }
+
+  get disableRecipientDelete(){
+    return this.readOnly && this.recipient && this.recipient.isPlaceHolder;
+  }
+
+  get roleName() {
+    return this.recipient && !isEmpty(this.recipient.role) && !isEmpty(this.recipient.role.name) ? this.recipient.role.name : null;
   }
 
   get showPlaceholderEdit() {
@@ -113,4 +123,8 @@ export default class RecipientRow extends LightningElement {
     let payload = {'currentIndex': this.index, 'newRoutingOrder': event.target.value};
     genericEvent.call(this, 'routingorderupdate', payload, false);
   };
+
+  render() {
+    return this.isSending ? sendingTemplate : decTemplate;
+  }
 }

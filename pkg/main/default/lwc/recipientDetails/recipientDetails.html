@@ -40,6 +40,8 @@
     </template>
     <section>
         <c-dec-recipient-action
+                is-place-holder={recipient.isPlaceHolder}
+                read-only={readOnly}
                 onactionchange={updateAction}
                 value={recipient.type}>
         </c-dec-recipient-action>

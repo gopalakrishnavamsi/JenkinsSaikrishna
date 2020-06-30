@@ -22,6 +22,9 @@ export default class DecRecipientDetails extends LightningElement {
   @api
   recipient = {};
 
+  @api
+  readOnly;
+
   get roleName() {
     return !isEmpty(this.recipient.role) && !isEmpty(this.recipient.role.name) ? this.recipient.role.name : null;
   }

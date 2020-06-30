@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slds-col slds-p-around_medium slds-size_1-of-3" if:false={showPlaceholderEdit}>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-5" if:false={showPlaceholderEdit}>
                 <div class="slds-grid_vertical">
                     <div class="slds-col">
                         <a onclick={handleEdit}>{recipientLabel}</a>
@@ -33,9 +33,12 @@
                     </div>
                 </div>
             </div>
-            <div class="slds-col slds-p-around_medium slds-size_1-of-3" if:true={showPlaceholderEdit}>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-5" if:true={showPlaceholderEdit}>
                 <lightning-button label={Labels.SelectRecipient} onclick={handleEdit}></lightning-button>
             </div>
+            <div class="slds-col slds-p-around_large slds-size_1-of-5">
+                <span>{roleName}</span>
+            </div>            
             <div class="slds-col slds-p-around_large slds-size_1-of-5">
                 <span>{recipientType}</span>
             </div>
@@ -49,7 +52,7 @@
                 <lightning-button-menu icon-size="small" alternative-text="Show menu" variant="border-filled">
                     <lightning-menu-item value="edit" label={Labels.Edit}
                                          onclick={handleRecipientAction}></lightning-menu-item>
-                    <lightning-menu-item value="delete" label={Labels.Delete}
+                    <lightning-menu-item if:false={disableRecipientDelete} value="delete" label={Labels.Delete}
                                          onclick={handleRecipientAction}></lightning-menu-item>
                 </lightning-button-menu>
             </div>

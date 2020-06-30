@@ -1,5 +1,5 @@
 import {LightningElement, api} from 'lwc';
-import {Recipient, LookupRecipient, RelatedRecipient, Types, Labels} from 'c/recipientUtils';
+import {Recipient, Types, Labels, Actions} from 'c/recipientUtils';
 import {isEmpty, proxify} from 'c/utils';
 const DEFAULT_SELECTED_TYPE = Types.EntityLookupSending.value;
 
@@ -8,6 +8,9 @@ export default class SendingRecipientsModal extends LightningElement {
 
   @api
   sourceObject;
+
+  @api
+  readOnly;
 
   Types = Types;
 
@@ -65,7 +68,7 @@ export default class SendingRecipientsModal extends LightningElement {
 
   handleTypeChange = ({detail}) => {
     if (this.selectedType === detail.name) return;
-    this.recipient = !isEmpty(this.recipient) ? this.convertRecipientType(this.recipient, detail.name) : null;
+    this.recipient = !isEmpty(this.recipient) ? this.convertRecipientType(this.recipient, detail.name, this.recipient ? this.recipient.isPlaceHolder : false) : null;
     this.selectedType = detail.name;
     this.isValid = false;
   };
@@ -74,44 +77,19 @@ export default class SendingRecipientsModal extends LightningElement {
     this.isValid = detail;
   };
 
-  convertRecipientType({note = null}, type = DEFAULT_SELECTED_TYPE) {
+  convertRecipientType({note = null, envelopeRecipientId = null}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
     if (isEmpty(type)) return null;
-
-    let result;
-
-    switch (type) {
-      case this.Types.LookupRecipient.value:
-        result = new LookupRecipient(
-          null,
-          null,
-          this.routingOrder,
-          {
-            note
-          }
-        );
-        break;
-      case this.Types.RelatedRecipient.value:
-        result = new RelatedRecipient(
-          null,
-          null,
-          null,
-          this.routingOrder,
-          null,
-          {
-            note
-          }
-        );
-        break;
-      default:
-        result = new Recipient(
-          {
-            note
-          },
-          null,
-          this.routingOrder
-        );
-        break;
-    }
-    return proxify(result);
+    return proxify(
+      new Recipient(
+        {
+          note,
+          envelopeRecipientId,
+          isPlaceHolder,
+          type : this.readOnly && !isPlaceHolder ? Actions.CarbonCopy.value : Actions.Signer.value
+        },
+        null,
+        this.routingOrder
+      )
+    );
   }
 }

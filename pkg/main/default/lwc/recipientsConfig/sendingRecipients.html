@@ -61,6 +61,7 @@
         <c-signing-order recipients={recipients}></c-signing-order>
     </div>
     <c-sending-recipients-modal is-open={showAddRecipientsModal}
+                                read-only={readOnly}
                                 handle-save={addRecipient}
                                 handle-close={closeRecipientsModal}
                                 recipient={editRecipient}

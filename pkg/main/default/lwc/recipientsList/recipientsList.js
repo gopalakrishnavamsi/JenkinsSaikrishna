@@ -11,10 +11,21 @@ import {
 } from 'c/dragUtils';
 
 import {genericEvent, getRandomKey} from 'c/utils';
+import actionLabel from '@salesforce/label/c.DecRecipientAction';
+import recipientRoleDecTableHeaderLabel from '@salesforce/label/c.RecipientRoleDecTableHeader';
+import recipientLabel from '@salesforce/label/c.RecipientLabel';
+import recipientRoleLabel from '@salesforce/label/c.RecipientRoleLabel';
 
 const DEFAULT_ROUTING_ORDER = 1;
 
 export default class RecipientsList extends LightningElement {
+
+  Labels = {
+    actionLabel,
+    recipientRoleDecTableHeaderLabel,
+    recipientLabel,
+    recipientRoleLabel
+  }
 
   @api
   isSending

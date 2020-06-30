@@ -5606,7 +5606,15 @@
 	<customLabels>
 		<label>Select Recipient</label>	
 		<name>SelectRecipient</name>
-	</customLabels>		
+	</customLabels>	
+	<customLabels>
+		<label>Recipient / Role</label>	
+		<name>RecipientRoleDecTableHeader</name>
+	</customLabels>	
+	<customLabels>
+		<label>Recipient</label>	
+		<name>RecipientLabel</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

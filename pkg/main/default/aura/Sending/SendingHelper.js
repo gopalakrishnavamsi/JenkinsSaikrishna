@@ -59,6 +59,14 @@
               }
             });
           }
+          var placeholders = component.get('v.placeholderRecipients');
+          var recipients = [];
+          if (!$A.util.isEmpty(placeholders) && !$A.util.isEmpty(placeholders.recipients)) {
+            placeholders.recipients.forEach(function(r) {
+              r.isPlaceHolder = true;
+            })
+            recipients = placeholders.recipients.concat(result.recipients || []);
+          } else recipients = result.recipients
           var defaultRoles = result.defaultRoles.reduce(function (rolesMap, role) {
             rolesMap[role.name.toLowerCase()] = role;
             return rolesMap;
@@ -77,7 +85,7 @@
           component.set('v.defaultEmailMessage', result.envelope.emailMessage);
           component.set('v.availableTemplates', result.templates);
           component.set('v.documents', result.documents);
-          component.set('v.recipients', result.recipients);
+          component.set('v.recipients', recipients);
           component.set('v.defaultRoles', defaultRoles);
           component.set('v.emailLocalizations', result.emailLocalizations);
           component.set(

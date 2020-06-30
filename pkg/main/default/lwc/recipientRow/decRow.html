@@ -1,0 +1,58 @@
+<template>
+    <div data-id={recipient.id}
+         ondragstart={itemDragStart}
+         ondragend={itemDragEnd}>
+        <div class="slds-grid">
+            <div class={recipientBackgroundColor}></div>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-9">
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    <div class="slds-media slds-media_center slds-col">
+                        <div class="slds-media__figure">
+                            <lightning-icon
+                                    icon-name="utility:drag_and_drop"
+                                    alternative-text="Drag and Drop"
+                                    variant="neutral"
+                                    size="small"></lightning-icon>
+                        </div>
+                    </div>
+                    <div class="slds-col ds-routingOrderInput">
+                        <lightning-input if:true={isSigningOrder}
+                                         value={recipient.routingOrder}
+                                         pattern="[0-9]*"
+                                         onchange={handleRoutingOrderChange}></lightning-input>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-3" if:false={showPlaceholderEdit}>
+                <div class="slds-grid_vertical">
+                    <div class="slds-col">
+                        <a onclick={handleEdit}>{recipientLabel}</a>
+                    </div>
+                    <div class="slds-col">
+                        <span>{recipientSubLabel}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-3" if:true={showPlaceholderEdit}>
+                <lightning-button label={Labels.SelectRecipient} onclick={handleEdit}></lightning-button>
+            </div>
+            <div class="slds-col slds-p-around_large slds-size_1-of-5">
+                <span>{recipientType}</span>
+            </div>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-5 slds-align_absolute-center">
+                <lightning-icon size="xx-small" icon-name="utility:shield" class="ds-type-icon"
+                                if:true={recipient.hasAuthentication}></lightning-icon>
+                <lightning-icon size="xx-small" icon-name="utility:quick_text" class="ds-type-icon"
+                                if:true={recipient.hasNote}></lightning-icon>
+            </div>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-9 slds-align_absolute-center">
+                <lightning-button-menu icon-size="small" alternative-text="Show menu" variant="border-filled">
+                    <lightning-menu-item value="edit" label={Labels.Edit}
+                                         onclick={handleRecipientAction}></lightning-menu-item>
+                    <lightning-menu-item if:false={disableRecipientDelete} value="delete" label={Labels.Delete}
+                                         onclick={handleRecipientAction}></lightning-menu-item>
+                </lightning-button-menu>
+            </div>
+        </div>
+    </div>
+</template>
