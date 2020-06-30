@@ -3,7 +3,7 @@
     var self = this;
     var fieldOptions = component.get('v.currentLevelFieldOptions');
     if ($A.util.isUndefinedOrNull(fieldOptions)) {
-      var objectName = component.get('v.config').objectMappings.name;
+      var objectName = component.get('v.template').objectMappings.name;
       var maxDepth = 5;
       helper.fetchMergeFields(component, objectName, maxDepth,
         function (response) {

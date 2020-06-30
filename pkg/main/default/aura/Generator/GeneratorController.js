@@ -16,44 +16,26 @@
     }
     var isGenEnabled = component.get('v.isGenEnabled');
     if (isAuthorized && isGenEnabled) {
-      var config = component.get('v.config');
-      helper.checkMultiCurrency(component);
-      if ($A.util.isEmpty(config)) {
+      var template = component.get('v.template');
+      if ($A.util.isEmpty(template)) {
         var templateId = component.get('v.templateId');
-        if (!$A.util.isUndefinedOrNull(templateId)) {
-          var action = component.get('c.getTemplate');
-
-          action.setParams({
-            templateId: templateId
-          });
-
-          action.setCallback(this, function (response) {
-            if (response.getState() === 'SUCCESS') {
-              var results = response.getReturnValue();
-              component.set('v.config', results);
-              component.set('v.templateFiles', results.generated);
-              helper.setupData(component);
-            } else {
-              component.set('v.errType', 'error');
-              component.set('v.errMsg', stringUtils.getErrorMessage(response));
-            }
-          });
-          $A.enqueueAction(action);
-        }
+        if (!$A.util.isUndefinedOrNull(templateId)) helper.getConfiguration(component, templateId);
       } else {
-        component.set('v.isLoading', true);
-        // TODO: Verify has Gen license, trial not expired, etc.
         helper.setupData(component);
-        component.set('v.isLoading', false);
       }
     }
   },
 
   generateDocs: function (component, event, helper) {
-    helper.getRecordData(component);
+    var sourceId = helper.getSourceId(component);
+    if (component.get('v.useGenV1')) {
+      helper.getRecordData(component, sourceId);
+    } else {
+      helper.generateDocuments(component, component.get('v.template').id, sourceId);
+    }
   },
 
-  checkRemaingFiles: function (component) {
+  checkRemainingFiles: function (component) {
     var files = component.get('v.templateFiles');
     var selected = [];
 

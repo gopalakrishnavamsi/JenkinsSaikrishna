@@ -6,8 +6,8 @@
   validate: function (component) {
     return new Promise(
       $A.getCallback(function (resolve, reject) {
-        var config = component.get('v.config');
-        if (!$A.util.isUndefinedOrNull(config.objectMappings)) {
+        var template = component.get('v.template');
+        if (!$A.util.isUndefinedOrNull(template.objectMappings)) {
           resolve();
         } else {
           reject();
@@ -125,8 +125,8 @@
   },
 
   addSigner: function (component) {
-    var config = component.get('v.config');
-    var signerMappings = config.signerMappings;
+    var template = component.get('v.template');
+    var signerMappings = template.signerMappings;
 
     signerMappings.push({
       fieldMappings: [
@@ -136,35 +136,35 @@
       ]
     });
 
-    component.set('v.config', config);
+    component.set('v.template', template);
   },
 
   removeSigner: function (component, event) {
     var index = event.getSource().get('v.value');
-    var config = component.get('v.config');
-    var signerMappings = config.signerMappings;
+    var template = component.get('v.template');
+    var signerMappings = template.signerMappings;
 
     signerMappings.splice(index, 1);
 
-    component.set('v.config', config);
+    component.set('v.template', template);
   },
 
   addSignerField: function (component, event) {
     var index = event.getSource().get('v.value');
-    var config = component.get('v.config');
-    var signerMappings = config.signerMappings;
+    var template = component.get('v.template');
+    var signerMappings = template.signerMappings;
 
     signerMappings[index].fieldMappings.push({
       apiName: 's'
     });
 
-    component.set('v.config', config);
+    component.set('v.template', template);
   },
 
   removeSignerField: function (component, event) {
     var params = event.getParam('data');
-    var config = component.get('v.config');
-    var signerMappings = config.signerMappings;
+    var template = component.get('v.template');
+    var signerMappings = template.signerMappings;
     var fieldMappings = signerMappings[params.parentIndex].fieldMappings;
     fieldMappings.splice(params.index, 1);
 
@@ -172,7 +172,7 @@
       signerMappings.splice(params.parentIndex, 1);
     }
 
-    component.set('v.config', config);
+    component.set('v.template', template);
 
     //recalc numbering in index fields due to removal of a signer.
     if (fieldMappings.length === 0) {

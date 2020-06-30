@@ -13,9 +13,9 @@
   },
 
   publishedButtons: function (component, event, helper) {
-    var config = component.get('v.config');
-    config.stepsCompleted++;
-    component.set('v.config', config);
+    var template = component.get('v.template');
+    template.stepsCompleted++;
+    component.set('v.template', template);
     component.set('v.isCompleted', true);
     helper.saveData(component, false);
   },
@@ -30,11 +30,11 @@
   },
 
   selectStep: function (component, event, helper) {
-    var config = component.get('v.config');
-    var maxStepsAllowed = config.stepsCompleted + 1;
+    var template = component.get('v.template');
+    var maxStepsAllowed = template.stepsCompleted + 1;
     var selectedStep = parseInt(event.currentTarget.dataset.step, 10);
 
-    if (selectedStep === 4 && !config.hasPreviewedDocuments) {
+    if (selectedStep === 4 && !template.hasPreviewedDocuments) {
       return;
     }
 
@@ -44,8 +44,8 @@
   },
 
   showExitModal: function (component, event, helper) {
-    var config = component.get('v.config');
-    if (config.isSample) {
+    var template = component.get('v.template');
+    if (template.isSample) {
       helper.goToRecord(component);
     } else {
       component.find('exitModal').show();
@@ -86,7 +86,7 @@
 
   editDetails: function (component) {
     var recordNameInput = component.find('record-name-input');
-    recordNameInput.set('v.value', component.get('v.config').name);
+    recordNameInput.set('v.value', component.get('v.template').name);
     component.find('edit-modal').show();
 
     window.setTimeout(
@@ -98,9 +98,9 @@
   },
 
   saveDetails: function (component, event, helper) {
-    var config = component.get('v.config');
-    config.name = component.find('record-name-input').get('v.value');
-    component.set('v.config', config);
+    var template = component.get('v.template');
+    template.name = component.find('record-name-input').get('v.value');
+    component.set('v.template', template);
     component.find('edit-modal').hide();
     helper.saveData(component, false);
   },

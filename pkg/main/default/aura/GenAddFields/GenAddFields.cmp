@@ -1,6 +1,6 @@
 <aura:component controller="GenController">
     <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}"/>
-    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="template" type="Object"/>
     <aura:attribute name="optionModalParams" type="Object" access="private"/>
     <aura:attribute name="clonedFieldMapping" type="Object" access="private"/>
     <aura:attribute name="mergeFieldDisplayOptions" type="Object[]" access="private"/>
@@ -39,8 +39,8 @@
         <p>{!$Label.c.SalesforceFieldsMsg}</p>
     </div>
     <!-- Merge Data -->
-    <c:GenTokenMapper objMappings="{!v.config.objectMappings}"
-                      mergeFieldTree="{!v.config.objectMappings.fieldMappings}"/>
+    <c:GenTokenMapper objMappings="{!v.template.objectMappings}"
+                      mergeFieldTree="{!v.template.objectMappings.fieldMappings}"/>
     <!-- /Merge Data -->
 
     <!-- AutoPlace Fields -->
@@ -50,7 +50,7 @@
     </div>
 
     <div class="ds-repeater-box slds-box slds-box_x-small slds-theme_shade">
-        <aura:if isTrue="{!v.config.signerMappings.length gt 0}">
+        <aura:if isTrue="{!v.template.signerMappings.length gt 0}">
             <div class="slds-grid slds-grid_pull-padded-large">
                 <div class="slds-col slds-size_1-of-2 slds-p-horizontal_large">
                     <div class="slds-grid slds-grid_pull-padded_xxx-small">
@@ -67,7 +67,7 @@
                 </div>
             </div>
         </aura:if>
-        <aura:iteration items="{!v.config.signerMappings}" var="signerMapping" indexVar="signerIndex">
+        <aura:iteration items="{!v.template.signerMappings}" var="signerMapping" indexVar="signerIndex">
             <div class="ds-merge-field slds-is-relative slds-m-bottom_x-small">
                 <div class="slds-grid slds-grid_align-spread slds-grid_pull-padded-large slds-is-relative">
                     <div class="slds-col slds-p-horizontal_large">
@@ -99,7 +99,7 @@
             </div>
         </aura:iteration>
 
-        <aura:if isTrue="{!v.config.signerMappings.length lt 4}">
+        <aura:if isTrue="{!v.template.signerMappings.length lt 4}">
             <lightning:button iconName="utility:add" label="{!$Label.c.AddSigner}" onclick="{!c.addSigner}"/>
         </aura:if>
     </div>

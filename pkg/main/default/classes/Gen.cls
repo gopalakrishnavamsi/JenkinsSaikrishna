@@ -2,6 +2,11 @@ public class Gen {
 
 	public static final String TYPE_WORD = 'Microsoft Word';
 	public static final String TYPE_ONLINE = 'Online Editor';
+	public static final String FILE_TYPE_WORD = 'Word';
+	public static final String FILE_TYPE_PDF = 'PDF';
+	public static final String FILE_SUFFIX_NAME = 'name';
+	public static final String FILE_SUFFIX_DATE = 'date';
+	public static final String FILE_SUFFIX_NAME_DATE = 'name_date';
 
 	public class File {
 		@AuraEnabled
@@ -74,18 +79,6 @@ public class Gen {
 		public String matchType { get; private set; }
 		@AuraEnabled
 		public String matchValue { get; private set; }
-
-		public RuleConditions(
-			final String fieldName,
-			final String fieldType,
-			final String matchType,
-			final String matchValue) {
-
-			this.fieldName = fieldName;
-			this.fieldType = fieldType;
-			this.matchType = matchType;
-			this.matchValue = matchValue;
-		}
 	}
 
 	public class RuleEvaluation {
@@ -103,36 +96,92 @@ public class Gen {
 		}
 	}
 
-	public class Job {
+	public class Task {
 		@AuraEnabled
 		public UUID id { get; private set; }
 		@AuraEnabled
-		public Id fileId { get; private set; }
+		public Id contentVersionId { get; private set; }
 		@AuraEnabled
 		public String status { get; private set; }
 		@AuraEnabled
 		public String message { get; private set; }
 		@AuraEnabled
-		public File file { get; private set; }
+		public Gen.File file { get; private set; }
 		@AuraEnabled
-		public Boolean success { get; private set; }
+		public String outputFileName { get; private set; }
+		@AuraEnabled
+		public Boolean success {
+			get {
+				return this.status == 'Success' || this.status == Label.Success;
+			}
+		}
+		public Boolean complete {
+			get {
+				return this.status == Label.Success || this.status == Label.Failure;
+			}
+		}
 
-		public Job(
+		public Task(
+			final Gen.File file,
+			final String outputFileName) {
+
+			this.file = file;
+			this.outputFileName = outputFileName;
+		}
+
+		public Task(
 			final UUID id,
-			final Id fileId,
+			final Id contentVersionId,
 			final String status,
 			final String message) {
 
 			this.id = id;
-			this.fileId = fileId;
-			this.status = String.isBlank(status) ? Label.Unknown : status;
+			this.contentVersionId = contentVersionId;
+			this.status = status;
 			this.message = message;
-			this.success = status == 'Success' || status == Label.Success;
 		}
 
-		public Job withFile(final File file) {
+		public Gen.Task withId(final UUID id) {
+			this.id = id;
+			return this;
+		}
+
+		public Gen.Task withStatus(final String status) {
+			this.status = status;
+			return this;
+		}
+
+		public Gen.Task withMessage(final String message) {
+			this.message = message;
+			return this;
+		}
+
+		public Gen.Task withFile(final Gen.File file) {
 			this.file = file;
 			return this;
+		}
+	}
+
+	public class Job {
+		@AuraEnabled
+		public Id templateId { get; private set; }
+		@AuraEnabled
+		public Entity source { get; private set; }
+		@AuraEnabled
+		public String locale { get; private set; }
+		@AuraEnabled
+		public List<Gen.Task> tasks { get; private set; }
+
+		public Job(
+			final Id templateId,
+			final Entity source,
+			final String locale,
+			final List<Gen.Task> tasks) {
+
+			this.templateId = templateId;
+			this.source = source;
+			this.locale = locale;
+			this.tasks = tasks == null ? new List<Gen.Task>() : tasks;
 		}
 	}
 

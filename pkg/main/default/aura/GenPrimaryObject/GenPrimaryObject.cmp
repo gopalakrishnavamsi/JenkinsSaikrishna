@@ -1,5 +1,5 @@
 <aura:component>
-    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="template" type="Object"/>
     <aura:attribute name="availableObjects" type="String[]"/>
     <aura:attribute name="labelByApiName" type="Object"/>
     <aura:attribute name="commonObjects" type="String[]"/>
@@ -15,7 +15,7 @@
 
     <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_xx-small">{!$Label.c.MainDataSource}</h3>
     <lightning:select label="{!$Label.c.MainDataSource}" class="ds-no-label"
-                      value="{!v.config.objectMappings.name}" onchange="{!c.selectedPrimary}">
+                      value="{!v.template.objectMappings.name}" onchange="{!c.selectedPrimary}">
         <optgroup label="{!$Label.c.CommonlyUsedObjects}">
             <aura:iteration items="{!v.commonObjects}" var="obj">
                 <option value="{!obj.name}">{!obj.label}</option>

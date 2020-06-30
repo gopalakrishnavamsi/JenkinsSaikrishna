@@ -84,6 +84,19 @@ public with sharing class GenService {
 		}
 
 		@TestVisible
+		private List<Gen.File> convert(final List<ContentDocumentLink> cdls) {
+			List<Gen.File> result = new List<Gen.File>();
+			if (Collection.isNotEmpty(cdls)) {
+				for (ContentDocumentLink cdl : cdls) {
+					if (cdl.ContentDocument == null || cdl.ContentDocument.LatestPublishedVersion == null) continue;
+
+					result.add(convert(cdl.ContentDocument.LatestPublishedVersion));
+				}
+			}
+			return result;
+		}
+
+		@TestVisible
 		private Gen.Template convert(final GenTemplate__c template, final List<Gen.File> generatedFiles) {
 			if (template == null) return null;
 
@@ -108,7 +121,7 @@ public with sharing class GenService {
 				String.isNotBlank(template.FileSuffix__c) ? template.FileSuffix__c : '');
 		}
 
-		private List<Gen.File> queryGeneratedFiles(final Id templateId) {
+		public List<Gen.File> queryTemplateFiles(final Id templateId) {
 			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
 				'Id', 'Title', 'FileExtension', 'ContentSize', 'ContentDocumentId',
 				Application.namespacePrefix + 'GeneratedFileFormat__c',
@@ -118,12 +131,19 @@ public with sharing class GenService {
 			});
 
 			return convert([
-				SELECT Id, Title, ContentSize, FileExtension,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, ContentDocumentId, Rule__c
-				FROM ContentVersion
-				WHERE ContentDocumentId IN :(queryLinkedDocumentIds(templateId))
-				AND IsLatest = TRUE
-				ORDER BY CreatedDate ASC
+				SELECT LinkedEntityId,
+					ContentDocument.LatestPublishedVersion.ContentDocumentId,
+					ContentDocument.LatestPublishedVersionId,
+					ContentDocument.LatestPublishedVersion.Title,
+					ContentDocument.LatestPublishedVersion.ContentSize,
+					ContentDocument.LatestPublishedVersion.FileExtension,
+					ContentDocument.LatestPublishedVersion.GeneratedFileFormat__c,
+					ContentDocument.LatestPublishedVersion.GeneratedFileName__c,
+					ContentDocument.LatestPublishedVersion.GeneratedFileSuffix__c,
+					ContentDocument.LatestPublishedVersion.Rule__c
+				FROM ContentDocumentLink
+				WHERE LinkedEntityId = :templateId
+				ORDER BY ContentDocument.LatestPublishedVersion.CreatedDate ASC
 			]);
 		}
 
@@ -152,7 +172,7 @@ public with sharing class GenService {
 				FROM GenTemplate__c
 				WHERE Id = :templateId
 				LIMIT 1
-			]), queryGeneratedFiles(templateId));
+			]), queryTemplateFiles(templateId));
 		}
 
 		public List<Gen.GenTemplateDisplay> queryTemplates() {
@@ -201,22 +221,6 @@ public with sharing class GenService {
 			});
 		}
 
-		private Set<Id> queryLinkedDocumentIds(final Id linkedEntityId) {
-			Permissions.verifyIsQueryable(CONTENT_DOCUMENT_LINK_TYPE, new List<String> {
-				'ContentDocumentId'
-			});
-
-			Set<Id> result = new Set<Id>();
-			for (ContentDocumentLink cdl : [
-				SELECT ContentDocumentId
-				FROM ContentDocumentLink
-				WHERE LinkedEntityId = :linkedEntityId
-			]) {
-				result.add(cdl.ContentDocumentId);
-			}
-			return result;
-		}
-
 		private List<ContentVersion> cloneContentVersions(final Id templateId) {
 			Permissions.verifyIsQueryable(CONTENT_VERSION_TYPE, new List<String> {
 				'Id', 'Title', 'Description', 'PathOnClient', 'VersionData',
@@ -234,24 +238,31 @@ public with sharing class GenService {
 			});
 
 			List<ContentVersion> cvs = new List<ContentVersion>();
-			for (ContentVersion cv : [
-				SELECT Id, Title, Description, PathOnClient, VersionData,
-					GeneratedFileFormat__c, GeneratedFileName__c, GeneratedFileSuffix__c, Rule__c
-				FROM ContentVersion
-				WHERE IsLatest = TRUE
-				AND ContentDocumentId IN :(queryLinkedDocumentIds(templateId))
+			for (ContentDocumentLink cdl : [
+				SELECT
+					ContentDocument.LatestPublishedVersion.Id,
+					ContentDocument.LatestPublishedVersion.Title,
+					ContentDocument.LatestPublishedVersion.Description,
+					ContentDocument.LatestPublishedVersion.PathOnClient,
+					ContentDocument.LatestPublishedVersion.VersionData,
+					ContentDocument.LatestPublishedVersion.GeneratedFileFormat__c,
+					ContentDocument.LatestPublishedVersion.GeneratedFileName__c,
+					ContentDocument.LatestPublishedVersion.GeneratedFileSuffix__c,
+					ContentDocument.LatestPublishedVersion.Rule__c
+				FROM ContentDocumentLink
+				WHERE LinkedEntityId = :templateId
 			]) {
 				// Can't use clone because ContentBodyId and VersionData are exclusive,
 				// but ContentBodyId is always queried even if we don't specify it.
 				cvs.add(new ContentVersion(
-					Title = cv.Title,
-					Description = cv.Description,
-					PathOnClient = cv.PathOnClient,
-					VersionData = cv.VersionData,
-					GeneratedFileFormat__c = cv.GeneratedFileFormat__c,
-					GeneratedFileName__c = cv.GeneratedFileName__c,
-					GeneratedFileSuffix__c = cv.GeneratedFileSuffix__c,
-					Rule__c = cv.Rule__c));
+					Title = cdl.ContentDocument.LatestPublishedVersion.Title,
+					Description = cdl.ContentDocument.LatestPublishedVersion.Description,
+					PathOnClient = cdl.ContentDocument.LatestPublishedVersion.PathOnClient,
+					VersionData = cdl.ContentDocument.LatestPublishedVersion.VersionData,
+					GeneratedFileFormat__c = cdl.ContentDocument.LatestPublishedVersion.GeneratedFileFormat__c,
+					GeneratedFileName__c = cdl.ContentDocument.LatestPublishedVersion.GeneratedFileName__c,
+					GeneratedFileSuffix__c = cdl.ContentDocument.LatestPublishedVersion.GeneratedFileSuffix__c,
+					Rule__c = cdl.ContentDocument.LatestPublishedVersion.Rule__c));
 			}
 			insert cvs;
 			return [
@@ -655,7 +666,6 @@ public with sharing class GenService {
 
 			return [SELECT Id, Name, FolderId__c, SourceObject__c, TempFolderId__c FROM AgreementConfiguration__c WHERE SourceObject__c = :sourceObjectId];
 		}
-
 	}
 
 	public static Gen.Template clone(final Id templateId) {
@@ -741,11 +751,13 @@ public with sharing class GenService {
 	}
 
 	public static Boolean checkDocumentRule(
-		final String startingObject,
+		final String sourceObject,
 		final Gen.Rule rule) {
 
+		if (String.isBlank(sourceObject) || rule == null || Collection.isEmpty(rule.conditions)) return true; // no rules to evaluate
+
 		return System.Database.countQuery(String.format('SELECT COUNT() FROM {0} WHERE {1}', new List<Object> {
-			startingObject,
+			sourceObject,
 			getRuleFilters(rule.ruleType == 'any' ? 'OR' : 'AND', rule.conditions)
 		})) > 0;
 	}
@@ -763,17 +775,14 @@ public with sharing class GenService {
 		return result;
 	}
 
+	@TestVisible
 	private static String getProcessedMatchValue(final String fieldType, final String value) {
 		String returnValue = '';
 
 		switch on fieldType {
 			when 'STRING', 'EMAIL', 'PICKLIST', 'URL', 'PHONE' {
 				returnValue = '\'' + value + '\'';
-			}
-			when 'BOOLEAN', 'DATE', 'PERCENT', 'DOUBLE', 'CURRENCY' {
-				returnValue = value;
-			}
-			when else {
+			} when else {
 				returnValue = value;
 			}
 		}
@@ -807,7 +816,107 @@ public with sharing class GenService {
 		return result;
 	}
 
-	public static List<Gen.Job> queueDocumentGeneration(
+	@TestVisible
+	private static Gen.Job buildJob(
+		final Id templateId,
+		final Id sourceId,
+		final String locale) {
+
+		if (String.isBlank(templateId) || String.isBlank(sourceId)) throw new DocuSignException(Label.UndefinedArgument);
+
+		// Get files to generate and apply rules
+		Entity source = Entity.resolve(sourceId);
+		List<Gen.Task> tasks = new List<Gen.Task>();
+		for (Gen.File file : DB.queryTemplateFiles(templateId)) {
+			if (file == null || !checkDocumentRule(source.typeName, file.rule)) continue;
+
+			tasks.add(new Gen.Task(file, getOutputFileName(file, source, Datetime.now())));
+		}
+		if (Collection.isEmpty(tasks)) throw new DocuSignException(Label.NoDocumentsToGenerate);
+
+		// Build job
+		return new Gen.Job(
+			templateId,
+			source,
+			(String.isBlank(locale) ? UserInfo.getLocale() : locale).replace('_', '-'),
+			tasks);
+	}
+
+	public static Gen.Job queueDocumentGeneration(
+		final Id templateId,
+		final Id sourceId,
+		final String locale,
+		final Boolean isPreview) {
+
+		if (isPreview) {
+			Permissions.verifyIsDocuSignAdministratorOrGenerator();
+		} else {
+			Permissions.verifyIsDocuSignGenerator();
+		}
+
+		if (String.isBlank(templateId) || String.isBlank(sourceId)) throw new DocuSignException(Label.UndefinedArgument);
+
+		Gen.Job job = buildJob(templateId, sourceId, locale);
+		try {
+			job = GenAPI.getInstance().enqueueJob(job);
+		} catch (Exception ex) {
+			LoggerService.getInstance().exception(ex, 'Failed to queue document generation');
+			if (job.tasks != null) {
+				for (Gen.Task task : job.tasks) {
+					if (task == null) continue;
+
+					task.withStatus(Label.Failure)
+						.withMessage(String.format(Label.CouldNotGenerateDocument_2, new List<Object> {
+						task.file == null ? Label.Unknown : task.file.title,
+						ex.getMessage()
+					}));
+				}
+			}
+		}
+		return job;
+	}
+
+	public static Gen.Job getJobStatus(final Gen.Job job) {
+		Permissions.verifyIsDocuSignAdministratorOrGenerator();
+
+		if (job == null || Collection.isEmpty(job.tasks)) throw new DocuSignException(Label.UndefinedArgument);
+
+		List<Gen.Task> tasks = new List<Gen.Task>();
+		Map<Id, Gen.Task> successfulTasks = new Map<Id, Gen.Task>();
+		GenAPI client = GenAPI.getInstance();
+		for (Gen.Task task : job.tasks) {
+			if (task == null) continue;
+
+			// Don't bother checking tasks without a valid ID or if already in an end state.
+			if (UUID.isEmpty(task.id) || task.complete) {
+				tasks.add(task);
+			} else {
+				try {
+					Gen.Task status = client.getTaskStatus(task.id);
+					tasks.add(status);
+					if (status.success) successfulTasks.put(status.contentVersionId, status);
+				} catch (Exception ex) {
+					tasks.add(new Gen.Task(
+						task.id,
+						null,
+						Label.Unknown,
+						ex.getMessage()));
+				}
+			}
+		}
+
+		for (Gen.File file : DB.queryFiles(successfulTasks.keySet())) {
+			successfulTasks.get(file.id).withFile(file);
+		}
+
+		return new Gen.Job(
+			job.templateId,
+			job.source,
+			job.locale,
+			tasks);
+	}
+
+	public static List<GenV1.Task> queueDocumentGenerationV1(
 		final Id templateId,
 		final Id sourceId,
 		final String xmlPayload,
@@ -828,9 +937,9 @@ public with sharing class GenService {
 			throw new DocuSignException(Label.UndefinedArgument);
 		}
 
-		List<Gen.Job> result = new List<Gen.Job>();
+		List<GenV1.Task> result = new List<GenV1.Task>();
 		Entity source = Entity.resolve(sourceId);
-		GenAPI client = GenAPI.getInstance();
+		GenAPIv1 client = GenAPIv1.getInstance();
 		for (Gen.File file : DB.queryFiles(contentDocumentIds)) {
 			try {
 				result.add(client.queueDocumentGeneration(
@@ -841,42 +950,43 @@ public with sharing class GenService {
 					getOutputFileName(file, source, Datetime.now())).withFile(file));
 			} catch (Exception ex) {
 				LoggerService.getInstance().exception(ex, 'Failed to queue document generation');
-				result.add(new Gen.Job(
+				result.add(new GenV1.Task(
 					null,
 					file.id,
 					Label.Failure,
-					ex.getMessage() + ' ' + file.title).withFile(file));
+					ex.getMessage() + ' ' + file.title)
+					.withFile(file));
 			}
 		}
 		return result;
 	}
 
-	public static List<Gen.Job> getJobStatus(final List<UUID> jobIds) {
+	public static List<GenV1.Task> getJobStatusV1(final List<UUID> taskIds) {
 		Permissions.verifyIsDocuSignAdministratorOrGenerator();
 
-		if (Collection.isEmpty(jobIds)) throw new DocuSignException(Label.UndefinedArgument);
+		if (Collection.isEmpty(taskIds)) throw new DocuSignException(Label.UndefinedArgument);
 
-		List<Gen.Job> result = new List<Gen.Job>();
-		Map<Id, Gen.Job> successfulJobs = new Map<Id, Gen.Job>();
-		GenAPI client = GenAPI.getInstance();
-		for (UUID jobId : jobIds) {
+		List<GenV1.Task> result = new List<GenV1.Task>();
+		Map<Id, GenV1.Task> successfulTasks = new Map<Id, GenV1.Task>();
+		GenAPIv1 client = GenAPIv1.getInstance();
+		for (UUID taskId : taskIds) {
 			try {
-				Gen.Job job = client.getJobStatus(jobId);
-				if (job.success) {
-					successfulJobs.put(job.fileId, job);
+				GenV1.Task task = client.getTaskStatus(taskId);
+				if (task.success) {
+					successfulTasks.put(task.fileId, task);
 				}
-				result.add(job);
+				result.add(task);
 			} catch (Exception ex) {
-				result.add(new Gen.Job(
-					jobId,
+				result.add(new GenV1.Task(
+					taskId,
 					null,
 					Label.Unknown,
 					ex.getMessage()));
 			}
 		}
 
-		for (Gen.File file : DB.queryFiles(successfulJobs.keySet())) {
-			successfulJobs.get(file.id).withFile(file);
+		for (Gen.File file : DB.queryFiles(successfulTasks.keySet())) {
+			successfulTasks.get(file.id).withFile(file);
 		}
 
 		return result;

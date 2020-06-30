@@ -1,7 +1,7 @@
 ({
   getMergeFieldMapping: function (component, optionModalParams) {
     var self = this;
-    var mergeFieldTree = component.get('v.config').objectMappings.fieldMappings;
+    var mergeFieldTree = component.get('v.template').objectMappings.fieldMappings;
 
     var parentNodeOfField = mergeFieldTree.find(function (node) {
       return self.isParentOfField(
@@ -232,7 +232,7 @@
   updateFieldMappingInConfig: function (component, fieldMapping) {
     var self = this;
     var parentIndexInTree;
-    var mergeFieldTree = component.get('v.config').objectMappings.fieldMappings.slice();
+    var mergeFieldTree = component.get('v.template').objectMappings.fieldMappings.slice();
     var optionModalParams = component.get('v.optionModalParams');
     self.resetValidationErrors(component);
 
@@ -249,7 +249,7 @@
         .then(function () {
           parentNodeOfField.fields[optionModalParams.fieldIndex] = fieldMapping;
           mergeFieldTree[parentIndexInTree] = parentNodeOfField;
-          component.set('v.config.objectMappings.fieldMappings', mergeFieldTree);
+          component.set('v.template.objectMappings.fieldMappings', mergeFieldTree);
           component.find('merge-token-options').hide();
         })
         .catch($A.getCallback(function (err) {
@@ -259,7 +259,7 @@
     } else if (!$A.util.isUndefinedOrNull(parentIndexInTree)) {
       parentNodeOfField.fields[optionModalParams.fieldIndex] = fieldMapping;
       mergeFieldTree[parentIndexInTree] = parentNodeOfField;
-      component.set('v.config.objectMappings.fieldMappings', mergeFieldTree);
+      component.set('v.template.objectMappings.fieldMappings', mergeFieldTree);
       component.find('merge-token-options').hide();
     }
   },

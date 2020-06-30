@@ -17,7 +17,7 @@
 
   uploadedFile: function (component, event, helper) {
     var data = event.getParam('data');
-    var config = component.get('v.config');
+    var template = component.get('v.template');
 
     component.set('v.currentAction', '');
 
@@ -28,9 +28,9 @@
 
       files.push(file);
 
-      if (config.name === 'Untitled') {
-        config.name = file.title.substring(0, 80);
-        component.set('v.config', config);
+      if (template.name === 'Untitled') {
+        template.name = file.title.substring(0, 80);
+        component.set('v.template', template);
       }
 
       component.set('v.files', files);

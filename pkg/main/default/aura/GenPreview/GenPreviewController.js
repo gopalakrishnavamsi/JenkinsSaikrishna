@@ -1,8 +1,8 @@
 ({
   setPreviewedDocs: function(component) {
-    var config = component.get('v.config');
-    config.hasPreviewedDocuments = true;
-    component.set('v.config', config);
+    var template = component.get('v.template');
+    template.hasPreviewedDocuments = true;
+    component.set('v.template', template);
   },
 
   validate: function() {

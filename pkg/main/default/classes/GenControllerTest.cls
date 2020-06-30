@@ -62,7 +62,7 @@ private class GenControllerTest {
 		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
-				GenController.getConfiguration(null);
+				GenController.getConfiguration(null, false);
 				throw new AssertException('Expected getConfiguration to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -75,7 +75,7 @@ private class GenControllerTest {
 	static void test_getConfiguration_blank_template() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			GenController.Configuration result = GenController.getConfiguration(null);
+			GenController.Configuration result = GenController.getConfiguration(null, false);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -84,6 +84,7 @@ private class GenControllerTest {
 			System.assert(Collection.isNotEmpty(result.commonObjects));
 			System.assert(Collection.isNotEmpty(result.allObjects));
 			System.assertEquals(UserInfo.isMultiCurrencyOrganization(), result.isMultiCurrencyOrganization);
+			System.assertEquals(FeatureManagement.checkPackageBooleanValue('UseGenV1'), result.useGenV1);
 			System.assertNotEquals(null, JSON.serialize(result));
 		}
 	}
@@ -94,7 +95,7 @@ private class GenControllerTest {
 			GenTemplate__c gt = TestUtils.createGenTemplate(Opportunity.getSObjectType());
 
 			Test.startTest();
-			GenController.Configuration result = GenController.getConfiguration(gt.Id);
+			GenController.Configuration result = GenController.getConfiguration(gt.Id, false);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -103,6 +104,27 @@ private class GenControllerTest {
 			System.assert(Collection.isNotEmpty(result.commonObjects));
 			System.assert(Collection.isNotEmpty(result.allObjects));
 			System.assertEquals(UserInfo.isMultiCurrencyOrganization(), result.isMultiCurrencyOrganization);
+			System.assertEquals(FeatureManagement.checkPackageBooleanValue('UseGenV1'), result.useGenV1);
+			System.assertNotEquals(null, JSON.serialize(result));
+		}
+	}
+
+	@IsTest
+	static void test_getConfiguration_generating() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			GenTemplate__c gt = TestUtils.createGenTemplate(Opportunity.getSObjectType());
+
+			Test.startTest();
+			GenController.Configuration result = GenController.getConfiguration(gt.Id, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.template);
+			System.assertEquals(gt.Id, result.template.id);
+			System.assert(Collection.isEmpty(result.commonObjects));
+			System.assert(Collection.isEmpty(result.allObjects));
+			System.assertEquals(UserInfo.isMultiCurrencyOrganization(), result.isMultiCurrencyOrganization);
+			System.assertEquals(FeatureManagement.checkPackageBooleanValue('UseGenV1'), result.useGenV1);
 			System.assertNotEquals(null, JSON.serialize(result));
 		}
 	}
@@ -201,7 +223,7 @@ private class GenControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
 			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
-			Schema.Account acc = TestUtils.createAccountWithName('ANOTHER UNIT TEST');
+			Schema.Account acc = TestUtils.createAccount('ANOTHER UNIT TEST');
 
 			Test.startTest();
 			Gen.Template result = GenService.getTemplate(gt.Id);
@@ -389,12 +411,12 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_queueDocumentGeneration_failure() {
+	static void test_queueDocumentGenerationV1_failure() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				GenController.queueDocumentGeneration(null, null, null, false, null);
-				throw new AssertException('Expected queueDocumentGeneration to fail');
+				GenController.queueDocumentGenerationV1(null, null, null, false, null);
+				throw new AssertException('Expected queueDocumentGenerationV1 to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
@@ -403,7 +425,7 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_queueDocumentGeneration_success() {
+	static void test_queueDocumentGenerationV1_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Opportunity o = TestUtils.createOpportunity();
@@ -411,7 +433,7 @@ private class GenControllerTest {
 			ContentVersion cv = TestUtils.createGenFile(gt.Id);
 
 			Test.startTest();
-			List<Gen.Job> result = GenController.queueDocumentGeneration(
+			List<GenV1.Task> result = GenController.queueDocumentGenerationV1(
 				gt.Id,
 				o.Id,
 				'<xml/>',
@@ -425,12 +447,12 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_getJobStatus_failure() {
+	static void test_getTaskStatusV1_failure() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				GenController.getJobStatus(null);
-				throw new AssertException('Expected getJobStatus to fail');
+				GenController.getTaskStatusV1(null);
+				throw new AssertException('Expected getTaskStatusV1 to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
 			}
@@ -439,11 +461,11 @@ private class GenControllerTest {
 	}
 
 	@IsTest
-	static void test_getJobStatus_success() {
+	static void test_getTaskStatusV1_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Test.startTest();
-			List<Gen.Job> result = GenController.getJobStatus(new List<String> {
+			List<GenV1.Task> result = GenController.getTaskStatusV1(new List<String> {
 				UUID.randomUUID().toString(),
 				UUID.randomUUID().toString()
 			});
@@ -451,32 +473,6 @@ private class GenControllerTest {
 
 			System.assertEquals(2, Collection.size(result));
 			System.assertNotEquals(null, JSON.serialize(result));
-		}
-	}
-
-	@IsTest
-	static void test_checkMultiCurrency_success() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			Boolean testResult;
-			Test.startTest();
-			testResult = GenController.checkMultiCurrency();
-			Test.stopTest();
-
-			System.assertNotEquals(null, testResult);
-		}
-	}
-
-	@IsTest
-	static void test_checkMultiCurrency_failure() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				GenController.checkMultiCurrency();
-				throw new AssertException('Expected checkMultiCurrency to fail');
-			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
-			}
-			Test.stopTest();
 		}
 	}
 
@@ -903,7 +899,7 @@ private class GenControllerTest {
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
 			Test.startTest();
 			GenController.convertHtmlDocumentToWord(String.valueOf(ScmAPIMock.DOCUMENT_ID));
-			system.assert(true);
+			System.assert(true);
 			Test.stopTest();
 		}
 	}
@@ -928,7 +924,7 @@ private class GenControllerTest {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
 			Test.startTest();
-			system.assert(GenController.deleteDocument(String.valueOf(ScmAPIMock.DOCUMENT_ID)));
+			System.assert(GenController.deleteDocument(String.valueOf(ScmAPIMock.DOCUMENT_ID)));
 			Test.stopTest();
 		}
 	}
@@ -966,8 +962,6 @@ private class GenControllerTest {
 	static void test_validateChildRelationshipField_success() {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			String fieldJSON = '{"type":"CHILD_RELATIONSHIP","scale":0,"relationship":"Opportunities","relatesTo":"Opportunity","parentIdField":"AccountId","orderBy":"Name ASC","name":"Opportunity","matchType":null,"label":"Opportunities","isConditional":false,"isChildRelation":true,"format":null,"filterBy":"StageName != \'Closed Won\'","conditionalValue":null}';
-			String sourceObject = 'Account';
-
 			AuraHandledException expMessage;
 
 			Test.startTest();
@@ -986,8 +980,6 @@ private class GenControllerTest {
 	static void test_validateChildRelationshipField_failure() {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			String fieldJSON = '{"type":"CHILD_RELATIONSHIP","scale":0,"relationship":"Opportunities","relatesTo":"Opportunity","parentIdField":"AccountId","orderBy":"Name ASC","name":"Opportunity","matchType":null,"label":"Opportunities","isConditional":false,"isChildRelation":true,"format":null,"filterBy":"BAD SOQL VALUE","conditionalValue":null}';
-			String sourceObject = 'Account';
-
 			AuraHandledException expMessage;
 
 			Test.startTest();
@@ -1070,6 +1062,26 @@ private class GenControllerTest {
 	}
 
 	@IsTest
+	static void test_getFileName_blank() {
+		Test.startTest();
+		System.assertEquals(Label.Untitled, GenController.getFileName(
+			' ',
+			'whatever',
+			'record'));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getFileName_other() {
+		Test.startTest();
+		System.assertEquals('name', GenController.getFileName(
+			'name',
+			'whatever',
+			'record'));
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_getFileName_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			GenTemplate__c gtx = TestUtils.createGenTemplate(Opportunity.getSObjectType());
@@ -1088,4 +1100,62 @@ private class GenControllerTest {
 		}
 	}
 
+	@IsTest
+	static void test_queueDocumentGeneration_error() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				GenController.queueDocumentGeneration(null, null, null, false);
+				throw new AssertException('Expected failure');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_queueDocumentGeneration_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Schema.Account a = TestUtils.createAccount();
+			GenTemplate__c t = TestUtils.createGenTemplate(Opportunity.getSObjectType());
+			TestUtils.createGenFile(t.Id);
+
+			Test.startTest();
+			Gen.Job result = GenController.queueDocumentGeneration(t.Id, a.Id, null, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(1, Collection.size(result.tasks));
+		}
+	}
+
+	@IsTest
+	static void test_getTaskStatus_error() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				GenController.getTaskStatus(null);
+				throw new AssertException('Expected failure');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getTaskStatus_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Test.startTest();
+			List<Gen.Task> result = GenController.getTaskStatus(new List<String> {
+				UUID.randomUUID().toString(), UUID.randomUUID().toString()
+			});
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+		}
+	}
 }

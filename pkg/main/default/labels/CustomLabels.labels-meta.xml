@@ -10752,6 +10752,20 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Ordered By</value>	
 	</labels>
 	<labels>
+		<fullName>CouldNotGenerateDocument_2</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Could not generate document</shortDescription>
+		<value>Could not generate document &quot;{0}&quot;: {1}</value>
+	</labels>
+	<labels>
+		<fullName>Processing</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Processing</shortDescription>
+		<value>Processing</value>
+	</labels>
+    <labels>
 		<fullName>Recent</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>
@@ -10821,7 +10835,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Select Recipient</shortDescription>
-		<value>Select Recipient</value>	
+		<value>Select Recipient</value>
 	</labels>
 	<labels>
 		<fullName>RecipientRoleDecTableHeader</fullName>

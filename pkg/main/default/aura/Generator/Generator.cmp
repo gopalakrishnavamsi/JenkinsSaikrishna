@@ -2,8 +2,8 @@
 
     <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
 
-    <aura:attribute name="config" type="Object"/>
-    <aura:attribute name="cvTitleByJobId" type="Object"/>
+    <aura:attribute name="template" type="Object"/>
+    <aura:attribute name="cvTitleByTaskId" type="Object"/>
     <aura:attribute name="lookupObjs" type="Object[]"/>
     <aura:attribute name="failedFiles" type="Object[]"/>
     <aura:attribute name="templateFiles" type="Object[]"/>
@@ -16,6 +16,7 @@
     <aura:attribute name="generatedFiles" type="String[]"/>
     <aura:attribute name="jobIds" type="String[]"/>
     <aura:attribute name="isMultiCurrency" type="Boolean" default="{!false}"/>
+    <aura:attribute name="useGenV1" type="Boolean" default="{!true}"/>
     <aura:attribute name="isGenerating" type="Boolean" default="{!false}" access="global"/>
     <aura:attribute name="isLoading" type="Boolean" default="{!true}"/>
     <aura:attribute name="finishedGenerating" type="Boolean" default="{!false}" access="global"/>
@@ -103,7 +104,7 @@
             </aura:if>
         </aura:if>
         <aura:if
-                isTrue="{!and( empty(v.errMsg), and( not(empty(v.config)), not(empty(v.templateFiles)) ),v.isAuthorized )}">
+                isTrue="{!and( empty(v.errMsg), and( not(empty(v.template)), not(empty(v.templateFiles)) ),v.isAuthorized )}">
             <aura:if isTrue="{!or(v.isLoading, v.isGenerating)}">
                 <div
                         class="{!'ds-generator-spinner_container' + if(v.isGenerating, ' ds-spinner_generating-container' + if(and(not(v.isPreview), v.isClassic), ' slds-box slds-is-relative'))}">
@@ -126,14 +127,14 @@
                 <aura:if isTrue="{!not(v.finishedGenerating)}">
                     <div class="{!if(and(not(v.isPreview), v.isClassic), 'slds-box')}">
                         <aura:if
-                                isTrue="{!not(and(v.config.useCurrentRecord, v.config.useAllTemplates ))}">
+                                isTrue="{!not(and(v.template.useCurrentRecord, v.template.useAllTemplates ))}">
                             {!v.body}
                         </aura:if>
                         <div
-                                class="{!'slds-text-align_left slds-form_stacked' + if(and(v.config.useCurrentRecord, not(v.isPreview)), ' slds-hide', '')}">
+                                class="{!'slds-text-align_left slds-form_stacked' + if(and(v.template.useCurrentRecord, not(v.isPreview)), ' slds-hide', '')}">
                             <c:strike_lookup aura:id="recordLookup" value="{!v.recordId}"
-                                             label="{!v.config.objectMappings.label}"
-                                             object="{!v.config.objectMappings.name}" searchField="Name"
+                                             label="{!v.template.objectMappings.label}"
+                                             object="{!v.template.objectMappings.name}" searchField="Name"
                                              placeholder="{!$Label.c.SelectAnOptionNoDash}" order="Name" limit="5"
                                              loadingMessage="{!$Label.c.Loading}" required="true"
                                              errorMessage="{!$Label.c.InvalidInput}" isDocuSignGenPreview="true"/>
@@ -153,7 +154,7 @@
                         </aura:iteration>
 
                         <aura:if
-                                isTrue="{!and( or(v.isPreview, not(v.config.useAllTemplates)), v.templateFiles.length > 1)}">
+                                isTrue="{!and( or(v.isPreview, not(v.template.useAllTemplates)), v.templateFiles.length > 1)}">
                             <!-- Template Selection -->
                             <div class="slds-text-align_left slds-form_stacked">
                                 <div class="slds-form-element">
@@ -167,7 +168,7 @@
                                                         <lightning:input name="{!file.title}"
                                                                          type="checkbox" checked="{!file.isChecked}"
                                                                          label="{!$Label.c.Select}"
-                                                                         onchange="{!c.checkRemaingFiles}"
+                                                                         onchange="{!c.checkRemainingFiles}"
                                                                          class="ds-no-label"/>
                                                     </div>
                                                     <div class="slds-media__figure">

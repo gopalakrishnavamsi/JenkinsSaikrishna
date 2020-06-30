@@ -1,5 +1,5 @@
 <aura:component controller="GenController" extends="c:RootContainer">
-    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="template" type="Object"/>
     <aura:attribute name="files" type="Object[]"/>
     <aura:attribute name="currentAction" type="String"/>
     <aura:attribute name="currentLevelFieldOptions" type="Object" access="private"/>
@@ -38,7 +38,7 @@
                     currentLevelFieldOptions="{!v.currentLevelFieldOptions}"
                     saveDocumentRule="{!c.saveDocumentRule}"
                     clearDocumentRule="{!c.clearDocumentRule}"/>
-            <aura:if isTrue="{!not(v.config.isSample)}">
+            <aura:if isTrue="{!not(v.template.isSample)}">
                 <lightning:buttonIcon class="ds-file-tile__remove slds-is-absolute" iconName="utility:close"
                                       variant="border-filled" alternativeText="Remove" value="{!fileIndex}"
                                       onclick="{!c.removeFile}"/>
@@ -46,15 +46,15 @@
         </div>
     </aura:iteration>
 
-    <aura:if isTrue="{!not(v.config.isSample)}">
-        <c:GenFileUploader recordId="{!v.config.id}" uploadStart="{!c.uploadStart}" uploadedFile="{!c.uploadedFile}"/>
+    <aura:if isTrue="{!not(v.template.isSample)}">
+        <c:GenFileUploader recordId="{!v.template.id}" uploadStart="{!c.uploadStart}" uploadedFile="{!c.uploadedFile}"/>
     </aura:if>
 
     <div class="slds-text-heading_small slds-m-bottom_x-small slds-m-top_large">
         {!$Label.c.BulkDocumentCreation}
     </div>
     <lightning:input type="checkbox" label="{!$Label.c.BulkDocumentCreationCheckboxInfo}"
-                     aura:id="documentGenerationOptionCheckbox" checked="{!v.config.useAllTemplates}"
+                     aura:id="documentGenerationOptionCheckbox" checked="{!v.template.useAllTemplates}"
                      disabled="{!if(v.files.length lt 2, true, false)}"/>
 
 </aura:component>

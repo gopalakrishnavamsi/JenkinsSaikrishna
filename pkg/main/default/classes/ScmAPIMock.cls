@@ -27,11 +27,13 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 	public static final String ORIGINAL_DOCUMENT_HREF = 'https://apiqana11.springcm.com/v2/f7e07673-7855-446c-b61e-9d5c4fc116e9/documents/df0c145c-f7a4-ea11-9c46-3863bb335c17';
 	public static final String COMPARE_VERSION_HREF = 'https://apiqana11.springcm.com/v2/f7e07673-7855-446c-b61e-9d5c4fc116e9/documents/47912546-f7a4-ea11-9c46-3863bb335c17';
 	public static final UUID COMPARE_TASK_ID = UUID.parse('05d5e974-595f-42cc-82cb-171be288bf85');
+	public static final Map<UUID, Id> TASK_CONTENT_VERSIONS = new Map<UUID, Id>();
 
 	private static final Map<String, String> MOCK_TYPES = new Map<String, String> {
 		'emails' => Application.classNamespacePrefix + 'ScmAPIMock.EmailMock',
 		'folders' => Application.classNamespacePrefix + 'ScmAPIMock.FolderMock',
 		'historyitems' => Application.classNamespacePrefix + 'ScmAPIMock.HistoryMock',
+		'sfdocumentxmlmergeandquerytask' => Application.classNamespacePrefix + 'ScmAPIMock.MergeAndQueryMock',
 		'sfdocumentxmlmergetasks' => Application.classNamespacePrefix + 'ScmAPIMock.MergeMock',
 		'resourcetokenregistrations' => Application.classNamespacePrefix + 'ScmAPIMock.ResourceTokensMock',
 		'tokenregistrations' => Application.classNamespacePrefix + 'ScmAPIMock.TokensMock',
@@ -89,6 +91,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 			request.getBody());
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class EmailMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -100,6 +103,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class FolderMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -108,9 +112,9 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 				//Set mock for getting the url of the root folder
 				if (request.path.contains('type')) {
 					response = MockResponse.ok('{"Name":"Other Sources","CreatedDate":"2019-10-03T20:57:32.093Z","CreatedBy":"octdaladmin1@dsxtr.com","UpdatedDate":"2019-10-03T20:57:32.093Z","UpdatedBy":"octdaladmin1@dsxtr.com","Description":"","ParentFolder":{"Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/81e35d6a-20e6-e911-9c2b-3ca82a1e3f41"},"BrowseDocumentsUrl":"https://uatna11.springcm.com/atlas/Link/Folder/12027/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41","AccessLevel":{"See":true,"Read":true,"Write":true,"Move":true,"Create":true,"SetAccess":true},"Documents":{"Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41/documents"},"Folders":{"Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41/folders"},"ShareLinks":{"Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41/sharelinks"},"CreateDocumentHref":"https://apiuploaduatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41/documents{?name}","Href":"https://apiuatna11.springcm.com/v2/645e10db-edb7-4e3b-a4a7-cbc55cab3905/folders/8de35d6a-20e6-e911-9c2b-3ca82a1e3f41"}');
-				} else if (request.path.contains('folders') && request.parameters.toString().contains('filter=name') &&  request.path.contains(FOLDER_ID.toString())) {
+				} else if (request.path.contains('folders') && request.parameters.toString().contains('filter=name') && request.path.contains(FOLDER_ID.toString())) {
 					response = MockResponse.ok('{"Items":[{"Name":"_temp","CreatedDate":"2020-04-18T04:11:14.26Z","CreatedBy":"deb.demoapr@dsxtr.com","UpdatedDate":"2020-04-18T04:11:14.26Z","UpdatedBy":"deb.demoapr@dsxtr.com","Description":"","ParentFolder":{"Href":"https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/6737a970-2a81-ea11-b80c-48df378a7098"},"BrowseDocumentsUrl":"https://uatna11.springcm.com/atlas/Link/Folder/16009/72b24fa2-2a81-ea11-b80c-48df378a7098","AccessLevel":{"See":true,"Read":true,"Write":true,"Move":true,"Create":true,"SetAccess":false},"Documents":{"Href":"https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/72b24fa2-2a81-ea11-b80c-48df378a7098/documents"},"Folders":{"Href":"https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/72b24fa2-2a81-ea11-b80c-48df378a7098/folders"},"ShareLinks":{"Href":"https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/72b24fa2-2a81-ea11-b80c-48df378a7098/sharelinks"},"CreateDocumentHref":"https://apiuploaduatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/72b24fa2-2a81-ea11-b80c-48df378a7098/documents{?name}","Href":"https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/72b24fa2-2a81-ea11-b80c-48df378a7098"}],"Href":"https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/6737a970-2a81-ea11-b80c-48df378a7098/folders?filter=name=_temp","Offset":0,"Limit":20,"First":"https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/6737a970-2a81-ea11-b80c-48df378a7098/folders?filter=name=_temp","Last":"https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/6737a970-2a81-ea11-b80c-48df378a7098/folders?filter=name=_temp","Total":1}');
-				} else if (request.path.contains('folders') && request.parameters.toString().contains('filter=name') &&  request.path.contains(FOLDER_ID_2.toString())) {
+				} else if (request.path.contains('folders') && request.parameters.toString().contains('filter=name') && request.path.contains(FOLDER_ID_2.toString())) {
 					response = MockResponse.ok('{"Items": [], "Href": "https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/6737a970-2a81-ea11-b80c-48df378a7098/folders?filter=name=_temps","Offset": 0,"Limit": 20,"First": "https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/6737a970-2a81-ea11-b80c-48df378a7098/folders?filter=name=_temps","Last": "https://apiuatna11.springcm.com/v2/5c008d43-f208-49bf-b8f4-71ae1c4f9903/folders/6737a970-2a81-ea11-b80c-48df378a7098/folders?filter=name=_temps","Total": 0}');
 				} else {
 					response = MockResponse.ok('{"Items":[{"Name":"docusignlogerror7-23-18-1.docx","CreatedDate":"2019-03-08T21:35:08.97Z","CreatedBy":"raguayo+pratikhatkar_apiuser@springcm.com","UpdatedDate":"2019-03-08T21:35:08.97Z","UpdatedBy":"raguayo+pratikhatkar_apiuser@springcm.com","ContentCreatedDate":"2019-03-10T21:35:08.97Z","Description":"","ParentFolder":{"Href":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41"},"HistoryItems":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/historyitems"},"AccessLevel":{"See":true,"Read":true,"Write":true,"Move":true,"Create":true,"SetAccess":true},"PageCount":5,"Lock":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/lock"},"PreviewUrl":"https://uatna11.springcm.com/atlas/documents/preview.aspx?aid=10250&lduid=ea7ab407-ea41-e911-9c1d-3ca82a1e3f41","Versions":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/versions"},"ShareLinks":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/sharelinks"},"DocumentProcessTrackingActivities":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/documentprocesstrackingactivities"},"DocumentReminders":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/documentreminders"},"RelatedDocuments":{"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41/relateddocuments"},"DownloadDocumentHref":"https://apidownloaduatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41","NativeFileSize":20557,"PdfFileSize":160453,"Href":"https://apiuatna11.springcm.com/v201411/documents/ea7ab407-ea41-e911-9c1d-3ca82a1e3f41"}],"Href":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Offset":0,"Limit":20,"First":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Last":"https://apiuatna11.springcm.com/v201411/folders/56322efe-e541-e911-9c1d-3ca82a1e3f41/documents","Total":1}');
@@ -126,6 +130,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class TemplateMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -137,6 +142,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class HistoryMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -166,22 +172,61 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
-	public class MergeMock implements MockResource {
+	//noinspection ApexUnusedDeclaration
+	public class MergeAndQueryMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
 			MockResponse response = null;
 			if (request.method == 'POST') {
-				response = MockResponse.created('{"Href":"https://unit.test/gen/' + UUID.randomUUID() + '"}');
-			} else if (request.method == 'GET') {
-				// Return last modified ContentVersion.Id. No good way to mock this without mixing in test code.
-				ContentVersion cv = (ContentVersion)Collection.head([SELECT Id FROM ContentVersion ORDER BY LastModifiedDate DESC LIMIT 1]);
-				Id cvId = cv == null ? null : cv.Id;
-				response = MockResponse.ok('{"SfContentVersionId":' + JSON.serialize(cvId) + ',"Status":"Success","Message":"Test success message"}');
+				GenAPI.APIJob j = (GenAPI.APIJob)JSON.deserialize(request.body, GenAPI.APIJob.class);
+				List<GenAPI.APITaskStatus> ts = new List<GenAPI.APITaskStatus>();
+				if (j != null && j.mergeDocumentTasks != null) {
+					for (GenAPI.APITask t : j.mergeDocumentTasks) {
+						GenAPI.APITaskStatus s = new GenAPI.APITaskStatus();
+						s.Status = 'Processing';
+						s.Href = 'https://unit.test/gen/v1/sfdocumentxmlmergetasks/' + UUID.randomUUID();
+						ts.add(s);
+					}
+				}
+				response = MockResponse.accepted(ts);
 			}
 			return response;
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
+	public class MergeMock implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			if (request.method == 'POST') {
+				GenAPI.APITaskStatus s = new GenAPI.APITaskStatus();
+				s.Status = 'Processing';
+				s.Href = 'https://unit.test/gen/' + UUID.randomUUID();
+				response = MockResponse.created(s);
+			} else if (request.method == 'GET') {
+				UUID taskId = UUID.tryParse((String)Collection.last(request.path));
+				Id contentVersionId = null;
+				if (taskId != null) {
+					contentVersionId = ScmAPIMock.TASK_CONTENT_VERSIONS.get(taskId);
+				}
+				if (contentVersionId == null) {
+					// Return last modified ContentVersion.Id. No good way to mock this without mixing in test code.
+					ContentVersion cv = (ContentVersion)Collection.head([SELECT Id FROM ContentVersion ORDER BY LastModifiedDate DESC LIMIT 1]);
+					if (cv != null) contentVersionId = cv.Id;
+				}
+				GenAPI.APITaskStatus s = new GenAPI.APITaskStatus();
+				s.Status = 'Success';
+				s.SfContentVersionId = contentVersionId;
+				s.Href = 'https://unit.test/gen/' + UUID.tryParse((String)Collection.last(request.path));
+				s.Message = 'Test success message';
+				response = MockResponse.ok(s);
+			}
+			return response;
+		}
+	}
+
+	//noinspection ApexUnusedDeclaration
 	public class ResourceTokensMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -194,6 +239,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class TokensMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -210,6 +256,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class WorkflowMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -235,6 +282,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class ImportMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -252,6 +300,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class ExportMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -269,6 +318,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class CompareMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -282,6 +332,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class ReviewMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -293,6 +344,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class WorkItemMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -308,6 +360,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class DocumentMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -333,6 +386,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class MemberMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -348,6 +402,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class ChangeSecurityTask implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {
@@ -359,6 +414,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
 	public class ConvertDocumentMock implements MockResource {
 
 		public MockResponse respond(final MockRequest request) {

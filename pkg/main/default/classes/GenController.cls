@@ -68,30 +68,39 @@ public with sharing class GenController extends Controller {
 		public List<MergeObject> allObjects { get; private set; }
 		@AuraEnabled
 		public Boolean isMultiCurrencyOrganization { get; private set; }
+		@AuraEnabled
+		public Boolean useGenV1 { get; private set; }
 
 		private Configuration(
 			final Gen.Template template,
 			final List<MergeObject> commonObjects,
 			final List<MergeObject> allObjects,
-			final Boolean isMultiCurrencyOrganization) {
+			final Boolean isMultiCurrencyOrganization,
+			final Boolean useGenV1) {
 
 			this.template = template;
 			this.commonObjects = commonObjects == null ? new List<MergeObject>() : commonObjects;
 			this.allObjects = allObjects == null ? new List<MergeObject>() : allObjects;
 			this.isMultiCurrencyOrganization = isMultiCurrencyOrganization;
+			this.useGenV1 = useGenV1;
 		}
 	}
 
 	@AuraEnabled
-	public static Configuration getConfiguration(final Id templateId) {
+	public static Configuration getConfiguration(
+		final Id templateId,
+		final Boolean isGenerating) {
+
 		try {
+			// Permissions verified by GenService
 			return new Configuration(
 				templateId == null
 					? GenService.createBlankTemplate()
 					: GenService.getTemplate(templateId),
-				MetadataService.getCommonObjects(),
-				MetadataService.getObjects(),
-				UserInfo.isMultiCurrencyOrganization());
+				isGenerating ? new List<MergeObject>() : MetadataService.getCommonObjects(),
+				isGenerating ? new List<MergeObject>() : MetadataService.getObjects(),
+				UserInfo.isMultiCurrencyOrganization(),
+				FeatureManagement.checkPackageBooleanValue('UseGenV1'));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to retrieve Gen template configuration.');
 		}
@@ -124,17 +133,6 @@ public with sharing class GenController extends Controller {
 			return GenService.getTemplate(templateId);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to retrieve Gen template.');
-		}
-	}
-
-	@AuraEnabled(Cacheable = true)
-	public static Boolean checkMultiCurrency() {
-		try {
-			Permissions.verifyIsDocuSignAdministratorOrGenerator();
-
-			return UserInfo.isMultiCurrencyOrganization();
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check multi currency');
 		}
 	}
 
@@ -223,7 +221,45 @@ public with sharing class GenController extends Controller {
 	}
 
 	@AuraEnabled
-	public static List<Gen.Job> queueDocumentGeneration(
+	public static Gen.Job queueDocumentGeneration(
+		final Id templateId,
+		final Id sourceId,
+		final String locale,
+		final Boolean isPreview) {
+
+		try {
+			return GenService.queueDocumentGeneration(templateId, sourceId, locale, isPreview);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to generate documents.');
+		}
+	}
+
+	// TODO: Change controller method to take Gen.Job as argument. Need changes in Generator.cmp to support.
+	@AuraEnabled
+	public static List<Gen.Task> getTaskStatus(final List<String> taskIds) {
+		try {
+			List<Gen.Task> tasks = new List<Gen.Task>();
+			if (!Collection.isEmpty(taskIds)) {
+				for (String taskId : taskIds) {
+					tasks.add(new Gen.Task(
+						UUID.parse(taskId),
+						null,
+						null,
+						null));
+				}
+			}
+			return GenService.getJobStatus(new Gen.Job(
+				null,
+				null,
+				null,
+				tasks)).tasks;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get job status.');
+		}
+	}
+
+	@AuraEnabled
+	public static List<GenV1.Task> queueDocumentGenerationV1(
 		final Id templateId,
 		final Id sourceId,
 		final String xmlPayload,
@@ -231,22 +267,22 @@ public with sharing class GenController extends Controller {
 		final List<Id> contentDocumentIds) {
 
 		try {
-			return GenService.queueDocumentGeneration(templateId, sourceId, xmlPayload, isPreview, contentDocumentIds);
+			return GenService.queueDocumentGenerationV1(templateId, sourceId, xmlPayload, isPreview, contentDocumentIds);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to generate documents.');
 		}
 	}
 
 	@AuraEnabled
-	public static List<Gen.Job> getJobStatus(final List<String> jobIds) {
+	public static List<GenV1.Task> getTaskStatusV1(final List<String> taskIds) {
 		try {
-			List<UUID> jobIdsList = new List<UUID>();
-			if (!Collection.isEmpty(jobIds)) {
-				for (String stringJobId : jobIds) {
-					jobIdsList.add(UUID.parse(stringJobId));
+			List<UUID> taskIdList = new List<UUID>();
+			if (!Collection.isEmpty(taskIds)) {
+				for (String taskId : taskIds) {
+					taskIdList.add(UUID.parse(taskId));
 				}
 			}
-			return GenService.getJobStatus(jobIdsList);
+			return GenService.getJobStatusV1(taskIdList);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get job status.');
 		}
@@ -347,6 +383,7 @@ public with sharing class GenController extends Controller {
 		}
 	}
 
+	// FIXME: This will break on non-English orgs and is inconsistent with Word Gen. Need to use Gen.FILE_SUFFIX_* constants, i.e. no magic strings.
 	@TestVisible
 	private static String getFileName(final String fileName, final String fileSuffix, final String recordName) {
 		String formattedFileName;

@@ -232,8 +232,8 @@ private class GenServiceTest {
 	static void test_checkDocumentRule_matches_true() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
-			ContentVersion cv1 = TestUtils.createGenFile(gt.Id);
-			Schema.Account acc = TestUtils.createAccount();
+			TestUtils.createGenFile(gt.Id);
+			TestUtils.createAccount();
 
 			Test.startTest();
 			Gen.Template result = GenService.getTemplate(gt.Id);
@@ -535,12 +535,12 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_queueDocumentGeneration_preview_unauthorized() {
+	static void test_queueDocumentGenerationV1_preview_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				GenService.queueDocumentGeneration(null, null, null, true, null);
-				throw new AssertException('Expected queueDocumentGeneration to fail');
+				GenService.queueDocumentGenerationV1(null, null, null, true, null);
+				throw new AssertException('Expected queueDocumentGenerationV1 to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
 			}
@@ -549,12 +549,12 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_queueDocumentGeneration_non_preview_unauthorized() {
+	static void test_queueDocumentGenerationV1_non_preview_unauthorized() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				GenService.queueDocumentGeneration(null, null, null, false, null);
-				throw new AssertException('Expected queueDocumentGeneration to fail');
+				GenService.queueDocumentGenerationV1(null, null, null, false, null);
+				throw new AssertException('Expected queueDocumentGenerationV1 to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
 			}
@@ -563,30 +563,30 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_queueDocumentGeneration_undefined_arguments() {
+	static void test_queueDocumentGenerationV1_undefined_arguments() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
 			try {
-				GenService.queueDocumentGeneration(null, UserInfo.getUserId(), '<xml/>', false, new List<Id> { UserInfo.getUserId() });
-				throw new AssertException('Expected queueDocumentGeneration to fail');
+				GenService.queueDocumentGenerationV1(null, UserInfo.getUserId(), '<xml/>', false, new List<Id> { UserInfo.getUserId() });
+				throw new AssertException('Expected queueDocumentGenerationV1 to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				GenService.queueDocumentGeneration(UserInfo.getUserId(), null, '<xml/>', false, new List<Id> { UserInfo.getUserId() });
-				throw new AssertException('Expected queueDocumentGeneration to fail');
+				GenService.queueDocumentGenerationV1(UserInfo.getUserId(), null, '<xml/>', false, new List<Id> { UserInfo.getUserId() });
+				throw new AssertException('Expected queueDocumentGenerationV1 to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				GenService.queueDocumentGeneration(UserInfo.getUserId(), UserInfo.getUserId(), '  ', false, new List<Id> { UserInfo.getUserId() });
-				throw new AssertException('Expected queueDocumentGeneration to fail');
+				GenService.queueDocumentGenerationV1(UserInfo.getUserId(), UserInfo.getUserId(), '  ', false, new List<Id> { UserInfo.getUserId() });
+				throw new AssertException('Expected queueDocumentGenerationV1 to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				GenService.queueDocumentGeneration(UserInfo.getUserId(), UserInfo.getUserId(), '<xml/>', false, new List<Id>());
-				throw new AssertException('Expected queueDocumentGeneration to fail');
+				GenService.queueDocumentGenerationV1(UserInfo.getUserId(), UserInfo.getUserId(), '<xml/>', false, new List<Id>());
+				throw new AssertException('Expected queueDocumentGenerationV1 to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
@@ -615,7 +615,7 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_queueDocumentGeneration_success_partial() {
+	static void test_queueDocumentGenerationV1_success_partial() {
 		Test.setMock(HttpCalloutMock.class, new PartialSuccessMock(1));
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
@@ -624,7 +624,7 @@ private class GenServiceTest {
 			ContentVersion cv2 = TestUtils.createGenFile(gt.Id);
 
 			Test.startTest();
-			List<Gen.Job> result = GenService.queueDocumentGeneration(gt.Id, l.Id, '<xml/>', true, new List<Id> {
+			List<GenV1.Task> result = GenService.queueDocumentGenerationV1(gt.Id, l.Id, '<xml/>', true, new List<Id> {
 				cv1.ContentDocumentId, cv2.ContentDocumentId
 			});
 			Test.stopTest();
@@ -647,7 +647,7 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_queueDocumentGeneration_preview() {
+	static void test_queueDocumentGenerationV1_preview() {
 		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
@@ -656,7 +656,7 @@ private class GenServiceTest {
 			ContentVersion cv2 = TestUtils.createGenFile(gt.Id);
 
 			Test.startTest();
-			List<Gen.Job> result = GenService.queueDocumentGeneration(gt.Id, l.Id, '<xml/>', true, new List<Id> {
+			List<GenV1.Task> result = GenService.queueDocumentGenerationV1(gt.Id, l.Id, '<xml/>', true, new List<Id> {
 				cv1.ContentDocumentId, cv2.ContentDocumentId
 			});
 			Test.stopTest();
@@ -678,7 +678,7 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_queueDocumentGeneration_source() {
+	static void test_queueDocumentGenerationV1_source() {
 		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			Lead l = TestUtils.createLead();
@@ -687,7 +687,7 @@ private class GenServiceTest {
 			ContentVersion cv2 = TestUtils.createGenFile(gt.Id);
 
 			Test.startTest();
-			List<Gen.Job> result = GenService.queueDocumentGeneration(gt.Id, l.Id, '<xml/>', false, new List<Id> {
+			List<GenV1.Task> result = GenService.queueDocumentGenerationV1(gt.Id, l.Id, '<xml/>', false, new List<Id> {
 				cv1.ContentDocumentId, cv2.ContentDocumentId
 			});
 			Test.stopTest();
@@ -709,12 +709,12 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_getJobStatus_unauthorized() {
+	static void test_getJobStatusV1_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				GenService.getJobStatus(null);
-				throw new AssertException('Expected getJobStatus to fail');
+				GenService.getJobStatusV1(null);
+				throw new AssertException('Expected getJobStatusV1 to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
 			}
@@ -723,18 +723,18 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_getJobStatus_invalid_argument() {
+	static void test_getJobStatusV1_invalid_argument() {
 		System.runAs(UserMock.createDocuSignGenerator(false)) {
 			Test.startTest();
 			try {
-				GenService.getJobStatus(null);
-				throw new AssertException('Expected getJobStatus to fail');
+				GenService.getJobStatusV1(null);
+				throw new AssertException('Expected getJobStatusV1 to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				GenService.getJobStatus(new List<UUID>());
-				throw new AssertException('Expected getJobStatus to fail');
+				GenService.getJobStatusV1(new List<UUID>());
+				throw new AssertException('Expected getJobStatusV1 to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
@@ -743,7 +743,7 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_getJobStatus_success() {
+	static void test_getJobStatusV1_success() {
 		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
@@ -751,7 +751,7 @@ private class GenServiceTest {
 			UUID jobId1 = UUID.randomUUID();
 
 			Test.startTest();
-			List<Gen.Job> result = GenService.getJobStatus(new List<UUID> { jobId1 });
+			List<GenV1.Task> result = GenService.getJobStatusV1(new List<UUID> { jobId1 });
 			Test.stopTest();
 
 			System.assertEquals(1, Collection.size(result));
@@ -772,7 +772,7 @@ private class GenServiceTest {
 	}
 
 	@IsTest
-	static void test_getJobStatus_success_partial() {
+	static void test_getJobStatusV1_success_partial() {
 		Test.setMock(HttpCalloutMock.class, new PartialSuccessMock(1));
 		System.runAs(UserMock.createDocuSignGenerator()) {
 			GenTemplate__c gt = TestUtils.createGenTemplate(Schema.Opportunity.getSObjectType());
@@ -780,7 +780,7 @@ private class GenServiceTest {
 			UUID jobId1 = UUID.randomUUID(), jobId2 = UUID.randomUUID();
 
 			Test.startTest();
-			List<Gen.Job> result = GenService.getJobStatus(new List<UUID> { jobId1, jobId2 });
+			List<GenV1.Task> result = GenService.getJobStatusV1(new List<UUID> { jobId1, jobId2 });
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
@@ -1273,7 +1273,7 @@ private class GenServiceTest {
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
 			Test.startTest();
 			GenService.convertHtmlDocumentToWord(ScmAPIMock.DOCUMENT_ID);
-			system.assert(true);
+			System.assert(true);
 			Test.stopTest();
 		}
 	}
@@ -1298,7 +1298,7 @@ private class GenServiceTest {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
 			Test.startTest();
-			system.assert(GenService.deleteScmDocument(ScmAPIMock.DOCUMENT_ID));
+			System.assert(GenService.deleteScmDocument(ScmAPIMock.DOCUMENT_ID));
 			Test.stopTest();
 		}
 	}
@@ -1356,11 +1356,7 @@ private class GenServiceTest {
 
 	@IsTest
 	static void test_validateChildRelationshipField() {
-
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-
-			String sourceObject = 'Account';
-
 			ValidationException ex1, ex2, ex3, ex4;
 
 			Gen.Field successField = new Gen.Field(
@@ -1459,7 +1455,6 @@ private class GenServiceTest {
 			} catch (ValidationException err) {
 				ex4 = err;
 			}
-
 			Test.stopTest();
 
 			System.assertEquals(ex1, null);
@@ -1468,8 +1463,536 @@ private class GenServiceTest {
 			System.assertNotEquals(ex3, null);
 			System.assert(ex2.getMessage().startsWith(Label.InvalidQuery));
 			System.assertEquals(ex4, null);
+		}
+	}
 
+	@IsTest
+	static void test_Database_queryRecentRecordIds_empty() {
+		Test.startTest();
+		try {
+			GenService.DB.queryRecentRecordIds(
+				Environment__mdt.getSObjectType(),
+				10);
+			throw new AssertException('Expected failure');
+		} catch (QueryException ex) {
+			// Difficult or impossible to properly test condition where there are no records in RecentlyViewed. Unlike
+			// other Salesforce object types, test methods appear able to see recently viewed records updated outside of
+			// the test.
+			System.assert(true);
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getProcessedMatchValue() {
+		Test.startTest();
+		System.assertEquals('\'value\'', GenService.getProcessedMatchValue('STRING', 'value'));
+		System.assertEquals('\'value\'', GenService.getProcessedMatchValue('EMAIL', 'value'));
+		System.assertEquals('\'value\'', GenService.getProcessedMatchValue('PICKLIST', 'value'));
+		System.assertEquals('\'value\'', GenService.getProcessedMatchValue('URL', 'value'));
+		System.assertEquals('\'value\'', GenService.getProcessedMatchValue('PHONE', 'value'));
+		System.assertEquals('value', GenService.getProcessedMatchValue('BOOLEAN', 'value'));
+		System.assertEquals('value', GenService.getProcessedMatchValue('DATE', 'value'));
+		System.assertEquals('value', GenService.getProcessedMatchValue('PERCENT', 'value'));
+		System.assertEquals('value', GenService.getProcessedMatchValue('DOUBLE', 'value'));
+		System.assertEquals('value', GenService.getProcessedMatchValue('CURRENCY', 'value'));
+		System.assertEquals('value', GenService.getProcessedMatchValue('WHATEVER', 'value'));
+
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_buildJob_undefined_arguments() {
+		Id templateId = UserInfo.getUserId();
+		Id sourceId = UserInfo.getOrganizationId();
+		String locale = 'en-US';
+
+		Test.startTest();
+		try {
+			GenService.buildJob(null, sourceId, locale);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		try {
+			GenService.buildJob(templateId, null, locale);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_buildJob_no_documents() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
+		Schema.Account a = TestUtils.createAccount(UUID.randomUUID().toString());
+		GenTemplate__c t = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+		TestUtils.createGenFile(t.Id); // Rules match Account.Name == 'UNIT TEST'
+		TestUtils.createGenFile(t.Id); // Rules match Account.Name == 'UNIT TEST'
+
+		Test.startTest();
+		try {
+			GenService.buildJob(t.Id, a.Id, null);
+			throw new AssertException('Expected failure');
+		} catch (DocuSignException ex) {
+			System.assertEquals(Label.NoDocumentsToGenerate, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_buildJob_success() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
+		Schema.Account a = TestUtils.createAccount();
+		GenTemplate__c t = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+		ContentVersion cv1 = TestUtils.createGenFile(t.Id);
+		cv1.GeneratedFileSuffix__c = Gen.FILE_SUFFIX_NAME_DATE;
+		cv1.GeneratedFileFormat__c = Gen.FILE_TYPE_WORD;
+		ContentVersion cv2 = TestUtils.createGenFile(t.Id);
+		cv2.GeneratedFileSuffix__c = Gen.FILE_SUFFIX_DATE;
+		cv2.GeneratedFileFormat__c = Gen.FILE_TYPE_PDF;
+		update new List<ContentVersion> { cv1, cv2 };
+		String dateString = Datetime.now().format('YYYY-MM-dd');
+
+		Test.startTest();
+		Gen.Job result = GenService.buildJob(t.Id, a.Id, null);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(t.Id, result.templateId);
+		System.assertNotEquals(null, result.source);
+		System.assertEquals(a.Id, result.source.id);
+		System.assertEquals(a.Name, result.source.name);
+		System.assertEquals(UserInfo.getLocale().replace('_', '-'), result.locale);
+		System.assertEquals(2, Collection.size(result.tasks));
+		System.assertNotEquals(null, result.tasks[0]);
+		System.assert(!result.tasks[0].success);
+		System.assert(!result.tasks[0].complete);
+		System.assertNotEquals(null, result.tasks[0].file);
+		System.assertEquals(cv1.Id, result.tasks[0].file.id);
+		System.assertEquals(Gen.FILE_TYPE_WORD, result.tasks[0].file.generatedFormat);
+		System.assertEquals(cv1.GeneratedFileName__c + '_' + a.Name + '_' + dateString, result.tasks[0].outputFileName);
+		System.assertNotEquals(null, result.tasks[1]);
+		System.assert(!result.tasks[1].success);
+		System.assert(!result.tasks[1].complete);
+		System.assertNotEquals(null, result.tasks[1].file);
+		System.assertEquals(cv2.Id, result.tasks[1].file.id);
+		System.assertEquals(Gen.FILE_TYPE_PDF, result.tasks[1].file.generatedFormat);
+		System.assertEquals(cv2.GeneratedFileName__c + '_' + dateString, result.tasks[1].outputFileName);
+	}
+
+	@IsTest
+	static void test_queueDocumentGeneration_preview_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				GenService.queueDocumentGeneration(null, null, null, true);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_queueDocumentGeneration_generate_unauthorized() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			try {
+				GenService.queueDocumentGeneration(null, null, null, false);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_queueDocumentGeneration_undefined_arguments() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Id templateId = UserInfo.getUserId();
+			Id sourceId = UserInfo.getOrganizationId();
+			String locale = 'en-US';
+			Boolean isPreview = false;
+
+			Test.startTest();
+			try {
+				GenService.queueDocumentGeneration(
+					null,
+					sourceId,
+					locale,
+					isPreview);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				GenService.queueDocumentGeneration(
+					templateId,
+					null,
+					locale,
+					isPreview);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_queueDocumentGeneration_api_error() {
+		ScmAPIMock.failure();
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Schema.Account a = TestUtils.createAccount();
+			GenTemplate__c t = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			TestUtils.createGenFile(t.Id);
+			TestUtils.createGenFile(t.Id);
+
+			Test.startTest();
+			Gen.Job result = GenService.queueDocumentGeneration(
+				t.Id,
+				a.Id,
+				'en-US',
+				false);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, Collection.size(result.tasks));
+			for (Gen.Task task : result.tasks) {
+				System.assertNotEquals(null, task);
+				System.assertEquals(null, task.id);
+				System.assert(!task.success);
+				System.assert(task.complete);
+				System.assertEquals(Label.Failure, task.status);
+				System.assert(String.isNotBlank(task.message));
+			}
+		}
+	}
+
+	@IsTest
+	static void test_queueDocumentGeneration_preview_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Schema.Account a = TestUtils.createAccount();
+			GenTemplate__c t = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			TestUtils.createGenFile(t.Id);
+			TestUtils.createGenFile(t.Id);
+
+			Test.startTest();
+			Gen.Job result = GenService.queueDocumentGeneration(
+				t.Id,
+				a.Id,
+				'en-US',
+				true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, Collection.size(result.tasks));
+			for (Gen.Task task : result.tasks) {
+				System.assertNotEquals(null, task);
+				System.assertNotEquals(null, task.id);
+				System.assert(!task.success);
+				System.assert(!task.complete);
+				System.assertEquals(Label.Processing, task.status);
+				System.assert(String.isBlank(task.message));
+			}
+		}
+	}
+
+	@IsTest
+	static void test_queueDocumentGeneration_generate_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Schema.Account a = TestUtils.createAccount();
+			GenTemplate__c t = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			TestUtils.createGenFile(t.Id);
+			TestUtils.createGenFile(t.Id);
+
+			Test.startTest();
+			Gen.Job result = GenService.queueDocumentGeneration(
+				t.Id,
+				a.Id,
+				'en-US',
+				false);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(2, Collection.size(result.tasks));
+			for (Gen.Task task : result.tasks) {
+				System.assertNotEquals(null, task);
+				System.assertNotEquals(null, task.id);
+				System.assert(!task.success);
+				System.assert(!task.complete);
+				System.assertEquals(Label.Processing, task.status);
+				System.assert(String.isBlank(task.message));
+			}
+		}
+	}
+
+	@IsTest
+	static void test_getJobStatus_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				GenService.getJobStatus(null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getJobStatus_undefined_arguments() {
+		System.runAs(UserMock.createDocuSignGenerator(false)) {
+			Gen.Job job = new Gen.Job(
+				null,
+				null,
+				null,
+				new List<Gen.Task>());
+
+			Test.startTest();
+			try {
+				GenService.getJobStatus(null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				GenService.getJobStatus(job);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getJobStatus_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Schema.Account a = TestUtils.createAccount();
+			GenTemplate__c t = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			ContentVersion cv1 = TestUtils.createGenFile(t.Id);
+			ContentVersion cv2 = TestUtils.createGenFile(t.Id);
+			Gen.Job job = new Gen.Job(
+				t.Id,
+				new Entity(a.Id),
+				'en-US',
+				new List<Gen.Task> {
+					new Gen.Task(
+						UUID.randomUUID(),
+						cv1.Id,
+						Label.Processing,
+						null),
+					new Gen.Task(
+						UUID.randomUUID(),
+						cv2.Id,
+						Label.Processing,
+						null)
+				}
+			);
+			ScmAPIMock.TASK_CONTENT_VERSIONS.putAll(new Map<UUID, Id> {
+				job.tasks[0].id => cv1.Id,
+				job.tasks[1].id => cv2.Id
+			});
+
+			Test.startTest();
+			Gen.Job result = GenService.getJobStatus(job);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(job.templateId, result.templateId);
+			System.assertEquals(job.source, result.source);
+			System.assertEquals(job.locale, result.locale);
+			System.assertEquals(2, Collection.size(job.tasks));
+			for (Gen.Task task : result.tasks) {
+				System.assertNotEquals(null, task);
+				System.assertNotEquals(null, task.id);
+				System.assertNotEquals(null, task.contentVersionId);
+				System.assert(task.success);
+				System.assert(task.complete);
+				System.assertNotEquals(null, task.file);
+			}
+		}
+	}
+
+	class TaskPartialSuccessMock extends OAuthTokenMock {
+
+		private Integer count = 0;
+		private Map<UUID, Id> contentVersions;
+
+		public TaskPartialSuccessMock(final Map<UUID, Id> contentVersions) {
+			this.contentVersions = contentVersions == null ? new Map<UUID, Id>() : contentVersions;
 		}
 
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setHeader('Content-Type', 'application/json');
+			UUID taskId = UUID.tryParse(request.getEndpoint().substringAfterLast('/'));
+			Integer statusCode = 200;
+			Object body;
+			switch on ++this.count {
+				when 1 { // Processing
+					GenAPI.APITaskStatus s = new GenAPI.APITaskStatus();
+					s.Status = 'processing';
+					s.Href = 'https://unit.test.springcm.com/gen/' + taskId;
+					body = s;
+				} when 2 { // API error
+					statusCode = 500;
+					body = new Map<String, Object> {
+						'Title' => 'https://httpstatuses.com/500',
+						'Status' => 500,
+						'Detail' => 'SpringCM API Exception',
+						'Extensions' => new Map<String, Object> {
+							'additionalDetails' => new Map<String, Object> {
+								'Error' => new Map<String, Object> {
+									'HttpStatusCode' => 500,
+									'UserMessage' => 'test user message',
+									'DeveloperMessage' => 'test developer message',
+									'ErrorCode' => 1234,
+									'ReferenceId' => UUID.randomUUID().toString()
+								}
+							}
+						}
+					};
+				} when 3 { // Failure
+					GenAPI.APITaskStatus s = new GenAPI.APITaskStatus();
+					s.Status = 'failure';
+					s.Message = 'test failure';
+					s.Href = 'https://unit.test.springcm.com/gen/' + taskId;
+					body = s;
+				} when else { // Success
+					GenAPI.APITaskStatus s = new GenAPI.APITaskStatus();
+					s.Status = 'success';
+					s.SfContentVersionId = this.contentVersions.get(taskId);
+					s.Href = 'https://unit.test.springcm.com/gen/' + taskId;
+					body = s;
+				}
+			}
+			response.setStatusCode(statusCode);
+			response.setBody(JSON.serialize(body));
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_getJobStatus_partial_success() {
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			UUID task5Id = UUID.randomUUID();
+			Id task5GeneratedId = TestUtils.createContentVersion().Id;
+			Test.setMock(HttpCalloutMock.class, new TaskPartialSuccessMock(new Map<UUID, Id> {
+				task5Id => task5GeneratedId
+			}));
+			Schema.Account a = TestUtils.createAccount();
+			GenTemplate__c t = TestUtils.createGenTemplate(Schema.Account.getSObjectType());
+			ContentVersion cv1 = TestUtils.createGenFile(t.Id); // processing
+			ContentVersion cv2 = TestUtils.createGenFile(t.Id); // API error
+			ContentVersion cv3 = TestUtils.createGenFile(t.Id); // failure
+			ContentVersion cv4 = TestUtils.createGenFile(t.Id); // already complete
+			ContentVersion cv5 = TestUtils.createGenFile(t.Id); // success
+			Gen.Job job = new Gen.Job(
+				t.Id,
+				new Entity(a.Id),
+				'en-US',
+				new List<Gen.Task> {
+					new Gen.Task(
+						UUID.randomUUID(),
+						cv1.Id,
+						Label.Processing,
+						null),
+					new Gen.Task(
+						UUID.randomUUID(),
+						cv2.Id,
+						Label.Processing,
+						null),
+					new Gen.Task(
+						UUID.randomUUID(),
+						cv3.Id,
+						Label.Processing,
+						null),
+					new Gen.Task(
+						UUID.randomUUID(),
+						cv4.Id,
+						Label.Success,
+						null),
+					new Gen.Task(
+						task5Id,
+						cv5.Id,
+						Label.Processing,
+						null)
+				}
+			);
+
+			Test.startTest();
+			Gen.Job result = GenService.getJobStatus(job);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(job.templateId, result.templateId);
+			System.assertEquals(job.source, result.source);
+			System.assertEquals(job.locale, result.locale);
+			System.assertEquals(5, Collection.size(job.tasks));
+
+			Gen.Task task = result.tasks[0];
+			System.assertNotEquals(null, task);
+			System.assertNotEquals(null, task.id);
+			System.assert(!task.success);
+			System.assert(!task.complete);
+			System.assertEquals(null, task.contentVersionId);
+			System.assertEquals(Label.Processing, task.status);
+			System.assert(String.isBlank(task.message));
+			System.assertEquals(null, task.file);
+
+			task = result.tasks[1];
+			System.assertNotEquals(null, task);
+			System.assertNotEquals(null, task.id);
+			System.assert(!task.success);
+			System.assert(!task.complete);
+			System.assertEquals(null, task.contentVersionId);
+			System.assertEquals(Label.Unknown, task.status);
+			System.assertNotEquals(null, task.message);
+			System.assertEquals(null, task.file);
+
+			task = result.tasks[2];
+			System.assertNotEquals(null, task);
+			System.assertNotEquals(null, task.id);
+			System.assert(!task.success);
+			System.assert(task.complete);
+			System.assertEquals(null, task.contentVersionId);
+			System.assertEquals(Label.Failure, task.status);
+			System.assertEquals('test failure', task.message);
+			System.assertEquals(null, task.file);
+
+			task = result.tasks[3];
+			System.assertNotEquals(null, task);
+			System.assertNotEquals(null, task.id);
+			System.assert(task.success);
+			System.assert(task.complete);
+			System.assertNotEquals(null, task.contentVersionId);
+			System.assertEquals(Label.Success, task.status);
+			System.assert(String.isBlank(task.message));
+			System.assertEquals(null, task.file); // Task was already successful, so file not queried
+
+			task = result.tasks[4];
+			System.assertNotEquals(null, task);
+			System.assertEquals(task5Id, task.id);
+			System.assert(task.success);
+			System.assert(task.complete);
+			System.assertEquals(task5GeneratedId, task.contentVersionId);
+			System.assertEquals(Label.Success, task.status);
+			System.assert(String.isBlank(task.message));
+			System.assertNotEquals(null, task.file);
+		}
 	}
 }

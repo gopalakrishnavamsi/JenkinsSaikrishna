@@ -9,7 +9,7 @@
     helper.getGenActionName(component)
       .then($A.getCallback(function (genActionName) {
         component.set('v.genActionName', genActionName);
-        component.set('v.genActionAPIName', genActionName + component.get('v.config').id);
+        component.set('v.genActionAPIName', genActionName + component.get('v.template').id);
         helper.getLayouts(component, event, helper);
       }))
       .catch(function (error) {
@@ -20,11 +20,11 @@
 
   startPublish: function (component, userEvents) {
     userEvents.time(this.PUBLISH_BUTTON);
-    var config = component.get('v.config');
+    var template = component.get('v.template');
     userEvents.addProperties({
       'Product': 'Gen',
       'Template Type': 'Word',
-      'Source Object': stringUtils.sanitizeObjectName(config ? config.sourceObject : null)
+      'Source Object': stringUtils.sanitizeObjectName(template ? template.sourceObject : null)
     });
   },
 
@@ -44,11 +44,11 @@
   },
 
   getLayouts: function (component, event, helper) {
-    var config = component.get('v.config');
+    var template = component.get('v.template');
     var getLayoutsAction = component.get('c.getLayouts');
     component.set('v.fetchingLayout', true);
     getLayoutsAction.setParams({
-      sObjectType: config.objectMappings.name
+      sObjectType: template.objectMappings.name
     });
 
     getLayoutsAction.setCallback(this, $A.getCallback(function (response) {
@@ -192,22 +192,22 @@
       return;
     }
     component.set('v.creatingButtons', true);
-    var config = component.get('v.config');
+    var template = component.get('v.template');
     var action = component.get('c.updateLayouts');
-    var buttonApiName = String(component.get('v.genActionName') + component.get('v.config').id);
+    var buttonApiName = String(component.get('v.genActionName') + component.get('v.template').id);
     var buttonLabel = component.get('v.genButtonLabel');
     var selectedLayouts = helper.getLayoutsToUpdate(component.get('v.layouts'), buttonApiName, component);
     var parameters = {
       genButtonApiName: buttonApiName,
       genButtonLabel: buttonLabel,
-      genTemplateId: config.id
+      genTemplateId: template.id
     };
     var evtProps = {
       'Layouts': selectedLayouts ? selectedLayouts.length : 0
     };
 
     action.setParams({
-      sObjectType: config.objectMappings.name,
+      sObjectType: template.objectMappings.name,
       layoutsJson: JSON.stringify(selectedLayouts),
       parameters: JSON.stringify(parameters)
     });

@@ -16,7 +16,7 @@
     <aura:attribute name="updateShowWhatYouWillNeedModal" type="Boolean" default="false" access="private"/>
     <aura:attribute name="currentStep" type="Integer"/>
     <aura:attribute name="isClassic" type="Boolean"/>
-    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="template" type="Object"/>
     <aura:attribute name="labelByApiName" type="Object"/>
     <aura:attribute name="files" type="Object[]"/>
     <aura:attribute name="isCompleted" type="Boolean"/>
@@ -58,8 +58,8 @@
                             <div class="slds-page-header__name">
                                 <div class="slds-page-header__name-title">
                                     <span>{!$Label.c.TemplateConfiguration}</span>
-                                    <h1 class="slds-page-header__title slds-truncate" title="{!v.config.name}">
-                                        <strong>{!v.config.name}</strong>
+                                    <h1 class="slds-page-header__title slds-truncate" title="{!v.template.name}">
+                                        <strong>{!v.template.name}</strong>
                                         <lightning:buttonIcon class="slds-m-left_x-small" iconName="utility:edit"
                                                               variant="bare" alternativeText="Edit"
                                                               onclick="{!c.editDetails}"
@@ -99,7 +99,7 @@
                                 <div class="slds-path__scroller_inner">
                                     <ul class="slds-path__nav" role="tablist">
                                         <aura:iteration items="{!v.steps}" var="step" indexVar="index">
-                                            <li class="{!'slds-path__item' + if(or( index gt (v.config.stepsCompleted + 1), and(step == 'Publish', not(v.config.hasPreviewedDocuments)) ), ' ds-cursor_not-allowed') + if(v.currentStep == index, ' slds-is-active slds-is-current', if(v.currentStep > index, ' slds-is-complete', ' slds-is-incomplete'))}"
+                                            <li class="{!'slds-path__item' + if(or( index gt (v.template.stepsCompleted + 1), and(step == 'Publish', not(v.template.hasPreviewedDocuments)) ), ' ds-cursor_not-allowed') + if(v.currentStep == index, ' slds-is-active slds-is-current', if(v.currentStep > index, ' slds-is-complete', ' slds-is-incomplete'))}"
                                                 role="presentation">
                                                 <a class="slds-path__link" href="javascript:void(0);" role="tab"
                                                    tabindex="-1"
@@ -121,27 +121,27 @@
                         <div class="slds-path__coach slds-grid slds-p-top_xxx-small">
                             <div class="slds-path__keys slds-size_3-of-5 slds-m-top_x-small slds-p-around_medium">
 
-                                <aura:if isTrue="{!not(empty(v.config))}">
+                                <aura:if isTrue="{!not(empty(v.template))}">
 
                                     <aura:if isTrue="{!v.currentStep == 0}">
-                                        <c:GenPrimaryObject aura:id="step" config="{!v.config}"
+                                        <c:GenPrimaryObject aura:id="step" template="{!v.template}"
                                                             availableObjects="{!v.availableObjects}"
                                                             labelByApiName="{!v.labelByApiName}"
                                                             commonObjects="{!v.commonObjects}"/>
                                     </aura:if>
                                     <aura:if isTrue="{!v.currentStep == 1}">
-                                        <c:GenAddFields aura:id="step" config="{!v.config}"/>
+                                        <c:GenAddFields aura:id="step" template="{!v.template}"/>
                                     </aura:if>
                                     <aura:if isTrue="{!v.currentStep == 2}">
-                                        <c:GenImportTemplateFiles aura:id="step" config="{!v.config}"
+                                        <c:GenImportTemplateFiles aura:id="step" template="{!v.template}"
                                                                   files="{!v.files}"/>
                                     </aura:if>
                                     <aura:if isTrue="{!v.currentStep == 3}">
-                                        <c:GenPreview aura:id="step" config="{!v.config}" files="{!v.files}"/>
+                                        <c:GenPreview aura:id="step" template="{!v.template}" files="{!v.files}"/>
                                     </aura:if>
 
                                     <aura:if isTrue="{!v.currentStep == 4}">
-                                        <c:GenPublish aura:id="step" config="{!v.config}" isClassic="{#v.isClassic}"/>
+                                        <c:GenPublish aura:id="step" template="{!v.template}" isClassic="{#v.isClassic}"/>
                                     </aura:if>
 
                                     <div class="slds-grid slds-text-align_right slds-p-top_medium slds-border_top slds-m-top_medium">
@@ -158,7 +158,7 @@
                                         <aura:if isTrue="{!not(v.currentStep == v.steps.length - 1)}">
                                             <div class="slds-col">
                                                 <lightning:button variant="brand" label="{!$Label.c.Next}"
-                                                                  disabled="{!and(v.currentStep == 3, not(v.config.hasPreviewedDocuments))}"
+                                                                  disabled="{!and(v.currentStep == 3, not(v.template.hasPreviewedDocuments))}"
                                                                   onclick="{!c.nextStep}"/>
                                             </div>
                                         </aura:if>

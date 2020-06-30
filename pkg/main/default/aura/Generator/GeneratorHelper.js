@@ -26,21 +26,30 @@
     this._getUserEvents(component).error(this._getEvent(component), {}, error);
   },
 
-  checkMultiCurrency: function (component) {
+  getConfiguration: function (component, templateId) {
     var self = this;
-    var action = component.get('c.checkMultiCurrency');
+    var action = component.get('c.getConfiguration');
+    action.setParams({
+      templateId: templateId,
+      isGenerating: true
+    });
     action.setCallback(this, function (response) {
       if (response.getState() === 'SUCCESS') {
-        var isMultiCurrency = response.getReturnValue();
-        component.set('v.isMultiCurrency', isMultiCurrency);
+        var config = response.getReturnValue();
+        component.set('v.template', config.template);
+        component.set('v.templateFiles', config.template.generated);
+        component.set('v.isMultiCurrency', config.isMultiCurrencyOrganization === true);
+        component.set('v.useGenV1', config.useGenV1 === true);
         self._getUserEvents(component).addProperties({
-          'Multi-Currency': isMultiCurrency
+          'Multi-Currency': config.isMultiCurrencyOrganization === true,
+          'Gen V1': config.useGenV1 === true
         });
+        self.setupData(component);
       } else {
-        var errMsg = stringUtils.getErrorMessage(response);
         component.set('v.errType', 'error');
-        component.set('v.errMsg', errMsg);
-        self.endGenerationError(component, 'Error while checking multi-currency support');
+        component.set('v.errMsg', stringUtils.getErrorMessage(response));
+        component.set('v.isLoading', false);
+        self.endGenerationError(component, 'Error while reading configuration');
       }
     });
     $A.enqueueAction(action);
@@ -48,7 +57,7 @@
 
   setupData: function (component) {
     this.startGeneration(component);
-    var config = component.get('v.config');
+    var template = component.get('v.template');
     var isPreview = component.get('v.isPreview');
     var templateFiles = component.get('v.templateFiles');
     var lookupObjs = [];
@@ -56,7 +65,7 @@
     var numFiles = $A.util.isEmpty(templateFiles) ? 0 : templateFiles.length;
     this._getUserEvents(component).addProperties({
       'Template Type': 'Word',
-      'Source Object': stringUtils.sanitizeObjectName(config ? config.sourceObject : null),
+      'Source Object': stringUtils.sanitizeObjectName(template ? template.sourceObject : null),
       'Template Files': numFiles
     });
 
@@ -72,8 +81,8 @@
       });
       component.set('v.templateFiles', templateFiles);
       var lookupObj = {
-        apiName: config.objectMappings.name,
-        label: config.objectMappings.label
+        apiName: template.objectMappings.name,
+        label: template.objectMappings.label
       };
       lookupObjs.push(lookupObj);
       component.set('v.lookupObjs', lookupObjs);
@@ -93,10 +102,15 @@
     } else {
       if (
         lookupObjs.length === 1 &&
-        config.useCurrentRecord &&
-        config.useAllTemplates
+        template.useCurrentRecord &&
+        template.useAllTemplates
       ) {
-        helper.getRecordData(component);
+        var sourceId = this.getSourceId(component);
+        if (component.get('v.useGenV1')) {
+          helper.getRecordData(component, sourceId);
+        } else {
+          helper.generateDocuments(component, template.id, sourceId);
+        }
       }
       component.set('v.isLoading', false);
     }
@@ -248,30 +262,30 @@
     return fields;
   },
 
-
-  getRecordData: function (component) {
-    var helper = this;
+  getSourceId: function (component) {
     var lookups = component.find('recordLookup');
     lookups = Array.isArray(lookups) ? lookups : [lookups];
-    var missingLookup = false;
     var objIds = [];
 
     lookups.forEach(function (lookup) {
       if ($A.util.isEmpty(lookup.get('v.value'))) {
         lookup.showError();
-        missingLookup = true;
       } else {
         objIds.push(lookup.get('v.value'));
       }
     });
 
-    if (missingLookup) {
-      return;
-    }
+    return $A.util.isEmpty(objIds) ? null : objIds[0];
+  },
+
+  getRecordData: function (component, sourceId) {
+    if ($A.util.isUndefinedOrNull(sourceId)) return;
+
+    var helper = this;
 
     component.set('v.isGenerating', true);
     var isMultiCurrency = component.get('v.isMultiCurrency');
-    var config = component.get('v.config');
+    var template = component.get('v.template');
     var xmlRoot = document.implementation.createDocument('', '', null);
     var templateConfig = xmlRoot.createElement('Template_Config');
     var selectedTemplateFiles = component.get('v.templateFiles').filter(function (t) {
@@ -281,15 +295,15 @@
 
     xmlRoot.appendChild(templateConfig);
 
-    if (!$A.util.isEmpty(config.objectMappings.fieldMappings)) {
+    if (!$A.util.isEmpty(template.objectMappings.fieldMappings)) {
       var promise = new Promise(
         $A.getCallback(function (resolve, reject) {
           var action = component.get('c.getMergeData');
-          var fieldMappings = config.objectMappings.fieldMappings;
+          var fieldMappings = template.objectMappings.fieldMappings;
           var query = helper.parseFieldMappings(fieldMappings, isMultiCurrency);
           var fieldMap = helper.getTypeMap(fieldMappings);
           action.setParams({
-            sourceId: objIds[0],
+            sourceId: sourceId,
             queryJson: JSON.stringify(query)
           });
 
@@ -348,7 +362,7 @@
                 });
 
                 if (docsToGenerate.length > 0) {
-                  helper.generateDocuments(component, objIds[0], xmlRoot, docsToGenerate);
+                  helper.generateDocumentsV1(component, sourceId, xmlRoot, docsToGenerate);
                 } else {
                   helper.endGenerationWithErrorMessage(component, $A.get('$Label.c.NoDocumentsToGenerate'), 'No documents to generate');
                 }
@@ -374,7 +388,7 @@
     var containsRule = !$A.util.isEmpty(templateFilesWithRules);
     action.setParams({
       sourceId: component.get('v.recordId'),
-      startingObject: component.get('v.config').objectMappings.name,
+      startingObject: component.get('v.template').objectMappings.name,
       filesJson: JSON.stringify(templateFilesWithRules),
       isPreview: component.get('v.isPreview')
     });
@@ -634,16 +648,177 @@
     return stringUtils.format('{0}{1}', $A.localizationService.formatNumber(getIntegerVal, $A.get('$Locale').numberFormat), getTrailingZeros);
   },
 
-  generateDocuments: function (component, startingRecordId, xmlRoot, templateFiles) {
-    var config = component.get('v.config');
+  // FIXME: Wire-up selected templateFiles
+  generateDocuments: function (component, templateId, sourceId) {
+    if ($A.util.isUndefinedOrNull(templateId) || $A.util.isUndefinedOrNull(sourceId)) return;
+
+    component.set('v.isGenerating', true);
+
+    var queueDocumentGeneration = component.get('c.queueDocumentGeneration');
+    queueDocumentGeneration.setParams({
+      templateId: templateId,
+      sourceId: sourceId,
+      locale: $A.get('$Locale').langLocale, // TODO: Allow locale selection?
+      isPreview: component.get('v.isPreview')
+    });
+    var self = this;
+    queueDocumentGeneration.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        var job = response.getReturnValue();
+        var taskIds = [];
+        var cvTitleByTaskId = {};
+        var failedFiles = [];
+
+        job.tasks.forEach(function (task) {
+          if (task.status === $A.get('$Label.c.Failure')) {
+            failedFiles.push({message: task.message, cv: task.file});
+          } else {
+            taskIds.push(task.id.value);
+            cvTitleByTaskId[task.id.value] = task.file.title;
+          }
+        });
+
+        var remainingTaskIds;
+        if (!$A.util.isEmpty(taskIds)) {
+          remainingTaskIds = taskIds.slice(0);
+        }
+
+        self.genFileCheckboxToggle(component);
+        component.set('v.failedFiles', failedFiles);
+        component.set('v.cvTitleByTaskId', cvTitleByTaskId);
+
+        //completionPoll should only be called if remainingTaskIds is defined
+        if (!$A.util.isEmpty(remainingTaskIds)) {
+          self.completionPoll(component, taskIds, remainingTaskIds, 0);
+        } else if (!$A.util.isEmpty(failedFiles)) {
+          self.endGenerationError(component, 'Job enqueue failed');
+        } else { //remainingTaskIds is not defined indicates document generation job was not successfully triggered
+          self.handleUndefinedTaskIdResponse(component, failedFiles);
+        }
+      } else {
+        self.handleExceptionInQueueDocumentGeneration(component, response);
+      }
+    });
+    queueDocumentGeneration.setBackground();
+    $A.enqueueAction(queueDocumentGeneration);
+  },
+
+  completionPoll: function (component, taskIds, remainingTaskIds, runCount) {
+    //30s polling
+    if (runCount === 16) {
+      component.set('v.showTakingTooLongMessage', true);
+      component.getEvent('generatedDocs').fire();
+      this.endGenerationError(component, 'Document generation is taking too long');
+      return;
+    }
+
+    var self = this;
+    var generatedFiles = component.get('v.generatedFiles');
+    var failedFiles = component.get('v.failedFiles');
+    var cvTitleByTaskId = component.get('v.cvTitleByTaskId');
+
+    var getTaskStatus = component.get('c.getTaskStatus');
+    getTaskStatus.setParams({
+      taskIds: remainingTaskIds
+    });
+    getTaskStatus.setCallback(this, function (response) {
+      if (response.getState() === 'SUCCESS') {
+        var tasks = response.getReturnValue();
+        var finishedTasks = [];
+        var failedTasks = [];
+
+        tasks.forEach(function (task) {
+          if (task.status === $A.get('$Label.c.Success')) {
+            finishedTasks.push({
+              cv: task.file,
+              taskId: task.id.value
+            });
+          } else if (task.status === $A.get('$Label.c.Failure')) {
+            failedTasks.push({
+              taskId: task.id.value,
+              message: task.message
+            });
+          }
+        });
+
+        finishedTasks.forEach(function (task) {
+          var taskIndex = taskIds.indexOf(task.taskId);
+          var remainingTaskIndex = remainingTaskIds.indexOf(task.taskId);
+          generatedFiles[taskIndex] = task.cv;
+          remainingTaskIds.splice(remainingTaskIndex, 1);
+        });
+
+        failedTasks.forEach(function (task) {
+          var remainingTaskIndex = remainingTaskIds.indexOf(task.taskId);
+          var templateTitle = cvTitleByTaskId[task.taskId];
+          remainingTaskIds.splice(remainingTaskIndex, 1);
+          task.title = templateTitle;
+          failedFiles.push(task);
+        });
+
+        if (remainingTaskIds.length > 0) {
+          setTimeout(
+            $A.getCallback(function () {
+              self.completionPoll(
+                component,
+                taskIds,
+                remainingTaskIds,
+                ++runCount
+              );
+            }),
+            2000
+          );
+        } else {
+          component.set('v.finishedGenerating', true);
+          component.set('v.isGenerating', false);
+          component.getEvent('generatedDocs').fire();
+
+          if (!$A.util.isEmpty(generatedFiles)) {
+            generatedFiles.forEach(function (d) {
+              self.addDocumentProperties(d, true);
+            });
+          }
+
+          component.set('v.generatedFiles', generatedFiles);
+          component.set('v.failedFiles', failedFiles);
+          self.genFileCheckboxToggle(component);
+
+          if (failedFiles.length > 0) {
+            component.set('v.bannerState', 'warning');
+            component.set(
+              'v.bannerMsg',
+              $A.get('$Label.c.GeneratorBannerErrorMsg')
+            );
+            self.endGenerationError(component, 'Failed to generate ' + failedFiles.length + ' file(s)');
+          } else {
+            var bannerMsg = $A.get('$Label.c.GeneratorBannerSuccessMsg');
+            component.set('v.bannerState', 'success');
+            component.set('v.bannerMsg', bannerMsg);
+            self.endGenerationSuccess(component);
+          }
+        }
+      } else {
+        var errorMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.GeneratorCompletionErrorMsg'), stringUtils.getErrorMessage(response));
+        component.set('v.finishedGenerating', true);
+        component.set('v.isGenerating', false);
+        component.set('v.bannerState', 'error');
+        component.set('v.bannerMsg', errorMessage);
+        self.endGenerationError(component, 'Error while polling for job completion status');
+      }
+    });
+    $A.enqueueAction(getTaskStatus);
+  },
+
+  generateDocumentsV1: function (component, startingRecordId, xmlRoot, templateFiles) {
+    var template = component.get('v.template');
     var isPreview = component.get('v.isPreview');
     var serializer = new XMLSerializer();
     var xmlString = serializer.serializeToString(xmlRoot); //serializeToString escapes xml for us
     var helper = this;
 
-    var action = component.get('c.queueDocumentGeneration');
+    var action = component.get('c.queueDocumentGenerationV1');
     action.setParams({
-      templateId: config.id,
+      templateId: template.id,
       sourceId: startingRecordId,
       xmlPayload: xmlString,
       isPreview: isPreview,
@@ -654,48 +829,48 @@
       var state = response.getState();
       if (state === 'SUCCESS') {
         var results = response.getReturnValue();
-        var jobIds = [];
-        var cvTitleByJobId = {};
-        var failedJobs = [];
+        var taskIds = [];
+        var cvTitleByTaskId = {};
+        var failedFiles = [];
 
-        //iterate Gen.Job results object and set populate jobIds, cvTitleByJobId, failedJobs
+        //iterate GenV1.Task results object and set populate taskIds, cvTitleByTaskId, failedFiles
         results.forEach(function (object) {
           if (object.status === $A.get('$Label.c.Failure')) {
-            failedJobs.push({message: object.message, cv: object.file});
+            failedFiles.push({message: object.message, cv: object.file});
           } else {
-            jobIds.push(object.id.value);
-            cvTitleByJobId[object.id.value] = object.file.title;
+            taskIds.push(object.id.value);
+            cvTitleByTaskId[object.id.value] = object.file.title;
           }
         });
 
-        var remainingJobIds;
-        if (!$A.util.isEmpty(jobIds)) {
-          remainingJobIds = jobIds.slice(0);
+        var remainingTaskIds;
+        if (!$A.util.isEmpty(taskIds)) {
+          remainingTaskIds = taskIds.slice(0);
         }
 
         helper.genFileCheckboxToggle(component);
-        component.set('v.failedFiles', failedJobs);
-        component.set('v.cvTitleByJobId', cvTitleByJobId);
+        component.set('v.failedFiles', failedFiles);
+        component.set('v.cvTitleByTaskId', cvTitleByTaskId);
 
-        //completionPoll should only be called if remainingJobIds is defined
-        if (!$A.util.isUndefinedOrNull(remainingJobIds)) {
-          helper.completionPoll(component, jobIds, remainingJobIds, 0);
-        } else if (!$A.util.isEmpty(failedJobs)) {
+        //completionPoll should only be called if remainingTaskIds is defined
+        if (!$A.util.isEmpty(remainingTaskIds)) {
+          helper.completionPollV1(component, taskIds, remainingTaskIds, 0);
+        } else if (!$A.util.isEmpty(failedFiles)) {
           helper.endGenerationError(component, 'Job enqueue failed');
-        } else { //remainingJobIds is not defined indicates document generation job was not successfully triggered
-          helper.handleUndefinedJobIdResponse(component, failedJobs);
+        } else { //remainingTaskIds is not defined indicates document generation job was not successfully triggered
+          helper.handleUndefinedTaskIdResponse(component, failedFiles);
         }
       } else {
-        helper.handleExceptionInQueueDocumentGeneration(component, response, helper);
+        helper.handleExceptionInQueueDocumentGeneration(component, response);
       }
     });
 
     $A.enqueueAction(action);
   },
 
-  handleExceptionInQueueDocumentGeneration: function (component, response, helper) {
+  handleExceptionInQueueDocumentGeneration: function (component, response) {
     var errorMessage = stringUtils.format('{0} {1}', $A.get('$Label.c.FailedInitiateDocGeneration'), stringUtils.getErrorMessage(response));
-    helper.endGenerationWithErrorMessage(component, errorMessage, 'Failed to initiate generation');
+    this.endGenerationWithErrorMessage(component, errorMessage, 'Failed to initiate generation');
   },
 
   endGenerationWithErrorMessage: function (component, errorMessage, eventMessage) {
@@ -705,9 +880,9 @@
     this.endGenerationError(component, eventMessage);
   },
 
-  handleUndefinedJobIdResponse: function (component, failedJobs) {
+  handleUndefinedTaskIdResponse: function (component, failedTasks) {
     var errorMessage = $A.get('$Label.c.FailedInitiateDocGeneration');
-    failedJobs.forEach(function (job) {
+    failedTasks.forEach(function (job) {
       errorMessage += job.message;
     });
     component.set('v.errMsg', errorMessage);
@@ -715,7 +890,7 @@
     component.set('v.isGenerating', false);
   },
 
-  completionPoll: function (component, jobIds, remainingJobIds, runCount) {
+  completionPollV1: function (component, taskIds, remainingTaskIds, runCount) {
     //30s polling
     if (runCount === 16) {
       component.set('v.showTakingTooLongMessage', true);
@@ -727,11 +902,11 @@
     var helper = this;
     var generatedFiles = component.get('v.generatedFiles');
     var failedFiles = component.get('v.failedFiles');
-    var cvTitleByJobId = component.get('v.cvTitleByJobId');
-    var action = component.get('c.getJobStatus');
+    var cvTitleByTaskId = component.get('v.cvTitleByTaskId');
+    var action = component.get('c.getTaskStatusV1');
 
     action.setParams({
-      jobIds: remainingJobIds
+      taskIds: remainingTaskIds
     });
 
     action.setCallback(this, function (response) {
@@ -739,42 +914,45 @@
 
       if (state === 'SUCCESS') {
         var results = response.getReturnValue();
-        var finishedJobs = [];
-        var failedJobs = [];
+        var finishedTasks = [];
+        var failedTasks = [];
 
-        results.forEach(function (object) {
-          if (object.status === 'Success') {
-            finishedJobs.push({cv: object.file, jobId: object.id.value});
-          } else if (object.status === 'Failure') {
-            failedJobs.push({
-              jobId: object.id.value,
-              message: object.message
+        results.forEach(function (task) {
+          if (task.status === $A.get('$Label.c.Success')) {
+            finishedTasks.push({
+              taskId: task.id.value,
+              cv: task.file
+            });
+          } else if (task.status === $A.get('$Label.c.Failure')) {
+            failedTasks.push({
+              taskId: task.id.value,
+              message: task.message
             });
           }
         });
 
-        finishedJobs.forEach(function (finishedJob) {
-          var jobIndex = jobIds.indexOf(finishedJob.jobId);
-          var remainingJobIndex = remainingJobIds.indexOf(finishedJob.jobId);
-          generatedFiles[jobIndex] = finishedJob.cv;
-          remainingJobIds.splice(remainingJobIndex, 1);
+        finishedTasks.forEach(function (task) {
+          var taskIndex = taskIds.indexOf(task.taskId);
+          var remainingTaskIndex = remainingTaskIds.indexOf(task.taskId);
+          generatedFiles[taskIndex] = task.cv;
+          remainingTaskIds.splice(remainingTaskIndex, 1);
         });
 
-        failedJobs.forEach(function (failedJob) {
-          var remainingJobIndex = remainingJobIds.indexOf(failedJob.jobId);
-          var templateTitle = cvTitleByJobId[failedJob.jobId];
-          remainingJobIds.splice(remainingJobIndex, 1);
-          failedJob.title = templateTitle;
-          failedFiles.push(failedJob);
+        failedTasks.forEach(function (task) {
+          var remainingTaskIndex = remainingTaskIds.indexOf(task.taskId);
+          var templateTitle = cvTitleByTaskId[task.taskId];
+          remainingTaskIds.splice(remainingTaskIndex, 1);
+          task.title = templateTitle;
+          failedFiles.push(task);
         });
 
-        if (remainingJobIds.length > 0) {
+        if (remainingTaskIds.length > 0) {
           setTimeout(
             $A.getCallback(function () {
-              helper.completionPoll(
+              helper.completionPollV1(
                 component,
-                jobIds,
-                remainingJobIds,
+                taskIds,
+                remainingTaskIds,
                 ++runCount
               );
             }),

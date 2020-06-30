@@ -34,11 +34,11 @@
           var isCompleted = component.get('v.isCompleted');
 
           if (!isCompleted) {
-            var config = component.get('v.config');
+            var template = component.get('v.template');
 
-            if (stepIndex > config.stepsCompleted) {
-              config.stepsCompleted++;
-              component.set('v.config', config);
+            if (stepIndex > template.stepsCompleted) {
+              template.stepsCompleted++;
+              component.set('v.template', template);
             }
           }
 
@@ -95,7 +95,7 @@
               return -1;
             }
           });
-          component.set('v.config', results.template);
+          component.set('v.template', results.template);
           component.set('v.files', results.template.generated);
           component.set('v.availableObjects', results.allObjects);
           component.set('v.commonObjects', results.commonObjects);
@@ -135,7 +135,8 @@
         }
         var getConfigAction = component.get('c.getConfiguration');
         getConfigAction.setParams({
-          templateId: templateId
+          templateId: templateId,
+          isGenerating: false,
         });
         getConfigAction.setCallback(this, function (response) {
           component.set('v.saving', false);
@@ -155,15 +156,15 @@
   saveTemplate: function (component, isNavigate) {
     var helper = this;
     component.set('v.saving', true);
-    var config = component.get('v.config');
-    config.generated = component.get('v.files');
-    component.set('v.config', config);
+    var template = component.get('v.template');
+    template.generated = component.get('v.files');
+    component.set('v.template', template);
 
-    if (config.isSample) {
+    if (template.isSample) {
       return;
     }
     var action = component.get('c.saveTemplate');
-    var saveTemplateParameters = JSON.stringify(config);
+    var saveTemplateParameters = JSON.stringify(template);
     action.setParams({
       templateJson: saveTemplateParameters
     });

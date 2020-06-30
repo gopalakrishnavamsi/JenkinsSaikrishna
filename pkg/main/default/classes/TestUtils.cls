@@ -191,17 +191,11 @@ global class TestUtils {
 	}
 
 	public static Schema.Account createAccount() {
-		Schema.Account a = new Schema.Account(Name = 'UNIT TEST');
-		insert a;
-		return a;
+		return createAccount('UNIT TEST');
 	}
 
-	public static Schema.Account createAccountWithName(final String name) {
-		String accountName = name;
-		if (accountName == null) {
-			accountName = 'UNIT TEST';
-		}
-		Schema.Account a = new Schema.Account(Name = accountName);
+	public static Schema.Account createAccount(final String name) {
+		Schema.Account a = new Schema.Account(Name = String.isBlank(name) ? UUID.randomUUID().toString() : name);
 		insert a;
 		return a;
 	}
@@ -509,9 +503,9 @@ global class TestUtils {
 			PathOnClient = title + '.docx',
 			VersionData = Blob.valueOf(UUID.randomUUID().toString()),
 			IsMajorVersion = false,
-			GeneratedFileFormat__c = 'Word',
+			GeneratedFileFormat__c = Gen.FILE_TYPE_WORD,
 			GeneratedFileName__c = title,
-			GeneratedFileSuffix__c = 'name',
+			GeneratedFileSuffix__c = Gen.FILE_SUFFIX_NAME,
 			Rule__c = '{"name":"Test Rule","ruleType":"any","conditions":[{"fieldName":"Name","fieldType":"STRING","matchType":"equals","matchValue":"UNIT TEST"},{"fieldName":"Name","fieldType":"STRING","matchType":"equals","matchValue":"TEST UNIT"},{"fieldName":"AnnualRevenue","fieldType":"CURRENCY","matchType":"notEquals","matchValue":""}]}');
 		insert cv;
 		cv = [

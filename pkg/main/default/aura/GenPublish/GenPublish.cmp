@@ -1,7 +1,7 @@
 <aura:component controller="MetadataController">
 
     <!-- attributes -->
-    <aura:attribute name="config" type="Object"/>
+    <aura:attribute name="template" type="Object"/>
     <aura:attribute name="layouts" type="Object[]" access="private"/>
     <aura:attribute name="isClassic" type="Boolean"/>
     <aura:attribute name="isDirty" type="Boolean" access="private" default="false"/>
@@ -72,7 +72,7 @@
         <!-- /Page Layout -->
     </aura:iteration>
 
-    <aura:if isTrue="{!not(v.config.Sample__c)}">
+    <aura:if isTrue="{!not(v.template.Sample__c)}">
         <lightning:button label="{!$Label.c.Publish}" class="slds-m-top_xx-small"
                           onclick="{!c.publish}"
                           disabled="{!(v.invalidButtonName || not(v.isDirty) || empty(v.genButtonLabel) || v.creatingButtons || v.fetchingLayout)}"/>
