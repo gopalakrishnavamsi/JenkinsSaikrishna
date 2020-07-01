@@ -216,7 +216,7 @@ export default class DecSetupConfig extends LightningElement {
       };
       publish(this.context, DEC_UPDATE_PAGE_LAYOUTS, msg);
     } else {
-      this.updateEnvelopeConfiguration().then(window.navUtils.navigateToSObject.bind(this, this.recordId))
+      this.updateEnvelopeConfiguration().then(window.navUtils.navigateToSObject.bind(this, this.recordId, null));
     }
   }
 

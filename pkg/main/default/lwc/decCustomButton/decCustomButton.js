@@ -192,7 +192,7 @@ export default class DecCustomButton extends LightningElement {
     })
       .then(() => {
         showSuccess(this.context, this.label.successfullyModifiedLayouts, SUCCESS);
-        setTimeout(window.navUtils.navigateToSObject.bind(this, this.recordId), 2000);
+        setTimeout(window.navUtils.navigateToSObject.bind(this, this.recordId, null), 2000);
       })
       .catch(error => {
         showError(this.context, error, ERROR);
