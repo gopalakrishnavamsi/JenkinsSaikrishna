@@ -10821,7 +10821,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>SearchTermMinLengthMessage</shortDescription>
 		<value>Your search term must have 2 or more characters.</value>
 	</labels>
-  <labels>
+  	<labels>
 		<fullName>ByNameAndEmail</fullName>
 		<categories>Sending</categories>
 		<language>en_US</language>
@@ -10835,7 +10835,39 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Select Recipient</shortDescription>
-		<value>Select Recipient</value>
+		<value>Select Recipient</value>	
+	</labels>
+	<labels>
+		<fullName>DocumentWriteBackOptionMessage</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentWriteBackOptionMessage</shortDescription>
+		<value>Save completed documents back to the Opportunity Record</value>
+	</labels>
+	<labels>
+		<fullName>DocumentWriteBackCombineAllDocuments</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentWriteBackCombineAllDocuments</shortDescription>
+		<value>Combine all documents into one PDF file</value>
+	</labels>
+	<labels>
+		<fullName>DocumentWriteBackFilename</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentWriteBackFilename</shortDescription>
+		<value>Filename</value>
+	</labels>
+	<labels>
+		<fullName>DocumentWriteBackCertificateOfCompletion</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentWriteBackCertificateOfCompletion</shortDescription>
+		<value>Save certificate of completion (COC) document back to the Opportunity Record</value>
 	</labels>
 	<labels>
 		<fullName>RecipientRoleDecTableHeader</fullName>
@@ -10852,5 +10884,61 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Recipient</shortDescription>
 		<value>Recipient</value>	
-	</labels>				
+	</labels>
+	<labels>
+		<fullName>DocumentNameAndEnvelopeStatus</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentNameAndEnvelopeStatus</shortDescription>
+		<value>Document Name + Envelope Status</value>
+	</labels>
+	<labels>
+		<fullName>DocumentNameAndPdf</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentNameAndPdf</shortDescription>
+		<value>Document Name + .pdf</value>
+	</labels>
+	<labels>
+		<fullName>DocumentNameAndEnvelopeStatusAndPdf</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DocumentNameAndEnvelopeStatusAndPdf</shortDescription>
+		<value>Document Name + Envelope Status + .pdf</value>
+	</labels>
+	<labels>
+		<fullName>EmailSubjectAndEnvelopeStatus</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EmailSubjectAndEnvelopeStatus</shortDescription>
+		<value>Email Subject + Envelope Status</value>
+	</labels>
+	<labels>
+		<fullName>EmailSubjectAndPdf</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EmailSubjectAndPdf</shortDescription>
+		<value>Email Subject + .pdf</value>
+	</labels>
+	<labels>
+		<fullName>EmailSubjectAndEnvelopeStatusAndPdf</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EmailSubjectAndEnvelopeStatusAndPdf</shortDescription>
+		<value>Email Subject + Envelope Status + .pdf</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeAndEnvelopeIDAndPdf</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EnvelopeAndEnvelopeID</shortDescription>
+		<value>"Envelope" + Envelope ID + .pdf</value>
+	</labels>
 </CustomLabels>

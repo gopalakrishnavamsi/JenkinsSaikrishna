@@ -37,3 +37,7 @@
 .ds-options-expiration-input {
     width: 54px;
 }
+
+.ds-options-custom-input {
+    padding-top: 20px;
+}

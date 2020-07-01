@@ -22,8 +22,9 @@ import {
   subscribeToMessageChannel,
   showError
 } from 'c/utils';
-import {DOCUMENT_TYPE_SOURCE_FILES} from 'c/documentUtils';
-import {LABEL} from 'c/setupUtils';
+import { getDefaultOptions } from 'c/optionsUtils';
+import { DOCUMENT_TYPE_SOURCE_FILES } from 'c/documentUtils';
+import { LABEL } from 'c/setupUtils';
 
 //apex methods
 import updateEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.updateEnvelopeConfiguration';
@@ -126,7 +127,10 @@ export default class DecSetupConfig extends LightningElement {
     } else if (data) {
       this.attachSourceFiles = !isEmpty(data.documents.find(d => d.type === DOCUMENT_TYPE_SOURCE_FILES));
       this.envelopeConfigurationData = data;
-    }
+      if(isEmpty(this.envelopeConfigurationData.options.documentWriteBack)) {
+        this.envelopeConfigurationData = {...this.envelopeConfigurationData, options: getDefaultOptions()};
+      }
+   }
   }
 
   get documents() {
@@ -147,6 +151,10 @@ export default class DecSetupConfig extends LightningElement {
 
   get notifications() {
     return isEmpty(this.envelopeConfigurationData) || isEmpty(this.envelopeConfigurationData.notifications) ? null : this.envelopeConfigurationData.notifications;
+  }
+
+  get options() {
+    return isEmpty(this.envelopeConfigurationData) || isEmpty(this.envelopeConfigurationData.options) ? null : this.envelopeConfigurationData.options;
   }
 
   // Passed to decHeader
@@ -343,5 +351,16 @@ export default class DecSetupConfig extends LightningElement {
       ...configurationData,
       ...processedFields
     });
+  }
+
+  updateLocalEnvelopeConfigurationDocumentWriteBack(documentWriteBack) {
+    let options = this.envelopeConfigurationData.options;
+    options = {...options, documentWriteBack: documentWriteBack};
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, options : options};
+    this.isDirty = true;
+  }
+
+  handleOnDocumentWriteBack(event) {
+    this.updateLocalEnvelopeConfigurationDocumentWriteBack(event.detail.data);
   }
 }

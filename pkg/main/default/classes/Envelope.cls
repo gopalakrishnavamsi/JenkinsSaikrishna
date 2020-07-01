@@ -369,18 +369,22 @@ global class Envelope {
 		/**
 		 * Where to link the completed envelope documents. Defaults to the envelope source ID.
 		 */
+		@AuraEnabled
 		public Id linkedEntityId { get; private set; }
 		/**
 		 * The naming format for the completed envelope documents.
 		 */
+		@AuraEnabled
 		public String nameFormat { get; private set; }
 		/**
 		 * Whether to combine the documents into one PDF.
 		 */
+		@AuraEnabled
 		public Boolean combineDocuments { get; private set; }
 		/**
 		 * Whether to include the Certificate of Completion (CoC).
 		 */
+		@AuraEnabled
 		public Boolean includeCertificateOfCompletion { get; private set; }
 
 		/**
@@ -419,18 +423,22 @@ global class Envelope {
 		/**
 		 * Whether to include default anchor tabs that map to recipient roles.
 		 */
+		@AuraEnabled
 		public Boolean includeDefaultAutoPlaceTags { get; private set; }
 		/**
 		 * Document write-back options for completed envelopes.
 		 */
+		@AuraEnabled
 		public DocumentWriteBack documentWriteBack { get; private set; }
 		/**
 		 * Data write-back for envelope events. Map of envelope status to map of field updates.
 		 */
+		@AuraEnabled
 		public Map<String, Map<String, Object>> envelopeEventUpdates { get; private set; }
 		/**
 		 * Data write-back for recipient events. Map of recipient status to map of field updates.
 		 */
+		@AuraEnabled
 		public Map<String, Map<String, Object>> recipientEventUpdates { get; private set; }
 
 		/**

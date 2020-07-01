@@ -5614,6 +5614,22 @@
 	<customLabels>
 		<label>Select Recipient</label>	
 		<name>SelectRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Save completed documents back to the Opportunity Record</label>
+		<name>DocumentWriteBackOptionMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Combine all documents into one PDF file</label>
+		<name>DocumentWriteBackCombineAllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Filename</label>
+		<name>DocumentWriteBackFilename</name>
+	</customLabels>
+	<customLabels>
+		<label>Save certificate of completion (COC) document back to the Opportunity Record</label>
+		<name>DocumentWriteBackCertificateOfCompletion</name>
 	</customLabels>	
 	<customLabels>
 		<label>Recipient / Role</label>	
@@ -5622,6 +5638,34 @@
 	<customLabels>
 		<label>Recipient</label>	
 		<name>RecipientLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Name + Envelope Status</label>
+		<name>DocumentNameAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Name + .pdf</label>
+		<name>DocumentNameAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Document Name + Envelope Status +.pdf</label>
+		<name>DocumentNameAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Email Subject + Envelope Status</label>
+		<name>EmailSubjectAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Email Subject + .pdf</label>
+		<name>EmailSubjectAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Email Subject + Envelope Status + .pdf</label>
+		<name>EmailSubjectAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>"Envelope" + Envelope ID + .pdf</label>
+		<name>EnvelopeAndEnvelopeIDAndPdf</name>
 	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>

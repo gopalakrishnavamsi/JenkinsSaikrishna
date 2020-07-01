@@ -1061,7 +1061,6 @@ public with sharing class EnvelopeConfigurationService {
 
 		EnvelopeConfiguration ec = DB.queryEnvelopeConfiguration(envelopeConfigurationId);
 		if (ec == null) throw new DocuSignException(Label.EnvelopeConfigurationNotFound);
-
 		return ec.withRecipients(mergeRecipients(ec.recipients));
 	}
 

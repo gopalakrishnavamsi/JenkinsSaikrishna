@@ -46,11 +46,47 @@
         </div>
         <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large">
             <div class="ds-options-details-header-text ">{label.opportunityStage}</div>
-            <div class="slds-p-top_large">TBD</div>
+            <div class="slds-p-top_large">
+                TBD
+            </div>
         </div>
         <div class="slds-p-bottom_large slds-p-top_large">
             <div class="ds-options-details-header-text">{label.documentWriteback}</div>
-            <div class="slds-p-top_large">TBD</div>
+            <div class="slds-p-top_large">
+                <lightning-input type="checkbox"
+                                 label={label.documentWriteBackOptionMessage}
+                                 value={documentWritebackOptions}
+                                 checked={documentWritebackOptions}
+                                 onchange={handleOnChangeOfDocumentWritebackOptions}>
+                </lightning-input>
+            </div>
+            <template if:true={isWriteBack}>
+                <div class="slds-p-top_large slds-p-left_large">
+                    <lightning-input type="checkbox"
+                                     label={label.documentWriteBackCombineDocuments}
+                                     value={documentWritebackCombineDocuments}
+                                     checked={documentWritebackCombineDocuments}
+                                     onchange={handleOnChangeOfCombinedDocumentWritebackOptions}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-top_small slds-p-left_large">
+                    <lightning-combobox
+                            name="filename"
+                            label={label.filename}
+                            value={documentWritebackFilename}
+                            options={filenameOptions}
+                            onchange={handleFilenameChange}>
+                    </lightning-combobox>
+                </div>
+            </template>
+            <div class="slds-p-top_large">
+                <lightning-input type="checkbox"
+                                 label={label.documentWriteBackCertificateOfCompletion}
+                                 checked={documentWritebackCertificateOfCompletion}
+                                 value={documentWritebackCertificateOfCompletion}
+                                 onchange={handleCertificateOfCompletionChange}>
+                </lightning-input>
+            </div>
         </div>
     </div>
 </template>

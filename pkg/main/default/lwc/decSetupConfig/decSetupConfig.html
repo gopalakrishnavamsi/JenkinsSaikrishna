@@ -51,7 +51,10 @@
             <!-- options step -->
             <c-dec-options
                     if:true={optionsStep}
-                    notifications={notifications}>
+                    notifications={notifications}
+                    options={options}
+                    record-id={recordId}
+                    ondocumentwriteback={handleOnDocumentWriteBack}>
             </c-dec-options>
             <!-- custom buttons step -->
             <template if:true={customButtonStep}>

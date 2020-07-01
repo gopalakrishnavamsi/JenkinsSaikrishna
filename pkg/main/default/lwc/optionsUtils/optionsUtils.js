@@ -15,6 +15,19 @@ import doNotRemind from '@salesforce/label/c.DoNotRemind';
 import everyDay from '@salesforce/label/c.EveryDay';
 import everyNumberOfDays from '@salesforce/label/c.EveryNumberOfDays';
 import expiresAfterSending from '@salesforce/label/c.ExpiresAfterSending';
+import documentWriteBackOptionMessage from '@salesforce/label/c.DocumentWriteBackOptionMessage';
+import documentWriteBackCombineDocuments from '@salesforce/label/c.DocumentWriteBackCombineAllDocuments';
+import documentWriteBackCertificateOfCompletion from '@salesforce/label/c.DocumentWriteBackCertificateOfCompletion';
+import filename from '@salesforce/label/c.DocumentWriteBackFilename';
+import documentName from '@salesforce/label/c.AgreementName';
+import documentNameAndEnvelopeStatus from '@salesforce/label/c.DocumentNameAndEnvelopeStatus';
+import emailSubject from '@salesforce/label/c.EmailSubject';
+import documentNameAndPdf from '@salesforce/label/c.DocumentNameAndPdf';
+import documentNameAndEnvelopeStatusAndPdf from '@salesforce/label/c.DocumentNameAndEnvelopeStatusAndPdf';
+import emailSubjectAndEnvelopeStatus from '@salesforce/label/c.EmailSubjectAndEnvelopeStatus';
+import envelopeAndEnvelopeIDAndPdf from '@salesforce/label/c.EnvelopeAndEnvelopeIDAndPdf';
+import emailSubjectAndPdf from '@salesforce/label/c.EmailSubjectAndPdf';
+import emailSubjectAndEnvelopeStatusAndPdf from '@salesforce/label/c.EmailSubjectAndEnvelopeStatusAndPdf';
 
 const LABEL = {
   options,
@@ -30,7 +43,11 @@ const LABEL = {
   doNotRemind,
   everyDay,
   everyNumberOfDays,
-  expiresAfterSending
+  expiresAfterSending,
+  documentWriteBackOptionMessage,
+  documentWriteBackCombineDocuments,
+  documentWriteBackCertificateOfCompletion,
+  filename
 };
 
 const DEFAULT_EXPIRATION = 90;
@@ -79,9 +96,41 @@ const getDefaultNotifications = () => ({
   expireWarnDays: null
 });
 
+const getDefaultOptions = () => {
+  return {
+    includeDefaultAutoPlaceTags: false,
+    documentWriteBack: {
+      linkedEntityId: null,
+      nameFormat: null,
+      combineDocuments: false,
+      includeCertificateOfCompletion: false
+    },
+    envelopeEventUpdates: null,
+    recipientEventUpdates: null
+  };
+}
+
+const FILE_NAME_OPTIONS_DEFAULT = [
+  { label: documentName, value: 'Name' },
+  { label: documentNameAndEnvelopeStatus, value: 'NameEnvStatus' },
+  { label: documentNameAndPdf, value: 'NamePDF' },
+  { label: documentNameAndEnvelopeStatusAndPdf, value: 'NameEnvStatusPDF' }
+];
+
+const FILE_NAME_OPTIONS_COMBINED_DOCS = [
+  { label: emailSubject, value: 'Name' },
+  { label: emailSubjectAndEnvelopeStatus, value: 'NameEnvStatus' },
+  { label: emailSubjectAndPdf, value: 'NamePDF'},
+  { label: emailSubjectAndEnvelopeStatusAndPdf, value: 'NameEnvStatusPDF' },
+  { label: envelopeAndEnvelopeIDAndPdf, value: 'EnvelopePDF' }
+ ];
+
 export {
   LABEL,
   DEFAULT_EXPIRATION,
   REMINDER_OPTIONS,
-  getDefaultNotifications
+  FILE_NAME_OPTIONS_DEFAULT,
+  FILE_NAME_OPTIONS_COMBINED_DOCS,
+  getDefaultNotifications,
+  getDefaultOptions
 }
