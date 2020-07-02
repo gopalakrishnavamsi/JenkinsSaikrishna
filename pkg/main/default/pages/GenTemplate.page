@@ -62,7 +62,9 @@
       var ns = '{!JSENCODE(namespace)}';
       $Lightning.use(ns + ':GenTemplateApp', function () {
         $Lightning.createComponent(ns + ':GenTemplate', {
-          templateId: '{!$CurrentPage.parameters.id}', isClassic: '{!$User.UIThemeDisplayed}' === 'Theme3'
+          templateId: '{!JSENCODE($CurrentPage.parameters.id)}',
+          isCreating: '{!JSENCODE($CurrentPage.parameters.isEdit)}' !== 'true',
+          isClassic: '{!$User.UIThemeDisplayed}' === 'Theme3'
         }, 'lightning', function (component, status, errorMessage) {
           if (status === 'SUCCESS') {
             document.getElementById('spinner').style.display = 'none';

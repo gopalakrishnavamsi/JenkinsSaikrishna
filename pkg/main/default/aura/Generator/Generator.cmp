@@ -16,7 +16,7 @@
     <aura:attribute name="generatedFiles" type="String[]"/>
     <aura:attribute name="jobIds" type="String[]"/>
     <aura:attribute name="isMultiCurrency" type="Boolean" default="{!false}"/>
-    <aura:attribute name="useGenV1" type="Boolean" default="{!true}"/>
+    <aura:attribute name="useGenV1" type="Boolean" default="{!true}" access="public"/>
     <aura:attribute name="isGenerating" type="Boolean" default="{!false}" access="global"/>
     <aura:attribute name="isLoading" type="Boolean" default="{!true}"/>
     <aura:attribute name="finishedGenerating" type="Boolean" default="{!false}" access="global"/>

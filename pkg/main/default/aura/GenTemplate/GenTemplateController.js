@@ -46,14 +46,14 @@
   showExitModal: function (component, event, helper) {
     var template = component.get('v.template');
     if (template.isSample) {
-      helper.goToRecord(component);
+      helper.goToRecord(component, false);
     } else {
       component.find('exitModal').show();
     }
   },
 
   goToRecord: function (component, event, helper) {
-    helper.goToRecord(component);
+    helper.goToRecord(component, true);
   },
 
   saveAndNavigate: function (component, event, helper) {

@@ -2,6 +2,8 @@
     <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
 
     <!-- attributes -->
+    <aura:attribute name="useGenV1" type="Boolean" default="{!true}" access="private"/>
+    <aura:attribute name="isCreating" type="Boolean" access="public"/>
     <aura:attribute name="templateId" type="Id"/>
     <aura:attribute name="showToast" type="Boolean"/>
     <aura:attribute name="toastMsg" type="String"/>
@@ -137,7 +139,7 @@
                                                                   files="{!v.files}"/>
                                     </aura:if>
                                     <aura:if isTrue="{!v.currentStep == 3}">
-                                        <c:GenPreview aura:id="step" template="{!v.template}" files="{!v.files}"/>
+                                        <c:GenPreview aura:id="step" template="{!v.template}" files="{!v.files}" useGenV1="{!v.useGenV1}"/>
                                     </aura:if>
 
                                     <aura:if isTrue="{!v.currentStep == 4}">

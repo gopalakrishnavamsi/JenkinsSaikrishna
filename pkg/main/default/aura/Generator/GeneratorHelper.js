@@ -671,7 +671,7 @@
 
         job.tasks.forEach(function (task) {
           if (task.status === $A.get('$Label.c.Failure')) {
-            failedFiles.push({message: task.message, cv: task.file});
+            failedFiles.push({message: task.message, title: task.file.title});
           } else {
             taskIds.push(task.id.value);
             cvTitleByTaskId[task.id.value] = task.file.title;
@@ -692,6 +692,10 @@
           self.completionPoll(component, taskIds, remainingTaskIds, 0);
         } else if (!$A.util.isEmpty(failedFiles)) {
           self.endGenerationError(component, 'Job enqueue failed');
+          component.set('v.bannerState', 'error');
+          component.set('v.bannerMsg', $A.get('$Label.c.FailedInitiateDocGeneration'));
+          component.set('v.finishedGenerating', true);
+          component.set('v.isGenerating', false);
         } else { //remainingTaskIds is not defined indicates document generation job was not successfully triggered
           self.handleUndefinedTaskIdResponse(component, failedFiles);
         }
@@ -836,7 +840,7 @@
         //iterate GenV1.Task results object and set populate taskIds, cvTitleByTaskId, failedFiles
         results.forEach(function (object) {
           if (object.status === $A.get('$Label.c.Failure')) {
-            failedFiles.push({message: object.message, cv: object.file});
+            failedFiles.push({message: object.message, title: object.file.title});
           } else {
             taskIds.push(object.id.value);
             cvTitleByTaskId[object.id.value] = object.file.title;
@@ -857,6 +861,10 @@
           helper.completionPollV1(component, taskIds, remainingTaskIds, 0);
         } else if (!$A.util.isEmpty(failedFiles)) {
           helper.endGenerationError(component, 'Job enqueue failed');
+          component.set('v.bannerState', 'error');
+          component.set('v.bannerMsg', $A.get('$Label.c.FailedInitiateDocGeneration'));
+          component.set('v.finishedGenerating', true);
+          component.set('v.isGenerating', false);
         } else { //remainingTaskIds is not defined indicates document generation job was not successfully triggered
           helper.handleUndefinedTaskIdResponse(component, failedFiles);
         }
@@ -888,6 +896,7 @@
     component.set('v.errMsg', errorMessage);
     component.set('v.errType', 'error');
     component.set('v.isGenerating', false);
+    component.set('v.finishedGenerating', true);
   },
 
   completionPollV1: function (component, taskIds, remainingTaskIds, runCount) {

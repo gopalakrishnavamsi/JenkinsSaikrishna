@@ -1,4 +1,5 @@
 <aura:component>
+    <aura:attribute name="useGenV1" type="Boolean" default="{!true}" access="public"/>
     <aura:attribute name="template" type="Object"/>
     <aura:attribute name="files" type="Object[]"/>
     <aura:attribute name="showTakingTooLongMessage" type="Boolean" default="{!false}"/>
@@ -15,8 +16,13 @@
     </div>
     <div
             class="{!'ds-try-template-config_container slds-is-relative' + if(v.showTakingTooLongMessage, ' ds-try-template-config_container-long-gen')}">
-        <c:Generator templateId="{!v.template.id}" template="{#v.template}" isPreview="{!true}" templateFiles="{#v.files}"
-                     showGenerateButton="{!true}" showTakingTooLongMessage="{!v.showTakingTooLongMessage}">
+        <c:Generator templateId="{!v.template.id}"
+                     template="{#v.template}"
+                     isPreview="{!true}"
+                     templateFiles="{#v.files}"
+                     showGenerateButton="{!true}"
+                     showTakingTooLongMessage="{!v.showTakingTooLongMessage}"
+                     useGenV1="{!v.useGenV1}">
             <p class="slds-m-bottom_small">{!$Label.c.TestYourTemplateMsg}</p>
         </c:Generator>
     </div>

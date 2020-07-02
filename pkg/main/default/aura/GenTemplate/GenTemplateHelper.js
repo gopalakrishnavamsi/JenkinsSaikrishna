@@ -1,8 +1,20 @@
 ({
   CREATE_TEMPLATE: 'Create Gen Template',
+  UPDATE_TEMPLATE: 'Update Gen Template',
 
   _getUserEvents: function (component) {
     return component.find('ds-user-events');
+  },
+
+  _getEventName: function (component) {
+    return component.get('v.isCreating') ? this.CREATE_TEMPLATE : this.UPDATE_TEMPLATE;
+  },
+
+  _getEventProperties: function (template) {
+    return $A.util.isUndefinedOrNull(template) ? {} : {
+      'Source Object': stringUtils.sanitizeObjectName(template.sourceObject),
+      'Template Files': $A.util.isEmpty(template.generated) ? 0 : template.generated.length
+    };
   },
 
   editName: function (component) {
@@ -52,7 +64,12 @@
       );
   },
 
-  goToRecord: function (component) {
+  goToRecord: function (component, isCanceling) {
+    if (isCanceling) {
+      this._getUserEvents(component).cancel(
+        this._getEventName(component),
+        this._getEventProperties(component.get('v.template')));
+    }
     var templateId = component.get('v.templateId');
     navUtils.navigateToSObject(templateId);
   },
@@ -73,7 +90,14 @@
     var isGenEnabled = component.get('v.isGenEnabled');
     if (isAuthorized && isGenEnabled) {
       component.set('v.saving', true);
-      var helper = this;
+
+      var userEvents = this._getUserEvents(component);
+      userEvents.addProperties({
+        'Product': 'Gen',
+        'Template Type': 'Word'
+      });
+      userEvents.time(this._getEventName(component));
+
       var steps = component.get('v.steps');
       steps = [
         $A.get('$Label.c.AddObjectsStep'),
@@ -83,9 +107,8 @@
         $A.get('$Label.c.PublishStep')
       ];
       component.set('v.steps', steps);
-      var templateId = component.get('v.templateId');
-      var isCreating = $A.util.isEmpty(templateId);
-      var getConfigAction = helper.getConfiguration(component);
+
+      var getConfigAction = this.getConfiguration(component);
       getConfigAction.then(
         $A.getCallback(function (results) {
           results.allObjects.sort(function (a, b) {
@@ -105,11 +128,7 @@
           });
           component.set('v.labelByApiName', labelByApiName);
 
-          if (isCreating) {
-            helper._getUserEvents(component).success(helper.CREATE_TEMPLATE, {
-              'Product': 'Gen',
-              'Template Type': 'Word'
-            });
+          if ($A.util.isEmpty(component.get('v.templateId'))) {
             component.set('v.templateId', results.template.id);
           }
           if (results.template.stepsCompleted >= steps.length) {
@@ -127,6 +146,7 @@
 
   getConfiguration: function (component) {
     component.set('v.saving', true);
+    var self = this;
     return new Promise(
       $A.getCallback(function (resolve) {
         var templateId = component.get('v.templateId');
@@ -143,6 +163,11 @@
           var state = response.getState();
           if (state === 'SUCCESS') {
             var results = response.getReturnValue();
+            component.set('v.useGenV1', results.useGenV1 === true);
+            self._getUserEvents(component).addProperties({
+              'Multi-Currency': results.isMultiCurrencyOrganization === true,
+              'Gen V1': results.useGenV1 === true
+            });
             resolve(results);
           } else {
             component.set('v.errMsg', stringUtils.getErrorMessage(response));
@@ -163,19 +188,24 @@
     if (template.isSample) {
       return;
     }
+
     var action = component.get('c.saveTemplate');
-    var saveTemplateParameters = JSON.stringify(template);
     action.setParams({
-      templateJson: saveTemplateParameters
+      templateJson: JSON.stringify(template)
     });
     action.setCallback(this, function (response) {
+      var userEvents = helper._getUserEvents(component);
+      var eventName = helper._getEventName(component);
+      var eventProperties = helper._getEventProperties(template);
       var state = response.getState();
       component.set('v.saving', false);
       if (state === 'SUCCESS') {
         if (isNavigate) {
-          helper.goToRecord(component);
+          userEvents.success(eventName, eventProperties);
+          helper.goToRecord(component, false);
         }
       } else {
+        userEvents.error(eventName, eventProperties, 'Failed to save template');
         component.set('v.errMsg', stringUtils.getErrorMessage(response));
       }
     });
