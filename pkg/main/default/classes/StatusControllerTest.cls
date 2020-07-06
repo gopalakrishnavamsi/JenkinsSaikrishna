@@ -52,4 +52,73 @@ private class StatusControllerTest {
 			System.assert(!Collection.isEmpty(result));
 		}
 	}
+
+	@IsTest
+	static void test_voidEnvelope_Success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+		System.runAs(UserMock.createDocuSignUser()) {
+			Envelope__c e1 = TestUtils.createEnvelope();
+			EnvelopeStatus__c es1 = TestUtils.createEnvelopeStatus(UUID.parse(e1.DocuSignId__c));
+			es1.Status__c = Envelope.STATUS_SENT;
+			update es1;
+
+			Test.startTest();
+			Boolean result = StatusController.voidEnvelope(e1.DocuSignId__c, 'reason');
+			Test.stopTest();
+			System.assert(result);
+		}
+	}
+
+	@IsTest
+	static void test_voidEnvelope_Unauthorized() {
+		Envelope e1;
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+		}
+
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				StatusController.voidEnvelope(String.valueOf(e1.docuSignId), 'reason');
+				throw new AssertException('Expected voidEnvelope to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_resendEnvelope_Success() {
+		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			UUID dseId = UUID.randomUUID();
+			Envelope__c e = TestUtils.createEnvelope(dseId);
+			TestUtils.createEnvelopeStatus(e);
+
+			Test.startTest();
+			System.assert(StatusController.resendEnvelope(String.valueOf(dseId)));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_resendEnvelope_Unauthorize() {
+		Envelope e1;
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			e1 = EnvelopeService.DB.convert(TestUtils.createEnvelope());
+		}
+
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				StatusController.resendEnvelope(String.valueOf(e1.docuSignId));
+				throw new AssertException('Expected resendEnvelope to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
 }

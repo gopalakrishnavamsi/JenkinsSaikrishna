@@ -26,4 +26,23 @@ public class StatusController extends Controller {
 			throw Controller.wrapException(ex, 'Failed to retrieve status list views');
 		}
 	}
+
+	@AuraEnabled
+	public static Boolean voidEnvelope(final String envelopeId, final String reason) {
+		try {
+			return StatusService.voidEnvelope(UUID.parse(envelopeId), reason);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to void Envelope');
+		}
+	}
+
+	@AuraEnabled
+	public static Boolean resendEnvelope(final String envelopeId) {
+		try {
+			return StatusService.resendEnvelope(UUID.parse(envelopeId));
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to resend Envelope');
+		}
+	}
+
 }
