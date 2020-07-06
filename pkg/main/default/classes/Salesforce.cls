@@ -5,6 +5,7 @@ public with sharing class Salesforce {
 
 	private static List<String> visualforceOrigins;
 	private static List<String> lightningOrigins;
+	private static List<String> communityOrigins;
 
 	public static final Double API_VERSION = 48.0;
 
@@ -206,6 +207,23 @@ public with sharing class Salesforce {
 		return Salesforce.visualforceOrigins;
 	}
 
+	public static List<String> getCommunityOrigins() {
+		if (Salesforce.communityOrigins == null) {
+			if (isValidSObject('Network')) {
+				Permissions.verifyIsQueryable(GLOBAL_DESCRIBE.get('Network'), new List<String> { 'Id' });
+				List<SObject> networkData = Database.query('SELECT Id FROM Network WITH SECURITY_ENFORCED');
+				List<String> communityUrls = new List<String>();
+				if (Collection.isNotEmpty(networkData)) {
+					for (Sobject networkObj : networkData) {
+						communityUrls.add(Network.getLoginUrl(networkObj.Id).removeEndIgnoreCase('/login'));
+					}
+					Salesforce.communityOrigins = communityUrls;
+				}
+			}
+		}
+		return Salesforce.communityOrigins;
+	}
+
 	public static List<String> getLightningOrigins() {
 		if (Salesforce.lightningOrigins == null) {
 			String host = baseUrl.getHost();
@@ -249,6 +267,7 @@ public with sharing class Salesforce {
 		Boolean result = false;
 		List<String> visualForceOrigins = Salesforce.getVisualforceOrigins();
 		List<String> lightningOrigins = Salesforce.getLightningOrigins();
+		List<String> communityOrigins = Salesforce.getCommunityOrigins();
 		if (visualForceOrigins != null && !visualForceOrigins.isEmpty()) {
 			for (String vfOrigin : visualForceOrigins) {
 				if (vfOrigin.equalsIgnoreCase(target)) {
@@ -260,6 +279,14 @@ public with sharing class Salesforce {
 		if (lightningOrigins != null && !lightningOrigins.isEmpty() && !result) {
 			for (String ltngOrigin : lightningOrigins) {
 				if (ltngOrigin.equalsIgnoreCase(target)) {
+					result = true;
+					break;
+				}
+			}
+		}
+		if (communityOrigins != null && !communityOrigins.isEmpty() && !result) {
+			for (String cmtyOrigin : communityOrigins) {
+				if (cmtyOrigin.equalsIgnoreCase(target)) {
 					result = true;
 					break;
 				}

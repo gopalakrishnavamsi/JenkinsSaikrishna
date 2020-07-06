@@ -252,6 +252,42 @@ private class SalesforceTest {
 		Test.stopTest();
 	}
 
+    @IsTest
+    static void test_isValidCommunityURL() {
+        List<Profile> proflieData = [SELECT ID FROM Profile WHERE Name = 'Customer Community Login User' LIMIT 1];
+        try {
+            if (Schema.getGlobalDescribe().containsKey('Network') && Collection.isNotEmpty(proflieData)) {
+                Schema.Account acc = TestUtils.createAccount();
+                Contact con = TestUtils.createContact(acc.Id);
+                User user = new User (
+                    contactID = con.id,
+                    FirstName = 'Unit',
+                    LastName = 'Test',
+                    Username = UUID.randomUUID().toString() + '@unit.test',
+                    Email = UUID.randomUUID().toString() + '@unit.test',
+                    Alias = 'test',
+                    TimeZoneSidKey = 'America/Los_Angeles',
+                    LocaleSidKey = 'en_US',
+                    EmailEncodingKey = 'ISO-8859-1',
+                    ProfileId = proflieData[0].ID,
+                    LanguageLocaleKey = 'en_US' );
+                insert user;
+                system.runAs(user) {
+                    Test.startTest();
+                    Id user_id = user.id;  
+                    List<SObject> networkMemberData = Database.Query('SELECT Network.Id FROM NetworkMember WHERE MemberId =: user_id LIMIT 1');
+                    if(Collection.isNotEmpty(networkMemberData)) {
+                        System.assertEquals(true, Salesforce.isValidTarget(Network.getLoginUrl((ID)networkMemberData[0].getSobject('Network').get('Id')).removeEndIgnoreCase('/login')));
+                        System.assertNotEquals(null, Salesforce.getCommunityOrigins());
+                    }
+                    Test.stopTest();
+                }
+            }
+        } catch(Exception ex) {
+
+        }
+    }
+    
 	@IsTest
 	static void test_isValidTarget() {
 		Test.startTest();

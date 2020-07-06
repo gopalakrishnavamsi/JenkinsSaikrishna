@@ -37,7 +37,10 @@
       var onMessage = function (event) {
         if (component && component.isValid()) {
           // event must originate from Visualforce page on our domain
-          if (component.get('v.eventOrigins').indexOf(event.origin) !== -1) {
+          var url = window.location.href;
+          // adding community unique name to url 
+          var getOrigin = $A.util.isUndefinedOrNull(url.substring(0, url.indexOf('/apex'))) ? event.origin : url.substring(0, url.indexOf('/apex'));
+          if (component.get('v.eventOrigins').indexOf(getOrigin) !== -1) {
             window.removeEventListener('message', onMessage);
             var success = event.data.loginInformation && event.data.loginInformation.status === 'Success';
             helper.getConfigAfterAuthorization(component, success).then(

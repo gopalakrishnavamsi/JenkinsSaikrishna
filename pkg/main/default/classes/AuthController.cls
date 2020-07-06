@@ -86,14 +86,15 @@ public with sharing class AuthController {
 			isAuthorized,
 			isConsentRequired,
 			message,
-			Salesforce.getVisualforceOrigins(),
+			getAllEventOrigins(), // merging community and visualforce origins
 			products, new Permission());
 	}
 
 	@AuraEnabled
 	public static String beginOAuth(final String target) {
 		try {
-			return AuthService.getLoginUrl(LoginInformation.TYPE_USER, target).toExternalForm().replace('+', '%20');
+			//adding site prefix to target url
+			return AuthService.getLoginUrl(LoginInformation.TYPE_USER, String.format('{0}{1}', new List<String> { target, Salesforce.sitePrefix })).toExternalForm().replace('+', '%20');
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to initiate user OAuth flow.');
 		}
@@ -126,5 +127,15 @@ public with sharing class AuthController {
 			}
 		}
 		return products;
+	}
+	private static List<String> getAllEventOrigins() {
+		List<String> allEventOrigins = new List<String>();
+		allEventOrigins.addAll(Salesforce.getVisualForceOrigins());
+		List<String> communityOrigins = Salesforce.getCommunityOrigins();
+		if (communityOrigins != null && !communityOrigins.isEmpty()) {
+			allEventOrigins.addAll(communityOrigins);
+		}
+
+		return allEventOrigins;
 	}
 }
