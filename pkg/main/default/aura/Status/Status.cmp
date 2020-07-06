@@ -1,4 +1,6 @@
-<aura:component controller="StatusController" implements="flexipage:availableForRecordHome,force:hasRecordId"
+<aura:component controller="StatusController"
+                implements="flexipage:availableForRecordHome,force:hasRecordId"
+                extends="c:RootContainer"
                 access="global">
 
     <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
@@ -6,15 +8,18 @@
     <aura:attribute name="envelopes" type="List" access="private"/>
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="errorMessage" type="String" access="private"/>
+    <aura:attribute name="envelopeActions" type="Object" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" access="private" default="{!false}"/>
 
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
+
+    <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
 
     <lightning:card variant="base">
         <div class="slds-card__header slds-grid">
             <header class="slds-media slds-media_center slds-has-flexi-truncate">
                 <div class="slds-media__figure">
-                    <img src="{!$Resource.AppIcon}"
+                    <img src="{!$Resource.sendingIcon}"
                          class="slds-icon slds-icon_small"/>
                 </div>
                 <div class="slds-media__body">
@@ -90,6 +95,17 @@
                                                                         <p class="slds-timeline__date">
                                                                             <c:DateTime datetime="{!envelope.sent}"/>
                                                                         </p>
+                                                                        <lightning:buttonMenu
+                                                                                iconSize="x-small"
+                                                                                menuAlignment="right"
+                                                                                onselect="{!c.handleEnvelopeAction}"
+                                                                                variant="border-filled">
+                                                                            <aura:iteration
+                                                                                    items="{!v.envelopeActions}"
+                                                                                    var="action">
+                                                                                <lightning:menuItem label="{!action.label}" value="{!action.value}"/>
+                                                                            </aura:iteration>
+                                                                        </lightning:buttonMenu>
                                                                     </div>
                                                                 </div>
                                                             </div>

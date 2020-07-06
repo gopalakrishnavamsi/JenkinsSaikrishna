@@ -1,5 +1,13 @@
 ({
-  initialize: function(component, helper) {
+  initialize: function (component, helper) {
+    component.set('v.envelopeActions', [{
+      label: $A.get('$Label.c.SendReminder'),
+      value: 'reminder'
+    }, {
+      label: $A.get('$Label.c.VoidEnvelope'),
+      value: 'void'
+    }]);
+
     var gs = component.get('c.getStatus');
     gs.setParams({
       sourceId: component.get('v.recordId'),
@@ -32,7 +40,7 @@
     $A.enqueueAction(gs);
   },
 
-  setError: function(component, response) {
+  setError: function (component, response) {
     if (component && response) {
       var errors = response.getError();
       var errMsg = errors;
@@ -43,7 +51,7 @@
     }
   },
 
-  getStatusLabel: function(status) {
+  getStatusLabel: function (status) {
     var result = '';
     switch (status) {
       case 'created':
@@ -74,5 +82,25 @@
         break;
     }
     return result;
+  },
+
+  handleEnvelopeAction: function (component, event, helper) {
+    var action = event.getParam('value');
+
+    if (action === 'reminder') {
+      helper.sendReminder(component, $A.get('$Label.c.ReminderSent'));
+    } else if (action === 'void') {
+      helper.voidEnvelope(component, $A.get('$Label.c.EnvelopeVoided'));
+    }
+  },
+
+  // TODO: Call invokeAction from RootContainer to send a reminder for the envelope
+  sendReminder: function (component, successMessage) {
+    this.showToast(component, successMessage, 'success');
+  },
+
+  // TODO: Call invokeAction from RootContainer to void an envelope
+  voidEnvelope: function (component, successMessage) {
+    this.showToast(component, successMessage, 'success');
   }
 });

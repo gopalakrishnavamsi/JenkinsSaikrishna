@@ -3658,6 +3658,22 @@
 		<name>EsignatureEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
+		<label>Send Reminder</label>
+		<name>SendReminder</name>
+	</customLabels>
+	<customLabels>
+		<label>Your reminder was sent!</label>
+		<name>ReminderSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Void</label>
+		<name>VoidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Your envelope was voided.</label>
+		<name>EnvelopeVoided</name>
+	</customLabels>
+	<customLabels>
 		<label>Get real time status updates on your envelopes right from Salesforce. DocuSign eSignature Envelope Status gets your documents signed faster, so you can get more work done.</label>
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>

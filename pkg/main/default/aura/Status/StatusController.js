@@ -65,5 +65,9 @@
         break;
       }
     }
+  },
+
+  handleEnvelopeAction: function (component, event, helper) {
+    helper.handleEnvelopeAction(component, event, helper);
   }
 });

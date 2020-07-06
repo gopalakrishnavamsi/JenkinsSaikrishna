@@ -7130,6 +7130,38 @@
 		<value>eSignature Envelope Status</value>
 	</labels>
 	<labels>
+		<fullName>SendReminder</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Send Reminder for envelope</shortDescription>
+		<value>Send Reminder</value>
+	</labels>
+	<labels>
+		<fullName>ReminderSent</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Message after sending envelope reminder</shortDescription>
+		<value>Your reminder was sent!</value>
+	</labels>
+	<labels>
+		<fullName>VoidEnvelope</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Void envelope</shortDescription>
+		<value>Void</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeVoided</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Message after voiding envelope</shortDescription>
+		<value>Your envelope was voided.</value>
+	</labels>
+	<labels>
 		<fullName>ComponentSectionEnvelopeStatus</fullName>
 		<categories>SetupComponents</categories>
 		<language>en_US</language>
