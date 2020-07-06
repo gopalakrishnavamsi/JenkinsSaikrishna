@@ -62,11 +62,11 @@
           var placeholders = component.get('v.placeholderRecipients');
           var recipients = [];
           if (!$A.util.isEmpty(placeholders) && !$A.util.isEmpty(placeholders.recipients)) {
-            placeholders.recipients.forEach(function(r) {
+            placeholders.recipients.forEach(function (r) {
               r.isPlaceHolder = true;
-            })
+            });
             recipients = placeholders.recipients.concat(result.recipients || []);
-          } else recipients = result.recipients
+          } else recipients = result.recipients;
           var defaultRoles = result.defaultRoles.reduce(function (rolesMap, role) {
             rolesMap[role.name.toLowerCase()] = role;
             return rolesMap;
@@ -119,8 +119,25 @@
         defaultRoles: component.get('v.defaultRoles'),
         files: component.get('v.files'),
         sendNow: component.get('v.sendNow'),
-        forbidEnvelopeChanges: component.get('v.lock')
+        forbidEnvelopeChanges: component.get('v.lock'),
+        onsendcomplete: component.getReference('c.onSendComplete')
       });
+  },
+
+  endSendForSignature: function (component, status, properties) {
+    switch (status) {
+      case 'failure':
+        this.trackError(component, this.SEND_FOR_SIGNATURE, properties, 'Failed to send for signature');
+        break;
+
+      case 'canceled':
+        this.trackCancel(component, this.SEND_FOR_SIGNATURE, properties);
+        break;
+
+      default: // success
+        this.trackSuccess(component, this.SEND_FOR_SIGNATURE, properties);
+        break;
+    }
   },
 
   addPlaceholderProperties: function (placeholder, routingOrder, defaultRoles) {

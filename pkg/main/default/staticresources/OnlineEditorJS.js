@@ -545,19 +545,28 @@ jQuery(document).ready(function ($) {
           onStart: function () {
             hideAll();
             showSpinner();
-            renderOnlineEditor().then(function () {
-              $('#onlineEditorToolBar').show();
-              $('#topPanel').show();
-              $('#onlineEditor').show();
-              Elements.spinner1.hide();
-              //Buttons
-              //Step 1
-              Elements.buttons.cancelTemplate.show();
-              Elements.buttons.saveClose.show();
-              //Step 2
-              Elements.buttons.cancelPublish.hide();
-              Elements.buttons.publish.hide();
-            });
+            renderOnlineEditor()
+              .then(function () {
+                $('#onlineEditorToolBar').show();
+                $('#topPanel').show();
+                $('#onlineEditor').show();
+                Elements.spinner1.hide();
+                //Buttons
+                //Step 1
+                Elements.buttons.cancelTemplate.show();
+                Elements.buttons.saveClose.show();
+                //Step 2
+                Elements.buttons.cancelPublish.hide();
+                Elements.buttons.publish.hide();
+              })
+              .catch(function (err) {
+                _userEvents.error(
+                  _sessionType,
+                  {},
+                  'Editor render error'
+                );
+                createToastComponent(err, 'error');
+              });
           }
         };
       case 2:

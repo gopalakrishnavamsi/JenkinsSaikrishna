@@ -140,5 +140,12 @@
 
   onRecipientsChange: function (component, event, helper) {
     component.set('v.disableNext', !helper.getValidity(component));
+  },
+
+  onSendComplete: function (component, event, helper) {
+    if (!$A.util.isUndefinedOrNull(event)) {
+      event.stopPropagation();
+      helper.endSendForSignature(component, event.getParam('status'), event.getParam('properties'));
+    }
   }
 });
