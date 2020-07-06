@@ -69,9 +69,9 @@ public with sharing class FileController extends Controller {
 	}
 
 	@AuraEnabled
-	public static void linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
+	public static String linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
 		try {
-			FileService.linkContentDocuments(contentDocumentIds, sourceObjectId);
+			return FileService.linkContentDocuments(contentDocumentIds, sourceObjectId);
 		} catch(Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to link content documents');
 		}

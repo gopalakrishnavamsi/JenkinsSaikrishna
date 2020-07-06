@@ -5683,6 +5683,14 @@
 		<label>"Envelope" + Envelope ID + .pdf</label>
 		<name>EnvelopeAndEnvelopeIDAndPdf</name>
 	</customLabels>
+	<customLabels>
+		<label>You don't have any files here. Try a different filter, or upload a file.</label>
+		<name>EmptyFileResultsMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} of {1} files selected</label>
+		<name>SelectedFilesOfTotalFiles</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

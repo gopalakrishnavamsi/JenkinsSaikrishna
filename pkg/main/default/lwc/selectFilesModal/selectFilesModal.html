@@ -44,105 +44,214 @@
                 <lightning-layout-item class="slds-p-around_small">
                     <lightning-input name="searchDocumentsInput"
                                      label=""
+                                     value={searchDocumentsInput}
                                      type="search"
-                                     placeholder={label.SearchFiles}
+                                     placeholder={label.searchFiles}
                                      minlength="2"
                                      message-when-too-short={label.searchTermMinLengthMessage}
                                      onchange={handleChangeOfSearchInput}
                                      class="ds-input-width">
                     </lightning-input>
                     <template if:true={isDocumentsOwnedByUserStep}>
-                        <div class="ds-table-height">
-                            <c-datatable-without-select-all key-field="Id"
-                                                            columns={documentColumns}
-                                                            data={documentsOwnedByUser}
-                                                            enable-infinite-loading
-                                                            onloadmore={loadMoreDocumentsOwnedByUser}
-                                                            onselectedrow={handleSelectedRow}
-                                                            hide-checkbox-column>
-                             </c-datatable-without-select-all>
-                        </div>
-                    </template>
-                    <template if:true={isDocumentsSharedWithUserStep}>
-                        <div class="ds-table-height">
-                            <c-datatable-without-select-all key-field="Id"
-                                                            columns={documentColumns}
-                                                            data={documentsSharedWithUser}
-                                                            enable-infinite-loading
-                                                            onloadmore={loadMoreDocumentsSharedWithUser}
-                                                            onselectedrow={handleSelectedRow}
-                                                            hide-checkbox-column>
-                            </c-datatable-without-select-all>
-                        </div>
-                    </template>
-                    <template if:true={isDocumentsRecentlyViewedByUserStep}>
-                        <div class="ds-table-height">
-                            <c-datatable-without-select-all key-field="Id"
-                                                            columns={documentColumns}
-                                                            data={documentsRecentlyViewedByUser}
-                                                            onselectedrow={handleSelectedRow}
-                                                            hide-checkbox-column>
-                            </c-datatable-without-select-all>
-                        </div>
-                    </template>
-                    <template if:true={isDocumentsFollowedByUserStep}>
-                        <div class="ds-table-height">
-                            <c-datatable-without-select-all key-field="Id"
-                                                            columns={documentColumns}
-                                                            data={documentsFollowedByUser}
-                                                            enable-infinite-loading
-                                                            onloadmore={loadMoreDocumentsFollowedByUser}
-                                                            onselectedrow={handleSelectedRow}
-                                                            hide-checkbox-column>
-                            </c-datatable-without-select-all>
-                        </div>
-                    </template>
-                    <template if:true={isContentWorkspacesStep}>
-                        <div class="ds-table-height">
-                            <template if:false={isContentDocumentInWorkspaceStep}>
-                                <c-datatable-content-workspace key-field="Id"
-                                                               columns={contentWorkspaceColumns}
-                                                               data={contentWorkspaces}
-                                                               enable-infinite-loading
-                                                               onloadmore={loadMoreContentWorkspaces}
-                                                               ondisplaycontentdocumentsinworkspace={loadContentDocumentsInWorkspace}
-                                                               min-column-width="200"
-                                                               hide-checkbox-column>
-                                </c-datatable-content-workspace>
-                            </template>
-                            <template if:true={isContentDocumentInWorkspaceStep}>
-                                <div class="slds-p-top_medium">
-                                    <lightning-icon icon-name="utility:left"
-                                                size="xx-small"
-                                                title="Back">
-                                    </lightning-icon>
-                                    <span class="slds-p-left_x-small">
-                                        <a onclick={handleBackFromContentWorkspace}>{label.back}</a>
-                                    </span>
+                        <template if:true={isEmptyDocs}>
+                            <div class="slds-p-top_large">{label.emptyFileResultsMessage}</div>
+                        </template>
+                        <template if:false={isSearching}>
+                            <template if:false={isEmptyDocs}>
+                                <div class="ds-table-height">
+                                    <c-datatable-without-select-all key-field="Id"
+                                                                    columns={documentColumns}
+                                                                    data={documentsOwnedByUser}
+                                                                    enable-infinite-loading
+                                                                    onloadmore={loadMoreDocumentsOwnedByUser}
+                                                                    onselectedrow={handleSelectedRow}
+                                                                    hide-checkbox-column>
+                                    </c-datatable-without-select-all>
                                 </div>
+                            </template>
+                        </template>
+                        <template if:true={isSearching}>
+                            <div class="ds-table-height">
                                 <c-datatable-without-select-all key-field="Id"
                                                                 columns={documentColumns}
-                                                                data={documentsInWorkspace}
+                                                                data={documentsOwnedByUserFiltered}
                                                                 onselectedrow={handleSelectedRow}
-                                                                enable-infinite-loading
-                                                                onloadmore={loadMoreContentDocumentsInWorkspace}
                                                                 hide-checkbox-column>
                                 </c-datatable-without-select-all>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:true={isDocumentsSharedWithUserStep}>
+                        <template if:true={isEmptyDocs}>
+                            <div class="slds-p-top_large">{label.emptyFileResultsMessage}</div>
+                        </template>
+                        <template if:false={isSearching}>
+                            <template if:false={isEmptyDocs}>
+                                <div class="ds-table-height">
+                                    <c-datatable-without-select-all key-field="Id"
+                                                                    columns={documentColumns}
+                                                                    data={documentsSharedWithUser}
+                                                                    enable-infinite-loading
+                                                                    onloadmore={loadMoreDocumentsSharedWithUser}
+                                                                    onselectedrow={handleSelectedRow}
+                                                                    hide-checkbox-column>
+                                    </c-datatable-without-select-all>
+                                </div>
                             </template>
-                        </div>
+                        </template>
+                        <template if:true={isSearching}>
+                            <div class="ds-table-height">
+                                <c-datatable-without-select-all key-field="Id"
+                                                                columns={documentColumns}
+                                                                data={documentsSharedWithUserFiltered}
+                                                                onselectedrow={handleSelectedRow}
+                                                                hide-checkbox-column>
+                                </c-datatable-without-select-all>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:true={isDocumentsRecentlyViewedByUserStep}>
+                        <template if:true={isEmptyDocs}>
+                            <div class="slds-p-top_large">{label.emptyFileResultsMessage}</div>
+                        </template>
+                        <template if:false={isSearching}>
+                            <template if:false={isEmptyDocs}>
+                                <div class="ds-table-height">
+                                    <c-datatable-without-select-all key-field="Id"
+                                                                    columns={documentColumns}
+                                                                    data={documentsRecentlyViewedByUser}
+                                                                    onselectedrow={handleSelectedRow}
+                                                                    hide-checkbox-column>
+                                    </c-datatable-without-select-all>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:true={isSearching}>
+                            <div class="ds-table-height">
+                                <c-datatable-without-select-all key-field="Id"
+                                                                columns={documentColumns}
+                                                                data={documentsRecentlyViewedByUserFiltered}
+                                                                onselectedrow={handleSelectedRow}
+                                                                hide-checkbox-column>
+                                </c-datatable-without-select-all>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:true={isDocumentsFollowedByUserStep}>
+                        <template if:true={isEmptyDocs}>
+                            <div class="slds-p-top_large">{label.emptyFileResultsMessage}</div>
+                        </template>
+                        <template if:false={isSearching}>
+                            <template if:false={isEmptyDocs}>
+                                <div class="ds-table-height">
+                                    <c-datatable-without-select-all key-field="Id"
+                                                                    columns={documentColumns}
+                                                                    data={documentsFollowedByUser}
+                                                                    enable-infinite-loading
+                                                                    onloadmore={loadMoreDocumentsFollowedByUser}
+                                                                    onselectedrow={handleSelectedRow}
+                                                                    hide-checkbox-column>
+                                    </c-datatable-without-select-all>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:true={isSearching}>
+                            <div class="ds-table-height">
+                                <c-datatable-without-select-all key-field="Id"
+                                                                columns={documentColumns}
+                                                                data={documentsFollowedByUserFiltered}
+                                                                onselectedrow={handleSelectedRow}
+                                                                hide-checkbox-column>
+                                </c-datatable-without-select-all>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:true={isContentWorkspacesStep}>
+                        <template if:false={isContentDocumentInWorkspaceStep}>
+                            <template if:true={isEmptyDocs}>
+                                <div class="slds-p-top_large">{label.emptyFileResultsMessage}</div>
+                            </template>
+                            <template if:false={isSearching}>
+                                <template if:false={isEmptyDocs}>
+                                    <div class="ds-table-height">
+                                        <c-datatable-content-workspace key-field="Id"
+                                                                       columns={contentWorkspaceColumns}
+                                                                       data={contentWorkspaces}
+                                                                       enable-infinite-loading
+                                                                       onloadmore={loadMoreContentWorkspaces}
+                                                                       ondisplaycontentdocumentsinworkspace={loadContentDocumentsInWorkspace}
+                                                                       min-column-width="200"
+                                                                       hide-checkbox-column>
+                                        </c-datatable-content-workspace>
+                                    </div>
+                                </template>
+                            </template>
+                            <template if:true={isSearching}>
+                                <div class="ds-table-height">
+                                    <c-datatable-without-select-all key-field="Id"
+                                                                    columns={documentColumns}
+                                                                    data={contentWorkspacesFiltered}
+                                                                    onselectedrow={handleSelectedRow}
+                                                                    hide-checkbox-column>
+                                    </c-datatable-without-select-all>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:true={isContentDocumentInWorkspaceStep}>
+                            <div class="slds-p-top_medium">
+                                <lightning-icon icon-name="utility:left"
+                                                size="xx-small"
+                                                title="Back">
+                                </lightning-icon>
+                                <span class="slds-p-left_x-small">
+                                        <a onclick={handleBackFromContentWorkspace}>{label.back}</a>
+                                    </span>
+                            </div>
+                            <template if:true={isEmptyDocsInWorkspace}>
+                                <div class="slds-p-top_large">{label.emptyFileResultsMessage}</div>
+                            </template>
+                            <template if:false={isSearching}>
+                                <template if:false={isEmptyDocsInWorkspace}>
+                                    <div class="ds-library-docs-table-height">
+                                        <c-datatable-without-select-all key-field="Id"
+                                                                        columns={documentColumns}
+                                                                        data={documentsInWorkspace}
+                                                                        onselectedrow={handleSelectedRow}
+                                                                        enable-infinite-loading
+                                                                        onloadmore={loadMoreContentDocumentsInWorkspace}
+                                                                        hide-checkbox-column>
+                                        </c-datatable-without-select-all>
+                                    </div>
+                                </template>
+                            </template>
+                            <template if:true={isSearching}>
+                                <div class="ds-table-height">
+                                    <c-datatable-without-select-all key-field="Id"
+                                                                    columns={documentColumns}
+                                                                    data={documentsInWorkspaceFiltered}
+                                                                    onselectedrow={handleSelectedRow}
+                                                                    hide-checkbox-column>
+                                    </c-datatable-without-select-all>
+                                </div>
+                            </template>
+                        </template>
                     </template>
                 </lightning-layout-item>
             </lightning-layout>
         </div>
         <div slot="footer">
+            <div class="slds-float_left">
+                {selectedOfTotalFilesLabel}
+            </div>
             <lightning-button label={label.cancel}
                               variant="neutral"
                               onclick={handleClose}>
             </lightning-button>
-            <lightning-button label={label.add}
+            <lightning-button label={addLabel}
                               variant="brand"
                               class="slds-p-left_small"
-                              onclick={handleAddFiles}>
+                              onclick={handleAddFiles}
+                              disabled={isAddFilesDisabled}>
             </lightning-button>
         </div>
     </c-modal>

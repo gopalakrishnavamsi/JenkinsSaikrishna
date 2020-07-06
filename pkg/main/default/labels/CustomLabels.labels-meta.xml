@@ -10973,4 +10973,20 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>EnvelopeAndEnvelopeID</shortDescription>
 		<value>"Envelope" + Envelope ID + .pdf</value>
 	</labels>
+	<labels>
+		<fullName>EmptyFileResultsMessage</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EmptyFileResultsMessage</shortDescription>
+		<value>You don't have any files here. Try a different filter, or upload a file.</value>
+	</labels>
+	<labels>
+		<fullName>SelectedFilesOfTotalFiles</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>SelectedFilesOfTotalFiles</shortDescription>
+		<value>{0} of {1} files selected</value>
+	</labels>
 </CustomLabels>

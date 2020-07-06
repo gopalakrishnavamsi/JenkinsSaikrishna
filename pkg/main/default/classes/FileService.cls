@@ -261,7 +261,7 @@ public with sharing class FileService {
 	 * @param Id sourceObjectId - Source Record Id to which the document has to be linked
 	 * @return List<ContentDocumentLink>
 	 */
-	public static void linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
+	public static String linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
 		Permissions.verifyIsDocuSignUser();
 		List<ContentDocumentLink> contentDocumentLinks = new List<ContentDocumentLink>();
 		for (Id id : contentDocumentIds) {
@@ -295,8 +295,9 @@ public with sharing class FileService {
 		if (errorMessage != '') {
 			String additionalMsg = successCount + ' file(s) were added successfully. ' +
 				errorCount + ' files(s) failed to add.';
-			throw new DocuSignException(errorMessage + ' ' + additionalMsg);
+			return errorMessage + ' ' + additionalMsg;
 		}
+		return null;
 	}
 
 	private static List<ContentDocument> getContentDocuments(List<Id> contentDocumentIds) {

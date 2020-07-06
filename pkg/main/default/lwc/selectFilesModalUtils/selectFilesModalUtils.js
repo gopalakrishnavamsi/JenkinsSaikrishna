@@ -9,6 +9,8 @@ import searchTermMinLengthMessage from '@salesforce/label/c.SearchTermMinLengthM
 import cancel from '@salesforce/label/c.Cancel';
 import add from '@salesforce/label/c.Add';
 import back from '@salesforce/label/c.Back';
+import emptyFileResultsMessage from '@salesforce/label/c.EmptyFileResultsMessage';
+import selectedFilesOfTotalFiles from '@salesforce/label/c.SelectedFilesOfTotalFiles';
 
 const LABEL = {
   addFromSalesforce,
@@ -21,7 +23,9 @@ const LABEL = {
   sharedWithMe,
   recent,
   following,
-  libraries
+  libraries,
+  emptyFileResultsMessage,
+  selectedFilesOfTotalFiles
 };
 
 export {

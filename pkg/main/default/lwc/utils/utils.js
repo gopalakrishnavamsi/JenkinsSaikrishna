@@ -164,10 +164,15 @@ const showSuccess = (context, message, channel) => {
 }
 
 const spliceArray = (arr) => {
-  if(!isEmpty(arr) && arr.length > 0) {
+  if(arr && !isEmpty(arr) && arr.length > 0) {
     arr = arr.splice(0, arr.length);
   }
   return arr;
+}
+
+const formatLabels = (stringToFormat, ...formattingArguments) => {
+  return stringToFormat.replace(/{(\d+)}/gm, (match, index) =>
+    (formattingArguments[index] === undefined ? '' : `${formattingArguments[index]}`));
 }
 
 export {
@@ -188,5 +193,6 @@ export {
   editArrayElement,
   showError,
   showSuccess,
-  spliceArray
+  spliceArray,
+  formatLabels
 };
