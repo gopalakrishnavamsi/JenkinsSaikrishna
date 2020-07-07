@@ -630,8 +630,8 @@ public with sharing class MetadataService {
 		webLink.displayType = 'button';
 		webLink.encodingKey = 'UTF-8';
 		webLink.protected_x = false;
-		webLink.url = String.format('\'{\'!URLFOR(\'\'{0}\'\', null, {1})\'}\'', new List<String> {
-			new Url(Url.getOrgDomainUrl(), page.getUrl()).getPath(),
+		webLink.url = String.format('\'{\'!URLFOR({0}\'\'{1}\'\', null, {2})\'}\'', new List<String> {
+			'$Site.Prefix +' , new Url(Url.getOrgDomainUrl(), page.getUrl()).getPath(),
 			buildInputs(type, parameters)
 		});
 		webLink.linkType = 'url';

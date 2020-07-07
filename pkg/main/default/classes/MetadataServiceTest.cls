@@ -481,6 +481,7 @@ private class MetadataServiceTest {
 		System.assert(result.url.contains('a = ' + params.get('a')));
 		System.assert(result.url.contains('b = ' + params.get('b')));
 		System.assert(result.url.contains('c = ' + params.get('c')));
+		System.assert(result.url.contains('$Site.Prefix +'));
 	}
 
 	@IsTest
