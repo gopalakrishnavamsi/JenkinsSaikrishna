@@ -390,7 +390,7 @@ global class UserMock {
 		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
 		accountSettings.Environment__c = 'other';
 		accountSettings.AccountBaseUrl__c = 'https://account.test.docusign.net/';
-		accountSettings.ESignatureBaseUrl__c = 'https://esign.test.docusign.net/';
+		accountSettings.ESignatureBaseUrl__c = 'https://www.test.docusign.net/';
 		accountSettings.ProvisioningBaseUrl__c = 'https://api.test.docusign.net/';
 		accountSettings.ScmWebBaseUrl__c = 'https://web.test.springcm.com/atlas/';
 		accountSettings.ScmApiBaseUrl__c = 'https://api.test.springcm.com/';
@@ -435,7 +435,8 @@ global class UserMock {
 					| AccountProducts.FLAG_MERGE_FIELDS
 					| AccountProducts.FLAG_SIGNING_GROUPS
 					| AccountProducts.FLAG_SMS_AUTHENTICATION
-					| AccountProducts.FLAG_TEMPLATES),
+					| AccountProducts.FLAG_TEMPLATES
+					| AccountProducts.FLAG_CONNECT),
 			new ProductSettings__c(
 				Name = Product.GEN,
 				Status__c = Product.STATUS_ACTIVE,

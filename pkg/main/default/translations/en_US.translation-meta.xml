@@ -5691,6 +5691,18 @@
 		<label>{0} of {1} files selected</label>
 		<name>SelectedFilesOfTotalFiles</name>
 	</customLabels>
+	<customLabels>
+		<label>Create DocuSign Connect configuration</label>
+		<name>CreateConnectConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Connect is not enabled for your account.</label>
+		<name>ConnectNotEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Failed to create DocuSign Connect configuration.</label>
+		<name>ConnectConfigurationError</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

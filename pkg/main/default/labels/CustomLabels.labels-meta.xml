@@ -10989,4 +10989,25 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>SelectedFilesOfTotalFiles</shortDescription>
 		<value>{0} of {1} files selected</value>
 	</labels>
+	<labels>
+		<fullName>CreateConnectConfiguration</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Create Connect configuration</shortDescription>
+		<value>Create DocuSign Connect configuration</value>
+	</labels>
+	<labels>
+		<fullName>ConnectNotEnabled</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Connect not enabled</shortDescription>
+		<value>DocuSign Connect is not enabled for your account.</value>
+	</labels>
+	<labels>
+		<fullName>ConnectConfigurationError</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Connect error</shortDescription>
+		<value>Failed to create DocuSign Connect configuration.</value>
+	</labels>
 </CustomLabels>

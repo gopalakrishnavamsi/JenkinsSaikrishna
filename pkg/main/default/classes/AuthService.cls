@@ -1080,8 +1080,7 @@ global with sharing class AuthService {
 	returned in the e_sign product activation properties or the OAuth userinfo response. Or if the URLs
 	were not site-specific in prod and we can just use Environment custom metadata.
  	*/
-	@TestVisible
-	private static Url createConnectConfiguration(
+	public static Url createConnectConfiguration(
 		final Url eSignatureBaseUrl,
 		final UUID accountId,
 		final String accessToken) {

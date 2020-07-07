@@ -299,13 +299,15 @@ private class AccountProductsTest {
 			| AccountProducts.FLAG_MERGE_FIELDS
 			| AccountProducts.FLAG_SIGNING_GROUPS
 			| AccountProducts.FLAG_SMS_AUTHENTICATION
-			| AccountProducts.FLAG_TEMPLATES;
+			| AccountProducts.FLAG_TEMPLATES
+			| AccountProducts.FLAG_CONNECT;
 		Set<ESignatureProduct.Feature> features = new Set<ESignatureProduct.Feature> {
 			ESignatureProduct.Feature.BulkSending,
 			ESignatureProduct.Feature.MergeFields,
 			ESignatureProduct.Feature.SigningGroups,
 			ESignatureProduct.Feature.SmsAuthentication,
-			ESignatureProduct.Feature.Templates
+			ESignatureProduct.Feature.Templates,
+			ESignatureProduct.Feature.Connect
 		};
 
 		Test.startTest();
@@ -319,13 +321,15 @@ private class AccountProductsTest {
 			| AccountProducts.FLAG_MERGE_FIELDS
 			| AccountProducts.FLAG_SIGNING_GROUPS
 			| AccountProducts.FLAG_SMS_AUTHENTICATION
-			| AccountProducts.FLAG_TEMPLATES;
+			| AccountProducts.FLAG_TEMPLATES
+			| AccountProducts.FLAG_CONNECT;
 		Set<ESignatureProduct.Feature> features = new Set<ESignatureProduct.Feature> {
 			ESignatureProduct.Feature.BulkSending,
 			ESignatureProduct.Feature.MergeFields,
 			ESignatureProduct.Feature.SigningGroups,
 			ESignatureProduct.Feature.SmsAuthentication,
-			ESignatureProduct.Feature.Templates
+			ESignatureProduct.Feature.Templates,
+			ESignatureProduct.Feature.Connect
 		};
 
 		Test.startTest();

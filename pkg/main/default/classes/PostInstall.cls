@@ -325,6 +325,15 @@ public class PostInstall implements InstallHandler, PostInstallScript {
 			isPush,
 			isUpgrade));
 
+		results.addResults(executeScript(
+			Label.CreateConnectConfiguration,
+			new ConnectConfigurationPostInstall(),
+			organizationId,
+			installerId,
+			previousVersion,
+			isPush,
+			isUpgrade));
+
 		return results;
 	}
 }

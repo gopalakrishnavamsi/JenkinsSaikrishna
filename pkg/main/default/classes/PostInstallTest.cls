@@ -378,4 +378,16 @@ private class PostInstallTest {
 
 		System.assertEquals(PostInstallResults.StepStatus.SKIPPED, result.getSteps()[0].status);
 	}
+
+	@IsTest
+	static void test_install_connect_configuration() {
+		DocuSignAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Test.testInstall(new PostInstall(), new Version(2, 4));
+			Test.stopTest();
+
+			System.assertEquals(0, [SELECT COUNT() FROM Log__c]);
+		}
+	}
 }

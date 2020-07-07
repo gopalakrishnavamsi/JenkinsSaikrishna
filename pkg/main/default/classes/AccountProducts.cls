@@ -20,6 +20,8 @@ public with sharing class AccountProducts {
 	private static final Integer FLAG_SMS_AUTHENTICATION = 8;
 	@TestVisible
 	private static final Integer FLAG_BULK_SENDING = 16;
+	@TestVisible
+	private static final Integer FLAG_CONNECT = 32;
 
 	@TestVisible
 	private final Map<String, Product> products;
@@ -95,6 +97,8 @@ public with sharing class AccountProducts {
 						result |= FLAG_SMS_AUTHENTICATION;
 					} else if (f == ESignatureProduct.Feature.BulkSending) {
 						result |= FLAG_BULK_SENDING;
+					} else if (f == ESignatureProduct.Feature.Connect) {
+						result |= FLAG_CONNECT;
 					}
 				}
 			}
@@ -118,6 +122,9 @@ public with sharing class AccountProducts {
 			}
 			if ((features & FLAG_BULK_SENDING) == FLAG_BULK_SENDING) {
 				result.add(ESignatureProduct.Feature.BulkSending);
+			}
+			if ((features & FLAG_CONNECT) == FLAG_CONNECT) {
+				result.add(ESignatureProduct.Feature.Connect);
 			}
 			return result;
 		}
