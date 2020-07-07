@@ -5691,6 +5691,14 @@
 		<label>{0} of {1} files selected</label>
 		<name>SelectedFilesOfTotalFiles</name>
 	</customLabels>
+	<customLabels>		
+		<label>starts with</label>
+		<name>StartsWithLabel</name>
+	</customLabels>
+	<customLabels>		
+		<label>ends with</label>
+		<name>EndsWithLabel</name>
+	</customLabels>	
 	<customLabels>
 		<label>Create DocuSign Connect configuration</label>
 		<name>CreateConnectConfiguration</name>

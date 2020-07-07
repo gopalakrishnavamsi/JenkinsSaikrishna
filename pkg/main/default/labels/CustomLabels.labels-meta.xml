@@ -10498,7 +10498,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>contains</shortDescription>
 		<value>contains</value>
 	</labels>						
-  <labels>
+  	<labels>
 		<fullName>SigningOrderDiagram</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>
@@ -10797,7 +10797,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Processing</shortDescription>
 		<value>Processing</value>
 	</labels>
-    <labels>
+    	<labels>
 		<fullName>Recent</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>
@@ -10990,6 +10990,22 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>{0} of {1} files selected</value>
 	</labels>
 	<labels>
+		<fullName>StartsWithLabel</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Starts With</shortDescription>
+		<value>starts with</value>
+	</labels>
+	<labels>
+		<fullName>EndsWithLabel</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Ends With</shortDescription>
+		<value>ends with</value>
+	</labels>
+  	<labels>
 		<fullName>CreateConnectConfiguration</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

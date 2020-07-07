@@ -13,6 +13,9 @@ import orderedByLabel from '@salesforce/label/c.OrderedBy';
 import recentDateCreatedLabel from '@salesforce/label/c.RecentDateCreated';
 import recentDateModifiedLabel from '@salesforce/label/c.RecentDateModified';
 import otherCustomSOQLLabel from '@salesforce/label/c.OtherCustomSOQL';
+import startsWithLabel from '@salesforce/label/c.StartsWithLabel';
+import endsWithLabel from '@salesforce/label/c.EndsWithLabel';
+
 
 import { isEmpty, getRandomKey } from 'c/utils';
 
@@ -38,6 +41,16 @@ export const OperatorOptions = {
         value: 'Contains',
         operator: 'LIKE'
     },
+    StartsWith: {
+        label: startsWithLabel,
+        value: 'StartsWith',
+        operator: 'LIKE'
+    },
+    EndsWith: {
+        label: endsWithLabel,
+        value: 'EndsWith',
+        operator: 'LIKE'
+    },        
     NotEquals: {
         label: notEqualsLabel,
         value: 'NotEquals',
@@ -216,23 +229,49 @@ class Rule {
         return !isEmpty(this.fieldName) && !isEmpty(this.operator) && !isEmpty(this.matchValue);
     }
 
+    get formattedValue() {
+        return isWildCardOperator(this.matchType) ? 
+        getWildCardValue(
+            this.matchValue, 
+            this.matchType === OperatorOptions.Contains.value || this.matchType === OperatorOptions.StartsWith.value,
+            this.matchType === OperatorOptions.Contains.value || this.matchType === OperatorOptions.EndsWith.value,
+            ) : this.matchValue;
+    }
+
     toString() {
-        const fieldValue = this.matchType === OperatorOptions.Contains.value ? getWildCardValue(this.matchValue) : this.matchValue;
-        return this.isValid ? `${this.fieldName} ${this.operator} ${fieldValue}` : '';
+        return this.isValid ? `${this.fieldName} ${this.operator} ${this.formattedValue}` : '';
     }
 }
 
-const getWildCardValue = (val) => {
+const isWildCardOperator = matchType => {
+    return matchType === OperatorOptions.Contains.value 
+        || matchType === OperatorOptions.StartsWith.value
+        || matchType === OperatorOptions.EndsWith.value
+}
+
+const getMatchType = (operator, value) => {
+    const formmatedValue = value.trim().replace(/['"]+/g, '');
+    const hasLeftWildCard = formmatedValue.charAt(0) === '%';
+    const hasRightWildCard = formmatedValue.charAt(formmatedValue.length - 1) === '%';
+
+    if (hasLeftWildCard && hasRightWildCard) return OperatorOptions.Contains.value;
+    if (hasLeftWildCard) return OperatorOptions.StartsWith.value;
+    if (hasRightWildCard) return OperatorOptions.EndsWith.value;
+    
+    return LogicOperators[operator];
+}
+
+const getWildCardValue = (val, hasLeft = false, hasRight = false) => {
     if (isEmpty(val)) return null;
     const isString = val.match(/'(?:[^'\\]|\\.)*'/) !== null;
     const formmatedValue = isString ? val.replace(/['"]+/g, '') : val;
-    return isString ? `'${formmatedValue}%'` : `${formmatedValue}%`
+    return isString ? `'${hasLeft ? '%' : ''}${formmatedValue}${hasRight ? '%' : ''}'` : `${formmatedValue}%`
 }
 
 const parseFilterBy = (filterBy, matchType) => {
     if (!matchType) throw 'invalid matchType';
 
-    const statements = filterBy.split(new RegExp(` ${matchType.toUpperCase()} | ${matchType.toLowerCase()} `));
+    const statements = filterBy.split(new RegExp(` ${matchType.toUpperCase()} `));
     const rules = statements && statements.length > 0 ? statements.map(r => parseRule(r)) : [];
     return new ConditionalLogic(matchType, {...rules});
 }
@@ -254,6 +293,12 @@ const parseRule = (rule) => {
 
     if (!isValid) throw 'Invalid query, statement is missing operator';
 
-    const [ fieldName = '', matchValue = '' ] = rule.split(operator);
-    return new Rule({ fieldName: fieldName.trim(), matchValue : matchValue.trim(), matchType: matchValue.indexOf('%') > -1 ? OperatorOptions.Contains.value : LogicOperators[operator] });
+    let [ fieldName = '', matchValue = '' ] = rule.split(operator);
+    matchValue = matchValue.trim();
+    const matchType = getMatchType(operator, matchValue);
+    return new Rule({ 
+        fieldName: fieldName.trim(), 
+        matchValue : isWildCardOperator(matchType) ? matchValue.replace(/%/g, '') : matchValue, 
+        matchType: matchType 
+    });
 }
