@@ -2225,8 +2225,8 @@ private class EnvelopeConfigurationServiceTest {
 	@IsTest
 	static void test_queryEnvelopeConfigurationsForDisplay_success() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
-			EnvelopeConfiguration__c config1 = TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
-			EnvelopeConfiguration__c config2 = TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
+			TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
+			TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
 
 			Test.startTest();
 			List<EnvelopeConfiguration.Listing> listings = EnvelopeConfigurationService.queryEnvelopeConfigurationsForDisplay();
@@ -2244,11 +2244,11 @@ private class EnvelopeConfigurationServiceTest {
 	@IsTest
 	static void test_queryEnvelopeConfigurationsForDisplay_failure() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
-			EnvelopeConfiguration__c config1 = TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
-			EnvelopeConfiguration__c config2 = TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
+			TestUtils.createEnvelopeConfiguration('Config 1', 'Account');
+			TestUtils.createEnvelopeConfiguration('Config 2', 'Account');
 			Test.startTest();
 			try {
-				List<EnvelopeConfiguration.Listing> listings = EnvelopeConfigurationService.queryEnvelopeConfigurationsForDisplay();
+				EnvelopeConfigurationService.queryEnvelopeConfigurationsForDisplay();
 				throw new AssertException('Expected failure');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -2257,124 +2257,126 @@ private class EnvelopeConfigurationServiceTest {
 		}
 	}
 
-	@isTest
+	@IsTest
 	static void test_mergeRecipients() {
-		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-		s.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
-		insert s;
-		Recipient r1 = new EnvelopeConfiguration.RelatedRecipients(
-			new Query.Relationship(
-				false,
-				'OpportunityContactRoles',
-				'Opportunity Contact Roles',
-				'OpportunityContactRole'),
-			null,
-			Recipient.TYPE_SIGNER,
-			1,
-			true,
-			new List<String> { 'r1', 'r2' },
-			false,
-			false);
-		Recipient r2 = Recipient.fromSource(
-			null,
-			null,
-			null,
-			'r3',
-			new Entity(UserInfo.getUserId()))
-			.withRoutingOrder(3);
-		Contact c1 = TestUtils.createContact();
-		Recipient r3 = Recipient.fromSource(
-			null,
-			null,
-			null,
-			'r4',
-			new Entity(c1.Id))
-			.withRoutingOrder(4);
-		Lead l = TestUtils.createLead();
-		Recipient r4 = Recipient.fromSource(
-			null,
-			null,
-			null,
-			'r5',
-			new Entity(l.Id))
-			.withRoutingOrder(5);
-		Recipient r5 = new EnvelopeConfiguration.LookupRecipient(
-			new Query.Relationship(
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.RecipientResolvers__c = Application.classNamespacePrefix + 'DefaultRecipientResolver';
+			insert s;
+			Recipient r1 = new EnvelopeConfiguration.RelatedRecipients(
+				new Query.Relationship(
+					false,
+					'OpportunityContactRoles',
+					'Opportunity Contact Roles',
+					'OpportunityContactRole'),
+				null,
+				Recipient.TYPE_SIGNER,
+				1,
 				true,
-				'Owner',
-				'Owner',
-				'User'),
-			Recipient.TYPE_CARBON_COPY,
-			6,
-			'r6',
-			false,
-			false);
-		Contact c2 = TestUtils.createContact();
-		Recipient r6 = Recipient.fromSource(
-			null,
-			null,
-			null,
-			'r7',
-			new Entity(c2.Id))
-			.withRoutingOrder(7);
+				new List<String> { 'r1', 'r2' },
+				false,
+				false);
+			Recipient r2 = Recipient.fromSource(
+				null,
+				null,
+				null,
+				'r3',
+				new Entity(UserInfo.getUserId()))
+				.withRoutingOrder(3);
+			Contact c1 = TestUtils.createContact();
+			Recipient r3 = Recipient.fromSource(
+				null,
+				null,
+				null,
+				'r4',
+				new Entity(c1.Id))
+				.withRoutingOrder(4);
+			Lead l = TestUtils.createLead();
+			Recipient r4 = Recipient.fromSource(
+				null,
+				null,
+				null,
+				'r5',
+				new Entity(l.Id))
+				.withRoutingOrder(5);
+			Recipient r5 = new EnvelopeConfiguration.LookupRecipient(
+				new Query.Relationship(
+					true,
+					'Owner',
+					'Owner',
+					'User'),
+				Recipient.TYPE_CARBON_COPY,
+				6,
+				'r6',
+				false,
+				false);
+			Contact c2 = TestUtils.createContact();
+			Recipient r6 = Recipient.fromSource(
+				null,
+				null,
+				null,
+				'r7',
+				new Entity(c2.Id))
+				.withRoutingOrder(7);
 
-		Test.startTest();
-		List<Recipient> result = EnvelopeConfigurationService.mergeRecipients(new List<Recipient> {
-			r1, r2, r3, r4, r5, r6
-		});
-		Test.stopTest();
+			Test.startTest();
+			List<Recipient> result = EnvelopeConfigurationService.mergeRecipients(new List<Recipient> {
+				r1, r2, r3, r4, r5, r6
+			});
+			Test.stopTest();
 
-		System.assertEquals(6, Collection.size(result));
+			System.assertEquals(6, Collection.size(result));
 
-		System.assertNotEquals(null, result[0]);
-		System.assert(result[0] instanceof EnvelopeConfiguration.RelatedRecipients);
-		System.assertEquals(null, result[0].name);
-		System.assertEquals(null, result[0].email);
-		System.assertEquals(null, result[0].phone);
-		System.assertEquals(null, result[0].source);
-		System.assertEquals('r1', result[0].getRoleName());
-		System.assertEquals(1, result[0].routingOrder);
+			System.assertNotEquals(null, result[0]);
+			System.assert(result[0] instanceof EnvelopeConfiguration.RelatedRecipients);
+			System.assertEquals(null, result[0].name);
+			System.assertEquals(null, result[0].email);
+			System.assertEquals(null, result[0].phone);
+			System.assertEquals(null, result[0].source);
+			System.assertEquals('r1', result[0].getRoleName());
+			System.assertEquals(1, result[0].routingOrder);
 
-		System.assertNotEquals(null, result[1]);
-		System.assertEquals(UserInfo.getName(), result[1].name);
-		System.assertEquals(UserInfo.getUserEmail(), result[1].email);
-		System.assertEquals([SELECT Phone FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1].Phone, result[1].phone);
-		System.assertEquals('r3', result[1].getRoleName());
-		System.assertEquals(UserInfo.getUserId(), result[1].getSourceId());
-		System.assertEquals(3, result[1].routingOrder);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(UserInfo.getName(), result[1].name);
+			System.assertEquals(UserInfo.getUserEmail(), result[1].email);
+			System.assertEquals([SELECT Phone FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1].Phone, result[1].phone);
+			System.assertEquals('r3', result[1].getRoleName());
+			System.assertEquals(UserInfo.getUserId(), result[1].getSourceId());
+			System.assertEquals(3, result[1].routingOrder);
 
-		System.assertNotEquals(null, result[2]);
-		System.assertEquals(c1.Name, result[2].name);
-		System.assertEquals(c1.Email, result[2].email);
-		System.assertEquals(c1.Phone, result[2].phone);
-		System.assertEquals('r4', result[2].getRoleName());
-		System.assertEquals(c1.Id, result[2].getSourceId());
-		System.assertEquals(4, result[2].routingOrder);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(c1.Name, result[2].name);
+			System.assertEquals(c1.Email, result[2].email);
+			System.assertEquals(c1.Phone, result[2].phone);
+			System.assertEquals('r4', result[2].getRoleName());
+			System.assertEquals(c1.Id, result[2].getSourceId());
+			System.assertEquals(4, result[2].routingOrder);
 
-		System.assertNotEquals(null, result[3]);
-		System.assertEquals(l.Name, result[3].name);
-		System.assertEquals(l.Email, result[3].email);
-		System.assertEquals(l.Phone, result[3].phone);
-		System.assertEquals('r5', result[3].getRoleName());
-		System.assertEquals(l.Id, result[3].getSourceId());
-		System.assertEquals(5, result[3].routingOrder);
+			System.assertNotEquals(null, result[3]);
+			System.assertEquals(l.Name, result[3].name);
+			System.assertEquals(l.Email, result[3].email);
+			System.assertEquals(l.Phone, result[3].phone);
+			System.assertEquals('r5', result[3].getRoleName());
+			System.assertEquals(l.Id, result[3].getSourceId());
+			System.assertEquals(5, result[3].routingOrder);
 
-		System.assertNotEquals(null, result[4]);
-		System.assert(result[4] instanceof EnvelopeConfiguration.LookupRecipient);
-		System.assertEquals(null, result[4].name);
-		System.assertEquals(null, result[4].email);
-		System.assertEquals(null, result[4].phone);
-		System.assertEquals('r6', result[4].getRoleName());
-		System.assertEquals(null, result[4].source);
-		System.assertEquals(6, result[4].routingOrder);
+			System.assertNotEquals(null, result[4]);
+			System.assert(result[4] instanceof EnvelopeConfiguration.LookupRecipient);
+			System.assertEquals(null, result[4].name);
+			System.assertEquals(null, result[4].email);
+			System.assertEquals(null, result[4].phone);
+			System.assertEquals('r6', result[4].getRoleName());
+			System.assertEquals(null, result[4].source);
+			System.assertEquals(6, result[4].routingOrder);
 
-		System.assertNotEquals(null, result[5]);
-		System.assertEquals(c2.Name, result[5].name);
-		System.assertEquals(c2.Email, result[5].email);
-		System.assertEquals(c2.Phone, result[5].phone);
-		System.assertEquals('r7', result[5].getRoleName());
-		System.assertEquals(c2.Id, result[5].getSourceId());
-		System.assertEquals(7, result[5].routingOrder);
+			System.assertNotEquals(null, result[5]);
+			System.assertEquals(c2.Name, result[5].name);
+			System.assertEquals(c2.Email, result[5].email);
+			System.assertEquals(c2.Phone, result[5].phone);
+			System.assertEquals('r7', result[5].getRoleName());
+			System.assertEquals(c2.Id, result[5].getSourceId());
+			System.assertEquals(7, result[5].routingOrder);
+		}
 	}
 
 	@IsTest

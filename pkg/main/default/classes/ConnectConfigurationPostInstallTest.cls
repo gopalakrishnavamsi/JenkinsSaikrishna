@@ -124,23 +124,25 @@ private class ConnectConfigurationPostInstallTest {
 
 	@IsTest
 	static void test_execute_account_not_configured() {
-		ConnectConfigurationPostInstall ccpi = new ConnectConfigurationPostInstall();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			ConnectConfigurationPostInstall ccpi = new ConnectConfigurationPostInstall();
 
-		Test.startTest();
-		PostInstallResults result = ccpi.execute(
-			UserInfo.getOrganizationId(),
-			UserInfo.getUserId(),
-			new Version(2, 4),
-			false,
-			true);
-		Test.stopTest();
+			Test.startTest();
+			PostInstallResults result = ccpi.execute(
+				UserInfo.getOrganizationId(),
+				UserInfo.getUserId(),
+				new Version(2, 4),
+				false,
+				true);
+			Test.stopTest();
 
-		System.assertNotEquals(null, result);
-		System.assert(result.success);
-		System.assertEquals(1, Collection.size(result.getSteps()));
-		System.assertEquals(Label.CreateConnectConfiguration, result.getSteps()[0].name);
-		System.assertEquals(PostInstallResults.StepStatus.SKIPPED, result.getSteps()[0].status);
-		System.assertEquals(Label.AccountNotConfigured, result.getSteps()[0].context);
+			System.assertNotEquals(null, result);
+			System.assert(result.success);
+			System.assertEquals(1, Collection.size(result.getSteps()));
+			System.assertEquals(Label.CreateConnectConfiguration, result.getSteps()[0].name);
+			System.assertEquals(PostInstallResults.StepStatus.SKIPPED, result.getSteps()[0].status);
+			System.assertEquals(Label.AccountNotConfigured, result.getSteps()[0].context);
+		}
 	}
 
 	@IsTest

@@ -811,7 +811,7 @@ private class AuthServiceTest {
 			System.assertEquals(0, Collection.size([
 				SELECT Id
 				FROM PermissionSetAssignment
-				WHERE AssigneeId IN :(NEW Set<Id> { u1.Id, u2.Id })
+				WHERE AssigneeId IN :(new Set<Id> { u1.Id, u2.Id })
 				AND PermissionSetId IN (
 					SELECT Id
 					FROM PermissionSet
@@ -2544,36 +2544,38 @@ private class AuthServiceTest {
 	static void test_completeSetup_success() {
 		DocuSignAPIMock.success();
 		MetadataAPIMock.success();
-		AuthService.RootCredentials rootCredentials = new AuthService.RootCredentials(
-			DocuSign.Environment.HQTEST0,
-			new Url('https://account-hqtest0.dev.docusign.net'),
-			new Url('https://api-hqtest0.dev.docusign.net'),
-			UUID.randomUUID().toString(),
-			UUID.randomUUID().toString());
-		LoginInformation loginInfo = new LoginInformation(
-			UUID.randomUUID(),
-			UUID.randomUUID().toString(),
-			UUID.randomUUID() + '@unit.test',
-			true,
-			new List<LoginInformation.Account> {
-				new LoginInformation.Account(
-					UUID.randomUUID(),
-					(Long)TestUtils.randomInteger(10000000),
-					UUID.randomUUID().toString(),
-					'https://hqtest0.dev.docusign.net',
-					true)
-			});
-		LoginInformation.Account account = loginInfo.accounts[0];
-		Credentials.AccessToken accessToken = new Credentials.AccessToken(
-			'unit.test',
-			Datetime.now().addHours(1));
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			AuthService.RootCredentials rootCredentials = new AuthService.RootCredentials(
+				DocuSign.Environment.HQTEST0,
+				new Url('https://account-hqtest0.dev.docusign.net'),
+				new Url('https://api-hqtest0.dev.docusign.net'),
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString());
+			LoginInformation loginInfo = new LoginInformation(
+				UUID.randomUUID(),
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				true,
+				new List<LoginInformation.Account> {
+					new LoginInformation.Account(
+						UUID.randomUUID(),
+						(Long)TestUtils.randomInteger(10000000),
+						UUID.randomUUID().toString(),
+						'https://hqtest0.dev.docusign.net',
+						true)
+				});
+			LoginInformation.Account account = loginInfo.accounts[0];
+			Credentials.AccessToken accessToken = new Credentials.AccessToken(
+				'unit.test',
+				Datetime.now().addHours(1));
 
-		Test.startTest();
-		System.assert(AuthService.completeSetup(
-			rootCredentials,
-			loginInfo,
-			account,
-			accessToken));
-		Test.stopTest();
+			Test.startTest();
+			System.assert(AuthService.completeSetup(
+				rootCredentials,
+				loginInfo,
+				account,
+				accessToken));
+			Test.stopTest();
+		}
 	}
 }

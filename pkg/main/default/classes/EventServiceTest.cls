@@ -290,314 +290,318 @@ private class EventServiceTest {
 
 	@IsTest
 	static void test_mergeEnvelopeOptions_undefined_options() {
-		UUID eId = UUID.randomUUID();
-		Envelope__c e = new Envelope__c(
-			DocuSignId__c = String.valueOf(eId),
-			Options__c = JSON.serialize(new Envelope.Options(
-				true,
-				null,
-				null,
-				null)));
-		insert e;
-		Map<UUID, List<EventService.EnvelopeUpdates>> envelopeUpdates =
-			new Map<UUID, List<EventService.EnvelopeUpdates>> {
-				eId => new List<EventService.EnvelopeUpdates> {
-					new EventService.EnvelopeUpdates(
-						eId,
-						UserInfo.getUserId(),
-						Envelope.STATUS_SENT,
-						null,
-						new Map<String, List<EventService.RecipientUpdates>> {
-							Recipient.STATUS_SENT => new List<EventService.RecipientUpdates> {
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null)
-							}
-						}),
-					new EventService.EnvelopeUpdates(
-						eId,
-						UserInfo.getUserId(),
-						Envelope.STATUS_COMPLETED,
-						new Map<String, Object> {
-							'xx' => 'xx1',
-							'yy' => 'yy1'
-						},
-						new Map<String, List<EventService.RecipientUpdates>> {
-							Recipient.STATUS_COMPLETED => new List<EventService.RecipientUpdates> {
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null)
-							}
-						})
-				}
-			};
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			UUID eId = UUID.randomUUID();
+			Envelope__c e = new Envelope__c(
+				DocuSignId__c = String.valueOf(eId),
+				Options__c = JSON.serialize(new Envelope.Options(
+					true,
+					null,
+					null,
+					null)));
+			insert e;
+			Map<UUID, List<EventService.EnvelopeUpdates>> envelopeUpdates =
+				new Map<UUID, List<EventService.EnvelopeUpdates>> {
+					eId => new List<EventService.EnvelopeUpdates> {
+						new EventService.EnvelopeUpdates(
+							eId,
+							UserInfo.getUserId(),
+							Envelope.STATUS_SENT,
+							null,
+							new Map<String, List<EventService.RecipientUpdates>> {
+								Recipient.STATUS_SENT => new List<EventService.RecipientUpdates> {
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null)
+								}
+							}),
+						new EventService.EnvelopeUpdates(
+							eId,
+							UserInfo.getUserId(),
+							Envelope.STATUS_COMPLETED,
+							new Map<String, Object> {
+								'xx' => 'xx1',
+								'yy' => 'yy1'
+							},
+							new Map<String, List<EventService.RecipientUpdates>> {
+								Recipient.STATUS_COMPLETED => new List<EventService.RecipientUpdates> {
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null)
+								}
+							})
+					}
+				};
 
-		Test.startTest();
-		Map<UUID, List<EventService.EnvelopeUpdates>> result = EventService.mergeEnvelopeOptions(envelopeUpdates);
-		Test.stopTest();
+			Test.startTest();
+			Map<UUID, List<EventService.EnvelopeUpdates>> result = EventService.mergeEnvelopeOptions(envelopeUpdates);
+			Test.stopTest();
 
-		System.assertNotEquals(null, result);
-		System.assertEquals(new Set<UUID> { eId }, result.keySet());
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<UUID> { eId }, result.keySet());
 
-		List<EventService.EnvelopeUpdates> eus = result.get(eId);
-		System.assertNotEquals(null, eus);
-		System.assertEquals(2, Collection.size(eus));
+			List<EventService.EnvelopeUpdates> eus = result.get(eId);
+			System.assertNotEquals(null, eus);
+			System.assertEquals(2, Collection.size(eus));
 
-		EventService.EnvelopeUpdates eu = eus[0];
-		System.assertNotEquals(null, eu);
-		System.assertEquals(eId, eu.id);
-		System.assertEquals(UserInfo.getUserId(), eu.sourceId);
-		System.assertEquals(Envelope.STATUS_SENT, eu.status);
-		System.assertEquals(new Map<String, Object>(), eu.updates);
+			EventService.EnvelopeUpdates eu = eus[0];
+			System.assertNotEquals(null, eu);
+			System.assertEquals(eId, eu.id);
+			System.assertEquals(UserInfo.getUserId(), eu.sourceId);
+			System.assertEquals(Envelope.STATUS_SENT, eu.status);
+			System.assertEquals(new Map<String, Object>(), eu.updates);
 
-		eu = eus[1];
-		System.assertNotEquals(null, eu);
-		System.assertEquals(eId, eu.id);
-		System.assertEquals(UserInfo.getUserId(), eu.sourceId);
-		System.assertEquals(Envelope.STATUS_COMPLETED, eu.status);
-		System.assertEquals(new Map<String, Object> {
-			'xx' => 'xx1',
-			'yy' => 'yy1'
-		}, eu.updates);
+			eu = eus[1];
+			System.assertNotEquals(null, eu);
+			System.assertEquals(eId, eu.id);
+			System.assertEquals(UserInfo.getUserId(), eu.sourceId);
+			System.assertEquals(Envelope.STATUS_COMPLETED, eu.status);
+			System.assertEquals(new Map<String, Object> {
+				'xx' => 'xx1',
+				'yy' => 'yy1'
+			}, eu.updates);
+		}
 	}
 
 	@IsTest
 	static void test_mergeEnvelopeOptions_success() {
-		UUID eId1 = UUID.randomUUID(),
-			eId2 = UUID.randomUUID(),
-			eId3 = UUID.randomUUID();
-		Envelope__c e1 = new Envelope__c(
-			DocuSignId__c = String.valueOf(eId1),
-			Options__c = JSON.serialize(new Envelope.Options(
-				true,
-				null,
-				new Map<String, Map<String, Object>> {
-					Envelope.STATUS_SENT => new Map<String, Object> {
-						'a' => 'a1'
-					},
-					Envelope.STATUS_COMPLETED => new Map<String, Object> {
-						'b' => 'b1',
-						'c' => 'c1'
-					}
-				},
-				new Map<String, Map<String, Object>> {
-					Recipient.STATUS_DELIVERED => new Map<String, Object> {
-						'd' => 'd1',
-						'e' => 'e1'
-					},
-					Recipient.STATUS_COMPLETED => new Map<String, Object> {
-						'f' => 'f1'
-					}
-				})));
-		Envelope__c e2 = new Envelope__c(
-			DocuSignId__c = String.valueOf(eId2),
-			Options__c = null);
-		Envelope__c e3 = new Envelope__c(
-			DocuSignId__c = String.valueOf(eId3),
-			Options__c = JSON.serialize(new Envelope.Options(
-				true,
-				null,
-				new Map<String, Map<String, Object>> {
-					Envelope.STATUS_VOIDED => new Map<String, Object> {
-						'd' => 'd1',
-						'e' => 'e1',
-						'f' => 'f1'
-					}
-				},
-				null)));
-		insert new List<Envelope__c> { e1, e2, e3 };
-		Map<UUID, List<EventService.EnvelopeUpdates>> envelopeUpdates
-			= new Map<UUID, List<EventService.EnvelopeUpdates>> {
-				eId1 => new List<EventService.EnvelopeUpdates> {
-					new EventService.EnvelopeUpdates(
-						eId1,
-						UserInfo.getUserId(),
-						Envelope.STATUS_SENT,
-						null,
-						new Map<String, List<EventService.RecipientUpdates>> {
-							Recipient.STATUS_SENT => new List<EventService.RecipientUpdates> {
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null)
-							},
-							Recipient.STATUS_DELIVERED => new List<EventService.RecipientUpdates> {
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null)
-							},
-							Recipient.STATUS_COMPLETED => new List<EventService.RecipientUpdates> {
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null),
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null)
-							}
-						}),
-					new EventService.EnvelopeUpdates(
-						eId1,
-						UserInfo.getUserId(),
-						Envelope.STATUS_COMPLETED,
-						new Map<String, Object> {
-							'xx' => 'xx1',
-							'yy' => 'yy1'
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			UUID eId1 = UUID.randomUUID(),
+				eId2 = UUID.randomUUID(),
+				eId3 = UUID.randomUUID();
+			Envelope__c e1 = new Envelope__c(
+				DocuSignId__c = String.valueOf(eId1),
+				Options__c = JSON.serialize(new Envelope.Options(
+					true,
+					null,
+					new Map<String, Map<String, Object>> {
+						Envelope.STATUS_SENT => new Map<String, Object> {
+							'a' => 'a1'
 						},
-						new Map<String, List<EventService.RecipientUpdates>> {
-							Recipient.STATUS_COMPLETED => new List<EventService.RecipientUpdates> {
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null),
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null),
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null),
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null)
-							}
-						})
-				},
-				eId2 => new List<EventService.EnvelopeUpdates> {
-					new EventService.EnvelopeUpdates(
-						eId2,
-						UserInfo.getOrganizationId(),
-						Envelope.STATUS_COMPLETED,
-						new Map<String, Object> {
-							'z' => 'z1'
+						Envelope.STATUS_COMPLETED => new Map<String, Object> {
+							'b' => 'b1',
+							'c' => 'c1'
+						}
+					},
+					new Map<String, Map<String, Object>> {
+						Recipient.STATUS_DELIVERED => new Map<String, Object> {
+							'd' => 'd1',
+							'e' => 'e1'
 						},
-						null)
-				},
-				eId3 => new List<EventService.EnvelopeUpdates> {
-					new EventService.EnvelopeUpdates(
-						eId3,
-						UserInfo.getOrganizationId(),
-						Envelope.STATUS_VOIDED,
-						new Map<String, Object>(),
-						new Map<String, List<EventService.RecipientUpdates>> {
-							Recipient.STATUS_SENT => new List<EventService.RecipientUpdates> {
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null),
-								new EventService.RecipientUpdates(
-									UUID.randomUUID(),
-									UserInfo.getUserId(),
-									null)
-							}
-						})
-				}
-			};
+						Recipient.STATUS_COMPLETED => new Map<String, Object> {
+							'f' => 'f1'
+						}
+					})));
+			Envelope__c e2 = new Envelope__c(
+				DocuSignId__c = String.valueOf(eId2),
+				Options__c = null);
+			Envelope__c e3 = new Envelope__c(
+				DocuSignId__c = String.valueOf(eId3),
+				Options__c = JSON.serialize(new Envelope.Options(
+					true,
+					null,
+					new Map<String, Map<String, Object>> {
+						Envelope.STATUS_VOIDED => new Map<String, Object> {
+							'd' => 'd1',
+							'e' => 'e1',
+							'f' => 'f1'
+						}
+					},
+					null)));
+			insert new List<Envelope__c> { e1, e2, e3 };
+			Map<UUID, List<EventService.EnvelopeUpdates>> envelopeUpdates
+				= new Map<UUID, List<EventService.EnvelopeUpdates>> {
+					eId1 => new List<EventService.EnvelopeUpdates> {
+						new EventService.EnvelopeUpdates(
+							eId1,
+							UserInfo.getUserId(),
+							Envelope.STATUS_SENT,
+							null,
+							new Map<String, List<EventService.RecipientUpdates>> {
+								Recipient.STATUS_SENT => new List<EventService.RecipientUpdates> {
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null)
+								},
+								Recipient.STATUS_DELIVERED => new List<EventService.RecipientUpdates> {
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null)
+								},
+								Recipient.STATUS_COMPLETED => new List<EventService.RecipientUpdates> {
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null),
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null)
+								}
+							}),
+						new EventService.EnvelopeUpdates(
+							eId1,
+							UserInfo.getUserId(),
+							Envelope.STATUS_COMPLETED,
+							new Map<String, Object> {
+								'xx' => 'xx1',
+								'yy' => 'yy1'
+							},
+							new Map<String, List<EventService.RecipientUpdates>> {
+								Recipient.STATUS_COMPLETED => new List<EventService.RecipientUpdates> {
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null),
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null),
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null),
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null)
+								}
+							})
+					},
+					eId2 => new List<EventService.EnvelopeUpdates> {
+						new EventService.EnvelopeUpdates(
+							eId2,
+							UserInfo.getOrganizationId(),
+							Envelope.STATUS_COMPLETED,
+							new Map<String, Object> {
+								'z' => 'z1'
+							},
+							null)
+					},
+					eId3 => new List<EventService.EnvelopeUpdates> {
+						new EventService.EnvelopeUpdates(
+							eId3,
+							UserInfo.getOrganizationId(),
+							Envelope.STATUS_VOIDED,
+							new Map<String, Object>(),
+							new Map<String, List<EventService.RecipientUpdates>> {
+								Recipient.STATUS_SENT => new List<EventService.RecipientUpdates> {
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null),
+									new EventService.RecipientUpdates(
+										UUID.randomUUID(),
+										UserInfo.getUserId(),
+										null)
+								}
+							})
+					}
+				};
 
-		Test.startTest();
-		Map<UUID, List<EventService.EnvelopeUpdates>> result = EventService.mergeEnvelopeOptions(envelopeUpdates);
-		Test.stopTest();
+			Test.startTest();
+			Map<UUID, List<EventService.EnvelopeUpdates>> result = EventService.mergeEnvelopeOptions(envelopeUpdates);
+			Test.stopTest();
 
-		System.assertNotEquals(null, result);
-		System.assertEquals(new Set<UUID> { eId1, eId2, eId3 }, result.keySet());
+			System.assertNotEquals(null, result);
+			System.assertEquals(new Set<UUID> { eId1, eId2, eId3 }, result.keySet());
 
-		List<EventService.EnvelopeUpdates> eus = result.get(eId1);
-		System.assertEquals(2, Collection.size(eus));
+			List<EventService.EnvelopeUpdates> eus = result.get(eId1);
+			System.assertEquals(2, Collection.size(eus));
 
-		EventService.EnvelopeUpdates eu = eus[0];
-		System.assertNotEquals(null, eu);
-		System.assertEquals(eId1, eu.id);
-		System.assertEquals(UserInfo.getUserId(), eu.sourceId);
-		System.assertEquals(Envelope.STATUS_SENT, eu.status);
-		System.assertEquals(new Map<String, Object> { 'a' => 'a1' }, eu.updates);
+			EventService.EnvelopeUpdates eu = eus[0];
+			System.assertNotEquals(null, eu);
+			System.assertEquals(eId1, eu.id);
+			System.assertEquals(UserInfo.getUserId(), eu.sourceId);
+			System.assertEquals(Envelope.STATUS_SENT, eu.status);
+			System.assertEquals(new Map<String, Object> { 'a' => 'a1' }, eu.updates);
 
-		System.assertNotEquals(null, eu.recipients);
-		System.assertEquals(
-			new Set<String> { Recipient.STATUS_SENT, Recipient.STATUS_DELIVERED, Recipient.STATUS_COMPLETED },
-			eu.recipients.keySet());
+			System.assertNotEquals(null, eu.recipients);
+			System.assertEquals(
+				new Set<String> { Recipient.STATUS_SENT, Recipient.STATUS_DELIVERED, Recipient.STATUS_COMPLETED },
+				eu.recipients.keySet());
 
-		System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_SENT));
-		System.assertEquals(1, Collection.size(eu.recipients.get(Recipient.STATUS_SENT)));
-		System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_SENT)[0]);
-		System.assertEquals(
-			new Map<String, Object>(),
-			eu.recipients.get(Recipient.STATUS_SENT)[0].updates);
+			System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_SENT));
+			System.assertEquals(1, Collection.size(eu.recipients.get(Recipient.STATUS_SENT)));
+			System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_SENT)[0]);
+			System.assertEquals(
+				new Map<String, Object>(),
+				eu.recipients.get(Recipient.STATUS_SENT)[0].updates);
 
-		System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_DELIVERED));
-		System.assertEquals(1, Collection.size(eu.recipients.get(Recipient.STATUS_DELIVERED)));
-		System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_DELIVERED)[0]);
-		System.assertEquals(
-			new Map<String, Object> { 'd' => 'd1', 'e' => 'e1' },
-			eu.recipients.get(Recipient.STATUS_DELIVERED)[0].updates);
+			System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_DELIVERED));
+			System.assertEquals(1, Collection.size(eu.recipients.get(Recipient.STATUS_DELIVERED)));
+			System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_DELIVERED)[0]);
+			System.assertEquals(
+				new Map<String, Object> { 'd' => 'd1', 'e' => 'e1' },
+				eu.recipients.get(Recipient.STATUS_DELIVERED)[0].updates);
 
-		System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_COMPLETED));
-		System.assertEquals(2, Collection.size(eu.recipients.get(Recipient.STATUS_COMPLETED)));
-		for (EventService.RecipientUpdates ru : eu.recipients.get(Recipient.STATUS_COMPLETED)) {
-			System.assertNotEquals(null, ru);
-			System.assertEquals(new Map<String, Object> { 'f' => 'f1' }, ru.updates);
-		}
+			System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_COMPLETED));
+			System.assertEquals(2, Collection.size(eu.recipients.get(Recipient.STATUS_COMPLETED)));
+			for (EventService.RecipientUpdates ru : eu.recipients.get(Recipient.STATUS_COMPLETED)) {
+				System.assertNotEquals(null, ru);
+				System.assertEquals(new Map<String, Object> { 'f' => 'f1' }, ru.updates);
+			}
 
-		eu = eus[1];
-		System.assertNotEquals(null, eu);
-		System.assertEquals(eId1, eu.id);
-		System.assertEquals(UserInfo.getUserId(), eu.sourceId);
-		System.assertEquals(Envelope.STATUS_COMPLETED, eu.status);
-		System.assertEquals(new Map<String, Object> {
-			'b' => 'b1',
-			'c' => 'c1',
-			'xx' => 'xx1',
-			'yy' => 'yy1'
-		}, eu.updates);
+			eu = eus[1];
+			System.assertNotEquals(null, eu);
+			System.assertEquals(eId1, eu.id);
+			System.assertEquals(UserInfo.getUserId(), eu.sourceId);
+			System.assertEquals(Envelope.STATUS_COMPLETED, eu.status);
+			System.assertEquals(new Map<String, Object> {
+				'b' => 'b1',
+				'c' => 'c1',
+				'xx' => 'xx1',
+				'yy' => 'yy1'
+			}, eu.updates);
 
-		System.assertNotEquals(null, eu.recipients);
-		System.assertEquals(new Set<String> { Recipient.STATUS_COMPLETED }, eu.recipients.keySet());
+			System.assertNotEquals(null, eu.recipients);
+			System.assertEquals(new Set<String> { Recipient.STATUS_COMPLETED }, eu.recipients.keySet());
 
-		System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_COMPLETED));
-		System.assertEquals(4, Collection.size(eu.recipients.get(Recipient.STATUS_COMPLETED)));
-		for (EventService.RecipientUpdates ru : eu.recipients.get(Recipient.STATUS_COMPLETED)) {
-			System.assertNotEquals(null, ru);
-			System.assertEquals(new Map<String, Object> { 'f' => 'f1' }, ru.updates);
-		}
+			System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_COMPLETED));
+			System.assertEquals(4, Collection.size(eu.recipients.get(Recipient.STATUS_COMPLETED)));
+			for (EventService.RecipientUpdates ru : eu.recipients.get(Recipient.STATUS_COMPLETED)) {
+				System.assertNotEquals(null, ru);
+				System.assertEquals(new Map<String, Object> { 'f' => 'f1' }, ru.updates);
+			}
 
-		eus = result.get(eId2);
-		System.assertEquals(1, Collection.size(eus));
+			eus = result.get(eId2);
+			System.assertEquals(1, Collection.size(eus));
 
-		eu = eus[0];
-		System.assertNotEquals(null, eu);
-		System.assertEquals(eId2, eu.id);
-		System.assertEquals(UserInfo.getOrganizationId(), eu.sourceId);
-		System.assertEquals(Envelope.STATUS_COMPLETED, eu.status);
-		System.assertEquals(new Map<String, Object> { 'z' => 'z1' }, eu.updates);
-		System.assert(Collection.isEmpty(eu.recipients));
+			eu = eus[0];
+			System.assertNotEquals(null, eu);
+			System.assertEquals(eId2, eu.id);
+			System.assertEquals(UserInfo.getOrganizationId(), eu.sourceId);
+			System.assertEquals(Envelope.STATUS_COMPLETED, eu.status);
+			System.assertEquals(new Map<String, Object> { 'z' => 'z1' }, eu.updates);
+			System.assert(Collection.isEmpty(eu.recipients));
 
-		eus = result.get(eId3);
-		System.assertEquals(1, Collection.size(eus));
+			eus = result.get(eId3);
+			System.assertEquals(1, Collection.size(eus));
 
-		eu = eus[0];
-		System.assertNotEquals(null, eu);
-		System.assertEquals(eId3, eu.id);
-		System.assertEquals(UserInfo.getOrganizationId(), eu.sourceId);
-		System.assertEquals(Envelope.STATUS_VOIDED, eu.status);
-		System.assertEquals(new Map<String, Object> {
-			'd' => 'd1',
-			'e' => 'e1',
-			'f' => 'f1'
-		}, eu.updates);
+			eu = eus[0];
+			System.assertNotEquals(null, eu);
+			System.assertEquals(eId3, eu.id);
+			System.assertEquals(UserInfo.getOrganizationId(), eu.sourceId);
+			System.assertEquals(Envelope.STATUS_VOIDED, eu.status);
+			System.assertEquals(new Map<String, Object> {
+				'd' => 'd1',
+				'e' => 'e1',
+				'f' => 'f1'
+			}, eu.updates);
 
-		System.assertNotEquals(null, eu.recipients);
-		System.assertEquals(new Set<String> { Recipient.STATUS_SENT }, eu.recipients.keySet());
+			System.assertNotEquals(null, eu.recipients);
+			System.assertEquals(new Set<String> { Recipient.STATUS_SENT }, eu.recipients.keySet());
 
-		System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_SENT));
-		System.assertEquals(2, Collection.size(eu.recipients.get(Recipient.STATUS_SENT)));
-		for (EventService.RecipientUpdates ru : eu.recipients.get(Recipient.STATUS_SENT)) {
-			System.assertNotEquals(null, ru);
-			System.assertEquals(new Map<String, Object>(), ru.updates);
+			System.assertNotEquals(null, eu.recipients.get(Recipient.STATUS_SENT));
+			System.assertEquals(2, Collection.size(eu.recipients.get(Recipient.STATUS_SENT)));
+			for (EventService.RecipientUpdates ru : eu.recipients.get(Recipient.STATUS_SENT)) {
+				System.assertNotEquals(null, ru);
+				System.assertEquals(new Map<String, Object>(), ru.updates);
+			}
 		}
 	}
 
