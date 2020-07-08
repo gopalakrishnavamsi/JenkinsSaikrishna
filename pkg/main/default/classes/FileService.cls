@@ -195,23 +195,38 @@ public with sharing class FileService {
 	 * Retrieves all files followed by the logged in user
 	 * @param offset - offset from where the records should be returned
 	 * @param size - count of records requested
-	 * @return List<ContentDocument>
+	 * @return Files followed by the user.
 	 */
-	public static List<ContentDocument> getFilesFollowedByUser(Integer offset, Integer size) {
-		Permissions.verifyIsDocuSignUser();
-		List<Id> contentDocIds = new List<Id>();
-		for (EntitySubscription es : [
-			SELECT ParentId
-			FROM EntitySubscription
-			WHERE SubscriberId = :UserInfo.getUserId()
-			AND Parent.Type = 'ContentDocument'
-			ORDER BY CreatedDate DESC
-			LIMIT :size
-			OFFSET :offset
-		]) {
-			contentDocIds.add(es.ParentId);
+	public static List<ContentDocument> getFilesFollowedByUser(
+		final Integer offset,
+		final Integer size) {
+
+		// Check FLS up front to avoid System.QueryException:
+		// Polymorphic field Parent is not supported in query using WITH SECURITY_ENFORCED
+		Permissions.verifyIsQueryable(ContentDocument.getSObjectType(), new List<String> {
+			'Title', 'FileType', 'FileExtension', 'ContentSize'
+		});
+
+		// EntitySubscription is supported only when Chatter is enabled. Hard references to it will cause installation
+		// to fail on orgs that have Chatter disabled, or prevent installation altogether.
+		List<ContentDocument> result = new List<ContentDocument>();
+		if (Salesforce.isValidSObject('EntitySubscription')) {
+			Id userId = UserInfo.getUserId();
+			String query = 'SELECT TYPEOF Parent WHEN ContentDocument THEN '
+				+ 'Id, Title, FileType, FileExtension, ContentSize END '
+				+ 'FROM EntitySubscription '
+				+ 'WHERE SubscriberId = :userId '
+				+ 'AND Parent.Type = \'ContentDocument\' '
+				+ 'ORDER BY CreatedDate DESC '
+				+ 'LIMIT :size '
+				+ 'OFFSET :offset';
+			for (SObject obj : System.Database.query(query)) {
+				if (obj == null) continue;
+
+				result.add((ContentDocument)obj.getSObject('Parent'));
+			}
 		}
-		return getContentDocuments(contentDocIds);
+		return result;
 	}
 
 	/**
@@ -257,8 +272,8 @@ public with sharing class FileService {
 
 	/**
 	 * Links the provided Content Documents with the Source Object
-	 * @param List<Id> contentDocumentIds - list of Content Document Ids
-	 * @param Id sourceObjectId - Source Record Id to which the document has to be linked
+	 * @param contentDocumentIds - list of Content Document Ids
+	 * @param sourceObjectId - Source Record Id to which the document has to be linked
 	 * @return List<ContentDocumentLink>
 	 */
 	public static String linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {

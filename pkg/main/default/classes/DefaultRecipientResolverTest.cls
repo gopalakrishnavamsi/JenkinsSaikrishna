@@ -775,13 +775,25 @@ private class DefaultRecipientResolverTest {
 
 	@IsTest
 	static void test_getRelatedRecipients_Lead_lookup() {
+		if (!Salesforce.isValidSObject('Campaign')
+			|| !Salesforce.isValidSObject('CampaignMember')) {
+
+			return;
+		}
+
 		Lead l1 = TestUtils.createLead();
 		Lead l2 = TestUtils.createLead();
-		Campaign c1 = new Campaign(Name = UUID.randomUUID().toString());
+		SObject c1 = Salesforce.getSObjectType('Campaign').newSObject();
+		c1.put('Name', UUID.randomUUID().toString());
 		insert c1;
-		CampaignMember cm1 = new CampaignMember(CampaignId = c1.Id, LeadId = l1.Id);
-		CampaignMember cm2 = new CampaignMember(CampaignId = c1.Id, LeadId = l2.Id);
-		insert new List<CampaignMember> { cm1, cm2 };
+		SObjectType cmType = Salesforce.getSObjectType('CampaignMember');
+		SObject cm1 = cmType.newSObject();
+		cm1.put('CampaignId', c1.Id);
+		cm1.put('LeadId', l1.Id);
+		SObject cm2 = cmType.newSObject();
+		cm2.put('CampaignId', c1.Id);
+		cm2.put('LeadId', l2.Id);
+		insert new List<SObject> { cm1, cm2 };
 		DefaultRecipientResolver rr = new DefaultRecipientResolver();
 
 		Test.startTest();

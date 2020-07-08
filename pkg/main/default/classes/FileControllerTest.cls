@@ -157,39 +157,19 @@ private class FileControllerTest {
 
 	@IsTest
 	private static void test_getFilesFollowedByUser_success() {
-		User u = UserMock.createDocuSignUser();
-		System.runAs(u) {
-			Opportunity o = TestUtils.createOpportunity();
-			String title = UUID.randomUUID().toString();
-			String base64Data = EncodingUtil.base64Encode(Blob.valueOf(UUID.randomUUID().toString()));
-			ContentVersion result = FileService.DB.createFile(o.Id, title, base64Data);
-			System.assertNotEquals(null, result);
-			System.assertNotEquals(null, result.Id);
+		if (!Salesforce.isValidSObject('EntitySubscription')) return;
 
-			EntitySubscription es = new EntitySubscription(ParentId = result.ContentDocumentId, SubscriberId = u.Id);
-			insert es;
+		ContentVersion cv = TestUtils.createContentVersion();
+		SObject es = Salesforce.getSObjectType('EntitySubscription').newSObject();
+		es.put('ParentId', cv.ContentDocumentId);
+		es.put('SubscriberId', UserInfo.getUserId());
+		insert es;
 
-			Test.startTest();
-			List<ContentDocument> docs = FileController.getFilesFollowedByUser(offset, countOfRecords);
-			Test.stopTest();
+		Test.startTest();
+		List<ContentDocument> result = FileController.getFilesFollowedByUser(offset, countOfRecords);
+		Test.stopTest();
 
-			System.assertEquals(docs.size(), 1, 'Should be able to retrieve files followed by logged in user');
-			System.assertEquals(docs[0].Title, title);
-		}
-	}
-
-	@IsTest
-	private static void test_getFilesFollowedByUser_failure() {
-		System.runAs(UserMock.createUser()) {
-			Test.startTest();
-			try {
-				FileController.getFilesFollowedByUser(offset, countOfRecords);
-				throw new AssertException('Expected failure');
-			} catch (Exception ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
-			}
-			Test.stopTest();
-		}
+		System.assertEquals(1, Collection.size(result));
 	}
 
 	@IsTest
