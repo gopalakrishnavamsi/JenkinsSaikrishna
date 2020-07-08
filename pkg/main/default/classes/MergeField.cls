@@ -2,6 +2,18 @@ public class MergeField implements Comparable {
 
 	public static final Integer MAX_DEPTH = 5; // TODO: Move max depth to config
 	public static final Integer MAX_CHILD_DEPTH = 2;
+	public static MergeField getCurrentDateField() {
+		return new MergeField(
+			null,
+			'CurrentDate',
+			'DATETIME',
+			'Current Date',
+			null,
+			null,
+			false,
+			0
+		); 
+	}
 	@TestVisible
 	private static final String TYPE_CHILD_RELATIONSHIP = 'CHILD_RELATIONSHIP';
 	// updating the list of blocked fields

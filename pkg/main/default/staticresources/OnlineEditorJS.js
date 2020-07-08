@@ -182,10 +182,12 @@ jQuery(document).ready(function ($) {
       function (resolve, reject) {
         if (!sourceId) reject(Labels.templateInvalidSourceLabel);
         try {
+          var convertedQuery = convertQuery(queryTree);
           Visualforce.remoting.Manager.invokeAction(
             RemoteActions.getMergeData,
             sourceId,
-            JSON.stringify(queryTree),
+            convertedQuery.queryTree,
+            convertedQuery.useCurrentDate,
             function (result, event) {
               if (event.status) {
                 resolve(result);
@@ -211,6 +213,19 @@ jQuery(document).ready(function ($) {
       }
     );
   }
+
+  function convertQuery(queryTree) {
+    var useCurrentDate = false;
+    queryTree.fields = queryTree.fields ? queryTree.fields.filter(function(f) {
+      if (f.name === 'CurrentDate') useCurrentDate = true;
+      return f.name !== 'CurrentDate';
+    }) : [];
+    return {
+      queryTree: JSON.stringify(queryTree),
+      useCurrentDate: useCurrentDate
+    }
+  }
+
 
   function getEntityRecords(index, searchValue) {
     return new Promise(

@@ -280,7 +280,7 @@ private class OnlineEditorControllerTest {
 			});
 
 			Test.startTest();
-			OnlineEditorController.Query result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q));
+			OnlineEditorController.Query result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q), false);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -743,6 +743,7 @@ private class OnlineEditorControllerTest {
 			List<OnlineEditorController.Field> onlineEditorFields = new List<OnlineEditorController.Field>();
 			onlineEditorFields.add(new OnlineEditorController.Field('Name', '', 'String'));
 			onlineEditorFields.add(new OnlineEditorController.Field('Account.Name', '', 'String'));
+			OnlineEditorController.Field currentDateField = OnlineEditorController.getCurrentDateField();
 
 			List<OnlineEditorController.Field> onlineEditorFieldsChild2 = new List<OnlineEditorController.Field>();
 			onlineEditorFieldsChild2.add(new OnlineEditorController.Field('Contact.Name', '', 'String'));
@@ -755,9 +756,8 @@ private class OnlineEditorControllerTest {
 			});
 
 			Test.startTest();
-			OnlineEditorController.Query result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q));
+			OnlineEditorController.Query result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q), true);
 			Test.stopTest();
-
 			System.assertNotEquals(null, result);
 			System.assertEquals(q.type, result.type);
 			System.assertEquals(q.relationship, result.relationship);
@@ -772,6 +772,9 @@ private class OnlineEditorControllerTest {
 			System.assertEquals(q.children[0].fields[0].type, result.children[0].fields[0].type);
 			System.assertEquals(q.children[0].fields[0].name, result.children[0].fields[0].name);
 			System.assertEquals(q.children[0].children, result.children[0].children);
+			System.assertEquals(result.fields.size(), 3);
+			System.assertEquals(result.fields[2].type, currentDateField.type);
+			System.assertEquals(result.fields[2].name, currentDateField.name);
 		}
 	}
 
@@ -800,7 +803,7 @@ private class OnlineEditorControllerTest {
 			});
 
 			Test.startTest();
-			OnlineEditorController.Query result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q));
+			OnlineEditorController.Query result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q), false);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -847,7 +850,7 @@ private class OnlineEditorControllerTest {
 			OnlineEditorController.Query result;
 			Test.startTest();
 			try {
-				result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q));
+				result = OnlineEditorController.getMergeData(o.Id, JSON.serialize(q), false);
 			} catch(UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeAdministratorOrGenerator, ex.getMessage());
 			}
@@ -864,7 +867,7 @@ private class OnlineEditorControllerTest {
 			Exception ex;
 			Test.startTest();
 			try {
-				result = OnlineEditorController.getMergeData(a.Id, JSON.serialize(q));
+				result = OnlineEditorController.getMergeData(a.Id, JSON.serialize(q), false);
 			} catch(Exception error) {
 				ex = error;
 			}
@@ -873,6 +876,25 @@ private class OnlineEditorControllerTest {
 			System.assertNotEquals(result, null);
 			System.assertEquals(result.isEmpty(), true);
 			System.assertEquals(q.isEmpty(), true);
+		}
+	}
+	
+	@IsTest
+	static void test_getMergeData_currentDate() {
+		System.runAs(UserMock.createDocuSignGenerator()) {
+			Schema.Account a = TestUtils.createAccount();
+			OnlineEditorController.Query q = new OnlineEditorController.Query(null, null, null, null);
+			OnlineEditorController.Field currentDateField = OnlineEditorController.getCurrentDateField();
+			Exception ex;
+			Test.startTest();
+			OnlineEditorController.Query result = OnlineEditorController.getMergeData(a.Id, JSON.serialize(q), true);
+			Test.stopTest();
+			System.assertEquals(ex, null);
+			System.assertNotEquals(result, null);
+			//System.assertEquals(result.isEmpty(), false);
+			System.assertEquals(result.fields.size(), 1);
+			System.assertEquals(result.fields[0].name, currentDateField.name);
+			System.assertEquals(result.fields[0].type, currentDateField.type);
 		}
 	}	
 
@@ -888,6 +910,17 @@ private class OnlineEditorControllerTest {
 			}
 			Test.stopTest();
 		}
+	}
+
+	@IsTest
+	static void test_getCurrentDateField() {
+		OnlineEditorController.Field currentDateField = OnlineEditorController.getCurrentDateField();
+		String currentDate = String.valueOf(System.today());
+		Test.startTest();
+		System.assertEquals(currentDateField.name, 'CurrentDate');
+		System.assertEquals(currentDate, currentDateField.value);
+		System.assertEquals(currentDateField.type, 'datetime');
+		Test.stopTest();
 	}
 
 	@IsTest

@@ -79,6 +79,15 @@ public with sharing class OnlineEditorController extends Controller {
 		}
 	}
 
+	@TestVisible
+	private static OnlineEditorController.Field getCurrentDateField() {
+		return new OnlineEditorController.Field(
+			'CurrentDate',
+			String.valueOf(System.today()),
+			'datetime'
+		);
+	}
+
 	public class MergeFieldsResult {
 		@AuraEnabled
 		public OnlineEditorMergeObject[] objects { get; private set; }
@@ -538,7 +547,11 @@ public with sharing class OnlineEditorController extends Controller {
 		Permissions.verifyIsDocuSignAdministrator();
 
 		OnlineEditorMergeObject obj = getObjectsRecursively(Salesforce.getSObjectType(sObjectType));
-		return new MergeFieldsResult(new List<OnlineEditorMergeObject> { obj }, getFieldsRecursively(obj));
+		MergeFieldsResult results = new MergeFieldsResult(new List<OnlineEditorMergeObject> { obj }, getFieldsRecursively(obj));
+		List<MergeField> currentObjectFields = results.fields.get(obj.name);
+		currentObjectFields.add(MergeField.getCurrentDateField());
+		results.fields.put(obj.name, currentObjectFields);
+		return results;
 	}
 
 	@RemoteAction
@@ -583,7 +596,8 @@ public with sharing class OnlineEditorController extends Controller {
 	@RemoteAction
 	public static OnlineEditorController.Query getMergeData(
 		final Id sourceId,
-		final String queryJson) {
+		final String queryJson,
+		final Boolean useCurrentField) {
 
 		try {
 			if (sourceId == null || String.isBlank(queryJson) == null) {
@@ -595,13 +609,17 @@ public with sharing class OnlineEditorController extends Controller {
 				OnlineEditorController.Query.class);
 
 			//Only convert queries with type && (fields || child queries)
-			if (onlineEditorQuery.isEmpty()) return onlineEditorQuery;
+			if (onlineEditorQuery.isEmpty()) {
+				if (useCurrentField) onlineEditorQuery.fields.add(getCurrentDateField());
+				return onlineEditorQuery;
+			}
 
 			// TODO: Chorus should support Word query results
 			Gen.Query genQuery = convertQuery(onlineEditorQuery);
 			SObject result = GenService.getMergeData(sourceId, genQuery);
-
-			return convertData(onlineEditorQuery, result);
+			OnlineEditorController.Query convertedData = convertData(onlineEditorQuery, result);
+			if (useCurrentField) convertedData.fields.add(getCurrentDateField());
+			return convertedData;
 		} catch (Exception ex) {
 			LoggerService.getInstance().exception(ex, 'Failed to get online editor merge data');
 			throw ex;
