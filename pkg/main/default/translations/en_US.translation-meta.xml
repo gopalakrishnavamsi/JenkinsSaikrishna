@@ -3670,6 +3670,22 @@
 		<name>VoidEnvelope</name>
 	</customLabels>
 	<customLabels>
+		<label>Void Envelope</label>
+		<name>VoidEnvelopeHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>By voiding this envelope, you are canceling all remaining signing activities. Recipients who have finished signing will receive an email notification that includes your reason for voiding. Recipients who have not yet signed will not be able to view or sign the enclosed documents.</label>
+		<name>VoidEnvelopeConfirmation</name>
+	</customLabels>
+	<customLabels>
+		<label>Reason for voiding envelope.</label>
+		<name>VoidReason</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} characters remaining.</label>
+		<name>VoidReasonLengthRemaining</name>
+	</customLabels>
+	<customLabels>
 		<label>Your envelope was voided.</label>
 		<name>EnvelopeVoided</name>
 	</customLabels>

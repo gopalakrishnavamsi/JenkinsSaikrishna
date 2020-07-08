@@ -7154,6 +7154,38 @@
 		<value>Void</value>
 	</labels>
 	<labels>
+		<fullName>VoidEnvelopeHeader</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Void Envelope Header</shortDescription>
+		<value>Void Envelope</value>
+	</labels>
+	<labels>
+		<fullName>VoidEnvelopeConfirmation</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Void Envelope Confirmation</shortDescription>
+		<value>By voiding this envelope, you are canceling all remaining signing activities. Recipients who have finished signing will receive an email notification that includes your reason for voiding. Recipients who have not yet signed will not be able to view or sign the enclosed documents.</value>
+	</labels>
+	<labels>
+		<fullName>VoidReason</fullName>
+		<categories>Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Void Envelope Confirmation</shortDescription>
+		<value>Reason for voiding envelope.</value>
+	</labels>
+	<labels>
+		<fullName>VoidReasonLengthRemaining</fullName>
+		<categories>Status</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Void Envelope Length Remaining</shortDescription>
+		<value>{0} characters remaining.</value>
+	</labels>
+	<labels>
 		<fullName>EnvelopeVoided</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>

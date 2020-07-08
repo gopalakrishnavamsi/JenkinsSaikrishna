@@ -1,0 +1,8 @@
+.ds-void-reason-label {
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.ds-reason-length-remaining {
+    opacity: 0.5;
+}

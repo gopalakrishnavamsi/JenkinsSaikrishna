@@ -8,10 +8,9 @@
     <aura:attribute name="envelopes" type="List" access="private"/>
     <aura:attribute name="loading" type="Boolean" access="private"/>
     <aura:attribute name="errorMessage" type="String" access="private"/>
-    <aura:attribute name="envelopeActions" type="Object" access="private"/>
     <aura:attribute name="isAuthorized" type="Boolean" access="private" default="{!false}"/>
 
-    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
+    <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.initHandler}"/>
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
 
@@ -95,17 +94,9 @@
                                                                         <p class="slds-timeline__date">
                                                                             <c:DateTime datetime="{!envelope.sent}"/>
                                                                         </p>
-                                                                        <lightning:buttonMenu
-                                                                                iconSize="x-small"
-                                                                                menuAlignment="right"
-                                                                                onselect="{!c.handleEnvelopeAction}"
-                                                                                variant="border-filled">
-                                                                            <aura:iteration
-                                                                                    items="{!v.envelopeActions}"
-                                                                                    var="action">
-                                                                                <lightning:menuItem label="{!action.label}" value="{!action.value}"/>
-                                                                            </aura:iteration>
-                                                                        </lightning:buttonMenu>
+                                                                        <c:statusEnvelopeActions
+                                                                                envelopeId="{!envelope.docuSignId}"
+                                                                                onactioncompleted="{!c.initHandler}"/>
                                                                     </div>
                                                                 </div>
                                                             </div>

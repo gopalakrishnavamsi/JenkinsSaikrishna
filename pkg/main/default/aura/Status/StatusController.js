@@ -1,12 +1,12 @@
 ({
-  onChangeIsAuthorized: function(component, event, helper) {
+  initHandler: function (component, event, helper) {
     if (component.get('v.isAuthorized')) {
       component.set('v.loading', true);
       helper.initialize(component, helper);
     }
   },
 
-  toggleRecipientDetails: function(component, event) {
+  toggleRecipientDetails: function (component, event) {
     var targetEnvelopeIndex = parseInt(
       event.currentTarget.dataset.envelopeIndex,
       10
@@ -28,9 +28,9 @@
     }
   },
 
-  handleViewAllClick: function(component, event, helper) {
+  handleViewAllClick: function (component, event, helper) {
     var getStatusListViews = component.get('c.getStatusListViews');
-    getStatusListViews.setCallback(this, function(response) {
+    getStatusListViews.setCallback(this, function (response) {
       var state = response.getState();
       if (state === 'SUCCESS') {
         var listViews = response.getReturnValue();
@@ -51,7 +51,7 @@
     $A.enqueueAction(getStatusListViews);
   },
 
-  toggleEnvelopeDetails: function(component, event) {
+  toggleEnvelopeDetails: function (component, event) {
     var targetIndex = parseInt(event.getSource().get('v.value'), 10);
     var envelopes = component.find('envelope');
 
@@ -65,9 +65,5 @@
         break;
       }
     }
-  },
-
-  handleEnvelopeAction: function (component, event, helper) {
-    helper.handleEnvelopeAction(component, event, helper);
   }
 });

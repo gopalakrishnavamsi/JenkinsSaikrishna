@@ -1,0 +1,62 @@
+<template>
+    <!-- Envelope Actions -->
+    <lightning-button-menu
+            icon-size="x-small"
+            menu-alignment="right"
+            onselect={handleEnvelopeAction}
+            variant="border-filled">
+        <lightning-menu-item label={Labels.sendReminderLabel} value="reminder"></lightning-menu-item>
+        <lightning-menu-item label={Labels.voidEnvelopeLabel} value="void"></lightning-menu-item>
+    </lightning-button-menu>
+
+    <!-- Spinner -->
+    <lightning-spinner
+            variant="brand"
+            size="small"
+            if:true={showSpinner}
+    ></lightning-spinner>
+
+    <!-- Void Modal -->
+    <c-modal
+            header={Labels.voidEnvelopeHeaderLabel}
+            show-modal={showVoidModal}
+            onclose={closeVoidModal}>
+        <div slot="content" class="slds-p-around_medium">
+
+            <div class="slds-text-body_regular slds-m-bottom_medium">{Labels.voidEnvelopeConfirmationLabel}</div>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label ds-void-reason-label"
+                       for="textarea-void-reason">
+                    <abbr
+                            class="slds-required"
+                            title="required">* </abbr>{Labels.voidReasonLabel}</label>
+                <div class="slds-form-element__control">
+                    <textarea
+                            id="textarea-void-reason"
+                            required
+                            class="slds-textarea"
+                            value={voidReason}
+                            maxlength={voidReasonMaxLength}
+                            onkeyup={handleReasonChange}>
+                    </textarea>
+                    <span class="slds-text-body_small ds-reason-length-remaining">{voidReasonLengthRemaining}</span>
+                </div>
+
+            </div>
+        </div>
+        <div slot="footer">
+            <lightning-button
+                    label={Labels.cancelLabel}
+                    onclick={closeVoidModal}>
+            </lightning-button>
+            <lightning-button
+                    variant="brand"
+                    label={Labels.voidEnvelopeLabel}
+                    disabled={isVoidDisabled}
+                    onclick={voidEnvelopeAction}
+                    class="slds-m-left_x-small">
+            </lightning-button>
+        </div>
+    </c-modal>
+</template>
