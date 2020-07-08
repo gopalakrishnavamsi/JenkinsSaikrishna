@@ -4,6 +4,7 @@
     component.set('v.loading', true);
     component.set('v.showModal', false);
     var config = component.get('v.envelopeConfig');
+    config.options = self.getDefaultOptions();
     var configParameters = JSON.stringify(config);
     self.invokeAction(
       component,
@@ -51,5 +52,19 @@
       component.set('v.showModal', true);
     }
     component.set('v.loading', false);
+  },
+
+  getDefaultOptions : function () {
+    return {
+      includeDefaultAutoPlaceTags: false,
+      documentWriteBack: {
+        linkedEntityId: null,
+        nameFormat: null,
+        combineDocuments: false,
+        includeCertificateOfCompletion: false
+      },
+      envelopeEventUpdates: null,
+      recipientEventUpdates: null
+    };
   }
 });

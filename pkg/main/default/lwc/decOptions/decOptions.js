@@ -25,7 +25,6 @@ export default class DecOptions extends LightningElement {
   label = LABEL;
   context = createMessageContext();
   filenameOptions;
-  isWriteBack;
   isCertificateOfCompletion = false;
 
   connectedCallback() {
@@ -35,26 +34,36 @@ export default class DecOptions extends LightningElement {
         expireAfterDays: DEFAULT_EXPIRATION
       });
     }
-    this.filenameOptions = this.filenameChoices();
-    this.documentWriteBackName = this.filenameOptions[0];
-    this.isWriteBack = !isEmpty(this.options) &&
-        !isEmpty(this.options.documentWriteBack) &&
-        !isEmpty(this.options.documentWriteBack.nameFormat);
   }
 
   disconnectedCallback() {
     releaseMessageContext(this.context);
   }
 
-  filenameChoices() {
+  get filenameChoices() {
+    if(!isEmpty(this.filenameOptions)) {
+      return this.filenameOptions;
+    }
     let nameOptions;
-    let isCombineDocs = this.options.documentWriteBack.combineDocuments;
+    let isCombineDocs = !isEmpty(this.options) &&
+                        !isEmpty(this.options.documentWriteBack) &&
+                        this.options.documentWriteBack.combineDocuments === true ? true : false;
     if(isCombineDocs) {
       nameOptions = FILE_NAME_OPTIONS_COMBINED_DOCS;
     } else {
       nameOptions = FILE_NAME_OPTIONS_DEFAULT;
     }
     return nameOptions;
+  }
+
+  set filenameChoices(value) {
+    this.filenameOptions = value;
+  }
+
+  get isWriteBack() {
+    return !isEmpty(this.options) &&
+      !isEmpty(this.options.documentWriteBack) &&
+      !isEmpty(this.options.documentWriteBack.nameFormat);
   }
 
   get reminderOptions() {
@@ -102,11 +111,17 @@ export default class DecOptions extends LightningElement {
   }
 
   get documentWritebackFilename() {
+    if(!isEmpty(this.documentWriteBackName)) {
+      return this.documentWriteBackName;
+    }
     let nameFormat = !isEmpty(this.options) &&
         !isEmpty(this.options.documentWriteBack) &&
         !isEmpty(this.options.documentWriteBack.nameFormat);
-    this.documentWriteBackName = nameFormat ? this.options.documentWriteBack.nameFormat : this.filenameOptions[0].value;
-    return this.documentWriteBackName;
+    return nameFormat ? this.options.documentWriteBack.nameFormat : this.filenameChoices[0].value;
+  }
+
+  set documentWritebackFilename(value) {
+    this.documentWriteBackName = value;
   }
 
   get documentWritebackCertificateOfCompletion() {
@@ -165,13 +180,13 @@ export default class DecOptions extends LightningElement {
   }
 
   handleOnChangeOfDocumentWritebackOptions(event) {
-    this.isWriteBack = event.target.checked;
+    let writeBack = event.target.checked;
     let documentWriteBackUpdated = this.options.documentWriteBack;
-    if(this.isWriteBack) {
+    if(writeBack) {
       documentWriteBackUpdated =
           {...documentWriteBackUpdated,
             linkedEntityId: this.recordId,
-            nameFormat: this.filenameOptions[0].value};
+            nameFormat: this.filenameChoices[0].value};
     } else {
       let defaultOptions = getDefaultOptions().documentWriteBack;
       documentWriteBackUpdated =
@@ -187,10 +202,10 @@ export default class DecOptions extends LightningElement {
     let combineDocuments = event.target.checked;
     let documentWriteBackUpdated = this.options.documentWriteBack;
     documentWriteBackUpdated = {...documentWriteBackUpdated, combineDocuments: combineDocuments};
-    if(this.isCertificateOfCompletion === false) {
-      this.setFilenameOptions(this.isCertificateOfCompletion, documentWriteBackUpdated);
-    }
-    documentWriteBackUpdated = {...documentWriteBackUpdated, nameFormat: this.documentWriteBackName};
+    this.filenameChoices =
+      combineDocuments === true ? FILE_NAME_OPTIONS_COMBINED_DOCS : FILE_NAME_OPTIONS_DEFAULT;
+    this.documentWritebackFilename = this.filenameChoices[0].value;
+    documentWriteBackUpdated = {...documentWriteBackUpdated, nameFormat: this.documentWritebackFilename};
     genericEvent.call(this, 'documentwriteback', documentWriteBackUpdated, false);
   }
 
@@ -208,11 +223,5 @@ export default class DecOptions extends LightningElement {
         {...documentWriteBackUpdated,
         includeCertificateOfCompletion: this.isCertificateOfCompletion};
     genericEvent.call(this, 'documentwriteback', documentWriteBackUpdated, false);
-  }
-
-  setFilenameOptions(isCertificateOfCompletion, documentWriteBackUpdated) {
-    this.filenameOptions =
-        documentWriteBackUpdated.combineDocuments ? FILE_NAME_OPTIONS_COMBINED_DOCS : FILE_NAME_OPTIONS_DEFAULT;
-    this.documentWriteBackName = this.filenameOptions[0].value;
   }
 }
