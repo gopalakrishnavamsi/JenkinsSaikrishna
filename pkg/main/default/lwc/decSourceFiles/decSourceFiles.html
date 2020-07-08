@@ -7,24 +7,22 @@
     </lightning-input>
     <template if:true={attachSourceFiles}>
         <div class="slds-grid slds-m-top_small">
-            <div class="slds-col slds-size_1-of-5">
+            <div class="slds-col slds-size_1-of-5 ds-source-files-fit-content-width">
                 <div class="slds-form-element__label slds-no-flex">{label.documentSelection}</div>
-                <select
-                    class="slds-select"
+                <lightning-combobox
+                    value={sourceFilesType}
+                    options={sourceFilesMenuOptions}
                     onchange={handleSourceFilesChange}>
-                    <option value={sourceFilesTypes.LATEST} selected={isLatestSelected}>{label.latestDocument}</option>
-                    <option value={sourceFilesTypes.CONTAINS} selected={isContainsSelected}>{label.fileNameContainsPending}</option>
-                    <option value={sourceFilesTypes.ALL} selected={isAllSelected}>{label.allDocuments}</option>
-                </select>
+                </lightning-combobox>
             </div>
 
             <template if:true={isContainsSelected}>
-                <div class="slds-col slds-size_1-of-6 slds-m-left_medium">
+                <div class="slds-col slds-size_1-of-6 ds-source-files-fit-content-width slds-m-left_medium">
+                    <div class="slds-form-element__label slds-no-flex">{label.fileNameContains}</div>
                     <lightning-input
                         type="text"
                         value={containsValue}
-                        onchange={handleContainsValue}
-                        label={label.fileNameContains}>
+                        onchange={handleContainsValue}>
                     </lightning-input>
                 </div>
             </template>

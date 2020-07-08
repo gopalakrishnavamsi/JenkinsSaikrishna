@@ -434,4 +434,206 @@ private class SendingControllerTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_createDraftEnvelopeFromTemplate_unauthorized() {
+		System.runAs(UserMock.createUser()) {
+			Test.startTest();
+			try {
+				SendingController.createDraftEnvelopeFromTemplate(UserInfo.getUserId(), UserInfo.getUserId());
+				throw new AssertException('Expected failure');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createDraftEnvelopeFromTemplate_undefined_argument() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			Test.startTest();
+			try {
+				SendingController.createDraftEnvelopeFromTemplate(null, null);
+				throw new AssertException('Expected to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_createDraftEnvelopeFromTemplate_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			ContentVersion td = TestUtils.createContentVersion();
+			EnvelopeConfiguration ec = EnvelopeConfigurationService.DB.insertEnvelopeConfiguration(new EnvelopeConfiguration(
+				null,
+				UUID.randomUUID().toString(),
+				'Opportunity',
+				UUID.randomUUID(),
+				new List<Document> {
+					new EnvelopeConfiguration.TemplateDocument(
+						null,
+						td.ContentDocumentId,
+						1,
+						td.Title,
+						td.FileExtension,
+						false,
+						false),
+					new EnvelopeConfiguration.SourceFiles(
+						null,
+						new Query.Filter(
+							'ContentDocument.Title LIKE \'a%\'', // expect cva2
+							'ContentDocument.Title DESC',
+							1
+						),
+						2,
+						false,
+						false)
+				},
+				new List<Recipient> {
+					new EnvelopeConfiguration.LookupRecipient(
+						new Query.Relationship(
+							true,
+							'Owner',
+							'Owner',
+							'User'),
+						Recipient.TYPE_CARBON_COPY,
+						1,
+						'r1',
+						false,
+						false)
+						.withEmailSettings(new Recipient.EmailSettings(
+						Localization.EN,
+						null,
+						'For account {!Opportunity.Account.Name}',
+						'From our company, {!$Organization.Name}')),
+					new EnvelopeConfiguration.RelatedRecipients(
+						new Query.Relationship(
+							false,
+							'OpportunityContactRoles',
+							'Opportunity Contact Roles',
+							'OpportunityContactRole'),
+						new Query.Filter(
+							'Role IN (\'r2\', \'r3\')',
+							null,
+							2),
+						Recipient.TYPE_SIGNER,
+						2,
+						true,
+						new List<String> { 'r2', 'r3' },
+						false,
+						false)
+						.withNote('Dear {!$Recipient.Name}, check this out'),
+					Recipient.fromSource(
+						UUID.randomUUID().toString(),
+						UUID.randomUUID() + '@unit.test',
+						String.valueOf(TestUtils.randomInteger(10000000)),
+						'r4',
+						new Entity(UserInfo.getUserId()))
+				},
+				new List<CustomField> {
+					CustomField.newTextField('n1', 'v1', true, true),
+					CustomField.newListField('n1', 'v1', new List<String> { 'v1', 'v2', 'v3' }, true, true)
+				},
+				new Notifications(
+					true,
+					1,
+					2,
+					true,
+					3,
+					4),
+				'Subject {!Opportunity.Name}',
+				'From {!$User.FirstName} {!$User.LastName}',
+				new List<Tab> {
+					Tab.newMergeField(Tab.TYPE_TEXT, 'Opportunity.Name', true, true),
+					Tab.newMergeField(Tab.TYPE_NUMBER, 'Opportunity.Amount', true, true)
+				},
+				Envelope.DEFAULT_PERMISSIONS,
+				Envelope.DEFAULT_OPTIONS,
+				true));
+			Schema.Account a = TestUtils.createAccount();
+			Opportunity o = TestUtils.createOpportunity(a.Id);
+			TestUtils.createContentVersion(o.Id, 'a1', 'pdf');
+			ContentVersion cva2 = TestUtils.createContentVersion(o.Id, 'a2', 'pdf');
+			TestUtils.createContentVersion(o.Id, 'b1', 'pdf');
+			Contact c1 = TestUtils.createContact(a.Id, 'a1', 'z1', 'a1.z1@unit.test', '11111111');
+			TestUtils.createOpportunityContactRole(o.Id, c1.Id, 'r1');
+			Contact c2 = TestUtils.createContact(a.Id, 'a2', 'z2', 'a2.z2@unit.test', '22222222');
+			OpportunityContactRole ocr2 = TestUtils.createOpportunityContactRole(o.Id, c2.Id, 'r2');
+			Contact c3 = TestUtils.createContact(a.Id, 'b1', 'z3', 'b1.z3@unit.test', '33333333');
+			OpportunityContactRole ocr3 = TestUtils.createOpportunityContactRole(o.Id, c3.Id, 'r3');
+
+			Test.startTest();
+			SendingController.DraftEnvelope draftEnvelope = SendingController.createDraftEnvelopeFromTemplate(ec.id, o.Id);
+			Envelope result = draftEnvelope.envelope;
+			Test.stopTest();
+
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(ec.id, result.envelopeConfigurationId);
+
+			System.assertEquals(2, Collection.size(result.documents));
+			System.assertNotEquals(null, result.documents[0]);
+			System.assertEquals(Document.TYPE_TEMPLATE, result.documents[0].type);
+			System.assertEquals(1, result.documents[0].sequence);
+			System.assertEquals(ec.name, result.documents[0].name);
+			System.assertEquals(String.valueOf(ec.docuSignId), result.documents[0].sourceId);
+			System.assert(result.documents[0].readOnly);
+			System.assert(result.documents[0].required);
+
+			System.assertNotEquals(null, result.documents[1]);
+			System.assertEquals(null, result.documents[1].id);
+			System.assertEquals(Document.TYPE_FILE, result.documents[1].type);
+			System.assertEquals(2, result.documents[1].sequence);
+			System.assertEquals(cva2.Title, result.documents[1].name);
+			System.assertEquals(cva2.FileExtension, result.documents[1].extension);
+			System.assertEquals(cva2.ContentSize, result.documents[1].size);
+			System.assertNotEquals(null, result.documents[1].lastModified);
+			System.assertEquals(cva2.Id, result.documents[1].sourceId);
+			System.assert(!result.documents[1].readOnly);
+			System.assert(!result.documents[1].required);
+
+			System.assertEquals(4, Collection.size(result.recipients));
+			System.assertNotEquals(null, result.recipients[0]);
+			System.assertEquals(UserInfo.getName(), result.recipients[0].name);
+			System.assertEquals(UserInfo.getUserEmail(), result.recipients[0].email);
+			System.assertEquals('r1', result.recipients[0].getRoleName());
+			System.assertNotEquals(null, result.recipients[0].emailSettings);
+			System.assertEquals('For account ' + a.Name, result.recipients[0].emailSettings.subject);
+			System.assertEquals('From our company, ' + UserInfo.getOrganizationName(), result.recipients[0].emailSettings.message);
+			System.assertEquals(null, result.recipients[0].note);
+
+			System.assertNotEquals(null, result.recipients[1]);
+			System.assertEquals(ocr2.Contact.Name, result.recipients[1].name);
+			System.assertEquals(ocr2.Contact.Email, result.recipients[1].email);
+			System.assertEquals(ocr2.Role, result.recipients[1].getRoleName());
+			System.assertEquals(null, result.recipients[1].emailSettings);
+			System.assertEquals('Dear ' + result.recipients[1].name + ', check this out', result.recipients[1].note);
+
+			System.assertNotEquals(null, result.recipients[2]);
+			System.assertEquals(ocr3.Contact.Name, result.recipients[2].name);
+			System.assertEquals(ocr3.Contact.Email, result.recipients[2].email);
+			System.assertEquals(ocr3.Role, result.recipients[2].getRoleName());
+			System.assertEquals(null, result.recipients[2].emailSettings);
+			System.assertEquals('Dear ' + result.recipients[2].name + ', check this out', result.recipients[2].note);
+
+			System.assertNotEquals(null, result.recipients[3]);
+			System.assertEquals(UserInfo.getName(), result.recipients[3].name);
+			System.assertEquals(UserInfo.getUserEmail(), result.recipients[3].email);
+			System.assertEquals('r4', result.recipients[3].getRoleName());
+			System.assertEquals(UserInfo.getUserId(), result.recipients[3].getSourceId());
+
+			System.assertEquals(2, Collection.size(result.customFields));
+			System.assertNotEquals(null, result.notifications);
+			System.assertNotEquals(null, result.options);
+			System.assertEquals('Subject ' + o.Name, result.emailSubject);
+			System.assertEquals('From ' + UserInfo.getName(), result.emailMessage);
+			System.assertNotEquals(null, result.senderPermissions);
+			System.assertNotEquals(null, result.source);
+			System.assertEquals(o.Id, result.source.id);
+		}
+	}
 }

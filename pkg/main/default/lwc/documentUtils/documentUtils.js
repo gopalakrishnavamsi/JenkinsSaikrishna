@@ -74,13 +74,33 @@ const SOURCE_FILES_TYPES = {
   ALL: 'all'
 };
 
+const SOURCE_FILES_MENU_OPTIONS = [
+  {
+    label: LABEL.latestDocument,
+    value: SOURCE_FILES_TYPES.LATEST
+  },
+  {
+    label: LABEL.fileNameContainsPending,
+    value: SOURCE_FILES_TYPES.CONTAINS
+  },
+  {
+    label: LABEL.allDocuments,
+    value: SOURCE_FILES_TYPES.ALL
+  }
+];
+
+const LATEST_SOURCE_FILES_ORDER_BY = 'ContentDocument.LatestPublishedVersion.LastModifiedDate DESC';
+const FILE_NAME_FILTER_PREFIX = 'ContentDocument.Title LIKE \'%';
+const FILE_NAME_FILTER_SUFFIX = '%\'';
+const FILE_NAME_CONTAINS_ORDER_BY = 'ContentDocument.Title ASC';
+
 const getDefaultSourceFiles = (sequence = 2) => {
   return {
     id: DOCUMENT_TYPE_SOURCE_FILES, // placeholder ID to bypass null ID error on rendering
     type: DOCUMENT_TYPE_SOURCE_FILES,
     filter: {
       filterBy: '',
-      orderBy: 'CreatedDate DESC',
+      orderBy: LATEST_SOURCE_FILES_ORDER_BY,
       maximumRecords: 1
     },
     sequence,
@@ -109,5 +129,10 @@ export {
   getDefaultSourceFiles,
   getDefaultTemplateDocument,
   SOURCE_FILES_TYPES,
-  TEMPLATE_DOCUMENT_ACTIONS
+  SOURCE_FILES_MENU_OPTIONS,
+  TEMPLATE_DOCUMENT_ACTIONS,
+  LATEST_SOURCE_FILES_ORDER_BY,
+  FILE_NAME_FILTER_PREFIX,
+  FILE_NAME_FILTER_SUFFIX,
+  FILE_NAME_CONTAINS_ORDER_BY
 }

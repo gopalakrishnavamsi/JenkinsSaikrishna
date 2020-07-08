@@ -20,10 +20,11 @@ import DEC_UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/DecUpdateNotifi
 import {
   isEmpty,
   subscribeToMessageChannel,
-  showError
+  showError,
+  format
 } from 'c/utils';
 import { getDefaultOptions } from 'c/optionsUtils';
-import { DOCUMENT_TYPE_SOURCE_FILES } from 'c/documentUtils';
+import { DOCUMENT_TYPE_SOURCE_FILES, FILE_NAME_FILTER_PREFIX, FILE_NAME_FILTER_SUFFIX } from 'c/documentUtils';
 import { LABEL } from 'c/setupUtils';
 
 //apex methods
@@ -346,7 +347,17 @@ export default class DecSetupConfig extends LightningElement {
     } else {
       processedFields.recipients = configurationData.recipients.map(r => ({...r, id: null}));
     }
-    processedFields.documents = configurationData.documents.map(doc => ({...doc, id: null}));
+    processedFields.documents = configurationData.documents.map((doc) => {
+      if (this.attachSourceFiles && doc.type === DOCUMENT_TYPE_SOURCE_FILES) {
+        if (!isEmpty(doc.filter.filterBy)) {
+          doc.filter.filterBy = format('{0}{1}{2}', FILE_NAME_FILTER_PREFIX, doc.filter.filterBy, FILE_NAME_FILTER_SUFFIX);
+        }
+      }
+      return {
+        ... doc,
+        id: null
+      };
+    });
     return JSON.stringify({
       ...configurationData,
       ...processedFields

@@ -118,6 +118,26 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
+	@AuraEnabled
+	public static DraftEnvelope createDraftEnvelopeFromTemplate(
+		final Id envelopeConfigurationId,
+		final Id sourceId) {
+		try {
+			if (envelopeConfigurationId == null || sourceId == null) throw new DocuSignException(Label.UndefinedArgument);
+
+			Envelope envelope = EnvelopeConfigurationService.getEnvelope(envelopeConfigurationId, new Entity(sourceId));
+			return new DraftEnvelope(
+				envelope,
+				null,
+				null,
+				null,
+				RecipientService.getDefaultRoles(),
+				Localization.isEmailLocalizationEnabled() ? Localization.getEmailSettings() : new List<Recipient.EmailSettings>());
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get draft envelope from template');
+		}
+	}
+
 	@AuraEnabled(Cacheable = true)
 	public static List<Document> getLinkedDocuments(final Id sourceId) {
 		try {

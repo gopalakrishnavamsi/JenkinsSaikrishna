@@ -27,7 +27,7 @@ const LABEL = {
     documents,
     recipients,
     prepareAndSend
-}
+};
 
 const PROGRESS_STEP = {
     DOCUMENTS: '1',

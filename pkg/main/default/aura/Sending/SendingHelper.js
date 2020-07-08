@@ -11,15 +11,23 @@
     if (component.get('v.isESignatureEnabled')) {
       var updated = false;
       var files = component.get('v.files');
-      this.invokeAction(component, component.get('c.createDraftEnvelope'),
-        {
-          sourceId: sourceId,
-          files: files
-        },
+      var envelopeTemplateId = component.get('v.envelopeTemplateId');
+      var fromEnvelopeTemplate = !$A.util.isEmpty(envelopeTemplateId);
+      var action = fromEnvelopeTemplate ? component.get('c.createDraftEnvelopeFromTemplate') : component.get('c.createDraftEnvelope');
+      var parameters = fromEnvelopeTemplate ? {
+        envelopeConfigurationId: envelopeTemplateId,
+        sourceId: sourceId
+      } : {
+        sourceId: sourceId,
+        files: files
+      };
+      this.invokeAction(component, action, parameters,
         function (result) {
           // Add front-end properties to documents
-          if (!$A.util.isEmpty(result.documents)) {
-            result.documents.forEach(function (d) {
+          var documents = fromEnvelopeTemplate ? result.envelope.documents : result.documents;
+          var recipients = fromEnvelopeTemplate ? result.envelope.recipients : result.recipients;
+          if (!$A.util.isEmpty(documents)) {
+            documents.forEach(function (d) {
               var isFileSelected = !$A.util.isEmpty(files) && (files.indexOf(d.sourceId) >= 0);
               self.addDocumentProperties(d, isFileSelected);
               if (isFileSelected) {
@@ -28,7 +36,7 @@
             });
           }
 
-          result.documents.sort(function (a, b) {
+          documents.sort(function (a, b) {
             if (!a['selected'] && b['selected'])
               return 1;
             if (a['selected'] && !b['selected'])
@@ -36,13 +44,13 @@
             return a['selected'] - b['selected'];
           });
 
-          if (!updated && !$A.util.isEmpty(result.documents)) {
-            result.documents[0].selected = true;
+          if (!updated && !$A.util.isEmpty(documents)) {
+            documents[0].selected = true;
             updated = true;
           }
 
-          if (!$A.util.isEmpty(result.recipients)) {
-            result.recipients.forEach(function (r) {
+          if (!$A.util.isEmpty(recipients)) {
+            recipients.forEach(function (r) {
               r = self.addRecipientProperties(r);
               r.role = {}; // TODO: Roles only apply to templates for now.
             });
@@ -60,13 +68,12 @@
             });
           }
           var placeholders = component.get('v.placeholderRecipients');
-          var recipients = [];
           if (!$A.util.isEmpty(placeholders) && !$A.util.isEmpty(placeholders.recipients)) {
             placeholders.recipients.forEach(function (r) {
               r.isPlaceHolder = true;
             });
-            recipients = placeholders.recipients.concat(result.recipients || []);
-          } else recipients = result.recipients;
+            recipients = placeholders.recipients.concat(recipients || []);
+          }
           var defaultRoles = result.defaultRoles.reduce(function (rolesMap, role) {
             rolesMap[role.name.toLowerCase()] = role;
             return rolesMap;
@@ -84,7 +91,7 @@
           component.set('v.defaultEmailSubject', result.envelope.emailSubject);
           component.set('v.defaultEmailMessage', result.envelope.emailMessage);
           component.set('v.availableTemplates', result.templates);
-          component.set('v.documents', result.documents);
+          component.set('v.documents', documents);
           component.set('v.recipients', recipients);
           component.set('v.defaultRoles', defaultRoles);
           component.set('v.emailLocalizations', result.emailLocalizations);

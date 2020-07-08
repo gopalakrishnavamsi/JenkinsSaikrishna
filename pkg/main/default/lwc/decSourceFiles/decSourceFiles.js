@@ -2,7 +2,15 @@ import { LightningElement, api} from 'lwc';
 
 // utility functions
 import {isEmpty} from 'c/utils';
-import {LABEL, SOURCE_FILES_TYPES} from 'c/documentUtils';
+import {
+    LABEL,
+    SOURCE_FILES_TYPES,
+    SOURCE_FILES_MENU_OPTIONS,
+    FILE_NAME_FILTER_PREFIX,
+    FILE_NAME_FILTER_SUFFIX,
+    LATEST_SOURCE_FILES_ORDER_BY,
+    FILE_NAME_CONTAINS_ORDER_BY
+} from 'c/documentUtils';
 
 // Lightning message service - Publisher
 import {createMessageContext, releaseMessageContext, publish} from 'lightning/messageService';
@@ -34,8 +42,8 @@ export default class DecSourceFiles extends LightningElement {
         return this.sourceFilesType === SOURCE_FILES_TYPES.ALL;
     }
 
-    get sourceFilesTypes() {
-        return SOURCE_FILES_TYPES;
+    get sourceFilesMenuOptions() {
+        return SOURCE_FILES_MENU_OPTIONS;
     }
 
     connectedCallback() {
@@ -47,7 +55,8 @@ export default class DecSourceFiles extends LightningElement {
             if (!isEmpty(this.document.filter.orderBy) && this.document.filter.maximumRecords === 1) {
                 this.sourceFilesType = SOURCE_FILES_TYPES.LATEST;
             } else if (!isEmpty(this.document.filter.filterBy)) {
-                this.containsValue = this.document.filter.filterBy;
+                let filterBy = this.document.filter.filterBy;
+                this.containsValue = filterBy.substring(filterBy.indexOf(FILE_NAME_FILTER_PREFIX) + FILE_NAME_FILTER_PREFIX.length, filterBy.lastIndexOf(FILE_NAME_FILTER_SUFFIX));
                 this.sourceFilesType = SOURCE_FILES_TYPES.CONTAINS;
             } else {
                 this.sourceFilesType = SOURCE_FILES_TYPES.ALL;
@@ -82,7 +91,7 @@ export default class DecSourceFiles extends LightningElement {
             ... this.document,
             filter: {
                 filterBy: '',
-                orderBy: 'CreatedDate DESC',
+                orderBy: LATEST_SOURCE_FILES_ORDER_BY,
                 maximumRecords: 1
             }
         });
@@ -93,7 +102,7 @@ export default class DecSourceFiles extends LightningElement {
             ... this.document,
             filter: {
                 filterBy: this.containsValue,
-                orderBy: '',
+                orderBy: FILE_NAME_CONTAINS_ORDER_BY,
                 maximumRecords: null
             }
         });

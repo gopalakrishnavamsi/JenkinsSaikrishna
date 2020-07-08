@@ -1541,7 +1541,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					this.recipients = new APIRecipients(
 						recipients,
 						this.sequence,
-						options != null && options.includeDefaultAutoPlaceTags);
+						options != null && options.includeDefaultAutoPlaceTags != null && options.includeDefaultAutoPlaceTags);
 				}
 				this.customFields = buildCustomFields(
 					customFields,

@@ -42,6 +42,7 @@
         $Lightning.createComponent(_namespace + ':Sending', {
           visualforce: true,
           recordId: '{!JSENCODE($CurrentPage.parameters.sId)}',
+          envelopeTemplateId: '{!JSENCODE($CurrentPage.parameters.templateId)}',
           sObjectName: '{!JSENCODE(sObjectName)}',
           files: _files,
           placeholderRecipients: _phrs,
