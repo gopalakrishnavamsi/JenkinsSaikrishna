@@ -53,17 +53,17 @@
       };
 
       Labels = {
-        templateCreatedLabel: '{!$Label.OnlineEditorTemplateCreated_1}',
-        templatePublishedLabel: '{!$Label.OnlineEditorAfterPublish_1}',
-        templateUpdatedLabel: '{!$Label.OnlineEditorTemplateUpdated_1}',
-        templateInvalidSourceLabel: '{!$Label.InvalidSource}',
-        templateExportDataIsUndefinedLabel: '{!$Label.ExportDataIsUndefinedLabel}',
-        templateInvalidPathLabel: '{!$Label.InvalidPathLabel}',
-        templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}',
-        templateSaveValidationLabel: '{!$Label.OnlineEditorSaveValidation}',
-        templateSCMHrefUndefinedLabel: '{!$Label.SCMHrefUndefined}',
-        apiError_3: '{!$Label.ApiError_3}',
-        UnauthorizedQueryMessage: '{!$Label.UnauthorizedQueryMessage}'
+        templateCreatedLabel: '{!JSENCODE($Label.OnlineEditorTemplateCreated_1)}',
+        templatePublishedLabel: '{!JSENCODE($Label.OnlineEditorAfterPublish_1)}',
+        templateUpdatedLabel: '{!JSENCODE($Label.OnlineEditorTemplateUpdated_1)}',
+        templateInvalidSourceLabel: '{!JSENCODE($Label.InvalidSource)}',
+        templateExportDataIsUndefinedLabel: '{!JSENCODE($Label.ExportDataIsUndefinedLabel)}',
+        templateInvalidPathLabel: '{!JSENCODE($Label.InvalidPathLabel)}',
+        templateUndefinedLabel: '{!JSENCODE($Label.UndefinedOnlineEditorTemplate)}',
+        templateSaveValidationLabel: '{!JSENCODE($Label.OnlineEditorSaveValidation)}',
+        templateSCMHrefUndefinedLabel: '{!JSENCODE($Label.SCMHrefUndefined)}',
+        apiError_3: '{!JSENCODE($Label.ApiError_3)}',
+        UnauthorizedQueryMessage: '{!JSENCODE($Label.UnauthorizedQueryMessage)}'
       };
     </script>
 

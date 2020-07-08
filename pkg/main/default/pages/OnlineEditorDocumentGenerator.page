@@ -40,10 +40,10 @@
       };
 
       Labels = {
-        templateUndefinedLabel: '{!$Label.UndefinedOnlineEditorTemplate}',
-        templateExportDataIsUndefinedLabel: '{!$Label.ExportDataIsUndefinedLabel}',
-        apiError_3: '{!$Label.ApiError_3}',
-        UnauthorizedQueryMessage: '{!$Label.UnauthorizedQueryMessage}'
+        templateUndefinedLabel: '{!JSENCODE($Label.UndefinedOnlineEditorTemplate)}',
+        templateExportDataIsUndefinedLabel: '{!JSENCODE($Label.ExportDataIsUndefinedLabel)}',
+        apiError_3: '{!JSENCODE($Label.ApiError_3)}',
+        UnauthorizedQueryMessage: '{!JSENCODE($Label.UnauthorizedQueryMessage)}'
       };
 
 

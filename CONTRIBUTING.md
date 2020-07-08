@@ -38,6 +38,7 @@ Eventually, linting will be introduced into our CI process and fail with any cod
 - **NEVER** commit secret or sensitive information to Github.
 - **NEVER** log sensitive information, e.g. passwords, tokens, PII, CPNI, PCI, etc.
 - **NEVER** use un-encoded user input directly. Use [JSENCODE](https://developer.salesforce.com/page/Secure_Coding_Cross_Site_Scripting#Built_in_Auto_Encoding) for query string parameters in JavaScript.
+- **NEVER** use un-encoded stored values(e.g. labels, custom settings...) or un-encoded external service data directly in javascript. Use [JSENCODE](https://developer.salesforce.com/page/Secure_Coding_Cross_Site_Scripting#Built_in_Auto_Encoding) to encode values for use in javascript.
 - **NEVER** build URLs by concatenating strings based on user input. Use `RestAPI.sendRequest()` and create appropriate proxy methods. 
 - **NEVER** serialize to JSON by concatenating strings. This is error-prone and a potential [attack vector](https://www.owasp.org/index.php/AJAX_Security_Cheat_Sheet#Avoid_building_XML_or_JSON_dynamically).
 - **ALWAYS** authorize actions for appropriate role via the `Permissions` class. Be especially vigilant with `@RemoteAction`.

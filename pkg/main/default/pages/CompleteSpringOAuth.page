@@ -17,7 +17,7 @@
       var error = '{!JSENCODE($CurrentPage.parameters.error)}';
       if (error) {
         endOAuth({
-          status: false, message: '{!JSENCODE($CurrentPage.parameters.error_message)}' || '{!$Label.ConsentRequired}'
+          status: false, message: '{!JSENCODE($CurrentPage.parameters.error_message)}' || '{!JSENCODE($Label.ConsentRequired)}'
         }, null);
       } else {
         Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.SetupController.completeSpringOAuth}', '{!JSENCODE($CurrentPage.parameters.code)}', function (result, event) {
