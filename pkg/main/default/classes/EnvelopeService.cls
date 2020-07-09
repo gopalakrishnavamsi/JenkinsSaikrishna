@@ -619,6 +619,11 @@ global with sharing class EnvelopeService {
 					result,
 					sendNow,
 					senderToken));
+
+			// Maybe create Connect configuration after 2.5 upgrade
+			if (updateNow && AccountSettings__c.getOrgDefaults().CreateConnectConfiguration__c) {
+				ConnectService.asyncCreateConfiguration();
+			}
 		} finally {
 			if (updateNow) Credentials.save();
 		}

@@ -224,6 +224,8 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					ConnectAPI.APIConfiguration.class);
 				c.connectId = String.valueOf(TestUtils.randomInteger(1000000));
 				response = MockResponse.created(c);
+			} else if (request.method == 'PUT') {
+				response = MockResponse.ok(request.body);
 			}
 			return response;
 		}

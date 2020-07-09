@@ -1075,51 +1075,6 @@ global with sharing class AuthService {
 		Permissions.assignPermissionSets(new Set<Id> { userId }, new Set<String> { Permissions.CLM_ADMINISTRATOR });
 	}
 
-	/*
-	This is a hack-y way to determine the appropriate Connect listener endpoint. Ideally, the endpoint would be
-	returned in the e_sign product activation properties or the OAuth userinfo response. Or if the URLs
-	were not site-specific in prod and we can just use Environment custom metadata.
- 	*/
-	public static Url createConnectConfiguration(
-		final Url eSignatureBaseUrl,
-		final UUID accountId,
-		final String accessToken) {
-
-		if (eSignatureBaseUrl == null || UUID.isEmpty(accountId)) throw new DocuSignException(Label.UndefinedArgument);
-
-		String site = eSignatureBaseUrl.getHost().substringBefore('.').toLowerCase();
-		Url listenerUrl = null;
-		switch on site {
-			when 'www', 'na1', 'na2', 'na3', 'na4' {
-				listenerUrl = new Url('https://na.act-event.docusign.com/listeners/connect-salesforce');
-			} when 'eu' {
-				listenerUrl = new Url('https://eu.act-event.docusign.com/listeners/connect-salesforce');
-			} when 'au' {
-				listenerUrl = new Url('https://au.act-event.docusign.com/listeners/connect-salesforce');
-			} when 'ca' {
-				listenerUrl = new Url('https://ca.act-event.docusign.com/listeners/connect-salesforce');
-			} when 'demo' {
-				listenerUrl = new Url('https://act-event-d.docusign.com/listeners/connect-salesforce');
-			} when 'stage' {
-				listenerUrl = new Url('https://act-event-s.docusign.com/listeners/connect-salesforce');
-			} when 'hqtest0', 'hqtest1', 'hqtest2', 'hqtest3' {
-				listenerUrl = new Url('https://act-event.dev.docusign.net/listeners/connect-salesforce');
-			} when else {
-				LOG.warn('Could not map eSignature site ' + site + ' to an ACT Framework Connect listener.');
-			}
-		}
-
-		if (listenerUrl != null) {
-			ConnectAPI.getInstance(
-				eSignatureBaseUrl,
-				accountId,
-				accessToken)
-				.createConfiguration(Application.name, listenerUrl);
-		}
-
-		return listenerUrl;
-	}
-
 	@TestVisible
 	private static Boolean completeSetup(
 		final RootCredentials rootCredentials,
@@ -1149,7 +1104,12 @@ global with sharing class AuthService {
 				account.id,
 				accessToken.token);
 
-			if (aps.isConnectEnabled()) createConnectConfiguration(eSignatureBaseUrl, account.id, accessToken.token);
+			if (aps.isConnectEnabled()) {
+				ConnectService.createConfiguration(
+					eSignatureBaseUrl,
+					account.id,
+					accessToken.token);
+			}
 
 			save(
 				rootCredentials.environment,

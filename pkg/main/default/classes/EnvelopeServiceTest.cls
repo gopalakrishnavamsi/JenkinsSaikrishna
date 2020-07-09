@@ -700,6 +700,9 @@ private class EnvelopeServiceTest {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
 		System.runAs(UserMock.createDocuSignSender()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.CreateConnectConfiguration__c = true;
+			update s;
 			Envelope__c ee1 = TestUtils.createEnvelope();
 			ee1.DocuSignId__c = null;
 			ee1.Sent__c = null;
@@ -763,6 +766,8 @@ private class EnvelopeServiceTest {
 				System.assertEquals(null, e.DocuSignId__c);
 				System.assertEquals(null, e.Sent__c);
 			}
+
+			System.assertEquals(true, AccountSettings__c.getOrgDefaults().CreateConnectConfiguration__c);
 		}
 	}
 
@@ -771,6 +776,9 @@ private class EnvelopeServiceTest {
 		Test.setMock(HttpCalloutMock.class, new ESignatureAPIMock());
 
 		System.runAs(UserMock.createDocuSignSender()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.CreateConnectConfiguration__c = true;
+			update s;
 			Envelope__c ee1 = TestUtils.createEnvelope();
 			ee1.DocuSignId__c = null;
 			update ee1;
@@ -812,6 +820,8 @@ private class EnvelopeServiceTest {
 			List<EnvelopeStatus__c> statuses = [SELECT Id FROM EnvelopeStatus__c WHERE DocuSignId__c = :result.docuSignId.toString()];
 			System.assertNotEquals(null, statuses);
 			System.assertEquals(1, statuses.size());
+
+			System.assertEquals(false, AccountSettings__c.getOrgDefaults().CreateConnectConfiguration__c);
 		}
 	}
 

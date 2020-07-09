@@ -44,7 +44,7 @@ private class ConnectAPITest {
 		}
 		Test.stopTest();
 	}
-	
+
 	static ConnectAPI newClient() {
 		return ConnectAPI.getInstance(
 			new Url('https://unit.test.docusign.net'),
@@ -95,6 +95,92 @@ private class ConnectAPITest {
 
 			Test.startTest();
 			System.assertNotEquals(null, client.getConfiguration(publishUrl, RestAPI.defaultTimeout));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateConfiguration_undefined_arguments() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Long id = TestUtils.randomInteger(10000000);
+			String name = UUID.randomUUID().toString();
+			Url publishUrl = new Url('https://unit.test.docusign.net');
+			ConnectAPI client = newClient();
+
+			Test.startTest();
+			try {
+				client.updateConfiguration(
+					null,
+					name,
+					publishUrl,
+					RestAPI.defaultTimeout);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				client.updateConfiguration(
+					id,
+					' ',
+					publishUrl,
+					RestAPI.defaultTimeout);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			try {
+				client.updateConfiguration(
+					id,
+					name,
+					null,
+					RestAPI.defaultTimeout);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateConfiguration_error() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignUser()) {
+			Long id = TestUtils.randomInteger(10000000);
+			String name = UUID.randomUUID().toString();
+			Url publishUrl = new Url('https://unit.test.docusign.net');
+			ConnectAPI client = newClient();
+
+			Test.startTest();
+			try {
+				client.updateConfiguration(
+					id,
+					name,
+					publishUrl,
+					RestAPI.defaultTimeout);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_updateConfiguration_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignUser()) {
+			Long id = TestUtils.randomInteger(10000000);
+			String name = UUID.randomUUID().toString();
+			Url publishUrl = new Url('https://unit.test.docusign.net');
+			ConnectAPI client = newClient();
+
+			Test.startTest();
+			System.assertEquals(id, client.updateConfiguration(
+				id,
+				name,
+				publishUrl,
+				RestAPI.defaultTimeout));
 			Test.stopTest();
 		}
 	}
@@ -204,6 +290,46 @@ private class ConnectAPITest {
 
 			Test.startTest();
 			System.assertNotEquals(null, client.createConfiguration(name, publishUrl));
+			Test.stopTest();
+		}
+	}
+
+	static final Long ID = TestUtils.randomInteger(10000000);
+	static final String NAME = UUID.randomUUID().toString();
+	static final Url PUBLISH_URL = new Url('https://' + UUID.randomUUID() + '.test.docusign.com');
+
+	class CreateConfigurationUpdateMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setHeader('Content-Type', 'application/json');
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			if (request.getMethod() == 'GET') {
+				ConnectAPI.APIConfiguration config = new ConnectAPI.APIConfiguration(
+					ID,
+					NAME,
+					PUBLISH_URL);
+				config.requireMutualTls = 'false';
+				config.allUsers = 'false';
+				ConnectAPI.APIConfigurations configs = new ConnectAPI.APIConfigurations();
+				configs.configurations = new List<ConnectAPI.APIConfiguration> { config };
+				response.setBody(JSON.serialize(configs));
+			} else if (request.getMethod() == 'PUT') {
+				response.setBody(request.getBody());
+			}
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_createConfiguration_update() {
+		Test.setMock(HttpCalloutMock.class, new CreateConfigurationUpdateMock());
+		System.runAs(UserMock.createDocuSignUser()) {
+			ConnectAPI client = newClient();
+
+			Test.startTest();
+			System.assertEquals(ID, client.createConfiguration(NAME, PUBLISH_URL));
 			Test.stopTest();
 		}
 	}

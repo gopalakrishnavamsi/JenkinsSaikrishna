@@ -1033,6 +1033,11 @@ public with sharing class EnvelopeConfigurationService {
 			Template template = EnvelopeAPI.getInstance().createTemplate(getTemplate(envelopeConfiguration));
 			envelopeConfiguration.withDocuSignId(template.id);
 
+			// Maybe create Connect configuration after 2.5 upgrade
+			if (AccountSettings__c.getOrgDefaults().CreateConnectConfiguration__c) {
+				ConnectService.asyncCreateConfiguration();
+			}
+
 			return DB.insertEnvelopeConfiguration(envelopeConfiguration);
 		} finally {
 			Credentials.save();

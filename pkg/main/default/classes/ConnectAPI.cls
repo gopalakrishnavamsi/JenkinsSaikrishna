@@ -64,6 +64,15 @@ public with sharing class ConnectAPI extends ESignatureAPI {
 			final String name,
 			final Url publishUrl) {
 
+			this(null, name, publishUrl);
+		}
+
+		public APIConfiguration(
+			final Long id,
+			final String name,
+			final Url publishUrl) {
+
+			this.connectId = String.valueOf(id);
 			this.name = name;
 			this.urlToPublishTo = publishUrl == null ? null : publishUrl.toExternalForm();
 			this.configurationType = 'custom';
@@ -88,10 +97,6 @@ public with sharing class ConnectAPI extends ESignatureAPI {
 			this.allUsers = 'true';
 			this.includeDocumentFields = 'true';
 		}
-
-		public Long getId() {
-			return String.isBlank(this.connectId) ? null : Long.valueOf(this.connectId);
-		}
 	}
 
 	@TestVisible
@@ -113,6 +118,10 @@ public with sharing class ConnectAPI extends ESignatureAPI {
 		}
 	}
 
+	private static Long getId(final APIConfiguration config) {
+		return config != null && String.isNotBlank(config.connectId) ? Long.valueOf(config.connectId) : null;
+	}
+
 	@TestVisible
 	private APIConfiguration getConfiguration(
 		final Url publishUrl,
@@ -132,6 +141,56 @@ public with sharing class ConnectAPI extends ESignatureAPI {
 			.getConfiguration(publishUrl);
 	}
 
+	@TestVisible
+	private static Boolean shouldUpdate(
+		final APIConfiguration config,
+		final Url publishUrl) {
+
+		return config != null
+			&& String.isNotBlank(config.connectId)
+			&& config.urlToPublishTo == (publishUrl == null ? null : publishUrl.toExternalForm())
+			&& (config.configurationType != 'custom'
+			|| config.allowEnvelopePublish != 'true'
+			|| config.enableLog != 'true'
+			|| config.includeDocuments != 'true'
+			|| config.includeCertificateOfCompletion != 'true'
+			|| config.requiresAcknowledgement != 'true'
+			|| config.requireMutualTls != 'true'
+			|| config.signMessageWithX509Certificate != 'true'
+			|| config.useSoapInterface != 'false'
+			|| config.includeTimeZoneInformation != 'true'
+			|| config.includeEnvelopeVoidReason != 'true'
+			|| config.includeSenderAccountasCustomField != 'true'
+			|| config.envelopeEvents != new List<String> { 'Sent', 'Delivered', 'Completed', 'Declined', 'Voided' }
+			|| config.recipientEvents != new List<String> { 'Sent', 'Delivered', 'Completed', 'Declined', 'AuthenticationFailed', 'AutoResponded' }
+			|| config.allUsers != 'true'
+			|| config.includeDocumentFields != 'true');
+	}
+
+	@TestVisible
+	private Long updateConfiguration(
+		final Long id,
+		final String name,
+		final Url publishUrl,
+		final Integer timeout) {
+
+		if (id == null || String.isBlank(name) || publishUrl == null) throw new DocuSignException(Label.UndefinedArgument);
+
+		RestAPI.Response response = this.put(
+			new List<Object> { 'connect' },
+			JSON.serialize(new APIConfiguration(
+				id,
+				name,
+				publishUrl)),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to update Connect configuration: ' + response.error.toString());
+			throw new APIException(response.error);
+		}
+
+		return getId((APIConfiguration)JSON.deserialize(response.body, APIConfiguration.class));
+	}
+
 	public Long createConfiguration(
 		final String name,
 		final Url publishUrl) {
@@ -149,19 +208,24 @@ public with sharing class ConnectAPI extends ESignatureAPI {
 		// Possible to create duplicate configs, so first see if we have one matching the target URL. No point in
 		// forwarding the events twice to the same listener.
 		APIConfiguration config = this.getConfiguration(publishUrl, timeout);
-		if (config != null && String.isNotBlank(config.connectId)) return config.getId();
+		Long result = getId(config);
+		if (result == null) {
+			RestAPI.Response response = this.post(
+				'connect',
+				JSON.serialize(new APIConfiguration(
+					name,
+					publishUrl)),
+				timeout);
+			if (response.hasError) {
+				this.log.error('Failed to create Connect configuration: ' + response.error.toString());
+				throw new APIException(response.error);
+			}
 
-		RestAPI.Response response = this.post(
-			'connect',
-			JSON.serialize(new APIConfiguration(
-				name,
-				publishUrl)),
-			timeout);
-		if (response.hasError) {
-			this.log.error('Failed to create Connect configuration: ' + response.error.toString());
-			throw new APIException(response.error);
+			result = getId((APIConfiguration)JSON.deserialize(response.body, APIConfiguration.class));
+		} else if (shouldUpdate(config, publishUrl)) { // Verify the config has the appropriate settings.
+			result = this.updateConfiguration(result, name, publishUrl, timeout);
 		}
 
-		return ((APIConfiguration)JSON.deserialize(response.body, APIConfiguration.class)).getId();
+		return result;
 	}
 }

@@ -1359,6 +1359,9 @@ private class EnvelopeConfigurationServiceTest {
 	static void test_createEnvelopeConfiguration_success() {
 		ESignatureAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.CreateConnectConfiguration__c = true;
+			update s;
 			ContentVersion cv = TestUtils.createContentVersion();
 			EnvelopeConfiguration ec = new EnvelopeConfiguration(
 				null,
@@ -1447,6 +1450,7 @@ private class EnvelopeConfigurationServiceTest {
 			System.assertEquals(Collection.size(ec.mergeFields), Collection.size(result.mergeFields));
 			System.assertNotEquals(null, result.senderPermissions);
 			System.assertEquals(ec.isDraft, result.isDraft);
+			System.assertEquals(false, AccountSettings__c.getOrgDefaults().CreateConnectConfiguration__c);
 		}
 	}
 
