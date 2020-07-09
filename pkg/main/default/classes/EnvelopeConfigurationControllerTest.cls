@@ -122,7 +122,7 @@ private class EnvelopeConfigurationControllerTest {
 				null);
 			Test.startTest();
 			EnvelopeConfiguration updatedEnvelopeConfiguration =
-				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), false, null);
+				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), null);
 			Test.stopTest();
 			System.assertEquals(updatedEnvelopeConfiguration.name, UPDATED_ENV_CONFIG_NAME);
 		}
@@ -200,7 +200,7 @@ private class EnvelopeConfigurationControllerTest {
 
 			String ecJSON = JSON.serialize(ec);
 			Test.startTest();
-			EnvelopeConfiguration result = EnvelopeConfigurationController.parseUpdates(ecJSON, true);
+			EnvelopeConfiguration result = EnvelopeConfigurationController.parseUpdates(ecJSON);
 			Test.stopTest();
 			System.assertNotEquals(result, null);
 			System.assertEquals(result.recipients.size(), 2);
@@ -322,8 +322,8 @@ private class EnvelopeConfigurationControllerTest {
 		List<Object> emptyDocs = new List<Object>();
 
 		Test.startTest();
-		List<Document> result1 = EnvelopeConfigurationController.parseDocuments(ds, true);
-		List<Document> result2 = EnvelopeConfigurationController.parseDocuments(emptyDocs, false);
+		List<Document> result1 = EnvelopeConfigurationController.parseDocuments(ds);
+		List<Document> result2 = EnvelopeConfigurationController.parseDocuments(emptyDocs);
 		Test.stopTest();
 
 		System.assertEquals(result1.size(), 2);
@@ -356,7 +356,7 @@ private class EnvelopeConfigurationControllerTest {
 				null);
 			Test.startTest();
 			try {
-				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), false, null);
+				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), null);
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -572,7 +572,6 @@ private class EnvelopeConfigurationControllerTest {
 				null);
 			EnvelopeConfiguration updatedEnvelopeConfiguration = EnvelopeConfigurationController.updateEnvelopeConfiguration(
 				Json.serialize(config),
-				false,
 				contentDocumentIds);
 			Test.stopTest();
 			System.assertEquals(updatedEnvelopeConfiguration.documents.size(), 0);
@@ -666,7 +665,6 @@ private class EnvelopeConfigurationControllerTest {
 			try {
 				EnvelopeConfiguration updatedEnvelopeConfiguration = EnvelopeConfigurationController.updateEnvelopeConfiguration(
 					Json.serialize(config),
-					false,
 					contentDocumentIds);
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());

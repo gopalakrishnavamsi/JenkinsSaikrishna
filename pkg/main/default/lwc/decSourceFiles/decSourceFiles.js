@@ -6,8 +6,6 @@ import {
     LABEL,
     SOURCE_FILES_TYPES,
     SOURCE_FILES_MENU_OPTIONS,
-    FILE_NAME_FILTER_PREFIX,
-    FILE_NAME_FILTER_SUFFIX,
     LATEST_SOURCE_FILES_ORDER_BY,
     FILE_NAME_CONTAINS_ORDER_BY
 } from 'c/documentUtils';
@@ -55,8 +53,7 @@ export default class DecSourceFiles extends LightningElement {
             if (!isEmpty(this.document.filter.orderBy) && this.document.filter.maximumRecords === 1) {
                 this.sourceFilesType = SOURCE_FILES_TYPES.LATEST;
             } else if (!isEmpty(this.document.filter.filterBy)) {
-                let filterBy = this.document.filter.filterBy;
-                this.containsValue = filterBy.substring(filterBy.indexOf(FILE_NAME_FILTER_PREFIX) + FILE_NAME_FILTER_PREFIX.length, filterBy.lastIndexOf(FILE_NAME_FILTER_SUFFIX));
+                this.containsValue = this.document.filter.filterBy;
                 this.sourceFilesType = SOURCE_FILES_TYPES.CONTAINS;
             } else {
                 this.sourceFilesType = SOURCE_FILES_TYPES.ALL;

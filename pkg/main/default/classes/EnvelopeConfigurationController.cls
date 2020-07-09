@@ -33,16 +33,16 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	}
 
 	@TestVisible
-	private static EnvelopeConfiguration parseUpdates(final String envelopeConfigurationJSON, final Boolean attachSourceFiles) {
+	private static EnvelopeConfiguration parseUpdates(final String envelopeConfigurationJSON) {
 		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(envelopeConfigurationJSON);
 		List<Recipient> recipients = parseRecipients((List<Object>)untypedConfig.get('recipients'));
-		List<Document> documents = parseDocuments((List<Object>)untypedConfig.get('documents'), attachSourceFiles);
+		List<Document> documents = parseDocuments((List<Object>)untypedConfig.get('documents'));
 		EnvelopeConfiguration configuration = (EnvelopeConfiguration)JSON.deserialize(envelopeConfigurationJSON, EnvelopeConfiguration.class);
 		return configuration.withRecipients(recipients).withDocuments(documents);
 	}
 
 	@TestVisible
-	private static List<Document> parseDocuments(final List<Object> documentsNode, final Boolean attachSourceFiles) {
+	private static List<Document> parseDocuments(final List<Object> documentsNode) {
 		List<Document> results = new List<Document>();
 		if (Collection.isEmpty(documentsNode)) return results;
 
@@ -50,7 +50,7 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 			Map<String, Object> nodeMap = (Map<String, Object>)node;
 			if (nodeMap.containsKey('type')) {
 				String type = (String)nodeMap.get('type');
-				if (type == EnvelopeConfiguration.DOCUMENT_TYPE_SOURCE_FILES && attachSourceFiles) {
+				if (type == EnvelopeConfiguration.DOCUMENT_TYPE_SOURCE_FILES) {
 					results.add((EnvelopeConfiguration.SourceFiles)JSON.deserialize(JSON.serialize((Object)nodeMap), EnvelopeConfiguration.SourceFiles.class));
 				} else if (type == EnvelopeConfiguration.DOCUMENT_TYPE_TEMPLATE_DOCUMENT) {
 					results.add((EnvelopeConfiguration.TemplateDocument)JSON.deserialize(JSON.serialize((Object)nodeMap), EnvelopeConfiguration.TemplateDocument.class));
@@ -88,7 +88,7 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	@AuraEnabled
 	public static EnvelopeConfiguration createEnvelopeConfiguration(final String envelopeConfigurationJSON) {
 		try {
-			return EnvelopeConfigurationService.createEnvelopeConfiguration(parseUpdates(envelopeConfigurationJSON, false));
+			return EnvelopeConfigurationService.createEnvelopeConfiguration(parseUpdates(envelopeConfigurationJSON));
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to create envelope configuration.');
 		}
@@ -97,10 +97,9 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	@AuraEnabled
 	public static EnvelopeConfiguration updateEnvelopeConfiguration(
 		final String envelopeConfigurationJSON,
-		final Boolean attachSourceFiles,
 		final List<Id> contentDocumentIdsToDelete) {
 		try {
-			EnvelopeConfiguration ec = EnvelopeConfigurationService.updateEnvelopeConfiguration(parseUpdates(envelopeConfigurationJSON, attachSourceFiles));
+			EnvelopeConfiguration ec = EnvelopeConfigurationService.updateEnvelopeConfiguration(parseUpdates(envelopeConfigurationJSON));
 			if (Collection.isNotEmpty(contentDocumentIdsToDelete)) {
 				EnvelopeConfigurationService.deleteContentDocuments(contentDocumentIdsToDelete);
 			}

@@ -23,9 +23,14 @@ import {
   showError,
   format
 } from 'c/utils';
-import { getDefaultOptions } from 'c/optionsUtils';
-import { DOCUMENT_TYPE_SOURCE_FILES, FILE_NAME_FILTER_PREFIX, FILE_NAME_FILTER_SUFFIX } from 'c/documentUtils';
-import { LABEL } from 'c/setupUtils';
+import {getDefaultOptions} from 'c/optionsUtils';
+import {
+  DOCUMENT_TYPE_SOURCE_FILES,
+  FILE_NAME_FILTER_PREFIX,
+  FILE_NAME_FILTER_SUFFIX,
+  DOCUMENT_TYPE_TEMPLATE_DOCUMENT
+} from 'c/documentUtils';
+import {LABEL} from 'c/setupUtils';
 
 //apex methods
 import updateEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.updateEnvelopeConfiguration';
@@ -127,11 +132,12 @@ export default class DecSetupConfig extends LightningElement {
       this.setLoading(false);
     } else if (data) {
       this.attachSourceFiles = !isEmpty(data.documents.find(d => d.type === DOCUMENT_TYPE_SOURCE_FILES));
-      this.envelopeConfigurationData = data;
-      if(isEmpty(this.envelopeConfigurationData.options.documentWriteBack)) {
-        this.envelopeConfigurationData = {...this.envelopeConfigurationData, options: getDefaultOptions()};
-      }
-   }
+      this.envelopeConfigurationData = {
+        ...data,
+        documents: this.attachSourceFiles ? this.processTextSearchSourceFiles(data.documents, true) : data.documents,
+        options: isEmpty(data.options.documentWriteBack) ? getDefaultOptions() : data.options
+      };
+    }
   }
 
   get documents() {
@@ -301,18 +307,20 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   updateEnvelopeConfiguration(step, configurationData = this.envelopeConfigurationData) {
-    const updatedConfiguration = this.getFilteredConfigurationData(configurationData);
     if (this.isDirty) {
       this.setLoading(true);
+      const updatedConfiguration = this.getFilteredConfigurationData(configurationData);
       return updateEnvelopeConfiguration({
         envelopeConfigurationJSON: updatedConfiguration,
-        attachSourceFiles: this.attachSourceFiles,
         contentDocumentIdsToDelete: this.contentDocumentIdsToDelete
       })
         .then(result => {
           this.isDirty = false;
           this.currentStep = isEmpty(step) ? this.currentStep : step;
-          this.envelopeConfigurationData = result;
+          this.envelopeConfigurationData = {
+            ...result,
+            documents: this.attachSourceFiles ? this.processTextSearchSourceFiles(result.documents, true) : result.documents
+          };
           return Promise.resolve(true);
         })
         .catch(error => {
@@ -347,17 +355,13 @@ export default class DecSetupConfig extends LightningElement {
     } else {
       processedFields.recipients = configurationData.recipients.map(r => ({...r, id: null}));
     }
-    processedFields.documents = configurationData.documents.map((doc) => {
-      if (this.attachSourceFiles && doc.type === DOCUMENT_TYPE_SOURCE_FILES) {
-        if (!isEmpty(doc.filter.filterBy)) {
-          doc.filter.filterBy = format('{0}{1}{2}', FILE_NAME_FILTER_PREFIX, doc.filter.filterBy, FILE_NAME_FILTER_SUFFIX);
-        }
-      }
-      return {
-        ... doc,
-        id: null
-      };
-    });
+
+    const documents = this.attachSourceFiles
+      ? this.processTextSearchSourceFiles(configurationData.documents, false)
+      : configurationData.documents.filter(d => d.type === DOCUMENT_TYPE_TEMPLATE_DOCUMENT);
+
+    processedFields.documents = documents.map(d => ({...d, id: null}));
+
     return JSON.stringify({
       ...configurationData,
       ...processedFields
@@ -367,11 +371,29 @@ export default class DecSetupConfig extends LightningElement {
   updateLocalEnvelopeConfigurationDocumentWriteBack(documentWriteBack) {
     let options = this.envelopeConfigurationData.options;
     options = {...options, documentWriteBack: documentWriteBack};
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData, options : options};
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, options: options};
     this.isDirty = true;
   }
 
   handleOnDocumentWriteBack(event) {
     this.updateLocalEnvelopeConfigurationDocumentWriteBack(event.detail.data);
+  }
+
+  processTextSearchSourceFiles(documents, extractText) {
+    return documents.map((d) => {
+      let doc = {...d};
+      if (d.type === DOCUMENT_TYPE_SOURCE_FILES && !isEmpty(d.filter.filterBy)) {
+        let updatedFilter = {...d.filter};
+        if (extractText) { // obtain filter-by value from query text
+          const startIndex = updatedFilter.filterBy.indexOf(FILE_NAME_FILTER_PREFIX) + FILE_NAME_FILTER_PREFIX.length;
+          const endIndex = updatedFilter.filterBy.lastIndexOf(FILE_NAME_FILTER_SUFFIX);
+          updatedFilter.filterBy = updatedFilter.filterBy.substring(startIndex, endIndex);
+        } else { // convert filter-by value into query text
+          updatedFilter.filterBy = format('{0}{1}{2}', FILE_NAME_FILTER_PREFIX, updatedFilter.filterBy, FILE_NAME_FILTER_SUFFIX);
+        }
+        doc.filter = updatedFilter;
+      }
+      return doc;
+    });
   }
 }
