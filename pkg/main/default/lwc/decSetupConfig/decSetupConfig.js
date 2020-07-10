@@ -269,7 +269,6 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   updateLocalData(event) {
-    this.isDirty = true;
     this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents: event.detail.data};
   }
 
@@ -318,9 +317,9 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   updateEnvelopeConfiguration(step, configurationData = this.envelopeConfigurationData) {
+    const updatedConfiguration = this.getFilteredConfigurationData(configurationData);
     if (this.isDirty) {
       this.setLoading(true);
-      const updatedConfiguration = this.getFilteredConfigurationData(configurationData);
       return updateEnvelopeConfiguration({
         envelopeConfigurationJSON: updatedConfiguration,
         contentDocumentIdsToDelete: this.contentDocumentIdsToDelete
