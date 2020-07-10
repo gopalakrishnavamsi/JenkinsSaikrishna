@@ -19,7 +19,7 @@
       component.set('v.loading', false);
       //Delete operation processed successfully
       if (deleteResponse === true) {
-        uiHelper.showToast($A.get('$Label.c.EnvelopeDeleted'), uiHelper.ToastMode.SUCCESS);
+        uiHelper.showToast($A.get('$Label.c.EnvelopeTemplateDeleted'), uiHelper.ToastMode.SUCCESS);
       }
 
       //If the component is created from Setup page context we will fire the event to reload Envelope configuration tab

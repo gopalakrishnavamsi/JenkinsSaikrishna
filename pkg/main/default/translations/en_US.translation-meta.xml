@@ -4940,6 +4940,10 @@
 		<name>EnvelopeDeleted</name>
 	</customLabels>
 	<customLabels>
+		<label>The envelope template has been deleted.</label>
+		<name>EnvelopeTemplateDeleted</name>
+	</customLabels>
+	<customLabels>
 		<label>Error</label>
 		<name>Error</name>
 	</customLabels>

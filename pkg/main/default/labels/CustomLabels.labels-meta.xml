@@ -9517,6 +9517,13 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>The envelope has been deleted.</value>
 	</labels>
 	<labels>
+		<fullName>EnvelopeTemplateDeleted</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>EnvelopeTemplateDeleted</shortDescription>
+		<value>The envelope template has been deleted.</value>
+	</labels>
+	<labels>
 		<fullName>Error</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
