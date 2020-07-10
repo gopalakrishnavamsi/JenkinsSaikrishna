@@ -17,14 +17,12 @@ public with sharing class MetadataService {
 
 	private static final Map<SObjectType, MetadataAPI.WebLink> SEND_ACTIONS
 		= new Map<SObjectType, MetadataAPI.WebLink>();
-	private static final Map<SObjectType, MetadataAPI.WebLink> GEN_ACTIONS
-		= new Map<SObjectType, MetadataAPI.WebLink>();
-	private static final Map<SObjectType, MetadataAPI.WebLink> DEC_ACTIONS
-		= new Map<SObjectType, MetadataAPI.WebLink>();
-	private static final Map<SObjectType, MetadataAPI.WebLink> ONLINE_EDITOR_ACTIONS
-		= new Map<SObjectType, MetadataAPI.WebLink>();
+	private static final Map<String, MetadataAPI.WebLink> GEN_ACTIONS
+		= new Map<String, MetadataAPI.WebLink>();
+	private static final Map<String, MetadataAPI.WebLink> DEC_ACTIONS
+		= new Map<String, MetadataAPI.WebLink>();
 	private static final List<String> PARAMETERS_ADD_QUOTES = new List<String> {
-		'templateId', 'title', 'onlineEditorTemplateId'
+		'templateId', 'title'
 	};
 
 	/**
@@ -138,6 +136,8 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+	// FIXME: This is almost identical to the other implementation of getFields. It's called in one place:
+	// CLMMapObjectController in conjunction with the other implementation. Not sure why we need both.
 	public static List<MergeField> getFields(final DescribeSObjectResult type) {
 		List<MergeField> result = new List<MergeField>();
 		if (MergeObject.isValid(type)) {
@@ -182,7 +182,6 @@ public with sharing class MetadataService {
 		List<Query.Relationship> result = new List<Query.Relationship>();
 		DescribeSObjectResult typeDesc = type.getDescribe();
 		for (Schema.ChildRelationship cr : typeDesc.getChildRelationships()) {
-			DescribeFieldResult sourceField = cr.getField().getDescribe();
 			SObjectType childType = cr.getChildSObject();
 			if (RecipientService.canResolveRelatedRecipients(childType) && String.isNotBlank(cr.getRelationshipName())) {
 				result.add(
@@ -280,6 +279,8 @@ public with sharing class MetadataService {
 	 * @param type The type of the Remote Site.
 	 * @param description Optional description of the Remote Site.
 	 * @param url The Remote Site URL.
+	 *
+	 * @return The new Remote Site.
 	 */
 	public static RemoteSite newRemoteSite(
 		final DocuSign.Environment environment,
@@ -433,8 +434,11 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+	@TestVisible
 	private static String getActionType(final String apiName) {
-		if (apiName == Layout.ACTION_NAME_SEND) {
+		if (String.isBlank(apiName)) {
+			return Layout.ACTION_TYPE_OTHER;
+		} else if (apiName == Layout.ACTION_NAME_SEND) {
 			return Layout.ACTION_TYPE_SEND;
 		} else if (apiName.contains(Layout.ACTION_NAME_GEN)) {
 			return Layout.ACTION_TYPE_GEN;
@@ -447,7 +451,11 @@ public with sharing class MetadataService {
 		}
 	}
 
-	private static Map<String, List<Layout.Action>> prepareLayoutNameToActions(final Map<String, MetadataAPI.FileProperties> layoutFullNames, final List<MetadataAPI.Layout> mdLayouts, final SObjectType type) {
+	private static Map<String, List<Layout.Action>> prepareLayoutNameToActions(
+		final Map<String, MetadataAPI.FileProperties> layoutFullNames,
+		final List<MetadataAPI.Layout> mdLayouts,
+		final SObjectType type) {
+
 		Map<String, List<Layout.Action>> layoutNameToLayoutActions = new Map<String, List<Layout.Action>>();
 		Map<String, Map<String, String>> layoutNameToActionApiNameAndFullNameMap = new Map<String, Map<String, String>>();
 		List<String> apiFullNames = new List<String>();
@@ -631,7 +639,7 @@ public with sharing class MetadataService {
 		webLink.encodingKey = 'UTF-8';
 		webLink.protected_x = false;
 		webLink.url = String.format('\'{\'!URLFOR({0}\'\'{1}\'\', null, {2})\'}\'', new List<String> {
-			'$Site.Prefix +' , new Url(Url.getOrgDomainUrl(), page.getUrl()).getPath(),
+			'$Site.Prefix +', new Url(Url.getOrgDomainUrl(), page.getUrl()).getPath(),
 			buildInputs(type, parameters)
 		});
 		webLink.linkType = 'url';
@@ -686,15 +694,24 @@ public with sharing class MetadataService {
 	// HACK: Salesforce MD API bug: readMetadata returns some QuickAction names with the type prepended. When calling
 	// updateMetadata with no changes, this will fail as the QuickAction is not found. For custom objects, the prefix
 	// may be garbled, e.g. SomeAction for MyObject__c becomes MyObject__SomeAction. Awesome.
+	// More fun: Third-party-namespaced actions are often incorrect, e.g. "Invoice__c.blng__Cancel_Rebill" instead of
+	// "blng__Invoice__c.blng__Cancel_Rebill". Sometimes.
 	@TestVisible
 	private static String fixActionName(
 		final SObjectType type,
 		final String actionName) {
 
-		String result = actionName;
-		if (type != null && actionName != null) {
-			String t = String.valueOf(type);
-			result = result.removeStart(t + '-');
+		if (type == null || String.isBlank(actionName)) return actionName;
+
+		String result = '';
+		String t = String.valueOf(type);
+		String ns = Salesforce.getNamespace(type);
+		if (actionName.startsWith(ns + '__') && actionName.contains('__c.')) { // probably OK
+			result = actionName;
+		} else if (actionName.startsWith(t.substringAfter(ns + '__') + '.')) { // fix missing namespace
+			result = ns + '__' + actionName;
+		} else { // try to fix names like CustomObject__Action
+			result = actionName.removeStart(t + '-');
 			Integer index = t.indexOf('__c');
 			if (index > 0) {
 				result = result.removeStart(t.substring(0, index + 2));
@@ -744,7 +761,7 @@ public with sharing class MetadataService {
 			for (MetadataAPI.PlatformActionListItem pali : platformActionListItems) {
 				if (pali != null && !actionNames.contains(pali.actionName)) {
 					pali.sortOrder = sortOrder++;
-					pali.actionName = fixActionName(type, pali.actionName);
+					if (pali.actionType == 'QuickAction') pali.actionName = fixActionName(type, pali.actionName);
 					result.add(pali);
 				}
 			}
@@ -852,6 +869,7 @@ public with sharing class MetadataService {
 			templateId != null &&
 			String.isNotBlank(webLink.masterLabel) &&
 			webLink.masterLabel != actionLabel) {
+
 			webLink.masterLabel = actionLabel;
 			validateResults(MetadataAPI.getInstance().updateMetadata(new List<MetadataAPI.Metadata> { webLink }));
 		}
@@ -873,19 +891,21 @@ public with sharing class MetadataService {
 	@TestVisible
 	private static MetadataAPI.WebLink getGenAction(
 		final SObjectType type,
-		final String parameters) {
+		final String apiName,
+		final String label,
+		final Id templateId,
+		final Boolean isOnlineEditor) {
 
-		if (type == null) return null;
+		if (type == null || String.isBlank(apiName) || String.isBlank(label) || String.isBlank(templateId)) return null;
 
-		MetadataAPI.WebLink result = GEN_ACTIONS.get(type);
+		MetadataAPI.WebLink result = GEN_ACTIONS.get(apiName);
 		if (result == null) {
-			Gen.LayoutParameters genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
 			result = getWebLink(type,
-				genLayoutParameters.genButtonApiName,
-				genLayoutParameters.genButtonLabel,
-				genLayoutParameters.genTemplateId,
-				Page.GenDocumentGenerator);
-			GEN_ACTIONS.put(type, result);
+				apiName,
+				label,
+				templateId,
+				isOnlineEditor ? Page.OnlineEditorDocumentGenerator : Page.GenDocumentGenerator);
+			GEN_ACTIONS.put(apiName, result);
 		}
 		return result;
 	}
@@ -893,32 +913,32 @@ public with sharing class MetadataService {
 	@TestVisible
 	private static MetadataAPI.WebLink getDecAction(
 		final SObjectType type,
-		final String parameters) {
+		final String apiName,
+		final String label,
+		final Id templateId) {
 
-		if (type == null) return null;
+		if (type == null || String.isBlank(apiName) || String.isBlank(label) || String.isBlank(templateId)) return null;
 
-		MetadataAPI.WebLink result = DEC_ACTIONS.get(type);
+		MetadataAPI.WebLink result = DEC_ACTIONS.get(apiName);
 		if (result == null) {
-			EnvelopeConfigurationController.LayoutParameters decLayoutParameters =
-				(EnvelopeConfigurationController.LayoutParameters)JSON.deserialize(
-					parameters,
-					EnvelopeConfigurationController.LayoutParameters.class);
 			result = getWebLink(type,
-				decLayoutParameters.decButtonApiName,
-				decLayoutParameters.decButtonLabel,
-				decLayoutParameters.decTemplateId,
+				apiName,
+				label,
+				templateId,
 				Page.Sending);
-			DEC_ACTIONS.put(type, result);
+			DEC_ACTIONS.put(apiName, result);
 		}
 		return result;
 	}
 
 	// FIXME: Consolidate Gen action logic. Pass in deserialized, validated types to this method.
+	// The client should not specify API names (e.g. Name+ID). This is a leaky abstraction. Instead the client should
+	// construct a Layout.Action with reified parameters and let this determine the proper API name. Gen and DEC button
+	// logic is identical.
 	public static List<Layout> updateLayouts(
 		final SObjectType type,
 		final List<Layout> layouts,
-		final String parameters,
-		final UUID scmTemplateId) {
+		final String parameters) {
 
 		Permissions.verifyIsDocuSignAdministrator();
 		if (type == null || Collection.isEmpty(layouts)) throw new DocuSignException(Label.UndefinedArgument);
@@ -930,11 +950,36 @@ public with sharing class MetadataService {
 			if (l.hasSendAction()) {
 				getSendAction(type);
 			} else if (l.hasGenAction()) {
-				getGenAction(type, parameters);
+				Gen.LayoutParameters params = (Gen.LayoutParameters)JSON.deserialize(
+					parameters,
+					Gen.LayoutParameters.class);
+				getGenAction(
+					type,
+					params.genButtonApiName,
+					params.genButtonLabel,
+					params.genTemplateId,
+					false);
 			} else if (l.hasDecAction()) {
-				getDecAction(type, parameters);
+				// FIXME: This introduces a dependency on EnvelopeConfigurationController. Deserialize there instead.
+				EnvelopeConfigurationController.LayoutParameters params =
+					(EnvelopeConfigurationController.LayoutParameters)JSON.deserialize(
+						parameters,
+						EnvelopeConfigurationController.LayoutParameters.class);
+				getDecAction(
+					type,
+					params.decButtonApiName,
+					params.decButtonLabel,
+					params.decTemplateId);
 			} else if (l.hasOnlineEditorAction()) {
-				getOnlineEditorAction(type, parameters, scmTemplateId);
+				Gen.LayoutParameters params = (Gen.LayoutParameters)JSON.deserialize(
+					parameters,
+					Gen.LayoutParameters.class);
+				getGenAction(
+					type,
+					params.genButtonApiName,
+					params.genButtonLabel,
+					params.genTemplateId,
+					true);
 			}
 		}
 		if (ls != null && ls.keySet().size() > 0) {
@@ -950,61 +995,4 @@ public with sharing class MetadataService {
 		}
 		return layouts;
 	}
-
-	// OnlineEditor logic start
-	@TestVisible
-	private static MetadataAPI.WebLink getOnlineEditorWebLink(
-		final SObjectType type,
-		final String actionName,
-		final String actionLabel,
-		final Id templateId,
-		final UUID scmTemplateId) {
-
-		if (type == null || String.isBlank(actionName)) return null;
-
-		MetadataAPI.WebLink webLink = (MetadataAPI.WebLink)Collection.head(MetadataAPI.getInstance().readMetadata(
-			'WebLink', new List<String> { getActionFullName(type, actionName) }));
-		if (webLink == null) {
-
-			Map <String, String> parametersMap = new Map<String, String>();
-			parametersMap.put('templateId', templateId);
-			parametersMap.put('recordId', type + '.Id');
-			parametersMap.put('recordName', type + '.' + Salesforce.getNameField(type));
-			parametersMap.put('title', actionLabel);
-			parametersMap.put('onlineEditorTemplateId', String.valueOf(scmTemplateId));
-			webLink = createWebLink(
-				type,
-				actionName,
-				actionLabel,
-				Page.OnlineEditorDocumentGenerator,
-				parametersMap);
-		} else if (webLink != null && String.isNotBlank(webLink.masterLabel) && webLink.masterLabel != actionLabel) {
-			webLink.masterLabel = actionLabel;
-			validateResults(MetadataAPI.getInstance().updateMetadata(new List<MetadataAPI.Metadata> { webLink }));
-		}
-		return webLink;
-	}
-
-	@TestVisible
-	private static MetadataAPI.WebLink getOnlineEditorAction(
-		final SObjectType type,
-		final String parameters,
-		final UUID scmTemplateId) {
-
-		if (type == null) return null;
-
-		MetadataAPI.WebLink result = ONLINE_EDITOR_ACTIONS.get(type);
-		if (result == null) {
-			Gen.LayoutParameters genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
-			result = getOnlineEditorWebLink(
-				type,
-				genLayoutParameters.genButtonApiName,
-				genLayoutParameters.genButtonLabel,
-				genLayoutParameters.genTemplateId,
-				scmTemplateId);
-			ONLINE_EDITOR_ACTIONS.put(type, result);
-		}
-		return result;
-	}
-	// OnlineEditor logic end
 }

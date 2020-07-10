@@ -150,6 +150,17 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
+	static void test_getFields_clm_implementation() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Test.startTest();
+			List<MergeField> result = MetadataService.getFields(Opportunity.getSObjectType().getDescribe());
+			Test.stopTest();
+
+			System.assert(Collection.isNotEmpty(result));
+		}
+	}
+
+	@IsTest
 	static void test_getErrorMessage() {
 		MetadataAPI.SaveResult result = null;
 		System.assertEquals(Label.SalesforceApiErrorUnexpectedResponse, MetadataService.getErrorMessage(result));
@@ -439,6 +450,14 @@ private class MetadataServiceTest {
 			new Map<String, String> { 'sId' => '1234' }));
 		System.assertEquals('[sId = Lead.Id, p1 = abc]', MetadataService.buildInputs(Lead.getSObjectType(),
 			new Map<String, String> { 'p1' => 'abc' }));
+		System.assertEquals('[sId = Lead.Id, templateId = \'' + UserInfo.getUserId() + '\']',
+			MetadataService.buildInputs(
+				Lead.getSObjectType(),
+				new Map<String, String> { 'templateId' => UserInfo.getUserId() }));
+		System.assertEquals('[title = \'test\']',
+			MetadataService.buildInputs(
+				null,
+				new Map<String, String> { 'title' => 'test' }));
 	}
 
 	@IsTest
@@ -740,6 +759,192 @@ private class MetadataServiceTest {
 		System.assertEquals(0, Collection.size(result.platformActionList.platformActionListItems));
 	}
 
+	@IsTest
+	static void test_mergeLayout_add_gen() {
+		Layout newLayout = new Layout(
+			Contact.getSObjectType(),
+			UserInfo.getUserId(),
+			'ns',
+			'n',
+			new List<Layout.Action> {
+				new Layout.Action(Layout.ACTION_TYPE_GEN, Layout.ACTION_NAME_GEN, 'testLabel')
+			});
+		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
+		currentLayout.customButtons = null;
+		currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
+		MetadataAPI.PlatformActionListItem pali = new MetadataAPI.PlatformActionListItem();
+		pali.actionName = 'testgenbutton';
+		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
+
+		Test.startTest();
+		MetadataAPI.Layout result = MetadataService.mergeLayout(
+			Contact.getSObjectType(),
+			newLayout,
+			currentLayout,
+			'{"genButtonApiName":"testgenbutton","genButtonLabel":"testgenlabel", "genTemplateId":"01pL0000002LXwu"}');
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(new List<String> { 'testgenbutton' }, result.customButtons);
+		System.assertNotEquals(null, result.platformActionList);
+		System.assertEquals(1, Collection.size(result.platformActionList.platformActionListItems));
+		System.assertNotEquals(null, result.platformActionList.platformActionListItems[0]);
+		System.assertEquals('testgenbutton', result.platformActionList.platformActionListItems[0].actionName);
+	}
+
+	@IsTest
+	static void test_mergeLayout_remove_gen() {
+		Layout newLayout = new Layout(
+			Contact.getSObjectType(),
+			UserInfo.getUserId(),
+			'ns',
+			'n',
+			null);
+		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
+		currentLayout.customButtons = new List<String> { 'testgenbutton' };
+		currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
+		MetadataAPI.PlatformActionListItem pali = new MetadataAPI.PlatformActionListItem();
+		pali.actionName = 'testgenbutton';
+		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
+
+		Test.startTest();
+		MetadataAPI.Layout result = MetadataService.mergeLayout(
+			Contact.getSObjectType(),
+			newLayout,
+			currentLayout,
+			'{"genButtonApiName":"testgenbutton","genButtonLabel":"testgenlabel", "genTemplateId":"01pL0000002LXwu"}');
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(0, Collection.size(result.customButtons));
+		System.assertNotEquals(null, result.platformActionList);
+		System.assertEquals(0, Collection.size(result.platformActionList.platformActionListItems));
+	}
+
+	@IsTest
+	static void test_mergeLayout_add_dec() {
+		Layout newLayout = new Layout(
+			Contact.getSObjectType(),
+			UserInfo.getUserId(),
+			'ns',
+			'n',
+			new List<Layout.Action> {
+				new Layout.Action(Layout.ACTION_TYPE_DEC, Layout.ACTION_NAME_DEC + '1234', 'testLabel')
+			});
+		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
+		currentLayout.customButtons = null;
+		currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
+		MetadataAPI.PlatformActionListItem pali = new MetadataAPI.PlatformActionListItem();
+		pali.actionName = 'testdecbutton';
+		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
+
+		Test.startTest();
+		MetadataAPI.Layout result = MetadataService.mergeLayout(
+			Contact.getSObjectType(),
+			newLayout,
+			currentLayout,
+			'{"decButtonApiName":"testdecbutton","decButtonLabel":"testdeclabel", "decTemplateId":"01pL0000002LXwu"}');
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(new List<String> { 'testdecbutton' }, result.customButtons);
+		System.assertNotEquals(null, result.platformActionList);
+		System.assertEquals(1, Collection.size(result.platformActionList.platformActionListItems));
+		System.assertNotEquals(null, result.platformActionList.platformActionListItems[0]);
+		System.assertEquals('testdecbutton', result.platformActionList.platformActionListItems[0].actionName);
+	}
+
+	@IsTest
+	static void test_mergeLayout_remove_dec() {
+		Layout newLayout = new Layout(
+			Contact.getSObjectType(),
+			UserInfo.getUserId(),
+			'ns',
+			'n',
+			null);
+		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
+		currentLayout.customButtons = new List<String> { 'testdecbutton' };
+		currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
+		MetadataAPI.PlatformActionListItem pali = new MetadataAPI.PlatformActionListItem();
+		pali.actionName = 'testdecbutton';
+		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
+
+		Test.startTest();
+		MetadataAPI.Layout result = MetadataService.mergeLayout(
+			Contact.getSObjectType(),
+			newLayout,
+			currentLayout,
+			'{"decButtonApiName":"testdecbutton","decButtonLabel":"testdeclabel", "decTemplateId":"01pL0000002LXwu"}');
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(0, Collection.size(result.customButtons));
+		System.assertNotEquals(null, result.platformActionList);
+		System.assertEquals(0, Collection.size(result.platformActionList.platformActionListItems));
+	}
+
+	@IsTest
+	static void test_mergeLayout_add_online_editor() {
+		Layout newLayout = new Layout(
+			Contact.getSObjectType(),
+			UserInfo.getUserId(),
+			'ns',
+			'n',
+			new List<Layout.Action> {
+				new Layout.Action(Layout.ACTION_TYPE_ONLINEEDITOR, Layout.ACTION_NAME_ONLINEEDITOR, 'testLabel')
+			});
+		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
+		currentLayout.customButtons = null;
+		currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
+		MetadataAPI.PlatformActionListItem pali = new MetadataAPI.PlatformActionListItem();
+		pali.actionName = 'testgenbutton';
+		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
+
+		Test.startTest();
+		MetadataAPI.Layout result = MetadataService.mergeLayout(
+			Contact.getSObjectType(),
+			newLayout,
+			currentLayout,
+			'{"genButtonApiName":"testgenbutton","genButtonLabel":"testgenlabel", "genTemplateId":"01pL0000002LXwu"}');
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(new List<String> { 'testgenbutton' }, result.customButtons);
+		System.assertNotEquals(null, result.platformActionList);
+		System.assertEquals(1, Collection.size(result.platformActionList.platformActionListItems));
+		System.assertNotEquals(null, result.platformActionList.platformActionListItems[0]);
+		System.assertEquals('testgenbutton', result.platformActionList.platformActionListItems[0].actionName);
+	}
+
+	@IsTest
+	static void test_mergeLayout_remove_online_editor() {
+		Layout newLayout = new Layout(
+			Contact.getSObjectType(),
+			UserInfo.getUserId(),
+			'ns',
+			'n',
+			null);
+		MetadataAPI.Layout currentLayout = new MetadataAPI.Layout();
+		currentLayout.customButtons = new List<String> { 'testgenbutton' };
+		currentLayout.platformActionList = new MetadataAPI.PlatformActionList();
+		MetadataAPI.PlatformActionListItem pali = new MetadataAPI.PlatformActionListItem();
+		pali.actionName = 'testgenbutton';
+		currentLayout.platformActionList.platformActionListItems = new List<MetadataAPI.PlatformActionListItem> { pali };
+
+		Test.startTest();
+		MetadataAPI.Layout result = MetadataService.mergeLayout(
+			Contact.getSObjectType(),
+			newLayout,
+			currentLayout,
+			'{"genButtonApiName":"testgenbutton","genButtonLabel":"testgenlabel", "genTemplateId":"01pL0000002LXwu"}');
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(0, Collection.size(result.customButtons));
+		System.assertNotEquals(null, result.platformActionList);
+		System.assertEquals(0, Collection.size(result.platformActionList.platformActionListItems));
+	}
+
 	private class WebLinkNotFoundMock implements WebServiceMock {
 
 		private final WebServiceMock baseMock;
@@ -897,7 +1102,7 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				MetadataService.updateLayouts(Contact.getSObjectType(), null, null, null);
+				MetadataService.updateLayouts(Contact.getSObjectType(), null, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -918,19 +1123,19 @@ private class MetadataServiceTest {
 
 			Test.startTest();
 			try {
-				MetadataService.updateLayouts(null, new List<Layout> { l }, null, null);
+				MetadataService.updateLayouts(null, new List<Layout> { l }, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				MetadataService.updateLayouts(Contact.getSObjectType(), null, null, null);
+				MetadataService.updateLayouts(Contact.getSObjectType(), null, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			try {
-				MetadataService.updateLayouts(Contact.getSObjectType(), new List<Layout>(), null, null);
+				MetadataService.updateLayouts(Contact.getSObjectType(), new List<Layout>(), null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
@@ -944,7 +1149,7 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
 			try {
-				MetadataService.updateLayouts(Lead.getSObjectType(), new List<Layout> { null }, null, null);
+				MetadataService.updateLayouts(Lead.getSObjectType(), new List<Layout> { null }, null);
 				throw new AssertException('Expected updateLayouts to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidLayout, ex.getMessage());
@@ -954,7 +1159,7 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_updateLayouts_success() {
+	static void test_updateLayouts_send() {
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Layout l1 = new Layout(
@@ -984,7 +1189,6 @@ private class MetadataServiceTest {
 			List<Layout> result = MetadataService.updateLayouts(
 				Contact.getSObjectType(),
 				new List<Layout> { l1, l2 },
-				null,
 				null);
 			Test.stopTest();
 
@@ -993,7 +1197,7 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_updateGenLayouts_success() {
+	static void test_updateLayouts_gen() {
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Layout l1 = new Layout(
@@ -1024,8 +1228,7 @@ private class MetadataServiceTest {
 			List<Layout> result = MetadataService.updateLayouts(
 				Contact.getSObjectType(),
 				new List<Layout> { l1, l2 },
-				parameters,
-				null);
+				parameters);
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
@@ -1033,7 +1236,7 @@ private class MetadataServiceTest {
 	}
 
 	@IsTest
-	static void test_updateDecLayouts_success() {
+	static void test_updateLayouts_dec() {
 		MetadataAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Layout l1 = new Layout(
@@ -1064,8 +1267,46 @@ private class MetadataServiceTest {
 			List<Layout> result = MetadataService.updateLayouts(
 				Contact.getSObjectType(),
 				new List<Layout> { l1, l2 },
-				parameters,
-				null);
+				parameters);
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+		}
+	}
+
+	@IsTest
+	static void test_updateLayouts_online_editor() {
+		MetadataAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			Layout l1 = new Layout(
+				Contact.getSObjectType(),
+				UserInfo.getOrganizationId(),
+				'ns',
+				'n1',
+				new List<Layout.Action> {
+					new Layout.Action(
+						Layout.ACTION_TYPE_ONLINEEDITOR,
+						Layout.ACTION_NAME_ONLINEEDITOR,
+						'testLabel')
+				});
+			Layout l2 = new Layout(
+				Contact.getSObjectType(),
+				UserInfo.getOrganizationId(),
+				'ns',
+				'n2',
+				new List<Layout.Action> {
+					new Layout.Action(
+						Layout.ACTION_TYPE_ONLINEEDITOR,
+						Layout.ACTION_NAME_ONLINEEDITOR,
+						'testLabel')
+				});
+
+			Test.startTest();
+			String parameters = '{"genButtonApiName":"testgenbutton","genButtonLabel":"testgenlabel", "genTemplateId":"01pL0000002LXwu"}';
+			List<Layout> result = MetadataService.updateLayouts(
+				Contact.getSObjectType(),
+				new List<Layout> { l1, l2 },
+				parameters);
 			Test.stopTest();
 
 			System.assertEquals(2, Collection.size(result));
@@ -1080,6 +1321,18 @@ private class MetadataServiceTest {
 		System.assertEquals('test', MetadataService.fixActionName(Lead.getSObjectType(), 'Lead-test'));
 		System.assertEquals('test', MetadataService.fixActionName(Envelope__c.getSObjectType(), 'test'));
 		System.assertEquals('test', MetadataService.fixActionName(Envelope__c.getSObjectType(), MetadataAPI.NAMESPACE_PREFIX + 'Envelope__test'));
+		if (Salesforce.isValidSObject('blng__Invoice__c')) {
+			System.assertEquals(
+				'blng__Invoice__c.Action',
+				MetadataService.fixActionName(
+					Salesforce.getSObjectType('blng__Invoice__c'),
+					'blng__Invoice__c.Action'));
+			System.assertEquals(
+				'blng__Invoice__c.Action',
+				MetadataService.fixActionName(
+					Salesforce.getSObjectType('blng__Invoice__c'),
+					'Invoice__c.Action')); // Test for DFS-7753
+		}
 	}
 
 	@IsTest
@@ -1150,7 +1403,7 @@ private class MetadataServiceTest {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			try {
-				List<Query.Relationship> results = MetadataService.getLookups(opportunityType);
+				MetadataService.getLookups(opportunityType);
 				throw new AssertException('Expected failure');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -1164,10 +1417,9 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				SObjectType type = null;
-				List<Query.Relationship> results = MetadataService.getLookups(type);
+				MetadataService.getLookups(null);
 				throw new AssertException('Expected failure');
-			} catch (DocusignException ex) {
+			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidType, ex.getMessage());
 			}
 			Test.stopTest();
@@ -1179,10 +1431,9 @@ private class MetadataServiceTest {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				SObjectType type = null;
-				List<Query.Relationship> results = MetadataService.getChildRelationships(type);
+				MetadataService.getChildRelationships((SObjectType)null);
 				throw new AssertException('Expected failure');
-			} catch (DocusignException ex) {
+			} catch (DocuSignException ex) {
 				System.assertEquals(Label.InvalidType, ex.getMessage());
 			}
 			Test.stopTest();
@@ -1195,12 +1446,25 @@ private class MetadataServiceTest {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			try {
-				List<Query.Relationship> results = MetadataService.getChildRelationships(opportunityType);
+				MetadataService.getChildRelationships(opportunityType);
 				throw new AssertException('Expected failure');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
+	}
+
+	@IsTest
+	static void test_getActionType() {
+		Test.startTest();
+		System.assertEquals(Layout.ACTION_TYPE_OTHER, MetadataService.getActionType(null));
+		System.assertEquals(Layout.ACTION_TYPE_OTHER, MetadataService.getActionType(' '));
+		System.assertEquals(Layout.ACTION_TYPE_OTHER, MetadataService.getActionType('Action'));
+		System.assertEquals(Layout.ACTION_TYPE_SEND, MetadataService.getActionType(Layout.ACTION_NAME_SEND));
+		System.assertEquals(Layout.ACTION_TYPE_GEN, MetadataService.getActionType(Layout.ACTION_NAME_GEN + 'XX'));
+		System.assertEquals(Layout.ACTION_TYPE_ONLINEEDITOR, MetadataService.getActionType(Layout.ACTION_NAME_ONLINEEDITOR + 'XX'));
+		System.assertEquals(Layout.ACTION_TYPE_DEC, MetadataService.getActionType(Layout.ACTION_NAME_DEC + 'XX'));
+		Test.stopTest();
 	}
 }

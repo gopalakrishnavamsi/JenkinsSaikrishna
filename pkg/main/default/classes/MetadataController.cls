@@ -69,8 +69,7 @@ public with sharing class MetadataController extends Controller {
 			return MetadataService.updateLayouts(
 				Salesforce.getSObjectType(sObjectType),
 				(List<Layout>)JSON.deserialize(layoutsJson, List<Layout>.class),
-				parameters,
-				null);
+				parameters);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to update layouts');
 		}

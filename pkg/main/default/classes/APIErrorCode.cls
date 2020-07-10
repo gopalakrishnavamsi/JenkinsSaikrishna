@@ -46,7 +46,7 @@ global class APIErrorCode {
 	 */
 	global static final Integer INVALID_RECIPIENT_SEQUENCE = 1008;
 	public static final Integer DATABASE_ERROR = 1009;
-	public static final Integer METADATA_API_NOT_SUPPORTED = 1010;
+	// 1010
 	/**
 	 * The DocuSign trial has expired.
 	 */

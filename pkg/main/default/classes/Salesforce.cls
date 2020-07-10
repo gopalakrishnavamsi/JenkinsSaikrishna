@@ -63,44 +63,6 @@ public with sharing class Salesforce {
 		isCommunitySite = Site.getSiteType() == 'ChatterNetwork';
 	}
 
-	public class MetadataApiNotSupportedException extends Exception {
-	}
-
-	@TestVisible
-	private static Boolean isSObjectId(final String sObjectName, final Id sObjectId) {
-		if (String.isBlank(sObjectId)) return false;
-
-		SObjectType objectType;
-		try {
-			objectType = sObjectId.getSobjectType();
-		} catch (SObjectException ex) {
-			objectType = null;
-		}
-		if (objectType == null) return false;
-
-		return objectType.getDescribe().getName() == sObjectName;
-	}
-
-	public static Boolean exists(final String sObjectType) {
-		return Salesforce.exists(sObjectType, null);
-	}
-
-	public static Boolean exists(final String sObjectType, final Set<String> fields) {
-		Boolean result = String.isNotBlank(sObjectType);
-		if (result) {
-			SObjectType t = GLOBAL_DESCRIBE.get(Application.resolveType(sObjectType).toLowerCase());
-			if (t == null) {
-				result = false;
-			} else if (Collection.isNotEmpty(fields)) {
-				Set<String> keys = t.getDescribe().fields.getMap().keySet();
-				for (String f : fields) {
-					result &= String.isNotBlank(f) && keys.contains(f.trim().toLowerCase());
-				}
-			}
-		}
-		return result;
-	}
-
 	public static SObjectType getSObjectType(final String typeName) {
 		if (String.isBlank(typeName)) {
 			throw new DocuSignException(
@@ -214,11 +176,13 @@ public with sharing class Salesforce {
 				List<SObject> networkData = Database.query('SELECT Id FROM Network WITH SECURITY_ENFORCED');
 				List<String> communityUrls = new List<String>();
 				if (Collection.isNotEmpty(networkData)) {
-					for (Sobject networkObj : networkData) {
+					for (SObject networkObj : networkData) {
 						communityUrls.add(Network.getLoginUrl(networkObj.Id).removeEndIgnoreCase('/login'));
 					}
 					Salesforce.communityOrigins = communityUrls;
 				}
+			} else {
+				Salesforce.communityOrigins = new List<String>();
 			}
 		}
 		return Salesforce.communityOrigins;
@@ -243,21 +207,6 @@ public with sharing class Salesforce {
 			};
 		}
 		return Salesforce.lightningOrigins;
-	}
-
-	public static Boolean isValidOrigin(final String origin) {
-		//Make case insensitive comparison
-		Boolean result = false;
-		List<String> visualForceOrigins = Salesforce.getVisualforceOrigins();
-		if (visualForceOrigins != null && !visualForceOrigins.isEmpty()) {
-			for (String vfOrigin : visualForceOrigins) {
-				if (vfOrigin.equalsIgnoreCase(origin)) {
-					result = true;
-					break;
-				}
-			}
-		}
-		return result;
 	}
 
 	public static Boolean isValidTarget(final String target) {
@@ -295,12 +244,16 @@ public with sharing class Salesforce {
 		return result;
 	}
 
-	public static Boolean isValidSObject(String sObjectName) {
-		return GLOBAL_DESCRIBE.containsKey(sObjectName);
+	public static Boolean isValidSObject(final String sObjectName) {
+		return String.isNotBlank(sObjectName)
+			&& GLOBAL_DESCRIBE.containsKey(sObjectName.trim().toLowerCase());
 	}
 
-	public static SObjectType getParentSObjectType(SObjectType baseSObject, String referenceFieldName) {
-		SObjectType parentSObjectType ;
+	public static SObjectType getParentSObjectType(
+		final SObjectType baseSObject,
+		final String referenceFieldName) {
+
+		SObjectType parentSObjectType;
 		Map<String, Schema.SObjectField> parentFieldsMap = baseSObject.getDescribe().fields.getMap();
 		if (parentFieldsMap.containsKey(referenceFieldName)) {
 			Schema.DescribeFieldResult dfr1 = parentFieldsMap.get(referenceFieldName).getDescribe();
@@ -311,5 +264,17 @@ public with sharing class Salesforce {
 			}
 		}
 		return parentSObjectType;
+	}
+
+	public static String getNamespace(final SObjectType type) {
+		if (type == null) return '';
+
+		String result = '';
+		DescribeSObjectResult objDesc = type.getDescribe();
+		if (objDesc.isCustom()) {
+			String name = objDesc.getName().removeEnd('__c');
+			result = name.contains('__') ? name.substringBefore('__') : '';
+		}
+		return result;
 	}
 }

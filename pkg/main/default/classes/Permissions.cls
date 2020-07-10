@@ -1041,7 +1041,9 @@ public with sharing class Permissions {
 						f = formatCustomLookupField(f);
 					}
 					SObjectField sof = fieldMap.get(f);
-					if (sof == null && !objectDescribe.isCustom() && !f.endsWith('__c') && Salesforce.exists(f)) {
+					if (sof == null && !objectDescribe.isCustom() && !f.endsWith('__c')
+						&& Salesforce.isValidSObject(Application.resolveType(f))) {
+
 						// In the event we have a lookup field with the same name as the master object.
 						f = formatIdPointingField(f);
 						sof = fieldMap.get(f);

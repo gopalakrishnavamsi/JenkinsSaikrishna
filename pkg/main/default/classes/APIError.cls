@@ -70,8 +70,6 @@ global virtual class APIError {
 			} else {
 				error = new APIError(APIErrorCode.DATABASE_ERROR, ex.getMessage());
 			}
-		} else if (ex instanceof Salesforce.MetadataApiNotSupportedException) {
-			error = new APIError(APIErrorCode.METADATA_API_NOT_SUPPORTED, ex.getMessage());
 		} else {
 			error = new APIError(APIErrorCode.FAILURE, ex.getMessage());
 		}

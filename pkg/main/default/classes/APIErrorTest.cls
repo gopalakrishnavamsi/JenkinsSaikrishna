@@ -56,7 +56,6 @@ private class APIErrorTest {
 		UnauthorizedException uaEx = new UnauthorizedException('UNAUTHORIZED');
 		DmlException dmlEx1 = new DmlException('Uh-oh, storage limit exceeded');
 		DmlException dmlEx2 = new DmlException('DML');
-		Salesforce.MetadataApiNotSupportedException mdEx = new Salesforce.MetadataApiNotSupportedException('UNSUPPORTED');
 		StringException sEx = new StringException('STRING');
 
 		System.assertEquals(APIErrorCode.UNSUPPORTED_MEDIA_TYPE, APIError.fromException(apiEx).code);
@@ -69,8 +68,6 @@ private class APIErrorTest {
 		System.assertEquals(Label.SalesforceOrgStorageLimitExceeded, APIError.fromException(dmlEx1).description);
 		System.assertEquals(APIErrorCode.DATABASE_ERROR, APIError.fromException(dmlEx2).code);
 		System.assertEquals('DML', APIError.fromException(dmlEx2).description);
-		System.assertEquals(APIErrorCode.METADATA_API_NOT_SUPPORTED, APIError.fromException(mdEx).code);
-		System.assertEquals('UNSUPPORTED', APIError.fromException(mdEx).description);
 		System.assertEquals(APIErrorCode.FAILURE, APIError.fromException(sEx).code);
 		System.assertEquals('STRING', APIError.fromException(sEx).description);
 	}

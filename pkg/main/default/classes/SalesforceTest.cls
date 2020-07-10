@@ -63,41 +63,6 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_isSObjectId() {
-		System.runAs(UserMock.createUser()) {
-			Schema.Account a = TestUtils.createAccount();
-			Contact c = TestUtils.createContact(a.Id);
-			Opportunity o = TestUtils.createOpportunity(a.Id);
-			Case cs = TestUtils.createCase(a.Id, c.Id);
-
-			Test.startTest();
-			System.assert(Salesforce.isSObjectId('Account', a.Id));
-			System.assert(Salesforce.isSObjectId('Contact', c.Id));
-			System.assert(Salesforce.isSObjectId('Opportunity', o.Id));
-			System.assert(Salesforce.isSObjectId('Case', cs.Id));
-			System.assert(!Salesforce.isSObjectId('Case', a.Id));
-			System.assert(!Salesforce.isSObjectId('Contact', '0006A000001f5mLQAQ'));
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_exists() {
-		Test.startTest();
-		// Object exists
-		System.assert(Salesforce.exists('User'));
-		System.assert(Salesforce.exists(' USER\n'));
-		System.assert(Salesforce.exists('User', null));
-		// Object does not exist
-		System.assert(!Salesforce.exists('unitest__BogusObject__c', null));
-		// Fields exist
-		System.assert(Salesforce.exists('User', new Set<String> { 'Name', 'Email' }));
-		// Fields do not exist
-		System.assert(!Salesforce.exists('User', new Set<String> { 'Name', 'unitest__BogusField__c', 'Email' }));
-		Test.stopTest();
-	}
-
-	@IsTest
 	static void test_getSObjectType() {
 		String testInput1 = null;
 		String testInput2 = '  ';
@@ -111,10 +76,10 @@ private class SalesforceTest {
 			System.assertEquals(
 				String.format(
 					Label.InvalidSObjectType_1,
-					new List<String> { 
+					new List<String> {
 						testInput1
 					}
-				), 
+				),
 				ex.getMessage()
 			);
 		}
@@ -125,12 +90,12 @@ private class SalesforceTest {
 			System.assertEquals(
 				String.format(
 					Label.InvalidSObjectType_1,
-					new List<String> { 
+					new List<String> {
 						testInput2
 					}
-				), 
+				),
 				ex.getMessage()
-			);			
+			);
 		}
 		try {
 			Salesforce.getSObjectType(testInput3);
@@ -139,12 +104,12 @@ private class SalesforceTest {
 			System.assertEquals(
 				String.format(
 					Label.InvalidSObjectType_1,
-					new List<String> { 
+					new List<String> {
 						testInput3
 					}
-				), 
+				),
 				ex.getMessage()
-			);			
+			);
 		}
 		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getSObjectType('Account'));
 		System.assertEquals(Lead.getSObjectType(), Salesforce.getSObjectType('lead'));
@@ -234,60 +199,37 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_isValidOrigin() {
-		Test.startTest();
-		System.assert(!Salesforce.isValidOrigin(null));
-		System.assert(!Salesforce.isValidOrigin('  '));
-		System.assert(!Salesforce.isValidOrigin('https://example.com'));
-		System.assert(!Salesforce.isValidOrigin('https://' + UUID.randomUUID() + '.lightning.force.com'));
-		System.assert(!Salesforce.isValidOrigin('https://' + UUID.randomUUID() + '.visualforce.com'));
-		System.assert(!Salesforce.isValidOrigin('https://evil.com?' + Salesforce.baseUrl.getHost().substringBefore('.') + 'lightning.force.com '));
-		System.assert(!Salesforce.isValidOrigin('https://evil.com?' + Salesforce.baseUrl.getHost().substringBefore('.') + 'visualforce.com '));
-		System.assert(!Salesforce.isValidOrigin('http://' + Salesforce.baseUrl.getHost().substringBefore('.') + 'visualforce.com '));
-		System.assert(!Salesforce.isValidOrigin('http://' + Salesforce.baseUrl.getHost().substringBefore('.') + 'lightning.force.com '));
-		System.assert(!Salesforce.isValidOrigin(lexOrigin1()), 'Origin not valid: ' + lexOrigin1());
-		System.assert(!Salesforce.isValidOrigin(lexOrigin2()), 'Origin not valid: ' + lexOrigin2());
-		System.assert(Salesforce.isValidOrigin(vfOrigin1()), 'Origin not valid: ' + vfOrigin1());
-		System.assert(Salesforce.isValidOrigin(vfOrigin2()), 'Origin not valid: ' + vfOrigin1());
-		Test.stopTest();
+	static void test_isValidCommunityURL() {
+		List<Profile> profileData = [SELECT Id FROM Profile WHERE Name = 'Customer Community Login User' LIMIT 1];
+		if (Schema.getGlobalDescribe().containsKey('Network') && Collection.isNotEmpty(profileData)) {
+			Schema.Account acc = TestUtils.createAccount();
+			Contact con = TestUtils.createContact(acc.Id);
+			User user = new User (
+				ContactId = con.Id,
+				FirstName = 'Unit',
+				LastName = 'Test',
+				Username = UUID.randomUUID().toString() + '@unit.test',
+				Email = UUID.randomUUID().toString() + '@unit.test',
+				Alias = 'test',
+				TimeZoneSidKey = 'America/Los_Angeles',
+				LocaleSidKey = 'en_US',
+				EmailEncodingKey = 'ISO-8859-1',
+				ProfileId = profileData[0].Id,
+				LanguageLocaleKey = 'en_US');
+			insert user;
+			System.runAs(user) {
+				Test.startTest();
+				Id user_id = user.Id;
+				List<SObject> networkMemberData = Database.query('SELECT Network.Id FROM NetworkMember WHERE MemberId =: user_id LIMIT 1');
+				if (Collection.isNotEmpty(networkMemberData)) {
+					System.assertEquals(true, Salesforce.isValidTarget(Network.getLoginUrl((Id)networkMemberData[0].getSObject('Network').get('Id')).removeEndIgnoreCase('/login')));
+					System.assertNotEquals(null, Salesforce.getCommunityOrigins());
+				}
+				Test.stopTest();
+			}
+		}
 	}
 
-    @IsTest
-    static void test_isValidCommunityURL() {
-        List<Profile> proflieData = [SELECT ID FROM Profile WHERE Name = 'Customer Community Login User' LIMIT 1];
-        try {
-            if (Schema.getGlobalDescribe().containsKey('Network') && Collection.isNotEmpty(proflieData)) {
-                Schema.Account acc = TestUtils.createAccount();
-                Contact con = TestUtils.createContact(acc.Id);
-                User user = new User (
-                    contactID = con.id,
-                    FirstName = 'Unit',
-                    LastName = 'Test',
-                    Username = UUID.randomUUID().toString() + '@unit.test',
-                    Email = UUID.randomUUID().toString() + '@unit.test',
-                    Alias = 'test',
-                    TimeZoneSidKey = 'America/Los_Angeles',
-                    LocaleSidKey = 'en_US',
-                    EmailEncodingKey = 'ISO-8859-1',
-                    ProfileId = proflieData[0].ID,
-                    LanguageLocaleKey = 'en_US' );
-                insert user;
-                system.runAs(user) {
-                    Test.startTest();
-                    Id user_id = user.id;  
-                    List<SObject> networkMemberData = Database.Query('SELECT Network.Id FROM NetworkMember WHERE MemberId =: user_id LIMIT 1');
-                    if(Collection.isNotEmpty(networkMemberData)) {
-                        System.assertEquals(true, Salesforce.isValidTarget(Network.getLoginUrl((ID)networkMemberData[0].getSobject('Network').get('Id')).removeEndIgnoreCase('/login')));
-                        System.assertNotEquals(null, Salesforce.getCommunityOrigins());
-                    }
-                    Test.stopTest();
-                }
-            }
-        } catch(Exception ex) {
-
-        }
-    }
-    
 	@IsTest
 	static void test_isValidTarget() {
 		Test.startTest();
@@ -311,6 +253,8 @@ private class SalesforceTest {
 	static void test_isValidSObjectTest() {
 		Test.startTest();
 		System.assert(Salesforce.isValidSObject('Account'));
+		System.assert(Salesforce.isValidSObject('USER'));
+		System.assert(Salesforce.isValidSObject(Application.namespacePrefix + 'envelope__c'));
 		System.assert(!Salesforce.isValidSObject('Parent'));
 		Test.stopTest();
 	}
@@ -322,6 +266,21 @@ private class SalesforceTest {
 		System.assertEquals(Schema.Account.getSObjectType(), Salesforce.getParentSObjectType(Schema.Account.getSObjectType(), 'MasterRecordId'));
 		System.assertEquals(Schema.Case.getSObjectType(), Salesforce.getParentSObjectType(Schema.Case.getSObjectType(), 'ParentId'));
 		System.assertEquals(Schema.User.getSObjectType(), Salesforce.getParentSObjectType(Schema.Case.getSObjectType(), 'OwnerID'));
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getNamespace() {
+		Test.startTest();
+		System.assertEquals('', Salesforce.getNamespace(null));
+		System.assertEquals('', Salesforce.getNamespace(Opportunity.getSObjectType()));
+		System.assertEquals(Application.namespace, Salesforce.getNamespace(Envelope__c.getSObjectType()));
+		if (Salesforce.isValidSObject('SBQQ__Quote__c')) {
+			System.assertEquals('SBQQ', Salesforce.getNamespace(Salesforce.getSObjectType('SBQQ__Quote__c')));
+		}
+		if (Salesforce.isValidSObject('blng__Invoice__c')) {
+			System.assertEquals('blng', Salesforce.getNamespace(Salesforce.getSObjectType('blng__Invoice__c')));
+		}
 		Test.stopTest();
 	}
 }

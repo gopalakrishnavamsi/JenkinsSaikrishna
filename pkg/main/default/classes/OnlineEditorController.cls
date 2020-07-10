@@ -562,14 +562,10 @@ public with sharing class OnlineEditorController extends Controller {
 
 		Permissions.verifyIsDocuSignAdministrator();
 
-		Gen.LayoutParameters params = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
-		Gen.Template template = GenService.getTemplate((Id)params.genTemplateId);
-
 		return MetadataService.updateLayouts(
 			Salesforce.getSObjectType(sObjectType),
 			(List<Layout>)JSON.deserialize(layoutsJson, List<Layout>.class),
-			parameters,
-			template.springTemplateId);
+			parameters);
 	}
 
 	// FIXME: This is a mostly useless function. If the springTemplateId is needed in UUID form on the client, just create it there.
