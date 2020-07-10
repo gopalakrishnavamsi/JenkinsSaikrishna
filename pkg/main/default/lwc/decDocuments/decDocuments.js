@@ -8,13 +8,6 @@ import {DOCUMENT_TYPE_TEMPLATE_DOCUMENT,
         LABEL,
         getDefaultTemplateDocument,
         getDefaultSourceFiles} from 'c/documentUtils';
-// Lightning message service
-import {createMessageContext,
-        releaseMessageContext,
-        APPLICATION_SCOPE,
-        subscribe} from 'lightning/messageService';
-// Subscriber
-import DEC_UPDATE_DOCUMENT_ON_DRAG_AND_DROP from '@salesforce/messageChannel/DecUpdateDocumentOnDragAndDrop__c';
 
 export default class DecDocuments extends LightningElement {
   @api recordId;
@@ -25,15 +18,6 @@ export default class DecDocuments extends LightningElement {
   sourceFilesDocument = null;
   addDocumentsEmptyImageURL = `${ADD_DOCUMENTS_EMPTY_IMAGE}#decAddDocumentsEmpty`;
   label = LABEL;
-  context = createMessageContext();
-
-  connectedCallback() {
-    this.subscribeToMessageChannel();
-  }
-
-  disconnectedCallback() {
-    releaseMessageContext(this.context);
-  }
 
   get hasTemplateDocuments() {
     return !isEmpty(this.getDocumentType(DOCUMENT_TYPE_TEMPLATE_DOCUMENT));
@@ -71,28 +55,12 @@ export default class DecDocuments extends LightningElement {
     }
   }
 
-  subscribeToMessageChannel() {
-    if(this.subscription) {
-      return;
-    }
-    this.subscription = subscribe(this.context, DEC_UPDATE_DOCUMENT_ON_DRAG_AND_DROP, (message) => {
-      this.updateDocument(message);
-    }, {scope: APPLICATION_SCOPE});
-  }
-
   updateDocumentsEvent(event) {
     this.updateDocuments(event.detail.documents);
   }
 
   updateDocuments(docs) {
       genericEvent.call(this, 'update', docs, true);
-  }
-
-  // Called by decDocument for modifying inner document details
-  updateDocument(message) {
-    let docs = this.documents.slice();
-    docs[message.index] = message.document;
-    this.updateDocuments(docs);
   }
 
   handleClearTemplateDocument() {

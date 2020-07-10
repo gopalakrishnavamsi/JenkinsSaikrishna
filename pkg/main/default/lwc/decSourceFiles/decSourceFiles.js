@@ -13,7 +13,6 @@ import {
 // Lightning message service - Publisher
 import {createMessageContext, releaseMessageContext, publish} from 'lightning/messageService';
 import DEC_UPDATE_SOURCE_FILES from '@salesforce/messageChannel/DecUpdateSourceFiles__c';
-import DEC_UPDATE_DOCUMENT_ON_DRAG_AND_DROP from '@salesforce/messageChannel/DecUpdateDocumentOnDragAndDrop__c';
 
 export default class DecSourceFiles extends LightningElement {
     @api document;
@@ -73,8 +72,8 @@ export default class DecSourceFiles extends LightningElement {
 
     handleToggleSourceFiles(event) {
         const message = {
-            isSourceFilesSelected : event.target.checked
-        }
+            attachSourceFiles: event.target.checked
+        };
         publish(this.context, DEC_UPDATE_SOURCE_FILES, message);
     }
 
@@ -118,10 +117,10 @@ export default class DecSourceFiles extends LightningElement {
 
     updateDocument(document) {
         const message = {
-            document : document,
-            index : this.index
+            document: document,
+            index: this.index
         };
-        publish(this.context, DEC_UPDATE_DOCUMENT_ON_DRAG_AND_DROP, message);
+        publish(this.context, DEC_UPDATE_SOURCE_FILES, message);
     }
 
     handleContainsValue(event) {

@@ -87,7 +87,7 @@ export default class DecSetupConfig extends LightningElement {
       this.context,
       this.sourceFilesSubscription,
       DEC_UPDATE_SOURCE_FILES,
-      this.handleToggleSourceFiles.bind(this)
+      this.handleUpdateSourceFiles.bind(this)
     );
 
     this.renameTemplateDocSubscription = subscribeToMessageChannel(
@@ -201,9 +201,20 @@ export default class DecSetupConfig extends LightningElement {
     return this.envelopeConfigurationData ? this.envelopeConfigurationData.sourceObject : null;
   }
 
-  handleToggleSourceFiles(message) {
+  handleUpdateSourceFiles(message) {
     this.isDirty = true;
-    this.attachSourceFiles = message.isSourceFilesSelected;
+
+    if (!isEmpty(message.attachSourceFiles) && this.attachSourceFiles !== message.attachSourceFiles) {
+      this.attachSourceFiles = message.attachSourceFiles;
+      return;
+    }
+
+    let documents = this.envelopeConfigurationData.documents.slice();
+    documents[message.index] = message.document;
+
+    this.updateLocalConfiguration({
+      documents
+    });
   }
 
   handleBack() {
@@ -251,7 +262,6 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   updateLocalConfiguration(fieldsToUpdate) {
-    this.isDirty = true;
     this.envelopeConfigurationData = {
       ...this.envelopeConfigurationData,
       ...fieldsToUpdate
@@ -259,6 +269,7 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   updateLocalData(event) {
+    this.isDirty = true;
     this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents: event.detail.data};
   }
 

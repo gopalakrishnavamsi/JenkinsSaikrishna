@@ -4,7 +4,15 @@
 	<isExposed>true</isExposed>
 	<description>Saves changes made to Source Files on Envelope Configuration</description>
 	<lightningMessageFields>
-		<fieldName>isSourceFilesSelected</fieldName>
-		<description>Updated source files data</description>
+		<fieldName>attachSourceFiles</fieldName>
+		<description>Flag to determine whether to attach files from the record</description>
+	</lightningMessageFields>
+	<lightningMessageFields>
+		<fieldName>document</fieldName>
+		<description>Document data to be placed at a specific sequence.</description>
+	</lightningMessageFields>
+	<lightningMessageFields>
+		<fieldName>index</fieldName>
+		<description>Sequence or routing order for the documents that are part of envelope configuration</description>
 	</lightningMessageFields>
 </LightningMessageChannel>
