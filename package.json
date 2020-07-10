@@ -15,7 +15,6 @@
     "husky": "^2.2.0",
     "jsdom": "15.1.0",
     "jsdom-global": "3.0.2",
-    "lightning": "^2.0.22",
     "lint-staged": "^8.1.6",
     "mocha": "^6.1.4",
     "module-alias": "^2.2.0",
