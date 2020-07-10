@@ -54,7 +54,9 @@
                     notifications={notifications}
                     options={options}
                     record-id={recordId}
-                    ondocumentwriteback={handleOnDocumentWriteBack}>
+                    source-object={sourceObject}
+                    ondocumentwriteback={handleOnDocumentWriteBack}
+                    ondatawriteback={handleOnDataWriteBack}>
             </c-dec-options>
             <!-- custom buttons step -->
             <template if:true={customButtonStep}>

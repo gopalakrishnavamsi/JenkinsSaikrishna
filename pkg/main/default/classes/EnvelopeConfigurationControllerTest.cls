@@ -813,10 +813,10 @@ private class EnvelopeConfigurationControllerTest {
 			try {
 				String result2 = EnvelopeConfigurationController.queryEntityPhone('BadIdValue');
 				throw new AssertException('Expected queryEntityPhone to fail');
-			} catch(Exception ex) {
+			} catch (Exception ex) {
 				System.assert(ex.getMessage().startsWith('Invalid id'), ex.getMessage());
 			}
-			Test.stopTest();		
+			Test.stopTest();
 			System.assertEquals(result1, null);
 		}
 	}
@@ -861,5 +861,99 @@ private class EnvelopeConfigurationControllerTest {
 			Test.stopTest();
 			System.assertNotEquals(null, result);
 		}
+	}
+
+	@IsTest
+	static void test_getPickListValues_success() {
+		final String sObjectType = 'Opportunity';
+		final String sobjectFieldName = 'StageName';
+		Test.startTest();
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			List<EnvelopeConfigurationController.ComboBoxOptions> picklistOptions =
+				EnvelopeConfigurationController.getPicklistValues(sObjectType, sobjectFieldName);
+			System.assertNotEquals(picklistOptions.size(), 0);
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getPickListValues_unauthorized() {
+		final String sObjectType = 'Opportunity';
+		final String sobjectFieldName = 'StageName';
+		Test.startTest();
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			try {
+				List<EnvelopeConfigurationController.ComboBoxOptions> picklistOptions =
+					EnvelopeConfigurationController.getPicklistValues(sObjectType, sobjectFieldName);
+				throw new AssertException('Expected getPickListValues to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_parseOptions_envelopeEventUpdates_completed() {
+		EnvelopeConfiguration config = new EnvelopeConfiguration(
+			null,
+			'Test Envelope Configuration',
+			'Account',
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null);
+		Map<String, Object> fieldMap = new Map<String, Object> { 'Opportunity.StageName' => 'Closed Won' };
+		Map<String, Map<String, Object>> envelopeEventUpdate =
+			new Map<String, Map<String, Object>> { Envelope.STATUS_COMPLETED => fieldMap };
+		Envelope.Options options = new Envelope.Options(
+			true,
+			new Envelope.DocumentWriteBack(
+				null,
+				'NamePDF',
+				true,
+				true),
+			envelopeEventUpdate,
+			new Map<String, Map<String, Object>>());
+		Map<String, Object> optionsNode = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(options));
+
+		Test.startTest();
+		Envelope.Options result = EnvelopeConfigurationController.parseOptions(optionsNode);
+		Test.stopTest();
+
+		System.assertNotEquals(result.envelopeEventUpdates, null);
+	}
+
+	@IsTest
+	static void test_parseOptions_default() {
+		EnvelopeConfiguration config = new EnvelopeConfiguration(
+			null,
+			'Test Envelope Configuration',
+			'Account',
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			Envelope.DEFAULT_OPTIONS,
+			null);
+		Map<String, Object> optionsNode = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(Envelope.DEFAULT_OPTIONS));
+
+		Test.startTest();
+		Envelope.Options result = EnvelopeConfigurationController.parseOptions(optionsNode);
+		Test.stopTest();
+
+		System.assertNotEquals(result.envelopeEventUpdates, null);
 	}
 }

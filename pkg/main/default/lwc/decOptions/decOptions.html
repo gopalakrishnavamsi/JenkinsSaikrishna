@@ -46,12 +46,25 @@
                 </div>
             </div>
         </div>
-        <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large">
-            <div class="ds-options-details-header-text ">{label.opportunityStage}</div>
-            <div class="slds-p-top_large">
-                TBD
+        <template if:true={isDataWritebackEnabled}>
+            <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large">
+                <div class="ds-options-details-header-text ">{stageLabel}</div>
+                <div class="slds-m-top_small ds-options-information-text">{dataWritebackHelpTextLabel}</div>
+                <div class="slds-grid slds-p-top_large">
+                    <div class="slds-col slds-size_1-of-6 ds-options-inner-text ds-options-fit-content-width slds-p-right_small">
+                        {stageLabel}
+                    </div>
+                    <div class="slds-col slds-size_1-of-5 ds-options-fit-content-width">
+                        <lightning-combobox
+                                value={selectedStage}
+                                options={stageOptions.data}
+                                onchange={handleDataWritebackChange}
+                                placeholder={label.doNotUpdatePlaceholder}>
+                        </lightning-combobox>
+                    </div>
+                </div>
             </div>
-        </div>
+        </template>
         <div class="slds-p-bottom_large slds-p-top_large">
             <div class="ds-options-details-header-text">{label.documentWriteback}</div>
             <div class="slds-p-top_large">

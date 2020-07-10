@@ -10683,12 +10683,12 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Document Writeback</value>
 	</labels>
 	<labels>
-		<fullName>OpportunityStage</fullName>
+		<fullName>Stage</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Opportunity Stage</shortDescription>
-		<value>Opportunity Stage</value>
+		<shortDescription>Stage</shortDescription>
+		<value>{0} Stage</value>
 	</labels>
 	<labels>
 		<fullName>InvalidJson</fullName>
@@ -11030,6 +11030,22 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>{0} of {1} files selected</value>
 	</labels>
 	<labels>
+		<fullName>DataWriteback</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DataWriteback</shortDescription>
+		<value>Data Writeback</value>
+	</labels>
+	<labels>
+		<fullName>DataWritebackHelpText</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DataWritebackHelpText</shortDescription>
+		<value>Once Documents are completed update the {0} stage</value>
+	</labels>
+	<labels>
 		<fullName>StartsWithLabel</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>
@@ -11044,6 +11060,14 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Ends With</shortDescription>
 		<value>ends with</value>
+	</labels>
+	<labels>
+		<fullName>DoNotUpdatePlaceholder</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>DoNotUpdatePlaceholder</shortDescription>
+		<value>- Do Not Update -</value>
 	</labels>
   	<labels>
 		<fullName>CreateConnectConfiguration</fullName>

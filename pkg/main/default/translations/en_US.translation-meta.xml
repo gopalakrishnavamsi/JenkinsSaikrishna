@@ -5532,8 +5532,8 @@
 		<name>DocumentWriteback</name>
 	</customLabels>
 	<customLabels>
-		<label>Opportunity Stage</label>
-		<name>OpportunityStage</name>
+		<label>{0} Stage</label>
+		<name>Stage</name>
 	</customLabels>
 	<customLabels>
 		<label>JSON is invalid.</label>
@@ -5711,6 +5711,14 @@
 		<label>{0} of {1} files selected</label>
 		<name>SelectedFilesOfTotalFiles</name>
 	</customLabels>
+	<customLabels>
+		<label>Data Writeback</label>
+		<name>DataWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>Once Documents are completed update the {0} stage</label>
+		<name>DataWritebackHelpText</name>
+	</customLabels>
 	<customLabels>		
 		<label>starts with</label>
 		<name>StartsWithLabel</name>
@@ -5718,7 +5726,11 @@
 	<customLabels>		
 		<label>ends with</label>
 		<name>EndsWithLabel</name>
-	</customLabels>	
+	</customLabels>
+	<customLabels>
+		<label>- Do Not Update -</label>
+		<name>DoNotUpdatePlaceholder</name>
+	</customLabels>
 	<customLabels>
 		<label>Create DocuSign Connect configuration</label>
 		<name>CreateConnectConfiguration</name>

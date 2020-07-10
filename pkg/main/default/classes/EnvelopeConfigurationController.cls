@@ -3,6 +3,17 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	public String objectHomeUrl { get; private set; }
 	public Id envelopeConfigId { get; set; }
 
+	public class ComboBoxOptions {
+		@AuraEnabled
+		public String label { get; private set; }
+		@AuraEnabled
+		public String value { get; private set; }
+		public ComboBoxOptions(final String label, final String value) {
+			this.label = label;
+			this.value = value;
+		}
+	}
+
 	public class LayoutParameters {
 		public String decButtonApiName { get; private set; }
 		public String decButtonLabel { get; private set; }
@@ -22,23 +33,65 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	private static String queryEntityPhone(final Id entityId) {
 		if (entityId == null) return null;
 		SObjectType objectType = entityId.getSobjectType();
-		if (!RecipientService.canResolveRecipientType(objectType))  return null;
+		if (!RecipientService.canResolveRecipientType(objectType)) return null;
 		Query phoneQuery = Query.newQuery(
-			String.valueOf(objectType), 
-			new List<String>{ 'Id', 'MobilePhone' },
+			String.valueOf(objectType),
+			new List<String> { 'Id', 'MobilePhone' },
 			null
 		);
 		Query.Result queryResult = phoneQuery.execute(entityId);
-		return (String) queryResult.result.get('MobilePhone');
+		return (String)queryResult.result.get('MobilePhone');
 	}
 
 	@TestVisible
 	private static EnvelopeConfiguration parseUpdates(final String envelopeConfigurationJSON) {
+		final String REGEX_PATTERN = '"envelopeEventUpdates".*,"includeDefaultAutoPlaceTags"';
+		final String REPLACEMENT = '"envelopeEventUpdates":null,"includeDefaultAutoPlaceTags"';
 		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(envelopeConfigurationJSON);
 		List<Recipient> recipients = parseRecipients((List<Object>)untypedConfig.get('recipients'));
 		List<Document> documents = parseDocuments((List<Object>)untypedConfig.get('documents'));
-		EnvelopeConfiguration configuration = (EnvelopeConfiguration)JSON.deserialize(envelopeConfigurationJSON, EnvelopeConfiguration.class);
-		return configuration.withRecipients(recipients).withDocuments(documents);
+		Envelope.Options options = parseOptions((Map<String, Object>)untypedConfig.get('options'));
+		Pattern envelopeEventUpdatesPattern = Pattern.compile(REGEX_PATTERN);
+		Matcher envelopeEventUpdatesMatcher = envelopeEventUpdatesPattern.matcher(envelopeConfigurationJSON);
+		String envelopeConfigurationJSONUpdated = envelopeConfigurationJSON;
+		if (envelopeEventUpdatesMatcher.find()) {
+			envelopeConfigurationJSONUpdated =
+				envelopeEventUpdatesMatcher.replaceAll(REPLACEMENT);
+		}
+		EnvelopeConfiguration configuration = (EnvelopeConfiguration)JSON.deserialize(envelopeConfigurationJSONUpdated, EnvelopeConfiguration.class);
+		return configuration.withRecipients(recipients).withDocuments(documents).withOptions(options);
+	}
+
+	@TestVisible
+	private static Envelope.Options parseOptions(final Map<String, Object> options) {
+		final String RECIPIENT_EVENT_UPDATES = 'recipientEventUpdates';
+		final String ENVELOPE_EVENT_UPDATES = 'envelopeEventUpdates';
+		final String INCLUDE_DEFAULT_AUTO_PLACE_TAGS = 'includeDefaultAutoPlaceTags';
+		final String DOCUMENT_WRITE_BACK = 'documentWriteBack';
+		Map<String, Object> unparsedRecipientEventUpdates =
+			(Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(options.get(RECIPIENT_EVENT_UPDATES)));
+		Map<String, Object> unparsedEnvelopeEventUpdates =
+			(Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(options.get(ENVELOPE_EVENT_UPDATES)));
+		Map<String, Map<String, Object>> recipientEventUpdates = getEventUpdates(unparsedRecipientEventUpdates);
+		Map<String, Map<String, Object>> envelopeEventUpdates = getEventUpdates(unparsedEnvelopeEventUpdates);
+		return new Envelope.Options(
+			(Boolean)options.get(INCLUDE_DEFAULT_AUTO_PLACE_TAGS),
+			(Envelope.DocumentWriteBack)JSON.deserialize(JSON.serialize(options.get(DOCUMENT_WRITE_BACK)), Envelope.DocumentWriteBack.class),
+			envelopeEventUpdates,
+			recipientEventUpdates
+		);
+	}
+
+	private static Map<String, Map<String, Object>> getEventUpdates(final Map<String, Object> unparsedEnvelopeEventUpdates) {
+		Map<String, Map<String, Object>> eventUpdates = new Map<String, Map<String, Object>>();
+		if (unparsedEnvelopeEventUpdates != null) {
+			for (String valueKey : unparsedEnvelopeEventUpdates.keySet()) {
+				Map<String, Object> valueMap =
+					(Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(unparsedEnvelopeEventUpdates.get(valueKey)));
+				eventUpdates.put(valueKey, valueMap);
+			}
+		}
+		return eventUpdates;
 	}
 
 	@TestVisible
@@ -244,8 +297,8 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	@AuraEnabled
 	public static String getEntityPhone(final String entityId) {
 		try {
-			return queryEntityPhone((Id) entityId);
-		} catch(Exception ex) {
+			return queryEntityPhone((Id)entityId);
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get entity phone number.');
 		}
 	}
@@ -257,5 +310,22 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 		}
 		pg.setRedirect(true);
 		return pg;
+	}
+
+	@AuraEnabled(Cacheable = true)
+	public static List<ComboBoxOptions> getPicklistValues(final String sobjectType, final String sobjectFieldName) {
+		try {
+			Permissions.verifyIsDocuSignAdministrator();
+
+			List<ComboBoxOptions> result = new List<ComboBoxOptions>();
+			DescribeSObjectResult objResult = Schema.getGlobalDescribe().get(sobjectType).getDescribe();
+			DescribeFieldResult fieldResult = objResult.fields.getMap().get(sobjectFieldName).getDescribe();
+			for (PicklistEntry ple : fieldResult.getPicklistValues()) {
+				if (ple.isActive()) result.add(new ComboBoxOptions(ple.getLabel(), ple.getValue()));
+			}
+			return result;
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get Picklist Values');
+		}
 	}
 }

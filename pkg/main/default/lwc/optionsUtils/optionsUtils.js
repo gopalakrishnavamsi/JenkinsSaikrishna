@@ -7,7 +7,7 @@ import helpVideoText from '@salesforce/label/c.DecOptionsVideoText';
 import helpVideoLength from '@salesforce/label/c.DecOptionsVideoLength';
 import helpVideoLink from '@salesforce/label/c.DecOptionsVideoLink';
 import documentWriteback from '@salesforce/label/c.DocumentWriteback';
-import opportunityStage from '@salesforce/label/c.OpportunityStage';
+import stage from '@salesforce/label/c.Stage';
 import reminders from '@salesforce/label/c.Reminders';
 import automaticReminders from '@salesforce/label/c.AutomaticReminders';
 import expiration from '@salesforce/label/c.Expiration';
@@ -29,6 +29,9 @@ import emailSubjectAndEnvelopeStatus from '@salesforce/label/c.EmailSubjectAndEn
 import envelopeAndEnvelopeIDAndPdf from '@salesforce/label/c.EnvelopeAndEnvelopeIDAndPdf';
 import emailSubjectAndPdf from '@salesforce/label/c.EmailSubjectAndPdf';
 import emailSubjectAndEnvelopeStatusAndPdf from '@salesforce/label/c.EmailSubjectAndEnvelopeStatusAndPdf';
+import dataWriteback from '@salesforce/label/c.DataWriteback';
+import dataWritebackHelpText from '@salesforce/label/c.DataWritebackHelpText';
+import doNotUpdatePlaceholder from '@salesforce/label/c.DoNotUpdatePlaceholder';
 
 const LABEL = {
   options,
@@ -37,7 +40,7 @@ const LABEL = {
   helpVideoLength,
   helpVideoLink,
   documentWriteback,
-  opportunityStage,
+  stage,
   reminders,
   automaticReminders,
   expiration,
@@ -49,10 +52,14 @@ const LABEL = {
   documentWriteBackOptionMessage,
   documentWriteBackCombineDocuments,
   documentWriteBackCertificateOfCompletion,
-  filename
+  filename,
+  dataWriteback,
+  dataWritebackHelpText,
+  doNotUpdatePlaceholder
 };
 
 const DEFAULT_EXPIRATION = 90;
+const ENVELOPE_STATUS_COMPLETED = 'completed';
 
 const REMINDER_OPTIONS = [
   {
@@ -133,6 +140,7 @@ export {
   REMINDER_OPTIONS,
   FILE_NAME_OPTIONS_DEFAULT,
   FILE_NAME_OPTIONS_COMBINED_DOCS,
+  ENVELOPE_STATUS_COMPLETED,
   getDefaultNotifications,
   getDefaultOptions
 }

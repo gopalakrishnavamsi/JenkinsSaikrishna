@@ -1,4 +1,4 @@
-import {LightningElement, api} from 'lwc';
+import {LightningElement, api, wire} from 'lwc';
 //Utils
 import {
   LABEL,
@@ -6,21 +6,34 @@ import {
   REMINDER_OPTIONS,
   FILE_NAME_OPTIONS_DEFAULT,
   FILE_NAME_OPTIONS_COMBINED_DOCS,
+  ENVELOPE_STATUS_COMPLETED,
   getDefaultNotifications,
-  getDefaultOptions} from 'c/optionsUtils';
-
+  getDefaultOptions
+} from 'c/optionsUtils';
 // Lightning message service - Publisher
-import {createMessageContext, releaseMessageContext, publish} from 'lightning/messageService';
+import {
+  createMessageContext, 
+  releaseMessageContext, 
+  publish} from 'lightning/messageService';
 import UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/UpdateNotifications__c';
 import {
   isEmpty,
   genericEvent,
+  formatLabels,
 } from 'c/utils';
+//Apex methods
+import getPicklistValues from '@salesforce/apex/EnvelopeConfigurationController.getPicklistValues';
+
+
+const STAGE = 'StageName';
+const ENVELOPE_UPDATE_KEY = 'Opportunity.StageName';
+const OPPORTUNITY = 'Opportunity';
 
 export default class DecOptions extends LightningElement {
   @api notifications;
   @api options;
   @api recordId;
+  @api sourceObject;
   documentWriteBackName;
   label = LABEL;
   context = createMessageContext();
@@ -40,15 +53,45 @@ export default class DecOptions extends LightningElement {
     releaseMessageContext(this.context);
   }
 
+  /* Todo - Need to add Do Not Update as a separate option instead of placeholder in HTML
+   * Wire property could be replaced by a Wire function or Imperative function for this.
+   */
+  @wire(getPicklistValues, {
+    sobjectType: '$sourceObject',
+    sobjectFieldName: STAGE
+  }) stageOptions;
+
+  get isDataWritebackEnabled() {
+    return !isEmpty(this.sourceObject) && this.sourceObject.toString() === OPPORTUNITY ? true : false;
+  }
+
+  get dataWritebackHelpTextLabel() {
+    return formatLabels(this.label.dataWritebackHelpText, this.sourceObject);
+  }
+
+  get stageLabel() {
+    return formatLabels(this.label.stage, this.sourceObject);
+  }
+
+  get selectedStage() {
+    if (!isEmpty(this.options) &&
+      !isEmpty(this.options.envelopeEventUpdates) &&
+      !isEmpty(this.options.envelopeEventUpdates.completed)) {
+      return this.options.envelopeEventUpdates.completed['Opportunity.StageName'];
+    }
+    return null;
+  }
+
+
   get filenameChoices() {
-    if(!isEmpty(this.filenameOptions)) {
+    if (!isEmpty(this.filenameOptions)) {
       return this.filenameOptions;
     }
     let nameOptions;
     let isCombineDocs = !isEmpty(this.options) &&
-                        !isEmpty(this.options.documentWriteBack) &&
-                        this.options.documentWriteBack.combineDocuments === true ? true : false;
-    if(isCombineDocs) {
+    !isEmpty(this.options.documentWriteBack) &&
+    this.options.documentWriteBack.combineDocuments === true ? true : false;
+    if (isCombineDocs) {
       nameOptions = FILE_NAME_OPTIONS_COMBINED_DOCS;
     } else {
       nameOptions = FILE_NAME_OPTIONS_DEFAULT;
@@ -92,31 +135,31 @@ export default class DecOptions extends LightningElement {
 
   get documentWritebackOptions() {
     return !isEmpty(this.options) &&
-        !isEmpty(this.options.documentWriteBack) &&
-        !isEmpty(this.options.documentWriteBack.nameFormat);
+      !isEmpty(this.options.documentWriteBack) &&
+      !isEmpty(this.options.documentWriteBack.nameFormat);
   }
 
   get isCertificateOfCompletionEnabled() {
     let isCertificateOfCompletionSelected = !isEmpty(this.options) &&
-        !isEmpty(this.options.documentWriteBack) &&
-        !isEmpty(this.options.documentWriteBack.includeCertificateOfCompletion);
+      !isEmpty(this.options.documentWriteBack) &&
+      !isEmpty(this.options.documentWriteBack.includeCertificateOfCompletion);
     return isCertificateOfCompletionSelected || this.isCertificateOfCompletion;
   }
 
   get documentWritebackCombineDocuments() {
     let combineDoc = !isEmpty(this.options) &&
-        !isEmpty(this.options.documentWriteBack) &&
-        !isEmpty(this.options.documentWriteBack.combineDocuments);
-    return  combineDoc ? this.options.documentWriteBack.combineDocuments : false;
+      !isEmpty(this.options.documentWriteBack) &&
+      !isEmpty(this.options.documentWriteBack.combineDocuments);
+    return combineDoc ? this.options.documentWriteBack.combineDocuments : false;
   }
 
   get documentWritebackFilename() {
-    if(!isEmpty(this.documentWriteBackName)) {
+    if (!isEmpty(this.documentWriteBackName)) {
       return this.documentWriteBackName;
     }
     let nameFormat = !isEmpty(this.options) &&
-        !isEmpty(this.options.documentWriteBack) &&
-        !isEmpty(this.options.documentWriteBack.nameFormat);
+      !isEmpty(this.options.documentWriteBack) &&
+      !isEmpty(this.options.documentWriteBack.nameFormat);
     return nameFormat ? this.options.documentWriteBack.nameFormat : this.filenameChoices[0].value;
   }
 
@@ -126,8 +169,8 @@ export default class DecOptions extends LightningElement {
 
   get documentWritebackCertificateOfCompletion() {
     let coc = !isEmpty(this.options) &&
-        !isEmpty(this.options.documentWriteBack) &&
-        !isEmpty(this.options.documentWriteBack.includeCertificateOfCompletion);
+      !isEmpty(this.options.documentWriteBack) &&
+      !isEmpty(this.options.documentWriteBack.includeCertificateOfCompletion);
     this.isCertificateOfCompletion = coc ? this.options.documentWriteBack.includeCertificateOfCompletion : false;
     return this.isCertificateOfCompletion;
   }
@@ -136,8 +179,8 @@ export default class DecOptions extends LightningElement {
     const currentNotifications = this.notifications || getDefaultNotifications();
     const message = {
       notifications: {
-        ... currentNotifications,
-        ... updatedFields
+        ...currentNotifications,
+        ...updatedFields
       }
     };
     publish(this.context, UPDATE_NOTIFICATIONS, message);
@@ -155,7 +198,7 @@ export default class DecOptions extends LightningElement {
   handleExpirationChange(event) {
     event.preventDefault();
     const filteredValue = event.target.value.replace(/[^0-9]/g, '');
-    
+
     // Expiration value is limited to 3 digits
     event.target.value = isEmpty(filteredValue) ? null : filteredValue.substring(0, 3);
 
@@ -182,17 +225,21 @@ export default class DecOptions extends LightningElement {
   handleOnChangeOfDocumentWritebackOptions(event) {
     let writeBack = event.target.checked;
     let documentWriteBackUpdated = this.options.documentWriteBack;
-    if(writeBack) {
+    if (writeBack) {
       documentWriteBackUpdated =
-          {...documentWriteBackUpdated,
-            linkedEntityId: this.recordId,
-            nameFormat: this.filenameChoices[0].value};
+        {
+          ...documentWriteBackUpdated,
+          linkedEntityId: this.recordId,
+          nameFormat: this.filenameChoices[0].value
+        };
     } else {
       let defaultOptions = getDefaultOptions().documentWriteBack;
       documentWriteBackUpdated =
-        {...defaultOptions,
-          includeCertificateOfCompletion : this.isCertificateOfCompletion,
-          linkedEntityId: this.isCertificateOfCompletion ? this.recordId : null};
+        {
+          ...defaultOptions,
+          includeCertificateOfCompletion: this.isCertificateOfCompletion,
+          linkedEntityId: this.isCertificateOfCompletion ? this.recordId : null
+        };
       this.isCustomFileName = false;
     }
     genericEvent.call(this, 'documentwriteback', documentWriteBackUpdated, false);
@@ -220,8 +267,25 @@ export default class DecOptions extends LightningElement {
     this.isCertificateOfCompletion = event.target.checked;
     let documentWriteBackUpdated = this.options.documentWriteBack;
     documentWriteBackUpdated =
-        {...documentWriteBackUpdated,
-        includeCertificateOfCompletion: this.isCertificateOfCompletion};
+      {
+        ...documentWriteBackUpdated,
+        includeCertificateOfCompletion: this.isCertificateOfCompletion
+      };
     genericEvent.call(this, 'documentwriteback', documentWriteBackUpdated, false);
+  }
+
+  handleDataWritebackChange(event) {
+    let stage = event.target.value;
+    let dataWriteBackUpdatedMap;
+    if (isEmpty(stage)) {
+      dataWriteBackUpdatedMap = null;
+    } else {
+      dataWriteBackUpdatedMap = {
+        [ENVELOPE_STATUS_COMPLETED]: {
+          [ENVELOPE_UPDATE_KEY]: stage
+        }
+      };
+    }
+    genericEvent.call(this, 'datawriteback', dataWriteBackUpdatedMap, false);
   }
 }

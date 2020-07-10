@@ -385,10 +385,21 @@ export default class DecSetupConfig extends LightningElement {
     this.isDirty = true;
   }
 
+  updateLocalEnvelopeConfigurationDataWriteBack(dataWriteBack) {
+    let options = this.envelopeConfigurationData.options;
+    options = {...options, envelopeEventUpdates: dataWriteBack};
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, options : options};
+    this.isDirty = true;
+  }
+
   handleOnDocumentWriteBack(event) {
     this.updateLocalEnvelopeConfigurationDocumentWriteBack(event.detail.data);
   }
 
+  handleOnDataWriteBack(event) {
+    this.updateLocalEnvelopeConfigurationDataWriteBack(event.detail.data);
+  }
+  
   processTextSearchSourceFiles(documents, extractText) {
     return documents.map((d) => {
       let doc = {...d};

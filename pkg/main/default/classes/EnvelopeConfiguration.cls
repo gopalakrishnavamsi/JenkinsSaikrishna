@@ -152,6 +152,18 @@ global class EnvelopeConfiguration {
 	}
 
 	/**
+	 * Sets the envelope configuration's <code>options</code> property.
+	 *
+	 * @param options The new options.
+	 *
+	 * @return The envelope configuration with an updated <code>options</code> property.
+	 */
+	public EnvelopeConfiguration withOptions(final Envelope.Options options) {
+		this.options = options;
+		return this;
+	}
+
+	/**
 	 * @descriptions Sets the envelope configuration's <code>recipients</code> property.
 	 *
 	 * @param recipients The new list of recipients.
