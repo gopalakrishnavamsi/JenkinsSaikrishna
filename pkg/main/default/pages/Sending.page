@@ -38,6 +38,7 @@
       _phrs = _phrs ? JSON.parse(_phrs) : null;
       var _sendNow = '{!JSENCODE($CurrentPage.parameters.sendNow)}'.trim() === '1';
       var _lock = '{!JSENCODE($CurrentPage.parameters.lock)}'.trim() === '1';
+      var _loadDefaultContacts = '{!JSENCODE($CurrentPage.parameters.loadDefaultContacts)}'.trim() === '0' ? false : true;
       $Lightning.use(_namespace + ':SendingApp', function () {
         $Lightning.createComponent(_namespace + ':Sending', {
           visualforce: true,
@@ -45,6 +46,7 @@
           envelopeTemplateId: '{!JSENCODE($CurrentPage.parameters.templateId)}',
           sObjectName: '{!JSENCODE(sObjectName)}',
           files: _files,
+          loadDefaultContacts: _loadDefaultContacts,
           placeholderRecipients: _phrs,
           sendNow: _sendNow,
           lock: _lock

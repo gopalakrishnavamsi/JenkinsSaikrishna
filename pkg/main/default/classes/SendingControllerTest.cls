@@ -41,16 +41,50 @@ private class SendingControllerTest {
 	}
 
 	@IsTest
+	static void test_createDraftEnvelope_loadDefaultContact() {
+		DocuSignAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Lead l = TestUtils.createLead();
+			Test.startTest();
+			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(l.Id, null, true);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.envelope);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(1, result.recipients.size());
+		}
+	}	
+
+	@IsTest
+	static void test_createDraftEnvelope_noDefaultContact() {
+		DocuSignAPIMock.success();
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Lead l = TestUtils.createLead();
+			Test.startTest();
+			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(l.Id, null, false);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, result.envelope);
+			System.assertNotEquals(null, result.recipients);
+			System.assertEquals(0, result.recipients.size());
+		}
+	}		
+
+	@IsTest
 	static void test_createDraftEnvelope_success() {
 		DocuSignAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignUser()) {
 			Lead l = TestUtils.createLead();
 			TestUtils.createContentVersion(l.Id);
-			TestUtils.createContentVersion(l.Id);
+			TestUtils.createContentVersion(l.Id);			
 
 			Test.startTest();
-			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(l.Id, null);
+			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(l.Id, null, true);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -79,7 +113,8 @@ private class SendingControllerTest {
 			Test.startTest();
 			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(
 				l.Id,
-				new List<String> { cv1.Id, cv2.Id, scmFile1, scmFile2 });
+				new List<String> { cv1.Id, cv2.Id, scmFile1, scmFile2 },
+				true);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -103,7 +138,7 @@ private class SendingControllerTest {
 		System.runAs(UserMock.createDocuSignSender()) { // Unauthorized
 			Test.startTest();
 			try {
-				SendingController.createDraftEnvelope(c.Id, null);
+				SendingController.createDraftEnvelope(c.Id, null, true);
 				throw new AssertException('Expected createDraftEnvelope to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
@@ -130,7 +165,7 @@ private class SendingControllerTest {
 			Lead l = TestUtils.createLead();
 
 			Test.startTest();
-			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(l.Id, null);
+			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(l.Id, null, true);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -157,7 +192,7 @@ private class SendingControllerTest {
 
 			Test.startTest();
 			try {
-				SendingController.createDraftEnvelope(l.Id, null);
+				SendingController.createDraftEnvelope(l.Id, null, true);
 				throw new AssertException('Expected createDraftEnvelope to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.ConsentRequired, ex.getMessage());

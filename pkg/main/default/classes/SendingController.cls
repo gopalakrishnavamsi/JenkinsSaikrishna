@@ -65,7 +65,8 @@ public with sharing class SendingController extends Controller {
 	@AuraEnabled
 	public static DraftEnvelope createDraftEnvelope(
 		final Id sourceId,
-		final List<String> files) {
+		final List<String> files,
+		final Boolean loadDefaultContacts) {
 
 		try {
 			Permissions.verifyIsDocuSignUser();
@@ -104,7 +105,7 @@ public with sharing class SendingController extends Controller {
 				}
 			}
 
-			List<Recipient> recipients = RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds);
+			List<Recipient> recipients = loadDefaultContacts ? RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds) : new List<Recipient>();
 
 			return new DraftEnvelope(
 				EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),

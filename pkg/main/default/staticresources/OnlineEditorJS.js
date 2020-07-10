@@ -1009,6 +1009,7 @@ jQuery(document).ready(function ($) {
         + '&phrs=' + encodeURIComponent(JSON.stringify(getPlaceholderRecipients()))
         + '&files=' + encodeURIComponent(scmFile)
         + '&lock=1'
+        + '&loadDefaultContacts=0'
         + '&sendNow=1';
       _userEvents.success(_sessionType, {'Size': size});
       window.open(pageUrl, '_self');

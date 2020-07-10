@@ -11,6 +11,7 @@
     if (component.get('v.isESignatureEnabled')) {
       var updated = false;
       var files = component.get('v.files');
+      var loadDefaultContacts = component.get('v.loadDefaultContacts');
       var envelopeTemplateId = component.get('v.envelopeTemplateId');
       var fromEnvelopeTemplate = !$A.util.isEmpty(envelopeTemplateId);
       var action = fromEnvelopeTemplate ? component.get('c.createDraftEnvelopeFromTemplate') : component.get('c.createDraftEnvelope');
@@ -19,7 +20,8 @@
         sourceId: sourceId
       } : {
         sourceId: sourceId,
-        files: files
+        files: files,
+        loadDefaultContacts: loadDefaultContacts
       };
       this.invokeAction(component, action, parameters,
         function (result) {
