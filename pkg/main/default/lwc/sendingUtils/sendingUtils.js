@@ -88,6 +88,8 @@ const getRecipientsForSending = (recs, hasDocuments, defaultRoles) => {
     return rs;
 };
 
+
+
 const getNextRole = (defaultRoles) => {
     const firstKey = Object.keys(defaultRoles)[0];
     const nextRole = isEmpty(defaultRoles) ? null : defaultRoles[firstKey];
@@ -117,4 +119,5 @@ export {
     STEPS,
     getDocumentsForSending,
     getRecipientsForSending
+
 }

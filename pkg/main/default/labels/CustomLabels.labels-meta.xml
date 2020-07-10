@@ -2084,6 +2084,14 @@
 		<value>Reminders</value>
 	</labels>
 	<labels>
+		<fullName>MoreOptions</fullName>
+		<categories>Sending</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>More Options</shortDescription>
+		<value>More Options</value>
+	</labels>
+	<labels>
 		<fullName>Remove</fullName>
 		<categories>General</categories>
 		<language>en_US</language>

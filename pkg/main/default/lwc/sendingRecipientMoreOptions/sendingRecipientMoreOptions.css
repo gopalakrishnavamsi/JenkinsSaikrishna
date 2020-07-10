@@ -1,0 +1,20 @@
+.ds-options-details-header-text {
+    color: rgb(5, 5, 5);
+    font-size: var(--lwc-fontSize5);
+    font-weight: bold;
+}
+
+.ds-options-inner-text {
+    color: rgb(62, 62, 60);
+    margin: auto 0;
+}
+
+.ds-options-fit-content-width {
+    width: fit-content;
+}
+
+.ds-options-expiration-input {
+    width: 54px;
+}
+
+

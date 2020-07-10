@@ -20,6 +20,7 @@ import documentWriteBackCombineDocuments from '@salesforce/label/c.DocumentWrite
 import documentWriteBackCertificateOfCompletion from '@salesforce/label/c.DocumentWriteBackCertificateOfCompletion';
 import filename from '@salesforce/label/c.DocumentWriteBackFilename';
 import documentName from '@salesforce/label/c.AgreementName';
+import moreOptions from '@salesforce/label/c.MoreOptions';
 import documentNameAndEnvelopeStatus from '@salesforce/label/c.DocumentNameAndEnvelopeStatus';
 import emailSubject from '@salesforce/label/c.EmailSubject';
 import documentNameAndPdf from '@salesforce/label/c.DocumentNameAndPdf';
@@ -40,10 +41,11 @@ const LABEL = {
   reminders,
   automaticReminders,
   expiration,
+  moreOptions,
   doNotRemind,
   everyDay,
-  everyNumberOfDays,
   expiresAfterSending,
+  everyNumberOfDays,
   documentWriteBackOptionMessage,
   documentWriteBackCombineDocuments,
   documentWriteBackCertificateOfCompletion,
@@ -55,7 +57,7 @@ const DEFAULT_EXPIRATION = 90;
 const REMINDER_OPTIONS = [
   {
     label: LABEL.doNotRemind,
-    value: ''
+    value: 0
   },
   {
     label: LABEL.everyDay,

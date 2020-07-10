@@ -11,6 +11,7 @@ import {
 } from 'lightning/messageService';
 import SENDING_ADD_DOCUMENT from '@salesforce/messageChannel/SendingAddDocument__c';
 import SENDING_TOGGLE_DOCUMENT_SELECTION from '@salesforce/messageChannel/SendingToggleDocumentSelection__c';
+import UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/UpdateNotifications__c';
 
 // utility functions
 import {isEmpty, proxify, subscribeToMessageChannel, showError} from 'c/utils';
@@ -30,7 +31,9 @@ import sendEnvelope from '@salesforce/apex/SendingController.sendEnvelope';
 import getTaggerUrl from '@salesforce/apex/SendingController.getTaggerUrl';
 import deleteDocument from '@salesforce/apex/SendingController.deleteDocument';
 
+
 export default class SendingConfig extends LightningElement {
+
   @api recordId;
   @api envelope;
   // Flag to determine ability to modify docs/recipients
@@ -47,7 +50,9 @@ export default class SendingConfig extends LightningElement {
   context = createMessageContext();
   privateDocuments = null;
   privateRecipients = null;
+  privateNotifications = null;
   //Todo, Use Draft envelope
+  envelope;
   emailSubject;
   emailMessage;
 
@@ -69,6 +74,13 @@ export default class SendingConfig extends LightningElement {
       this.addNewDocumentSubscription,
       SENDING_ADD_DOCUMENT,
       this.addNewDocument.bind(this)
+    );
+
+    this.updateNotificationsSubscription = subscribeToMessageChannel(
+      this.context,
+      this.updateNotificationsSubscription,
+      UPDATE_NOTIFICATIONS,
+      this.handleUpdateNotifications.bind(this)
     );
   }
 
@@ -104,6 +116,15 @@ export default class SendingConfig extends LightningElement {
 
   set documents(docs) {
     this.privateDocuments = isEmpty(docs) ? null : proxify(docs);
+  }
+
+  @api
+  get notifications() {
+    return this.privateNotifications;
+  }
+
+  set notifications(notifs) {
+    this.privateNotifications = isEmpty(notifs) ? null : proxify(notifs);
   }
 
   @api
@@ -149,7 +170,6 @@ export default class SendingConfig extends LightningElement {
     if (!this.validateCurrentStep(toStep)) {
       return;
     }
-
     this.currentStep = toStep;
 
     if (this.currentStep === PROGRESS_STEP.PREPARE_AND_SEND) {
@@ -218,7 +238,8 @@ export default class SendingConfig extends LightningElement {
     return {
       ...this.envelope,
       documents,
-      recipients
+      recipients,
+      notifications: this.privateNotifications
     };
   }
 
@@ -267,11 +288,17 @@ export default class SendingConfig extends LightningElement {
       envelopeJson: JSON.stringify(envelope)
     })
       .then(result => {
-        window.navUtils.navigateToUrl(result)
+        window.navUtils.navigateToUrl(result);
       });
   }
 
   showError(errorMessage) {
     publish(this.context, ERROR, {errorMessage});
   }
+
+  handleUpdateNotifications(message) {
+    this.privateNotifications = message.notifications;
+  }
+
 }
+

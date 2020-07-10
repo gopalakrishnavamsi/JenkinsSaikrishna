@@ -11,7 +11,7 @@ import {
 
 // Lightning message service - Publisher
 import {createMessageContext, releaseMessageContext, publish} from 'lightning/messageService';
-import DEC_UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/DecUpdateNotifications__c';
+import UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/UpdateNotifications__c';
 import {
   isEmpty,
   genericEvent,
@@ -140,7 +140,7 @@ export default class DecOptions extends LightningElement {
         ... updatedFields
       }
     };
-    publish(this.context, DEC_UPDATE_NOTIFICATIONS, message);
+    publish(this.context, UPDATE_NOTIFICATIONS, message);
   }
 
   handleReminderChange(event) {

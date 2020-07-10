@@ -990,6 +990,10 @@
 		<name>Reminders</name>
 	</customLabels>
 	<customLabels>
+		<label>More Options</label>
+		<name>MoreOptions</name>
+	</customLabels>
+	<customLabels>
 		<label>Remove</label>
 		<name>Remove</name>
 	</customLabels>

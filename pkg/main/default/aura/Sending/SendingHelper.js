@@ -121,6 +121,7 @@
       {
         recordId: component.get('v.recordId'),
         envelope: component.get('v.envelope'),
+        notifications: component.get('v.envelope').notifications,
         documents: component.get('v.documents'),
         recipients: component.get('v.recipients'),
         defaultRoles: component.get('v.defaultRoles'),

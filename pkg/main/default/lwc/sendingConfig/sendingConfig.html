@@ -41,6 +41,11 @@
                     email-message={emailMessage}
                     onemailchange={handleEmailChange}>
             </c-dec-recipient-message>
+            <c-sending-recipient-more-options
+                if:true={recipientsStep}
+                notifications={notifications}
+                envelope={envelope}>
+            </c-sending-recipient-more-options>
         </div>
     </div>
 </template>

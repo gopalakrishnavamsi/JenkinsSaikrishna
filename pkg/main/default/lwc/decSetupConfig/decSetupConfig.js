@@ -14,7 +14,7 @@ import DEC_UPDATE_SOURCE_FILES from '@salesforce/messageChannel/DecUpdateSourceF
 import DEC_RENAME_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecRenameTemplateDocument__c';
 import DEC_DELETE_TEMPLATE_DOCUMENT from '@salesforce/messageChannel/DecDeleteTemplateDocument__c';
 import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEnvelopeTemplate__c';
-import DEC_UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/DecUpdateNotifications__c';
+import UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/UpdateNotifications__c';
 
 // utility functions
 import {
@@ -114,7 +114,7 @@ export default class DecSetupConfig extends LightningElement {
     this.updateNotificationsSubscription = subscribeToMessageChannel(
       this.context,
       this.updateNotificationsSubscription,
-      DEC_UPDATE_NOTIFICATIONS,
+      UPDATE_NOTIFICATIONS,
       this.handleUpdateNotifications.bind(this)
     );
   }
