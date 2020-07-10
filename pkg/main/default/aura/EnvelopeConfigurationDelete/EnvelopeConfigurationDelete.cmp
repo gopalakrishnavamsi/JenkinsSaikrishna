@@ -48,7 +48,7 @@
                     <div class="slds-grid slds-grid_vertical">
                         <div class="slds-col">
                             <div class="slds-text-align_center slds-text-body_regular">
-                                {!$Label.c.DeleteEnvelopeMessage}
+                                {!$Label.c.DeleteEnvelopeTemplateMessage}
                             </div>
                         </div>
                     </div>

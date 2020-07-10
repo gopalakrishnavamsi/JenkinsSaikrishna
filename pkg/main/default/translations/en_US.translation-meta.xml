@@ -4924,8 +4924,8 @@
 		<name>DeleteTemplateMessage</name>
 	</customLabels>
 	<customLabels>
-		<label>Are you sure you want to delete this envelope?</label>
-		<name>DeleteEnvelopeMessage</name>
+		<label>Are you sure you want to delete this envelope template?</label>
+		<name>DeleteEnvelopeTemplateMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>The template has been deleted.</label>
