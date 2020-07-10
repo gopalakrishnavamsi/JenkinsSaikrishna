@@ -7,42 +7,51 @@
 }
 
 .THIS .slds-timeline__media:before {
+    margin-left: 6px;
     z-index: 0;
 }
 
-.THIS .ds-timeline__media_incomplete:before {
-    background: #b8c3cf;
-}
-
-.THIS .ds-timeline__media_completed:before,
-.THIS .ds-timeline__media_completed .slds-icon_container {
-    background: t(colorBackgroundSuccessDark);
-}
-
-.THIS .ds-timeline__media_declined {
+.THIS .ds-timeline__positive:before,
+.THIS .ds-timeline__positive {
+    background: t(colorTextSuccessInverse);
     border-radius: t(borderRadiusMedium);
 }
 
-.THIS .ds-timeline__media_declined:before,
-.THIS .ds-timeline__media_declined .slds-icon_container {
+.THIS .ds-timeline__pending:before,
+.THIS .ds-timeline__pending {
+    background: t(colorTextWarning);
+    border-radius: t(borderRadiusMedium);
+}
+
+.THIS .ds-timeline__negative {
+    background: t(colorBackgroundDestructive);
+    border-radius: t(borderRadiusMedium);
+    padding: 0;
+}
+
+.THIS .ds-timeline__negative .slds-icon {
+    padding: 5px;
+}
+
+.THIS .ds-timeline__negative:before,
+.THIS .ds-timeline__negative .slds-icon_container {
     background: t(colorBackgroundDestructive);
 }
 
-.THIS .ds-timeline__media_declined .slds-icon_container {
-    border-radius: t(borderRadiusMedium);
-    width: 1.625rem;
-    height: 1.625rem;
-    padding: 0.05rem;
+.THIS .ds-timeline__green:before {
+    background: t(colorTextSuccessInverse);
 }
 
-.THIS .ds-timeline__media_declined .slds-icon_container .slds-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    padding: t(spacingXxSmall);
+.THIS .ds-timeline__orange:before {
+    background: t(colorTextWarning);
+}
+
+.THIS .ds-timeline__red:before {
+    background: t(colorBackgroundDestructive);
 }
 
 .THIS .ds-timeline__item_envelope:before {
-    background: #f28b00;
+    margin-left: 5px;
 }
 
 .THIS .ds-timeline__item_envelope .slds-timeline__item_details {

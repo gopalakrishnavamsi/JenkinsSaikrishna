@@ -12,8 +12,10 @@
         var envelopes = response.getReturnValue();
         if (!$A.util.isEmpty(envelopes)) {
           envelopes.forEach(function (envelope) {
+            envelope.style = helper.getStyleDetails(envelope.status);
             envelope.status = helper.getStatusLabel(envelope.status);
             envelope.recipients.forEach(function (recipient) {
+              recipient.style = helper.getStyleDetails(recipient.status);
               recipient.status = helper.getStatusLabel(recipient.status);
               recipient.completed = $A.util.isEmpty(recipient.completed) ? null : new Date(recipient.completed).toLocaleString().replace(/,/g, '');
               recipient.sent = $A.util.isEmpty(recipient.sent) ? null : new Date(recipient.sent).toLocaleString().replace(/,/g, '');
@@ -43,7 +45,7 @@
     }
   },
 
-  getStatusLabel: function (status) {
+  getStatusLabel: function(status) {
     var result = '';
     switch (status) {
       case 'created':
@@ -74,5 +76,52 @@
         break;
     }
     return result;
+  },
+
+  getStyleDetails: function (status) {
+    var details = {};
+    switch (status) {
+      case 'created':
+      case 'sent':
+        details.icon = 'custom:custom105';
+        details.color = 'ds-timeline__orange';
+        details.container = 'ds-timeline__pending';
+        break;
+      case 'delivered':
+        details.icon = 'action:preview';
+        details.color = 'ds-timeline__orange';
+        details.container = 'ds-timeline__pending';
+        break;
+      case 'canceled':
+      case 'declined':
+      case 'voided':
+        details.icon = 'action:remove';
+        details.color = 'ds-timeline__red';
+        details.container = 'ds-timeline__negative';
+        break;
+      case 'completed':
+      case 'signed':
+        details.icon = 'standard:task2';
+        details.color = 'ds-timeline__green';
+        details.container = 'ds-timeline__positive';
+        break;
+      case 'authenticationfailed':
+        details.icon = 'utility:block_visitor';
+        details.color = 'ds-timeline__red';
+        details.container = 'ds-timeline__negative';
+        break;
+      case 'autoresponded':
+        details.icon = 'custom:custom105'
+        details.color = 'ds-timeline__orange';
+        details.container = 'ds-timeline__pending';
+        break;
+      default:
+        details.icon = 'custom:custom105';
+        details.color = 'ds-timeline__orange';
+        details.container = 'ds-timeline__pending';
+        break;
+    }
+
+    return details;
   }
 });

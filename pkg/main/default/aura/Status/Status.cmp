@@ -57,7 +57,7 @@
                                             <aura:iteration items="{!v.envelopes}" var="envelope"
                                                             indexVar="envelopeIndex">
                                                 <div aura:id="envelope"
-                                                     class="slds-timeline__item_expandable ds-timeline__item_envelope"
+                                                     class="{!'slds-timeline__item_expandable ds-timeline__item_envelope ' + envelope.style.color}"
                                                      data-index="{!envelopeIndex}">
                                                     <div class="slds-media">
                                                         <div class="slds-media__figure">
@@ -69,8 +69,10 @@
                                                                     variant="bare"
                                                                     onclick="{!c.toggleEnvelopeDetails}"
                                                                     value="{!envelopeIndex}"/>
-                                                            <lightning:icon iconName="custom:custom105" size="small"
-                                                                            class="slds-timeline__icon"/>
+                                                            <lightning:icon
+                                                                            iconName="{!envelope.style.icon}"
+                                                                            size="medium"
+                                                                            class="{!'slds-timeline__icon ' + envelope.style.container}"/>
                                                         </div>
                                                         <div class="slds-media__body">
                                                             <div class="slds-grid slds-timeline__trigger slds-gutters_xx-small">
@@ -170,11 +172,12 @@
                                                                                 <span class="slds-assistive-text">{!recipient.status}</span>
                                                                                 <div class="slds-media">
                                                                                     <div class="slds-media__body">
-                                                                                        <div class="{!'slds-media slds-timeline__media' + if(or(recipient.status == $Label.c.Completed, recipient.status == $Label.c.Signed), ' ds-timeline__media_completed', if(or(recipient.status == $Label.c.Declined, recipient.status == $Label.c.Canceled), ' ds-timeline__media_declined', ' ds-timeline__media_incomplete'))}">
+                                                                                        <div class="{!'slds-media slds-timeline__media ' + recipient.style.color}">
                                                                                             <div class="slds-media__figure slds-timeline__icon">
                                                                                                 <lightning:icon
-                                                                                                        iconName="{!if(or(recipient.status == $Label.c.Completed, recipient.status == $Label.c.Signed), 'standard:task2', if(or(recipient.status == $Label.c.Declined, recipient.status == $Label.c.Canceled), 'action:remove', 'standard:avatar_loading'))}"
-                                                                                                        size="small"/>
+                                                                                                        iconName="{!recipient.style.icon}"
+                                                                                                        class="{!'slds-timeline__icon ' + recipient.style.container}"
+                                                                                                        size="medium"/>
                                                                                             </div>
                                                                                             <div aura:id="recipient"
                                                                                                  class="slds-media__body ds-recipient"
