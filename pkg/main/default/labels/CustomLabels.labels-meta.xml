@@ -9489,6 +9489,13 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Are you sure you want to delete this template?</value>
 	</labels>
 	<labels>
+		<fullName>DeleteEnvelopeMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Delete Envelope Message</shortDescription>
+		<value>Are you sure you want to delete this envelope?</value>
+	</labels>
+	<labels>
 		<fullName>DeleteEnvelopeTemplateMessage</fullName>
 		<language>en_US</language>
 		<protected>true</protected>
