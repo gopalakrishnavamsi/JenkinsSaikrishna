@@ -410,11 +410,6 @@ global class EnvelopeConfiguration {
 		}
 	}
 
-	public EnvelopeConfiguration withMergeFields(final List<Tab> mergeFields) {
-		this.mergeFields = mergeFields == null ? new List<Tab>() : mergeFields;
-		return this;
-	}
-
 	public class Listing {
 		@AuraEnabled
 		public Id id { get; private set; }
@@ -438,4 +433,18 @@ global class EnvelopeConfiguration {
 		}
 	}
 
+	/**
+	 * Filters the envelope configuration documents for DocuSign template documents.
+	 *
+	 * @return A list of the DocuSign template documents contained by this envelope configuration.
+	 */
+	public List<Document> filterTemplateDocuments() {
+		List<Document> result = new List<Document>();
+		if (this.documents != null) {
+			for (Document d : this.documents) {
+				if (d != null && d instanceof TemplateDocument) result.add(d);
+			}
+		}
+		return result;
+	}
 }

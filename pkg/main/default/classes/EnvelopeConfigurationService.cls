@@ -1396,6 +1396,7 @@ public with sharing class EnvelopeConfigurationService {
 			// Set DS template to the first document.
 			result.addDocuments(new List<Document> {
 				Document.fromTemplate(ec.docuSignId, ec.name)
+					.withTemplateDocuments(ec.filterTemplateDocuments())
 					.withSequence(1)
 					.withPermissions(true, true)
 			});

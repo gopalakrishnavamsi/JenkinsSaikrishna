@@ -123,7 +123,8 @@ global with sharing class DocumentService {
 				doc.LastModified__c,
 				doc.SourceId__c,
 				doc.ReadOnly__c == true,
-				doc.Required__c == true);
+				doc.Required__c == true,
+				null);
 		}
 
 		@TestVisible

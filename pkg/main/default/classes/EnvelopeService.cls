@@ -110,10 +110,10 @@ global with sharing class EnvelopeService {
 				Id = e.id,
 				DocuSignId__c = UUID.toString(e.docuSignId),
 				EnvelopeConfiguration__c = e.envelopeConfigurationId,
-				Remind__c = e.notifications == null ? false : e.notifications.remind,
+				Remind__c = e.notifications != null && e.notifications.remind == true, // Can be null
 				RemindAfterDays__c = e.notifications == null ? 0 : e.notifications.remindAfterDays,
 				RemindFrequencyDays__c = e.notifications == null ? 0 : e.notifications.remindFrequencyDays,
-				Expires__c = e.notifications == null ? false : e.notifications.expires,
+				Expires__c = e.notifications != null && e.notifications.expires == true, // Can be null
 				ExpireAfterDays__c = e.notifications == null ? 0 : e.notifications.expireAfterDays,
 				ExpireWarnDays__c = e.notifications == null ? 0 : e.notifications.expireWarnDays,
 				EmailSubject__c = e.emailSubject,

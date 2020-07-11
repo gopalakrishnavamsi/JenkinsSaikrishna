@@ -80,11 +80,12 @@
             rolesMap[role.name.toLowerCase()] = role;
             return rolesMap;
           }, {});
-          result.envelope.notifications = self.setExpiration(
-            result.envelope.notifications,
-            result.envelope.notifications.expireAfterDays,
-            result.envelope.notifications.expireWarnDays
-          );
+          result.envelope.notifications = $A.util.isUndefinedOrNull(result.envelope.notifications)
+            ? {}
+            : self.setExpiration(
+              result.envelope.notifications,
+              result.envelope.notifications.expireAfterDays,
+              result.envelope.notifications.expireWarnDays);
           component.set(
             'v.expiresOn',
             self.getExpirationDate(result.envelope.notifications.expireAfterDays)

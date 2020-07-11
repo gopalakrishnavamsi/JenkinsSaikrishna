@@ -214,7 +214,8 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 					doc.lastModified,
 					doc.sourceId,
 					doc.readOnly,
-					doc.required);
+					doc.required,
+					null);
 				updatedDocs.add(d);
 			} else {
 				updatedDocs.add(doc);

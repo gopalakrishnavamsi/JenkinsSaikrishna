@@ -2173,6 +2173,16 @@ private class EnvelopeConfigurationServiceTest {
 			System.assertEquals(String.valueOf(ec.docuSignId), result.documents[0].sourceId);
 			System.assert(result.documents[0].readOnly);
 			System.assert(result.documents[0].required);
+			System.assert(!result.documents[0].isEmptyTemplate);
+			System.assertEquals(1, Collection.size(result.documents[0].templateDocuments));
+			System.assertNotEquals(null, result.documents[0].templateDocuments[0]);
+			System.assert(result.documents[0].templateDocuments[0] instanceof EnvelopeConfiguration.TemplateDocument);
+			System.assertEquals(td.ContentDocumentId, result.documents[0].templateDocuments[0].sourceId);
+			System.assertEquals(1, result.documents[0].templateDocuments[0].sequence);
+			System.assertEquals(td.Title, result.documents[0].templateDocuments[0].name);
+			System.assertEquals(td.FileExtension, result.documents[0].templateDocuments[0].extension);
+			System.assertEquals(false, result.documents[0].templateDocuments[0].readOnly);
+			System.assertEquals(false, result.documents[0].templateDocuments[0].required);
 
 			System.assertNotEquals(null, result.documents[1]);
 			System.assertEquals(null, result.documents[1].id);

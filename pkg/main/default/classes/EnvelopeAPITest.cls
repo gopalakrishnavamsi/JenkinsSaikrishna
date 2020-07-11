@@ -156,7 +156,8 @@ private class EnvelopeAPITest {
 				cv2.LastModifiedDate,
 				cv2.ContentDocumentId,
 				false,
-				false);
+				false,
+				null);
 
 			Test.startTest();
 			Map<String, Blob> result1 = EnvelopeAPI.getDocumentContent(new List<Document> {

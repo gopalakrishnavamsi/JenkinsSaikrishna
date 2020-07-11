@@ -70,6 +70,21 @@ global virtual class Document {
 	@AuraEnabled
 	public Boolean required { get; private set; }
 	/**
+	 * List of documents contained by the template.
+	 */
+	@AuraEnabled
+	public List<Document> templateDocuments { get; private set; }
+	/**
+	 * Whether this is a template without documents.
+	 */
+	//noinspection ApexUnusedDeclaration - this is used by LWC and EnvelopeConfigurationServiceTest
+	@AuraEnabled
+	public Boolean isEmptyTemplate {
+		get {
+			return this.templateId != null && Collection.isEmpty(this.templateDocuments);
+		}
+	}
+	/**
 	 * Read-only property representing the DocuSign template ID if any.
 	 */
 	public UUID templateId {
@@ -94,6 +109,7 @@ global virtual class Document {
 	 * @param sourceId The Salesforce source record ID or the DocuSign template ID.
 	 * @param readOnly Whether the document properties may be modified by the sender.
 	 * @param required Whether the document can be removed from the envelope or not.
+	 * @param templateDocuments The documents contained by the template.
 	 */
 	public Document(
 		final Id id,
@@ -105,7 +121,8 @@ global virtual class Document {
 		final Datetime lastModified,
 		final String sourceId,
 		final Boolean readOnly,
-		final Boolean required) {
+		final Boolean required,
+		final List<Document> templateDocuments) {
 
 		this.id = id;
 		this.type = type;
@@ -117,6 +134,7 @@ global virtual class Document {
 		this.sourceId = sourceId;
 		this.readOnly = readOnly;
 		this.required = required;
+		this.templateDocuments = templateDocuments == null ? new List<Document>() : templateDocuments;
 	}
 
 	/**
@@ -151,7 +169,8 @@ global virtual class Document {
 			lastModified,
 			sourceId,
 			false,
-			false);
+			false,
+			null);
 	}
 
 	public Document(
@@ -174,7 +193,8 @@ global virtual class Document {
 			null,
 			sourceId,
 			readOnly,
-			required);
+			required,
+			null);
 	}
 
 	/**
@@ -281,6 +301,18 @@ global virtual class Document {
 	}
 
 	/**
+	 * Sets the DocuSign envelope document <code>templateDocuments</code> property.
+	 *
+	 * @param templateDocuments List of documents contained by the template.
+	 *
+	 * @return The DocuSign envelope document with updated <code>templateDocuments</code>.
+	 */
+	public Document withTemplateDocuments(final List<Document> templateDocuments) {
+		this.templateDocuments = templateDocuments == null ? new List<Document>() : templateDocuments;
+		return this;
+	}
+
+	/**
 	 * Creates a DocuSign envelope document from a DocuSign template.
 	 *
 	 * @param docuSignId The DocuSign template ID.
@@ -302,7 +334,8 @@ global virtual class Document {
 			null,
 			String.valueOf(docuSignId),
 			false,
-			false);
+			false,
+			null);
 	}
 
 	/**
@@ -325,7 +358,8 @@ global virtual class Document {
 			template == null ? null : template.lastModified,
 			template == null ? null : String.valueOf(template.id),
 			false,
-		false);
+			false,
+			template == null ? null : template.documents);
 	}
 
 	/**
@@ -352,32 +386,8 @@ global virtual class Document {
 			null,
 			String.valueOf(docuSignId),
 			false,
-			false);
-	}
-
-	/**
-	 * Converts a Salesforce content document (file) into a DocuSign envelope document. The latest published version of
-	 * the file is used to construct the document.
-	 *
-	 * @param file The content document from which to construct a document.
-	 *
-	 * @return The DocuSign envelope document representation of the content version.
-	 */
-	public static Document fromFile(final ContentDocument file) {
-		if (file == null || !file.isSet('LatestPublishedVersionId')) return null;
-
-		ContentVersion cv = file.LatestPublishedVersion;
-		return new Document(
-			null,
-			TYPE_FILE,
-			null,
-			cv.isSet('Title') ? cv.Title : null,
-			cv.isSet('FileExtension') ? cv.FileExtension : null,
-			cv.isSet('ContentSize') ? cv.ContentSize : null,
-			cv.isSet('LastModifiedDate') ? cv.LastModifiedDate : null,
-			file.Id,
 			false,
-			false);
+			null);
 	}
 
 	/**
@@ -400,7 +410,8 @@ global virtual class Document {
 			file.isSet('LastModifiedDate') ? file.LastModifiedDate : null,
 			file.Id,
 			false,
-			false);
+			false,
+			null);
 	}
 
 	/**
@@ -423,6 +434,7 @@ global virtual class Document {
 			doc.isSet('LastModifiedDate') ? doc.LastModifiedDate : null,
 			doc.Id,
 			false,
-			false);
+			false,
+			null);
 	}
 }

@@ -32,12 +32,14 @@ export default class SendingDocumentsList extends LightningElement {
     }
 
     get selectedDocumentsHeader() {
-        const selectedDocuments = isEmpty(this.documents) ? 0 : this.documents.filter(doc => doc.selected).length;
+        const selectedDocuments = isEmpty(this.documents)
+          ? 0
+          : this.documents.filter(doc => doc.selected && !doc.isEmptyTemplate).length;
         return format(this.label.selectedDocuments, selectedDocuments);
     }
 
     get allDocumentsSelected() {
-        return !isEmpty(this.documents) && isEmpty(this.documents.find(doc => !doc.selected));
+        return !isEmpty(this.documents) && isEmpty(this.documents.find(doc => !doc.selected || doc.isEmptyTemplate));
     }
 
     addUploadedDocument(event) {
