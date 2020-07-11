@@ -1,0 +1,13 @@
+<template>
+    <lightning-card>
+        <p class="slds-p-horizontal_small" if:true={isAuthConsentRequired}>
+            {rootLabels.AuthorizeDocuSignInstructions}
+        </p>
+        <p class='slds-m-around_medium slds-text-color_error slds-text-align_center' if:false={isAuthConsentRequired}>
+            {authUserMessage}
+        </p>
+        <p slot="footer" if:true={isAuthConsentRequired}>
+            <lightning-button class="slds-align_absolute-center" label={rootLabels.AuthorizeButtonLabel} onclick={beginOAuth} slot="actions"></lightning-button>
+        </p>
+    </lightning-card>    
+</template>
