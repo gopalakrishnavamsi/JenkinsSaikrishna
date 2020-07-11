@@ -167,7 +167,7 @@
 	</customLabels>
 	<customLabels>
 		<label>高级设置</label>
-		<name>AdvancedSettings</name>
+		<name>eSignSetupSettingsTab</name>
 	</customLabels>
 	<customLabels>
 		<label>指定收件人</label>

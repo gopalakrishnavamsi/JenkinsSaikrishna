@@ -166,8 +166,8 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>Advanced Settings</label>
-		<name>AdvancedSettings</name>
+		<label>Settings</label>
+		<name>eSignSetupSettingsTab</name>
 	</customLabels>
 	<customLabels>
 		<label>Specify Recipients</label>
@@ -2576,6 +2576,10 @@
 	<customLabels>
 		<label>You can create a custom button in Salesforce to trigger a Document Generation configuration URL. Clicking the custom button opens the affiliated Document Generation form.</label>
 		<name>ConfigureButtonInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Button</label>
+		<name>eSignSetupButtonTab</name>
 	</customLabels>
 	<customLabels>
 		<label>Configure Buttons</label>

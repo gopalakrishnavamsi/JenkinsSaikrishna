@@ -167,7 +167,7 @@
 	</customLabels>
 	<customLabels>
 		<label>Erweiterte Einstellungen</label>
-		<name>AdvancedSettings</name>
+		<name>eSignSetupSettingsTab</name>
 	</customLabels>
 	<customLabels>
 		<label>Empfänger angeben</label>

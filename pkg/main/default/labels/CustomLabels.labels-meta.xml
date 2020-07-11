@@ -353,12 +353,12 @@
 		<value>Advanced Options</value>
 	</labels>
 	<labels>
-		<fullName>AdvancedSettings</fullName>
+		<fullName>eSignSetupSettingsTab</fullName>
 		<categories>Setup</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>AdvancedSettings</shortDescription>
-		<value>Advanced Settings</value>
+		<shortDescription>eSignSetupSettingsTab</shortDescription>
+		<value>Settings</value>
 	</labels>
 	<labels>
 		<fullName>Agent</fullName>
@@ -745,6 +745,14 @@
 		<protected>true</protected>
 		<shortDescription>CLM - Configure Button Info</shortDescription>
 		<value>You can create a custom button in Salesforce to trigger a Document Generation configuration URL. Clicking the custom button opens the affiliated Document Generation form.</value>
+	</labels>
+	<labels>
+		<fullName>eSignSetupButtonTab</fullName>
+		<categories>Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>eSignSetupButtonTab</shortDescription>
+		<value>Button</value>
 	</labels>
 	<labels>
 		<fullName>ConfigureButtons</fullName>

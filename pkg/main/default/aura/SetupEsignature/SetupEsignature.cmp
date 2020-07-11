@@ -6,10 +6,10 @@
         <lightning:tab label="{!$Label.c.Templates}" id="envelopeConfiguration">
             <c:DECSetup navigateToNewEnvelopeConfigUrl="{!v.navigateToNewEnvelopeConfigUrl}"/>
         </lightning:tab>
-        <lightning:tab label="{!$Label.c.ConfigureButtons}" id="eSignButtons">
+        <lightning:tab label="{!$Label.c.eSignSetupButtonTab}" id="eSignButtons">
             <c:ESignatureConfigureButtons/>
         </lightning:tab>
-        <lightning:tab label="{!$Label.c.AdvancedSettings}" id="advancedSettings">
+        <lightning:tab label="{!$Label.c.eSignSetupSettingsTab}" id="advancedSettings">
             <c:Settings/>
         </lightning:tab>
     </lightning:tabset>
