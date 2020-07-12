@@ -14,4 +14,39 @@
         <field>ConnectedAppId__c</field>
         <value xsi:type="xsd:string">3MVG9vrJTfRxlfl73UnkTYVZ6r4FpiYpbjtFZ6j3rmP.Z1mj5_jGVnzIQIfpqR4iZngiK4tg_xoKRu679GGDi</value>
     </values>
+    <values>
+        <field>ConnectedAppSecret__c</field>
+        <value xsi:type="xsd:string">8743680031937846319</value>
+    </values>
+    <values>
+        <field>ConnectedAppJwtSigningKey__c</field>
+        <value xsi:type="xsd:string">
+            MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCn3WR0pWj0EcuQ
+            qAjR1t0/DQLLN1fvbtftXeQqHN3Om4j8ntDMx3pxBfjUERnXUsiq9E3IT+ufMtFb
+            FVeOzGbF63+9W65FRF6r5OqtzEeowqHgHKYpyn3eDYBsQXVWUYPa16EkMfeW2j9E
+            YRGt3/gZ9t73kQghRLudJL367/Rl7qOVgvRyU73VnVC1PnuR4djuT88wWW8HugSy
+            1PcogutWS+BIJ2hySahlkxO7wPcheBUVQdElpTeC8d/VVK6bn4sn47X308AR01FK
+            11juJfoMAdxCnYMJe7VoUF4p1V3wQ8OSgqJqtkbaKsw6tfw39NhADj3Vv6UiQIX6
+            li2V7txpAgMBAAECggEAQOusqDg4qPwg4Gc8UftpQbNEe1eCGMWjmNeRIIBdgERC
+            7IB3fFtBjWij3VBn0BDiLsuhMXFHTSCYO0O7wyxmKvFzS8ajVYKlopE7+c9hf3EW
+            rdgmo07+8twB6NxABwwrlH2Egr0YZi0t/sIT1k0iZNhHTzO2EzfD33iQSPZ4bNsH
+            vhkYDt8NcgvN6WlwhY+zTwIyTfVqzfDc0PzDCWZ3b+WLGEJBSkL/pP1mvRq+HX6S
+            Ttr3XHZS9zGCFfe1wNK5dA+aNVjHpsmELkwa2tVqfmaHCaSdsWGqvdC/GbcJsp7N
+            Q8cm0DmQLbU2uR2p4bdF6weBGbMFRU/bRS/2UrrDqQKBgQDZYW6lqtdF3VjCVSQE
+            GLi95C3ENAbuV1vz8If13SYRpMXDYfVNUN507ZoR1vvq7LHmwkyYOwdgpF7HXRjU
+            pi3HOGDnRGaZFycmlHy/DomYIZXzeK7e8OUKjNNfOBwuKD+KE3ZAO352MMP28PzK
+            zmWDNEd1D0V7gT2Jqz5W/0YYXwKBgQDFr/XIhw5K1Lj96O1roC+AGFvsj+36SCL4
+            uNTAbd67C7V5DjgmhLNwT/xIWPzuEJFrYCLK1HW6IQymGaMjlXzP7TzkGo9NFOGB
+            ovqTqZeaDfbF0fSL1dpRQOZKnEEFLpwDAodblc/rk3hc3rKY/HdG9peTFzJmoYFa
+            g6ErtMRgNwKBgQCe5LkcH2R7jO/0HIfW9rsTElbhs6XdUb3E8WxwKtZIz0g/KLtF
+            aHcywPp9T8eUUK85HY0fOQaLfZpJ36LmzRFpLaynXzgfbu0PJjqI7PdmXCZfcTdh
+            fnPs4kMetsTieEj5hIBLMzGc8shLGJuvIm7RGMWiqyb+v9lbZ/CJZs61wQKBgClX
+            D7X8kD+T1o+6ixPLrsNB1M9WlfSV60JKHKuVDlPdMfj7wUBE1eVxxJc4jMQYEOD8
+            fKof3fKrgKKnj9ccJrqwqOAmsbrz1+itNWt1tq9PpkBeFJ69fOcrBD2sCWjVA2kZ
+            uUaswItKDoyVQZH+kc70OGRZIIAX3B4akrS6G6rnAoGBAMLclISJ75IROTQX1RcQ
+            OTKAgqZxYgjQaMHCIcte/08R7Hk8ZBFhpgAb2avhH3yrhiHD6NkvNmWuC8VZpSUW
+            W03Eg1BuM8SU9OTg3ZG9CgomIUBfHeqct5Gt/hiYkazfc8RWULlhCQGV3JE0OJQe
+            uHNyAXmxaLrG1CUMVkflyu8r
+        </value>
+    </values>
 </CustomMetadata>

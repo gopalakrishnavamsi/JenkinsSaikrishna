@@ -1,7 +1,7 @@
 <aura:component controller="SetupController">
 
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
-    <aura:attribute name="beginSpringOAuth" type="Object" required="true"/>
+    <aura:attribute name="beginSalesforceOAuth" type="Object" required="true"/>
     <aura:attribute name="showSetupComponent" type="Object" required="true"/>
     <aura:attribute name="showSetupSpinner" type="Object" required="true"/>
     <aura:attribute name="login" type="Object"/>

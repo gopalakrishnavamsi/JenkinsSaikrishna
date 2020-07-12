@@ -241,4 +241,24 @@ public class StringUtils {
 		if (replacedBy == null) replacedBy = '';
 		return s.replaceAll('[^a-zA-Z0-9\\s+]', replacedBy);
 	}
+
+	/**
+	 * Base64 and URL encodes a string.
+	 *
+	 * @param input The input blob to base64 and URL encode.
+	 *
+	 * @return Base64, URL-encoded string.
+	 */
+	public static String base64UrlEncode(final Blob input) {
+		if (input == null) return '';
+
+		String output = EncodingUtil.base64Encode(input)
+			.replace('+', '-')
+			.replace('/', '_');
+		while (output.endsWith('=')) {
+			output = output.substring(0, output.length() - 1);
+		}
+
+		return output;
+	}
 }

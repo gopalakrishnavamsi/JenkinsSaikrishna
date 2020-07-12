@@ -226,4 +226,11 @@ private class StringUtilsTest {
 		System.assertEquals(StringUtils.replaceSpecialCharacter('tes:t / , char', null), 'test   char');
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_base64UrlEncode() {
+		System.assertEquals('', StringUtils.base64UrlEncode(null));
+		System.assertEquals('YWJjZA', StringUtils.base64UrlEncode(Blob.valueOf('abcd')));
+		System.assertEquals('YWJjZCBlZmdo', StringUtils.base64UrlEncode(Blob.valueOf('abcd efgh')));
+	}
 }

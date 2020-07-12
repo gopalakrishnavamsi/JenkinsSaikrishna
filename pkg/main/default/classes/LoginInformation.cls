@@ -16,10 +16,6 @@ public class LoginInformation {
 	 */
 	public static final String STATUS_FAILURE = 'Failure';
 	/**
-	 * No login.
-	 */
-	public static final String TYPE_NONE = 'NONE';
-	/**
 	 * Initial admin or setup user login.
 	 */
 	public static final String TYPE_SETUP = 'SETUP';
@@ -73,7 +69,14 @@ public class LoginInformation {
 	 */
 	@AuraEnabled
 	public String message { get; private set; }
-
+	/**
+	 * Details for a failed login attempt.
+	 */
+	@AuraEnabled
+	public String detail { get; private set; }
+	/**
+	 * Whether the platform authorization step is complete.
+	 */
 	@AuraEnabled
 	public Boolean isPlatformAuthorized { get; private set; }
 
@@ -81,11 +84,13 @@ public class LoginInformation {
 		final String type,
 		final String status,
 		final String message,
+		final String detail,
 		final String target) {
 
 		this.type = type;
 		this.status = status;
 		this.message = message;
+		this.detail = detail;
 		this.target = target;
 	}
 
@@ -96,7 +101,7 @@ public class LoginInformation {
 		final Boolean isPlatformAuthorized,
 		final List<LoginInformation.Account> accounts) {
 
-		this.type = TYPE_NONE;
+		this.type = TYPE_SETUP;
 		this.id = id;
 		this.name = name;
 		this.email = email;

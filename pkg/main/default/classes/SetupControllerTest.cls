@@ -66,118 +66,6 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_beginOAuth_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				SetupController.beginOAuth(TestUtils.getOrigin(), 'prod', null);
-				throw new AssertException('Expected beginOAuth to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_beginOAuth_failure() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			Test.startTest();
-			try {
-				SetupController.beginOAuth(null, null, null);
-				throw new AssertException('Expected beginOAuth to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(AuthService.DOMAIN_ERROR_PAYLOAD, ex.getMessage());
-			}
-			try {
-				SetupController.beginOAuth(TestUtils.getOrigin(), '', null);
-				throw new AssertException('Expected beginOAuth to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
-			}
-			try {
-				SetupController.beginOAuth(TestUtils.getOrigin(), '  ', null);
-				throw new AssertException('Expected beginOAuth to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
-			}
-			try {
-				SetupController.beginOAuth(TestUtils.getOrigin(), 'other', null);
-				throw new AssertException('Expected beginOAuth to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
-			}
-			try {
-				SetupController.beginOAuth(TestUtils.getOrigin(), 'other', 'https://example.com');
-				throw new AssertException('Expected beginOAuth to fail');
-			} catch (DocuSignException ex) {
-				System.assertEquals(Label.InvalidEnvironment, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_beginOAuth_success() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			TestUtils.generateKey();
-
-			Test.startTest();
-			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'PROD', null));
-			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'pRODUCTIOn', null));
-			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'demo', null));
-			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'stage', null));
-			System.assertNotEquals(null, SetupController.beginOAuth(TestUtils.getOrigin(), 'other', 'https://other.docusign.com'));
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_completeOAuth_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				SetupController.completeOAuth('code', TestUtils.generateState(true), null, null);
-				throw new AssertException('Expected completeOAuth to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_completeOAuth_success() {
-		DocuSignAPIMock.success();
-		MetadataAPIMock.success();
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			String state = TestUtils.generateState(true);
-
-			Test.startTest();
-			LoginInformation result = SetupController.completeOAuth('code', state, null, null);
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
-		}
-	}
-
-	@IsTest
-	static void test_completeOAuth_error() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			String state = TestUtils.generateState(true);
-
-			Test.startTest();
-			LoginInformation result = SetupController.completeOAuth(null, state, 'consent_required', 'Consent required.');
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
-			System.assertEquals(Label.ConsentRequired, result.message);
-		}
-	}
-
-	@IsTest
 	static void test_setAccount_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
@@ -320,12 +208,18 @@ private class SetupControllerTest {
 			User u = UserMock.createUser();
 			String userJson = '[{"sourceId":"' + u.Id + '","email":"' + u.Email + '","firstName":"' + u.FirstName + '","lastName":"' + u.LastName + '","canManageAccount":true}]';
 			String rolesJson = '{"e_sign":"User"}';
+
+			Test.startTest();
 			try {
 				SetupController.addUsers(userJson, rolesJson);
 				throw new AssertException('Expected addUser to fail');
 			} catch (AuraHandledException ex) {
-				System.assertNotEquals(null, ex.getMessage());
+				System.assertNotEquals(String.format(Label.QueryError_2, new List<Object> {
+					u.Email,
+					'[MAX_MEMBERS_EXCEEDED]: The maximum number of members for the account has been exceeded.'}),
+					ex.getMessage());
 			}
+			Test.stopTest();
 		}
 	}
 
@@ -463,109 +357,6 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_beginSpringOAuth_success() {
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			String result = SetupController.beginSpringOAuth('testState');
-			Test.stopTest();
-			System.assertNotEquals(null, result);
-		}
-	}
-
-	@IsTest
-	static void test_beginSpringOAuth_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				SetupController.beginSpringOAuth('testState');
-				throw new AssertException('Expected beginSpringOAuth to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	class SpringOAuthSuccessMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			response.setStatusCode(200);
-			response.setStatus('OK');
-			response.setHeader('Content-Type', 'application/json; charset=utf-8');
-			response.setBody('{"success":true,"message":"Successfully stored refresh token."}');
-			return response;
-		}
-	}
-
-	class SpringOAuthFailureMock implements HttpCalloutMock {
-		public HttpResponse respond(final HttpRequest request) {
-			HttpResponse response = new HttpResponse();
-			response.setStatusCode(400);
-			response.setStatus('Bad Request');
-			response.setHeader('Content-Type', 'application/json; charset=utf-8');
-			response.setBody('Bad Request');
-			return response;
-		}
-	}
-
-	@IsTest
-	static void test_completeSpringOAuth_success() {
-		Test.setMock(HttpCalloutMock.class, new SpringOAuthSuccessMock());
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			AuthService.PlatformAuthStatus loginInformation = SetupController.completeSpringOAuth('1234556');
-			System.assertNotEquals(null, loginInformation);
-			System.assert(loginInformation.success);
-			System.assertEquals(Label.SuccessDocuSignAuthorization, loginInformation.message);
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_completeSpringOAuth_fail() {
-		Test.setMock(HttpCalloutMock.class, new SpringOAuthFailureMock());
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			AuthService.PlatformAuthStatus loginInformation = SetupController.completeSpringOAuth('1234556');
-			System.assertNotEquals(null, loginInformation);
-			System.assert(!loginInformation.success);
-			System.assertEquals(Label.UnableToConnectDocuSignGen, loginInformation.message);
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_completeSpringOAuth_missingSettings() {
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
-			accountSettings.ScmWebBaseUrl__c = '';
-			update accountSettings;
-
-			Test.startTest();
-			AuthService.PlatformAuthStatus loginInformation = SetupController.completeSpringOAuth('1234556');
-			Test.stopTest();
-
-			System.assertNotEquals(null, loginInformation);
-			System.assert(!loginInformation.success);
-			System.assertEquals(Label.MissingDocuSignGenAuthorizationSettings, loginInformation.message);
-		}
-	}
-
-	@IsTest
-	static void test_completeSpringOAuth_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				SetupController.completeSpringOAuth('1234556');
-				throw new AssertException('Expected completeSpringOAuth to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
 	static void test_addTrialGen_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
@@ -637,7 +428,7 @@ private class SetupControllerTest {
 
 	@IsTest
 	static void test_getProductsOnAccount_positive() {
-		System.runAs(UserMock.createDocuSignUser(true)) {
+		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
 			List<Product> productsList = SetupController.getProductsOnAccount();
 			Test.stopTest();
@@ -678,14 +469,14 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_getProductRoles_unAuthorized() {
-		System.runAs(UserMock.createUser()) {
+	static void test_getProductRoles_error() {
+		System.runAs(UserMock.createDocuSignUser(true)) {
 			Test.startTest();
 			try {
-				SetupController.getProductsOnAccount();
-				throw new AssertException('Expected getProductRoles to fail');
+				SetupController.getProductRoles();
+				throw new AssertException('Expected failure');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -944,6 +735,97 @@ private class SetupControllerTest {
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_beginDocuSignOAuth_success() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			TestUtils.generateKey();
+
+			Test.startTest();
+			System.assertNotEquals(null, SetupController.beginDocuSignOAuth(TestUtils.getOrigin(), 'PROD', null));
+			System.assertNotEquals(null, SetupController.beginDocuSignOAuth(TestUtils.getOrigin(), 'pRODUCTIOn', null));
+			System.assertNotEquals(null, SetupController.beginDocuSignOAuth(TestUtils.getOrigin(), 'demo', null));
+			System.assertNotEquals(null, SetupController.beginDocuSignOAuth(TestUtils.getOrigin(), 'stage', null));
+			System.assertNotEquals(null, SetupController.beginDocuSignOAuth(TestUtils.getOrigin(), 'other', 'https://other.docusign.com'));
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_beginSalesforceOAuth_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			String result = SetupController.beginSalesforceOAuth(
+				LoginInformation.TYPE_USER,
+				TestUtils.getOrigin());
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_redirectToNewConfigUrl() {
+		PageReference pg = Page.Setup;
+		pg.getParameters().put('id', UserInfo.getUserId());
+		Test.setCurrentPage(pg);
+
+		Test.startTest();
+		PageReference result = new SetupController().redirectToNewConfigUrl();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assert(result.getUrl().startsWithIgnoreCase(Page.EnvelopeConfigurationNavigator.getUrl().substringBefore('?')));
+		System.assert(result.getUrl().containsIgnoreCase('id='+UserInfo.getUserId()));
+	}
+
+	@IsTest
+	static void test_authorizeConnectedApplication_error() {
+		System.runAs(UserMock.createDocuSignUser(false)) { // unauthorized
+			Test.startTest();
+			try {
+				SetupController.authorizeConnectedApplication();
+				throw new AssertException('Expected failure');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_authorizeConnectedApplication_success() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			// No way to ensure connected app is installed in target org, so non-null response is acceptable.
+			System.assertNotEquals(null, SetupController.authorizeConnectedApplication());
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deauthorizeConnectedApplication_error() {
+		System.runAs(UserMock.createDocuSignUser(false)) { // unauthorized
+			Test.startTest();
+			try {
+				SetupController.deauthorizeConnectedApplication();
+				throw new AssertException('Expected failure');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_deauthorizeConnectedApplication_success() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			// No way to ensure connected app is installed in target org, so non-null response is acceptable.
+			System.assertNotEquals(null, SetupController.deauthorizeConnectedApplication());
 			Test.stopTest();
 		}
 	}

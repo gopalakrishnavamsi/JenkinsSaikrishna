@@ -43,7 +43,7 @@
       helper.createComponent('setupContent', component, 'c:Login',
         {
           beginOAuth: component.get('v.beginOAuth'),
-          beginSpringOAuth: component.get('v.beginSpringOAuth'),
+          beginSalesforceOAuth: component.get('v.beginSalesforceOAuth'),
           login: component.get('v.login')
         }
       );
@@ -110,7 +110,7 @@
             helper.createComponent('setupContent', component, 'c:Login',
               {
                 beginOAuth: component.get('v.beginOAuth'),
-                beginSpringOAuth: component.get('v.beginSpringOAuth'),
+                beginSalesforceOAuth: component.get('v.beginSalesforceOAuth'),
                 login: component.get('v.login')
               }
             );

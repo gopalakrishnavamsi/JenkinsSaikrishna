@@ -11,13 +11,6 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_base64UrlEncode() {
-		System.assertEquals('', AuthService.base64UrlEncode(null));
-		System.assertEquals('YWJjZA', AuthService.base64UrlEncode(Blob.valueOf('abcd')));
-		System.assertEquals('YWJjZCBlZmdo', AuthService.base64UrlEncode(Blob.valueOf('abcd efgh')));
-	}
-
-	@IsTest
 	static void test_AuthAPI_constructor() {
 		System.assertNotEquals(null, new AuthService.AuthAPI(new Url('https://account.docusign.com/')));
 		try {
@@ -426,7 +419,7 @@ private class AuthServiceTest {
 			System.assertEquals(aud, (String)payload.get('aud'));
 			System.assertEquals(AuthService.SCOPE_USER, (String)payload.get('scope'));
 
-			String signature = AuthService.base64UrlEncode(Crypto.sign('RSA-SHA256', Blob.valueOf(toks[0] + '.' + toks[1]),
+			String signature = StringUtils.base64UrlEncode(Crypto.sign('RSA-SHA256', Blob.valueOf(toks[0] + '.' + toks[1]),
 				jwtSigningKey));
 			System.assertEquals(signature, toks[2]);
 		}
@@ -459,7 +452,7 @@ private class AuthServiceTest {
 			System.assertEquals(aud, (String)payload.get('aud'));
 			System.assertEquals(AuthService.SCOPE_ADMIN, (String)payload.get('scope'));
 
-			String signature = AuthService.base64UrlEncode(Crypto.sign('RSA-SHA256', Blob.valueOf(toks[0] + '.' + toks[1]),
+			String signature = StringUtils.base64UrlEncode(Crypto.sign('RSA-SHA256', Blob.valueOf(toks[0] + '.' + toks[1]),
 				jwtSigningKey));
 			System.assertEquals(signature, toks[2]);
 		}
@@ -998,22 +991,6 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_getOAuthRedirectUrl() {
-		System.assertEquals(
-			new Url(Salesforce.baseUrl, Page.CompleteOAuth.getUrl()).toExternalForm(),
-			AuthService.getOAuthRedirectUrl().toExternalForm());
-	}
-
-	@IsTest
-	static void test_getCommunityOAuthRedirectUrl() {
-		Salesforce.baseUrl = new Url('https://communityexample.com/Partner/s');
-		Salesforce.sitePrefix = '/Partner/s';
-		System.assertEquals(
-			new Url('https://communityexample.com/Partner' + Page.CompleteOAuth.getUrl()).toExternalForm(),
-			AuthService.getOAuthRedirectUrl().toExternalForm());
-	}
-
-	@IsTest
 	static void test_getLoginUrl_user_unauthorized() {
 		System.runAs(UserMock.createDocuSignSender(false)) {
 			Test.startTest();
@@ -1071,7 +1048,7 @@ private class AuthServiceTest {
 			System.assertEquals('code', params.get('response_type'));
 			System.assertEquals(AuthService.SCOPE_ADMIN, params.get('scope'));
 			System.assertEquals(s.ClientId__c, params.get('client_id'));
-			System.assertEquals(AuthService.getOAuthRedirectUrl().toExternalForm(), params.get('redirect_uri'));
+			System.assertEquals(AuthService.getDocuSignOAuthRedirectUrl(false).toExternalForm(), params.get('redirect_uri'));
 			System.assert(String.isNotBlank(params.get('state')));
 		}
 	}
@@ -1128,9 +1105,9 @@ private class AuthServiceTest {
 			System.assertEquals('code', params.get('response_type'));
 			System.assertEquals(AuthService.SCOPE_ADMIN, params.get('scope'));
 			System.assertEquals(s.ClientId__c, params.get('client_id'));
-			System.assertEquals(AuthService.getOAuthRedirectUrl().toExternalForm(), params.get('redirect_uri'));
+			System.assertEquals(AuthService.getDocuSignOAuthRedirectUrl(false).toExternalForm(), params.get('redirect_uri'));
 			System.assert(String.isNotBlank(params.get('state')));
-			AuthService.State state = AuthService.decodeState(params.get('state'), UserSettings__c.getInstance().Nonce__c);
+			AuthService.DocuSignOAuthState state = AuthService.decodeDocuSignOAuthState(params.get('state'), UserSettings__c.getInstance().Nonce__c);
 			System.assertNotEquals(null, state);
 			System.assertEquals('/some/path', state.target);
 		}
@@ -1142,7 +1119,6 @@ private class AuthServiceTest {
 		System.assert(!AuthService.isValidType(null));
 		System.assert(!AuthService.isValidType(' '));
 		System.assert(!AuthService.isValidType('whatever'));
-		System.assert(!AuthService.isValidType(LoginInformation.TYPE_NONE));
 		System.assert(AuthService.isValidType(LoginInformation.TYPE_DEVELOPER));
 		System.assert(AuthService.isValidType(LoginInformation.TYPE_SETUP));
 		System.assert(AuthService.isValidType(LoginInformation.TYPE_USER));
@@ -1165,19 +1141,19 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_encodeState_setup() {
+	static void test_encodeDocuSignOAuthState_setup() {
 		TestUtils.generateKey();
 		String nonce = UUID.randomUUID().toString();
 		String origin = TestUtils.getOrigin();
 		Url url = new Url('https://unit.test.docusign.net/');
-		AuthService.State state = new AuthService.State(
+		AuthService.DocuSignOAuthState state = new AuthService.DocuSignOAuthState(
 			LoginInformation.TYPE_SETUP,
 			origin,
 			DocuSign.Environment.Stage,
 			url);
 
 		Test.startTest();
-		String result = AuthService.encodeState(nonce, state);
+		String result = AuthService.encodeDocuSignOAuthState(nonce, state);
 		Test.stopTest();
 
 		System.assert(String.isNotBlank(result));
@@ -1186,19 +1162,19 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_encodeState_user() {
+	static void test_encodeDocuSignOAuthState_user() {
 		TestUtils.generateKey();
 		String nonce = UUID.randomUUID().toString();
 		String origin = TestUtils.getOrigin();
 		Url url = new Url('https://unit.test.docusign.net/');
-		AuthService.State state = new AuthService.State(
+		AuthService.DocuSignOAuthState state = new AuthService.DocuSignOAuthState(
 			LoginInformation.TYPE_USER,
 			origin,
 			DocuSign.Environment.Stage,
 			url);
 
 		Test.startTest();
-		String result = AuthService.encodeState(nonce, state);
+		String result = AuthService.encodeDocuSignOAuthState(nonce, state);
 		Test.stopTest();
 
 		System.assert(String.isNotBlank(result));
@@ -1206,18 +1182,18 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_encodeState_developer() {
+	static void test_encodeDocuSignOAuthState_developer() {
 		TestUtils.generateKey();
 		String nonce = UUID.randomUUID().toString();
 		Url url = new Url('https://unit.test.docusign.net/');
-		AuthService.State state = new AuthService.State(
+		AuthService.DocuSignOAuthState state = new AuthService.DocuSignOAuthState(
 			LoginInformation.TYPE_DEVELOPER,
 			'/some/path',
 			DocuSign.Environment.Stage,
 			url);
 
 		Test.startTest();
-		String result = AuthService.encodeState(nonce, state);
+		String result = AuthService.encodeDocuSignOAuthState(nonce, state);
 		Test.stopTest();
 
 		System.assert(String.isNotBlank(result));
@@ -1225,31 +1201,31 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_blank() {
+	static void test_decodeDocuSignOAuthState_blank() {
 		try {
-			AuthService.decodeState(null, null);
-			throw new AssertException('Expected decodeState to fail');
+			AuthService.decodeDocuSignOAuthState(null, null);
+			throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 		} catch (UnauthorizedException ex) {
 			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 		}
 
 		try {
-			AuthService.decodeState('', null);
-			throw new AssertException('Expected decodeState to fail');
+			AuthService.decodeDocuSignOAuthState('', null);
+			throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 		} catch (UnauthorizedException ex) {
 			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 		}
 
 		try {
-			AuthService.decodeState('\r', null);
-			throw new AssertException('Expected decodeState to fail');
+			AuthService.decodeDocuSignOAuthState('\r', null);
+			throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 		} catch (UnauthorizedException ex) {
 			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 		}
 	}
 
 	@IsTest
-	static void test_decodeState_wrong_key() {
+	static void test_decodeDocuSignOAuthState_wrong_key() {
 		String state = EncodingUtil.base64Encode(Crypto.encryptWithManagedIV(
 			'AES256',
 			Crypto.generateAesKey(256),
@@ -1258,8 +1234,8 @@ private class AuthServiceTest {
 
 		Test.startTest();
 		try {
-			AuthService.decodeState(state, 'test');
-			throw new AssertException('Expected decodeState to fail');
+			AuthService.decodeDocuSignOAuthState(state, 'test');
+			throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 		} catch (UnauthorizedException ex) {
 			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 		}
@@ -1267,14 +1243,14 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_unexpected_state() {
+	static void test_decodeDocuSignOAuthState_unexpected_state() {
 		TestUtils.generateKey();
 		String state = SecureUtils.encrypt('test');
 
 		Test.startTest();
 		try {
-			AuthService.decodeState(state, 'test');
-			throw new AssertException('Expected decodeState to fail');
+			AuthService.decodeDocuSignOAuthState(state, 'test');
+			throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 		} catch (UnauthorizedException ex) {
 			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 		}
@@ -1282,7 +1258,7 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_invalid_nonce() {
+	static void test_decodeDocuSignOAuthState_invalid_nonce() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
 			String origin = TestUtils.getOrigin();
@@ -1290,8 +1266,8 @@ private class AuthServiceTest {
 
 			Test.startTest();
 			try {
-				AuthService.decodeState(state, UUID.randomUUID().toString());
-				throw new AssertException('Expected decodeState to fail');
+				AuthService.decodeDocuSignOAuthState(state, UUID.randomUUID().toString());
+				throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 			}
@@ -1300,7 +1276,7 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_invalid_type() {
+	static void test_decodeDocuSignOAuthState_invalid_type() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
 			String origin = TestUtils.getOrigin();
@@ -1308,8 +1284,8 @@ private class AuthServiceTest {
 
 			Test.startTest();
 			try {
-				AuthService.decodeState(state, 'test');
-				throw new AssertException('Expected decodeState to fail');
+				AuthService.decodeDocuSignOAuthState(state, 'test');
+				throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 			}
@@ -1318,15 +1294,15 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_invalid_target() {
+	static void test_decodeDocuSignOAuthState_invalid_target() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
 			String state = SecureUtils.encrypt('test|' + LoginInformation.TYPE_USER + '|http://bad.origin|Demo|https://unit.test.docusign.net');
 
 			Test.startTest();
 			try {
-				AuthService.decodeState(state, 'test');
-				throw new AssertException('Expected decodeState to fail');
+				AuthService.decodeDocuSignOAuthState(state, 'test');
+				throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 			}
@@ -1335,7 +1311,7 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_invalid_environment() {
+	static void test_decodeDocuSignOAuthState_invalid_environment() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
 			String origin = TestUtils.getOrigin();
@@ -1343,8 +1319,8 @@ private class AuthServiceTest {
 
 			Test.startTest();
 			try {
-				AuthService.decodeState(state, 'test');
-				throw new AssertException('Expected decodeState to fail');
+				AuthService.decodeDocuSignOAuthState(state, 'test');
+				throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 			}
@@ -1353,7 +1329,7 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_invalid_url() {
+	static void test_decodeDocuSignOAuthState_invalid_url() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
 			String origin = TestUtils.getOrigin();
@@ -1361,8 +1337,8 @@ private class AuthServiceTest {
 
 			Test.startTest();
 			try {
-				AuthService.decodeState(state, 'test');
-				throw new AssertException('Expected decodeState to fail');
+				AuthService.decodeDocuSignOAuthState(state, 'test');
+				throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 			}
@@ -1371,7 +1347,7 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_non_allowedList_url() {
+	static void test_decodeDocuSignOAuthState_non_allowedList_url() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
 			String origin = TestUtils.getOrigin();
@@ -1379,8 +1355,8 @@ private class AuthServiceTest {
 
 			Test.startTest();
 			try {
-				AuthService.decodeState(state, 'test');
-				throw new AssertException('Expected decodeState to fail');
+				AuthService.decodeDocuSignOAuthState(state, 'test');
+				throw new AssertException('Expected decodeDocuSignOAuthState to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
 			}
@@ -1389,14 +1365,14 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_decodeState_valid() {
+	static void test_decodeDocuSignOAuthState_valid() {
 		System.runAs(UserMock.createUser()) {
 			TestUtils.generateKey();
 			String url = 'https://other.docusign.net/oauth/token';
 			String state = SecureUtils.encrypt('test|' + LoginInformation.TYPE_DEVELOPER + '|/some/path|Other|' + url);
 
 			Test.startTest();
-			AuthService.State result = AuthService.decodeState(state, 'test');
+			AuthService.DocuSignOAuthState result = AuthService.decodeDocuSignOAuthState(state, 'test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1642,14 +1618,14 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemCode_setup_unauthorized() {
+	static void test_redeemDocuSignCode_setup_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
-			String state = TestUtils.generateState(true);
+			String state = TestUtils.generateDocuSignOAuthState(true);
 
 			Test.startTest();
 			try {
-				AuthService.redeemCode('test', state);
-				throw new AssertException('Expected redeemCode to fail');
+				AuthService.redeemDocuSignCode('test', state);
+				throw new AssertException('Expected redeemDocuSignCode to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -1658,14 +1634,14 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemCode_non_setup_unauthorized() {
+	static void test_redeemDocuSignCode_non_setup_unauthorized() {
 		System.runAs(UserMock.createDocuSignSender(false)) {
-			String state = TestUtils.generateState(false);
+			String state = TestUtils.generateDocuSignOAuthState(false);
 
 			Test.startTest();
 			try {
-				AuthService.redeemCode('test', state);
-				throw new AssertException('Expected redeemCode to fail');
+				AuthService.redeemDocuSignCode('test', state);
+				throw new AssertException('Expected redeemDocuSignCode to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
@@ -1674,16 +1650,16 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemCode_api_error() {
+	static void test_redeemDocuSignCode_api_error() {
 		MetadataAPIMock.success();
 		DocuSignAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			String state = TestUtils.generateState(true);
+			String state = TestUtils.generateDocuSignOAuthState(true);
 
 			Test.startTest();
 			try {
-				AuthService.redeemCode('test', state);
-				throw new AssertException('Expected redeemCode to fail');
+				AuthService.redeemDocuSignCode('test', state);
+				throw new AssertException('Expected redeemDocuSignCode to fail');
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
 				System.assertEquals(APIErrorCode.UNAUTHORIZED, ex.error.code);
@@ -1693,12 +1669,12 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemError_unauthorized() {
+	static void test_redeemDocuSignError_unauthorized() {
 		System.runAs(UserMock.createDocuSignSender(false)) {
 			Test.startTest();
 			try {
-				AuthService.redeemError(null, null, null);
-				throw new AssertException('Expected redeemError to fail');
+				AuthService.redeemDocuSignError(null, null, null);
+				throw new AssertException('Expected redeemDocuSignError to fail');
 			} catch (UnauthorizedException ex) {
 				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
 			}
@@ -1707,12 +1683,12 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemError_default() {
+	static void test_redeemDocuSignError_default() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
-			LoginInformation result1 = AuthService.redeemError(null, null, TestUtils.generateState(false));
-			LoginInformation result2 = AuthService.redeemError('consent_required', 'blah', TestUtils.generateState(false));
-			LoginInformation result3 = AuthService.redeemError('access_denied', 'blah', TestUtils.generateState(false));
+			LoginInformation result1 = AuthService.redeemDocuSignError(null, null, TestUtils.generateDocuSignOAuthState(false));
+			LoginInformation result2 = AuthService.redeemDocuSignError('consent_required', 'blah', TestUtils.generateDocuSignOAuthState(false));
+			LoginInformation result3 = AuthService.redeemDocuSignError('access_denied', 'blah', TestUtils.generateDocuSignOAuthState(false));
 			Test.stopTest();
 
 			System.assertNotEquals(null, result1);
@@ -1729,12 +1705,12 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemError_custom() {
+	static void test_redeemDocuSignError_custom() {
 		System.runAs(UserMock.createDocuSignUser()) {
-			String state = TestUtils.generateState(false);
+			String state = TestUtils.generateDocuSignOAuthState(false);
 
 			Test.startTest();
-			LoginInformation result = AuthService.redeemError('unknown_error_code', 'test message', state);
+			LoginInformation result = AuthService.redeemDocuSignError('unknown_error_code', 'test message', state);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1758,7 +1734,7 @@ private class AuthServiceTest {
 			];
 			System.assert(Collection.isEmpty(psas));
 
-			AuthService.State state = new AuthService.State(
+			AuthService.DocuSignOAuthState state = new AuthService.DocuSignOAuthState(
 				LoginInformation.TYPE_SETUP,
 				TestUtils.getOrigin(),
 				DocuSign.Environment.Other,
@@ -1797,7 +1773,7 @@ private class AuthServiceTest {
 				LIMIT 1
 			];
 			System.assert(Collection.isNotEmpty(psas));
-			AuthService.State state = new AuthService.State(
+			AuthService.DocuSignOAuthState state = new AuthService.DocuSignOAuthState(
 				LoginInformation.TYPE_SETUP,
 				TestUtils.getOrigin(),
 				DocuSign.Environment.Other,
@@ -1831,16 +1807,16 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemCode_no_accounts() {
+	static void test_redeemDocuSignCode_no_accounts() {
 		MetadataAPIMock.success();
 		Test.setMock(HttpCalloutMock.class, new NoAccountsMock());
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			String state = TestUtils.generateState(true);
+			String state = TestUtils.generateDocuSignOAuthState(true);
 
 			Test.startTest();
 			try {
-				AuthService.redeemCode('test', state);
-				throw new AssertException('Expected redeemCode to fail');
+				AuthService.redeemDocuSignCode('test', state);
+				throw new AssertException('Expected redeemDocuSignCode to fail');
 			} catch (DocuSignException ex) {
 				System.assertEquals(Label.NoValidAccounts, ex.getMessage());
 			}
@@ -1869,14 +1845,14 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemCode_multiple_accounts() {
+	static void test_redeemDocuSignCode_multiple_accounts() {
 		MetadataAPIMock.success();
 		Test.setMock(HttpCalloutMock.class, new MultipleAccountsMock());
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			String state = TestUtils.generateState(true);
+			String state = TestUtils.generateDocuSignOAuthState(true);
 
 			Test.startTest();
-			LoginInformation result = AuthService.redeemCode('test', state);
+			LoginInformation result = AuthService.redeemDocuSignCode('test', state);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1896,15 +1872,15 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemCode_setup_success() {
+	static void test_redeemDocuSignCode_setup_success() {
 		DocuSignAPIMock.success();
 		MetadataAPIMock.success();
 
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			String state = TestUtils.generateState(true);
+			String state = TestUtils.generateDocuSignOAuthState(true);
 
 			Test.startTest();
-			LoginInformation result = AuthService.redeemCode('test', state);
+			LoginInformation result = AuthService.redeemDocuSignCode('test', state);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -1924,13 +1900,13 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemCode_non_setup_success() {
+	static void test_redeemDocuSignCode_non_setup_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignUser()) {
-			String state = TestUtils.generateState(false);
+			String state = TestUtils.generateDocuSignOAuthState(false);
 
 			Test.startTest();
-			LoginInformation result = AuthService.redeemCode('test', state);
+			LoginInformation result = AuthService.redeemDocuSignCode('test', state);
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
@@ -2049,12 +2025,12 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_getSpringOAuthAPI() {
-		Url baseUrl = new Url('https://unit.test.springcm.com');
+	static void test_getScmSetupAPI() {
+		Url baseUrl = new Url('https://unit.test.springcm.com/atlas/');
 
 		Test.startTest();
-		AuthService.SpringOAuthAPI result1 = AuthService.getSpringOAuthAPI(baseUrl);
-		AuthService.SpringOAuthAPI result2 = AuthService.getSpringOAuthAPI(baseUrl);
+		AuthService.ScmSetupAPI result1 = AuthService.getScmSetupAPI(baseUrl);
+		AuthService.ScmSetupAPI result2 = AuthService.getScmSetupAPI(baseUrl);
 		Test.stopTest();
 
 		System.assertNotEquals(null, result1);
@@ -2062,120 +2038,52 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_SpringOAuthAPI_completeSpringOAuth_invalid_credentials() {
+	static void test_ScmSetupAPI_completeSetup_invalid_credentials() {
 		System.runAs(UserMock.createDocuSignAdministrator(false)) {
 			Test.startTest();
-			AuthService.PlatformAuthStatus result = new AuthService.SpringOAuthAPI(new Url('https://unit.test.springcm.com'))
-				.completeSpringOAuth('test');
+			LoginInformation result = new AuthService.ScmSetupAPI(new Url('https://unit.test.springcm.com/atlas/'))
+				.completeSetup('test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assert(!result.success);
-			System.assertEquals(Label.AccountNotConfigured, result.message);
-		}
-	}
-
-	@IsTest
-	static void test_completeSpringOAuth_missing_settings() {
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
-			s.ScmWebBaseUrl__c = null;
-			update s;
-
-			Test.startTest();
-			AuthService.PlatformAuthStatus result = AuthService.completeSpringOAuth('unit.test');
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assert(!result.success);
-			System.assertEquals(Label.MissingDocuSignGenAuthorizationSettings, result.message);
-		}
-	}
-
-	@IsTest
-	static void test_SpringOAuthAPI_completeSpringOAuth_api_error() {
-		Test.setMock(HttpCalloutMock.class, new SpringOAuthAPIMock(false));
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			AuthService.PlatformAuthStatus result = new AuthService.SpringOAuthAPI(new Url('https://unit.test.springcm.com'))
-				.completeSpringOAuth('test');
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assert(!result.success);
+			System.assertEquals(LoginInformation.TYPE_SETUP, result.type);
+			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
 			System.assertEquals(Label.UnableToConnectDocuSignGen, result.message);
-			System.assert(String.isNotBlank(result.detail));
+			System.assertEquals(Label.AccountNotConfigured, result.detail);
 		}
 	}
 
 	@IsTest
-	static void test_SpringOAuthAPI_completeSpringOAuth_success() {
-		Test.setMock(HttpCalloutMock.class, new SpringOAuthAPIMock(true));
+	static void test_ScmSetupAPI_completeSetup_api_error() {
+		ScmAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
-			AuthService.PlatformAuthStatus result = new AuthService.SpringOAuthAPI(new Url('https://unit.test.springcm.com'))
-				.completeSpringOAuth('test');
+			LoginInformation result = new AuthService.ScmSetupAPI(new Url('https://unit.test.springcm.com/atlas/'))
+				.completeSetup('test');
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assert(result.success);
+			System.assertEquals(LoginInformation.TYPE_SETUP, result.type);
+			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
+			System.assertEquals(Label.UnableToConnectDocuSignGen, result.message);
+			System.assertNotEquals(null, result.detail);
+		}
+	}
+
+	@IsTest
+	static void test_ScmSetupAPI_completeSetup_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			LoginInformation result = new AuthService.ScmSetupAPI(new Url('https://unit.test.springcm.com/atlas/'))
+				.completeSetup('test');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.TYPE_SETUP, result.type);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
 			System.assertEquals(Label.SuccessDocuSignAuthorization, result.message);
-		}
-	}
-
-	@IsTest
-	static void test_getSpringOAuthUrl_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				AuthService.getSpringOAuthUrl('test');
-				throw new AssertException('Expected getSpringOAuthUrl to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_getSpringOAuthUrl_success() {
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			Url result = AuthService.getSpringOAuthUrl('test');
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-		}
-	}
-
-	@IsTest
-	static void test_completeSpringOAuth_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			Test.startTest();
-			try {
-				AuthService.completeSpringOAuth('test');
-				throw new AssertException('Expected completeSpringOAuth to fail');
-			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_completeSpringOAuth_success() {
-		Test.setMock(HttpCalloutMock.class, new SpringOAuthAPIMock(true));
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			System.assert(!AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
-
-			Test.startTest();
-			AuthService.PlatformAuthStatus result = AuthService.completeSpringOAuth('test');
-			Test.stopTest();
-
-			System.assertNotEquals(null, result);
-			System.assert(result.success);
-			System.assertEquals(Label.SuccessDocuSignAuthorization, result.message);
-			System.assert(AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
+			System.assertEquals(null, result.detail);
 		}
 	}
 
@@ -2324,6 +2232,90 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
+	static void test_getDocuSignOAuthRedirectUrl_setup() {
+		Test.startTest();
+		Url result = AuthService.getDocuSignOAuthRedirectUrl(true);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(
+			'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com' + Page.CompleteOAuth.getUrl(),
+			result.toExternalForm());
+	}
+
+	@IsTest
+	static void test_getDocuSignOAuthRedirectUrl_non_setup() {
+		Test.startTest();
+		Url result = AuthService.getDocuSignOAuthRedirectUrl(false);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(
+			new Url(Salesforce.baseUrl, Site.getPathPrefix().removeEndIgnoreCase('/s') + Page.CompleteOAuth.getUrl()).toExternalForm(),
+			result.toExternalForm());
+	}
+
+	@IsTest
+	static void test_getDocuSignOAuthRedirectUrl_community() {
+		Salesforce.baseUrl = new Url('https://communityexample.com/Partner/s');
+		Salesforce.sitePrefix = '/Partner/s';
+		System.assertEquals(
+			new Url('https://communityexample.com/Partner' + Page.CompleteOAuth.getUrl()).toExternalForm(),
+			AuthService.getDocuSignOAuthRedirectUrl(false).toExternalForm());
+	}
+
+	@IsTest
+	static void test_getSalesforceOAuthRedirectUrl() {
+		Test.startTest();
+		Url result = AuthService.getSalesforceOAuthRedirectUrl();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(
+			'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com/apex/'
+				+ Application.namespacePrefix + 'CompleteSpringOAuth',
+			result.toExternalForm());
+	}
+
+	@IsTest
+	static void test_getSalesforceOAuthUrl_unauthorized() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Test.startTest();
+			try {
+				AuthService.getSalesforceOAuthUrl('type', 'target');
+				throw new AssertException('Expected getSalesforceOAuthUrl to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getSalesforceOAuthUrl_success() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Test.startTest();
+			Url result = AuthService.getSalesforceOAuthUrl(
+				LoginInformation.TYPE_USER,
+				TestUtils.getOrigin());
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(Salesforce.baseUrl.toExternalForm(), 'https://' + result.getAuthority());
+			System.assertEquals('/services/oauth2/authorize', result.getPath());
+			QueryString params = QueryString.parse(result.getQuery());
+			System.assertEquals(
+				[SELECT ConnectedAppId__c FROM Organization__mdt WHERE DeveloperName = 'Current'].ConnectedAppId__c,
+				params.get('client_id'));
+			System.assertEquals(
+				AuthService.getSalesforceOAuthRedirectUrl().toExternalForm(),
+				params.get('redirect_uri'));
+			System.assertEquals('code', params.get('response_type'));
+			System.assert(String.isNotBlank(params.get('state')));
+		}
+	}
+
+	@IsTest
 	static void test_completeSetup_success() {
 		DocuSignAPIMock.success();
 		MetadataAPIMock.success();
@@ -2359,6 +2351,375 @@ private class AuthServiceTest {
 				account,
 				accessToken));
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_encodeSalesforceOAuthState_setup() {
+		TestUtils.generateKey();
+		String nonce = UUID.randomUUID().toString();
+		String origin = TestUtils.getOrigin();
+		AuthService.SalesforceOAuthState state = new AuthService.SalesforceOAuthState(
+			LoginInformation.TYPE_SETUP,
+			origin);
+
+		Test.startTest();
+		String result = AuthService.encodeSalesforceOAuthState(nonce, state);
+		Test.stopTest();
+
+		System.assert(String.isNotBlank(result));
+		System.assertEquals(nonce + '|' + LoginInformation.TYPE_SETUP + '|' + origin, SecureUtils.decrypt(result));
+	}
+
+	@IsTest
+	static void test_encodeSalesforceOAuthState_user() {
+		TestUtils.generateKey();
+		String nonce = UUID.randomUUID().toString();
+		String origin = TestUtils.getOrigin();
+		AuthService.SalesforceOAuthState state = new AuthService.SalesforceOAuthState(
+			LoginInformation.TYPE_USER,
+			origin);
+
+		Test.startTest();
+		String result = AuthService.encodeSalesforceOAuthState(nonce, state);
+		Test.stopTest();
+
+		System.assert(String.isNotBlank(result));
+		System.assertEquals(nonce + '|' + LoginInformation.TYPE_USER + '|' + origin, SecureUtils.decrypt(result));
+	}
+
+	@IsTest
+	static void test_encodeSalesforceOAuthState_developer() {
+		TestUtils.generateKey();
+		String nonce = UUID.randomUUID().toString();
+		AuthService.SalesforceOAuthState state = new AuthService.SalesforceOAuthState(
+			LoginInformation.TYPE_DEVELOPER,
+			'/some/path');
+
+		Test.startTest();
+		String result = AuthService.encodeSalesforceOAuthState(nonce, state);
+		Test.stopTest();
+
+		System.assert(String.isNotBlank(result));
+		System.assertEquals(nonce + '|' + LoginInformation.TYPE_DEVELOPER + '|/some/path', SecureUtils.decrypt(result));
+	}
+
+	@IsTest
+	static void test_decodeSalesforceOAuthState_blank() {
+		try {
+			AuthService.decodeSalesforceOAuthState(null, null);
+			throw new AssertException('Expected decodeSalesforceOAuthState to fail');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
+		}
+
+		try {
+			AuthService.decodeSalesforceOAuthState('', null);
+			throw new AssertException('Expected decodeSalesforceOAuthState to fail');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
+		}
+
+		try {
+			AuthService.decodeSalesforceOAuthState('\r', null);
+			throw new AssertException('Expected decodeSalesforceOAuthState to fail');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
+		}
+	}
+
+	@IsTest
+	static void test_decodeSalesforceOAuthState_wrong_key() {
+		String state = EncodingUtil.base64Encode(Crypto.encryptWithManagedIV(
+			'AES256',
+			Crypto.generateAesKey(256),
+			Blob.valueOf('test')));
+		TestUtils.generateKey();
+
+		Test.startTest();
+		try {
+			AuthService.decodeSalesforceOAuthState(state, 'test');
+			throw new AssertException('Expected decodeSalesforceOAuthState to fail');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_decodeSalesforceOAuthState_unexpected_state() {
+		TestUtils.generateKey();
+		String state = SecureUtils.encrypt('test');
+
+		Test.startTest();
+		try {
+			AuthService.decodeSalesforceOAuthState(state, 'test');
+			throw new AssertException('Expected decodeSalesforceOAuthState to fail');
+		} catch (UnauthorizedException ex) {
+			System.assertEquals(Label.InvalidAuthState, ex.getMessage());
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_decodeSalesforceOAuthState_invalid_nonce() {
+		System.runAs(UserMock.createUser()) {
+			TestUtils.generateKey();
+			String origin = TestUtils.getOrigin();
+			String state = SecureUtils.encrypt('test|' + LoginInformation.TYPE_USER + '|' + origin);
+
+			Test.startTest();
+			try {
+				AuthService.decodeSalesforceOAuthState(state, UUID.randomUUID().toString());
+				throw new AssertException('Expected decodeSalesforceOAuthState to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_decodeSalesforceOAuthState_invalid_type() {
+		System.runAs(UserMock.createUser()) {
+			TestUtils.generateKey();
+			String origin = TestUtils.getOrigin();
+			String state = SecureUtils.encrypt('test|bad|' + origin);
+
+			Test.startTest();
+			try {
+				AuthService.decodeSalesforceOAuthState(state, 'test');
+				throw new AssertException('Expected decodeSalesforceOAuthState to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_decodeSalesforceOAuthState_invalid_target() {
+		System.runAs(UserMock.createUser()) {
+			TestUtils.generateKey();
+			String state = SecureUtils.encrypt('test|' + LoginInformation.TYPE_USER + '|http://bad.origin');
+
+			Test.startTest();
+			try {
+				AuthService.decodeSalesforceOAuthState(state, 'test');
+				throw new AssertException('Expected decodeSalesforceOAuthState to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.InvalidAuthState, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_decodeSalesforceOAuthState_valid() {
+		System.runAs(UserMock.createUser()) {
+			TestUtils.generateKey();
+			String state = SecureUtils.encrypt('test|' + LoginInformation.TYPE_DEVELOPER + '|/some/path');
+
+			Test.startTest();
+			AuthService.SalesforceOAuthState result = AuthService.decodeSalesforceOAuthState(state, 'test');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.TYPE_DEVELOPER, result.type);
+			System.assertEquals('/some/path', result.target);
+		}
+	}
+
+	@IsTest
+	static void test_getSalesforceOAuthUrl_developer_invalid_redirect() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				AuthService.getSalesforceOAuthUrl(
+					LoginInformation.TYPE_DEVELOPER,
+					null);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidRedirectUrl, ex.getMessage());
+			}
+			try {
+				AuthService.getSalesforceOAuthUrl(
+					LoginInformation.TYPE_DEVELOPER,
+					'https://example.com');
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assertEquals(Label.InvalidRedirectUrl, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getSalesforceOAuthUrl_developer() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			TestUtils.generateKey();
+
+			Test.startTest();
+			Url result = AuthService.getSalesforceOAuthUrl(
+				LoginInformation.TYPE_DEVELOPER,
+				'////unit/test'); // multiple leading slashes should be removed
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			QueryString params = QueryString.parse(result.getQuery());
+			String s = params.get('state');
+			System.assert(String.isNotBlank(s));
+			AuthService.SalesforceOAuthState state = AuthService.decodeSalesforceOAuthState(
+				s, UserSettings__c.getInstance().Nonce__c);
+			System.assertNotEquals(null, state);
+			System.assertEquals(LoginInformation.TYPE_DEVELOPER, state.type);
+			System.assertEquals('/unit/test', state.target);
+		}
+	}
+
+	@IsTest
+	static void test_redeemSalesforceCode_setup_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			String state = TestUtils.generateSalesforceOAuthState(true);
+
+			Test.startTest();
+			try {
+				AuthService.redeemSalesforceCode('unit.test', state);
+				throw new AssertException('Expected redeemSalesforceCode to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_redeemSalesforceCode_non_setup_unauthorized() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			String state = TestUtils.generateSalesforceOAuthState(false);
+
+			Test.startTest();
+			try {
+				AuthService.redeemSalesforceCode('unit.test', state);
+				throw new AssertException('Expected redeemSalesforceCode to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_redeemSalesforceCode_missing_settings() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.ScmWebBaseUrl__c = null;
+			update s;
+			String state = TestUtils.generateSalesforceOAuthState(true);
+
+			Test.startTest();
+			LoginInformation result = AuthService.redeemSalesforceCode('unit.test', state);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
+			System.assertEquals(Label.MissingDocuSignGenAuthorizationSettings, result.message);
+			System.assertEquals(null, UserSettings__c.getInstance().Nonce__c);
+			System.assertEquals(true, UserSettings__c.getInstance().IsPlatformAuthorized__c);
+			System.assertNotEquals(null, UserSettings__c.getInstance().PlatformAuthorizationLastChecked__c);
+			System.assertEquals(
+				PlatformAuthorizationService.DEFAULT_CHECK_FREQUENCY_MIN,
+				Integer.valueOf(UserSettings__c.getInstance().PlatformAuthorizationCheckFrequency__c));
+		}
+	}
+
+	@IsTest
+	static void test_redeemSalesforceCode_setup_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			System.assert(!AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
+			String state = TestUtils.generateSalesforceOAuthState(true);
+
+			Test.startTest();
+			LoginInformation result = AuthService.redeemSalesforceCode('unit.test', state);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.TYPE_SETUP, result.type);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
+			System.assertEquals(Label.SuccessDocuSignAuthorization, result.message);
+			System.assertEquals(TestUtils.getOrigin(), result.target);
+			System.assert(AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
+			System.assertEquals(null, UserSettings__c.getInstance().Nonce__c);
+			System.assertEquals(true, UserSettings__c.getInstance().IsPlatformAuthorized__c);
+			System.assertNotEquals(null, UserSettings__c.getInstance().PlatformAuthorizationLastChecked__c);
+			System.assertEquals(
+				PlatformAuthorizationService.DEFAULT_CHECK_FREQUENCY_MIN,
+				Integer.valueOf(UserSettings__c.getInstance().PlatformAuthorizationCheckFrequency__c));
+		}
+	}
+
+	@IsTest
+	static void test_redeemSalesforceCode_non_setup_success() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			String state = TestUtils.generateSalesforceOAuthState(false);
+
+			Test.startTest();
+			LoginInformation result = AuthService.redeemSalesforceCode('unit.test', state);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.TYPE_USER, result.type);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
+			System.assertEquals(TestUtils.getOrigin(), result.target);
+			System.assertEquals(Label.SuccessDocuSignAuthorization, result.message);
+			System.assertEquals(null, UserSettings__c.getInstance().Nonce__c);
+			System.assertEquals(true, UserSettings__c.getInstance().IsPlatformAuthorized__c);
+			System.assertNotEquals(null, UserSettings__c.getInstance().PlatformAuthorizationLastChecked__c);
+			System.assertEquals(
+				PlatformAuthorizationService.DEFAULT_CHECK_FREQUENCY_MIN,
+				Integer.valueOf(UserSettings__c.getInstance().PlatformAuthorizationCheckFrequency__c));
+		}
+	}
+
+	@IsTest
+	static void test_redeemSalesforceError_unauthorized() {
+		System.runAs(UserMock.createDocuSignSender(false)) {
+			Test.startTest();
+			try {
+				AuthService.redeemSalesforceError(null, null, null);
+				throw new AssertException('Expected failure');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignUser, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_redeemSalesforceError_success() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			String state = TestUtils.generateSalesforceOAuthState(false);
+
+			Test.startTest();
+			LoginInformation result = AuthService.redeemSalesforceError(
+				'access_denied',
+				'error message',
+				state);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.TYPE_USER, result.type);
+			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
+			System.assertEquals(Label.ConsentRequired, result.message);
+			System.assertEquals('error message', result.detail);
+			System.assertEquals(TestUtils.getOrigin(), result.target);
+			System.assertEquals(null, UserSettings__c.getInstance().Nonce__c);
+			System.assertEquals(false, UserSettings__c.getInstance().IsPlatformAuthorized__c);
+			System.assertNotEquals(null, UserSettings__c.getInstance().PlatformAuthorizationLastChecked__c);
+			System.assertEquals(
+				PlatformAuthorizationService.DEFAULT_CHECK_FREQUENCY_MIN,
+				Integer.valueOf(UserSettings__c.getInstance().PlatformAuthorizationCheckFrequency__c));
 		}
 	}
 }

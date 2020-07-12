@@ -48,20 +48,6 @@ global with sharing class AuthService {
 		}
 	}
 
-	@TestVisible
-	private static String base64UrlEncode(final Blob input) {
-		if (input == null) return '';
-
-		String output = EncodingUtil.base64Encode(input)
-			.replace('+', '-')
-			.replace('/', '_');
-		while (output.endsWith('=')) {
-			output = output.substring(0, output.length() - 1);
-		}
-
-		return output;
-	}
-
 	private class APIToken {
 		public String access_token;
 		public Integer expires_in;
@@ -418,12 +404,12 @@ global with sharing class AuthService {
 	private static final String SCOPE_CONTENT = 'spring_content';
 	private static final Integer AUTH_TIMEOUT = 5000; // TODO: Move to config
 	private static AuthAPI api;
-	private static SpringOAuthAPI springOAuth;
+	private static ScmSetupAPI scmClient;
 	private static Map<DocuSign.Environment, RootCredentials> rootCredentials
 		= new Map<DocuSign.Environment, RootCredentials>();
 
 	static {
-		JWT_HEADER = base64UrlEncode(Blob.valueOf(JSON.serialize(new Map<String, String> {
+		JWT_HEADER = StringUtils.base64UrlEncode(Blob.valueOf(JSON.serialize(new Map<String, String> {
 			'typ' => 'JWT',
 			'alg' => 'RS256'
 		})));
@@ -444,7 +430,7 @@ global with sharing class AuthService {
 		final String clientId,
 		final Blob jwtSigningKey) {
 
-		String payload = base64UrlEncode(Blob.valueOf(JSON.serialize(new Map<String, Object> {
+		String payload = StringUtils.base64UrlEncode(Blob.valueOf(JSON.serialize(new Map<String, Object> {
 			'iss' => clientId,
 			'sub' => String.valueOf(userId),
 			'iat' => Datetime.now().getTime() / 1000,
@@ -453,7 +439,7 @@ global with sharing class AuthService {
 			'scope' => scope
 		})));
 
-		String signature = base64UrlEncode(Crypto.sign('RSA-SHA256', Blob.valueOf(JWT_HEADER + '.' + payload),
+		String signature = StringUtils.base64UrlEncode(Crypto.sign('RSA-SHA256', Blob.valueOf(JWT_HEADER + '.' + payload),
 			jwtSigningKey));
 
 		return JWT_HEADER + '.' + payload + '.' + signature;
@@ -679,7 +665,7 @@ global with sharing class AuthService {
 	}
 
 	@TestVisible
-	private class State {
+	private class DocuSignOAuthState {
 
 		public String type { get; private set; }
 		public String target { get; private set; }
@@ -693,7 +679,7 @@ global with sharing class AuthService {
 			}
 		}
 
-		public State(
+		public DocuSignOAuthState(
 			final String type,
 			final String target,
 			final DocuSign.Environment environment,
@@ -737,20 +723,16 @@ global with sharing class AuthService {
 			'response_type' => 'code',
 			'scope' => SCOPE_ADMIN,
 			'client_id' => rc.clientId,
-			'redirect_uri' => 'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
-				+ '/apex/' + Application.namespacePrefix + 'completeoauth',
-			'state' => encodeState(generateNonce(), new State(
-				LoginInformation.TYPE_SETUP,
-				target,
-				rc.environment,
-				rc.accountBaseUrl))
+			'redirect_uri' => getDocuSignOAuthRedirectUrl(true).toExternalForm(),
+			'state' => encodeDocuSignOAuthState(
+				generateNonce(),
+				new DocuSignOAuthState(
+					LoginInformation.TYPE_SETUP,
+					target,
+					rc.environment,
+					rc.accountBaseUrl))
 		});
 		return new Url(pg.getUrl());
-	}
-
-	@TestVisible
-	private static Url getOAuthRedirectUrl() {
-		return new Url(Salesforce.baseUrl, Salesforce.sitePrefix.removeEndIgnoreCase('/s') + Page.CompleteOAuth.getUrl());
 	}
 
 	/**
@@ -785,8 +767,8 @@ global with sharing class AuthService {
 			'response_type' => 'code',
 			'scope' => SCOPE_ADMIN,
 			'client_id' => c.client.id,
-			'redirect_uri' => getOAuthRedirectUrl().toExternalForm(),
-			'state' => encodeState(generateNonce(), new State(
+			'redirect_uri' => getDocuSignOAuthRedirectUrl(type == LoginInformation.TYPE_SETUP).toExternalForm(),
+			'state' => encodeDocuSignOAuthState(generateNonce(), new DocuSignOAuthState(
 				type,
 				target,
 				c.environment.environment,
@@ -841,9 +823,9 @@ global with sharing class AuthService {
 	}
 
 	@TestVisible
-	private static String encodeState(
+	private static String encodeDocuSignOAuthState(
 		final String nonce,
-		final State state) {
+		final DocuSignOAuthState state) {
 
 		if (state == null || !state.isValid) throw new DocuSignException(Label.InvalidAuthState);
 
@@ -855,7 +837,7 @@ global with sharing class AuthService {
 	}
 
 	@TestVisible
-	private static State decodeState(
+	private static DocuSignOAuthState decodeDocuSignOAuthState(
 		final String state,
 		final String nonce) {
 
@@ -923,7 +905,7 @@ global with sharing class AuthService {
 			throw new UnauthorizedException(Label.InvalidAuthState);
 		}
 
-		return new State(type, target, environment, baseUrl);
+		return new DocuSignOAuthState(type, target, environment, baseUrl);
 	}
 
 	@TestVisible
@@ -959,9 +941,7 @@ global with sharing class AuthService {
 			.getInstanceCredentials(
 				rootClientId,
 				acct.id,
-				new List<Url> {
-					getOAuthRedirectUrl()
-				},
+				new List<Url> { getDocuSignOAuthRedirectUrl(false) },
 				token.token);
 		Credentials.AccessToken newToken = getAccessToken(
 			null,
@@ -1135,7 +1115,7 @@ global with sharing class AuthService {
 	@TestVisible
 	private static LoginInformation saveSetupCredentials(
 		final String authorizationCode,
-		final State state) {
+		final DocuSignOAuthState state) {
 
 		RootCredentials rc = getRootCredentials(state.environment, state.baseUrl);
 
@@ -1212,12 +1192,12 @@ global with sharing class AuthService {
 	 * required), or with multiple accounts in which case the <code>setAccount</code> method should be called after the
 	 * user selects the desired account.
 	 */
-	public static LoginInformation redeemCode(
+	public static LoginInformation redeemDocuSignCode(
 		final String authorizationCode,
 		final String state) {
 
 		LoginInformation result = null;
-		State s = decodeState(state, UserSettings__c.getInstance().Nonce__c);
+		DocuSignOAuthState s = decodeDocuSignOAuthState(state, UserSettings__c.getInstance().Nonce__c);
 		if (s.type == LoginInformation.TYPE_SETUP) {
 			Permissions.verifyIsDocuSignAdministrator();
 			result = saveSetupCredentials(authorizationCode, s);
@@ -1226,7 +1206,7 @@ global with sharing class AuthService {
 			saveUserCredentials(authorizationCode, s.baseUrl);
 		}
 		return result == null
-			? new LoginInformation(s.type, LoginInformation.STATUS_SUCCESS, null, s.target)
+			? new LoginInformation(s.type, LoginInformation.STATUS_SUCCESS, null, null, s.target)
 			: result.withTarget(s.target);
 	}
 
@@ -1242,7 +1222,7 @@ global with sharing class AuthService {
 	 *
 	 * @return The failure result of the login with event target specified.
 	 */
-	public static LoginInformation redeemError(
+	public static LoginInformation redeemDocuSignError(
 		final String errorCode,
 		final String errorMessage,
 		final String state) {
@@ -1252,12 +1232,13 @@ global with sharing class AuthService {
 		LoginInformation result = null;
 		UserSettings__c us = UserSettings__c.getInstance();
 		try {
-			State s = decodeState(state, us.Nonce__c);
+			DocuSignOAuthState s = decodeDocuSignOAuthState(state, us.Nonce__c);
 			result = new LoginInformation(
 				s.type,
 				LoginInformation.STATUS_FAILURE,
 				errorCode == 'consent_required' || errorCode == 'access_denied' || String.isBlank(errorMessage)
 					? Label.ConsentRequired : errorMessage,
+				null,
 				s.target);
 		} finally {
 			if (String.isNotBlank(us.Nonce__c)) {
@@ -1322,37 +1303,15 @@ global with sharing class AuthService {
 			new List<LoginInformation.Account> { selected });
 	}
 
-	public class PlatformAuthStatus {
-		@AuraEnabled
-		public Boolean success { get; private set; }
-		@AuraEnabled
-		public String message { get; private set; }
-		@AuraEnabled
-		public String detail { get; private set; }
-
-		private PlatformAuthStatus(
-			final Boolean success,
-			final String message,
-			final String detail) {
-
-			this.success = success;
-			this.message = message;
-			this.detail = detail;
-		}
-	}
-
 	@TestVisible
-	private class SpringOAuthAPI extends ScmAPI {
+	private class ScmSetupAPI extends ScmAPI {
 
-		public SpringOAuthAPI(final Url baseUrl) {
+		public ScmSetupAPI(final Url baseUrl) {
 			super(baseUrl);
 		}
 
-		public PlatformAuthStatus completeSpringOAuth(final String authorizationCode) {
-			PlatformAuthStatus result = new PlatformAuthStatus(
-				true,
-				Label.SuccessDocuSignAuthorization,
-				null);
+		public LoginInformation completeSetup(final String authorizationCode) {
+			LoginInformation result;
 			try {
 				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
 				Map<String, Object> body = new Map<String, Object> {
@@ -1367,79 +1326,290 @@ global with sharing class AuthService {
 
 				if (response.hasError) {
 					this.log.error('Failed to setup SCM to Salesforce OAuth: ' + response.error);
-					result = new PlatformAuthStatus(
-						false,
+					result = new LoginInformation(
+						LoginInformation.TYPE_SETUP,
+						LoginInformation.STATUS_FAILURE,
 						Label.UnableToConnectDocuSignGen,
-						String.valueOf(response.error));
+						String.valueOf(response.error),
+						null);
+				} else {
+					result = new LoginInformation(
+						LoginInformation.TYPE_SETUP,
+						LoginInformation.STATUS_SUCCESS,
+						Label.SuccessDocuSignAuthorization,
+						null,
+						null);
 				}
 			} catch (Exception ex) {
 				LoggerService.getInstance().exception(ex, 'Failed to setup SCM to Salesforce OAuth');
-				result = new PlatformAuthStatus(
-					false,
+				result = new LoginInformation(
+					LoginInformation.TYPE_SETUP,
+					LoginInformation.STATUS_FAILURE,
+					Label.UnableToConnectDocuSignGen,
 					ex.getMessage(),
 					null);
-			} finally {
-				AccountProducts.save();
 			}
 			return result;
 		}
 	}
 
 	@TestVisible
-	private static SpringOAuthAPI getSpringOAuthAPI(final Url baseUrl) {
-		if (springOAuth == null) {
-			springOAuth = new SpringOAuthAPI(baseUrl);
+	private static ScmSetupAPI getScmSetupAPI(final Url baseUrl) {
+		if (scmClient == null) {
+			scmClient = new ScmSetupAPI(baseUrl);
 		}
-		return springOAuth;
+		return scmClient;
+	}
+
+	@TestVisible
+	private class SalesforceOAuthState {
+		public String type { get; private set; }
+		public String target { get; private set; }
+		public Boolean isValid {
+			get {
+				return isValidType(this.type)
+					&& isValidTarget(this.type, this.target);
+			}
+		}
+
+		public SalesforceOAuthState(
+			final String type,
+			final String target) {
+
+			this.type = type;
+			this.target = target;
+		}
+	}
+
+	@TestVisible
+	private static String encodeSalesforceOAuthState(
+		final String nonce,
+		final SalesforceOAuthState state) {
+
+		if (state == null || !state.isValid) throw new DocuSignException(Label.InvalidAuthState);
+
+		return SecureUtils.encrypt(nonce
+			+ '|' + state.type
+			+ '|' + state.target);
+	}
+
+	@TestVisible
+	private static SalesforceOAuthState decodeSalesforceOAuthState(
+		final String state,
+		final String nonce) {
+
+		// 1) Verify state is non-blank.
+		if (String.isBlank(state)) {
+			LOG.error('OAuth state is blank');
+			throw new UnauthorizedException(Label.InvalidAuthState);
+		}
+
+		// 2) Verify can decrypt
+		String decrypted;
+		try {
+			decrypted = SecureUtils.decrypt(state);
+		} catch (Exception ex) {
+			LOG.exception(ex, 'Failed to decrypt state: ' + state);
+			throw new UnauthorizedException(Label.InvalidAuthState);
+		}
+
+		// 3) Verify 3 state tokens
+		List<String> toks = decrypted.split('\\|');
+		if (Collection.size(toks) != 3) {
+			LOG.error('Unexpected state: ' + decrypted);
+			throw new UnauthorizedException(Label.InvalidAuthState);
+		}
+
+		// 4) Verify nonce
+		if (nonce != toks[0]) {
+			LOG.error('Nonce mismatch: ' + nonce + ' != ' + toks[0]);
+			throw new UnauthorizedException(Label.InvalidAuthState);
+		}
+
+		// 5) Parse type
+		String type = toks[1];
+		if (!isValidType(type)) {
+			LOG.error('Invalid login type: ' + type);
+			throw new UnauthorizedException(Label.InvalidAuthState);
+		}
+
+		// 6) Verify target.
+		String target = toks[2];
+		if (!isValidTarget(type, target)) {
+			LOG.error('Invalid target: ' + target);
+			throw new UnauthorizedException(Label.InvalidAuthState);
+		}
+
+		return new SalesforceOAuthState(type, target);
+	}
+
+	@TestVisible
+	private static Url getDocuSignOAuthRedirectUrl(final Boolean isSetup) {
+		Url baseUrl = isSetup
+			? new Url('https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com/')
+			: Salesforce.baseUrl;
+		return new Url(baseUrl, (isSetup ? '' : Salesforce.sitePrefix.removeEndIgnoreCase('/s'))
+			+ '/apex/' + Application.namespacePrefix + 'completeoauth'); // case-sensitive?
+	}
+
+	@TestVisible
+	private static Url getSalesforceOAuthRedirectUrl() {
+		return new Url('https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com/apex/'
+			+ Application.namespacePrefix + 'CompleteSpringOAuth'); // case-sensitive!
 	}
 
 	/**
-	 * Retrieves the URL to start Salesforce and Spring OAuth Flow
+	 * Retrieves the URL to start the Salesforce OAuth flow.
+	 * <p>
+	 * For Community users, this method does not work as the redirect URI cannot be pre-authorized. Instead, grant
+	 * admin consent for these users.
 	 * <p>
 	 * The caller must be assigned the <code>DocuSign Administrator</code> permission set.
 	 *
+	 * @param type The login type requested: <code>USER</code> or <code>DEVELOPER</code>.
+	 * @param target Where to redirect the user to after login. This must be a local path to a page that will
+	 * handle the authorization result.
+	 *
 	 * @return The Salesforce OAuth Url along with redirection to completeOauth
 	 */
-	public static Url getSpringOAuthUrl(final String state) {
-		Permissions.verifyIsDocuSignAdministrator();
-		PageReference pg = new PageReference(Salesforce.oauthUrl.toExternalForm());
+	public static Url getSalesforceOAuthUrl(
+		final String type,
+		final String target) {
+
+		Permissions.verifyIsDocuSignUser();
+
+		String safeTarget = target;
+		if (type == LoginInformation.TYPE_DEVELOPER
+			&& (String.isBlank(target) || !target.startsWith('/'))) {
+
+			throw new DocuSignException(Label.InvalidRedirectUrl);
+		} else if (target.startsWith('/')) {
+			// Prevent double-slash in case browser allows it as a valid external redirect
+			safeTarget = target.replaceFirst('/+', '/');
+		}
+
+		PageReference pg = new PageReference(Salesforce.baseUrl.toExternalForm() + '/services/oauth2/authorize');
 		pg.getParameters().putAll(new Map<String, String> {
 			'response_type' => 'code',
-			'state' => state,
+			'state' => encodeSalesforceOAuthState(
+				generateNonce(),
+				new SalesforceOAuthState(
+					type,
+					safeTarget)),
 			'client_id' => [
 				SELECT ConnectedAppId__c
 				FROM Organization__mdt
 				WHERE DeveloperName = 'Current'
 				LIMIT 1
 			].ConnectedAppId__c,
-			'redirect_uri' => 'https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com'
-				+ '/apex/' + Application.namespacePrefix + 'CompleteSpringOAuth'
+			'redirect_uri' => getSalesforceOAuthRedirectUrl().toExternalForm()
 		});
 		return new Url(pg.getUrl());
 	}
 
-	public static PlatformAuthStatus completeSpringOAuth(final String authorizationCode) {
-		Permissions.verifyIsDocuSignAdministrator();
-
+	@TestVisible
+	private static LoginInformation completeScmSetup(final String authorizationCode) {
+		LoginInformation result;
 		try {
 			Url baseUrl = AccountProducts.getInstance().getScmWebBaseUrl();
 			if (baseUrl == null) {
 				LoggerService.getInstance().error('SCM web base URL is not configured');
-				return new PlatformAuthStatus(
-					false,
+				result = new LoginInformation(
+					LoginInformation.TYPE_SETUP,
+					LoginInformation.STATUS_FAILURE,
 					Label.MissingDocuSignGenAuthorizationSettings,
+					null,
 					null);
+			} else {
+				result = getScmSetupAPI(baseUrl).completeSetup(authorizationCode);
+				if (result.status == LoginInformation.STATUS_SUCCESS) {
+					AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+					settings.IsPlatformAuthorized__c = true;
+					update settings;
+				}
 			}
-
-			PlatformAuthStatus result = getSpringOAuthAPI(baseUrl).completeSpringOAuth(authorizationCode);
-			if (result.success) {
-				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-				settings.IsPlatformAuthorized__c = true;
-				update settings;
-			}
-			return result;
 		} finally {
 			AccountProducts.save();
 		}
+		return result;
+	}
+
+	/**
+	 * Attempts login to Salesforce with the supplied credentials.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param authorizationCode The authorization code returned by Salesforce after successful login and consent.
+	 * @param state The state passed through Salesforce. This value is opaque to the caller and may not be tampered with.
+	 *
+	 * @return The result of the login.
+	 */
+	public static LoginInformation redeemSalesforceCode(
+		final String authorizationCode,
+		final String state) {
+
+		Permissions.verifyIsDocuSignUser();
+
+		LoginInformation result;
+		UserSettings__c us = UserSettings__c.getInstance();
+		try {
+			SalesforceOAuthState s = decodeSalesforceOAuthState(state, us.Nonce__c);
+
+			if (s.type == LoginInformation.TYPE_SETUP) {
+				Permissions.verifyIsDocuSignAdministrator();
+				result = completeScmSetup(authorizationCode).withTarget(s.target);
+			} else {
+				Permissions.verifyIsDocuSignUser();
+				result = new LoginInformation(
+					s.type,
+					LoginInformation.STATUS_SUCCESS,
+					Label.SuccessDocuSignAuthorization,
+					null,
+					s.target);
+			}
+		} finally {
+			us.Nonce__c = null;
+			us.IsPlatformAuthorized__c = true;
+			us.PlatformAuthorizationLastChecked__c = Datetime.now();
+			update us;
+		}
+		return result;
+	}
+
+	/**
+	 * Completes a Salesforce OAuth transaction with an error.
+	 * <p>
+	 * The caller must be assigned the <code>DocuSign User</code> permission set.
+	 *
+	 * @param errorCode The error code returned by Salesforce.
+	 * @param errorMessage The error message returned by Salesforce.
+	 * @param state The state passed through Salesforce. This value is opaque to the caller and may not be tampered with.
+	 *
+	 * @return The failure result of the login with event target specified.
+	 */
+	public static LoginInformation redeemSalesforceError(
+		final String errorCode,
+		final String errorMessage,
+		final String state) {
+
+		Permissions.verifyIsDocuSignUser();
+
+		LoginInformation result;
+		UserSettings__c us = UserSettings__c.getInstance();
+		try {
+			SalesforceOAuthState s = decodeSalesforceOAuthState(state, us.Nonce__c);
+			result = new LoginInformation(
+				s.type,
+				LoginInformation.STATUS_FAILURE,
+				errorCode == 'access_denied' || String.isBlank(errorMessage) ? Label.ConsentRequired : errorMessage,
+				errorMessage,
+				s.target);
+		} finally {
+			us.Nonce__c = null;
+			us.IsPlatformAuthorized__c = false;
+			us.PlatformAuthorizationLastChecked__c = Datetime.now();
+			update us;
+		}
+		return result;
 	}
 }

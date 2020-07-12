@@ -473,12 +473,19 @@ global class TestUtils {
 		return origin;
 	}
 
-	public static String generateState(final Boolean setup) {
+	public static String generateDocuSignOAuthState(final Boolean setup) {
 		generateKey();
 		return SecureUtils.encrypt(generateNonce()
 			+ '|' + (setup ? LoginInformation.TYPE_SETUP : LoginInformation.TYPE_USER)
 			+ '|' + getOrigin()
 			+ '|Other|https://unit.test.docusign.net/');
+	}
+
+	public static String generateSalesforceOAuthState(final Boolean setup) {
+		generateKey();
+		return SecureUtils.encrypt(generateNonce()
+			+ '|' + (setup ? LoginInformation.TYPE_SETUP : LoginInformation.TYPE_USER)
+			+ '|' + getOrigin());
 	}
 
 	public static GenTemplate__c createGenTemplate(final SObjectType sourceType) {

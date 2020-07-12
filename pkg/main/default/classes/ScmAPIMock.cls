@@ -47,13 +47,14 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		'members' => Application.classNamespacePrefix + 'ScmAPIMock.MemberMock',
 		'changesecuritytasks' => Application.classNamespacePrefix + 'ScmAPIMock.ChangeSecurityTask',
 		'templates' => Application.classNamespacePrefix + 'ScmAPIMock.TemplateMock',
-		'convert' => Application.classNamespacePrefix + 'ScmAPIMock.ConvertDocumentMock'
+		'convert' => Application.classNamespacePrefix + 'ScmAPIMock.ConvertDocumentMock',
+		'DALIntegration' => Application.classNamespacePrefix + 'ScmAPIMock.DalIntegrationMock'
 	};
 	private static final Map<String, MockResource> MOCKS = new Map<String, MockResource>();
 
 	// Capture group 1 = gen?, group 2 = api version, group 3 = account ID, group 4 = the rest
 	private static final Pattern BASE_PATH_PATTERN = Pattern.compile(
-		'\\/(gen\\/|negotiate\\/api\\/)?(v[1,2])\\/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})\\/(.+)');
+		'/(gen/|negotiate/api/)?(v[1,2])/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})/(.+)');
 
 	private final Boolean success;
 
@@ -65,6 +66,18 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 	private MockRequest parseRequest(final HttpRequest request) {
 		Url u = new Url(request.getEndpoint());
 		String p = u.getPath();
+
+		if (p == '/atlas/SetupSalesforce/DALIntegration') { // special case for setup API
+			return new MockRequest(
+				request.getMethod(),
+				null,
+				null,
+				'DALIntegration',
+				new List<Object>(),
+				QueryString.parse(u.getQuery()),
+				request.getHeader('User-Agent'),
+				request.getBody());
+		}
 
 		Matcher m = BASE_PATH_PATTERN.matcher(u.getPath());
 		if (!m.matches()) throw new AssertException('API request endpoint was not in expected format: ' + u.getPath());
@@ -426,6 +439,18 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		}
 	}
 
+	//noinspection ApexUnusedDeclaration
+	public class DalIntegrationMock implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			if (request.method == 'POST') {
+				response = MockResponse.ok('{"success":true,"message":"Successfully stored refresh token."}');
+			}
+			return response;
+		}
+	}
+
 	private MockResource getMock(final String resource) {
 		if (MOCKS.containsKey(resource)) return MOCKS.get(resource);
 
@@ -438,7 +463,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		return mock;
 	}
 
-	private MockResponse getError(final String resource) {
+	private MockResponse getError() {
 		return MockResponse.badRequest('{"Error":{"HttpStatusCode":400,"UserMessage":"Test user message","DeveloperMessage":"Test developer message","ErrorCode":1234,"ReferenceId":"' + UUID.randomUUID() + '"}}');
 	}
 
@@ -446,7 +471,7 @@ public class ScmAPIMock extends OAuthTokenMock implements HttpCalloutMock {
 		MockRequest req = parseRequest(request);
 		MockResponse resp = this.success
 			? getMock(req.resource).respond(req)
-			: getError(req.resource);
+			: getError();
 		if (resp == null) {
 			resp = MockResponse.notImplemented(req.method, req.resource);
 		}

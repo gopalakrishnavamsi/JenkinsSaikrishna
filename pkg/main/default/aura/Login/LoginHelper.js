@@ -233,14 +233,13 @@
     component.destroy();
   },
 
-  beginSpringOAuth: function (component) {
+  beginSalesforceOAuth: function (component) {
     component.set('v.loading', true);
-    var beginSpringOAuth = component.get('v.beginSpringOAuth');
-    beginSpringOAuth(component);
+    component.get('v.beginSalesforceOAuth')(component);
   },
 
-  endSpringOAuth: function (component, response, loginInformation, helper) {
-    if (loginInformation && loginInformation.success) {
+  endSalesforceOAuth: function (component, response, loginInformation, helper) {
+    if (loginInformation && loginInformation.status === 'Success') {
       helper.showToast(component, loginInformation.message, loginInformation.detail, 'success');
       window.setTimeout($A.getCallback(function () {
         component.getEvent('reloadEvent').fire();

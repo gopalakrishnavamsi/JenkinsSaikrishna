@@ -43,11 +43,11 @@
   },
 
   completePlatformOAuth: function (component, event, helper) {
-    helper.beginSpringOAuth(component);
+    helper.beginSalesforceOAuth(component);
   },
 
-  handleSpringOAuthEvent: function (component, event, helper) {
-    helper.endSpringOAuth(component, event.getParam('response'), event.getParam('loginInformation'), helper);
+  handleSalesforceOAuthEvent: function (component, event, helper) {
+    helper.endSalesforceOAuth(component, event.getParam('response'), event.getParam('loginInformation'), helper);
   },
 
   gotoSelectAccountStep: function (component, event, helper) {

@@ -28,13 +28,12 @@ public with sharing class Salesforce {
 	@TestVisible
 	public static Boolean isCommunitySite { get; private set; }
 	@TestVisible
-	public static Url oauthUrl { get; private set; }
+	public static Url oauthAudience { get; private set; }
 
 	static {
 		String siteBaseUrl = Site.getBaseUrl();
 		baseUrl = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl) : Url.getOrgDomainUrl();
 		sitePrefix = String.isNotBlank(Site.getPathPrefix()) ? Site.getPathPrefix() : '' ;
-		oauthUrl = new Url(baseUrl, '/services/oauth2/authorize');
 		Organization org = [
 			SELECT InstanceName, IsSandbox, OrganizationType, NamespacePrefix
 			FROM Organization
@@ -42,6 +41,8 @@ public with sharing class Salesforce {
 		];
 		instance = org.InstanceName.toLowerCase();
 		isSandbox = org.IsSandbox;
+		oauthAudience = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl)
+			: new Url('https://' + (isSandbox ? 'test' : 'login') + '.salesforce.com');
 		edition = org.OrganizationType;
 		switch on (edition) {
 			when 'Professional Edition' {

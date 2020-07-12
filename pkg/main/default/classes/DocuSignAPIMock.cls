@@ -8,6 +8,7 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 	private ScmAPIMock scmMock;
 	private RoleAPIMock roleMock;
 	private CLMAPIMock clmMock;
+	private SalesforceAPIMock salesforceMock;
 	private Boolean success;
 
 	public DocuSignAPIMock(final Boolean success) {
@@ -72,6 +73,13 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 		return this.clmMock;
 	}
 
+	private SalesforceAPIMock getSalesforceMock() {
+		if (this.salesforceMock == null) {
+			this.salesforceMock = new SalesforceAPIMock(this.success);
+		}
+		return this.salesforceMock;
+	}
+
 	override public HttpResponse getResponse(final HttpRequest request) {
 		String path = new Url(request.getEndpoint()).getPath();
 		if (path.startsWith('/oauth')) {
@@ -86,6 +94,8 @@ public class DocuSignAPIMock extends OAuthTokenMock {
 			return this.getScmMock().getResponse(request);
 		} else if (path.startsWith('/api/v1/')) {
 			return this.getClmMock().getResponse(request);
+		} else if (path.startsWith('/services/oauth2/')) {
+			return this.getSalesforceMock().respond(request);
 		}
 		return this.getESignatureMock().getResponse(request);
 	}

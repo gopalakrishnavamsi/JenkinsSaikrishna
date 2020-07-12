@@ -52,9 +52,12 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_oauthUrl() {
-		System.assertEquals(Salesforce.baseUrl.toExternalForm() + '/services/oauth2/authorize',
-			Salesforce.oauthUrl.toExternalForm());
+	static void test_oauthAudience() {
+		System.assertEquals(
+			String.isNotBlank(Site.getBaseUrl())
+				? Site.getBaseUrl()
+				: 'https://' + (Salesforce.isSandbox ? 'test.salesforce.com' : 'login.salesforce.com'),
+			Salesforce.oauthAudience.toExternalForm());
 	}
 
 	@IsTest

@@ -147,6 +147,20 @@ private class AuthControllerTest {
 	}
 
 	@IsTest
+	static void test_getAuthStatus_salesforce_error() {
+		System.runAs(UserMock.createDocuSignUser(false)) { // Account not configured
+			Test.startTest();
+			AuthController.AuthStatus result = AuthController.getAuthStatus();
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assert(!result.isAuthorized);
+			System.assert(!result.isConsentRequired);
+			System.assertEquals(Label.AccountNotConfigured, result.message);
+		}
+	}
+
+	@IsTest
 	static void test_beginOAuth_failure() {
 		System.runAs(UserMock.createDocuSignSender(false)) {
 			Test.startTest();
@@ -181,7 +195,7 @@ private class AuthControllerTest {
 
 			Test.startTest();
 			AuthController.AuthStatus config = AuthController.getConfigAfterAuthorization();
-			system.assertNotEquals(config, null);
+			System.assertNotEquals(config, null);
 			Test.stopTest();
 
 			System.assertEquals(4, config.products.size());
@@ -189,6 +203,63 @@ private class AuthControllerTest {
 			System.assertEquals(true, config.permission.isDocuSignIntegrationUser);
 			System.assertEquals(true, config.permission.isDocuSignGenerator);
 			System.assertEquals(true, config.permission.isDocuSignNegotiator);
+		}
+	}
+
+	@IsTest
+	static void test_completeDocuSignOAuth_unauthorized() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Test.startTest();
+			try {
+				AuthController.completeDocuSignOAuth(
+					'code',
+					TestUtils.generateDocuSignOAuthState(true),
+					null,
+					null);
+				throw new AssertException('Expected completeDocuSignOAuth to fail');
+			} catch (UnauthorizedException ex) {
+				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_completeDocuSignOAuth_success() {
+		DocuSignAPIMock.success();
+		MetadataAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			String state = TestUtils.generateDocuSignOAuthState(true);
+
+			Test.startTest();
+			LoginInformation result = AuthController.completeDocuSignOAuth(
+				'code',
+				state,
+				null,
+				null);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
+		}
+	}
+
+	@IsTest
+	static void test_completeDocuSignOAuth_error() {
+		System.runAs(UserMock.createDocuSignAdministrator(false)) {
+			String state = TestUtils.generateDocuSignOAuthState(true);
+
+			Test.startTest();
+			LoginInformation result = AuthController.completeDocuSignOAuth(
+				null,
+				state,
+				'consent_required',
+				'Consent required.');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
+			System.assertEquals(Label.ConsentRequired, result.message);
 		}
 	}
 
@@ -218,6 +289,58 @@ private class AuthControllerTest {
 			Test.stopTest();
 
 			System.assertEquals(3, config.products.size());
+		}
+	}
+
+	@IsTest
+	static void test_beginSalesforceOAuth_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			String result = AuthController.beginSalesforceOAuth(
+				LoginInformation.TYPE_USER,
+				TestUtils.getOrigin());
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+		}
+	}
+
+	@IsTest
+	static void test_completeSalesforceOAuth_success() {
+		ScmAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			String state = TestUtils.generateSalesforceOAuthState(true);
+
+			Test.startTest();
+			LoginInformation result = AuthController.completeSalesforceOAuth(
+				'unit.test',
+				state,
+				null,
+				null);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
+			System.assertEquals(Label.SuccessDocuSignAuthorization, result.message);
+		}
+	}
+
+	@IsTest
+	static void test_completeSalesforceOAuth_error() {
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			String state = TestUtils.generateSalesforceOAuthState(true);
+
+			Test.startTest();
+			LoginInformation result = AuthController.completeSalesforceOAuth(
+				'unit.test',
+				state,
+				'access_denied',
+				'enduser denied authorization');
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
+			System.assertEquals(Label.ConsentRequired, result.message);
 		}
 	}
 }

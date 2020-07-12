@@ -2,7 +2,7 @@
     <!-- attributes -->
     <aura:attribute name="login" type="Object"/>
     <aura:attribute name="beginOAuth" type="Object" required="true"/>
-    <aura:attribute name="beginSpringOAuth" type="Object" required="true"/>
+    <aura:attribute name="beginSalesforceOAuth" type="Object" required="true"/>
     <aura:attribute name="steps" type="String[]" access="private"/>
     <aura:attribute name="loading" type="Boolean" default="false"/>
     <aura:attribute name="isLoggedIn" type="Boolean" default="false" access="private"/>
@@ -24,12 +24,12 @@
     <aura:registerEvent name="loadingEvent" type="c:LoadingEvent"/>
     <aura:registerEvent name="reloadEvent" type="c:ReloadEvent"/>
     <aura:registerEvent name="oauthEvent" type="c:OAuthEvent"/>
-    <aura:registerEvent name="springOauthEvent" type="c:OAuthEvent"/>
+    <aura:registerEvent name="salesforceOAuthEvent" type="c:OAuthEvent"/>
 
     <!--register handlers -->
     <aura:handler name="loadingEvent" event="c:LoadingEvent" action="{!c.handleLoadingEvent}"/>
     <aura:handler name="oauthEvent" event="c:OAuthEvent" action="{!c.handleOAuthEvent}"/>
-    <aura:handler name="springOauthEvent" event="c:OAuthEvent" action="{!c.handleSpringOAuthEvent}"/>
+    <aura:handler name="salesforceOAuthEvent" event="c:OAuthEvent" action="{!c.handleSalesforceOAuthEvent}"/>
 
     <div class="ds-login-component slds-m-bottom_large">
         <div class="slds-container slds-container_medium slds-container_center">

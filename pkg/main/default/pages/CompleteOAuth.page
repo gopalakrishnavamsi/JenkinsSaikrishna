@@ -1,12 +1,19 @@
-<apex:page id="CompleteOAuth" controller="SetupController" title="{!$Label.DocuSign}" showHeader="false"
+<apex:page id="CompleteOAuth" controller="AuthController" title="{!$Label.DocuSign}" showHeader="false"
            sideBar="false">
+
+    <apex:includeScript value="{!$Resource.stringUtils}"/>
+    <apex:includeScript value="{!$Resource.loginUtils}"/>
 
     <apex:slds/>
 
     <script>
       function endOAuth(response, loginInformation) {
         if (loginInformation && loginInformation.target) {
-          if (loginInformation.type === 'DEVELOPER') { // redirect locally if developer-initiated login
+          if (loginInformation.type === loginUtils.Type.DEVELOPER
+            && loginInformation.status === loginUtils.Status.FAILURE
+            && loginInformation.target) {
+
+            // redirect locally if developer-initiated login and OAuth failed
             var redirectTo = loginInformation.target;
             // ensure exactly one leading slash for local path
             redirectTo = '/' + redirectTo.replace(/^\/+/, '');
@@ -26,7 +33,13 @@
             } else {
               window.location.replace(redirectTo);
             }
-          } else {
+          } else if (loginInformation
+            && (loginInformation.type === loginUtils.Type.SETUP
+              || loginInformation.status !== loginUtils.Status.SUCCESS
+              || ({!NOT(ISNULL($Site.SiteId))} && '{!$Site.SiteId}' !== ''))) {
+
+            // Setup user will complete Salesforce OAuth later, or user did not grant consent, or user is in Community
+            // Community users cannot grant consent themselves as the OAuth redirect URI cannot be pre-defined.
             if (window.opener) {
               window.opener.postMessage({
                 response: response,
@@ -34,6 +47,24 @@
               }, loginInformation.target);
             }
             window.close();
+          }
+        else
+          {
+            // Non-setup user, continue with Salesforce OAuth
+            Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.AuthController.beginSalesforceOAuth}',
+              loginInformation.type,
+              loginInformation.target,
+              function (loginUrl, response) {
+                if (response.status) { // redirect to Salesforce login page
+                  if (typeof sforce !== 'undefined' && sforce && (!!sforce.one)) {
+                    sforce.one.navigateToURL(stringUtils.unescapeHtml(loginUrl), true);
+                  } else {
+                    window.location.replace(stringUtils.unescapeHtml(loginUrl));
+                  }
+                } else {
+                  showToast(response.message);
+                }
+              });
           }
         }
       }
@@ -47,13 +78,18 @@
         document.getElementById('toast').classList.add('slds-hidden');
       }
 
-      Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.SetupController.completeOAuth}', '{!JSENCODE($CurrentPage.parameters.code)}', '{!JSENCODE($CurrentPage.parameters.state)}', '{!JSENCODE($CurrentPage.parameters.error)}', '{!JSENCODE($CurrentPage.parameters.error_message)}', function (loginInformation, response) {
-        if (response.status) {
-          endOAuth(response, loginInformation);
-        } else {
-          showToast(response.message);
-        }
-      });
+      Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.AuthController.completeDocuSignOAuth}',
+        '{!JSENCODE($CurrentPage.parameters.code)}',
+        '{!JSENCODE($CurrentPage.parameters.state)}',
+        '{!JSENCODE($CurrentPage.parameters.error)}',
+        '{!JSENCODE($CurrentPage.parameters.error_message)}',
+        function (loginInformation, response) {
+          if (response.status) {
+            endOAuth(response, loginInformation);
+          } else {
+            showToast(response.message);
+          }
+        });
     </script>
 
     <!-- loading spinner -->
@@ -76,7 +112,8 @@
                 <div class="slds-notify__content">
                     <h2 id="error-message" class="slds-text-heading_small"></h2>
                 </div>
-                <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse" title="{!$Label.Close}"
+                <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse"
+                        title="{!$Label.Close}"
                         onclick='hideToast()'>
                     <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
                         <use xmlns:xlink="http://www.w3.org/1999/xlink"

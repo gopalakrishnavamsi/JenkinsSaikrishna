@@ -835,6 +835,10 @@
 		<enabled>true</enabled>
 	</pageAccesses>
 	<pageAccesses>
+		<apexPage>CompleteSpringOAuth</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
+	<pageAccesses>
 		<apexPage>ReturnFromDocuSign</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>

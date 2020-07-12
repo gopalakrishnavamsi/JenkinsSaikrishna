@@ -39,7 +39,7 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@RemoteAction
-	public static String beginOAuth(
+	public static String beginDocuSignOAuth(
 		final String target,
 		final String environment,
 		final String otherUrl) {
@@ -48,31 +48,19 @@ public with sharing class SetupController extends Controller {
 		return AuthService.getLoginUrl(
 			target,
 			DocuSign.parseEnvironment(environment),
-			String.isBlank(otherUrl) ? null : new Url(otherUrl)).toExternalForm().replace('+', '%20');
+			String.isBlank(otherUrl) ? null : new Url(otherUrl))
+			.toExternalForm()
+			.replace('+', '%20');
 	}
 
 	@RemoteAction
-	public static LoginInformation completeOAuth(
-		final String authorizationCode,
-		final String state,
-		final String errorCode,
-		final String errorMessage) {
+	public static String beginSalesforceOAuth(
+		final String type,
+		final String target) {
 
-		if (String.isBlank(errorCode)) {
-			return AuthService.redeemCode(authorizationCode, state);
-		} else {
-			return AuthService.redeemError(errorCode, errorMessage, state);
-		}
-	}
-
-	@RemoteAction
-	public static String beginSpringOAuth(final String state) {
-		return AuthService.getSpringOAuthUrl(state).toExternalForm();
-	}
-
-	@RemoteAction
-	public static AuthService.PlatformAuthStatus completeSpringOAuth(final String authorizationCode) {
-		return AuthService.completeSpringOAuth(authorizationCode);
+		return AuthService.getSalesforceOAuthUrl(type, target)
+			.toExternalForm()
+			.replace('+', '%20');
 	}
 
 	@AuraEnabled
@@ -131,9 +119,18 @@ public with sharing class SetupController extends Controller {
 
 			Map<String, String> rolesMap = (Map<String, String>)JSON.deserialize(roles, Map<String, String>.class);
 			List<Account.User> updatedUsers = UserService.addUsers(usersList, rolesMap);
-
-			if (Collection.isNotEmpty(updatedUsers) && updatedUsers[0].hasError) {
-				throw new APIException(updatedUsers[0].error);
+			List<String> errors = new List<String>();
+			if (updatedUsers != null) {
+				for (Account.User u : updatedUsers) {
+					if (u != null && u.hasError) {
+						errors.add(String.format(Label.QueryError_2, new List<Object> {
+							u.email, u.error
+						}));
+					}
+				}
+			}
+			if (Collection.isNotEmpty(errors)) {
+				throw new DocuSignException(String.join(errors, '\n'));
 			}
 
 			return updatedUsers;
@@ -352,10 +349,10 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static List<EnvelopeConfiguration.Listing> getEnvelopeConfigurations() { 
+	public static List<EnvelopeConfiguration.Listing> getEnvelopeConfigurations() {
 		try {
 			return EnvelopeConfigurationService.queryEnvelopeConfigurationsForDisplay();
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get envelope configurations');
 		}
 	}
@@ -383,5 +380,23 @@ public with sharing class SetupController extends Controller {
 			redirectPage.setRedirect(true);
 		}
 		return redirectPage;
+	}
+
+	@AuraEnabled
+	public static Boolean authorizeConnectedApplication() {
+		try {
+			return Collection.isNotEmpty(PlatformAuthorizationService.authorize());
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to authorize connected application.');
+		}
+	}
+
+	@AuraEnabled
+	public static Boolean deauthorizeConnectedApplication() {
+		try {
+			return Collection.isNotEmpty(PlatformAuthorizationService.deauthorize());
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to deauthorize connected application.');
+		}
 	}
 }

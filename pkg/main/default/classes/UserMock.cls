@@ -370,6 +370,9 @@ global class UserMock {
 			UserSettings__c s = UserSettings__c.getInstance(u.Id);
 			s.AccessToken0__c = UUID.randomUUID().toShortString();
 			s.AccessTokenExpires__c = Datetime.now().addHours(1);
+			s.IsPlatformAuthorized__c = true;
+			s.PlatformAuthorizationLastChecked__c = Datetime.now();
+			s.PlatformAuthorizationCheckFrequency__c = 15;
 			insert s;
 		}
 

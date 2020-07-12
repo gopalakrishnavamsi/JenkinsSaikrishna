@@ -80,4 +80,5 @@ global class APIErrorCode {
 	 * The envelope recipient signing group is invalid.
 	 */
 	global static final Integer INVALID_SIGNING_GROUP = 1022;
+	public static final Integer ADMIN_CONSENT_REQUIRED = 1023;
 }
