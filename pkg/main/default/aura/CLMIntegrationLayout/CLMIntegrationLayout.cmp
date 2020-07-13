@@ -21,7 +21,7 @@
     <aura:attribute type="boolean" name="showTrouble" default="true" access="private"/>
     <aura:attribute type="boolean" name="showPathAndNew" default="false" access="private"/>
 
-    <lightning:layout multipleRows="true">
+    <lightning:layout multipleRows="true" class="slds-p-around_large">
         <aura:if isTrue="{!and(v.isEmpty,!v.showPathAndNew)}">
             <div class="slds-grid slds-grid_vertical" style="width:100%">
                 <div class="slds-col ds-card-heading slds-m-around_large">
@@ -34,7 +34,7 @@
                 <div class="slds-col medium-fonts-size slds-p-top_large slds-align-middle">
                     <span>{!$Label.c.YouHaveNoMappedObjects}</span>
                 </div>
-                <div class="slds-col slds-p-around_large slds-align-middle">
+                <div class="slds-col slds-align-middle">
                     <lightning:button class="ds-button-width" variant="brand" onclick="{!c.gotoNew}"
                         label="{!$Label.c.MapNew}"/>
                 </div>
@@ -67,7 +67,7 @@
                 </lightning:layoutItem>
             </aura:if>
             <aura:if isTrue="{!v.showTrouble}">
-                <lightning:layoutItem size="12" padding="around-large">
+                <lightning:layoutItem size="12">
                     <c:CLMHelp title="{!$Label.c.WhatsNext}" imageURL="standard:product_required"
                         secondButtonName="{!$Label.c.ConfigureLayouts}" showIcon="true" secondButtonIcon="true"
                         firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true" isIcon="true"
@@ -75,7 +75,7 @@
                 </lightning:layoutItem>
             </aura:if>
             <aura:if isTrue="{!v.showHelp}">
-                <lightning:layoutItem size="12" class="slds-p-left_large slds-p-right_large">
+                <lightning:layoutItem size="12">
                     <c:CLMHelp title="{!$Label.c.LearnMoreAboutObjectMapping}"
                         imageURL="{!($Resource.HavingTroubleOnHome)}" secondButtonName="{!$Label.c.HomeGetHelp}" showFirstButton="false"
                         showIcon="true" isIcon="false" secondButtonVariant="neutral"

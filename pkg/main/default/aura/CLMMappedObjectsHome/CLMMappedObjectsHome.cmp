@@ -70,7 +70,7 @@
 						{!format($Label.c.NoOfUsersMapped, v.mappedObjData.length)} . 
 						{!format($Label.c.ObjectsSortedBy, v.sortedByColumn)}
 					</div>
-					<div class="slds-col slds-border_top slds-is-relative ds-table-color">
+					<div class="slds-col slds-m-around_large slds-is-relative ds-table-color">
 						<lightning:datatable class="ds-separator " aura:id="userTable" keyField="Id"
 							hideCheckboxColumn="true" columns="{!v.mapColumns}" data="{!v.mappedObjData}"
 							onrowaction="{! c.handleRowAction }" sortedDirection="{!v.sortedDirection}"

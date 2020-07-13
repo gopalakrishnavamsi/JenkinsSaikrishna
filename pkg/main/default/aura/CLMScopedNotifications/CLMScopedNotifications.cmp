@@ -7,7 +7,7 @@
 
     <aura:handler event="c:CLMEvent" action="{!c.handleScopedNotification}" />
     <aura:if isTrue="{!v.isVisible}">
-        <div class="slds-scoped-notification slds-media slds-media_center slds-scoped-notification_light" role="status">
+        <div class="slds-scoped-notification slds-m-around_large slds-media slds-media_center slds-scoped-notification_light" role="status">
             <div class="slds-media__figure">
                     <span class="slds-icon_container slds-icon-utility-info" title="{!$Label.c.InformationIcon}">
                         <div class="ds-iconAlign">
