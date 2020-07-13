@@ -137,7 +137,7 @@
                     </div>
                     <div class="slds-card__body_inner slds-p-horizontal--large">
                         <!-- File Name Details -->
-                        <div class="slds-text-body_small  slds-p-top--x-small">
+                        <div class="slds-text-body_small  slds-p-top_x-small">
                             {!$Label.c.ExternalReviewFileName}
                         </div>
                         <div>
@@ -146,7 +146,7 @@
                                     <c:IconByFileExtension extension="{!v.agreementDetails.extension}" size="small"/>
                                 </li>
                                 <li>
-                                    <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small">
+                                    <div class="slds-text-body_small slds-p-left_xx-small slds-p-top_xx-small">
                                         {!v.agreementDetails.name}
                                     </div>
                                 </li>
@@ -164,7 +164,7 @@
                                                         class="ds-approver-icon-color"/>
                                     </li>
                                     <li>
-                                        <div class="slds-text-body_small slds-p-left--xx-small slds-p-top--xx-small slds-p-right--x-small">
+                                        <div class="slds-text-body_small slds-p-left_xx-small slds-p-top_xx-small slds-p-right_x-small">
                                             {!recipient.name}
                                         </div>
                                     </li>

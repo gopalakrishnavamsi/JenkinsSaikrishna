@@ -121,7 +121,7 @@
             </div>
         </div>
     </div>
-    <div class="slds-m-around--xx-large">
+    <div class="slds-m-around_xx-large">
         <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large slds-p-top_large">
         <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_x-large slds-m-right_x-large"><c:CLMPath steps="{!v.pathValues}"/></div>
     </div>
@@ -370,7 +370,7 @@
         </div>
     </div>
     </div>
-    <div class="slds-m-around--xx-large">
+    <div class="slds-m-around_xx-large">
         <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_x-large slds-m-right_x-large">
             <aura:if isTrue="{!v.currentStep!='1'}">
                 <c:CLMHelp title="{!$Label.c.ViewingObjectFoldersSummary}" imageURL="standard:solution" showIcon="true"
