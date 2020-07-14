@@ -13,6 +13,7 @@ import {
 
 // utility functions
 import {
+  isEmpty,
   showError,
   showSuccess,
   subscribeToMessageChannel
@@ -178,6 +179,9 @@ export default class DecCustomButton extends LightningElement {
   }
 
   handleUpdateLayouts() {
+    if(isEmpty(this.decButtonLabel)) {
+      return;
+    }
     this.setLoading(true);
     let parameters = {
       decButtonApiName: this.decButtonApiName,
