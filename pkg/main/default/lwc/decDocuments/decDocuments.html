@@ -31,13 +31,12 @@
                 <!-- details body section -->
                 <template if:false={hasTemplateDocuments}>
                     <template if:false={hideTemplateFileUpload}>
-                    <div class="slds-grid slds-p-around_large">
+                    <div class="slds-grid slds-p-around_large ds-addDocuments-border-bottom">
                         <div class="slds-col slds-size_1-of-12 ds-addDocuments-sequence-whenEmpty">
                             <lightning-icon
                                     icon-name="utility:drag_and_drop"
                                     alternative-text="Drag and Drop"
-                                    variant="neutral"
-                                    size="small"></lightning-icon>
+                                    size="x-small"></lightning-icon>
                             <span class="slds-p-left_small slds-p-right_small">1</span>
                         </div>
                         <div class="slds-col ds-addDocuments-details-body">
@@ -60,8 +59,8 @@
                         </div>
                         <lightning-icon
                                 icon-name="utility:clear"
-                                size="small"
-                                class="ds-addDocuments-close-whenEmpty slds-p-left_small"
+                                size="x-small"
+                                class="ds-addDocuments-close-whenEmpty slds-p-left_medium"
                                 onclick={handleClearTemplateDocument}>
                         </lightning-icon>
                     </div>

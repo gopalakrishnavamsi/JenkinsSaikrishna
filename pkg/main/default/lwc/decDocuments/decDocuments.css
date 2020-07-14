@@ -42,17 +42,21 @@
 
 .ds-addDocuments-details-body {
     border-radius: 4px;
-    border: 1px solid rgb(221, 219, 218);
+    border: 1px dashed rgb(221, 219, 218);
     height: 169px;
     width: 836px;
 }
 
 .ds-addDocuments-sequence-whenEmpty {
-    padding-top: 70px;
+    margin: auto;
 }
 
 .ds-addDocuments-close-whenEmpty {
-    padding-top: 70px;
+    margin: auto;
+}
+
+.ds-addDocuments-border-bottom {
+    border-bottom: 1px solid rgb(221, 219, 218);
 }
 
 .ds-addDocuments-details-noDocuments-header {
@@ -70,4 +74,8 @@
 .over {
     border-style: dashed;
     border-color: green;
+}
+
+.ds-light-icon {
+    fill: #b0adab;
 }

@@ -1,18 +1,17 @@
 <template>
     <div class="slds-grid slds-p-around_medium"
-        data-id={document.id}
-        ondragstart={itemDragStart}
-        ondragend={itemDragEnd}>
+        draggable={isTemplateDocument}>
 
-        <div class="slds-col slds-size_1-of-12">
-            <span>
+        <div class="slds-col slds-size_1-of-12 ds-center-content">
+            <span if:true={isTemplateDocument}>
                 <div class="slds-media slds-media_center">
                     <div class="slds-media__figure">
                         <lightning-icon
-                                    icon-name="utility:drag_and_drop"
-                                    alternative-text="Drag and Drop"
-                                    variant="neutral"
-                                    size="small"></lightning-icon>
+                            icon-name="utility:drag_and_drop"
+                            alternative-text="Drag and Drop"
+                            variant="neutral"
+                            size="x-small">
+                        </lightning-icon>
                         <span class="slds-p-left_small slds-p-right_small">{documentSequence}</span>
                     </div>
                 </div>

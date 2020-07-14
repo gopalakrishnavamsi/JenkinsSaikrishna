@@ -269,14 +269,16 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   updateLocalData(event) {
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents: event.detail.data};
+    this.isDirty = event.detail.data.isDirty || this.isDirty;
+    this.updateLocalConfiguration({ documents: event.detail.data.documents });
   }
 
   handleUpdateDocument(event) {
     this.isDirty = true;
-    let docs = this.envelopeConfigurationData.documents;
-    docs = [...docs, {...event.detail.data}];
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents: docs};
+    let documents = [...this.envelopeConfigurationData.documents];
+    let indexToInsert = documents.length > 0 ? documents.length - 1 : 0;
+    documents.splice(indexToInsert, 0, {...event.detail.data});
+    this.updateLocalConfiguration({ documents });
   }
 
   handleOnClickProgressStep(event) {

@@ -3,12 +3,11 @@ import {
     handleDragEnter,
     handleDragOver,
     handleDragLeave,
-    addDragOverStyle,
-    removeDragOverStyle,
     handleDrop,
     itemDragStart,
     itemDragEnd
 } from 'c/dragUtils';
+import { DOCUMENT_TYPE_SOURCE_FILES } from 'c/documentUtils';
 
 export default class DecDocumentsList extends LightningElement {
     @api
@@ -21,35 +20,39 @@ export default class DecDocumentsList extends LightningElement {
     attachSourceFiles;
 
     handleDragEnter(evt) {
-        handleDragEnter(this, evt);
+        if (evt.currentTarget.dataset.type !== DOCUMENT_TYPE_SOURCE_FILES) {
+            handleDragEnter(this, evt);
+        }
     }
     
     handleDragOver(evt) {
-        handleDragOver(this, evt);
+        if (evt.currentTarget.dataset.type !== DOCUMENT_TYPE_SOURCE_FILES) {
+            handleDragOver(this, evt);
+        }
     }
     
     handleDragLeave(evt) {
-        handleDragLeave(this, evt);
-    }
-    
-    addDragOverStyle(index) {
-        addDragOverStyle(this, index);
-    }
-    
-    removeDragOverStyle(index) {
-        removeDragOverStyle(this, index);
+        if (evt.currentTarget.dataset.type !== DOCUMENT_TYPE_SOURCE_FILES) {
+            handleDragLeave(this, evt);
+        }
     }
 
     itemDragStart(evt) {
-        itemDragStart(this, evt.currentTarget.dataset.id);
+        if (evt.currentTarget.dataset.type !== DOCUMENT_TYPE_SOURCE_FILES) {
+            itemDragStart(this, evt.currentTarget.dataset.id);
+        }
     }
 
     itemDragEnd(evt) {
-        itemDragEnd(this, evt.currentTarget.dataset.id);
+        if (evt.currentTarget.dataset.type !== DOCUMENT_TYPE_SOURCE_FILES) {
+            itemDragEnd(this, evt.currentTarget.dataset.id);
+        }
     }
 
     handleDrop(evt) {
-        handleDrop(this, evt, this.updateDocuments.bind(this));
+        if (evt.currentTarget.dataset.type !== DOCUMENT_TYPE_SOURCE_FILES) {
+            handleDrop(this, evt, this.updateDocuments.bind(this));
+        }
     }
 
     /** Document-specific functions for envelope configuration **/

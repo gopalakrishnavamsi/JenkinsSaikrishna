@@ -3,9 +3,9 @@
         for:each={list}
         for:item="item"
         for:index="index">
-        <div class="slds-border_bottom slds-p-around_small"
-            draggable="true"
+        <div class="slds-border_bottom"
             data-id={item.id}
+            data-type={item.type}
             data-index={index}
             key={item.id}
             ondrop={handleDrop}
