@@ -20,6 +20,7 @@ public with sharing class OnlineEditorController extends Controller {
 	public String docuSignUserId { get; private set; }
 	public String docuSignEnvironment { get; private set; }
 	public String templateListUrl { get; private set; }
+	public String userLanguage { get; private set; }
 	//OnlineEditor
 
 	public OnlineEditorController() {
@@ -132,6 +133,7 @@ public with sharing class OnlineEditorController extends Controller {
 				Salesforce.baseUrl,
 				'/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o'
 			).toExternalForm();
+			this.userLanguage = UserInfo.getLanguage();
 		} catch (Exception ex) {
 			this.errorMessage = ex.getMessage();
 			LoggerService.getInstance().error(ex.getMessage());

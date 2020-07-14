@@ -44,8 +44,9 @@ jQuery(document).ready(function ($) {
     api: {
       getMergeFields: getMergeFields,
       getEntityRecords: getEntityRecords,
-      getMergeData: getMergeData
-    }
+      getMergeData: getMergeData,
+    },
+    resourcePath: Configuration.translationPath,
   });
 
   displayStartupElements();
@@ -466,7 +467,7 @@ jQuery(document).ready(function ($) {
         })
       : new Promise(function (resolve, reject) {
         try {
-          _editor.render(element);
+          _editor.render(element, false, getLocaleString());
           resolve(template);
         } catch (err) {
           reject(err);
@@ -961,8 +962,8 @@ jQuery(document).ready(function ($) {
           reader.onloadend = function () {
             // FIXME: Typed arrays not available in ES5, but no good alternative here.
             var fileBytes = new Uint8Array(reader.result); // eslint-disable-line no-undef
-            _editor.render(element, isGenerating);
             _editor.importDocument(fileBytes, sourceId).then(function () {
+              _editor.render(element, isGenerating, getLocaleString());
               resolve(true);
             });
           };
@@ -1040,4 +1041,15 @@ jQuery(document).ready(function ($) {
       );
     });
   });
+
+  function getLocaleString() {
+    switch (Configuration.userLanguage.toLowerCase()) {
+      case 'pt_br':
+      case 'zh_cn':
+      case 'zh_tw':
+        return Configuration.userLanguage.replace('_', '-');
+      default:
+        return Configuration.userLanguage.split('_')[0];
+    }
+  }
 });

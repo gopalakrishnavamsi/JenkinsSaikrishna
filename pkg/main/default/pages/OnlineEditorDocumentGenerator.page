@@ -36,7 +36,9 @@
         sourceId: '{!JSENCODE($CurrentPage.parameters.recordId)}',
         sendingUrl: '{!URLFOR($Page.Sending)}',
         hasInitError: !!initErrorMessage,
-        initError: initErrorMessage
+        initError: initErrorMessage,
+        translationPath: '{!$Resource.dsEditorTranslations}',
+        userLanguage: '{!JSENCODE(userLanguage)}',
       };
 
       Labels = {

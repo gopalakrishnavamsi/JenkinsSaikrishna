@@ -49,7 +49,9 @@
         template: templateDetails ? Object.freeze(JSON.parse(templateDetails)) : {},
         layoutActionName: '{!layoutActionName}',
         layoutActionType: '{!layoutActionType}',
-        templateListUrl: '{!templateListUrl}'
+        templateListUrl: '{!templateListUrl}',
+        translationPath: '{!$Resource.dsEditorTranslations}',
+        userLanguage: '{!JSENCODE(userLanguage)}',
       };
 
       Labels = {
