@@ -871,7 +871,20 @@ private class EnvelopeConfigurationControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			List<EnvelopeConfigurationController.ComboBoxOptions> picklistOptions =
 				EnvelopeConfigurationController.getPicklistValues(sObjectType, sobjectFieldName);
-			System.assertNotEquals(picklistOptions.size(), 0);
+			System.assertNotEquals(picklistOptions.size(), 0, 'Unable to get picklist values');
+		}
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_getPickListValues_Lead() {
+		final String sObjectType = 'Lead';
+		final String sobjectFieldName = 'StageName';
+		Test.startTest();
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			List<EnvelopeConfigurationController.ComboBoxOptions> picklistOptions =
+				EnvelopeConfigurationController.getPicklistValues(sObjectType, sobjectFieldName);
+			System.assertEquals(picklistOptions, null, 'picklist values should not be returned for non data writeback sobjecttype');
 		}
 		Test.stopTest();
 	}

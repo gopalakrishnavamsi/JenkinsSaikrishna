@@ -2,6 +2,8 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 
 	public String objectHomeUrl { get; private set; }
 	public Id envelopeConfigId { get; set; }
+	@TestVisible
+	private static final String DATA_WRITEBACK_SOBJECT_TYPE = 'Opportunity';
 
 	public class ComboBoxOptions {
 		@AuraEnabled
@@ -315,10 +317,13 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 
 	@AuraEnabled(Cacheable = true)
 	public static List<ComboBoxOptions> getPicklistValues(final String sobjectType, final String sobjectFieldName) {
+		List<ComboBoxOptions> result = new List<ComboBoxOptions>();
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
-
-			List<ComboBoxOptions> result = new List<ComboBoxOptions>();
+			//Todo - this will need to be altered as we support Data Writeback for other objects and field types.
+			if (sobjectType != DATA_WRITEBACK_SOBJECT_TYPE) {
+				return null;
+			}
 			DescribeSObjectResult objResult = Schema.getGlobalDescribe().get(sobjectType).getDescribe();
 			DescribeFieldResult fieldResult = objResult.fields.getMap().get(sobjectFieldName).getDescribe();
 			for (PicklistEntry ple : fieldResult.getPicklistValues()) {
