@@ -11068,6 +11068,14 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Once Documents are completed update the {0} stage</value>
 	</labels>
 	<labels>
+		<fullName>StageUpdate</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>StageUpdate</shortDescription>
+		<value>Stage Update</value>
+	</labels>
+	<labels>
 		<fullName>StartsWithLabel</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>

@@ -32,6 +32,7 @@ import emailSubjectAndEnvelopeStatusAndPdf from '@salesforce/label/c.EmailSubjec
 import dataWriteback from '@salesforce/label/c.DataWriteback';
 import dataWritebackHelpText from '@salesforce/label/c.DataWritebackHelpText';
 import doNotUpdatePlaceholder from '@salesforce/label/c.DoNotUpdatePlaceholder';
+import stageUpdate from '@salesforce/label/c.StageUpdate';
 
 const LABEL = {
   options,
@@ -55,7 +56,8 @@ const LABEL = {
   filename,
   dataWriteback,
   dataWritebackHelpText,
-  doNotUpdatePlaceholder
+  doNotUpdatePlaceholder,
+  stageUpdate
 };
 
 const DEFAULT_EXPIRATION = 90;

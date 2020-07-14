@@ -5731,6 +5731,10 @@
 		<label>Once Documents are completed update the {0} stage</label>
 		<name>DataWritebackHelpText</name>
 	</customLabels>
+	<customLabels>
+		<label>Stage Update</label>
+		<name>StageUpdate</name>
+	</customLabels>
 	<customLabels>		
 		<label>starts with</label>
 		<name>StartsWithLabel</name>
