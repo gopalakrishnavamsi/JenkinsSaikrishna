@@ -30,28 +30,11 @@ import {
   FILE_NAME_FILTER_SUFFIX,
   DOCUMENT_TYPE_TEMPLATE_DOCUMENT
 } from 'c/documentUtils';
-import {LABEL} from 'c/setupUtils';
+import {LABEL, PROGRESS_STEP, OPERATION, MAX_STEP, MIN_STEP, STEPS} from 'c/setupUtils';
 
 //apex methods
 import updateEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.updateEnvelopeConfiguration';
 import getEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.getEnvelopeConfiguration';
-
-const MAX_STEP = '6';
-const MIN_STEP = '1';
-
-const PROGRESS_STEP = {
-  DOCUMENTS: '1',
-  RECIPIENTS: '2',
-  MERGE_FIELDS: '3',
-  TAGGER: '4',
-  OPTIONS: '5',
-  CUSTOM_BUTTON: '6'
-};
-
-const OPERATION = {
-  BACK: 'back',
-  NEXT: 'next'
-};
 
 export default class DecSetupConfig extends LightningElement {
   @api recordId;
@@ -74,13 +57,7 @@ export default class DecSetupConfig extends LightningElement {
   attachSourceFiles = false;
   label = LABEL;
 
-  steps = [
-    {'label': this.label.documents, 'value': PROGRESS_STEP.DOCUMENTS},
-    {'label': this.label.recipients, 'value': PROGRESS_STEP.RECIPIENTS},
-    {'label': this.label.mergeFields, 'value': PROGRESS_STEP.MERGE_FIELDS},
-    {'label': this.label.tagger, 'value': PROGRESS_STEP.TAGGER},
-    {'label': this.label.options, 'value': PROGRESS_STEP.OPTIONS},
-    {'label': this.label.customButton, 'value': PROGRESS_STEP.CUSTOM_BUTTON}];
+  steps = STEPS;
 
   connectedCallback() {
     this.sourceFilesSubscription = subscribeToMessageChannel(

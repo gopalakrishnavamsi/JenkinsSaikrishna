@@ -18,26 +18,55 @@ import defaultEmailSubject from '@salesforce/label/c.DefaultEmailSubject';
 import defaultEmailMessage from '@salesforce/label/c.DefaultEmailMessage';
 
 const LABEL = {
-  envelopeConfiguration: envelopeConfiguration,
-  documents: documents,
-  recipients: recipients,
-  mergeFields: mergeFields,
-  tagger: tagger,
-  options: options,
-  customButton: customButton,
-  errorLabel: errorLabel,
-  nameLabel: nameLabel,
-  renameEnvelopeConfiguration: renameEnvelopeConfiguration,
-  saveAndClose: saveAndClose,
-  saveAndFinish: saveAndFinish,
-  back: back,
-  next: next,
-  save: save,
-  cancel: cancel,
-  defaultEmailSubject: defaultEmailSubject,
-  defaultEmailMessage: defaultEmailMessage
+  envelopeConfiguration,
+  documents,
+  recipients,
+  mergeFields,
+  tagger,
+  options,
+  customButton,
+  errorLabel,
+  nameLabel,
+  renameEnvelopeConfiguration,
+  saveAndClose,
+  saveAndFinish,
+  back,
+  next,
+  save,
+  cancel,
+  defaultEmailSubject,
+  defaultEmailMessage
 };
 
+// TODO: Merge Fields step to be returned in eSign Phase 2 between Recipients and Tagger steps
+const PROGRESS_STEP = {
+  DOCUMENTS: '1',
+  RECIPIENTS: '2',
+  TAGGER: '3',
+  OPTIONS: '4',
+  CUSTOM_BUTTON: '5'
+};
+
+const OPERATION = {
+  BACK: 'back',
+  NEXT: 'next'
+};
+
+const MAX_STEP = PROGRESS_STEP.CUSTOM_BUTTON;
+const MIN_STEP = PROGRESS_STEP.DOCUMENTS;
+
+const STEPS = [
+  {'label': LABEL.documents, 'value': PROGRESS_STEP.DOCUMENTS},
+  {'label': LABEL.recipients, 'value': PROGRESS_STEP.RECIPIENTS},
+  {'label': LABEL.tagger, 'value': PROGRESS_STEP.TAGGER},
+  {'label': LABEL.options, 'value': PROGRESS_STEP.OPTIONS},
+  {'label': LABEL.customButton, 'value': PROGRESS_STEP.CUSTOM_BUTTON}];
+
 export {
-  LABEL
+  LABEL,
+  PROGRESS_STEP,
+  OPERATION,
+  MAX_STEP,
+  MIN_STEP,
+  STEPS
 };

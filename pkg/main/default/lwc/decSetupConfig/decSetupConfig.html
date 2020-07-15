@@ -40,9 +40,9 @@
                     email-message={emailMessage}
                     onemailchange={handleEmailChange}>
             </c-dec-recipient-message>
-            <!-- merge fields step -->
-            <c-dec-merge-fields if:true={mergeFieldsStep}>
-            </c-dec-merge-fields>
+            <!-- merge fields step to be returned in eSign Phase 2 -->
+            <!-- <c-dec-merge-fields if:true={mergeFieldsStep}>
+            </c-dec-merge-fields> -->
             <!-- tagger step -->
             <c-dec-tagger if:true={taggerStep}
                           record-id={recordId}>

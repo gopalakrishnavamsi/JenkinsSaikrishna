@@ -2,7 +2,8 @@ public with sharing class DecReturnFromDocuSignController {
 
 	public Id decTemplateId { get; private set; }
 	@TestVisible
-	private final String afterDecTaggerStep = '5';
+	// TODO: Change value to '5' (Options step) for eSign Phase 2
+	private final String afterDecTaggerStep = '4';
 
 	public DecReturnFromDocuSignController() {
 		this(QueryString.fromCurrentPage());

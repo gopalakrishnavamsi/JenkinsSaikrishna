@@ -16,10 +16,10 @@ public class DecReturnFromDocuSignControllerTest {
 
 		System.assertNotEquals(null, result);
 		System.assertEquals(UserInfo.getUserId(), result.decTemplateId);
-		System.assertEquals('5', result.afterDecTaggerStep);
+		System.assertEquals('4', result.afterDecTaggerStep);
 		System.assertNotEquals(null, testPg);
 		System.assertEquals(testPg.getParameters().get('id'), UserInfo.getUserId());
-		System.assertEquals(testPg.getParameters().get('step'), '5');
+		System.assertEquals(testPg.getParameters().get('step'), '4');
 	}
 
 }
