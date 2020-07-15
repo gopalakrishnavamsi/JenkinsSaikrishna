@@ -1,6 +1,6 @@
 import {LightningElement, api} from 'lwc';
 import {isEmpty, formatFileSize, format} from 'c/utils';
-import {LABEL, TEMPLATE_DOCUMENT_ACTIONS} from 'c/documentUtils';
+import {LABEL, TEMPLATE_DOCUMENT_ACTIONS, DOCUMENT_TYPE_CONTENT_VERSION} from 'c/documentUtils';
 import SENDING_TOGGLE_DOCUMENT_SELECTION from '@salesforce/messageChannel/SendingToggleDocumentSelection__c';
 
 // Lightning message service
@@ -23,6 +23,10 @@ export default class SendingDocument extends LightningElement {
 
     label = LABEL;
     templateDocumentActions = TEMPLATE_DOCUMENT_ACTIONS;
+
+    get canPreview() {
+        return this.document.type === DOCUMENT_TYPE_CONTENT_VERSION && !isEmpty(this.document.sourceId);
+    }
 
     get details() {
         const formattedSize = isEmpty(this.document.size) ? null : formatFileSize(this.document.size, 0);

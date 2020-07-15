@@ -27,7 +27,8 @@
                 </div>
                 <div class="slds-media__content slds-has-flexi-truncate">
                     <p class="slds-truncate" title={document.name}>
-                        <a href="javascript:void(0)" onclick={previewFile}>{document.name}</a>
+                        <span if:false={canPreview}>{document.name}</span>
+                        <a if:true={canPreview} href="javascript:void(0)" onclick={previewFile}>{document.name}</a>
                     </p>
                     <p class="slds-text-body__small slds-text-color_weak">{details}</p>
                 </div>

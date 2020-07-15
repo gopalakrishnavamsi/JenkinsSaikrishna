@@ -24,8 +24,13 @@ import renameModalTitle from '@salesforce/label/c.RenameAgreement';
 import selectedDocuments from '@salesforce/label/c.SelectedDocuments';
 import addFromSalesforce from '@salesforce/label/c.AddFromSalesforce';
 
+// DEC experience
 const DOCUMENT_TYPE_TEMPLATE_DOCUMENT = 'TemplateDocument';
 const DOCUMENT_TYPE_SOURCE_FILES = 'SourceFiles';
+
+// Sending experience
+const DOCUMENT_TYPE_CONTENT_VERSION = 'ContentVersion';
+
 const LABEL = {
   addDocuments,
   documents,
@@ -125,6 +130,7 @@ const getDefaultTemplateDocument = (sequence = 1, contentVersion) => {
 export {
   DOCUMENT_TYPE_SOURCE_FILES,
   DOCUMENT_TYPE_TEMPLATE_DOCUMENT,
+  DOCUMENT_TYPE_CONTENT_VERSION,
   LABEL,
   getDefaultSourceFiles,
   getDefaultTemplateDocument,
