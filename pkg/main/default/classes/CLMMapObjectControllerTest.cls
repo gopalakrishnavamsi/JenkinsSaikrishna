@@ -1,6 +1,20 @@
 @IsTest
 public class CLMMapObjectControllerTest {
 	@IsTest
+	public static void setScopedNotificationStatusTest_insert() {
+		System.runAs(UserMock.createClmAdministrator()) {
+			CLMMapObjectController.setScopedNotificationStatus();
+
+			Test.startTest();
+			CLMMapObjectController.setScopedNotificationStatus();
+			Test.stopTest();
+
+			Boolean result = CLMMapObjectController.getScopedNotificationStatus();
+			System.assert(result);
+		}
+	}
+
+	@IsTest
 	public static void getMappedObjectsListTest_authorized() {
 		System.runAs(UserMock.createClmAdministrator()) {
 			Test.startTest();

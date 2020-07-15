@@ -144,6 +144,11 @@
             },
             'CLMEvent'
           );
+          helper.callServer(
+            component,
+            'c.setScopedNotificationStatus',
+            false
+          );
           helper.fireToast(
             component,
             stringUtils.format(

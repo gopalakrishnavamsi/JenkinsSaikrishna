@@ -75,3 +75,9 @@
 .THIS .ds-height{
     max-height:500px
 }
+
+.THIS .ds-width{
+    max-width: 776px;
+    margin-left: auto;
+    margin-right: auto;
+}

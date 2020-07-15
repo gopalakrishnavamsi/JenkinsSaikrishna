@@ -8,6 +8,9 @@ public with sharing class CLMMapObjectController {
 
 	@AuraEnabled
 	public static void setScopedNotificationStatus() {
+		if(getScopedNotificationStatus()){
+			return;
+		}
 		try {
 			Permissions.verifyIsClmAdministrator();
 			User_Activity__c newState = new User_Activity__c();

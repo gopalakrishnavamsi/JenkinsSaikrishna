@@ -236,6 +236,20 @@
 					if (selectedObjDetails.Id) {
 						toastTitle = $A.get('$Label.c.ObjectEditSuccessful');
 					}
+					helper.fireApplicationEvent(
+						component,
+						{
+							fromComponent: 'CLMMappedObjectsEdit',
+							toComponent: 'CLMScopedNotifications',
+							type: 'hide'
+						},
+						'CLMEvent'
+					);
+					helper.callServer(
+						component,
+						'c.setScopedNotificationStatus',
+						false
+					);
 					helper.fireToast(component, stringUtils.format(toastTitle, label), helper.SUCCESS);
 					helper.fireApplicationEvent(component, {
 						fromComponent: 'CLMMappedObjectsEdit',
@@ -595,6 +609,20 @@
 				{ eosDetails: selectedObjDetails },
 				function (result) {
 					if (result) {
+						helper.fireApplicationEvent(
+							component,
+							{
+								fromComponent: 'CLMMappedObjectsEdit',
+								toComponent: 'CLMScopedNotifications',
+								type: 'hide'
+							},
+							'CLMEvent'
+						);
+						helper.callServer(
+							component,
+							'c.setScopedNotificationStatus',
+							false
+						);
 						var toastTitle = $A.get('$Label.c.MappingSuccess');
 						if (selectedObjDetails.Id) {
 							toastTitle = $A.get('$Label.c.ObjectEditSuccessful');

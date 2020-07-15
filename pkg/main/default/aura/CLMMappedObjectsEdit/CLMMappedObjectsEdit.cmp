@@ -122,11 +122,11 @@
         </div>
     </div>
     <div class="slds-m-around_xx-large">
-        <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large slds-p-top_large">
-        <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_x-large slds-m-right_x-large"><c:CLMPath steps="{!v.pathValues}"/></div>
+        <div class="ds-width slds-p-left_xx-large slds-p-right_xx-large">
+        <div class="slds-p-left_x-large slds-p-right_x-large slds-m-left_x-large slds-m-right_x-large"><c:CLMPath steps="{!v.pathValues}"/></div>
     </div>
     <div
-        class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large slds-p-top_large slds-card__body slds-is-relative slds-p-left_x-large slds-p-right_x-large">
+        class="ds-width slds-p-left_xx-large slds-p-right_xx-large slds-m-left_xx-large slds-m-right_xx-large slds-p-top_large slds-card__body slds-is-relative slds-p-left_x-large slds-p-right_x-large">
         <aura:if isTrue="{!v.loader}">
             <lightning:spinner alternativeText="{!$Label.c.Loading}" size="large"/>
         </aura:if>
@@ -202,7 +202,7 @@
                                 </div>
                             </div>
                         </aura:if>
-                        <div class="slds-scrollable_y slds-border_bottom CLMHelp-height" style="max-height:500px">
+                        <div class="slds-scrollable_y ds-height">
                             <aura:if isTrue="{!v.currentStep=='1'}">
                                 <ul class="slds-tree" role="tree">
                                     <aura:iteration items="{!v.allObjectsList}" var="data">
@@ -222,7 +222,7 @@
                                 </ul>
                             </aura:if>
                             <aura:if isTrue="{!v.currentStep=='2'}">
-                                <div class="slds-box slds-p-around_none">
+                                <div class="slds-box slds-p-around_none slds-border_bottom">
                                     <ul class="slds-tree" role="tree">
                                         <aura:iteration items="{!v.allObjectFieldsList}" var="objectData">
                                             <li aria-expanded="{!objectData.selected}" aria-level="1"
@@ -274,7 +274,7 @@
                             <aura:if isTrue="{!v.currentStep=='3'}">
                                 <div class="slds-grid">
                                     <div class="slds-col slds-size_1-of-2 slds-box slds-p-around_none">
-                                        <div class="slds-p-around_medium ">
+                                        <div class="slds-p-around_medium slds-border_bottom">
                                             {!$Label.c.YourDocuSignCLMFolders}
                                         </div>
                                         <ul class="slds-tree slds-p-around_medium" role="tree">
@@ -371,12 +371,14 @@
     </div>
     </div>
     <div class="slds-m-around_xx-large">
-        <div class="slds-p-left_xx-large slds-p-right_xx-large slds-m-left_x-large slds-m-right_x-large">
-            <aura:if isTrue="{!v.currentStep!='1'}">
-                <c:CLMHelp title="{!$Label.c.ViewingObjectFoldersSummary}" imageURL="standard:solution" showIcon="true"
-                    firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true" showSecondButton="false"
-                    summary="{!$Label.c.ViewObjectFoldersCardBody}"/>
-            </aura:if>
+        <div class="ds-width">
+            <div class="slds-m-left_x-large slds-m-right_x-large">
+                <aura:if isTrue="{!v.currentStep!='1'}">
+                    <c:CLMHelp title="{!$Label.c.ViewingObjectFoldersSummary}" imageURL="standard:solution" showIcon="true"
+                        firstButtonName="{!$Label.c.LearnMore}" showFirstButton="true" showSecondButton="false"
+                        summary="{!$Label.c.ViewObjectFoldersCardBody}"/>
+                </aura:if>
+            </div>
         </div>
     </div>
 </aura:component>
