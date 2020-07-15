@@ -82,6 +82,9 @@ export default class SendingConfig extends LightningElement {
       UPDATE_NOTIFICATIONS,
       this.handleUpdateNotifications.bind(this)
     );
+
+    this.emailSubject = this.envelope && !isEmpty(this.envelope.emailSubject) ? this.envelope.emailSubject : this.label.defaultEmailSubject;
+    this.emailMessage = this.envelope && !isEmpty(this.envelope.emailMessage) ? this.envelope.emailMessage : this.label.defaultEmailMessage;
   }
 
   disconnectedCallback() {
@@ -239,7 +242,9 @@ export default class SendingConfig extends LightningElement {
       ...this.envelope,
       documents,
       recipients,
-      notifications: this.privateNotifications
+      notifications: this.privateNotifications,
+      emailSubject: this.emailSubject,
+      emailMessage: this.emailMessage
     };
   }
 

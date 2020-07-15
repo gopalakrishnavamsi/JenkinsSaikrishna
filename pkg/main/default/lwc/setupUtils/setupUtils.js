@@ -14,26 +14,30 @@ import back from '@salesforce/label/c.Back';
 import next from '@salesforce/label/c.Next';
 import save from '@salesforce/label/c.Save';
 import cancel from '@salesforce/label/c.Cancel';
+import defaultEmailSubject from '@salesforce/label/c.DefaultEmailSubject';
+import defaultEmailMessage from '@salesforce/label/c.DefaultEmailMessage';
 
 const LABEL = {
-  envelopeConfiguration : envelopeConfiguration,
-  documents : documents,
-  recipients : recipients,
-  mergeFields : mergeFields,
-  tagger : tagger,
-  options : options,
-  customButton : customButton,
-  errorLabel : errorLabel,
-  nameLabel : nameLabel,
-  renameEnvelopeConfiguration : renameEnvelopeConfiguration,
-  saveAndClose : saveAndClose,
-  saveAndFinish : saveAndFinish,
-  back : back,
-  next : next,
-  save : save,
-  cancel : cancel
-}
+  envelopeConfiguration: envelopeConfiguration,
+  documents: documents,
+  recipients: recipients,
+  mergeFields: mergeFields,
+  tagger: tagger,
+  options: options,
+  customButton: customButton,
+  errorLabel: errorLabel,
+  nameLabel: nameLabel,
+  renameEnvelopeConfiguration: renameEnvelopeConfiguration,
+  saveAndClose: saveAndClose,
+  saveAndFinish: saveAndFinish,
+  back: back,
+  next: next,
+  save: save,
+  cancel: cancel,
+  defaultEmailSubject: defaultEmailSubject,
+  defaultEmailMessage: defaultEmailMessage
+};
 
 export {
   LABEL
-}
+};

@@ -135,7 +135,9 @@ export default class DecSetupConfig extends LightningElement {
       this.envelopeConfigurationData = {
         ...data,
         documents: this.attachSourceFiles ? this.processTextSearchSourceFiles(data.documents, true) : data.documents,
-        options: isEmpty(data.options.documentWriteBack) ? getDefaultOptions() : data.options
+        options: isEmpty(data.options.documentWriteBack) ? getDefaultOptions() : data.options,
+        emailMessage: isEmpty(data.emailMessage) ? this.label.defaultEmailMessage : data.emailMessage,
+        emailSubject: isEmpty(data.emailSubject) ? this.label.defaultEmailSubject : data.emailSubject
       };
     }
   }
@@ -390,7 +392,7 @@ export default class DecSetupConfig extends LightningElement {
   updateLocalEnvelopeConfigurationDataWriteBack(dataWriteBack) {
     let options = this.envelopeConfigurationData.options;
     options = {...options, envelopeEventUpdates: dataWriteBack};
-    this.envelopeConfigurationData = {...this.envelopeConfigurationData, options : options};
+    this.envelopeConfigurationData = {...this.envelopeConfigurationData, options: options};
     this.isDirty = true;
   }
 
@@ -401,7 +403,7 @@ export default class DecSetupConfig extends LightningElement {
   handleOnDataWriteBack(event) {
     this.updateLocalEnvelopeConfigurationDataWriteBack(event.detail.data);
   }
-  
+
   processTextSearchSourceFiles(documents, extractText) {
     return documents.map((d) => {
       let doc = {...d};

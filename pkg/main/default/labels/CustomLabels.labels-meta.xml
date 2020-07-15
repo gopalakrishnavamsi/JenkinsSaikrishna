@@ -9876,7 +9876,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Can Not Modified Later</shortDescription>
-		<value>This can't be modified later.</value>
+		<value>You can't change this later.</value>
 	</labels>
 	<labels>
 		<fullName>EnvelopeTemplateUpperCase</fullName>
@@ -10788,6 +10788,20 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<protected>true</protected>
 		<shortDescription>Message To All Description</shortDescription>
 		<value>This will be sent as an email to all recipients. You can use  &lt;a href=&quot;https://placeholder&quot; target=&quot;_blank&quot;&gt;merge tags&lt;/a&gt; to personalize the message.</value>
+	</labels>
+	<labels>
+		<fullName>DefaultEmailSubject</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Default Email Subject</shortDescription>
+		<value>Documents for your DocuSign Signature</value>
+	</labels>
+	<labels>
+		<fullName>DefaultEmailMessage</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Default Email Message</shortDescription>
+		<value>I am sending you this request for your electronic signature, please review and electronically sign by following the link below.</value>
 	</labels>
 	<labels>
 		<fullName>AddAndNew</fullName>

@@ -5140,7 +5140,7 @@
 		<name>AddName</name>
 	</customLabels>
 	<customLabels>
-		<label>This can't be modified later.</label>
+		<label>You can't change this later.</label>
 		<name>CanNotModifiedLater</name>
 	</customLabels>
 	<customLabels>
@@ -5590,6 +5590,14 @@
 	<customLabels>
 		<label>This will be sent as an email to all recipients. You can use  &lt;a href=&quot;https://placeholder&quot; target=&quot;_blank&quot;&gt;merge tags&lt;/a&gt; to personalize the message.</label>
 		<name>MessageToAllDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Documents for your DocuSign Signature</label>
+		<name>DefaultEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>I am sending you this request for your electronic signature, please review and electronically sign by following the link below.</label>
+		<name>DefaultEmailMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>Add &amp; New</label>
