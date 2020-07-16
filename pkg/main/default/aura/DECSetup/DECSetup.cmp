@@ -10,6 +10,9 @@
     <aura:attribute name="loading" type="Boolean" default="true" access="private"/>
     <aura:attribute name="columns" type="List" access="private"/>
     <aura:attribute name="uiHelper" type="Object" access="private"/>
+    <aura:attribute name="sortedDirection" type="String" default="asc" access="private"/>
+    <aura:attribute name="sortedBy" type="String" default="asc" access="private"/>
+    <aura:attribute name="sortedByColumn" type="String" default="" access="private"/>
 
     <!-- override RootContainer component attributes -->
     <aura:set attribute="showDefaultSpinner" value="false"/>
@@ -73,9 +76,15 @@
                                 </div>
                             </div>
                             <div class="slds-m-top_large">
-                                <lightning:datatable keyField="Id" data="{!v.envelopeConfigurations}"
+                                <lightning:datatable keyField="Id"
+                                                     data="{!v.envelopeConfigurations}"
                                                      columns="{!v.columns}"
-                                                     hideCheckboxColumn="true" onrowaction="{!c.handleRowAction}"/>
+                                                     hideCheckboxColumn="true"
+                                                     sortedDirection="{!v.sortDirection}"
+                                                     sortedBy="{!v.sortedBy}"
+                                                     onsort="{!c.updateColumnSorting}"
+                                                     onrowaction="{!c.handleRowAction}"
+                                />
                             </div>
                         </div>
                     </aura:set>

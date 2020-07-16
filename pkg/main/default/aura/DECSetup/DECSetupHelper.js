@@ -43,17 +43,20 @@
           label: $A.get('$Label.c.NameLabel'),
           fieldName: 'link',
           type: 'url',
+          sortable: true,
           typeAttributes: {label: {fieldName: 'name'}, target: '_blank'}
         },
         {
           label: $A.get('$Label.c.MainDataSource'),
           fieldName: 'sourceObject',
-          type: 'text'
+          type: 'text',
+          sortable: true
         },
         {
           label: $A.get('$Label.c.LastModfiedDateLabel'),
           fieldName: 'lastModifiedDate',
           type: 'date',
+          sortable: true,
           typeAttributes: {
             month: '2-digit',
             day: '2-digit',
@@ -83,6 +86,27 @@
     };
     //use createComponent from rootContainer
     this.createComponent('deleteDecSetup', component, 'c:EnvelopeConfigurationDelete', deleteAttributes);
+  },
+
+  sortData: function (component, fieldName, sortDirection) {
+    var data = component.get('v.envelopeConfigurations');
+    var reverse = sortDirection !== 'asc';
+    data.sort(this.sortBy(fieldName, reverse));
+    component.set('v.envelopeConfigurations', data);
+  },
+
+  sortBy: function (field, reverse, primer) {
+    var key = primer
+      ? function (x) {
+        return primer(x[field]);
+      }
+      : function (x) {
+        return x[field];
+      };
+    reverse = !reverse ? 1 : -1;
+    return function (a, b) {
+      return (a = key(a)), (b = key(b)), reverse * ((a > b) - (b > a));
+    };
   }
 
 });
