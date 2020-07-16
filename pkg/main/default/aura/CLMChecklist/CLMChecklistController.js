@@ -195,28 +195,11 @@
         helper.openSetup(component);
         break;
       case 'step3':
-        helper.fireApplicationEvent(component, {
-          fromComponent: 'CLMChecklist',
-          toComponent: 'CLMSetupLayout',
-          type: 'update',
-          tabIndex: '4',
-        }, 'CLMNavigationEvent');
-        break;
       case 'step4':
-        helper.fireApplicationEvent(component, {
-          fromComponent: 'CLMChecklist',
-          toComponent: 'CLMSetupLayout',
-          type: 'update',
-          tabIndex: '4',
-        }, 'CLMNavigationEvent');
-        break;
       case 'step5':
-        helper.fireApplicationEvent(component, {
-          fromComponent: 'CLMChecklist',
-          toComponent: 'CLMSetupLayout',
-          type: 'update',
-          tabIndex: '4',
-        }, 'CLMNavigationEvent');
+        helper.callServer(component, 'c.getDocGenButtonLink', false, function (result) {
+          navUtils.navigateToUrl(result);
+        });
         break;
       case 'step6':
         helper.openSetup(component);

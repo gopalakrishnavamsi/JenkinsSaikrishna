@@ -172,6 +172,7 @@
 			component.set('v.modalBody', newCmp);
 			component.set('v.modalTitleText', $A.get('$Label.c.WhyAmISelectingFields'));
 			component.set('v.showModal', 'true');
+			component.set('v.modalSize', 'small');
 			var modelComponent = component.find('popupModel');
 			setTimeout($A.getCallback(function () {
 				modelComponent.show();
@@ -465,6 +466,7 @@
 		});
 		component.set('v.modalTitleText', $A.get('$Label.c.NameSubFolder'));
 		component.set('v.showModal', 'true');
+		component.set('v.modalSize', 'small');
 		component.set('v.modalValueHolder', {
 			buttonType: 'subFolder',
 			selectedFolder: selectedFolder,
@@ -509,6 +511,7 @@
 		});
 		component.set('v.modalTitleText', $A.get('$Label.c.RenameFolder'));
 		component.set('v.showModal', 'true');
+		component.set('v.modalSize', 'small');
 		component.set('v.modalValueHolder', {
 			buttonType: 'rename',
 			selectedFolder: selectedFolder,

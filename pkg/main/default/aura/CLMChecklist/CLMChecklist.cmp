@@ -154,7 +154,7 @@
                                 </aura:if>
                             </span>
                         </div>
-                        <div class="slds-col_bump-left  ds-green" id="step1" onclick="{!c.onNavigate}">
+                        <div class="slds-col_bump-left" id="step1" onclick="{!c.onNavigate}">
                             <span>
                                 <aura:if isTrue="{!!v.step1}">
                                     <lightning:button class="ds-button-width" variant="neutral"
@@ -168,7 +168,7 @@
                                             name="step1"/>
                                         <aura:set attribute="else">
                                             <lightning:icon iconName="utility:success" alternativeText="Success!"
-                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                                class="ds-icon-padding ds-green slds-m-top_small" size="xx-small"/>
                                             {!$Label.c.MarkedComplete}
                                         </aura:set>
                                     </aura:if>
@@ -198,20 +198,22 @@
                                 <a id="step2" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
                             </aura:if>
                         </div>
-                        <div class="slds-col_bump-left ds-green" id="step2" onclick="{!c.onNavigate}">
+                        <div class="slds-col_bump-left" id="step2" onclick="{!c.onNavigate}">
                             <span>
                                 <aura:if isTrue="{!!v.step2}">
                                     <lightning:button class="ds-button-width" variant="neutral"
                                         disabled="{!v.isStep2Disabled}" label="{!$Label.c.ConfigureLayouts}"
-                                        title="{!$Label.c.ConfigureLayouts}"/>
+                                        title="{!$Label.c.ConfigureLayouts}"
+                                        iconName="utility:new_window" iconPosition="right"/>
                                 </aura:if>
                                 <aura:if isTrue="{!v.step2}">
                                     <aura:if isTrue="{!v.isFinished}">
                                         <lightning:button class="ds-button-width" variant="neutral"
-                                            label="{!$Label.c.ConfigureLayouts}" title="{!$Label.c.ConfigureLayouts}"/>
+                                            label="{!$Label.c.ConfigureLayouts}" title="{!$Label.c.ConfigureLayouts}"
+                                            iconName="utility:new_window" iconPosition="right"/>
                                         <aura:set attribute="else">
                                             <lightning:icon iconName="utility:success" alternativeText="Success!"
-                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                                class="ds-icon-padding ds-green slds-m-top_small" size="xx-small"/>
                                             {!$Label.c.MarkedComplete}
                                         </aura:set>
                                     </aura:if>
@@ -243,20 +245,22 @@
                                 </aura:if>
                             </span>
                         </div>
-                        <div class="slds-col_bump-left ds-green" id="step3" onclick="{!c.onNavigate}">
+                        <div class="slds-col_bump-left" id="step3" onclick="{!c.onNavigate}">
                             <span>
                                 <aura:if isTrue="{!!v.step3}">
                                     <lightning:button class="ds-button-width" variant="neutral"
                                         disabled="{!v.isStep3Disabled}" label="{!$Label.c.GoToCLM}"
-                                        title="{!$Label.c.GoToCLM}" name="step3"/>
+                                        title="{!$Label.c.GoToCLM}" name="step3"
+                                        iconName="utility:new_window" iconPosition="right"/>
                                 </aura:if>
                                 <aura:if isTrue="{!v.step3}">
                                     <aura:if isTrue="{!v.isFinished}">
                                         <lightning:button class="ds-button-width" variant="neutral"
-                                            label="{!$Label.c.GoToCLM}" title="{!$Label.c.GoToCLM}" name="step3"/>
+                                            label="{!$Label.c.GoToCLM}" title="{!$Label.c.GoToCLM}" name="step3"
+                                            iconName="utility:new_window" iconPosition="right"/>
                                         <aura:set attribute="else">
                                             <lightning:icon iconName="utility:success" alternativeText="Success!"
-                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                                class="ds-icon-padding ds-green slds-m-top_small" size="xx-small"/>
                                             {!$Label.c.MarkedComplete}
                                         </aura:set>
                                     </aura:if>
@@ -286,20 +290,22 @@
                                 <a id="step4" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
                             </aura:if>
                         </div>
-                        <div class="slds-col_bump-left ds-green" id="step4" onclick="{!c.onNavigate}">
+                        <div class="slds-col_bump-left" id="step4" onclick="{!c.onNavigate}">
                             <span>
                                 <aura:if isTrue="{!!v.step4}">
                                     <lightning:button class="ds-button-width" variant="neutral"
                                         disabled="{!v.isStep4Disabled}" label="{!$Label.c.GoToCLM}"
-                                        title="{!$Label.c.GoToCLM}" name="step4"/>
+                                        title="{!$Label.c.GoToCLM}" name="step4"
+                                        iconName="utility:new_window" iconPosition="right"/>
                                 </aura:if>
                                 <aura:if isTrue="{!v.step4}">
                                     <aura:if isTrue="{!v.isFinished}">
                                         <lightning:button class="ds-button-width" variant="neutral"
-                                            label="{!$Label.c.GoToCLM}" title="{!$Label.c.GoToCLM}" name="step4"/>
+                                            label="{!$Label.c.GoToCLM}" title="{!$Label.c.GoToCLM}" name="step4"
+                                            iconName="utility:new_window" iconPosition="right"/>
                                         <aura:set attribute="else">
                                             <lightning:icon iconName="utility:success" alternativeText="Success!"
-                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                                class="ds-icon-padding ds-green slds-m-top_small" size="xx-small"/>
                                             {!$Label.c.MarkedComplete}
                                         </aura:set>
                                     </aura:if>
@@ -331,20 +337,22 @@
                                 </aura:if>
                             </span>
                         </div>
-                        <div class="slds-col_bump-left ds-green" id="step5" onclick="{!c.onNavigate}">
+                        <div class="slds-col_bump-left" id="step5" onclick="{!c.onNavigate}">
                             <span>
                                 <aura:if isTrue="{!!v.step5}">
                                     <lightning:button class="ds-button-width" variant="neutral"
                                         disabled="{!v.isStep5Disabled}" label="{!$Label.c.GoToCLM}"
-                                        title="{!$Label.c.GoToCLM}" name="step5"/>
+                                        title="{!$Label.c.GoToCLM}" name="step5"
+                                        iconName="utility:new_window" iconPosition="right"/>
                                 </aura:if>
                                 <aura:if isTrue="{!v.step5}">
                                     <aura:if isTrue="{!v.isFinished}">
                                         <lightning:button class="ds-button-width" variant="neutral"
-                                            label="{!$Label.c.GoToCLM}" title="{!$Label.c.GoToCLM}" name="step5"/>
+                                            label="{!$Label.c.GoToCLM}" title="{!$Label.c.GoToCLM}" name="step5"
+                                            iconName="utility:new_window" iconPosition="right"/>
                                         <aura:set attribute="else">
                                             <lightning:icon iconName="utility:success" alternativeText="Success!"
-                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                                class="ds-icon-padding ds-green slds-m-top_small" size="xx-small"/>
                                             {!$Label.c.MarkedComplete}
                                         </aura:set>
                                     </aura:if>
@@ -374,21 +382,22 @@
                                 <a id="step6" href="javascript:void(0)" onclick="{!c.onHelp}">{!$Label.c.Help}</a>
                             </aura:if>
                         </div>
-                        <div class="slds-col_bump-left ds-green" id="step6" onclick="{!c.onNavigate}">
+                        <div class="slds-col_bump-left" id="step6" onclick="{!c.onNavigate}">
                             <span>
                                 <aura:if isTrue="{!!v.step6}">
                                     <lightning:button class="ds-button-width" variant="neutral"
                                         disabled="{!v.isStep6Disabled}" label="{!$Label.c.CLObjectManager}"
-                                        title="{!$Label.c.CLObjectManager}" name="step6"/>
+                                        title="{!$Label.c.CLObjectManager}" name="step6"
+                                        iconName="utility:new_window" iconPosition="right"/>
                                 </aura:if>
                                 <aura:if isTrue="{!v.step6}">
                                     <aura:if isTrue="{!v.isFinished}">
                                         <lightning:button class="ds-button-width" variant="neutral"
                                             label="{!$Label.c.CLObjectManager}" title="{!$Label.c.CLObjectManager}"
-                                            name="step6"/>
+                                            name="step6" iconName="utility:new_window" iconPosition="right"/>
                                         <aura:set attribute="else">
                                             <lightning:icon iconName="utility:success" alternativeText="Success!"
-                                                class="ds-icon-padding slds-m-top_small" size="xx-small"/>
+                                                class="ds-icon-padding ds-green slds-m-top_small" size="xx-small"/>
                                             {!$Label.c.MarkedComplete}
                                         </aura:set>
                                     </aura:if>

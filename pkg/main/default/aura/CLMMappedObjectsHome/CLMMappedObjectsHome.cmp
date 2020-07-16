@@ -43,7 +43,7 @@
 		<aura:if isTrue="{!v.isRemove}">
 			<c:strike_modal aura:id="popupModal" footerButtons="{!v.strikeModelFooterButtons}" body="{!v.modalBodyText}"
 				title="{!v.modalTitleText}" primaryButtonLabel="{!v.modalPrimaryButtonText}"
-				secondaryButtonLabel="{!v.modalSecondaryButtonText}"/>
+				secondaryButtonLabel="{!v.modalSecondaryButtonText}" size="small"/>
 			<aura:set attribute="else">
 				<c:strike_modal aura:id="popupModal" body="{!v.modalBodyText}" title="{!v.modalTitleText}"
 					primaryButtonLabel="{!v.modalPrimaryButtonText}"
