@@ -20,10 +20,10 @@ import {
 // utility functions
 import {
   genericEvent,
-  isEmpty,
   showError,
   spliceArray,
-  formatLabels
+  formatLabels,
+  isEmpty
 } from 'c/utils';
 
 const Types = {
@@ -87,9 +87,9 @@ export default class SelectFilesModal extends LightningElement {
       type: 'selectRow',
       hideDefaultActions: true,
       typeAttributes: {
-        rowid: { fieldName : 'Id' },
-        extension: { fieldName : 'FileExtension'},
-        filesize: { fieldName : 'ContentSize' }
+        rowid: {fieldName: 'Id'},
+        extension: {fieldName: 'FileExtension'},
+        filesize: {fieldName: 'ContentSize'}
       }
     }];
   contentWorkspaceColumns = [
@@ -98,7 +98,7 @@ export default class SelectFilesModal extends LightningElement {
       fieldName: 'Name',
       type: 'contentWorkspace',
       hideDefaultActions: true,
-      typeAttributes: { rowid: { fieldName : 'Id' } }
+      typeAttributes: {rowid: {fieldName: 'Id'}}
     }
   ];
   currentOffset = 0;
@@ -118,8 +118,8 @@ export default class SelectFilesModal extends LightningElement {
   }
 
   handleClose() {
+    this.showSelectFiles = false;
     this.clearData();
-    window.location.reload();
   }
 
   get selectedOfTotalFilesLabel() {
@@ -148,13 +148,13 @@ export default class SelectFilesModal extends LightningElement {
 
   handleChangeOfSearchInput(event) {
     this.searchDocumentsInput = event.target.value.toLowerCase();
-    if(!this.searchDocumentsInput || this.searchDocumentsInput.length < 2) {
+    if (!this.searchDocumentsInput || this.searchDocumentsInput.length < 2) {
       this.isSearching = false;
       return;
     }
     this.isSearching = true;
     let filteredArray = [];
-    switch(this.selectedType) {
+    switch (this.selectedType) {
       case this.types.OwnedByMe.value:
         for (let index = 0; index < this.documentsOwnedByUser.length; index++) {
           if (this.documentsOwnedByUser[index].Title.toLowerCase().indexOf(this.searchDocumentsInput) !== -1) {
@@ -164,31 +164,31 @@ export default class SelectFilesModal extends LightningElement {
         this.documentsOwnedByUserFiltered = filteredArray;
         break;
       case this.types.SharedWithMe.value:
-        for(let index = 0 ; index < this.documentsSharedWithUser.length; index++) {
-          if(this.documentsSharedWithUser[index].Title.toLowerCase().indexOf(this.searchDocumentsInput) !== -1) {
+        for (let index = 0; index < this.documentsSharedWithUser.length; index++) {
+          if (this.documentsSharedWithUser[index].Title.toLowerCase().indexOf(this.searchDocumentsInput) !== -1) {
             filteredArray.push(this.documentsSharedWithUser[index]);
           }
         }
         this.documentsSharedWithUserFiltered = filteredArray;
         break;
       case this.types.Recent.value:
-        for(let index = 0 ; index < this.documentsRecentlyViewedByUser.length; index++) {
-          if(this.documentsRecentlyViewedByUser[index].Title.toLowerCase().indexOf(this.searchDocumentsInput) !== -1) {
+        for (let index = 0; index < this.documentsRecentlyViewedByUser.length; index++) {
+          if (this.documentsRecentlyViewedByUser[index].Title.toLowerCase().indexOf(this.searchDocumentsInput) !== -1) {
             filteredArray.push(this.documentsRecentlyViewedByUser[index]);
           }
         }
         this.documentsRecentlyViewedByUserFiltered = filteredArray;
         break;
       case this.types.Following.value:
-        for(let index = 0 ; index < this.documentsFollowedByUser.length; index++) {
-          if(this.documentsFollowedByUser[index].Title.toLowerCase().indexOf(this.searchDocumentsInput) !== -1) {
+        for (let index = 0; index < this.documentsFollowedByUser.length; index++) {
+          if (this.documentsFollowedByUser[index].Title.toLowerCase().indexOf(this.searchDocumentsInput) !== -1) {
             filteredArray.push(this.documentsFollowedByUser[index]);
           }
         }
         this.documentsFollowedByUserFiltered = filteredArray;
         break;
       case this.types.Libraries.value:
-        if(!this.isContentDocumentInWorkspaceStep) {
+        if (!this.isContentDocumentInWorkspaceStep) {
           for (let index = 0; index < this.contentWorkspaces.length; index++) {
             if (this.contentWorkspaces[index].Title.toLowerCase().indexOf(this.searchDocumentsInput) !== -1) {
               filteredArray.push(this.contentWorkspaces[index]);
@@ -207,22 +207,24 @@ export default class SelectFilesModal extends LightningElement {
     }
   }
 
-  handleFileUpload() {
+  handleFileUpload(event) {
+    if (!isEmpty(event.detail.data)) {
+      genericEvent.call(this, 'fileupload', event.detail.data.Id, false);
+    }
     this.handleClose();
-    genericEvent.call(this, 'success', false, false, false);
   }
 
   loadMoreDocumentsOwnedByUser(event) {
-     getDocumentsOwnedByUser({
-      offset : this.currentOffset,
-      size : NUMBER_OF_ROWS
+    getDocumentsOwnedByUser({
+      offset: this.currentOffset,
+      size: NUMBER_OF_ROWS
     })
       .then(data => {
         if (data.length === 0) {
           if (event) {
             event.target.enableInfiniteLoading = false;
           }
-          if(this.documentsOwnedByUser.length === 0){
+          if (this.documentsOwnedByUser.length === 0) {
             this.isEmptyDocs = true;
           }
         } else {
@@ -235,24 +237,23 @@ export default class SelectFilesModal extends LightningElement {
           this.isEmptyDocs = false;
         }
       })
-       .catch(error => showError(this.context, error, ERROR));
+      .catch(error => showError(this.context, error, ERROR));
   }
 
   loadMoreDocumentsSharedWithUser(event) {
     getDocumentsSharedWithUser({
-      offset : this.currentOffset,
-      size : NUMBER_OF_ROWS
+      offset: this.currentOffset,
+      size: NUMBER_OF_ROWS
     })
       .then(data => {
         if (data.length === 0) {
           if (event) {
             event.target.enableInfiniteLoading = false;
           }
-          if(this.documentsSharedWithUser.length === 0){
+          if (this.documentsSharedWithUser.length === 0) {
             this.isEmptyDocs = true;
           }
-        }
-        else {
+        } else {
           const currentData = this.documentsSharedWithUser;
           const newData = currentData.concat(data);
           this.documentsSharedWithUser = newData;
@@ -266,13 +267,13 @@ export default class SelectFilesModal extends LightningElement {
 
   loadDocumentsRecentlyViewedByUser() {
     getDocumentsRecentlyViewedByUser({
-      count : NUMBER_OF_ROWS
+      count: NUMBER_OF_ROWS
     })
       .then(data => {
-          this.documentsRecentlyViewedByUser = data;
-          this.currentOffset = data.length;
-          this.totalDocs = data.length;
-          this.isEmptyDocs = data.length === 0 ? true : false;
+        this.documentsRecentlyViewedByUser = data;
+        this.currentOffset = data.length;
+        this.totalDocs = data.length;
+        this.isEmptyDocs = data.length === 0 ? true : false;
       })
       .catch(error => showError(this.context, error, ERROR));
   }
@@ -280,18 +281,17 @@ export default class SelectFilesModal extends LightningElement {
   loadMoreDocumentsFollowedByUser(event) {
     getDocumentsFollowedByUser({
       offset: this.currentOffset,
-      size : NUMBER_OF_ROWS
+      size: NUMBER_OF_ROWS
     })
       .then(data => {
         if (data.length === 0) {
           if (event) {
             event.target.enableInfiniteLoading = false;
           }
-          if(this.documentsFollowedByUser.length === 0) {
+          if (this.documentsFollowedByUser.length === 0) {
             this.isEmptyDocs = true;
           }
-        }
-        else {
+        } else {
           const currentData = this.documentsFollowedByUser;
           const newData = currentData.concat(data);
           this.documentsFollowedByUser = newData;
@@ -306,7 +306,7 @@ export default class SelectFilesModal extends LightningElement {
   loadMoreContentWorkspaces(event) {
     getContentWorkspaces({
       offset: this.currentOffset,
-      size : NUMBER_OF_ROWS
+      size: NUMBER_OF_ROWS
     })
       .then(data => {
         if (data.length === 0) {
@@ -316,8 +316,7 @@ export default class SelectFilesModal extends LightningElement {
           if (this.contentWorkspaces.length === 0) {
             this.isEmptyDocs = true;
           }
-        }
-        else {
+        } else {
           const currentData = this.contentWorkspaces;
           const newData = currentData.concat(data);
           this.contentWorkspaces = newData;
@@ -335,16 +334,16 @@ export default class SelectFilesModal extends LightningElement {
 
   loadMoreContentDocumentsInWorkspace(contentWorkspaceId, event) {
     let selectedId = contentWorkspaceId;
-    if(this.selectedContentWorkspaceId) {
+    if (this.selectedContentWorkspaceId) {
       selectedId = this.selectedContentWorkspaceId;
     } else {
       this.selectedContentWorkspaceId = selectedId;
     }
     this.isContentDocumentInWorkspaceStep = true;
     getContentDocumentsInWorkspace({
-      offset : this.currentOffsetForDocumentsInWorkspace,
-      size : NUMBER_OF_ROWS,
-      contentWorkspaceId : selectedId
+      offset: this.currentOffsetForDocumentsInWorkspace,
+      size: NUMBER_OF_ROWS,
+      contentWorkspaceId: selectedId
     }).then(data => {
       if (data.length === 0) {
         if (this.documentsInWorkspace.length === 0) {
@@ -353,8 +352,7 @@ export default class SelectFilesModal extends LightningElement {
         if (event) {
           event.target.enableInfiniteLoading = false;
         }
-      }
-      else {
+      } else {
         const currentData = this.documentsInWorkspace;
         const newData = currentData.concat(data);
         this.documentsInWorkspace = newData;
@@ -369,14 +367,14 @@ export default class SelectFilesModal extends LightningElement {
   handleSelectedRow(event) {
     let docId = event.detail.data.rowid;
     let selected = event.detail.data.selected;
-    if(selected) {
+    if (selected) {
       this.selectedDocuments.push(docId);
     } else {
       this.selectedDocuments = this.selectedDocuments.filter(d => d !== docId);
     }
     this.selectedDocumentsSize = this.selectedDocuments.length;
     this.isAddFilesDisabled = this.selectedDocumentsSize === 0 ? true : false;
-    if(!this.isAddFilesDisabled) {
+    if (!this.isAddFilesDisabled) {
       this.addLabel = this.label.add + ' (' + this.selectedDocumentsSize + ')';
     }
   }
@@ -401,6 +399,7 @@ export default class SelectFilesModal extends LightningElement {
     this.isEmptyDocsInWorkspace = false;
     this.isSearching = false;
     this.searchDocumentsInput = '';
+    this.selectedType = this.types.OwnedByMe.value;
   }
 
   handleTypeChange = ({detail}) => {
@@ -425,30 +424,21 @@ export default class SelectFilesModal extends LightningElement {
         this.loadMoreContentWorkspaces();
         break;
     }
-  }
+  };
 
   handleAddFiles() {
-      this.isLoading = true;
-      linkContentDocuments({
-        contentDocumentIds : this.selectedDocuments,
-        sourceObjectId : this.soureRecordId
-      }).then(result => {
-        this.isLoading = false;
-        if(!isEmpty(result)) {
-          let errorMsg =
-            {
-              body : {
-                message : result
-              }
-            };
-          showError(this.context, errorMsg, ERROR);
-        } else {
-          this.handleClose();
-        }
-      }).catch(error => {
-          showError(this.context, error, ERROR);
-          this.isLoading = false;
-      });
+    this.isLoading = true;
+    linkContentDocuments({
+      contentDocumentIds: this.selectedDocuments,
+      sourceObjectId: this.soureRecordId
+    }).then(result => {
+      this.isLoading = false;
+      genericEvent.call(this, 'success', result, false);
+      this.handleClose();
+    }).catch(error => {
+      showError(this.context, error, ERROR);
+      this.isLoading = false;
+    });
   }
 
   handleBackFromContentWorkspace() {

@@ -52,10 +52,11 @@ private class SendingControllerTest {
 
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.envelope);
+			System.assertNotEquals(null, result.envelope.id);
 			System.assertNotEquals(null, result.recipients);
 			System.assertEquals(1, result.recipients.size());
 		}
-	}	
+	}
 
 	@IsTest
 	static void test_createDraftEnvelope_noDefaultContact() {
@@ -69,10 +70,11 @@ private class SendingControllerTest {
 
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.envelope);
+			System.assertNotEquals(null, result.envelope.id);
 			System.assertNotEquals(null, result.recipients);
 			System.assertEquals(0, result.recipients.size());
 		}
-	}		
+	}
 
 	@IsTest
 	static void test_createDraftEnvelope_success() {
@@ -81,7 +83,7 @@ private class SendingControllerTest {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Lead l = TestUtils.createLead();
 			TestUtils.createContentVersion(l.Id);
-			TestUtils.createContentVersion(l.Id);			
+			TestUtils.createContentVersion(l.Id);
 
 			Test.startTest();
 			SendingController.DraftEnvelope result = SendingController.createDraftEnvelope(l.Id, null, true);
@@ -89,6 +91,7 @@ private class SendingControllerTest {
 
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.envelope);
+			System.assertNotEquals(null, result.envelope.id);
 			System.assertNotEquals(null, result.templates);
 			System.assertNotEquals(null, result.documents);
 			System.assertEquals(2, result.documents.size());
@@ -119,6 +122,7 @@ private class SendingControllerTest {
 
 			System.assertNotEquals(null, result);
 			System.assertNotEquals(null, result.envelope);
+			System.assertNotEquals(null, result.envelope.id);
 			System.assertNotEquals(null, result.templates);
 			System.assertNotEquals(null, result.documents);
 			System.assertEquals(4, result.documents.size());
@@ -444,6 +448,53 @@ private class SendingControllerTest {
 	}
 
 	@IsTest
+	static void test_deleteIncompleteEnvelope_success() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Schema.Account a = TestUtils.createAccount();
+			Envelope__c e = TestUtils.createEnvelope(a.Id, null);
+
+			Test.startTest();
+			SendingController.deleteIncompleteEnvelope(e.Id);
+			Test.stopTest();
+
+			System.assert(Collection.isEmpty([SELECT Id FROM Envelope__c WHERE Id = :e.Id]));
+		}
+	}
+
+	@IsTest
+	static void test_deleteIncompleteEnvelope_failure() {
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Schema.Account a = TestUtils.createAccount();
+			Envelope__c e = TestUtils.createEnvelope(a.Id, UUID.randomUUID());
+			Test.startTest();
+			SendingController.deleteIncompleteEnvelope(e.Id);
+			Test.stopTest();
+
+			System.assert(Collection.isNotEmpty([SELECT Id FROM Envelope__c WHERE Id = :e.Id]));
+		}
+	}
+
+	@IsTest
+	static void test_deleteIncompleteEnvelope_unauthorized() {
+		Envelope__c e;
+		System.runAs(UserMock.createDocuSignUser(false)) {
+			Schema.Account a = TestUtils.createAccount();
+			e = TestUtils.createEnvelope(a.Id, null);
+		}
+
+		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
+			Test.startTest();
+			try {
+				SendingController.deleteIncompleteEnvelope(e.Id);
+				throw new AssertException('Expected deleteEnvelope to fail');
+			} catch (AuraHandledException ex) {
+				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
 	static void test_deleteDocument_success() {
 		DocuSignAPIMock.success();
 		System.runAs(UserMock.createDocuSignGenerator(true)) {
@@ -605,7 +656,6 @@ private class SendingControllerTest {
 			SendingController.DraftEnvelope draftEnvelope = SendingController.createDraftEnvelopeFromTemplate(ec.id, o.Id);
 			Envelope result = draftEnvelope.envelope;
 			Test.stopTest();
-
 
 			System.assertNotEquals(null, result);
 			System.assertEquals(ec.id, result.envelopeConfigurationId);

@@ -274,11 +274,13 @@ public with sharing class FileService {
 	 * Links the provided Content Documents with the Source Object
 	 * @param contentDocumentIds - list of Content Document Ids
 	 * @param sourceObjectId - Source Record Id to which the document has to be linked
-	 * @return List<ContentDocumentLink>
+	 * @return List<Id> contentVersionIds
 	 */
-	public static String linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
+	public static List<Id> linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
 		Permissions.verifyIsDocuSignUser();
+
 		List<ContentDocumentLink> contentDocumentLinks = new List<ContentDocumentLink>();
+		List<Id> contentVersionIds = new List<Id>();
 		for (Id id : contentDocumentIds) {
 			ContentDocumentLink cdl = new ContentDocumentLink(
 				ContentDocumentId = id,
@@ -287,32 +289,20 @@ public with sharing class FileService {
 			);
 			contentDocumentLinks.add(cdl);
 		}
-		Database.SaveResult[] srList = System.Database.insert(contentDocumentLinks, false);
-		Integer successCount = 0;
-		Integer errorCount = 0;
-		String errorMessage = '';
-		for (Database.SaveResult sr : srList) {
-			if (sr.isSuccess()) {
-				successCount++;
-			} else {
-				errorCount++;
-				for (Database.Error err : sr.getErrors()) {
-					if (errorMessage == '') {
-						errorMessage = err.getMessage();
-					} else if (errorMessage != '' && err.getMessage().contains(errorMessage)) {
-						continue;
-					} else {
-						errorMessage += ', ' + err.getMessage();
-					}
-				}
-			}
+		Permissions.verifyIsCreateable(CONTENT_DOCUMENT_LINK_TYPE, new List<String> {
+			'ContentDocumentId', 'LinkedEntityId', 'ShareType'
+		});
+		System.Database.insert(contentDocumentLinks, false);
+		for (ContentDocumentLink cdl : [
+			SELECT ContentDocument.LatestPublishedVersionId
+			FROM ContentDocumentLink
+			WHERE ContentDocumentId IN:contentDocumentIds
+			AND LinkedEntityId = :sourceObjectId
+			WITH SECURITY_ENFORCED
+		]) {
+			contentVersionIds.add(cdl.ContentDocument.LatestPublishedVersionId);
 		}
-		if (errorMessage != '') {
-			String additionalMsg = successCount + ' file(s) were added successfully. ' +
-				errorCount + ' files(s) failed to add.';
-			return errorMessage + ' ' + additionalMsg;
-		}
-		return null;
+		return contentVersionIds;
 	}
 
 	private static List<ContentDocument> getContentDocuments(List<Id> contentDocumentIds) {

@@ -360,33 +360,8 @@ private class FileServiceTest {
 			contentDocIds.add(cv2.ContentDocumentId);
 
 			Test.startTest();
-			FileService.linkContentDocuments(contentDocIds, o.Id);
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	private static void test_linkContentDocumentsDuplicate_failure() {
-		User u = UserMock.createDocuSignUser();
-		System.runAs(u) {
-			List<Id> contentDocIds = new List<Id>();
-			Opportunity o = TestUtils.createOpportunity();
-			ContentVersion cv1 = TestUtils.createContentVersion();
-			ContentVersion cv2 = TestUtils.createContentVersion();
-			System.assertNotEquals(null, cv1.Id);
-			System.assertNotEquals(null, cv2.Id);
-			contentDocIds.add(cv1.ContentDocumentId);
-			contentDocIds.add(cv2.ContentDocumentId);
-
-			Test.startTest();
-			try {
-				FileService.linkContentDocuments(contentDocIds, o.Id);
-				FileService.linkContentDocuments(contentDocIds, o.Id);
-				System.assert(true, 'Should have thrown an exception for duplicate linked files');
-			} catch (Exception ex) {
-				System.assert(ex.getMessage().contains('is already linked with the entity'),
-					'Exception should indicate duplicate files are being linked');
-			}
+			List<Id> contentVersionIds = FileService.linkContentDocuments(contentDocIds, o.Id);
+			System.assertEquals(contentVersionIds.size(), 2, 'Link Content Documents Failed');
 			Test.stopTest();
 		}
 	}

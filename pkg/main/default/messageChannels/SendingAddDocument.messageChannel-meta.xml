@@ -4,7 +4,7 @@
 	<isExposed>true</isExposed>
 	<description>Adds a new document to the list of documents of an envelope</description>
 	<lightningMessageFields>
-		<fieldName>document</fieldName>
-		<description>The document to add</description>
+		<fieldName>documents</fieldName>
+		<description>The documents to be added while Sending with Docusign</description>
 	</lightningMessageFields>
 </LightningMessageChannel>

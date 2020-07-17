@@ -62,6 +62,7 @@ public with sharing class SendingController extends Controller {
 		return new Url(Salesforce.baseUrl, pg.getUrl());
 	}
 
+
 	@AuraEnabled
 	public static DraftEnvelope createDraftEnvelope(
 		final Id sourceId,
@@ -107,8 +108,10 @@ public with sharing class SendingController extends Controller {
 
 			List<Recipient> recipients = loadDefaultContacts ? RecipientService.getRecipients(sourceId.getSobjectType(), sourceIds) : new List<Recipient>();
 
+			Envelope envelope = EnvelopeService.getEmptyEnvelope(new Entity(sourceId));
+			Envelope__c env = EnvelopeService.saveEnvelope();
 			return new DraftEnvelope(
-				EnvelopeService.getEmptyEnvelope(new Entity(sourceId)),
+				envelope.withId(env.Id),
 				templates == null ? new List<Template>() : templates,
 				documents == null ? new List<Document>() : documents,
 				recipients == null ? new List<Recipient>() : recipients,
@@ -127,8 +130,9 @@ public with sharing class SendingController extends Controller {
 			if (envelopeConfigurationId == null || sourceId == null) throw new DocuSignException(Label.UndefinedArgument);
 
 			Envelope envelope = EnvelopeConfigurationService.getEnvelope(envelopeConfigurationId, new Entity(sourceId));
+			Envelope__c env = EnvelopeService.saveEnvelope();
 			return new DraftEnvelope(
-				envelope,
+				envelope.withId(env.Id),
 				null,
 				null,
 				null,
@@ -139,7 +143,7 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
-	@AuraEnabled(Cacheable = true)
+	@AuraEnabled
 	public static List<Document> getLinkedDocuments(final Id sourceId) {
 		try {
 			return DocumentService.getLinkedDocuments(ContentVersion.getSObjectType(), new Set<Id> {
@@ -252,6 +256,27 @@ public with sharing class SendingController extends Controller {
 	@AuraEnabled
 	public static void deleteEnvelope(final Id envelopeId) {
 		try {
+			EnvelopeService.deleteEnvelope(envelopeId);
+		} catch (Exception ex) {
+			if (!(ex instanceof DocuSignException && ex.getMessage() == Label.EnvelopeNotFound)) {
+				throw Controller.wrapException(ex, 'Failed to delete envelope');
+			}
+		}
+	}
+
+	@AuraEnabled
+	public static void deleteIncompleteEnvelope(final Id envelopeId) {
+		try {
+			Permissions.verifyIsDeletable(Envelope__c.getSObjectType());
+			List<Envelope__c> envelope = [
+				SELECT DocuSignId__c, SourceId__c
+				FROM Envelope__c
+				WHERE Id = :envelopeId
+				LIMIT 1
+			];
+			if (Collection.isEmpty(envelope) || envelope[0].DocuSignId__c != null) {
+				return;
+			}
 			EnvelopeService.deleteEnvelope(envelopeId);
 		} catch (Exception ex) {
 			if (!(ex instanceof DocuSignException && ex.getMessage() == Label.EnvelopeNotFound)) {

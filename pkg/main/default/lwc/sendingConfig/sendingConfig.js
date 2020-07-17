@@ -30,6 +30,7 @@ import {
 import sendEnvelope from '@salesforce/apex/SendingController.sendEnvelope';
 import getTaggerUrl from '@salesforce/apex/SendingController.getTaggerUrl';
 import deleteDocument from '@salesforce/apex/SendingController.deleteDocument';
+import deleteIncompleteEnvelope from '@salesforce/apex/SendingController.deleteIncompleteEnvelope';
 
 
 export default class SendingConfig extends LightningElement {
@@ -223,10 +224,11 @@ export default class SendingConfig extends LightningElement {
   }
 
   addNewDocument(message) {
-    this.privateDocuments = [...this.privateDocuments, message.document];
+    this.privateDocuments = [...this.privateDocuments].concat(message.documents);
   }
 
   handleExitWorkflow() {
+    this.handleDeleteIncompleteEnvelope();
     this.dispatchEvent(new CustomEvent('sendcomplete', {
       detail: {status: 'canceled'}
     }));
@@ -237,6 +239,12 @@ export default class SendingConfig extends LightningElement {
     } else {
       window.navUtils.navigateToSObject(this.recordId);
     }
+  }
+
+  handleDeleteIncompleteEnvelope() {
+    deleteIncompleteEnvelope({envelopeId: this.envelope.id})
+      .then()
+      .catch(error => showError(this.context, error, ERROR));
   }
 
   deleteSCMDocument() {

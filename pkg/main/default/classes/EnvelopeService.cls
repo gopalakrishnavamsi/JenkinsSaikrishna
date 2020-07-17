@@ -282,6 +282,29 @@ global with sharing class EnvelopeService {
 				.withCustomFields(envelope.customFields);
 		}
 
+		public Envelope__c insertEnvelope() {
+			Permissions.verifyIsCreateable(TYPE_ENVELOPE, new List<String> {
+				Application.namespacePrefix + 'DocuSignId__c',
+				Application.namespacePrefix + 'EmailMessage__c',
+				Application.namespacePrefix + 'EmailSubject__c',
+				Application.namespacePrefix + 'EnvelopeConfiguration__c',
+				Application.namespacePrefix + 'ExpireAfterDays__c',
+				Application.namespacePrefix + 'Expires__c',
+				Application.namespacePrefix + 'ExpireWarnDays__c',
+				Application.namespacePrefix + 'Remind__c',
+				Application.namespacePrefix + 'RemindAfterDays__c',
+				Application.namespacePrefix + 'RemindFrequencyDays__c',
+				Application.namespacePrefix + 'SenderPermissions__c',
+				Application.namespacePrefix + 'Options__c',
+				Application.namespacePrefix + 'Sent__c',
+				Application.namespacePrefix + 'SourceId__c'
+			});
+
+			Envelope__c env = new Envelope__c();
+			insert env;
+			return env;
+		}
+
 		public List<Envelope> insertSentEnvelopes(final List<Envelope> envelopes) {
 			Permissions.verifyIsCreateable(TYPE_ENVELOPE, new List<String> {
 				Application.namespacePrefix + 'DocuSignId__c',
@@ -429,6 +452,17 @@ global with sharing class EnvelopeService {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Saves a placeholder Envelope__c record
+	 * <p>
+	 * <em>This method is intended for DocuSign internal use only.
+	 *
+	 * @return The saved placeholder envelope.
+	 */
+	public static Envelope__c saveEnvelope() {
+		return DB.insertEnvelope();
 	}
 
 	@TestVisible

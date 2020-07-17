@@ -18,7 +18,7 @@ public with sharing class FileController extends Controller {
 	public static List<ContentDocument> getFilesOwnedByUser(Integer offset, Integer size) {
 		try {
 			return FileService.getFilesOwnedByUser(offset, size);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get files owned by user');
 		}
 	}
@@ -27,7 +27,7 @@ public with sharing class FileController extends Controller {
 	public static List<ContentDocument> getFilesSharedWithUser(Integer offset, Integer size) {
 		try {
 			return FileService.getFilesSharedWithUser(offset, size);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get files shared with user');
 		}
 	}
@@ -36,7 +36,7 @@ public with sharing class FileController extends Controller {
 	public static List<ContentDocument> getFilesRecentlyViewedByUser(Integer count) {
 		try {
 			return FileService.getFilesRecentlyViewedByUser(count);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get files recently viewed by user');
 		}
 	}
@@ -45,7 +45,7 @@ public with sharing class FileController extends Controller {
 	public static List<ContentDocument> getFilesFollowedByUser(Integer offset, Integer size) {
 		try {
 			return FileService.getFilesFollowedByUser(offset, size);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get files followed by user');
 		}
 	}
@@ -54,7 +54,7 @@ public with sharing class FileController extends Controller {
 	public static List<ContentWorkspace> getContentWorkspaces(Integer offset, Integer size) {
 		try {
 			return FileService.getContentWorkspaces(offset, size);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get content workspaces');
 		}
 	}
@@ -63,16 +63,16 @@ public with sharing class FileController extends Controller {
 	public static List<ContentDocument> getContentDocumentsInWorkspace(Integer offset, Integer size, Id contentWorkspaceId) {
 		try {
 			return FileService.getContentDocumentsInWorkspace(offset, size, contentWorkspaceId);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get content documents in workspace');
 		}
 	}
 
 	@AuraEnabled
-	public static String linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
+	public static List<Id> linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
 		try {
 			return FileService.linkContentDocuments(contentDocumentIds, sourceObjectId);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to link content documents');
 		}
 	}
