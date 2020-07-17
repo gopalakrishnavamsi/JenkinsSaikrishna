@@ -1,7 +1,7 @@
 //custom labels
-import helpVideoText from '@salesforce/label/c.DecDocumentsVideoText';
-import helpVideoLength from '@salesforce/label/c.DecDocumentsVideoLength';
-import helpVideoLink from '@salesforce/label/c.DecDocumentsVideoLink';
+import helpVideoText from '@salesforce/label/c.DecCustomButtonVideoText';
+import helpVideoLength from '@salesforce/label/c.DecCustomButtonVideoLength';
+import helpVideoLink from '@salesforce/label/c.DecCustomButtonVideoLink';
 import decCreateCustomButton from '@salesforce/label/c.DecCreateCustomButton';
 import decLayoutDescription from '@salesforce/label/c.DecLayoutDescription';
 import decCreateCustomButtonDescription from '@salesforce/label/c.DecCreateCustomButtonDescription';

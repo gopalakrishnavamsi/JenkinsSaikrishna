@@ -5188,7 +5188,7 @@
 		<name>DecDocumentsVideoLength</name>
 	</customLabels>
 	<customLabels>
-		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<label>https://bcove.video/32qlvSr</label>
 		<name>DecDocumentsVideoLink</name>
 	</customLabels>
 	<customLabels>
@@ -5200,7 +5200,7 @@
 		<name>DecRecipientsVideoLength</name>
 	</customLabels>
 	<customLabels>
-		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<label>https://bcove.video/2Or2pDp</label>
 		<name>DecRecipientsVideoLink</name>
 	</customLabels>
 	<customLabels>
@@ -5212,7 +5212,7 @@
 		<name>DecSetupTemplatesVideoLength</name>
 	</customLabels>
 	<customLabels>
-		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<label>https://bcove.video/3h1JsDK</label>
 		<name>DecSetupTemplatesVideoLink</name>
 	</customLabels>
 	<customLabels>
@@ -5224,8 +5224,20 @@
 		<name>DecMergeFieldsVideoLength</name>
 	</customLabels>
 	<customLabels>
-		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<label>https://bcove.video/38Xwh3W</label>
 		<name>DecMergeFieldsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Create Custom Button</label>
+		<name>DecCustomButtonVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 min video</label>
+		<name>DecCustomButtonVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2WqQ1YC </label>
+		<name>DecCustomButtonVideoLink</name>
 	</customLabels>
 	<customLabels>
 		<label>Prepare Fields for Placement</label>
@@ -5536,7 +5548,7 @@
 		<name>DecOptionsVideoLength</name>
 	</customLabels>
 	<customLabels>
-		<label>https://docusign.wistia.com/medias/elojgoj4cu</label>
+		<label>https://bcove.video/2Ov2plS</label>
 		<name>DecOptionsVideoLink</name>
 	</customLabels>
 	<customLabels>
