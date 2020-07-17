@@ -908,6 +908,18 @@ private class EnvelopeConfigurationControllerTest {
 
 	@IsTest
 	static void test_parseOptions_envelopeEventUpdates_completed() {
+		Map<String, Object> fieldMap = new Map<String, Object> { 'Opportunity.StageName' => 'Closed Won' };
+		Map<String, Map<String, Object>> envelopeEventUpdate =
+			new Map<String, Map<String, Object>> { Envelope.STATUS_COMPLETED => fieldMap };
+		Envelope.Options options = new Envelope.Options(
+			true,
+			new Envelope.DocumentWriteBack(
+				null,
+				'NamePDF',
+				true,
+				true),
+			envelopeEventUpdate,
+			new Map<String, Map<String, Object>>());
 		EnvelopeConfiguration config = new EnvelopeConfiguration(
 			null,
 			'Test Envelope Configuration',
@@ -921,24 +933,12 @@ private class EnvelopeConfigurationControllerTest {
 			null,
 			null,
 			null,
-			null,
+			options,
 			null);
-		Map<String, Object> fieldMap = new Map<String, Object> { 'Opportunity.StageName' => 'Closed Won' };
-		Map<String, Map<String, Object>> envelopeEventUpdate =
-			new Map<String, Map<String, Object>> { Envelope.STATUS_COMPLETED => fieldMap };
-		Envelope.Options options = new Envelope.Options(
-			true,
-			new Envelope.DocumentWriteBack(
-				null,
-				'NamePDF',
-				true,
-				true),
-			envelopeEventUpdate,
-			new Map<String, Map<String, Object>>());
-		Map<String, Object> optionsNode = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(options));
+		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(config));
 
 		Test.startTest();
-		Envelope.Options result = EnvelopeConfigurationController.parseOptions(optionsNode);
+		Envelope.Options result = Envelope.deserializeOptionsFromParent(untypedConfig);
 		Test.stopTest();
 
 		System.assertNotEquals(result.envelopeEventUpdates, null);
@@ -961,10 +961,10 @@ private class EnvelopeConfigurationControllerTest {
 			null,
 			Envelope.DEFAULT_OPTIONS,
 			null);
-		Map<String, Object> optionsNode = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(Envelope.DEFAULT_OPTIONS));
+		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(config));
 
 		Test.startTest();
-		Envelope.Options result = EnvelopeConfigurationController.parseOptions(optionsNode);
+		Envelope.Options result = Envelope.deserializeOptionsFromParent(untypedConfig);
 		Test.stopTest();
 
 		System.assertNotEquals(result.envelopeEventUpdates, null);

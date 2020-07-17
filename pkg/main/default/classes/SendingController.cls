@@ -195,8 +195,9 @@ public with sharing class SendingController extends Controller {
 		}
 
 		try {
+			Envelope envelope = parseEnvelope(envelopeJson);
 			Envelope result = EnvelopeService.sendEnvelope(
-				(Envelope)JSON.deserialize(envelopeJson, Envelope.class),
+				envelope,
 				sendNow,
 				updateNow,
 				Application.name);
@@ -207,9 +208,28 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
+	private static Envelope parseEnvelope(String envelopeJson) {
+		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(envelopeJson);
+		Envelope.Options options = Envelope.deserializeOptionsFromParent(untypedConfig);
+
+		String envelopeJSONUpdated = envelopeJson;
+		final String REGEX_PATTERN = '"options".*,"recipients"';
+		final String REPLACEMENT = '"options":null,"recipients"';
+
+		Pattern envelopeEventUpdatesPattern = Pattern.compile(REGEX_PATTERN);
+		Matcher envelopeEventUpdatesMatcher = envelopeEventUpdatesPattern.matcher(envelopeJson);
+		if (envelopeEventUpdatesMatcher.find()) {
+			envelopeJSONUpdated =
+				envelopeEventUpdatesMatcher.replaceAll(REPLACEMENT);
+		}
+		Envelope envelope = (Envelope)JSON.deserialize(envelopeJSONUpdated, Envelope.class);
+		return envelope.withOptions(options);
+	}
+
 	@AuraEnabled
 	public static String getTaggerUrl(final String envelopeJson) {
-		Envelope envelope = (Envelope)JSON.deserialize(envelopeJson, Envelope.class);
+		Envelope envelope = parseEnvelope(envelopeJson);
+
 		if (envelope == null
 			|| envelope.id == null
 			|| envelope.source == null

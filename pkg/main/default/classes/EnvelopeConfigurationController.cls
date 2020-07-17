@@ -52,7 +52,7 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(envelopeConfigurationJSON);
 		List<Recipient> recipients = parseRecipients((List<Object>)untypedConfig.get('recipients'));
 		List<Document> documents = parseDocuments((List<Object>)untypedConfig.get('documents'));
-		Envelope.Options options = parseOptions((Map<String, Object>)untypedConfig.get('options'));
+		Envelope.Options options = Envelope.deserializeOptionsFromParent(untypedConfig);
 		Pattern envelopeEventUpdatesPattern = Pattern.compile(REGEX_PATTERN);
 		Matcher envelopeEventUpdatesMatcher = envelopeEventUpdatesPattern.matcher(envelopeConfigurationJSON);
 		String envelopeConfigurationJSONUpdated = envelopeConfigurationJSON;
@@ -62,38 +62,6 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 		}
 		EnvelopeConfiguration configuration = (EnvelopeConfiguration)JSON.deserialize(envelopeConfigurationJSONUpdated, EnvelopeConfiguration.class);
 		return configuration.withRecipients(recipients).withDocuments(documents).withOptions(options);
-	}
-
-	@TestVisible
-	private static Envelope.Options parseOptions(final Map<String, Object> options) {
-		final String RECIPIENT_EVENT_UPDATES = 'recipientEventUpdates';
-		final String ENVELOPE_EVENT_UPDATES = 'envelopeEventUpdates';
-		final String INCLUDE_DEFAULT_AUTO_PLACE_TAGS = 'includeDefaultAutoPlaceTags';
-		final String DOCUMENT_WRITE_BACK = 'documentWriteBack';
-		Map<String, Object> unparsedRecipientEventUpdates =
-			(Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(options.get(RECIPIENT_EVENT_UPDATES)));
-		Map<String, Object> unparsedEnvelopeEventUpdates =
-			(Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(options.get(ENVELOPE_EVENT_UPDATES)));
-		Map<String, Map<String, Object>> recipientEventUpdates = getEventUpdates(unparsedRecipientEventUpdates);
-		Map<String, Map<String, Object>> envelopeEventUpdates = getEventUpdates(unparsedEnvelopeEventUpdates);
-		return new Envelope.Options(
-			(Boolean)options.get(INCLUDE_DEFAULT_AUTO_PLACE_TAGS),
-			(Envelope.DocumentWriteBack)JSON.deserialize(JSON.serialize(options.get(DOCUMENT_WRITE_BACK)), Envelope.DocumentWriteBack.class),
-			envelopeEventUpdates,
-			recipientEventUpdates
-		);
-	}
-
-	private static Map<String, Map<String, Object>> getEventUpdates(final Map<String, Object> unparsedEnvelopeEventUpdates) {
-		Map<String, Map<String, Object>> eventUpdates = new Map<String, Map<String, Object>>();
-		if (unparsedEnvelopeEventUpdates != null) {
-			for (String valueKey : unparsedEnvelopeEventUpdates.keySet()) {
-				Map<String, Object> valueMap =
-					(Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(unparsedEnvelopeEventUpdates.get(valueKey)));
-				eventUpdates.put(valueKey, valueMap);
-			}
-		}
-		return eventUpdates;
 	}
 
 	@TestVisible

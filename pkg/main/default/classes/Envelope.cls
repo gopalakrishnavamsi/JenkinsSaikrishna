@@ -511,6 +511,25 @@ global class Envelope {
 		return result;
 	}
 
+	// parentNode could be an envelope/envelope configuration based on Sending/Admin flows
+	public static Envelope.Options deserializeOptionsFromParent(final Map<String, Object> parentNode) {
+		Envelope.Options result = null;
+
+		if (parentNode == null) return result;
+
+		Map<String, Object> optionsNode = (Map<String, Object>)parentNode.get('options');
+
+		if (optionsNode != null) {
+			result = new Envelope.Options(
+				StringUtils.parseBoolean(String.valueOf(optionsNode.get('includeDefaultAutoPlaceTags'))),
+				reifyDocumentWriteBack((Map<String, Object>)optionsNode.get('documentWriteBack')),
+				reifyUpdateMap((Map<String, Object>)optionsNode.get('envelopeEventUpdates')),
+				reifyUpdateMap((Map<String, Object>)optionsNode.get('recipientEventUpdates')));
+		}
+
+		return result;
+	}
+
 	/**
 	 * DocuSign envelope status.
 	 */
