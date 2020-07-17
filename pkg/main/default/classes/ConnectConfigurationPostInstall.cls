@@ -5,19 +5,15 @@
  */
 public class ConnectConfigurationPostInstall implements PostInstallScript {
 
-	private static final Integer FLAG_CONNECT = 32;
-
 	@TestVisible
-	private static Boolean isConnectEnabled() {
+	private static Boolean isESignatureEnabled() {
 		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
 		ProductSettings__c eSignSettings = ProductSettings__c.getInstance(Product.ESIGNATURE);
 		return accountSettings != null
 			&& eSignSettings != null
 			&& String.isNotBlank(accountSettings.AccountId__c)
 			&& String.isNotBlank(accountSettings.Environment__c)
-			&& String.isNotBlank(accountSettings.ESignatureBaseUrl__c)
-			&& eSignSettings.Features__c != null
-			&& (Integer.valueOf(eSignSettings.Features__c) & FLAG_CONNECT) == FLAG_CONNECT;
+			&& String.isNotBlank(accountSettings.ESignatureBaseUrl__c);
 	}
 
 	public Boolean shouldExecute(
@@ -32,7 +28,7 @@ public class ConnectConfigurationPostInstall implements PostInstallScript {
 			&& previousVersion != null
 			&& previousVersion.major() <= 2
 			&& previousVersion.minor() < 5
-			&& isConnectEnabled();
+			&& isESignatureEnabled();
 	}
 
 	public PostInstallResults execute(
@@ -48,6 +44,7 @@ public class ConnectConfigurationPostInstall implements PostInstallScript {
 
 		AccountSettings__c accountSettings = AccountSettings__c.getOrgDefaults();
 		accountSettings.CreateConnectConfiguration__c = true;
+		accountSettings.ProductsLastChecked__c = null; // Force API call to get latest product settings
 		update accountSettings;
 
 		PostInstallResults result = new PostInstallResults();

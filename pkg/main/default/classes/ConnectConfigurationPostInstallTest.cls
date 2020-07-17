@@ -2,27 +2,21 @@
 private class ConnectConfigurationPostInstallTest {
 
 	@IsTest
-	static void test_isConnectEnabled_disabled() {
+	static void test_isESignatureEnabled_disabled() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
-			ProductSettings__c ps = ProductSettings__c.getInstance(Product.ESIGNATURE);
-			ps.Features__c = 0;
-			update ps;
+			delete ProductSettings__c.getInstance(Product.ESIGNATURE);
 
 			Test.startTest();
-			System.assert(!ConnectConfigurationPostInstall.isConnectEnabled());
+			System.assert(!ConnectConfigurationPostInstall.isESignatureEnabled());
 			Test.stopTest();
 		}
 	}
 
 	@IsTest
-	static void test_isConnectEnabled_enabled() {
+	static void test_isESignatureEnabled_enabled() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
-			ProductSettings__c ps = ProductSettings__c.getInstance(Product.ESIGNATURE);
-			ps.Features__c = 33;
-			update ps;
-
 			Test.startTest();
-			System.assert(ConnectConfigurationPostInstall.isConnectEnabled());
+			System.assert(ConnectConfigurationPostInstall.isESignatureEnabled());
 			Test.stopTest();
 		}
 	}
