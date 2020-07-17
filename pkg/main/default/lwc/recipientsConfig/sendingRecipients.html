@@ -10,7 +10,7 @@
                             <div class="ds-addRecipients-details-header-text">{Labels.recipients}</div>
                         </div>
                         <div class="slds-col">
-                            <lightning-button-group>
+                            <lightning-button-group if:false={isEmptyRecipients}>
                                 <lightning-button label={Labels.signingOrderLabel}
                                                   icon-name={signingOrderButtonIcon}
                                                   onclick={handleRecipientSigningOrder}></lightning-button>

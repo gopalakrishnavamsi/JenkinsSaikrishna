@@ -6,7 +6,8 @@ import {
   removeArrayElement,
   subscribeToMessageChannel,
   editArrayElement,
-  groupBy
+  groupBy,
+  genericEvent
 } from 'c/utils';
 import {createMessageContext, releaseMessageContext} from 'lightning/messageService';
 import decTemplate from './decRecipients.html';
@@ -32,6 +33,8 @@ export default class Recipients extends LightningElement {
 
   isDirtyRecipients = false;
 
+  isEmptyRecipients = false;
+
   @api
   sourceObject;
 
@@ -43,7 +46,12 @@ export default class Recipients extends LightningElement {
   }
 
   set recipients(val) {
-    this.privateRecipients = proxify(!isEmpty(val) ? val.map(r => Recipient.fromObject({ ...r, isPlaceHolder: r.isPlaceHolder })) : []);
+    this.privateRecipients = proxify(!isEmpty(val) ? val.map(r => Recipient.fromObject({
+      ...r,
+      isPlaceHolder: r.isPlaceHolder
+    })) : []);
+    this.isEmptyRecipients = isEmpty(this.privateRecipients) || (!isEmpty(this.privateRecipients) && this.privateRecipients.length === 0);
+    genericEvent.call(this, 'emptyrecipients', this.isEmptyRecipients, false);
   }
 
   connectedCallback() {
@@ -97,7 +105,7 @@ export default class Recipients extends LightningElement {
   }
 
   get isPlaceHolder() {
-    return !isEmpty(this.editRecipient) && this.editRecipient.isPlaceHolder
+    return !isEmpty(this.editRecipient) && this.editRecipient.isPlaceHolder;
   }
 
   closeRecipientsModal = () => {

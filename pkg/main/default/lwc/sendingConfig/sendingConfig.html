@@ -14,13 +14,15 @@
                 is-final-step={isFinalStep}
                 next-step-button-text={nextStepButtonText}
                 onclickprogressstep={handleOnClickProgressStep}
-                onexitworkflow={handleExitWorkflow}>
+                onexitworkflow={handleExitWorkflow}
+                disable-all-buttons={isEmptyRecipients}>
         </c-sending-header>
         <div class="slds-m-top_large slds-m-bottom_xx-large ds-sending-margin">
             <c-progress-bar
                     current-step={currentStep}
                     steps={steps}
-                    onclickprogressstep={handleOnClickProgressStep}>
+                    onclickprogressstep={handleOnClickProgressStep}
+                    disable-steps={isEmptyRecipients}>
             </c-progress-bar>
             <c-sending-documents
                     if:true={documentsStep}
@@ -32,18 +34,19 @@
                     if:true={recipientsStep}
                     is-sending
                     read-only={forbidEnvelopeChanges}
-                    recipients={recipients}>
+                    recipients={recipients}
+                    onemptyrecipients={handleEmptyRecipient}>
             </c-recipients-config>
             <c-dec-recipient-message
-                    if:true={recipientsStep}
+                    if:true={showEmailMessage}
                     email-subject={emailSubject}
                     email-message={emailMessage}
                     onemailchange={handleEmailChange}>
             </c-dec-recipient-message>
             <c-sending-recipient-more-options
-                if:true={recipientsStep}
-                notifications={notifications}
-                envelope={envelope}>
+                    if:true={recipientsStep}
+                    notifications={notifications}
+                    envelope={envelope}>
             </c-sending-recipient-more-options>
         </div>
     </div>

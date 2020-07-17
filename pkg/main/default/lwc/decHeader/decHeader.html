@@ -21,7 +21,8 @@
                                                 icon-name="utility:edit"
                                                 variant="bare"
                                                 alternative-text="Edit"
-                                                onclick={openRenameModal}>
+                                                onclick={openRenameModal}
+                                                disabled={disableAllButtons}>
                                         </lightning-button-icon>
                                     </span>
                                 </h1>
@@ -35,37 +36,39 @@
                     <div class="slds-page-header__control">
                         <template if:false={isFinalStep}>
                             <lightning-button
-                                label={saveLabel}
-                                variant={saveLabelClass}
-                                onclick={handleSaveAndClose}>
+                                    label={saveLabel}
+                                    variant={saveLabelClass}
+                                    onclick={handleSaveAndClose}
+                                    disabled={disableAllButtons}>
                             </lightning-button>
                             <lightning-button
-                                label={label.back}
-                                variant="neutral"
-                                class="slds-p-left_large"
-                                onclick={handleBack}
-                                disabled={isFirstStep}>
+                                    label={label.back}
+                                    variant="neutral"
+                                    class="slds-p-left_large"
+                                    onclick={handleBack}
+                                    disabled={disableBackButton}>
                             </lightning-button>
                             <lightning-button
-                                label={label.next}
-                                variant="brand"
-                                class="slds-p-left_x-small"
-                                onclick={handleNext}
-                                disabled={isFinalStep}>
+                                    label={label.next}
+                                    variant="brand"
+                                    class="slds-p-left_x-small"
+                                    onclick={handleNext}
+                                    disabled={disableNextButton}>
                             </lightning-button>
                         </template>
                         <template if:true={isFinalStep}>
                             <lightning-button
-                                label={label.back}
-                                variant="neutral"
-                                onclick={handleBack}
-                                disabled={isFirstStep}>
+                                    label={label.back}
+                                    variant="neutral"
+                                    onclick={handleBack}
+                                    disabled={disableBackButton}>
                             </lightning-button>
                             <lightning-button
-                                label={saveLabel}
-                                variant={saveLabelClass}
-                                class="slds-p-left_x-small"
-                                onclick={handleSaveAndClose}>
+                                    label={saveLabel}
+                                    variant={saveLabelClass}
+                                    class="slds-p-left_x-small"
+                                    onclick={handleSaveAndClose}
+                                    disabled={disableAllButtons}>
                             </lightning-button>
                         </template>
                     </div>

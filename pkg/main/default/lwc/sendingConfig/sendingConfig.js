@@ -55,6 +55,8 @@ export default class SendingConfig extends LightningElement {
   envelope;
   emailSubject;
   emailMessage;
+  isEmptyRecipients = false;
+
 
   // Temporary recipients list for testing online editor sending flow
   // testRecipients = [{'email':'rose@edge.com','isSigningGroup':false,'name':'Rose Gonzalez','phone':'(512) 757-9340','readOnly':false,'required':false,'signNow':false,'source':{'id':'0032F00000Zy9DEQAZ','isValid':true,'label':'Contact','name':'Rose Gonzalez','parent':{'id':'0012F00000dlx9XQAQ','isValid':true,'label':'Account','name':'Edge Communications','typeName':'Account'},'typeName':'Contact'},'type':'Signer','templateId':null,'emailSettings':{},'authentication':{},'role':{}}];
@@ -102,6 +104,10 @@ export default class SendingConfig extends LightningElement {
   get nextStepButtonText() {
     return (this.currentStep === PROGRESS_STEP.RECIPIENTS || this.currentStep === PROGRESS_STEP.PREPARE_AND_SEND)
     && this.sendNow ? this.label.send : this.label.next;
+  }
+
+  get showEmailMessage() {
+    return this.currentStep === PROGRESS_STEP.RECIPIENTS && !this.isEmptyRecipients;
   }
 
   /*
@@ -152,6 +158,10 @@ export default class SendingConfig extends LightningElement {
     this.emailMessage = emailMessage;
     this.emailSubject = emailSubject;
   };
+
+  handleEmptyRecipient({detail}) {
+    this.isEmptyRecipients = detail.data;
+  }
 
   handleOnClickProgressStep(event) {
     let toStep = event.detail.data;

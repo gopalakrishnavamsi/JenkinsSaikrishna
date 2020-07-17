@@ -59,6 +59,8 @@ export default class DecSetupConfig extends LightningElement {
 
   steps = STEPS;
 
+  isEmptyRecipients = false;
+
   connectedCallback() {
     this.sourceFilesSubscription = subscribeToMessageChannel(
       this.context,
@@ -180,6 +182,10 @@ export default class DecSetupConfig extends LightningElement {
     return this.envelopeConfigurationData ? this.envelopeConfigurationData.sourceObject : null;
   }
 
+  get showEmailMessage() {
+    return this.currentStep === PROGRESS_STEP.RECIPIENTS && !this.isEmptyRecipients;
+  }
+
   handleUpdateSourceFiles(message) {
     this.isDirty = true;
 
@@ -249,7 +255,7 @@ export default class DecSetupConfig extends LightningElement {
 
   updateLocalData(event) {
     this.isDirty = event.detail.data.isDirty || this.isDirty;
-    this.updateLocalConfiguration({ documents: event.detail.data.documents });
+    this.updateLocalConfiguration({documents: event.detail.data.documents});
   }
 
   handleUpdateDocument(event) {
@@ -257,7 +263,7 @@ export default class DecSetupConfig extends LightningElement {
     let documents = [...this.envelopeConfigurationData.documents];
     let indexToInsert = documents.length > 0 ? documents.length - 1 : 0;
     documents.splice(indexToInsert, 0, {...event.detail.data});
-    this.updateLocalConfiguration({ documents });
+    this.updateLocalConfiguration({documents});
   }
 
   handleOnClickProgressStep(event) {
@@ -295,6 +301,10 @@ export default class DecSetupConfig extends LightningElement {
       emailMessage: emailMessage,
       emailSubject: emailSubject
     });
+  }
+
+  handleEmptyRecipient({detail}) {
+    this.isEmptyRecipients = detail.data;
   }
 
   updateEnvelopeConfiguration(step, configurationData = this.envelopeConfigurationData) {

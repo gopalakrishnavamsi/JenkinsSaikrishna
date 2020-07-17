@@ -11,6 +11,7 @@
                 header-name={label.envelopeConfiguration}
                 sub-header-name={configurationName}
                 modal-title={label.renameEnvelopeConfiguration}
+                disable-all-buttons={isEmptyRecipients}
                 is-first-step={documentsStep}
                 is-final-step={customButtonStep}
                 onsaveandclose={handleSaveAndClose}
@@ -21,7 +22,8 @@
             <c-progress-bar
                     current-step={currentStep}
                     steps={steps}
-                    onclickprogressstep={handleOnClickProgressStep}>
+                    onclickprogressstep={handleOnClickProgressStep}
+                    disable-steps={isEmptyRecipients}>
             </c-progress-bar>
             <c-dec-documents
                     onupdatetemplatedocuments={handleUpdateDocument}
@@ -31,11 +33,12 @@
                     record-id={recordId}>
             </c-dec-documents>
             <c-recipients-config if:true={recipientsStep}
-                              source-object={sourceObject}
-                              recipients={recipients}>
+                                 source-object={sourceObject}
+                                 recipients={recipients}
+                                 onemptyrecipients={handleEmptyRecipient}>
             </c-recipients-config>
             <c-dec-recipient-message
-                    if:true={recipientsStep}
+                    if:true={showEmailMessage}
                     email-subject={emailSubject}
                     email-message={emailMessage}
                     onemailchange={handleEmailChange}>

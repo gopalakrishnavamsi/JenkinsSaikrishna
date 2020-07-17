@@ -1,90 +1,110 @@
-import { LightningElement, api } from 'lwc';
+import {LightningElement, api} from 'lwc';
 
 // utility functions
-import { isEmpty } from 'c/utils';
-import { LABEL } from 'c/setupUtils';
+import {isEmpty} from 'c/utils';
+import {LABEL} from 'c/setupUtils';
 
 // Lightning message service
-import {createMessageContext,
-    releaseMessageContext,
-    publish
-  } from 'lightning/messageService';
+import {
+  createMessageContext,
+  releaseMessageContext,
+  publish
+} from 'lightning/messageService';
 // Publisher
 import DEC_RENAME_ENVELOPE_TEMPLATE from '@salesforce/messageChannel/DecRenameEnvelopeTemplate__c';
 
 export default class DecHeader extends LightningElement {
-    showRenameModal = false;
-    nameCopy;
-    @api
-    icon;
+  showRenameModal = false;
+  nameCopy;
+  @api
+  icon;
 
-    @api
-    headerName;
+  @api
+  headerName;
 
-    @api
-    subHeaderName;
+  @api
+  subHeaderName;
 
-    @api
-    modalTitle;
+  @api
+  modalTitle;
 
-    @api
-    isFinalStep;
+  @api
+  isFinalStep;
 
-    @api
-    isFirstStep;
+  @api
+  isFirstStep;
 
-    label = LABEL;
+  label = LABEL;
 
-    context = createMessageContext();
+  context = createMessageContext();
 
-    disconnectedCallback() {
-      releaseMessageContext(this.context);
-    }
+  privateDisableAllButtons = false;
 
-    get saveLabel() {
-        return this.isFinalStep ? this.label.saveAndFinish : this.label.saveAndClose;
-    }
-    
-    get saveLabelClass() {
-        return this.isFinalStep ? 'brand' : 'neutral';
-    }
+  @api
+  get disableAllButtons() {
+    return this.privateDisableAllButtons;
+  }
 
-    get disableModalSave() {
-        return isEmpty(this.nameCopy) || this.nameCopy.trim().length === 0;
-    }
+  set disableAllButtons(val) {
+    this.privateDisableAllButtons = val;
+  }
 
-    openRenameModal() {
-        this.showRenameModal = true;
-        this.nameCopy = this.subHeaderName;
-    }
-    
-    closeRenameModal() {
-        this.showRenameModal = false;
-    }
-    
-    saveRenameModal() {
-        const message = {
-            name: this.nameCopy.trim()
-        };
-        publish(this.context, DEC_RENAME_ENVELOPE_TEMPLATE, message);
-        this.closeRenameModal();
-    }
+  get disableNextButton() {
+    return this.isFinalStep || this.privateDisableAllButtons;
+  }
 
-    
-    handleNameChange(event) {
-        event.preventDefault();
-        this.nameCopy = event.target.value;
-    }
+  get disableBackButton() {
+    return this.isFirstStep || this.privateDisableAllButtons;
+  }
 
-    handleSaveAndClose() {
-        this.dispatchEvent(new CustomEvent('saveandclose'));
-    }
+  disconnectedCallback() {
+    releaseMessageContext(this.context);
+  }
 
-    handleNext() {
-        this.dispatchEvent(new CustomEvent('next'));
-    }
+  get saveLabel() {
+    return this.isFinalStep ? this.label.saveAndFinish : this.label.saveAndClose;
+  }
 
-    handleBack() {
-        this.dispatchEvent(new CustomEvent('back'));
-    }
+  get saveLabelClass() {
+    return this.isFinalStep ? 'brand' : 'neutral';
+  }
+
+  get disableModalSave() {
+    return isEmpty(this.nameCopy) || this.nameCopy.trim().length === 0;
+  }
+
+  openRenameModal() {
+    this.showRenameModal = true;
+    this.nameCopy = this.subHeaderName;
+  }
+
+  closeRenameModal() {
+    this.showRenameModal = false;
+  }
+
+  saveRenameModal() {
+    const message = {
+      name: this.nameCopy.trim()
+    };
+    publish(this.context, DEC_RENAME_ENVELOPE_TEMPLATE, message);
+    this.closeRenameModal();
+  }
+
+
+  handleNameChange(event) {
+    event.preventDefault();
+    this.nameCopy = event.target.value;
+  }
+
+  handleSaveAndClose() {
+    this.dispatchEvent(new CustomEvent('saveandclose'));
+  }
+
+  handleNext() {
+    this.dispatchEvent(new CustomEvent('next'));
+  }
+
+  handleBack() {
+    this.dispatchEvent(new CustomEvent('back'));
+  }
 }
