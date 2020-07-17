@@ -80,44 +80,6 @@
 		<layoutColumns/>
 		<style>CustomLinks</style>
 	</layoutSections>
-	<platformActionList>
-		<actionListContext>Record</actionListContext>
-		<platformActionListItems>
-			<actionName>Delete</actionName>
-			<actionType>StandardButton</actionType>
-			<sortOrder>1</sortOrder>
-		</platformActionListItems>
-		<platformActionListItems>
-			<actionName>Clone</actionName>
-			<actionType>StandardButton</actionType>
-			<sortOrder>2</sortOrder>
-		</platformActionListItems>
-		<platformActionListItems>
-			<actionName>ChangeOwnerOne</actionName>
-			<actionType>StandardButton</actionType>
-			<sortOrder>3</sortOrder>
-		</platformActionListItems>
-	</platformActionList>
-	<quickActionList>
-		<quickActionListItems>
-			<quickActionName>FeedItem.TextPost</quickActionName>
-		</quickActionListItems>
-		<quickActionListItems>
-			<quickActionName>FeedItem.ContentPost</quickActionName>
-		</quickActionListItems>
-		<quickActionListItems>
-			<quickActionName>FeedItem.MobileSmartActions</quickActionName>
-		</quickActionListItems>
-		<quickActionListItems>
-			<quickActionName>FeedItem.LinkPost</quickActionName>
-		</quickActionListItems>
-		<quickActionListItems>
-			<quickActionName>FeedItem.PollPost</quickActionName>
-		</quickActionListItems>
-		<quickActionListItems>
-			<quickActionName>FeedItem.QuestionPost</quickActionName>
-		</quickActionListItems>
-	</quickActionList>
 	<relatedLists>
 		<fields>NAME</fields>
 		<fields>EmailSubject__c</fields>
