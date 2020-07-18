@@ -414,6 +414,11 @@ global class Envelope {
 				this.combineDocuments,
 				this.includeCertificateOfCompletion);
 		}
+
+		public DocumentWriteBack withLinkedEntityId(final Id linkedEntityId) {
+			this.linkedEntityId = linkedEntityId;
+			return this;
+		}
 	}
 
 	/**
@@ -466,9 +471,17 @@ global class Envelope {
 		public Envelope.Options copy() {
 			return new Envelope.Options(
 				this.includeDefaultAutoPlaceTags,
-				this.documentWriteBack.copy(),
-				this.envelopeEventUpdates.clone(),
-				this.recipientEventUpdates.clone());
+				this.documentWriteBack == null
+					? null : this.documentWriteBack.copy(),
+				this.envelopeEventUpdates == null
+					? new Map<String, Map<String, Object>>() : this.envelopeEventUpdates.clone(),
+				this.recipientEventUpdates == null
+					? new Map<String, Map<String, Object>>() : this.recipientEventUpdates.clone());
+		}
+
+		public Envelope.Options withDocumentWriteBack(final DocumentWriteBack documentWriteBack) {
+			this.documentWriteBack = documentWriteBack;
+			return this;
 		}
 	}
 

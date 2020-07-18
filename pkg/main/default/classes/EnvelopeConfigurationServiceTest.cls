@@ -2233,6 +2233,22 @@ private class EnvelopeConfigurationServiceTest {
 			System.assertNotEquals(null, result.senderPermissions);
 			System.assertNotEquals(null, result.source);
 			System.assertEquals(o.Id, result.source.id);
+
+			System.assertNotEquals(null, result.options);
+			System.assertEquals(
+				Envelope.DEFAULT_OPTIONS.includeDefaultAutoPlaceTags,
+				result.options.includeDefaultAutoPlaceTags);
+			System.assertNotEquals(null, result.options.documentWriteBack);
+			System.assertEquals(o.Id, result.options.documentWriteBack.linkedEntityId);
+			System.assertEquals(
+				Envelope.DEFAULT_OPTIONS.documentWriteBack.includeCertificateOfCompletion,
+				result.options.documentWriteBack.includeCertificateOfCompletion);
+			System.assertEquals(
+				Envelope.DEFAULT_OPTIONS.documentWriteBack.combineDocuments,
+				result.options.documentWriteBack.combineDocuments);
+			System.assertEquals(
+				Envelope.DEFAULT_OPTIONS.documentWriteBack.nameFormat,
+				result.options.documentWriteBack.nameFormat);
 		}
 	}
 
@@ -2424,5 +2440,233 @@ private class EnvelopeConfigurationServiceTest {
 			System.assert(Collection.isEmpty([SELECT Id FROM ContentVersion WHERE Id IN :contentVersionIds]));
 			System.assert(Collection.isEmpty([SELECT Id FROM ContentDocument WHERE Id IN :contentDocumentIds]));
 		}
+	}
+
+	@IsTest
+	static void test_getEnvelopeOptions_null_options() {
+		Contact c = TestUtils.createContact();
+		Envelope.Options options = null;
+		Entity source = new Entity(c.Id);
+
+		Test.startTest();
+		Envelope.Options result = EnvelopeConfigurationService.getEnvelopeOptions(
+			options,
+			source);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(
+			Envelope.DEFAULT_OPTIONS.includeDefaultAutoPlaceTags,
+			result.includeDefaultAutoPlaceTags);
+		System.assertNotEquals(null, result.documentWriteBack);
+		System.assertEquals(c.Id, result.documentWriteBack.linkedEntityId);
+		System.assertEquals(
+			Envelope.DEFAULT_OPTIONS.documentWriteBack.includeCertificateOfCompletion,
+			result.documentWriteBack.includeCertificateOfCompletion);
+		System.assertEquals(
+			Envelope.DEFAULT_OPTIONS.documentWriteBack.combineDocuments,
+			result.documentWriteBack.combineDocuments);
+		System.assertEquals(
+			Envelope.DEFAULT_OPTIONS.documentWriteBack.nameFormat,
+			result.documentWriteBack.nameFormat);
+	}
+
+	@IsTest
+	static void test_getEnvelopeOptions_null_source() {
+		Envelope.Options options = new Envelope.Options(
+			false,
+			new Envelope.DocumentWriteBack(
+				null,
+				'format',
+				false,
+				false),
+			new Map<String, Map<String, Object>> {
+				's1' => new Map<String, Object> {
+					'k1' => 'v1'
+				}
+			},
+			new Map<String, Map<String, Object>> {
+				's2' => new Map<String, Object> {
+					'k2' => 'v2'
+				}
+			}
+		);
+		Entity source = null;
+
+		Test.startTest();
+		Envelope.Options result = EnvelopeConfigurationService.getEnvelopeOptions(
+			options,
+			source);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(
+			options.includeDefaultAutoPlaceTags,
+			result.includeDefaultAutoPlaceTags);
+		System.assertNotEquals(null, result.documentWriteBack);
+		System.assertEquals(
+			options.documentWriteBack.linkedEntityId,
+			result.documentWriteBack.linkedEntityId);
+		System.assertEquals(
+			options.documentWriteBack.includeCertificateOfCompletion,
+			result.documentWriteBack.includeCertificateOfCompletion);
+		System.assertEquals(
+			options.documentWriteBack.combineDocuments,
+			result.documentWriteBack.combineDocuments);
+		System.assertEquals(
+			options.documentWriteBack.nameFormat,
+			result.documentWriteBack.nameFormat);
+		System.assertEquals(
+			options.envelopeEventUpdates,
+			result.envelopeEventUpdates);
+		System.assertEquals(
+			options.recipientEventUpdates,
+			result.recipientEventUpdates);
+	}
+
+	@IsTest
+	static void test_getEnvelopeOptions_dec_linkedEntityId() {
+		Contact c = TestUtils.createContact();
+		Envelope.Options options = new Envelope.Options(
+			false,
+			new Envelope.DocumentWriteBack(
+				TestUtils.createEnvelopeConfiguration().Id,
+				'format',
+				false,
+				false),
+			new Map<String, Map<String, Object>> {
+				's1' => new Map<String, Object> {
+					'k1' => 'v1'
+				}
+			},
+			new Map<String, Map<String, Object>> {
+				's2' => new Map<String, Object> {
+					'k2' => 'v2'
+				}
+			}
+		);
+		Entity source = new Entity(c.Id);
+
+		Test.startTest();
+		Envelope.Options result = EnvelopeConfigurationService.getEnvelopeOptions(
+			options,
+			source);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(
+			options.includeDefaultAutoPlaceTags,
+			result.includeDefaultAutoPlaceTags);
+		System.assertNotEquals(null, result.documentWriteBack);
+		System.assertEquals(
+			c.Id,
+			result.documentWriteBack.linkedEntityId);
+		System.assertEquals(
+			options.documentWriteBack.includeCertificateOfCompletion,
+			result.documentWriteBack.includeCertificateOfCompletion);
+		System.assertEquals(
+			options.documentWriteBack.combineDocuments,
+			result.documentWriteBack.combineDocuments);
+		System.assertEquals(
+			options.documentWriteBack.nameFormat,
+			result.documentWriteBack.nameFormat);
+		System.assertEquals(
+			options.envelopeEventUpdates,
+			result.envelopeEventUpdates);
+		System.assertEquals(
+			options.recipientEventUpdates,
+			result.recipientEventUpdates);
+	}
+
+	@IsTest
+	static void test_getEnvelopeOptions_non_source_linkedEntityId() {
+		Contact c = TestUtils.createContact();
+		Envelope.Options options = new Envelope.Options(
+			false,
+			new Envelope.DocumentWriteBack(
+				c.AccountId,
+				'format',
+				false,
+				false),
+			new Map<String, Map<String, Object>> {
+				's1' => new Map<String, Object> {
+					'k1' => 'v1'
+				}
+			},
+			new Map<String, Map<String, Object>> {
+				's2' => new Map<String, Object> {
+					'k2' => 'v2'
+				}
+			}
+		);
+		Entity source = new Entity(c.Id);
+
+		Test.startTest();
+		Envelope.Options result = EnvelopeConfigurationService.getEnvelopeOptions(
+			options,
+			source);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(
+			options.includeDefaultAutoPlaceTags,
+			result.includeDefaultAutoPlaceTags);
+		System.assertNotEquals(null, result.documentWriteBack);
+		System.assertEquals(
+			c.AccountId,
+			result.documentWriteBack.linkedEntityId);
+		System.assertEquals(
+			options.documentWriteBack.includeCertificateOfCompletion,
+			result.documentWriteBack.includeCertificateOfCompletion);
+		System.assertEquals(
+			options.documentWriteBack.combineDocuments,
+			result.documentWriteBack.combineDocuments);
+		System.assertEquals(
+			options.documentWriteBack.nameFormat,
+			result.documentWriteBack.nameFormat);
+		System.assertEquals(
+			options.envelopeEventUpdates,
+			result.envelopeEventUpdates);
+		System.assertEquals(
+			options.recipientEventUpdates,
+			result.recipientEventUpdates);
+	}
+
+	@IsTest
+	static void test_getEnvelopeOptions_no_document_write_back() {
+		Contact c = TestUtils.createContact();
+		Envelope.Options options = new Envelope.Options(
+			false,
+			null,
+			new Map<String, Map<String, Object>> {
+				's1' => new Map<String, Object> {
+					'k1' => 'v1'
+				}
+			},
+			new Map<String, Map<String, Object>> {
+				's2' => new Map<String, Object> {
+					'k2' => 'v2'
+				}
+			}
+		);
+		Entity source = new Entity(c.Id);
+
+		Test.startTest();
+		Envelope.Options result = EnvelopeConfigurationService.getEnvelopeOptions(
+			options,
+			source);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(
+			options.includeDefaultAutoPlaceTags,
+			result.includeDefaultAutoPlaceTags);
+		System.assertEquals(null, result.documentWriteBack);
+		System.assertEquals(
+			options.envelopeEventUpdates,
+			result.envelopeEventUpdates);
+		System.assertEquals(
+			options.recipientEventUpdates,
+			result.recipientEventUpdates);
 	}
 }

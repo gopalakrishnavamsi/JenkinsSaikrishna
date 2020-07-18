@@ -135,6 +135,23 @@ private class EnvelopeAPITest {
 			System.assertEquals(new List<String> { 'v1', 'v2', 'v3' }, result.listCustomFields[0].listItems);
 			System.assertEquals('true', result.listCustomFields[0].required);
 			System.assertEquals('true', result.listCustomFields[0].show);
+
+			for (EnvelopeAPI.APITextCustomField cf : result.textCustomFields) {
+				System.assertNotEquals(null, cf);
+				switch on cf.name {
+					when '##SFUsername' {
+						System.assertEquals(UserInfo.getUserName(), cf.value);
+					} when '##SFBaseUrl' {
+						System.assertEquals(Salesforce.baseUrl.toExternalForm(), cf.value);
+					} when '##SFTokenEndpoint' {
+						System.assertEquals('https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com', cf.value);
+					} when '##SFApplication' {
+						System.assertEquals(Application.name + ' ' + String.valueOf(Application.version), cf.value);
+					} when 'Company' {
+						System.assertEquals(UserInfo.getOrganizationName(), cf.value);
+					}
+				}
+			}
 		}
 	}
 

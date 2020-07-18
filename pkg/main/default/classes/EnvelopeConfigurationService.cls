@@ -1423,9 +1423,26 @@ public with sharing class EnvelopeConfigurationService {
 			}
 			result = result.withCustomFields(customFields);
 		}
-		result = result.withSenderPermissions(ec.senderPermissions.copy());
-		result = result.withOptions(ec.options.copy());
 
+		return result
+			.withSenderPermissions(ec.senderPermissions.copy())
+			.withOptions(getEnvelopeOptions(ec.options, source));
+	}
+
+	@TestVisible
+	private static Envelope.Options getEnvelopeOptions(
+		final Envelope.Options options,
+		final Entity source) {
+
+		Envelope.Options result = options == null ? Envelope.DEFAULT_OPTIONS : options.copy();
+		if (result.documentWriteBack != null
+			&& source != null
+			&& (result.documentWriteBack.linkedEntityId == null
+			|| result.documentWriteBack.linkedEntityId.getSobjectType() == EnvelopeConfiguration__c.getSObjectType())) {
+
+			result = result.withDocumentWriteBack(result.documentWriteBack.withLinkedEntityId(source.id));
+		}
 		return result;
 	}
+
 }
