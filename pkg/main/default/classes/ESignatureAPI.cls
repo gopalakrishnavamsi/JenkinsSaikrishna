@@ -83,6 +83,10 @@ public with sharing virtual class ESignatureAPI extends DocuSignAPI {
 		return super.put(getBaseUrl(), path, queryString, getDefaultHeaders(), body, timeout);
 	}
 
+	protected virtual RestAPI.Response del(final List<Object> path, final String body, final Integer timeout) {
+		return super.del(getBaseUrl(), path, QueryString.empty, getDefaultHeaders(), body, timeout);
+	}
+
 	protected virtual RestAPI.Response del(final List<Object> path, final Integer timeout) {
 		return super.del(getBaseUrl(), path, QueryString.empty, getDefaultHeaders(), null, timeout);
 	}

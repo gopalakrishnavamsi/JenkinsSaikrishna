@@ -2280,6 +2280,21 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		if (template.id == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
 
 		APITemplate updateTemplateRequest = new APITemplate(template);
+
+		//1. get the old template data
+		Template oldTemplate = getTemplate(template.id);
+		APITemplate oldAPITemplateRequest = new APITemplate(oldTemplate);
+
+		//2. delete all old documents
+		if (Collection.isNotEmpty(oldAPITemplateRequest.documents)) {
+			deleteTemplateDocuments(oldAPITemplateRequest.documents, template.id, timeout);
+		}
+
+		//3.delete all old recipients
+		if (oldAPITemplateRequest.recipients != null) {
+			deleteTemplateRecipients(oldAPITemplateRequest.recipients, template.id, timeout);
+		}
+
 		List<APIDocument> updateTemplateDocumentsRequest = Collection.isNotEmpty(updateTemplateRequest.documents) ? updateTemplateRequest.documents : null;
 		//null out the documents in the updateTemplateRequest since
 		//documents will be updated using updateTemplateDocumentsRequest and a separate endpoint
@@ -2293,28 +2308,85 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		//TODO : Add error handling to cover both multi item put requests viz;
 		//'templates/{templateId}' and 'templates/{templateId}/documents'
 		//this will require updates to RestAPI.cls and will be covered in follow up JIRA ticket
+		//4. update template without documents
+		updateAPITemplate(updateTemplateRequest, template.id, timeout);
+
+		//5. update template documents
+		if (Collection.isNotEmpty(updateTemplateDocumentsRequest)) {
+			updateTemplateDocuments(updateTemplateDocumentsRequest, template.id, timeout);
+		}
+
+		return template.withLastModified(Datetime.now());
+	}
+
+	@TestVisible
+	private Boolean updateAPITemplate(final APITemplate template, final UUID templateId, final Integer timeout) {
+
+		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
 		RestAPI.Response response = this.put(
-			new List<Object> { 'templates', template.id },
-			JSON.serialize(updateTemplateRequest, true),
+			new List<Object> { 'templates', templateId },
+			JSON.serialize(template, true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to update template: ' + response.error);
 			throw new APIException(response.error);
 		}
+		return response.error == APIError.none;
+	}
 
-		if (Collection.isNotEmpty(updateTemplateDocumentsRequest)) {
-			RestAPI.Response documentsResponse = this.put(
-				new List<Object> { 'templates', template.id, 'documents' },
-				JSON.serialize(new APITemplateUpdateDocuments(updateTemplateDocumentsRequest), true),
-				timeout);
-			if (documentsResponse.hasError) {
-				// FIXME: Add unit test for when template update is successful but document update is not.
-				this.log.error('Failed to update template documents: ' + documentsResponse.error);
-				throw new APIException(documentsResponse.error);
-			}
+	@TestVisible
+	private Boolean updateTemplateDocuments(final List<APIDocument> documents, final UUID templateId, final Integer timeout) {
+
+		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.put(
+			new List<Object> { 'templates', templateId, 'documents' },
+			JSON.serialize(new APITemplateUpdateDocuments(documents), true),
+			RestAPI.defaultTimeout);
+
+		if (response.hasError) {
+			this.log.error('Failed to update template documents: ' + response.error);
+			throw new APIException(response.error);
 		}
 
-		return template.withLastModified(Datetime.now());
+		return response.error == APIError.none;
+	}
+
+	@TestVisible
+	private Boolean deleteTemplateDocuments(final List<APIDocument> documents, final UUID templateId, final Integer timeout) {
+
+		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.del(
+			new List<Object> { 'templates', templateId, 'documents' },
+			JSON.serialize(new APITemplateUpdateDocuments(documents), true),
+			RestAPI.defaultTimeout);
+
+		if (response.hasError && response.error != APIError.notFound) {
+			this.log.error('Failed to delete documents: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return response.error == APIError.none;
+	}
+
+	@TestVisible
+	private Boolean deleteTemplateRecipients(final APIRecipients recipients, final UUID templateId, final Integer timeout) {
+
+		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.del(
+			new List<Object> { 'templates', templateId, 'recipients' },
+			JSON.serialize(recipients, true),
+			RestAPI.defaultTimeout);
+
+		if (response.hasError && response.error != APIError.notFound) {
+			this.log.error('Failed to delete recipients: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return response.error == APIError.none;
 	}
 
 	public Boolean deleteTemplate(final UUID templateId) {

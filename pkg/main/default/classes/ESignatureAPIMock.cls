@@ -991,6 +991,10 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					t.envelopeTemplateDefinition.lastModified = StringUtils.formatDatetime(Datetime.now());
 				}
 				response = MockResponse.ok(t);
+			} else if (request.method == 'DELETE') {
+				if (request.path.contains('documents') || request.path.contains('recipients')) {
+					response = MockResponse.ok(null);
+				}
 			}
 			return response;
 		}
