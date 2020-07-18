@@ -6,7 +6,6 @@ public with sharing class FileController extends Controller {
 		final Id linkedEntityId,
 		final String fileName,
 		final String base64Data) {
-
 		try {
 			return FileService.saveFile(contentVersionId, linkedEntityId, fileName, StringUtils.decode(base64Data));
 		} catch (Exception ex) {
@@ -69,9 +68,9 @@ public with sharing class FileController extends Controller {
 	}
 
 	@AuraEnabled
-	public static List<Id> linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
+	public static void linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
 		try {
-			return FileService.linkContentDocuments(contentDocumentIds, sourceObjectId);
+			FileService.linkContentDocuments(contentDocumentIds, sourceObjectId);
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to link content documents');
 		}

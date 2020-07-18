@@ -11,7 +11,7 @@ import SENDING_ADD_DOCUMENT from '@salesforce/messageChannel/SendingAddDocument_
 import SENDING_TOGGLE_DOCUMENT_SELECTION from '@salesforce/messageChannel/SendingToggleDocumentSelection__c';
 
 //apex methods
-import getLinkedDocuments from '@salesforce/apex/SendingController.getLinkedDocuments';
+import getContentDocumentsById from '@salesforce/apex/SendingController.getContentDocumentsById';
 
 // utility functions
 import {isEmpty, format, formatFileSize} from 'c/utils';
@@ -66,7 +66,7 @@ export default class SendingDocumentsList extends LightningElement {
   }
 
   handleOnFileUpload(event) {
-    let selectedDocId = event.detail.data.Id;
+    let selectedDocId = event.detail.data.ContentDocumentId;
     this.addToDoc(selectedDocId);
   }
 
@@ -86,21 +86,13 @@ export default class SendingDocumentsList extends LightningElement {
 
   addUploadedDocument(docIds) {
     this.setLoading(true);
-    getLinkedDocuments({
-      sourceId: this.envelopeId
+    getContentDocumentsById({
+      contentDocumentIds: docIds
     })
       .then(docs => {
-        let selectedContentDocIds = docIds;
-        let selectedDocs = [];
-        for (let i = 0; i < selectedContentDocIds.length; i++) {
-          let uploadedDocument = docs.find(doc => (!isEmpty(doc) && !isEmpty(doc.sourceId) && doc.sourceId === selectedContentDocIds[i]));
-          if (!isEmpty(uploadedDocument)) {
-            selectedDocs.push(uploadedDocument);
-          }
-        }
-        if (!isEmpty(selectedDocs) && selectedDocs.length > 0) {
-          for (let i = 0; i < selectedDocs.length; i++) {
-            let newDocument = this.addDocumentProperties(selectedDocs[i], true);
+        if (!isEmpty(docs) && docs.length > 0) {
+          for (let i = 0; i < docs.length; i++) {
+            let newDocument = this.addDocumentProperties(docs[i], true);
             this.addNewDocument(newDocument);
           }
         }

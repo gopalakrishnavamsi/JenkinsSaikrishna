@@ -792,4 +792,43 @@ private class DocumentServiceTest {
 		System.assert(DocumentService.isValidFileType('docx'));
 		Test.stopTest();
 	}
+
+	@IsTest
+	static void test_getContentDocumentsByVersion_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			Set<Id> contentVersionIds = new Set<Id>();
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
+			System.assertNotEquals(null, cv1.Id);
+			System.assertNotEquals(null, cv2.Id);
+			contentVersionIds.add(cv1.Id);
+			contentVersionIds.add(cv2.Id);
+
+			Test.startTest();
+			List<Document> docs = DocumentService.getContentDocumentsByVersion(contentVersionIds);
+			Test.stopTest();
+
+			System.assertEquals(docs.size(), 2, 'getContentDocumentsByVersion did not retrieve documents');
+		}
+	}
+
+	@IsTest
+	static void test_getContentDocumentsById_success() {
+		System.runAs(UserMock.createDocuSignUser()) {
+			List<Id> contentDocumentIds = new List<Id>();
+			ContentVersion cv1 = TestUtils.createContentVersion();
+			ContentVersion cv2 = TestUtils.createContentVersion();
+			System.assertNotEquals(null, cv1.Id);
+			System.assertNotEquals(null, cv2.Id);
+			contentDocumentIds.add(cv1.ContentDocumentId);
+			contentDocumentIds.add(cv2.ContentDocumentId);
+
+			Test.startTest();
+			List<Document> docs = DocumentService.getContentDocumentsById(contentDocumentIds);
+			Test.stopTest();
+
+			System.assertEquals(docs.size(), 2, 'getContentDocumentsById did not retrieve documents');
+		}
+
+	}
 }

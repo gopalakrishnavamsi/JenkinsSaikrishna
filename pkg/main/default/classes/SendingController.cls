@@ -62,7 +62,6 @@ public with sharing class SendingController extends Controller {
 		return new Url(Salesforce.baseUrl, pg.getUrl());
 	}
 
-
 	@AuraEnabled
 	public static DraftEnvelope createDraftEnvelope(
 		final Id sourceId,
@@ -102,7 +101,7 @@ public with sharing class SendingController extends Controller {
 					}
 				}
 				if (Collection.isNotEmpty(sfContentIds)) {
-					documents.addAll(DocumentService.getDocuments(ContentVersion.getSObjectType(), new Set<Id>(sfContentIds)));
+					documents.addAll(DocumentService.getContentDocumentsByVersion(sfContentIds));
 				}
 			}
 
@@ -292,6 +291,16 @@ public with sharing class SendingController extends Controller {
 			return UUID.isNotEmpty(scmFileGuid) ? GenService.deleteScmDocument(scmFileGuid) : false;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to delete document');
+		}
+	}
+
+	@AuraEnabled
+	public static List<Document> getContentDocumentsById(final List<Id> contentDocumentIds) {
+		try {
+			Permissions.verifyIsDocuSignUser();
+			return DocumentService.getContentDocumentsById(contentDocumentIds);
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to retrieve content document');
 		}
 	}
 

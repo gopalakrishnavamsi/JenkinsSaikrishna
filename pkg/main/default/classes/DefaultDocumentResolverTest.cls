@@ -480,4 +480,23 @@ private class DefaultDocumentResolverTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_getContentVersionDocuments_success() {
+		Set<Id> contentVersionIds = new Set<Id>();
+		ContentVersion cv1 = TestUtils.createContentVersion();
+		ContentVersion cv2 = TestUtils.createContentVersion();
+		System.assertNotEquals(null, cv1.Id);
+		System.assertNotEquals(null, cv2.Id);
+		contentVersionIds.add(cv1.Id);
+		contentVersionIds.add(cv2.Id);
+
+		Test.startTest();
+		List<ContentVersion> contentVersions = new DefaultDocumentResolver().getContentVersionDocuments(contentVersionIds);
+		Test.stopTest();
+
+		System.assertEquals(contentVersions.size(), 2, 'Content versions were not inserted');
+		System.assertNotEquals(contentVersions[0].ContentDocumentId, null, 'Content versions were not inserted');
+	}
+
 }

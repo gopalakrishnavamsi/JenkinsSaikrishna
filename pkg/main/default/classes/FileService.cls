@@ -274,9 +274,8 @@ public with sharing class FileService {
 	 * Links the provided Content Documents with the Source Object
 	 * @param contentDocumentIds - list of Content Document Ids
 	 * @param sourceObjectId - Source Record Id to which the document has to be linked
-	 * @return List<Id> contentVersionIds
 	 */
-	public static List<Id> linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
+	public static void linkContentDocuments(List<Id> contentDocumentIds, Id sourceObjectId) {
 		Permissions.verifyIsDocuSignUser();
 
 		List<ContentDocumentLink> contentDocumentLinks = new List<ContentDocumentLink>();
@@ -293,16 +292,6 @@ public with sharing class FileService {
 			'ContentDocumentId', 'LinkedEntityId', 'ShareType'
 		});
 		System.Database.insert(contentDocumentLinks, false);
-		for (ContentDocumentLink cdl : [
-			SELECT ContentDocument.LatestPublishedVersionId
-			FROM ContentDocumentLink
-			WHERE ContentDocumentId IN:contentDocumentIds
-			AND LinkedEntityId = :sourceObjectId
-			WITH SECURITY_ENFORCED
-		]) {
-			contentVersionIds.add(cdl.ContentDocument.LatestPublishedVersionId);
-		}
-		return contentVersionIds;
 	}
 
 	private static List<ContentDocument> getContentDocuments(List<Id> contentDocumentIds) {

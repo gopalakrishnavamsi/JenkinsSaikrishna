@@ -117,6 +117,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 
 	private static List<Document> getLinkedContentVersions(
 		final Set<Id> linkedEntityIds,
+		final SObjectType sourceType,
 		final Query.Filter filter) {
 
 		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> {
@@ -136,6 +137,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 
 		String query = String.format(
 			'SELECT ContentDocument.LatestPublishedVersion.Id, '
+				+ 'ContentDocument.Id,'
 				+ 'ContentDocument.LatestPublishedVersion.Title, '
 				+ 'ContentDocument.LatestPublishedVersion.FileExtension, '
 				+ 'ContentDocument.LatestPublishedVersion.ContentSize, '
@@ -164,7 +166,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 					cv.FileExtension,
 					cv.ContentSize,
 					cv.LastModifiedDate,
-					cv.Id));
+					sourceType == TYPE_CONTENT_DOCUMENT ? cdl.ContentDocument.Id : cv.Id));
 			}
 		}
 		return result;
@@ -179,7 +181,7 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 
 		List<Document> result = null;
 		if (type == TYPE_CONTENT_VERSION || type == TYPE_CONTENT_DOCUMENT) {
-			result = getLinkedContentVersions(linkedEntityIds, filter);
+			result = getLinkedContentVersions(linkedEntityIds, type, filter);
 		} else if (!canResolveDocuments(type)) {
 			throw new DocuSignException(String.format(Label.CannotResolveDocumentType_1,
 				new List<String> { String.valueOf(type) }));
@@ -370,5 +372,16 @@ public with sharing class DefaultDocumentResolver implements DocumentResolver {
 			}));
 		}
 		return result;
+	}
+
+	public List<ContentVersion> getContentVersionDocuments(final Set<Id> contentVersionIds) {
+		Permissions.verifyIsQueryable(TYPE_CONTENT_VERSION, new List<String> { 'Id', 'ContentDocumentId' });
+
+		return [
+			SELECT Id, ContentDocumentId
+			FROM ContentVersion
+			WHERE Id IN:contentVersionIds
+			WITH SECURITY_ENFORCED
+		];
 	}
 }

@@ -625,4 +625,19 @@ global with sharing class DocumentService {
 
 		return getLinkedDocuments(ContentVersion.getSObjectType(), linkedEntityIds, getLastUpdatedOnly);
 	}
+
+	public static List<Document> getContentDocumentsByVersion(final Set<Id> contentVersionIds) {
+		List<ContentVersion> contentVersions = new DefaultDocumentResolver().getContentVersionDocuments(contentVersionIds);
+
+		Set<Id> contentDocumentIds = new Set<Id>();
+
+		for (ContentVersion cv : contentVersions) {
+			contentDocumentIds.add(cv.ContentDocumentId);
+		}
+		return getDocuments(ContentDocument.getSObjectType(), contentDocumentIds);
+	}
+
+	public static List<Document> getContentDocumentsById(final List<Id> contentDocumentIds) {
+		return getDocuments(ContentDocument.getSObjectType(), new Set<Id>(contentDocumentIds));
+	}
 }

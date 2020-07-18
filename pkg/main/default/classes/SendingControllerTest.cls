@@ -677,7 +677,7 @@ private class SendingControllerTest {
 			System.assertEquals(cva2.FileExtension, result.documents[1].extension);
 			System.assertEquals(cva2.ContentSize, result.documents[1].size);
 			System.assertNotEquals(null, result.documents[1].lastModified);
-			System.assertEquals(cva2.Id, result.documents[1].sourceId);
+			System.assertEquals(cva2.ContentDocumentId, result.documents[1].sourceId);
 			System.assert(!result.documents[1].readOnly);
 			System.assert(!result.documents[1].required);
 

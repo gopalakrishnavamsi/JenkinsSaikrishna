@@ -360,9 +360,10 @@ private class FileServiceTest {
 			contentDocIds.add(cv2.ContentDocumentId);
 
 			Test.startTest();
-			List<Id> contentVersionIds = FileService.linkContentDocuments(contentDocIds, o.Id);
-			System.assertEquals(contentVersionIds.size(), 2, 'Link Content Documents Failed');
+			FileService.linkContentDocuments(contentDocIds, o.Id);
 			Test.stopTest();
+			List<ContentDocumentLink> contentDocumentLinks = [SELECT Id FROM ContentDocumentLink WHERE LinkedEntityId = :o.Id];
+			System.assertEquals(contentDocumentLinks.size(), 2, 'Documents were not linked to source record');
 		}
 	}
 

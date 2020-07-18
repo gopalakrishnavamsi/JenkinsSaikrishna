@@ -1133,7 +1133,7 @@ public with sharing class EnvelopeConfigurationService {
 					if (source != null && source.id != null) {
 						EnvelopeConfiguration.SourceFiles sfs = (EnvelopeConfiguration.SourceFiles)d;
 						result.addAll(DocumentService.getLinkedDocuments(
-							ContentVersion.getSObjectType(),
+							ContentDocument.getSObjectType(),
 							new Set<Id> { source.id },
 							sfs.filter));
 					} // else skip these files

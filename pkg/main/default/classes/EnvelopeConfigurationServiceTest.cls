@@ -1918,10 +1918,10 @@ private class EnvelopeConfigurationServiceTest {
 
 		System.assertEquals(3, Collection.size(result));
 		System.assertNotEquals(null, result[0]);
-		System.assertEquals(cv2.Id, result[0].sourceId);
+		System.assertEquals(cv2.ContentDocumentId, result[0].sourceId);
 		System.assertEquals(2, result[0].sequence); // First doc is DS template, so sequence starts with 2
 		System.assertNotEquals(null, result[1]);
-		System.assertEquals(cv1.Id, result[1].sourceId);
+		System.assertEquals(cv1.ContentDocumentId, result[1].sourceId);
 		System.assertEquals(3, result[1].sequence);
 		System.assertNotEquals(null, result[2]);
 		System.assertEquals(cv3.Id, result[2].sourceId);
@@ -2192,7 +2192,7 @@ private class EnvelopeConfigurationServiceTest {
 			System.assertEquals(cva2.FileExtension, result.documents[1].extension);
 			System.assertEquals(cva2.ContentSize, result.documents[1].size);
 			System.assertNotEquals(null, result.documents[1].lastModified);
-			System.assertEquals(cva2.Id, result.documents[1].sourceId);
+			System.assertEquals(cva2.ContentDocumentId, result.documents[1].sourceId);
 			System.assert(!result.documents[1].readOnly);
 			System.assert(!result.documents[1].required);
 

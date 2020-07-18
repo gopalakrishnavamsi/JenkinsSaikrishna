@@ -209,7 +209,7 @@ export default class SelectFilesModal extends LightningElement {
 
   handleFileUpload(event) {
     if (!isEmpty(event.detail.data)) {
-      genericEvent.call(this, 'fileupload', event.detail.data.Id, false);
+      genericEvent.call(this, 'fileupload', event.detail.data.ContentDocumentId, false);
     }
     this.handleClose();
   }
@@ -431,9 +431,9 @@ export default class SelectFilesModal extends LightningElement {
     linkContentDocuments({
       contentDocumentIds: this.selectedDocuments,
       sourceObjectId: this.soureRecordId
-    }).then(result => {
+    }).then(() => {
       this.isLoading = false;
-      genericEvent.call(this, 'success', result, false);
+      genericEvent.call(this, 'success', this.selectedDocuments, false);
       this.handleClose();
     }).catch(error => {
       showError(this.context, error, ERROR);
