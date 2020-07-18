@@ -2,6 +2,81 @@
 private class OnlineEditorControllerTest {
 
 	@IsTest
+	static void test_constructor_null() {
+		Test.startTest();
+		System.assertEquals(Label.DocumentGeneration, new OnlineEditorController().recordName);
+		System.assertEquals(Label.DocumentGeneration, new OnlineEditorController((Id)null).recordName);
+		System.assertEquals(Label.DocumentGeneration, new OnlineEditorController((Entity)null).recordName);
+		System.assertEquals(Label.DocumentGeneration, new OnlineEditorController((ApexPages.StandardController)null).recordName);
+		Test.stopTest();
+	}
+
+	@IsTest
+	static void test_constructor_default() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
+		PageReference pg = Page.OnlineEditorDocumentGenerator;
+		pg.getParameters().put('recordId', UserInfo.getUserId());
+		Test.setCurrentPage(pg);
+
+		Test.startTest();
+		OnlineEditorController result = new OnlineEditorController();
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(UserInfo.getName(), result.recordName);
+	}
+
+	@IsTest
+	static void test_constructor_id() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
+		Lead l = TestUtils.createLead();
+
+		Test.startTest();
+		OnlineEditorController result = new OnlineEditorController(l.Id);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(l.Name, result.recordName);
+	}
+
+	@IsTest
+	static void test_constructor_entity() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
+		Lead l = TestUtils.createLead();
+
+		Test.startTest();
+		OnlineEditorController result = new OnlineEditorController(new Entity(l.Id).withName(l.Name));
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(l.Name, result.recordName);
+	}
+
+	@IsTest
+	static void test_constructor_standard() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
+		GenTemplate__c template = new GenTemplate__c(
+			Name = UUID.randomUUID().toString(),
+			TemplateType__c = Gen.TYPE_WORD);
+		insert template;
+
+		Test.startTest();
+		OnlineEditorController result = new OnlineEditorController(new ApexPages.StandardController(template));
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(template.Name, result.recordName);
+	}
+
+	@IsTest
 	static void test_convertFields_success() {
 		DocuSignAPIMock.success();
 
@@ -501,14 +576,6 @@ private class OnlineEditorControllerTest {
 			testTemplateFolderId = OnlineEditorController.getTemplateFolderId();
 			System.assertNotEquals(null, testTemplateFolderId);
 			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_constructors() {
-		System.runAs(UserMock.createDocuSignGenerator(false)) {
-			System.assertNotEquals(null, new OnlineEditorController());
-			System.assertNotEquals(null, new OnlineEditorController(null));
 		}
 	}
 

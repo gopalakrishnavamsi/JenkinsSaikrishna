@@ -1014,6 +1014,11 @@ private class MetadataServiceTest {
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
+		System.assertEquals('TestLabel', result.masterLabel);
+		System.assert(String.isNotBlank(result.url));
+		System.assert(result.url.contains('recordId = Lead.Id'));
+		System.assert(result.url.contains('title = \'TestLabel\''));
+		System.assert(result.url.contains('templateId = \'' + UserInfo.getUserId() + '\''));
 	}
 
 	@IsTest

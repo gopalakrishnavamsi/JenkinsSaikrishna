@@ -3,14 +3,24 @@ public with sharing class GenController extends Controller {
 	public Id templateId { get; set; }
 	public String errorMessage { get; private set; }
 	public String objectHomeUrl { get; private set; }
+	public String recordName { get; private set; }
 
 	public GenController() {
+		this(QueryString.fromCurrentPage().getId('recordId', null));
+	}
+
+	public GenController(final Id id) {
+		this(String.isBlank(id) ? null : Entity.resolve(id));
+	}
+
+	public GenController(final Entity entity) {
 		this.objectHomeUrl = '/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o';
+		this.recordName = entity == null || String.isBlank(entity.name) ? Label.DocumentGeneration : entity.name;
 	}
 
 	//noinspection ApexUnusedDeclaration
 	public GenController(final ApexPages.StandardController c) {
-		this();
+		this(c == null || String.isBlank(c.getId()) ? null : Entity.resolve(c.getId()));
 	}
 
 	public PageReference redirectOnEdit() {

@@ -58,7 +58,7 @@
                                     <div class="slds-page-header__name-title">
                                         <h1>
                                         <span class="slds-page-header__title slds-truncate"
-                                              title="{!$CurrentPage.parameters.title}"><strong>{!$CurrentPage.parameters.recordName}</strong></span>
+                                              title="{!$CurrentPage.parameters.title}"><strong>{!HTMLENCODE(recordName)}</strong></span>
                                         </h1>
                                     </div>
                                 </div>

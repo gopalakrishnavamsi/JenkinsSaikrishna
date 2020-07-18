@@ -126,6 +126,9 @@ private class SalesforceTest {
 		System.assertEquals(null, Salesforce.getNameField(null));
 		System.assertEquals('Name', Salesforce.getNameField(Opportunity.getSObjectType()));
 		System.assertEquals('CaseNumber', Salesforce.getNameField(Case.getSObjectType()));
+		if (Salesforce.isValidSObject('CampaignMember')) { // DFS-7778
+			System.assertEquals('Name', Salesforce.getNameField(Salesforce.getSObjectType('CampaignMember')));
+		}
 	}
 
 	@IsTest

@@ -97,11 +97,16 @@ public with sharing class Salesforce {
 	public static String getNameField(final SObjectType type) {
 		String result = null;
 		if (type != null) {
-			for (SObjectField field : type.getDescribe().fields.getMap().values()) {
-				DescribeFieldResult fieldDesc = field.getDescribe();
-				if (fieldDesc.isNameField()) {
-					result = fieldDesc.getName();
-					break;
+			Map<String, SObjectField> fieldMap = type.getDescribe().fields.getMap();
+			if (fieldMap.containsKey('Name')) { // Look up front for Name
+				result = 'Name';
+			} else { // Fall back to iterating over the fields.
+				for (SObjectField field : fieldMap.values()) {
+					DescribeFieldResult fieldDesc = field.getDescribe();
+					if (fieldDesc.isNameField()) {
+						result = fieldDesc.getName();
+						break;
+					}
 				}
 			}
 		}

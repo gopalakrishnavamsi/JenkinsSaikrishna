@@ -21,15 +21,25 @@ public with sharing class OnlineEditorController extends Controller {
 	public String docuSignEnvironment { get; private set; }
 	public String templateListUrl { get; private set; }
 	public String userLanguage { get; private set; }
+	public String recordName { get; private set; }
 	//OnlineEditor
 
 	public OnlineEditorController() {
+		this(QueryString.fromCurrentPage().getId('recordId', null));
+	}
+
+	public OnlineEditorController(final Id id) {
+		this(String.isBlank(id) ? null : Entity.resolve(id));
+	}
+
+	public OnlineEditorController(final Entity entity) {
+		this.recordName = entity == null || String.isBlank(entity.name) ? Label.DocumentGeneration : entity.name;
 		onlineEditorInit();
 	}
 
 	//noinspection ApexUnusedDeclaration
 	public OnlineEditorController(final ApexPages.StandardController c) {
-		this();
+		this(c == null || String.isBlank(c.getId()) ? null : Entity.resolve(c.getId()));
 	}
 
 	public class Query {

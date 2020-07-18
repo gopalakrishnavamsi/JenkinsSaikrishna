@@ -293,7 +293,8 @@ public with sharing class strike_lookupController {
 	private static Map<String, Object> getGenPreviewData(Map<String, Object> jsonMap) {
 		List<Map<String, Object>> data = new List<Map<String, Object>>();
 		String objType = safeGetObjectType((String)jsonMap.get('object'));
-		Map<String, Schema.SObjectField> fieldMap = Schema.getGlobalDescribe().get(objType).getDescribe().fields.getMap();
+		SObjectType type = Salesforce.getSObjectType(objType);
+		Map<String, Schema.SObjectField> fieldMap = type.getDescribe().fields.getMap();
 		String nameField = '';
 		List<Object> recordIds = (List<Object>)jsonMap.get('recordIds');
 		String recordId = '';
@@ -309,13 +310,7 @@ public with sharing class strike_lookupController {
 			likeSearchTerm = '%' + searchTerm + '%';
 		}
 
-		for (Schema.SObjectField field : fieldMap.values()) {
-			Schema.DescribeFieldResult describedField = field.getDescribe();
-
-			if (describedField.isNameField()) {
-				nameField = describedField.getName();
-			}
-		}
+		nameField = Salesforce.getNameField(type);
 
 		Set<String> fields = new Set<String> { 'Id', nameField };
 

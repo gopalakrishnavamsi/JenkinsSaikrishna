@@ -2,31 +2,82 @@
 private class GenControllerTest {
 
 	@IsTest
+	static void test_constructor_null() {
+		Test.startTest();
+		System.assertEquals(Label.DocumentGeneration, new GenController().recordName);
+		System.assertEquals(Label.DocumentGeneration, new GenController((Id)null).recordName);
+		System.assertEquals(Label.DocumentGeneration, new GenController((Entity)null).recordName);
+		System.assertEquals(Label.DocumentGeneration, new GenController((ApexPages.StandardController)null).recordName);
+		Test.stopTest();
+	}
+
+	@IsTest
 	static void test_constructor_default() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
 		PageReference pg = Page.GenDocumentGenerator;
+		pg.getParameters().put('recordId', UserInfo.getUserId());
 		Test.setCurrentPage(pg);
+
 		Test.startTest();
 		GenController result = new GenController();
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
 		System.assertEquals('/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o', result.objectHomeUrl);
+		System.assertEquals(UserInfo.getName(), result.recordName);
+	}
+
+	@IsTest
+	static void test_constructor_id() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
+		Lead l = TestUtils.createLead();
+
+		Test.startTest();
+		GenController result = new GenController(l.Id);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals('/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o', result.objectHomeUrl);
+		System.assertEquals(l.Name, result.recordName);
+	}
+
+	@IsTest
+	static void test_constructor_entity() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
+		Lead l = TestUtils.createLead();
+
+		Test.startTest();
+		GenController result = new GenController(new Entity(l.Id).withName(l.Name));
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals('/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o', result.objectHomeUrl);
+		System.assertEquals(l.Name, result.recordName);
 	}
 
 	@IsTest
 	static void test_constructor_standard() {
+		AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+		s.EntityResolvers__c = Application.classNamespacePrefix + 'DefaultEntityResolver';
+		insert s;
 		GenTemplate__c template = new GenTemplate__c(
 			Name = UUID.randomUUID().toString(),
 			TemplateType__c = Gen.TYPE_WORD);
 		insert template;
 
 		Test.startTest();
-		new GenController(null);
 		GenController result = new GenController(new ApexPages.StandardController(template));
 		Test.stopTest();
 
 		System.assertNotEquals(null, result);
 		System.assertEquals('/' + GenTemplate__c.getSObjectType().getDescribe().getKeyPrefix() + '/o', result.objectHomeUrl);
+		System.assertEquals(template.Name, result.recordName);
 	}
 
 	@IsTest

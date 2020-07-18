@@ -856,7 +856,6 @@ public with sharing class MetadataService {
 			if (templateId != null) {
 				parametersMap.put('templateId', templateId);
 				parametersMap.put('recordId', type + '.Id');
-				parametersMap.put('recordName', type + '.' + Salesforce.getNameField(type));
 				parametersMap.put('title', actionLabel);
 			}
 			webLink = createWebLink(
