@@ -28,7 +28,7 @@ public with sharing class Salesforce {
 	@TestVisible
 	public static Boolean isCommunitySite { get; private set; }
 	@TestVisible
-	public static Url oauthAudience { get; private set; }
+	public static Url jwtAudience { get; private set; }
 
 	static {
 		String siteBaseUrl = Site.getBaseUrl();
@@ -41,7 +41,7 @@ public with sharing class Salesforce {
 		];
 		instance = org.InstanceName.toLowerCase();
 		isSandbox = org.IsSandbox;
-		oauthAudience = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl)
+		jwtAudience = String.isNotBlank(siteBaseUrl) ? new Url(siteBaseUrl)
 			: new Url('https://' + (isSandbox ? 'test' : 'login') + '.salesforce.com');
 		edition = org.OrganizationType;
 		switch on (edition) {

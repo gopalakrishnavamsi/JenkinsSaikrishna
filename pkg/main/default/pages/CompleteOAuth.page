@@ -9,9 +9,12 @@
     <script>
       function endOAuth(response, loginInformation) {
         if (loginInformation && loginInformation.target) {
+
+          var isCommunity = ({!NOT(ISNULL($Site.SiteId))} && '{!$Site.SiteId}' !== '');
+
+          // Community users cannot grant consent themselves as the OAuth redirect URI cannot be pre-defined.
           if (loginInformation.type === loginUtils.Type.DEVELOPER
-            && loginInformation.status === loginUtils.Status.FAILURE
-            && loginInformation.target) {
+            && (isCommunity || loginInformation.status === loginUtils.Status.FAILURE)) {
 
             // redirect locally if developer-initiated login and OAuth failed
             var redirectTo = loginInformation.target;
@@ -33,13 +36,11 @@
             } else {
               window.location.replace(redirectTo);
             }
-          } else if (loginInformation
-            && (loginInformation.type === loginUtils.Type.SETUP
+          } else if (loginInformation.type === loginUtils.Type.SETUP
               || loginInformation.status !== loginUtils.Status.SUCCESS
-              || ({!NOT(ISNULL($Site.SiteId))} && '{!$Site.SiteId}' !== ''))) {
+              || isCommunity) {
 
             // Setup user will complete Salesforce OAuth later, or user did not grant consent, or user is in Community
-            // Community users cannot grant consent themselves as the OAuth redirect URI cannot be pre-defined.
             if (window.opener) {
               window.opener.postMessage({
                 response: response,
@@ -47,9 +48,7 @@
               }, loginInformation.target);
             }
             window.close();
-          }
-        else
-          {
+          } else {
             // Non-setup user, continue with Salesforce OAuth
             Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.AuthController.beginSalesforceOAuth}',
               loginInformation.type,

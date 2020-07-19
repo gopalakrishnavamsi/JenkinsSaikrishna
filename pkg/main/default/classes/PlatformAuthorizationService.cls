@@ -210,7 +210,7 @@ public with sharing class PlatformAuthorizationService {
 			final Blob jwtSigningKey) {
 
 			RestAPI.Response response = this.post(
-				new Url(Salesforce.baseUrl, '/'),
+				UrlUtils.canonicalizeBaseUrl(Salesforce.baseUrl),
 				new List<Object> { 'services', 'oauth2', 'token' },
 				QueryString.empty,
 				new Map<String, String> {
@@ -247,7 +247,7 @@ public with sharing class PlatformAuthorizationService {
 			result = String.isNotBlank(new SalesforceOAuthAPI().getAccessToken(
 				orgMd.ConnectedAppId__c,
 				UserInfo.getUserName(),
-				Salesforce.oauthAudience.toExternalForm(),
+				Salesforce.jwtAudience.toExternalForm(),
 				EncodingUtil.base64Decode(orgMd.ConnectedAppJwtSigningKey__c)));
 		} catch (APIException ex) {
 			if (ex.error != APIError.consentRequired) throw ex;

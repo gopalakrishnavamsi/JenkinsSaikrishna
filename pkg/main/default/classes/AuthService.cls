@@ -1447,7 +1447,7 @@ global with sharing class AuthService {
 	private static Url getDocuSignOAuthRedirectUrl(final Boolean isSetup) {
 		Url baseUrl = isSetup
 			? new Url('https://' + (Salesforce.isSandbox ? 'test' : 'login') + '.salesforce.com/')
-			: Salesforce.baseUrl;
+			: UrlUtils.canonicalizeBaseUrl(Salesforce.baseUrl);
 		return new Url(baseUrl, (isSetup ? '' : Salesforce.sitePrefix.removeEndIgnoreCase('/s'))
 			+ '/apex/' + Application.namespacePrefix + 'completeoauth'); // case-sensitive?
 	}

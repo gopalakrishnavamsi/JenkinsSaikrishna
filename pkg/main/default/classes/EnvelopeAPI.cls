@@ -1649,7 +1649,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				false),
 			new APITextCustomField(
 				'##SFTokenEndpoint',
-				Salesforce.oauthAudience.toExternalForm(),
+				Salesforce.jwtAudience.toExternalForm(),
 				false,
 				false),
 			new APITextCustomField(

@@ -9,7 +9,7 @@ private class UrlUtilsTest {
 		System.assertEquals('https://unit.test/', UrlUtils.canonicalizeBaseUrl(new Url('http://unit.test/')).toExternalForm());
 		System.assertEquals('https://unit.test/path/', UrlUtils.canonicalizeBaseUrl(new Url('http://unit.test/path')).toExternalForm());
 		System.assertEquals('https://unit.test/path/', UrlUtils.canonicalizeBaseUrl(new Url('http://unit.test/path/')).toExternalForm());
-		System.assertEquals('https://unit.test/path/', UrlUtils.canonicalizeBaseUrl(new Url('http://UNIT.test/Path/')).toExternalForm());
+		System.assertEquals('https://unit.test/Path/', UrlUtils.canonicalizeBaseUrl(new Url('http://UNIT.test/Path/')).toExternalForm());
 		Test.stopTest();
 	}
 }

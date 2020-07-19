@@ -52,12 +52,12 @@ private class SalesforceTest {
 	}
 
 	@IsTest
-	static void test_oauthAudience() {
+	static void test_jwtAudience() {
 		System.assertEquals(
 			String.isNotBlank(Site.getBaseUrl())
 				? Site.getBaseUrl()
 				: 'https://' + (Salesforce.isSandbox ? 'test.salesforce.com' : 'login.salesforce.com'),
-			Salesforce.oauthAudience.toExternalForm());
+			Salesforce.jwtAudience.toExternalForm());
 	}
 
 	@IsTest

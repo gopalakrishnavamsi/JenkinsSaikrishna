@@ -100,11 +100,11 @@ private class ProductTest {
 
 		System.assertNotEquals(null, result);
 		System.assertNotEquals(null, result.webBaseUrl);
-		System.assertEquals('https://test.springcm.com/atlas/', result.webBaseUrl.toExternalForm());
+		System.assertEquals('https://test.springcm.com/Atlas/', result.webBaseUrl.toExternalForm());
 		System.assertNotEquals(null, result.apiBaseUrl);
 		System.assertEquals('https://api.test.springcm.com/', result.apiBaseUrl.toExternalForm());
 		System.assertNotEquals(null, result.mergeBaseUrl);
-		System.assertEquals('https://test.springcm.com/gen/', result.mergeBaseUrl.toExternalForm());
+		System.assertEquals('https://test.springcm.com/GEN/', result.mergeBaseUrl.toExternalForm());
 	}
 
 	@IsTest
@@ -118,11 +118,11 @@ private class ProductTest {
 
 		System.assertNotEquals(null, result);
 		System.assertNotEquals(null, result.webBaseUrl);
-		System.assertEquals('https://test.springcm.com/atlas/', result.webBaseUrl.toExternalForm());
+		System.assertEquals('https://test.springcm.com/Atlas/', result.webBaseUrl.toExternalForm());
 		System.assertNotEquals(null, result.apiBaseUrl);
 		System.assertEquals('https://api.test.springcm.com/', result.apiBaseUrl.toExternalForm());
 		System.assertNotEquals(null, result.mergeBaseUrl);
-		System.assertEquals('https://test.springcm.com/gen/', result.mergeBaseUrl.toExternalForm());
+		System.assertEquals('https://test.springcm.com/GEN/', result.mergeBaseUrl.toExternalForm());
 	}
 
 	@IsTest
@@ -135,7 +135,7 @@ private class ProductTest {
 
 		System.assertNotEquals(null, result);
 		System.assertNotEquals(null, result.webBaseUrl);
-		System.assertEquals('https://test.springcm.com/atlas/', result.webBaseUrl.toExternalForm());
+		System.assertEquals('https://test.springcm.com/Atlas/', result.webBaseUrl.toExternalForm());
 		System.assertNotEquals(null, result.authBaseUrl);
 		System.assertEquals('https://auth.test.springcm.com/', result.authBaseUrl.toExternalForm());
 	}
