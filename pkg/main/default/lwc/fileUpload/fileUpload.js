@@ -39,6 +39,11 @@ export default class FileUpload extends LightningElement {
     return this.progress === MAX_PROGRESS ? true : false;
   }
 
+  @api
+  handleFileUploadFromDragAndDrop(uploadedFile) {
+    this.processUploadedFile(uploadedFile);
+  }
+
   closeUploadFilesModal() {
     this.showUploadFilesModal = false;
     this.progress = 0;
@@ -46,8 +51,13 @@ export default class FileUpload extends LightningElement {
 
   handleFilesChange(event) {
     if(event.target.files.length > 0) {
-      this.file = event.target.files[0];
-      this.fileName = event.target.files[0].name;
+      this.processUploadedFile(event.target.files[0]);
+    }
+  }
+
+  processUploadedFile(uploadedFile) {
+      this.file = uploadedFile;
+      this.fileName = uploadedFile.name;
       if (this.file.size > MAX_FILE_SIZE) {
         genericEvent.call(this, ERROR_EVENT_LABEL, this.label.fileSizeLimitReached, false);
         return;
@@ -63,7 +73,7 @@ export default class FileUpload extends LightningElement {
       });
       this.fileReader.readAsDataURL(this.file);
     }
-  }
+
 
   setProgressBar() {
     let intervalID = setInterval(function (){
@@ -82,7 +92,8 @@ export default class FileUpload extends LightningElement {
       contentVersionId: null,
       linkedEntityId: this.recordId,
       fileName: this.file.name,
-      base64Data: encodeURIComponent(this.fileContents.substring(start, end))})
+      base64Data: encodeURIComponent(this.fileContents.substring(start, end))
+    })
       .then(result => {
         this.progress = MAX_PROGRESS;
         genericEvent.call(this, SUCCESS_EVENT_LABEL, result, false);
@@ -93,5 +104,4 @@ export default class FileUpload extends LightningElement {
         }
       });
   }
-
 }

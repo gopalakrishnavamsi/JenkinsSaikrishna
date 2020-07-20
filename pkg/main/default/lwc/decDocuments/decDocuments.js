@@ -3,11 +3,13 @@ import {LightningElement, api} from 'lwc';
 import ADD_DOCUMENTS_EMPTY_IMAGE from '@salesforce/resourceUrl/DecAddDocumentsEmpty';
 //utils
 import {genericEvent, isEmpty} from 'c/utils';
-import {DOCUMENT_TYPE_TEMPLATE_DOCUMENT, 
-        DOCUMENT_TYPE_SOURCE_FILES,
-        LABEL,
-        getDefaultTemplateDocument,
-        getDefaultSourceFiles} from 'c/documentUtils';
+import {
+  DOCUMENT_TYPE_TEMPLATE_DOCUMENT,
+  DOCUMENT_TYPE_SOURCE_FILES,
+  LABEL,
+  getDefaultTemplateDocument,
+  getDefaultSourceFiles
+} from 'c/documentUtils';
 
 export default class DecDocuments extends LightningElement {
   @api recordId;
@@ -28,7 +30,10 @@ export default class DecDocuments extends LightningElement {
 
   handleFileUploadSuccess(event) {
     const newTemplateDocument = getDefaultTemplateDocument(1, event.detail.data);
-    genericEvent.call(this, 'updatetemplatedocuments', {...newTemplateDocument, size:event.detail.data.ContentSize}, true);
+    genericEvent.call(this, 'updatetemplatedocuments', {
+      ...newTemplateDocument,
+      size: event.detail.data.ContentSize
+    }, true);
   }
 
   renderedCallback() {
@@ -44,10 +49,28 @@ export default class DecDocuments extends LightningElement {
   }
 
   updateDocuments(documents, isDirty) {
-      genericEvent.call(this, 'update', {documents, isDirty}, true);
+    genericEvent.call(this, 'update', {documents, isDirty}, true);
   }
 
   handleClearTemplateDocument() {
     this.hideTemplateFileUpload = true;
+  }
+
+  handleFileOnDrop(event) {
+    event.preventDefault();
+    if (event.dataTransfer.files.length > 0) {
+      const fileUploadComponent = this.template.querySelector('c-file-upload');
+      fileUploadComponent.handleFileUploadFromDragAndDrop(event.dataTransfer.files[0]);
+    }
+  }
+
+  handleFileOnDragOver(event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  handleFileOnDragEnter(event) {
+    event.stopPropagation();
+    event.preventDefault();
   }
 }

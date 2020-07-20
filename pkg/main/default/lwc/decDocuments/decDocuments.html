@@ -31,39 +31,42 @@
                 <!-- details body section -->
                 <template if:false={hasTemplateDocuments}>
                     <template if:false={hideTemplateFileUpload}>
-                    <div class="slds-grid slds-p-around_large ds-addDocuments-border-bottom">
-                        <div class="slds-col slds-size_1-of-12 ds-addDocuments-sequence-whenEmpty">
-                            <lightning-icon
-                                    icon-name="utility:drag_and_drop"
-                                    alternative-text="Drag and Drop"
-                                    size="x-small"></lightning-icon>
-                            <span class="slds-p-left_small slds-p-right_small">1</span>
-                        </div>
-                        <div class="slds-col ds-addDocuments-details-body">
-                            <div class="slds-p-around_large">
-                                <span class="slds-text-heading_medium">{label.addDocuments}</span>
-                                <span class="slds-float_right">
+                        <div class="slds-grid slds-p-around_large ds-addDocuments-border-bottom"
+                             ondrop={handleFileOnDrop}
+                             ondragover={handleFileOnDragOver}
+                             ondragenter={handleFileOnDragEnter}>
+                            <div class="slds-col slds-size_1-of-12 ds-addDocuments-sequence-whenEmpty">
+                                <lightning-icon
+                                        icon-name="utility:drag_and_drop"
+                                        alternative-text="Drag and Drop"
+                                        size="x-small"></lightning-icon>
+                                <span class="slds-p-left_small slds-p-right_small">1</span>
+                            </div>
+                            <div class="slds-col ds-addDocuments-details-body">
+                                <div class="slds-p-around_large">
+                                    <span class="slds-text-heading_medium">{label.addDocuments}</span>
+                                    <span class="slds-float_right">
                                     <img src={addDocumentsEmptyImageURL}/>
                                 </span>
-                                <div class="slds-p-top_large">{label.addDocumentsHelpText}</div>
-                                <div class="slds-m-top_medium">
-                                    <c-file-upload
-                                            record-id={recordId}
-                                            onsuccess={handleFileUploadSuccess}
-                                            file-upload-label={label.uploadDocument}></c-file-upload>
-                                    <span class="ds-addDocuments-dropDocuments-text slds-p-left_x-small">
+                                    <div class="slds-p-top_large">{label.addDocumentsHelpText}</div>
+                                    <div class="slds-m-top_medium">
+                                        <c-file-upload
+                                                record-id={recordId}
+                                                onsuccess={handleFileUploadSuccess}
+                                                file-upload-label={label.uploadDocument}></c-file-upload>
+                                        <span class="ds-addDocuments-dropDocuments-text slds-p-left_x-small">
                                         {label.dropDocuments}
                                     </span>
+                                    </div>
                                 </div>
                             </div>
+                            <lightning-icon
+                                    icon-name="utility:clear"
+                                    size="x-small"
+                                    class="ds-addDocuments-close-whenEmpty slds-p-left_medium"
+                                    onclick={handleClearTemplateDocument}>
+                            </lightning-icon>
                         </div>
-                        <lightning-icon
-                                icon-name="utility:clear"
-                                size="x-small"
-                                class="ds-addDocuments-close-whenEmpty slds-p-left_medium"
-                                onclick={handleClearTemplateDocument}>
-                        </lightning-icon>
-                    </div>
                     </template>
                 </template>
                 <div onupdatedocuments={updateDocumentsEvent}>
