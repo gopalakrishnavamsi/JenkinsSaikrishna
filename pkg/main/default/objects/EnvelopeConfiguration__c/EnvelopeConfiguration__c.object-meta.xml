@@ -57,13 +57,13 @@
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
-    <label>DocuSign Envelope Configuration</label>
+    <label>DocuSign Envelope Template</label>
     <nameField>
         <label>Name</label>
         <trackHistory>false</trackHistory>
         <type>Text</type>
     </nameField>
-    <pluralLabel>DocuSign Envelope Configurations</pluralLabel>
+    <pluralLabel>DocuSign Envelope Templates</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
