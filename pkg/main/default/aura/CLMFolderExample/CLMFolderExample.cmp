@@ -13,8 +13,8 @@
                 <div class="slds-p-around_small slds-m-left_large ds-blue-text-color">
                     <strong>{!$Label.c.AccountObject}</strong>
                 </div>
-                <div class="slds-border_top slds-p-around_small">
-                    <div class="slds-border_bottom">
+                <div class="slds-border_top">
+                    <div class="slds-p-around_small">
                         <div class="slds-float--left ">
                             <lightning:icon class="slds-show" aura:id="accountOne" iconName="utility:down"
                                 size="x-small" alternativeText="{!$Label.c.IndicatesUp}" />
@@ -104,7 +104,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="slds-p-top_small">
+                    <div class="slds-border_top  slds-p-around_small">
                         <div class="slds-m-left_large">
                             <lightning:icon size="x-small" class="slds-p-left_xx-small" iconName="utility:open_folder" alternativeText="{!$Label.c.OpenFolder}" />
                             <span class="slds-p-left_small">{!$Label.c.Account2}</span>         
@@ -193,7 +193,7 @@
                 </div>
             </div>
             <div class="slds-col slds-size_1-of-2">
-                <div class="slds-p-around_small slds-m-left_large slds-border_bottom ds-blue-text-color">
+                <div class="slds-p-around_small slds-p-left_large slds-border_bottom ds-blue-text-color">
                     <strong>{!$Label.c.CorrespondingFolder}</strong>
                 </div>
                 <div class="slds-p-around_small">

@@ -17,7 +17,7 @@
 	<aura:if isTrue="{!v.showPopup}">
 		<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
 			aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
-			<div class="slds-modal__container">
+			<div>
 				<header class="slds-modal__header">
 					<lightning:buttonIcon onclick="{!c.closePopUp}" iconName="utility:close" alternativeText="{!$Label.c.Close}" name="Close"
 						size="large" variant="bare" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"

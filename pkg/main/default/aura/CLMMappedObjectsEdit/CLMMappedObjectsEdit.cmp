@@ -134,7 +134,7 @@
             <lightning:layout multipleRows="true">
                 <lightning:layoutItem size="12">
                     <div class="slds-p-right_x-large slds-p-top_large slds-p-bottom_small">
-                        <span class="medium-fonts-size blue-text-color">
+                        <span class="ds-large-font-size blue-text-color">
                             <b>{!v.cardtitle}</b>
                         </span>
                     </div>
@@ -142,7 +142,7 @@
                         <span>{!v.cardSummary}</span>
                     </div>
                     <div class="slds-p-top_x-large slds-p-bottom_small ">
-                        <span class="medium-fonts-size blue-text-color">
+                        <span class="ds-medium-font-size blue-text-color">
                             <b>{!v.title} </b>
                         </span>
                         <span class="slds-p-left_x-small">
