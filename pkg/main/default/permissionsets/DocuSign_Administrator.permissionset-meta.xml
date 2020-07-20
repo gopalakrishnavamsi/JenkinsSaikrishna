@@ -1026,6 +1026,10 @@
 		<apexPage>GenTemplateDelete</apexPage>
 		<enabled>true</enabled>
 	</pageAccesses>
+	<pageAccesses>
+		<apexPage>TroubleShooting</apexPage>
+		<enabled>true</enabled>
+	</pageAccesses>
 	<tabSettings>
 		<tab>GenTemplate__c</tab>
 		<visibility>Visible</visibility>

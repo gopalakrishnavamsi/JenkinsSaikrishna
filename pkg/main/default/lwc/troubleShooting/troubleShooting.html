@@ -1,0 +1,123 @@
+<template>
+    <div class="ds-troubleShooting-section slds-container_medium slds-container_center
+                slds-p-around_large slds-m-top_small slds-m-bottom_small">
+        <!-- toast -->
+        <c-lwctoast message={toastMessage}
+                    mode={toastMode}
+                    show-toast={showToast}>
+        </c-lwctoast>
+
+        <!-- spinner -->
+        <template if:true={isLoading}>
+            <div class="ds-troubleShooting-spinner">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </template>
+
+        <!-- component body -->
+        <template if:false= {isLoading}>
+            <div class="slds-grid slds-grid_vertical ds-troubleShooting-flex">
+                <div class="slds-col ds-troubleShooting-col">
+                    <ul>
+                        <li>
+                            <div class="ds-docusign-illustration">
+                                <img src={docuSignLogo}/>
+                            </div>
+                        </li>
+                        <li class="ds-troubleShooting-info">{troubleShootingTitle}</li>
+                    </ul>
+                </div>
+                <template if:true={isDocuSignAccountConnected}>
+                    <!-- Disconnect Account-->
+                    <div class="slds-col ds-troubleShooting-col">
+                        <div class="slds-grid slds-grid_align-spread ds-troubleShooting-item-border">
+                            <div class="slds-col slds-p-bottom_medium">
+                                <div class="slds-media slds-media_large">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name="standard:team_member" size="large"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p class="ds-troubleShooting-item-detail">{troubleShootingDisconnectAccount}</p>
+                                        <p>{troubleShootingDisconnectAccountInfo}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-p-bottom_medium">
+                                <lightning-button label="Disconnect">
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Root folder permissions for SpringCM platform -->
+                    <div class="slds-col ds-troubleShooting-col">
+                        <div class="slds-grid slds-grid_align-spread ds-troubleShooting-item-border">
+                            <div class="slds-col slds-p-bottom_medium">
+                                <div class="slds-media slds-media_large">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name="standard:folder" size="large"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p class="ds-troubleShooting-item-detail">{troubleShootingFolderPermissions}</p>
+                                        <p>{troubleShootingFolderPermissionsInfo}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-p-bottom_medium">
+                                <lightning-button label="Execute">
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Create Connected App create -->
+                    <div class="slds-col ds-troubleShooting-col">
+                        <div class="slds-grid slds-grid_align-spread ds-troubleShooting-item-border">
+                            <div class="slds-col slds-p-bottom_medium">
+                                <div class="slds-media slds-media_large">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name="standard:entity" size="large"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p class="ds-troubleShooting-item-detail">{troubleShootingConnectedApp}</p>
+                                        <p>{troubleShootingConnectedAppInfo}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-p-bottom_medium">
+                                <lightning-button label="Execute">
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={isDocuSignAccountDisconnected}>
+                    <div class="slds-col ds-troubleShooting-col ds-troubleShooting-center slds-m-top_xx-large">
+                        <ul>
+                            <li>
+                                <div>
+                                    <img src={disconnectedLogo}/>
+                                </div>
+                            </li>
+                            <li class="ds-troubleShooting-info">{troubleShootingNoAccountConnected}</li>
+                        </ul>
+                    </div>
+                </template>
+                <template if:true={loginInformationError}>
+                    <div class="slds-col ds-troubleShooting-col ds-troubleShooting-center slds-m-top_xx-large">
+                        <ul>
+                            <li>
+                                <div>
+                                    <img src={disconnectedLogo}/>
+                                </div>
+                            </li>
+                            <li class="ds-troubleShooting-info">{troubleShootingError}</li>
+                        </ul>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>
+

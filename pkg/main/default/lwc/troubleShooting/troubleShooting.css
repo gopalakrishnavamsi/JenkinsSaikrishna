@@ -1,0 +1,43 @@
+.ds-troubleShooting-section {
+    display: flex;
+    height: 100vh;
+    border: solid #ecebea 0.3px;
+}
+
+.ds-troubleShooting-spinner {
+    height: calc(100vh - 165px);
+}
+
+.ds-troubleShooting-flex {
+    flex-grow: 1;
+}
+
+.ds-docusign-illustration img {
+    max-width: 200px;
+    width: auto;
+    max-height: 200px;
+    height: auto;
+}
+
+.ds-troubleShooting-info {
+    color: rgb(62, 62, 60);
+    font-size: var(--lwc-fontSize6);
+}
+
+.ds-troubleShooting-col {
+    max-height: 150px;
+}
+
+.ds-troubleShooting-item-detail {
+    color: var(--lwc-colorTextActionLabelActive);
+    font-size: var(--lwc-fontSize7);
+    font-weight: var(--lwc-fontWeightBold);
+}
+
+.ds-troubleShooting-item-border {
+    border-bottom: solid 0.5px rgb(243, 242, 242);
+}
+
+.ds-troubleShooting-center {
+    text-align: center;
+}

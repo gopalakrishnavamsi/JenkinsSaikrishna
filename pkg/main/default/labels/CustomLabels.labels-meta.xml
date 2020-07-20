@@ -8025,6 +8025,78 @@
 		<value>Go to Documentation</value>
 	</labels>
 	<labels>
+		<fullName>TroubleShootingTitle</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingTitle</shortDescription>
+		<value>DocuSign Apps Launcher TroubleShooting</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingDisconnectAccount</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingDisconnectAccount</shortDescription>
+		<value>Disconnect Account</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingDisconnectAccountInfo</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingDisconnectAccountInfo</shortDescription>
+		<value>Disconnect DocuSign Account connected to your Salesforce organization</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingFolderPermissions</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingFolderPermissions</shortDescription>
+		<value>Folder Permissions</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingFolderPermissionsInfo</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingFolderPermissionsInfo</shortDescription>
+		<value>Trigger root folder permissions update task</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingConnectedApp</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingConnectedApp</shortDescription>
+		<value>Connected App</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingConnectedAppInfo</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingConnectedAppInfo</shortDescription>
+		<value>Trigger connected app creation</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingNoAccountConnected</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingNoAccountConnected</shortDescription>
+		<value>No DocuSign Account connected</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingError</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingError</shortDescription>
+		<value>Unable to get DocuSign Account Information</value>
+	</labels>
+	<labels>
 		<fullName>AddButtonEsignature</fullName>
 		<categories>SetupWizard</categories>
 		<language>en_US</language>
