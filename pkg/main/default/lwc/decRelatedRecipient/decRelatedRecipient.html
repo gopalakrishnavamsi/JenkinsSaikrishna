@@ -20,6 +20,9 @@
             </div>
         </div>
     </section>
+    <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+        <lightning-input label={Labels.recipientRoleLabel} value={role} onchange={handleRoleChange}></lightning-input>
+    </section>
     <section if:true={showFilterPill}>
         <section class="slds-grid slds-wrap slds-p-around_xx-small slds-p-left_small filterByPill">
             <div class="slds-col slds-size_1-of-12 slds-p-top_xxx-small slds-p-left_x-small">

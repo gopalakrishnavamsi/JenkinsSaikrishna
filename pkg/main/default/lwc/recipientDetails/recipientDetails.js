@@ -98,6 +98,7 @@ export default class DecRecipientDetails extends LightningElement {
 
   handleRelationshipUpdate = ({detail}) => {
     this.recipient.relationship = detail;
+    this.recipient.addRole(detail.name);
     this.sendValidationEvent(this.recipient.isValid);
   };
 

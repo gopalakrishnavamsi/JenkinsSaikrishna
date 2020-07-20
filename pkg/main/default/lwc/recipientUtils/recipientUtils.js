@@ -105,7 +105,7 @@ export class Recipient {
         return new RelatedRecipient(
           Relationship.fromObject(recipientDetails.relationship),
           recipientDetails.roles,
-          recipientDetails.incrementRoutingOrder,
+          !isEmpty(recipientDetails.incrementRoutingOrder) ? recipientDetails.incrementRoutingOrder : false,
           recipientDetails.routingOrder,
           Filter.fromObject(recipientDetails.filter || {}),
           {
@@ -225,12 +225,20 @@ export class LookupRecipient extends Recipient {
 }
 
 export class RelatedRecipient extends Recipient {
-  constructor(relationship, roles = [], incrementRoutingOrder, routingOrder, filter, props = {}) {
+  constructor(relationship, roles = [], incrementRoutingOrder = false, routingOrder, filter, props = {}) {
     super(props, null, routingOrder);
     this.relationship = isEmpty(relationship) ? new Relationship(false) : relationship;
     this.roles = roles;
     this.incrementRoutingOrder = incrementRoutingOrder;
     this.filter = filter;
+  }
+
+  get roleName() {
+    return this.roles && !isEmpty(this.roles) ? this.roles.join(',') : null; 
+  }
+
+  addRole(value) {
+    if (!isEmpty(value)) this.roles = value.split(',');
   }
 
   addSMSAuthentication() {

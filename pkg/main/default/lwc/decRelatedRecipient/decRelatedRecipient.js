@@ -21,6 +21,8 @@ export default class DecRelatedRecipient extends LightningElement {
 
   orderByType;
 
+  @api role;
+
   @api
   get filter() {
     return this.privateFilter;
@@ -49,6 +51,19 @@ export default class DecRelatedRecipient extends LightningElement {
 
   openLogicModal = () => {
     this.isLogicModalOpen = true;
+  }
+
+  handleRoleChange({ target }) {
+    const value = target.value;
+    this.dispatchEvent(new CustomEvent(
+      'rolechange',
+      {
+        detail: { 
+          name: 'roleName', 
+          value
+        } 
+      }
+    ));
   }
 
   handleFilterByChange = ({ detail = {}}) => {

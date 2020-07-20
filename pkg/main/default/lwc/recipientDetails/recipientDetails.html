@@ -10,7 +10,9 @@
         <c-dec-related-recipient
                 filter={filter}
                 relationship={relationship}
+                role={recipient.roleName}
                 source-object={sourceObject}
+                onrolechange={handleRoleRecipientChange}
                 onrelationshipupdate={handleRelationshipUpdate}
                 onfilterchange={handleFilterChange}>
         </c-dec-related-recipient>

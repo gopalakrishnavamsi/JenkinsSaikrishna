@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <div class="slds-col slds-p-around_medium slds-size_1-of-3" if:false={showPlaceholderEdit}>
+            <div class="slds-col slds-p-around_medium slds-size_1-of-3">
                 <div class="slds-grid_vertical">
                     <div class="slds-col">
                         <a onclick={handleEdit}>{recipientLabel}</a>
@@ -32,9 +32,6 @@
                         <span>{recipientSubLabel}</span>
                     </div>
                 </div>
-            </div>
-            <div class="slds-col slds-p-around_medium slds-size_1-of-3" if:true={showPlaceholderEdit}>
-                <lightning-button label={Labels.SelectRecipient} onclick={handleEdit}></lightning-button>
             </div>
             <div class="slds-col slds-p-around_large slds-size_1-of-5">
                 <span>{recipientType}</span>

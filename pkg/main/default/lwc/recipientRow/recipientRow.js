@@ -43,18 +43,13 @@ export default class RecipientRow extends LightningElement {
   }
 
   get showPlaceholderEdit() {
-    return this.isSending
-      && this.recipient
-      && !isEmpty(this.recipient.role)
-      && !isEmpty(this.recipient.role.name)
-      && (isEmpty(this.recipient.name)
-        && isEmpty(this.recipient.email));
+    return this.isSending && this.recipient && (isEmpty(this.recipient.name) && isEmpty(this.recipient.email))
   }
 
   get recipientLabel() {
     if (isEmpty(this.recipient)) return '';
     if (!isEmpty(this.recipient.relationship)) {
-      return this.recipient.relationship.label;
+      return this.recipient.relationship.name;
     } else if (!isEmpty(this.recipient.role) && !this.isSending) {
       return this.recipient.role.name;
     } else if (!isEmpty(this.recipient.name)) {

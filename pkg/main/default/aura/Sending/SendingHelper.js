@@ -51,24 +51,6 @@
             updated = true;
           }
 
-          if (!$A.util.isEmpty(recipients)) {
-            recipients.forEach(function (r) {
-              r = self.addRecipientProperties(r);
-              r.role = {}; // TODO: Roles only apply to templates for now.
-            });
-          }
-
-          if (!$A.util.isEmpty(result.templates)) {
-            result.templates.forEach(function (template) {
-              template.selected = false;
-              if (!$A.util.isEmpty(template.recipients)) {
-                template.recipients.forEach(function (r) {
-                  r = self.addRecipientProperties(r);
-                  r.templateId = template.id.value;
-                });
-              }
-            });
-          }
           var placeholders = component.get('v.placeholderRecipients');
           if (!$A.util.isEmpty(placeholders) && !$A.util.isEmpty(placeholders.recipients)) {
             placeholders.recipients.forEach(function (r) {

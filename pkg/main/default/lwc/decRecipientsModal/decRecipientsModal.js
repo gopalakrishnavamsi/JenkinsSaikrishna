@@ -95,7 +95,7 @@ export default class DecRecipientsModal extends LightningElement {
         result = new RelatedRecipient(
           null,
           null,
-          null,
+          false,
           this.routingOrder,
           null,
           {
