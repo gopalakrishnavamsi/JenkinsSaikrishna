@@ -1,42 +1,59 @@
 <template>
-    <lightning-accordion class="slds-border_bottom" allow-multiple-sections-open="true">
-        <lightning-accordion-section name="More Options" label={label.moreOptions}>
-            <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large">
-                <div class="ds-options-details-header-text">{label.reminders}</div>
-                <div class="slds-grid slds-p-top_large">
-                    <div class="slds-col slds-size_1-of-6 ds-options-inner-text ds-options-fit-content-width slds-p-right_small">
-                        {label.automaticReminders}
+    <div class="slds-p-top_large">
+        <lightning-accordion class="ds-more-options-title"
+                             allow-multiple-sections-open="true"
+                             active-section-name="More Options">
+            <lightning-accordion-section name="More Options" label={label.moreOptions}>
+                <div class="ds-more-background">
+                    <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large slds-p-left_small">
+                        <div class="ds-options-details-header-text">{label.reminders}</div>
+                        <div class="slds-grid slds-p-top_medium">
+                            <div class="slds-col slds-size_1-of-6 ds-options-inner-text ds-options-fit-content-width">
+                                {label.automaticReminders}
+                            </div>
+                            <div class="slds-col slds-size_1-of-5 ds-options-fit-content-width slds-p-left_small">
+                                <lightning-combobox
+                                        name="reminder"
+                                        placeholder={label.doNotRemind}
+                                        value={reminder}
+                                        options={reminderOptions}
+                                        onchange={handleReminderChange}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
                     </div>
-                    <div class="slds-col slds-size_1-of-5 ds-options-fit-content-width">
-                        <lightning-combobox
-                                name="reminder"
-                                placeholder={label.doNotRemind}
-                                value={reminder}
-                                options={reminderOptions}
-                                onchange={handleReminderChange}>
-                        </lightning-combobox>
+                    <div class="slds-p-bottom_large slds-p-top_large slds-p-left_small">
+                        <div class="ds-options-details-header-text">{label.expiration}</div>
+                        <div class="slds-grid slds-p-top_medium">
+                            <div class="slds-col slds-size_1-of-3 ds-options-inner-text ds-options-fit-content-width">
+                                {envelopeExpires}
+                            </div>
+                            <div class="slds-col slds-size_1-of-3 ds-options-fit-content slds-p-left_small">
+                                <lightning-input
+                                        type="date"
+                                        class="slds-form-element ds-options-expiration"
+                                        value={formattedExpirationDate}
+                                        onchange={handleExpirationDateChange}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-12 ds-options-fit-content-width slds-p-left_large">
+                                <div class="ds-line"></div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-12 ds-options-fit-content-width slds-p-left_small">
+                                <lightning-input
+                                        type="text"
+                                        class="slds-form-element ds-options-expiration-input"
+                                        onchange={handleExpirationChange}
+                                        value={expiration}>
+                                </lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-3 slds-p-left_x-small ds-options-inner-text ds-options-fit-content-width">
+                                {daysAfterSending}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="slds-border_bottom slds-p-bottom_large slds-p-top_large">
-                <div class="ds-options-details-header-text">{label.expiration}</div>
-                <div class="slds-grid slds-p-top_large">
-                    <div class="slds-col slds-size_1-of-3 slds-p-right_small ds-options-inner-text ds-options-fit-content-width">
-                        {envelopeExpires}
-                    </div>
-                    <div class="slds-col slds-size_1-of-12 ds-options-fit-content-width">
-                        <lightning-input
-                                type="text"
-                                class="slds-form-element ds-options-expiration-input"
-                                onchange={handleExpirationChange}
-                                value={expiration}>
-                        </lightning-input>
-                    </div>
-                    <div class="slds-col slds-size_1-of-3 slds-p-left_small ds-options-inner-text ds-options-fit-content-width">
-                        {daysAfterSending}
-                    </div>
-                </div>
-            </div>
-        </lightning-accordion-section>
-    </lightning-accordion>
+            </lightning-accordion-section>
+        </lightning-accordion>
+    </div>
 </template>

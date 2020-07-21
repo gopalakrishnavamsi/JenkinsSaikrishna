@@ -33,6 +33,7 @@ import dataWriteback from '@salesforce/label/c.DataWriteback';
 import dataWritebackHelpText from '@salesforce/label/c.DataWritebackHelpText';
 import doNotUpdatePlaceholder from '@salesforce/label/c.DoNotUpdatePlaceholder';
 import stageUpdate from '@salesforce/label/c.StageUpdate';
+import expirationDateError from '@salesforce/label/c.ExpirationDateError';
 
 const LABEL = {
   options,
@@ -57,7 +58,8 @@ const LABEL = {
   dataWriteback,
   dataWritebackHelpText,
   doNotUpdatePlaceholder,
-  stageUpdate
+  stageUpdate,
+  expirationDateError
 };
 
 const DEFAULT_EXPIRATION = 90;

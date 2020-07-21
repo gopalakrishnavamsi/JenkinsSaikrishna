@@ -1,6 +1,6 @@
 .ds-options-details-header-text {
     color: rgb(5, 5, 5);
-    font-size: var(--lwc-fontSize5);
+    font-size: var(--lwc-fontSize4);
     font-weight: bold;
 }
 
@@ -13,8 +13,31 @@
     width: fit-content;
 }
 
+.ds-options-fit-content {
+    width: 202px;
+}
+
 .ds-options-expiration-input {
     width: 54px;
 }
 
+.ds-options-expiration {
+    width: 202px;
+}
 
+.ds-more-options-title {
+    background: rgb(243, 242, 242);
+}
+
+.ds-more-background {
+    background: rgb(255, 255, 255);
+    margin-right: -12px;
+    margin-left: -12px;
+    margin-bottom: -12px;
+}
+
+.ds-line {
+    border: 1px solid rgb(221, 219, 218);
+    height: 35px;
+    width: 1px;
+}

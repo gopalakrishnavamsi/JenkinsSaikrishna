@@ -5852,6 +5852,10 @@
 		<name>DoNotUpdatePlaceholder</name>
 	</customLabels>
 	<customLabels>
+		<label>Expiration date should be in future</label>
+		<name>ExpirationDateError</name>
+	</customLabels>
+	<customLabels>
 		<label>Create DocuSign Connect configuration</label>
 		<name>CreateConnectConfiguration</name>
 	</customLabels>

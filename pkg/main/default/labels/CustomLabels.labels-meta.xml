@@ -11305,6 +11305,14 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>DoNotUpdatePlaceholder</shortDescription>
 		<value>- Do Not Update -</value>
 	</labels>
+	<labels>
+		<fullName>ExpirationDateError</fullName>
+		<categories>Envelope Configuration Setup</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Expiration date should be in future</shortDescription>
+		<value>Expiration date should be in future</value>
+	</labels>
   	<labels>
 		<fullName>CreateConnectConfiguration</fullName>
 		<language>en_US</language>

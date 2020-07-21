@@ -175,6 +175,17 @@ const formatLabels = (stringToFormat, ...formattingArguments) => {
     (formattingArguments[index] === undefined ? '' : `${formattingArguments[index]}`));
 }
 
+const formatDate = (dt) => {
+  const dtf = new Intl.DateTimeFormat('en', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit'
+  })
+  const [{value: mo}, , {value: da}, , {value: ye}] = dtf.formatToParts(dt);
+  let formatedDate = `${mo} ${da}, ${ye}`;
+  return formatedDate;
+}
+
 export {
   FILE_EXTENSION_TO_ICON_NAME_MAPPING,
   UNKNOWN_ICON_NAME,
@@ -194,5 +205,6 @@ export {
   showError,
   showSuccess,
   spliceArray,
-  formatLabels
+  formatLabels,
+  formatDate
 };
