@@ -68,51 +68,6 @@ const convertSendingDocument = (sequence, {type, name, extension, size, lastModi
   sourceId
 });
 
-const getRecipientsForSending = (recs, hasDocuments, defaultRoles) => {
-  let rs = [];
-  let sequence = 1;
-  const defRoles = JSON.parse(JSON.stringify(defaultRoles));
-  if (!isEmpty(recs)) {
-    let routingOrder = recs.reduce((ro, r) => r && r.routingOrder > ro ? r.routingOrder : ro, 0);
-    rs = recs.map(r => {
-      let rec = {...r};
-      if (isValidRecipient(rec) && (!isEmpty(rec.templateId) || hasDocuments)) {
-        rec.sequence = sequence++;
-        if (!isEmpty(rec.routingOrder)) {
-          rec.routingOrder = ++routingOrder;
-        }
-        rec.role = !isEmpty(rec.role) && !isEmpty(rec.role.name) ? rec.role : getNextRole(defRoles);
-        delete rec.templateId;
-        delete rec.locked;
-        delete rec.original;
-      }
-      return rec;
-    });
-  }
-  return rs;
-};
-
-
-const getNextRole = (defaultRoles) => {
-  const firstKey = Object.keys(defaultRoles)[0];
-  const nextRole = isEmpty(defaultRoles) ? null : defaultRoles[firstKey];
-  if (!isEmpty(nextRole)) {
-    delete defaultRoles[firstKey];
-  }
-  return nextRole;
-};
-
-const isValidRecipient = (recipient) => (
-  !isEmpty(recipient) &&
-  ((!isEmpty(recipient.name) &&
-    !isEmpty(recipient.email)) ||
-    (!isEmpty(recipient.signingGroup) &&
-      !isEmpty(recipient.signingGroup.name))) &&
-  (isEmpty(recipient.templateId) ||
-    (!isEmpty(recipient.role) &&
-      !isEmpty(recipient.role.name)))
-);
-
 export {
   LABEL,
   PROGRESS_STEP,
@@ -120,7 +75,5 @@ export {
   MIN_STEP,
   MAX_STEP,
   STEPS,
-  getDocumentsForSending,
-  getRecipientsForSending
-
+  getDocumentsForSending
 };

@@ -22,8 +22,7 @@ import {
   MAX_STEP,
   STEPS,
   OPERATION,
-  getDocumentsForSending,
-  getRecipientsForSending
+  getDocumentsForSending
 } from 'c/sendingUtils';
 
 //apex methods
@@ -253,9 +252,8 @@ export default class SendingConfig extends LightningElement {
   }
 
   createDraftEnvelope() {
-    const hasSelectedDocuments = !isEmpty(this.privateDocuments.find(doc => doc.selected));
     const documents = getDocumentsForSending(this.privateDocuments);
-    const recipients = getRecipientsForSending(this.privateRecipients, hasSelectedDocuments, this.defaultRoles);
+    const recipients = this.privateRecipients;
     return {
       ...this.envelope,
       documents,
@@ -276,6 +274,7 @@ export default class SendingConfig extends LightningElement {
       'Using SpringCM': envelope && envelope.documents && envelope.documents.some(d => d.type === 'SCM'),
       'Send Now': this.sendNow
     };
+
     sendEnvelope({
       envelopeJson: JSON.stringify(envelope),
       sendNow: this.sendNow,
