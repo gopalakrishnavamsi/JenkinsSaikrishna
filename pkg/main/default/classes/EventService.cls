@@ -39,8 +39,8 @@ global with sharing class EventService {
 			]) {
 				if (e == null || String.isBlank(e.DocuSignId__c) || String.isBlank(e.Options__c)) continue;
 
-				Envelope.Options o = Envelope.deserializeOptions(e.Options__c);
-				if (o != null) result.put(UUID.parse(e.DocuSignId__c), Envelope.deserializeOptions(e.Options__c));
+				Envelope.Options o = EnvelopeParser.deserializeOptions(e.Options__c);
+				if (o != null) result.put(UUID.parse(e.DocuSignId__c), EnvelopeParser.deserializeOptions(e.Options__c));
 			}
 			return result;
 		}

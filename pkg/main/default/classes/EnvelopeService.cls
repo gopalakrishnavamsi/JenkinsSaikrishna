@@ -97,7 +97,7 @@ global with sharing class EnvelopeService {
 				e.EmailMessage__c,
 				String.isBlank(e.SenderPermissions__c) ? Envelope.DEFAULT_PERMISSIONS
 					: (Envelope.Permissions)JSON.deserialize(e.SenderPermissions__c, Envelope.Permissions.class),
-				String.isBlank(e.Options__c) ? Envelope.DEFAULT_OPTIONS : Envelope.deserializeOptions(e.Options__c),
+				String.isBlank(e.Options__c) ? Envelope.DEFAULT_OPTIONS : EnvelopeParser.deserializeOptions(e.Options__c),
 				e.SourceId__c == null ? null : new Entity(e.SourceId__c),
 				e.Sent__c);
 		}

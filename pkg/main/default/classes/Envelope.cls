@@ -485,64 +485,6 @@ global class Envelope {
 		}
 	}
 
-	private static DocumentWriteBack reifyDocumentWriteBack(final Map<String, Object> documentWriteBack) {
-		if (documentWriteBack == null) return null;
-
-		return new DocumentWriteBack(
-			(Id)documentWriteBack.get('linkedEntityId'),
-			(String)documentWriteBack.get('nameFormat'),
-			(Boolean)documentWriteBack.get('combineDocuments'),
-			(Boolean)documentWriteBack.get('includeCertificateOfCompletion'));
-	}
-
-	private static Map<String, Map<String, Object>> reifyUpdateMap(final Map<String, Object> updates) {
-		Map<String, Map<String, Object>> result = new Map<String, Map<String, Object>>();
-
-		if (updates == null) return result;
-
-		for (String key : updates.keySet()) {
-			result.put(key, (Map<String, Object>)updates.get(key));
-		}
-
-		return result;
-	}
-
-	public static Envelope.Options deserializeOptions(final String optionsJson) {
-		Envelope.Options result = null;
-
-		if (String.isBlank(optionsJson)) return result;
-
-		Map<String, Object> m = (Map<String, Object>)JSON.deserializeUntyped(optionsJson);
-		if (m != null) {
-			result = new Envelope.Options(
-				StringUtils.parseBoolean(String.valueOf(m.get('includeDefaultAutoPlaceTags'))),
-				reifyDocumentWriteBack((Map<String, Object>)m.get('documentWriteBack')),
-				reifyUpdateMap((Map<String, Object>)m.get('envelopeEventUpdates')),
-				reifyUpdateMap((Map<String, Object>)m.get('recipientEventUpdates')));
-		}
-
-		return result;
-	}
-
-	// parentNode could be an envelope/envelope configuration based on Sending/Admin flows
-	public static Envelope.Options deserializeOptionsFromParent(final Map<String, Object> parentNode) {
-		Envelope.Options result = null;
-
-		if (parentNode == null) return result;
-
-		Map<String, Object> optionsNode = (Map<String, Object>)parentNode.get('options');
-
-		if (optionsNode != null) {
-			result = new Envelope.Options(
-				StringUtils.parseBoolean(String.valueOf(optionsNode.get('includeDefaultAutoPlaceTags'))),
-				reifyDocumentWriteBack((Map<String, Object>)optionsNode.get('documentWriteBack')),
-				reifyUpdateMap((Map<String, Object>)optionsNode.get('envelopeEventUpdates')),
-				reifyUpdateMap((Map<String, Object>)optionsNode.get('recipientEventUpdates')));
-		}
-
-		return result;
-	}
-
 	/**
 	 * DocuSign envelope status.
 	 */

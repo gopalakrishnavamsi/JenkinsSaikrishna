@@ -370,7 +370,7 @@ private class SendingControllerTest {
 			Envelope e = EnvelopeService.DB.convert(TestUtils.createEnvelope(UserInfo.getUserId()));
 
 			Test.startTest();
-			String result = SendingController.getTaggerUrl(JSON.serialize(e));
+			String result = SendingController.getTaggerUrl(e.id, String.valueOf(e.docuSignId), e.source.id);
 			Test.stopTest();
 
 			System.assert(String.isNotBlank(result));
@@ -379,18 +379,13 @@ private class SendingControllerTest {
 
 	@IsTest
 	static void test_getTaggerUrl_invalid() {
-		Envelope e;
-		System.runAs(UserMock.createDocuSignUser(false)) {
-			e = EnvelopeService.DB.convert(TestUtils.createEnvelope(null, null));
-		}
-
 		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
-				SendingController.getTaggerUrl(JSON.serialize(e));
+				SendingController.getTaggerUrl(null, null, null);
 				throw new AssertException('Expected getTaggerUrl to fail');
 			} catch (AuraHandledException ex) {
-				System.assertEquals(Label.InvalidEnvelope, ex.getMessage());
+				System.assertEquals(Label.UndefinedArgument, ex.getMessage());
 			}
 			Test.stopTest();
 		}
@@ -406,7 +401,7 @@ private class SendingControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) { // Unauthorized
 			Test.startTest();
 			try {
-				SendingController.getTaggerUrl(JSON.serialize(e));
+				SendingController.getTaggerUrl(e.id, String.valueOf(e.docuSignId), e.source.id);
 				throw new AssertException('Expected getTaggerUrl to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.NotEnvelopeOwner, ex.getMessage());

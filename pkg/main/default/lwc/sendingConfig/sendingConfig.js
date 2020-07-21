@@ -284,7 +284,10 @@ export default class SendingConfig extends LightningElement {
       .then(result => {
         if (this.sendNow) return this.deleteSCMDocument();
 
-        return this.navigateToTagger(result);
+        return this.navigateToTagger(
+          result.id,
+          result.docuSignId,
+          result.source ? result.source.id : null);
       })
       .then(() => {
         this.dispatchEvent(new CustomEvent('sendcomplete', {
@@ -306,9 +309,11 @@ export default class SendingConfig extends LightningElement {
       .finally(() => this.isLoading = false);
   }
 
-  navigateToTagger(envelope) {
+  navigateToTagger(envelopeId, docuSignId, sourceId) {
     return getTaggerUrl({
-      envelopeJson: JSON.stringify(envelope)
+      envelopeId: envelopeId,
+      docuSignId: docuSignId ? docuSignId.value : null,
+      sourceId: sourceId
     })
       .then(result => {
         window.navUtils.navigateToUrl(result);

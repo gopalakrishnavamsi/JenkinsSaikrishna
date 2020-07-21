@@ -2,8 +2,6 @@
 // HACK: Deserializing JSON string here because @AuraEnabled methods fail hard with unhelpful server errors on custom types.
 public with sharing class SendingController extends Controller {
 
-	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
-
 	public String sObjectName { get; private set; }
 
 	public SendingController() {
@@ -198,9 +196,8 @@ public with sharing class SendingController extends Controller {
 		}
 
 		try {
-			Envelope envelope = parseEnvelope(envelopeJson);
 			Envelope result = EnvelopeService.sendEnvelope(
-				envelope,
+				EnvelopeParser.deserialize(envelopeJson),
 				sendNow,
 				updateNow,
 				Application.name);
@@ -211,41 +208,23 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
-	private static Envelope parseEnvelope(String envelopeJson) {
-		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(envelopeJson);
-		Envelope.Options options = Envelope.deserializeOptionsFromParent(untypedConfig);
-
-		String envelopeJSONUpdated = envelopeJson;
-		final String REGEX_PATTERN = '"options".*,"recipients"';
-		final String REPLACEMENT = '"options":null,"recipients"';
-
-		Pattern envelopeEventUpdatesPattern = Pattern.compile(REGEX_PATTERN);
-		Matcher envelopeEventUpdatesMatcher = envelopeEventUpdatesPattern.matcher(envelopeJson);
-		if (envelopeEventUpdatesMatcher.find()) {
-			envelopeJSONUpdated =
-				envelopeEventUpdatesMatcher.replaceAll(REPLACEMENT);
-		}
-		Envelope envelope = (Envelope)JSON.deserialize(envelopeJSONUpdated, Envelope.class);
-		return envelope.withOptions(options);
-	}
-
 	@AuraEnabled
-	public static String getTaggerUrl(final String envelopeJson) {
-		Envelope envelope = parseEnvelope(envelopeJson);
+	public static String getTaggerUrl(
+		final Id envelopeId,
+		final String docuSignId, // UUID triggers ISE :(
+		final Id sourceId) {
 
-		if (envelope == null
-			|| envelope.id == null
-			|| envelope.source == null
-			|| envelope.source.id == null
-			|| envelope.docuSignId == null) {
+		if (String.isBlank(envelopeId)
+			|| String.isBlank(docuSignId)
+			|| String.isBlank(sourceId)) {
 
-			throw Controller.wrapException(Label.InvalidEnvelope);
+			throw Controller.wrapException(Label.UndefinedArgument);
 		}
 
 		try {
 			return EnvelopeService.getSenderViewUrl(
-				envelope.docuSignId,
-				getReturnUrl(envelope.source.id, envelope.id))
+				UUID.parse(docuSignId),
+				getReturnUrl(sourceId, envelopeId))
 				.toExternalForm();
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to get tagger URL');
@@ -318,7 +297,7 @@ public with sharing class SendingController extends Controller {
 		}
 	}
 
-	private static UUID getSCMFileGuid(final string scmFile) {
+	private static UUID getSCMFileGuid(final String scmFile) {
 		List<String> scmFileDetails = scmFile.split(';');
 		Boolean isScmFile = Collection.isNotEmpty(scmFileDetails) && scmFileDetails[0].equalsIgnoreCase(Document.TYPE_SCM);
 		return isScmFile && scmFileDetails.size() > 1 ? UUID.parse(scmFileDetails[1]) : null ;

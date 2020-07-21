@@ -46,7 +46,7 @@ private class EnvelopeConfigurationControllerTest {
 			null);
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			Test.startTest();
-			EnvelopeConfiguration envConfig = EnvelopeConfigurationController.createEnvelopeConfiguration(Json.serialize(config));
+			EnvelopeConfiguration envConfig = EnvelopeConfigurationController.createEnvelopeConfiguration(JSON.serialize(config));
 			Test.stopTest();
 			System.assertNotEquals(envConfig.id, null);
 			System.assertNotEquals(envConfig.docuSignId, null);
@@ -76,7 +76,7 @@ private class EnvelopeConfigurationControllerTest {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
 			try {
-				EnvelopeConfiguration envConfig = EnvelopeConfigurationController.createEnvelopeConfiguration(Json.serialize(config));
+				EnvelopeConfigurationController.createEnvelopeConfiguration(JSON.serialize(config));
 				throw new AssertException('Expected failure');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -122,7 +122,7 @@ private class EnvelopeConfigurationControllerTest {
 				null);
 			Test.startTest();
 			EnvelopeConfiguration updatedEnvelopeConfiguration =
-				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), null);
+				EnvelopeConfigurationController.updateEnvelopeConfiguration(JSON.serialize(config), null);
 			Test.stopTest();
 			System.assertEquals(updatedEnvelopeConfiguration.name, UPDATED_ENV_CONFIG_NAME);
 		}
@@ -337,7 +337,6 @@ private class EnvelopeConfigurationControllerTest {
 		ESignatureAPIMock.success();
 		EnvelopeConfiguration__c envConfig = TestUtils.createEnvelopeConfiguration();
 		System.assertNotEquals(envConfig.Id, null);
-		final String UPDATED_ENV_CONFIG_NAME = envConfig.Name + 'Updated';
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			EnvelopeConfiguration config = new EnvelopeConfiguration(
 				envConfig.Id,
@@ -356,7 +355,7 @@ private class EnvelopeConfigurationControllerTest {
 				null);
 			Test.startTest();
 			try {
-				EnvelopeConfigurationController.updateEnvelopeConfiguration(Json.serialize(config), null);
+				EnvelopeConfigurationController.updateEnvelopeConfiguration(JSON.serialize(config), null);
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
@@ -383,8 +382,7 @@ private class EnvelopeConfigurationControllerTest {
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
 			Test.startTest();
 			try {
-				EnvelopeConfiguration envelopeConfiguration =
-					EnvelopeConfigurationController.getEnvelopeConfiguration(null);
+				EnvelopeConfigurationController.getEnvelopeConfiguration(null);
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.UndefinedId, ex.getMessage());
 			}
@@ -470,7 +468,7 @@ private class EnvelopeConfigurationControllerTest {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			try {
-				List<Query.Relationship> results = EnvelopeConfigurationController.getLookupFields(String.valueOf(opportunityType));
+				EnvelopeConfigurationController.getLookupFields(String.valueOf(opportunityType));
 				throw new AssertException('Expected failure');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -485,7 +483,7 @@ private class EnvelopeConfigurationControllerTest {
 			SObjectType opportunityType = Opportunity.getSObjectType();
 			Test.startTest();
 			try {
-				List<Query.Relationship> results = EnvelopeConfigurationController.getChildRelationships(String.valueOf(opportunityType));
+				EnvelopeConfigurationController.getChildRelationships(String.valueOf(opportunityType));
 				throw new AssertException('Expected failure');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -498,7 +496,6 @@ private class EnvelopeConfigurationControllerTest {
 	static void test_deleteContentDocument_success() {
 		ESignatureAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			Boolean testResult;
 			ContentVersion testContentVersion1 = TestUtils.createContentVersion();
 			ContentVersion testContentVersion2 = TestUtils.createContentVersion();
 			EnvelopeConfiguration__c envConfig = TestUtils.createEnvelopeConfiguration();
@@ -571,7 +568,7 @@ private class EnvelopeConfigurationControllerTest {
 				null,
 				null);
 			EnvelopeConfiguration updatedEnvelopeConfiguration = EnvelopeConfigurationController.updateEnvelopeConfiguration(
-				Json.serialize(config),
+				JSON.serialize(config),
 				contentDocumentIds);
 			Test.stopTest();
 			System.assertEquals(updatedEnvelopeConfiguration.documents.size(), 0);
@@ -588,7 +585,6 @@ private class EnvelopeConfigurationControllerTest {
 		List<Id> contentDocumentIds;
 		List<Id> contentVersionIds;
 
-		Boolean testResult;
 		ContentVersion testContentVersion1 = TestUtils.createContentVersion();
 		ContentVersion testContentVersion2 = TestUtils.createContentVersion();
 		envConfig = TestUtils.createEnvelopeConfiguration();
@@ -663,8 +659,8 @@ private class EnvelopeConfigurationControllerTest {
 				null,
 				null);
 			try {
-				EnvelopeConfiguration updatedEnvelopeConfiguration = EnvelopeConfigurationController.updateEnvelopeConfiguration(
-					Json.serialize(config),
+				EnvelopeConfigurationController.updateEnvelopeConfiguration(
+					JSON.serialize(config),
 					contentDocumentIds);
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
@@ -703,7 +699,6 @@ private class EnvelopeConfigurationControllerTest {
 	static void test_parseEnvelopeConfiguration_success() {
 		ESignatureAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			Boolean testResult;
 			ContentVersion testContentVersion1 = TestUtils.createContentVersion();
 			ContentVersion testContentVersion2 = TestUtils.createContentVersion();
 			EnvelopeConfiguration__c envConfig = TestUtils.createEnvelopeConfiguration();
@@ -713,38 +708,6 @@ private class EnvelopeConfigurationControllerTest {
 			List<Id> contentVersionIds = new List<Id> { testContentVersion1.Id, testContentVersion2.Id };
 			List<Id> contentDocumentIds = new List<Id> { testContentVersion1.ContentDocumentId, testContentVersion2.ContentDocumentId };
 
-			EnvelopeConfiguration config = new EnvelopeConfiguration(
-				envConfig.Id,
-				envConfig.Name,
-				envConfig.SourceObject__c,
-				UUID.parse(envConfig.DocuSignId__c),
-				new List<Document> {
-					new EnvelopeConfiguration.TemplateDocument(
-						null,
-						testContentVersion1.ContentDocumentId,
-						1,
-						testContentVersion1.Title,
-						testContentVersion1.FileExtension,
-						false,
-						true),
-					new EnvelopeConfiguration.TemplateDocument(
-						null,
-						testContentVersion2.ContentDocumentId,
-						1,
-						testContentVersion2.Title,
-						testContentVersion2.FileExtension,
-						false,
-						true)
-				},
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null,
-				null);
 			EnvelopeConfigurationDocument__c templateDocument1 = TestUtils.createEnvelopeConfigurationDocument(
 				testContentVersion1.Title,
 				envConfig.Id,
@@ -777,12 +740,12 @@ private class EnvelopeConfigurationControllerTest {
 			testContact.MobilePhone = '1111111111';
 			update testContact;
 
-			Id invalidTypeId = TestUtils.createEnvelope().id;
+			Id invalidTypeId = TestUtils.createEnvelope().Id;
 
 			Test.startTest();
 			String result1 = EnvelopeConfigurationController.queryEntityPhone(null);
 			String result2 = EnvelopeConfigurationController.queryEntityPhone(invalidTypeId);
-			String result3 = EnvelopeConfigurationController.queryEntityPhone(testContact.id);
+			String result3 = EnvelopeConfigurationController.queryEntityPhone(testContact.Id);
 			Test.stopTest();
 
 			System.assertEquals(result1, null);
@@ -798,7 +761,7 @@ private class EnvelopeConfigurationControllerTest {
 			testContact.MobilePhone = '1111111111';
 			update testContact;
 			Test.startTest();
-			String result = EnvelopeConfigurationController.queryEntityPhone(testContact.id);
+			String result = EnvelopeConfigurationController.queryEntityPhone(testContact.Id);
 			Test.stopTest();
 
 			System.assertEquals(result, testContact.MobilePhone, testContact.MobilePhone);
@@ -811,7 +774,7 @@ private class EnvelopeConfigurationControllerTest {
 			Test.startTest();
 			String result1 = EnvelopeConfigurationController.queryEntityPhone(null);
 			try {
-				String result2 = EnvelopeConfigurationController.queryEntityPhone('BadIdValue');
+				EnvelopeConfigurationController.queryEntityPhone('BadIdValue');
 				throw new AssertException('Expected queryEntityPhone to fail');
 			} catch (Exception ex) {
 				System.assert(ex.getMessage().startsWith('Invalid id'), ex.getMessage());
@@ -896,77 +859,12 @@ private class EnvelopeConfigurationControllerTest {
 		Test.startTest();
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			try {
-				List<EnvelopeConfigurationController.ComboBoxOptions> picklistOptions =
-					EnvelopeConfigurationController.getPicklistValues(sObjectType, sobjectFieldName);
+				EnvelopeConfigurationController.getPicklistValues(sObjectType, sobjectFieldName);
 				throw new AssertException('Expected getPickListValues to fail');
 			} catch (AuraHandledException ex) {
 				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
 			}
 		}
 		Test.stopTest();
-	}
-
-	@IsTest
-	static void test_parseOptions_envelopeEventUpdates_completed() {
-		Map<String, Object> fieldMap = new Map<String, Object> { 'Opportunity.StageName' => 'Closed Won' };
-		Map<String, Map<String, Object>> envelopeEventUpdate =
-			new Map<String, Map<String, Object>> { Envelope.STATUS_COMPLETED => fieldMap };
-		Envelope.Options options = new Envelope.Options(
-			true,
-			new Envelope.DocumentWriteBack(
-				null,
-				'NamePDF',
-				true,
-				true),
-			envelopeEventUpdate,
-			new Map<String, Map<String, Object>>());
-		EnvelopeConfiguration config = new EnvelopeConfiguration(
-			null,
-			'Test Envelope Configuration',
-			'Account',
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			options,
-			null);
-		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(config));
-
-		Test.startTest();
-		Envelope.Options result = Envelope.deserializeOptionsFromParent(untypedConfig);
-		Test.stopTest();
-
-		System.assertNotEquals(result.envelopeEventUpdates, null);
-	}
-
-	@IsTest
-	static void test_parseOptions_default() {
-		EnvelopeConfiguration config = new EnvelopeConfiguration(
-			null,
-			'Test Envelope Configuration',
-			'Account',
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			Envelope.DEFAULT_OPTIONS,
-			null);
-		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(config));
-
-		Test.startTest();
-		Envelope.Options result = Envelope.deserializeOptionsFromParent(untypedConfig);
-		Test.stopTest();
-
-		System.assertNotEquals(result.envelopeEventUpdates, null);
 	}
 }

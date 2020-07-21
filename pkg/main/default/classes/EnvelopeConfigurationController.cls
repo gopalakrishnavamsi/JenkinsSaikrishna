@@ -52,7 +52,7 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 		Map<String, Object> untypedConfig = (Map<String, Object>)JSON.deserializeUntyped(envelopeConfigurationJSON);
 		List<Recipient> recipients = parseRecipients((List<Object>)untypedConfig.get('recipients'));
 		List<Document> documents = parseDocuments((List<Object>)untypedConfig.get('documents'));
-		Envelope.Options options = Envelope.deserializeOptionsFromParent(untypedConfig);
+		Envelope.Options options = EnvelopeParser.reifyOptions((Map<String, Object>)untypedConfig.get('options'));
 		Pattern envelopeEventUpdatesPattern = Pattern.compile(REGEX_PATTERN);
 		Matcher envelopeEventUpdatesMatcher = envelopeEventUpdatesPattern.matcher(envelopeConfigurationJSON);
 		String envelopeConfigurationJSONUpdated = envelopeConfigurationJSON;
