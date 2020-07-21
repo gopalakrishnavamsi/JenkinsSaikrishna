@@ -19,7 +19,7 @@
 
 .THIS .ds-timeline__pending:before,
 .THIS .ds-timeline__pending {
-    background: t(colorTextWarning);
+    background: #f7b500;
     border-radius: t(borderRadiusMedium);
 }
 
@@ -29,7 +29,13 @@
     padding: 0;
 }
 
+.THIS .ds-timeline__positive .slds-icon,
+.THIS .ds-timeline__pending .slds-icon,
 .THIS .ds-timeline__negative .slds-icon {
+    fill: #ffffff;
+}
+
+.THIS .icon-padding .slds-icon {
     padding: 5px;
 }
 
@@ -43,7 +49,7 @@
 }
 
 .THIS .ds-timeline__orange:before {
-    background: t(colorTextWarning);
+    background: #f7b500;
 }
 
 .THIS .ds-timeline__red:before {

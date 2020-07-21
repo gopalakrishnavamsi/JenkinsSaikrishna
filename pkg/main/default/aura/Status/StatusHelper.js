@@ -72,6 +72,12 @@
       case 'canceled':
         result = $A.get('$Label.c.Canceled');
         break;
+      case 'autoresponded':
+        result = $A.get('$Label.c.Autoresponded');
+        break;
+      case 'authenticationfailed':
+        result = $A.get('$Label.c.Authenticationfailed');
+        break;
       default:
         break;
     }
@@ -82,6 +88,10 @@
     var details = {};
     switch (status) {
       case 'created':
+        details.icon = 'utility:record_create';
+        details.color = 'ds-timeline__orange';
+        details.container = 'ds-timeline__pending icon-padding';
+        break;
       case 'sent':
         details.icon = 'custom:custom105';
         details.color = 'ds-timeline__orange';
@@ -90,14 +100,14 @@
       case 'delivered':
         details.icon = 'action:preview';
         details.color = 'ds-timeline__orange';
-        details.container = 'ds-timeline__pending';
+        details.container = 'ds-timeline__pending icon-padding slds-p-around_none';
         break;
       case 'canceled':
       case 'declined':
       case 'voided':
         details.icon = 'action:remove';
         details.color = 'ds-timeline__red';
-        details.container = 'ds-timeline__negative';
+        details.container = 'ds-timeline__negative icon-padding';
         break;
       case 'completed':
       case 'signed':
@@ -105,20 +115,20 @@
         details.color = 'ds-timeline__green';
         details.container = 'ds-timeline__positive';
         break;
+      case 'autoresponded':
+        details.icon = 'utility:warning'
+        details.color = 'ds-timeline__red';
+        details.container = 'ds-timeline__negative icon-padding';
+        break;
       case 'authenticationfailed':
         details.icon = 'utility:block_visitor';
         details.color = 'ds-timeline__red';
-        details.container = 'ds-timeline__negative';
-        break;
-      case 'autoresponded':
-        details.icon = 'custom:custom105'
-        details.color = 'ds-timeline__orange';
-        details.container = 'ds-timeline__pending';
+        details.container = 'ds-timeline__negative icon-padding';
         break;
       default:
-        details.icon = 'custom:custom105';
-        details.color = 'ds-timeline__orange';
-        details.container = 'ds-timeline__pending';
+        details.icon = 'utility:warning';
+        details.color = 'ds-timeline__red';
+        details.container = 'ds-timeline__negative icon-padding';
         break;
     }
 

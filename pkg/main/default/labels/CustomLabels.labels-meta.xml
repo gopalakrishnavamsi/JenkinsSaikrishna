@@ -1341,6 +1341,38 @@
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; has viewed the envelope</value>
 	</labels>
 	<labels>
+		<fullName>Autoresponded</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Autoresponded recipient status</shortDescription>
+		<value>Auto-responded</value>
+	</labels>
+	<labels>
+		<fullName>AuthenticationFailed</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Authentication failed recipient status</shortDescription>
+		<value>Authentication failed</value>
+	</labels>
+	<labels>
+		<fullName>AutorespondedDetail</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Autoresponded recipient detail</shortDescription>
+		<value>Check to make sure &lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; got the envelope</value>
+	</labels>
+	<labels>
+		<fullName>AuthenticationFailedDetail</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Authentication failed recipient detail</shortDescription>
+		<value>Resend or remove authentication requirements</value>
+	</labels>
+	<labels>
 		<fullName>HavingTrouble</fullName>
 		<categories>Support</categories>
 		<language>en_US</language>

@@ -248,6 +248,16 @@
                                                                                                         <lightning:formattedRichText
                                                                                                                 value="{!format($Label.c.WillNotReceive_2, recipient.email, recipient.name)}"/>
                                                                                                     </aura:if>
+                                                                                                    <aura:if
+                                                                                                            isTrue="{!recipient.status == $Label.c.Autoresponded}">
+                                                                                                        <lightning:formattedRichText
+                                                                                                                value="{!format($Label.c.AutorespondedDetail, recipient.email, recipient.name)}"/>
+                                                                                                    </aura:if>
+                                                                                                    <aura:if
+                                                                                                            isTrue="{!recipient.status == $Label.c.Authenticationfailed}">
+                                                                                                        <lightning:formattedRichText
+                                                                                                                value="{!$Label.c.AuthenticationFailedDetail}"/>
+                                                                                                    </aura:if>
                                                                                                 </p>
                                                                                                 <!-- Recipient Details -->
                                                                                                 <div class="ds-recipient__details slds-box slds-theme_shade">
