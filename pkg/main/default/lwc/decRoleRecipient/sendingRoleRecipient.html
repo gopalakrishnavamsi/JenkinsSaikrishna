@@ -1,0 +1,24 @@
+<template>
+    <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+        <div if:false={isSending}>
+            <span>{Labels.decRoleRecipientTitle}</span>
+        </div>
+        <div class="slds-grid slds-gutters slds-p-left_xxx-small" slot="content">
+            <div class="slds-col slds-size_1-of-2">
+                <div class="slds-form-element">
+                    <lightning-input name="name" onchange={handleChange} label={Labels.nameLabel} value={name}></lightning-input>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <div class="slds-form-element">
+                    <lightning-input name="email" onchange={handleChange} label={Labels.emailAddressLabel} value={email}></lightning-input>
+                </div>
+            </div>
+        </div>        
+        <div class="slds-form-element__row">
+            <div class="slds-form-element">
+                <lightning-input name="roleName" label={Labels.recipientRoleLabel} value={roleName} onchange={handleChange}></lightning-input>
+            </div>
+        </div>
+    </section>
+</template>

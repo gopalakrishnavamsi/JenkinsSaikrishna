@@ -1,6 +1,8 @@
 import {LightningElement, api} from 'lwc';
 import {Labels} from 'c/recipientUtils';
 import {isEmpty} from 'c/utils';
+import sendingTemplate from './sendingRoleRecipient.html';
+import decTemplate from './decRoleRecipient.html';
 
 export default class DecRoleRecipient extends LightningElement {
   Labels = Labels;
@@ -35,5 +37,9 @@ export default class DecRoleRecipient extends LightningElement {
         } 
       }
     ));
+  }
+
+  render() {
+    return this.isSending ? sendingTemplate : decTemplate;
   }
 }
