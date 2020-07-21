@@ -478,7 +478,7 @@
 		<name>Declined</name>
 	</customLabels>
 	<customLabels>
-		<label>Delivered</label>
+		<label>Viewed</label>
 		<name>Delivered</name>
 	</customLabels>
 	<customLabels>
@@ -684,6 +684,30 @@
 	<customLabels>
 		<label>Resend or remove authentication requirements</label>
 		<name>AuthenticationFailedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope Created</label>
+		<name>EnvelopeStatusCreated</name>
+	</customLabels>
+	<customLabels>
+		<label>Sent for Signature</label>
+		<name>EnvelopeStatusSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope Viewed</label>
+		<name>EnvelopeStatusViewed</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope Declined</label>
+		<name>EnvelopeStatusDeclined</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope Voided</label>
+		<name>EnvelopeStatusVoided</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope Completed</label>
+		<name>EnvelopeStatusCompleted</name>
 	</customLabels>
 	<customLabels>
 		<label>Having trouble?</label>
@@ -1074,8 +1098,16 @@
 		<name>Sent</name>
 	</customLabels>
 	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; created an envelope</label>
+		<name>CreatedAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; sent an envelope</label>
 		<name>SentAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; voided an envelope</label>
+		<name>VoidedAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
 		<label>Show</label>

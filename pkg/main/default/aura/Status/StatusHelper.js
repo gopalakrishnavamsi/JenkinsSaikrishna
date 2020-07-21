@@ -13,6 +13,7 @@
         if (!$A.util.isEmpty(envelopes)) {
           envelopes.forEach(function (envelope) {
             envelope.style = helper.getStyleDetails(envelope.status);
+            envelope.details = helper.getEnvelopeStatusDetails(envelope);
             envelope.status = helper.getStatusLabel(envelope.status);
             envelope.recipients.forEach(function (recipient) {
               recipient.style = helper.getStyleDetails(recipient.status);
@@ -82,6 +83,47 @@
         break;
     }
     return result;
+  },
+
+  getEnvelopeStatusDetails: function (envelope) {
+    var status = envelope.status;
+    var recipient = envelope.recipients.find(function (r) {
+      return r.status === status;
+    });
+    var details = {
+      title: '',
+      subtitle: ''
+    };
+    switch (status) {
+      case 'created':
+        details.title = $A.get('$Label.c.EnvelopeStatusCreated');
+        details.subtitle = stringUtils.format($A.get('$Label.c.CreatedAnEnvelope_2'), envelope.senderEmail, envelope.senderName);
+        break;
+      case 'sent':
+        details.title = $A.get('$Label.c.EnvelopeStatusSent');
+        details.subtitle = stringUtils.format($A.get('$Label.c.SentAnEnvelope_2'), envelope.senderEmail, envelope.senderName);
+        break;
+      case 'delivered':
+        details.title = $A.get('$Label.c.EnvelopeStatusViewed');
+        details.subtitle = stringUtils.format($A.get('$Label.c.HasViewed_2'), recipient.email, recipient.name);
+        break;
+      case 'declined':
+        details.title = $A.get('$Label.c.EnvelopeStatusDeclined');
+        details.subtitle = stringUtils.format($A.get('$Label.c.HasDeclined_2'), recipient.email, recipient.name);
+        break;
+      case 'voided':
+        details.title = $A.get('$Label.c.EnvelopeStatusVoided');
+        details.subtitle = stringUtils.format($A.get('$Label.c.VoidedAnEnvelope_2'), envelope.senderEmail, envelope.senderName);
+        break;
+      case 'completed':
+        details.title = $A.get('$Label.c.Signed');
+        details.subtitle = $A.get('$Label.c.EnvelopeStatusCompleted');
+        break;
+      default:
+        break;
+    }
+  
+    return details;
   },
 
   getStyleDetails: function (status) {

@@ -3,6 +3,8 @@
                 extends="c:RootContainer"
                 access="global">
 
+    <ltng:require scripts="{!$Resource.stringUtils}"/>
+
     <aura:attribute name="visualforce" type="Boolean" default="{!false}"/>
 
     <aura:attribute name="envelopes" type="List" access="private"/>
@@ -15,7 +17,7 @@
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
 
     <lightning:card variant="base">
-        <div class="slds-card__header slds-grid">
+        <div class="slds-card__header slds-grid slds-m-top_none slds-p-top_none">
             <header class="slds-media slds-media_center slds-has-flexi-truncate">
                 <div class="slds-media__figure">
                     <img src="{!$Resource.sendingIcon}"
@@ -77,19 +79,11 @@
                                                         <div class="slds-media__body">
                                                             <div class="slds-grid slds-timeline__trigger slds-gutters_xx-small">
                                                                 <div class="slds-col slds-grow-none ds-envelope-title">
-                                                                    <h3 class="slds-truncate"
-                                                                        title="{!envelope.emailSubject}">
-                                                                        <strong>{!envelope.emailSubject}</strong>
+                                                                    <h3 title="{!envelope.details.title}">
+                                                                        <strong>{!envelope.details.title}</strong>
                                                                     </h3>
                                                                 </div>
                                                                 <div class="slds-col">
-                                                                    <lightning:badge label="{!envelope.status}" class="{!
-                                                                        'ds-status-badge_inline'
-                                                                                + if(envelope.status == $Label.c.Completed, ' slds-theme_success')
-                                                                                + if(envelope.status == $Label.c.Declined, ' slds-theme_error')
-                                                                                + if(envelope.status == $Label.c.Voided, ' slds-theme_error')
-                                                                                + if(envelope.status == $Label.c.Signed, ' slds-theme_alert-texture')
-                                                                        }"/>
                                                                 </div>
                                                                 <div class="slds-col slds-no-flex slds-gutters_small">
                                                                     <div class="slds-timeline__actions slds-timeline__actions_inline">
@@ -104,7 +98,7 @@
                                                             </div>
                                                             <p class="slds-m-horizontal_xx-small">
                                                                 <lightning:formattedRichText
-                                                                        value="{!format($Label.c.SentAnEnvelope_2, envelope.senderEmail, envelope.senderName)}"/>
+                                                                        value="{!envelope.details.subtitle}"/>
                                                             </p>
                                                             <!-- Envelope Details -->
                                                             <div class="slds-timeline__item_details">
@@ -183,33 +177,29 @@
                                                                                                  class="slds-media__body ds-recipient"
                                                                                                  data-envelope-index="{!envelopeIndex}"
                                                                                                  data-index="{!recipientIndex}">
-                                                                                                <div class="slds-grid slds-gutters_xx-small">
-                                                                                                    <div class="slds-col">
-                                                                                                        <lightning:badge
-                                                                                                                label="{!recipient.status}"
-                                                                                                                class="{!
-                                                                                                                    'slds-show_inline-block slds-m-top_xx-small slds-m-bottom_xx-small'
-                                                                                                                            + if(recipient.status == $Label.c.Signed, ' slds-theme_success')
-                                                                                                                            + if(recipient.status == $Label.c.Completed, ' slds-theme_success')
-                                                                                                                            + if(recipient.status == $Label.c.Declined, ' slds-theme_error')
-                                                                                                                            + if(recipient.status == $Label.c.Canceled, ' slds-theme_error')
-                                                                                                                    }"/>
+                                                                                                <div class="slds-grid slds-gutters_xx-small slds-m-top_xx-small">
+                                                                                                    <div class="slds-col slds-show_inline-block slds-m-bottom_xx-small">
+                                                                                                        <h3><strong>{!recipient.status}</strong></h3>
                                                                                                     </div>
                                                                                                     <div class="slds-col slds-no-flex">
-                                                                                                    <span class="ds-recipient__toggle_more">
-                                                                                                    <a class="slds-show_inline-block slds-m-top_xx-small"
-                                                                                                       href="javascript:void(0);"
-                                                                                                       data-envelope-index="{!envelopeIndex}"
-                                                                                                       data-index="{!recipientIndex}"
-                                                                                                       onclick="{!c.toggleRecipientDetails}">{!$Label.c.ShowMore}</a>
-                                                                                                    </span>
+                                                                                                        <span class="ds-recipient__toggle_more">
+                                                                                                            <a class="slds-show_inline-block"
+                                                                                                                href="javascript:void(0);"
+                                                                                                                data-envelope-index="{!envelopeIndex}"
+                                                                                                                data-index="{!recipientIndex}"
+                                                                                                                onclick="{!c.toggleRecipientDetails}">
+                                                                                                                {!$Label.c.ShowMore}
+                                                                                                            </a>
+                                                                                                        </span>
                                                                                                         <span class="ds-recipient__toggle_less">
-                                                                                                    <a class="slds-show_inline-block slds-m-top_xx-small"
-                                                                                                       href="javascript:void(0);"
-                                                                                                       data-envelope-index="{!envelopeIndex}"
-                                                                                                       data-index="{!recipientIndex}"
-                                                                                                       onclick="{!c.toggleRecipientDetails}">{!$Label.c.ShowLess}</a>
-                                                                                                    </span>
+                                                                                                            <a class="slds-show_inline-block"
+                                                                                                                href="javascript:void(0);"
+                                                                                                                data-envelope-index="{!envelopeIndex}"
+                                                                                                                data-index="{!recipientIndex}"
+                                                                                                                onclick="{!c.toggleRecipientDetails}">
+                                                                                                                {!$Label.c.ShowLess}
+                                                                                                            </a>
+                                                                                                        </span>
                                                                                                     </div>
                                                                                                 </div>
                                                                                                 <p>

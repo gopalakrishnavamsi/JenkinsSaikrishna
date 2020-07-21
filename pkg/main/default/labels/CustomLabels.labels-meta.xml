@@ -944,8 +944,8 @@
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
-		<shortDescription>Delivered</shortDescription>
-		<value>Delivered</value>
+		<shortDescription>Viewed by envelope recipient</shortDescription>
+		<value>Viewed</value>
 	</labels>
 	<labels>
 		<fullName>Disabled</fullName>
@@ -1371,6 +1371,54 @@
 		<protected>true</protected>
 		<shortDescription>Authentication failed recipient detail</shortDescription>
 		<value>Resend or remove authentication requirements</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeStatusCreated</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Status Created</shortDescription>
+		<value>Envelope Created</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeStatusSent</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Status Sent</shortDescription>
+		<value>Sent for Signature</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeStatusViewed</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Status Viewed</shortDescription>
+		<value>Envelope Viewed</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeStatusDeclined</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Status Declined</shortDescription>
+		<value>Envelope Declined</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeStatusVoided</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Status Voided</shortDescription>
+		<value>Envelope Voided</value>
+	</labels>
+	<labels>
+		<fullName>EnvelopeStatusCompleted</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Envelope Status Completed</shortDescription>
+		<value>Envelope Completed</value>
 	</labels>
 	<labels>
 		<fullName>HavingTrouble</fullName>
@@ -2276,12 +2324,28 @@
 		<value>Sent</value>
 	</labels>
 	<labels>
+		<fullName>CreatedAnEnvelope_2</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Created an envelope</shortDescription>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; created an envelope</value>
+	</labels>
+	<labels>
 		<fullName>SentAnEnvelope_2</fullName>
 		<categories>Status,UI</categories>
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Sent an envelope</shortDescription>
 		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; sent an envelope</value>
+	</labels>
+	<labels>
+		<fullName>VoidedAnEnvelope_2</fullName>
+		<categories>Status,UI</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Voided an envelope</shortDescription>
+		<value>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; voided an envelope</value>
 	</labels>
 	<labels>
 		<fullName>Show</fullName>
