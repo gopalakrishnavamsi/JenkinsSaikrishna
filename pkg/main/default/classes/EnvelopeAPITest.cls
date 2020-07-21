@@ -2414,6 +2414,7 @@ private class EnvelopeAPITest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
+			System.assert(result.toExternalForm().contains('send=1'));
 		}
 	}
 

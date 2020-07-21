@@ -144,6 +144,14 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	@TestVisible
 	private class APIViewResponse {
 		public String url;
+
+		public Url toUrl(final Boolean includeTaggerParameter) {
+			if (String.isBlank(this.url)) return null;
+
+			// HACK: append send=1 to trigger tagger URL
+			return !includeTaggerParameter || this.url.containsIgnoreCase('send=1')
+				? new Url(this.url) : new Url(this.url + '&send=1');
+		}
 	}
 
 	public Url getSenderViewUrl(
@@ -167,7 +175,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			throw new APIException(response.error);
 		}
 
-		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
+		return ((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).toUrl(false);
 	}
 
 	public Url getRecipientViewUrl(
@@ -197,7 +205,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			throw new APIException(response.error);
 		}
 
-		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
+		return ((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).toUrl(false);
 	}
 
 	//Embedded Recipient view request
@@ -227,7 +235,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			throw new APIException(response.error);
 		}
 
-		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
+		return ((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).toUrl(false);
 	}
 
 	public Url getConsoleViewUrl(
@@ -250,7 +258,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			this.log.error('Failed to get console view: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
-		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
+		return ((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).toUrl(false);
 	}
 
 	public Url getCorrectViewUrl(
@@ -286,7 +294,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			throw new APIException(error);
 		}
 
-		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
+		return ((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).toUrl(false);
 	}
 
 	public Url getTemplateEditUrl(
@@ -311,7 +319,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			this.log.error('Failed to get template edit view: ' + response.error.toString());
 			throw new APIException(response.error);
 		}
-		return new Url(((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).url);
+		return ((APIViewResponse)JSON.deserialize(response.body, APIViewResponse.class)).toUrl(true);
 	}
 
 	public Boolean resendEnvelope(final UUID envelopeId) {
