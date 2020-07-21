@@ -91,3 +91,8 @@
 .THIS .ds-spinner_container {
     min-height: 100px;
 }
+
+.THIS .ds-center-fit-content {
+    align-self: center;
+    width: fit-content;
+}

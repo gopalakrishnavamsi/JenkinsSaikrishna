@@ -48,11 +48,14 @@
                             <aura:set attribute="else">
                                 <aura:if isTrue="{!empty(v.envelopes)}">
                                     <!-- Empty State -->
-                                    <div class="slds-text-color_weak slds-m-vertical_large slds-text-align_center">
-                                        <em>{!$Label.c.NoEnvelopesSent}</em>
+                                    <div class="slds-grid slds-grid_vertical">
+                                        <div class="slds-col slds-m-vertical-medium ds-center-fit-content">
+                                            <img class="slds-size_small" src="{!$Resource.DecAddRecipientsEmpty}"/>
+                                        </div>
+                                        <div class="slds-col slds-text-color_weak slds-text-align_center">
+                                            {!$Label.c.NoEnvelopesSent}
+                                        </div>
                                     </div>
-                                    <!-- /Empty State -->
-
                                     <aura:set attribute="else">
                                         <div class="slds-timeline">
                                             <!-- Envelope -->

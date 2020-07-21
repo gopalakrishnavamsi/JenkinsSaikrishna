@@ -1985,7 +1985,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>No envelopes sent</shortDescription>
-		<value>No envelopes have been sent</value>
+		<value>Send an envelope to view its status</value>
 	</labels>
 	<labels>
 		<fullName>NoFilesAttached</fullName>
