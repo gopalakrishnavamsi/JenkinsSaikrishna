@@ -193,11 +193,11 @@
                             <div class="slds-grid slds-m-around_x-small ">
                                 <div class="slds-col_bump-left">
                                     <lightning:button label="{!$Label.c.AddSubfolder}" onclick="{!c.addSubFolder}"
-                                        iconName="utility:add" iconPosition="right" disabled="{!v.isAddSubFolder}"/>
+                                        iconName="utility:add" iconPosition="left" disabled="{!v.isAddSubFolder}"/>
                                     <lightning:button label="{!$Label.c.Rename}" onclick="{!c.renameSubFolder}"
-                                        iconName="utility:edit" iconPosition="right" disabled="{!v.isRenameFolder}"/>
+                                        iconName="utility:edit" iconPosition="left" disabled="{!v.isRenameFolder}"/>
                                     <lightning:button label="{!$Label.c.DeleteButtonLabel}"
-                                        onclick="{!c.deleteSubFolder}" iconName="utility:delete" iconPosition="right"
+                                        onclick="{!c.deleteSubFolder}" iconName="utility:delete" iconPosition="left"
                                         class="slds-button_text-destructive" disabled="{!v.isDeleteFolder}"/>
                                 </div>
                             </div>

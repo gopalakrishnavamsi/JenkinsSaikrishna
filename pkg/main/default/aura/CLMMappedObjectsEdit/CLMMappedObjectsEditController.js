@@ -577,11 +577,13 @@
 			clmFolderTree[modalValueHolder.selectedFolderIndex].name =
 				modalValueHolder.folderName;
 			component.set('v.clmFolderTree', clmFolderTree);
+			component.set('v.selectedFolderParentExample', clmFolderTree[modalValueHolder.selectedFolderIndex].name);
 			component.set('v.showModal', 'false');
 			helper.updatePath(component);
 		} else if (modalValueHolder.buttonType === 'subFolder') {
 			clmFolderTree = helper.sortTree(clmFolderTree);
 			clmFolderTree.forEach(function (treeData) {
+				treeData.selected = false;
 				if (
 					treeData.level >
 					clmFolderTree[modalValueHolder.selectedFolderIndex].level
@@ -596,12 +598,15 @@
 				level: clmFolderTree[modalValueHolder.selectedFolderIndex].level + 1,
 				name: modalValueHolder.folderName,
 				type: 'folder',
-				selected: false,
+				selected: true,
 				id: clmFolderTree[modalValueHolder.selectedFolderIndex].level + 1
 			});
 			clmFolderTree = helper.sortTree(clmFolderTree);
 			component.set('v.clmFolderTree', clmFolderTree);
 			component.set('v.showModal', 'false');
+			modalValueHolder.selectedFolderIndex++;
+			component.set('v.selectedFolderParentExample', clmFolderTree[modalValueHolder.selectedFolderIndex].name);
+			component.set('v.SelectedFolderExample', clmFolderTree[modalValueHolder.selectedFolderIndex + 1].name);
 			helper.updatePath(component);
 		} else if (modalValueHolder.buttonType === 'confirm') {
 			var selectedObjDetails = modalValueHolder.selectedObjDetails;
