@@ -3,11 +3,11 @@
 	<!-- smartling.translate_paths = CustomObjectTranslation/caseValues/value -->
 	<caseValues>
 		<plural>false</plural>
-		<value>DocuSign Envelope Configuration</value>
+		<value>DocuSign Envelope Template</value>
 	</caseValues>
 	<caseValues>
 		<plural>true</plural>
-		<value>DocuSign Envelope Configurations</value>
+		<value>DocuSign Envelope Templates</value>
 	</caseValues>
 	<startsWith>Consonant</startsWith>
 </CustomObjectTranslation>
