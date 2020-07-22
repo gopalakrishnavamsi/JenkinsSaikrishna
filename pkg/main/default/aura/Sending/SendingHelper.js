@@ -90,11 +90,17 @@
             self.handleFilesChange(component); // Uncomment this line for EXISTING sending experience
             */
           }
-
           // Renders LWC component for NEW sending experience
           self.beginSendForSignature(component); // Comment this line for EXISTING sending experience
-        }
-      );
+        }, function (error, message) {
+          //hide sending page spinner
+          var showSendingComponent = component.get('v.showSendingComponent');
+          showSendingComponent();
+          var toast = component.find('ds-toast');
+          if (toast) {
+            toast.show('error', message);
+          }
+        });
     }
   },
 
@@ -115,6 +121,9 @@
         forbidEnvelopeChanges: component.get('v.lock'),
         onsendcomplete: component.getReference('c.onSendComplete')
       });
+    //hide sending page spinner
+    var showSendingComponent = component.get('v.showSendingComponent');
+    showSendingComponent();
   },
 
   endSendForSignature: function (component, status, properties) {

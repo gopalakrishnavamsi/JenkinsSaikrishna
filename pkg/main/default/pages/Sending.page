@@ -2,31 +2,44 @@
            title="{!$Label.SendWithDocuSign}">
 
     <apex:includeLightning/>
+    <apex:slds/>
 
     <style type="text/css">
-        #ds-sending {
-            min-height: 100vh;
-            position: relative;
-        }
 
-        .noSidebarCell #ds-sending {
-            min-height: calc(100vh - 120px);
-        }
-
-        .bodyDiv .outerNoSidebar,
-        .noSidebarCell,
-        .sidebarCell .fixed {
+        /* CSS to override default padding applied in Lightning Experience */
+        html body.sfdcBody {
             padding: 0;
         }
 
-        .noSidebarCell #ds-sending .slds-scope .ds-sending__footer {
-            position: absolute;
+        /* CSS to override default padding applied in Classic Experience */
+        .bodyDiv .outerNoSidebar, .noSidebarCell, .sidebarCell .fixed {
+            padding: 0;
         }
+
+        .noSidebarCell #ds-spinner,  .noSidebarCell #ds-sending {
+            height: calc(100vh - 165px);
+        }
+
+
+
     </style>
 
-    <div id="ds-sending"></div>
+    <div id="ds-sending" style="display: none;">
+    </div>
+    <div id="ds-spinner">
+        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+
 
     <script>
+      function showSendingComponent() {
+        document.getElementById('ds-spinner').style.display = 'none';
+        document.getElementById('ds-sending').style.display = 'block';
+      }
+
       var _namespace = '{!JSENCODE(namespace)}';
       var _navigateToURL = function (event) {
         var url = event.getParam('url');
@@ -49,7 +62,8 @@
           loadDefaultContacts: _loadDefaultContacts,
           placeholderRecipients: _phrs,
           sendNow: _sendNow,
-          lock: _lock
+          lock: _lock,
+          showSendingComponent: showSendingComponent
         }, 'ds-sending', function () {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': _navigateToURL});
         });

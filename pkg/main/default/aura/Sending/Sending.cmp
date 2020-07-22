@@ -14,6 +14,8 @@
     <aura:attribute name="placeholderRecipients" type="Object"/>
     <aura:attribute name="sendNow" type="Boolean" default="false"/>
     <aura:attribute name="lock" type="Boolean" default="false"/>
+    <aura:attribute name="showSendingComponent" type="Object"/>
+    <aura:set attribute="showDefaultSpinner" value="false"/>
     <aura:attribute name="loadDefaultContacts" type="Boolean" default="true"/>
     <aura:attribute name="filesSelected" type="Boolean" default="{!false}" access="private"/>
     <aura:attribute name="selectedFileTitles" type="String" access="private"/>
