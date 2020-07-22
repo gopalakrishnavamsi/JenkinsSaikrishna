@@ -56,11 +56,11 @@ const MAX_STEP = PROGRESS_STEP.CUSTOM_BUTTON;
 const MIN_STEP = PROGRESS_STEP.DOCUMENTS;
 
 const STEPS = [
-  {'label': LABEL.documents, 'value': PROGRESS_STEP.DOCUMENTS},
-  {'label': LABEL.recipients, 'value': PROGRESS_STEP.RECIPIENTS},
-  {'label': LABEL.tagger, 'value': PROGRESS_STEP.TAGGER},
-  {'label': LABEL.options, 'value': PROGRESS_STEP.OPTIONS},
-  {'label': LABEL.customButton, 'value': PROGRESS_STEP.CUSTOM_BUTTON}];
+  {'label': LABEL.documents, 'value': PROGRESS_STEP.DOCUMENTS, 'disabled': false},
+  {'label': LABEL.recipients, 'value': PROGRESS_STEP.RECIPIENTS, 'disabled': false},
+  {'label': LABEL.tagger, 'value': PROGRESS_STEP.TAGGER, 'disabled': false},
+  {'label': LABEL.options, 'value': PROGRESS_STEP.OPTIONS, 'disabled': false},
+  {'label': LABEL.customButton, 'value': PROGRESS_STEP.CUSTOM_BUTTON, 'disabled': false}];
 
 export {
   LABEL,

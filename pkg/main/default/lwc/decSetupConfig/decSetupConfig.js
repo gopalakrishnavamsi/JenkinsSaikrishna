@@ -30,7 +30,14 @@ import {
   FILE_NAME_FILTER_SUFFIX,
   DOCUMENT_TYPE_TEMPLATE_DOCUMENT
 } from 'c/documentUtils';
-import {LABEL, PROGRESS_STEP, OPERATION, MAX_STEP, MIN_STEP, STEPS} from 'c/setupUtils';
+import {
+  LABEL,
+  PROGRESS_STEP,
+  OPERATION,
+  MAX_STEP,
+  MIN_STEP,
+  STEPS
+} from 'c/setupUtils';
 
 //apex methods
 import updateEnvelopeConfiguration from '@salesforce/apex/EnvelopeConfigurationController.updateEnvelopeConfiguration';
@@ -40,6 +47,7 @@ export default class DecSetupConfig extends LightningElement {
   @api recordId;
   @api currentStep;
 
+  isTaggerDisabled = false;
   isDirty = false;
   envelopeConfigurationData;
   isLoading = false;
@@ -56,9 +64,6 @@ export default class DecSetupConfig extends LightningElement {
   @api
   attachSourceFiles = false;
   label = LABEL;
-
-  steps = STEPS;
-
   isEmptyRecipients = false;
 
   connectedCallback() {
@@ -118,6 +123,7 @@ export default class DecSetupConfig extends LightningElement {
         emailMessage: isEmpty(data.emailMessage) ? this.label.defaultEmailMessage : data.emailMessage,
         emailSubject: isEmpty(data.emailSubject) ? this.label.defaultEmailSubject : data.emailSubject
       };
+      this.updateProgressBar();
     }
   }
 
@@ -207,6 +213,7 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleNext() {
+    this.updateProgressBar();
     this.handleOperation(OPERATION.NEXT);
   }
 
@@ -215,6 +222,9 @@ export default class DecSetupConfig extends LightningElement {
     const isValidStep = operation === OPERATION.BACK ? stepNumber > MIN_STEP : stepNumber < MAX_STEP;
     if (isValidStep) {
       operation === OPERATION.BACK ? --stepNumber : ++stepNumber;
+      if (stepNumber === parseInt(PROGRESS_STEP.TAGGER) && this.isTaggerDisabled === true) {
+        stepNumber = operation === OPERATION.BACK ? --stepNumber : ++stepNumber;
+      }
       this.updateEnvelopeConfiguration(stepNumber.toString());
     }
   }
@@ -267,6 +277,7 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleOnClickProgressStep(event) {
+    this.updateProgressBar();
     this.updateEnvelopeConfiguration(event.detail.data);
   }
 
@@ -389,6 +400,21 @@ export default class DecSetupConfig extends LightningElement {
 
   handleOnDataWriteBack(event) {
     this.updateLocalEnvelopeConfigurationDataWriteBack(event.detail.data);
+  }
+
+  updateProgressBar() {
+    let taggerStepUpdated = STEPS;
+    if (!isEmpty(this.envelopeConfigurationData) &&
+      !isEmpty(this.envelopeConfigurationData.documents) &&
+      this.envelopeConfigurationData.documents.find((doc) => doc.type === DOCUMENT_TYPE_TEMPLATE_DOCUMENT)) {
+      taggerStepUpdated[2].disabled = false;
+      this.isTaggerDisabled = false;
+    } else {
+      taggerStepUpdated[2].disabled = true;
+      this.isTaggerDisabled = true;
+    }
+    let progressSelector = this.template.querySelector('c-progress-bar');
+    progressSelector.progressSteps(taggerStepUpdated);
   }
 
   processTextSearchSourceFiles(documents, extractText) {
