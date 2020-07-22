@@ -497,9 +497,7 @@
       var childXml;
       if (depth < 2) {
         childData = result[childQuery.relationship];
-        if ($A.util.isUndefinedOrNull(childData)) {
-          return objRoot;
-        }
+        if ($A.util.isUndefinedOrNull(childData)) continue;
         for (var j = 0; j < childData.length; j++) {
           childXml = helper.generateXML(childQuery, childData[j], children, depth + 1, xmlRoot, fieldMap, isMultiCurrency, query.relationship);
           container.appendChild(childXml);
@@ -507,9 +505,7 @@
         }
       } else {
         childData = children[childQuery.relationship];
-        if ($A.util.isUndefinedOrNull(childData)) {
-          return objRoot;
-        }
+        if ($A.util.isUndefinedOrNull(childData)) continue;
         for (var k = 0; k < childData.length; k++) {
           if (result['Id'] === childData[k][childQuery.parentIdField]) {
             childXml = helper.generateXML(childQuery, result, childData[k], depth + 1, xmlRoot, fieldMap, isMultiCurrency, query.relationship);

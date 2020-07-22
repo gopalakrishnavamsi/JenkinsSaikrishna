@@ -44,7 +44,8 @@ public class MergeObject implements Comparable {
 			&& type.isQueryable()
 			&& !type.isDeprecatedAndHidden()
 			&& !type.isCustomSetting()
-			&& !type.getName().startsWithIgnoreCase(Application.namespacePrefix)
+			&& (Application.namespace == Salesforce.namespace // allow custom objects if we are on a dfsle scratch org
+			|| !type.getName().startsWithIgnoreCase(Application.namespacePrefix))
 			&& !type.getName().endsWithIgnoreCase(CUSTOM_METADATA_SUFFIX);
 	}
 

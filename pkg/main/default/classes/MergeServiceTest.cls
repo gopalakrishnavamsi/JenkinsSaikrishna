@@ -1383,4 +1383,11 @@ private class MergeServiceTest {
 			}
 		}
 	}
+
+	@IsTest
+	static void test_MergeObject_dev_namespace() {
+		System.assertEquals(
+			Application.namespace == Salesforce.namespace, // dev scratch org?
+			MergeObject.isValid(Envelope__c.getSObjectType()));
+	}
 }
