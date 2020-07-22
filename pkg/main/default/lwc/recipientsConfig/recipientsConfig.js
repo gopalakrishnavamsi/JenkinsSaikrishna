@@ -13,6 +13,7 @@ import {createMessageContext, releaseMessageContext} from 'lightning/messageServ
 import decTemplate from './decRecipients.html';
 import sendingTemplate from './sendingRecipients.html';
 
+
 const DEFAULT_ROUTING_ORDER = 1;
 
 export default class Recipients extends LightningElement {
@@ -155,6 +156,13 @@ export default class Recipients extends LightningElement {
     const signingOrderDiagramComponent = this.template.querySelector('c-signing-order');
     signingOrderDiagramComponent.handleShow();
   };
+
+  isDuplicate = (recipient) => {
+    return this.recipients.some((r, index) => {
+      if (this.editRecipientIndex === index) return false;
+      return r.equals(recipient)
+    });
+  }
 
   handleRecipientSigningOrder = () => {
     this.isDirtyRecipients = true;

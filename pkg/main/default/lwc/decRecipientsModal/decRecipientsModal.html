@@ -32,6 +32,11 @@
                 </lightning-layout-item>
                 <div class="ds-panel-separator"></div>
                 <lightning-layout-item class="slds-p-around_small ds-dec-recipient-details">
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert" if:true={showDuplicateRecipientError}>
+                        <h2>
+                            {Labels.DuplicateRowLabel}
+                        </h2>
+                    </div>
                     <c-recipient-details 
                         source-object={sourceObject} 
                         recipient={recipient} 

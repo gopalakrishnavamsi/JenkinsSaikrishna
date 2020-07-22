@@ -35,7 +35,7 @@ export default class RecipientRow extends LightningElement {
   }
 
   get disableRecipientDelete(){
-    return this.readOnly && this.recipient && this.recipient.isPlaceHolder;
+    return this.recipient && this.recipient.isPlaceHolder;
   }
 
   get roleName() {
@@ -64,7 +64,8 @@ export default class RecipientRow extends LightningElement {
   get recipientSubLabel() {
     if (isEmpty(this.recipient)) return '';
     if (!isEmpty(this.recipient.relationship)) {
-      return Labels.recipientRecordFieldLabel;
+      if (this.recipient.relationship.isLookup) return Labels.recipientRecordFieldLabel;
+      return Labels.childRelationshipsLabel; 
     } else if (!isEmpty(this.recipient.email)) {
       return this.recipient.email;
     } else if (!isEmpty(this.recipient.role)) {

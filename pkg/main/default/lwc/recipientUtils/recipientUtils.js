@@ -198,6 +198,12 @@ export class Recipient {
     };
   }
 
+  equals(recipient) {
+    if (!isEmpty(this.signingGroup)) return this.signingGroup === recipient.signingGroup;
+    else if (!isEmpty(this.source) && !isEmpty(recipient.source)) return this.sourceId === recipient.sourceId;
+    return recipient.role && this.role ? recipient.role.name === this.role.name : false;
+  }  
+
   addRole(roleName) {
     this.role = new Role(roleName, this.routingOrder);
   }
@@ -219,6 +225,13 @@ export class LookupRecipient extends Recipient {
     this.relationship = isEmpty(relationship) ? new Relationship() : relationship;
   }
 
+  equals(recipient) {
+    return this.relationship && 
+      recipient.relationship && 
+      recipient.relationship.isLookup &&
+      this.relationship.name === recipient.relationship.name;
+  }  
+
   addSMSAuthentication() {
     this.authentication = new Authentication({idCheckRequired: true});
   }
@@ -235,6 +248,13 @@ export class RelatedRecipient extends Recipient {
 
   get roleName() {
     return this.roles && !isEmpty(this.roles) ? this.roles.join(',') : null; 
+  }
+
+  equals(recipient) {
+    return this.relationship && 
+      recipient.relationship && 
+      !recipient.relationship.isLookup &&
+      this.relationship.name === recipient.relationship.name;
   }
 
   addRole(value) {
@@ -321,6 +341,7 @@ export const Labels = {
   nameLabel: nameLabel,
   recipientRoleLabel: recipientRoleLabel,
   recipientRecordFieldLabel: recipientRecordFieldLabel,
+  childRelationshipsLabel: childRelationships, 
   view: view,
   addAndNew: addAndNew,
   accessCodeLabel: accessCodeLabel,

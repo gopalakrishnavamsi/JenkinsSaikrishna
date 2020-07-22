@@ -1,4 +1,4 @@
-<template>
+<template> 
     <div class="slds-m-top_x-large">
         <!-- Recipient details section -->
         <div class="slds-m-top_large slds-m-bottom_xx-large">
@@ -66,6 +66,7 @@
                                 handle-close={closeRecipientsModal}
                                 recipient={editRecipient}
                                 source-object={sourceObject}
+                                is-duplicate={isDuplicate}
                                 if:true={isSending}>
     </c-sending-recipients-modal>
 </template>

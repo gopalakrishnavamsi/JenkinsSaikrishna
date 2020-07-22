@@ -1,11 +1,16 @@
 import {LightningElement, api} from 'lwc';
 import {Recipient, LookupRecipient, RelatedRecipient, Types, Labels} from 'c/recipientUtils';
 import {isEmpty, proxify} from 'c/utils';
+import DuplicateRowLabel from '@salesforce/label/c.DuplicateRow';
+
 const DEFAULT_SELECTED_TYPE = Types.LookupRecipient.value;
 
 export default class DecRecipientsModal extends LightningElement {
 
-  Labels = Labels;
+  Labels = {
+    ...Labels,
+    DuplicateRowLabel
+  }
 
   @api
   sourceObject;
@@ -26,6 +31,10 @@ export default class DecRecipientsModal extends LightningElement {
 
   @api
   handleSave;
+
+  @api isDuplicate;
+
+  showDuplicateRecipientError = false;  
 
   isValid = false;
 
@@ -62,6 +71,7 @@ export default class DecRecipientsModal extends LightningElement {
   closeModal = () => {
     if (this.handleClose) this.handleClose();
     this.recipient = null;
+    this.showDuplicateRecipientError = false;
   };
 
   handleTypeChange = ({detail}) => {
@@ -72,7 +82,8 @@ export default class DecRecipientsModal extends LightningElement {
   };
 
   handleValidationChange = ({detail}) => {
-    this.isValid = detail;
+    this.showDuplicateRecipientError = this.isDuplicate(this.recipient);
+    this.isValid = detail && !this.showDuplicateRecipientError;
   };
 
   convertRecipientType({note = null}, type = DEFAULT_SELECTED_TYPE) {

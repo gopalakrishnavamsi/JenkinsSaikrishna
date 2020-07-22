@@ -1,4 +1,4 @@
-<template>
+<template>  
     <div class="slds-m-top_x-large">
         <!-- Add Recipients Information section -->
         <div class="slds-grid slds-grid_align-spread ds-addRecipients-information-section">
@@ -80,6 +80,7 @@
                             handle-close={closeRecipientsModal}
                             recipient={editRecipient}
                             source-object={sourceObject}
+                            is-duplicate={isDuplicate}
                             if:false={isSending}>
     </c-dec-recipients-modal>
 </template>
