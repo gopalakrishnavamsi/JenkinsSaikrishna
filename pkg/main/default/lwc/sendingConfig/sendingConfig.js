@@ -9,8 +9,6 @@ import {
   releaseMessageContext,
   publish
 } from 'lightning/messageService';
-import SENDING_ADD_DOCUMENT from '@salesforce/messageChannel/SendingAddDocument__c';
-import SENDING_TOGGLE_DOCUMENT_SELECTION from '@salesforce/messageChannel/SendingToggleDocumentSelection__c';
 import UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/UpdateNotifications__c';
 
 // utility functions
@@ -63,20 +61,6 @@ export default class SendingConfig extends LightningElement {
 
   connectedCallback() {
     this.steps = this.sendNow ? STEPS.filter(s => s.value !== PROGRESS_STEP.PREPARE_AND_SEND) : STEPS;
-
-    this.toggleDocSelectionSubscription = subscribeToMessageChannel(
-      this.context,
-      this.toggleDocSelectionSubscription,
-      SENDING_TOGGLE_DOCUMENT_SELECTION,
-      this.toggleDocumentSelection.bind(this)
-    );
-
-    this.addNewDocumentSubscription = subscribeToMessageChannel(
-      this.context,
-      this.addNewDocumentSubscription,
-      SENDING_ADD_DOCUMENT,
-      this.addNewDocument.bind(this)
-    );
 
     this.updateNotificationsSubscription = subscribeToMessageChannel(
       this.context,
@@ -166,6 +150,14 @@ export default class SendingConfig extends LightningElement {
   handleOnClickProgressStep(event) {
     let toStep = event.detail.data;
 
+    if (this.currentStep === PROGRESS_STEP.DOCUMENTS) {
+      let documentsSelector = this.template.querySelector('c-sending-documents');
+      if (!isEmpty(documentsSelector)) {
+        let documents = documentsSelector.fetchDocuments();
+        if (documents) this.documents = documents.data;
+      }
+    }
+
     if (this.currentStep === PROGRESS_STEP.RECIPIENTS) {
       let recipientsSelector = this.template.querySelector('c-recipients-config');
       if (!isEmpty(recipientsSelector)) {
@@ -206,24 +198,6 @@ export default class SendingConfig extends LightningElement {
       valid = true;
     }
     return valid;
-  }
-
-  // Toggle a single document or all documents based on presence of a message index
-  toggleDocumentSelection(message) {
-    const toggleSingleDocument = !isEmpty(message.index);
-    this.privateDocuments = this.privateDocuments.map((doc, index) => {
-      if ((toggleSingleDocument && index === message.index) || !toggleSingleDocument) {
-        return {
-          ...doc,
-          selected: message.selected
-        };
-      }
-      return doc;
-    });
-  }
-
-  addNewDocument(message) {
-    this.privateDocuments = [...this.privateDocuments].concat(message.documents);
   }
 
   handleExitWorkflow() {

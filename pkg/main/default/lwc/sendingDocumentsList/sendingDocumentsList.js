@@ -7,7 +7,7 @@ import {
   publish
 } from 'lightning/messageService';
 import ERROR from '@salesforce/messageChannel/Error__c';
-import SENDING_ADD_DOCUMENT from '@salesforce/messageChannel/SendingAddDocument__c';
+import SENDING_UPDATE_DOCUMENTS from '@salesforce/messageChannel/SendingUpdateDocuments__c';
 import SENDING_TOGGLE_DOCUMENT_SELECTION from '@salesforce/messageChannel/SendingToggleDocumentSelection__c';
 
 //apex methods
@@ -16,11 +16,18 @@ import getContentDocumentsById from '@salesforce/apex/SendingController.getConte
 // utility functions
 import {isEmpty, format, formatFileSize} from 'c/utils';
 import {LABEL} from 'c/documentUtils';
+import {
+  handleDragEnter,
+  handleDragOver,
+  handleDragLeave,
+  handleDrop,
+  itemDragStart,
+  itemDragEnd
+} from 'c/dragUtils';
 
 export default class SendingDocumentsList extends LightningElement {
   @api recordId;
   @api envelopeId;
-  documents;
   @api forbidEnvelopeChanges;
   isLoading = false;
 
@@ -28,8 +35,18 @@ export default class SendingDocumentsList extends LightningElement {
 
   context = createMessageContext();
 
+  documents = null;
+
+  fromIndex = null;
+
   @api
   get docs() {
+    return this.documents;
+  }
+
+  // For drag-and-drop functionality
+  @api
+  get list() {
     return this.documents;
   }
 
@@ -44,25 +61,15 @@ export default class SendingDocumentsList extends LightningElement {
   }
 
   get selectedDocumentsHeader() {
-    let selectedDocuments = 0;
-    if (!isEmpty(this.documents)) {
-      this.documents.filter(doc =>
-        !isEmpty(doc) &&
-        !isEmpty(doc.selected) &&
-        doc.selected &&
-        !isEmpty(doc.isEmptyTemplate) &&
-        !doc.isEmptyTemplate).length;
-    }
+    const selectedDocuments = !isEmpty(this.documents) ? this.documents.filter(doc => doc.selected).length : 0;
     return format(this.label.selectedDocuments, selectedDocuments);
   }
 
   get allDocumentsSelected() {
-    return !isEmpty(this.documents) &&
-      this.documents.length > 0 &&
-      isEmpty(this.documents.find(doc =>
-        !isEmpty(doc) &&
-        (!isEmpty(doc.selected) && !doc.selected) ||
-        (!isEmpty(doc.isEmptyTemplate) && doc.isEmptyTemplate)));
+    if (isEmpty(this.documents)) return false;
+    const hasEmptyTemplate = !isEmpty(this.documents.find(doc => doc.isEmptyTemplate));
+    const filteredDocuments = hasEmptyTemplate ? this.documents.filter(doc => !doc.isEmptyTemplate) : this.documents;
+    return isEmpty(filteredDocuments.find(doc => !doc.selected));
   }
 
   handleOnFileUpload(event) {
@@ -91,10 +98,7 @@ export default class SendingDocumentsList extends LightningElement {
     })
       .then(docs => {
         if (!isEmpty(docs) && docs.length > 0) {
-          for (let i = 0; i < docs.length; i++) {
-            let newDocument = this.addDocumentProperties(docs[i], true);
-            this.addNewDocument(newDocument);
-          }
+          this.addNewDocuments(docs.map(d => this.addDocumentProperties(d, true)));
         }
         this.setLoading(false);
       })
@@ -122,13 +126,12 @@ export default class SendingDocumentsList extends LightningElement {
     publish(this.context, SENDING_TOGGLE_DOCUMENT_SELECTION, {selected: event.target.checked});
   }
 
-  addNewDocument(document) {
-    let docs = [];
-    docs.push(document);
-    const message = {
-      documents: docs
-    };
-    publish(this.context, SENDING_ADD_DOCUMENT, message);
+  addNewDocuments(newDocuments) {
+    this.updateDocuments(this.documents.concat(newDocuments));
+  }
+
+  updateDocuments(documents) {
+    publish(this.context, SENDING_UPDATE_DOCUMENTS, { documents });
   }
 
   showError(errorMessage) {
@@ -146,5 +149,31 @@ export default class SendingDocumentsList extends LightningElement {
 
   setLoading(value) {
     this.isLoading = value;
+  }
+
+  /* Drag-and-drop functions */
+
+  handleDragEnter(evt) {
+    handleDragEnter(this, evt);
+  }
+
+  handleDragOver(evt) {
+    handleDragOver(this, evt);
+  }
+
+  handleDragLeave(evt) {
+    handleDragLeave(this, evt);
+  }
+
+  itemDragStart(evt) {
+    itemDragStart(this, evt.currentTarget.dataset.id);
+  }
+
+  itemDragEnd(evt) {
+    itemDragEnd(this, evt.currentTarget.dataset.id);
+  }
+
+  handleDrop(evt) {
+    handleDrop(this, evt, this.updateDocuments.bind(this));
   }
 }

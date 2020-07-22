@@ -23,7 +23,7 @@
     border-top: 1px solid rgb(221, 219, 218);
     border-bottom: 1px solid rgb(221, 219, 218);
     padding-top: 5px;
-    padding-left: 60px;
+    padding-left: 3rem;
 }
 
 .ds-sending-header-text {
@@ -40,4 +40,8 @@
 
 .ds-sending-center-content {
     margin: auto;
+}
+
+.over {
+    border: 1px dashed green;
 }

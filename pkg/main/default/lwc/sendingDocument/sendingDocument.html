@@ -1,5 +1,6 @@
 <template>
-    <div class="slds-grid slds-gutters">
+    <div class="slds-grid slds-p-around_medium"
+        draggable="true">
         <div class="slds-col slds-size_1-of-12 slds-p-right_none ds-sending-center-content ds-sending-fit-content-width">
             <div class="slds-grid">
                 <div class="slds-col slds-size_1-of-12 ds-sending-fit-content-width">
@@ -7,10 +8,10 @@
                         icon-name="utility:drag_and_drop"
                         alternative-text="Drag and Drop"
                         variant="neutral"
-                        size="small">
+                        size="x-small">
                     </lightning-icon>
                 </div>
-                <div class="slds-col slds-size_1-of-12 slds-p-around_none ds-sending-fit-content-width">
+                <div class="slds-col slds-size_1-of-12 slds-p-left_medium ds-sending-fit-content-width">
                     <lightning-input
                         type="checkbox"
                         disabled={forbidEnvelopeChanges}

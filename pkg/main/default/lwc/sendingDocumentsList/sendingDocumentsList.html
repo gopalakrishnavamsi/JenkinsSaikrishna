@@ -51,8 +51,16 @@
                 for:item="document"
                 for:index="index">
             <template if:false={document.isEmptyTemplate}>
-                <div class="slds-border_bottom slds-p-around_small"
-                     key={document.sourceId}>
+                <div class="slds-border_bottom"
+                    data-id={document.sourceId}
+                    data-index={index}
+                    key={document.sourceId}
+                    ondrop={handleDrop}
+                    ondragenter={handleDragEnter}
+                    ondragover={handleDragOver}
+                    ondragleave={handleDragLeave}
+                    ondragstart={itemDragStart}
+                    ondragend={itemDragEnd}>
                     <c-sending-document
                             document={document}
                             index={index}

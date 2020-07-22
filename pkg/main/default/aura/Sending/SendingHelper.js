@@ -46,7 +46,7 @@
             return a['selected'] - b['selected'];
           });
 
-          if (!updated && !$A.util.isEmpty(documents)) {
+          if (!updated && !$A.util.isEmpty(documents) && !documents[0].isEmptyTemplate) {
             documents[0].selected = true;
             updated = true;
           }
