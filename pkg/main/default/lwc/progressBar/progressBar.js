@@ -8,15 +8,10 @@ import {LightningElement, api} from 'lwc';
 export default class ProgressBar extends LightningElement {
   @api disableSteps = false;
   @api currentStep;
-  steps;
+  @api steps;
 
   get progressIndicatorStyle() {
     return this.disableSteps ? 'ds-disabled-path' : '';
-  }
-
-  @api
-  progressSteps(value) {
-    this.steps = value;
   }
 
   handleStep(event) {

@@ -64,6 +64,7 @@ export default class DecSetupConfig extends LightningElement {
   @api
   attachSourceFiles = false;
   label = LABEL;
+  steps = STEPS;
   isEmptyRecipients = false;
 
   connectedCallback() {
@@ -213,7 +214,6 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   handleNext() {
-    this.updateProgressBar();
     this.handleOperation(OPERATION.NEXT);
   }
 
@@ -274,10 +274,10 @@ export default class DecSetupConfig extends LightningElement {
     let indexToInsert = documents.length > 0 ? documents.length - 1 : 0;
     documents.splice(indexToInsert, 0, {...event.detail.data});
     this.updateLocalConfiguration({documents});
+    this.updateProgressBar();
   }
 
   handleOnClickProgressStep(event) {
-    this.updateProgressBar();
     this.updateEnvelopeConfiguration(event.detail.data);
   }
 
@@ -303,6 +303,7 @@ export default class DecSetupConfig extends LightningElement {
     const documents = this.envelopeConfigurationData.documents.filter((d, i) => i !== message.index);
     this.envelopeConfigurationData = {...this.envelopeConfigurationData, documents};
     this.contentDocumentIdsToDelete.push(message.contentDocumentId);
+    this.updateProgressBar();
   }
 
   handleEmailChange({detail}) {
@@ -403,7 +404,7 @@ export default class DecSetupConfig extends LightningElement {
   }
 
   updateProgressBar() {
-    let taggerStepUpdated = STEPS;
+    let taggerStepUpdated = STEPS.slice();
     if (!isEmpty(this.envelopeConfigurationData) &&
       !isEmpty(this.envelopeConfigurationData.documents) &&
       this.envelopeConfigurationData.documents.find((doc) => doc.type === DOCUMENT_TYPE_TEMPLATE_DOCUMENT)) {
@@ -413,8 +414,8 @@ export default class DecSetupConfig extends LightningElement {
       taggerStepUpdated[2].disabled = true;
       this.isTaggerDisabled = true;
     }
-    let progressSelector = this.template.querySelector('c-progress-bar');
-    progressSelector.progressSteps(taggerStepUpdated);
+
+    this.steps = taggerStepUpdated;
   }
 
   processTextSearchSourceFiles(documents, extractText) {

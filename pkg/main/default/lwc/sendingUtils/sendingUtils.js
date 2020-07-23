@@ -48,9 +48,9 @@ const MIN_STEP = PROGRESS_STEP.DOCUMENTS;
 const MAX_STEP = PROGRESS_STEP.PREPARE_AND_SEND;
 
 const STEPS = [
-  {'label': LABEL.documents, 'value': PROGRESS_STEP.DOCUMENTS},
-  {'label': LABEL.recipients, 'value': PROGRESS_STEP.RECIPIENTS},
-  {'label': LABEL.prepareAndSend, 'value': PROGRESS_STEP.PREPARE_AND_SEND}
+  {'label': LABEL.documents, 'value': PROGRESS_STEP.DOCUMENTS, 'disabled': false},
+  {'label': LABEL.recipients, 'value': PROGRESS_STEP.RECIPIENTS, 'disabled': false},
+  {'label': LABEL.prepareAndSend, 'value': PROGRESS_STEP.PREPARE_AND_SEND, 'disabled': false}
 ];
 
 const getDocumentsForSending = (docs) => {
