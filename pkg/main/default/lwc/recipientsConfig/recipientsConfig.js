@@ -1,5 +1,5 @@
 import {LightningElement, api} from 'lwc';
-import {Labels, Recipient, StandardEvents} from 'c/recipientUtils';
+import {Labels, Recipient, StandardEvents, RoleQueue, Types} from 'c/recipientUtils';
 import {
   isEmpty,
   proxify,
@@ -28,6 +28,8 @@ export default class Recipients extends LightningElement {
 
   privateRecipients = proxify([]);
 
+  privateDefaultRoles = null;
+
   editRecipientIndex = null;
 
   isSigningOrder = false;
@@ -55,6 +57,25 @@ export default class Recipients extends LightningElement {
     genericEvent.call(this, 'emptyrecipients', this.isEmptyRecipients, false);
   }
 
+  @api
+  get defaultRoles() {
+    return this.privateDefaultRoles;
+  }
+
+  set defaultRoles(val = []) {
+    this.privateDefaultRoles = new RoleQueue(
+      val, 
+      () => {
+        let roles = [];
+        this.recipients.forEach((r) => {
+          if (r.recipientType === Types.RelatedRecipient.value && !isEmpty(r.roles) && r.roles.length > 0) roles.push(...r.roles.map(rr => rr.toUpperCase()));
+          else if (!isEmpty(r.role) && !isEmpty(r.role.name)) roles.push(r.role.name.toUpperCase())
+        })
+        return roles;
+      }
+    )
+  }
+
   connectedCallback() {
     this.deleteChannelEvent = subscribeToMessageChannel(
       this.context,
@@ -71,6 +92,12 @@ export default class Recipients extends LightningElement {
     );
 
     if (!isEmpty(this.recipients)) {
+      //Apply Default Roles
+      if (this.defaultRoles && this.isSending) {
+        for(let recipient of this.recipients) {
+          if (isEmpty(recipient.role) || recipient.role.isEmpty) recipient.role = this.defaultRoles.getNextRole();
+        }
+      }
       let recipientsGroup = groupBy(this.recipients, 'routingOrder');
       Object.keys(recipientsGroup).forEach(function (key) {
         if (parseInt(key) > DEFAULT_ROUTING_ORDER) {
@@ -131,6 +158,10 @@ export default class Recipients extends LightningElement {
       const maxRoutingOrder = Math.max(...this.recipients.map(r => r.routingOrder), 0);
       recipient.routingOrder = maxRoutingOrder + 1;
     } else if (!isEdit) recipient.routingOrder = DEFAULT_ROUTING_ORDER;
+  
+    if (this.isSending && !isEmpty(this.defaultRoles) && (isEmpty(recipient.role) || recipient.role.isEmpty)) {
+      recipient.role = this.defaultRoles.getNextRole();
+    }
 
     if (isEdit) {
       this.editRecipient = recipient;

@@ -58,10 +58,7 @@
             });
             recipients = placeholders.recipients.concat(recipients || []);
           }
-          var defaultRoles = result.defaultRoles.reduce(function (rolesMap, role) {
-            rolesMap[role.name.toLowerCase()] = role;
-            return rolesMap;
-          }, {});
+
           result.envelope.notifications = $A.util.isUndefinedOrNull(result.envelope.notifications)
             ? {}
             : self.setExpiration(
@@ -78,7 +75,7 @@
           component.set('v.availableTemplates', result.templates);
           component.set('v.documents', documents);
           component.set('v.recipients', recipients);
-          component.set('v.defaultRoles', defaultRoles);
+          component.set('v.defaultRoles', result.defaultRoles);
           component.set('v.emailLocalizations', result.emailLocalizations);
           component.set(
             'v.isEmailLocalizationEnabled',

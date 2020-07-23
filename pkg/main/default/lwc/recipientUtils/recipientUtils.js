@@ -99,7 +99,7 @@ export class Recipient {
       if (recipientDetails.relationship.isLookup) {
         return new LookupRecipient(
           Relationship.fromObject(recipientDetails.relationship),
-          recipientDetails.role,
+          Role.fromObject(recipientDetails.role || {}),
           recipientDetails.routingOrder,
           {
             ...recipientDetails,
@@ -126,7 +126,7 @@ export class Recipient {
         ...recipientDetails,
         authentication: new Authentication(recipientAuthentication)
       },
-      typeof recipientDetails.role === 'string' ? new Role(recipientDetails.role) : recipientDetails.role,
+      typeof recipientDetails.role === 'string' ? new Role(recipientDetails.role) : Role.fromObject(recipientDetails.role || {}),
       recipientDetails.routingOrder
     );
   }
@@ -280,6 +280,10 @@ class Role {
   constructor(name, value = 1) {
     this.name = name;
     this.value = value;
+  }
+
+  static fromObject({ name, value }) {
+    return new Role(name, value);
   }
 
   get isEmpty() {
@@ -454,4 +458,20 @@ export class RecipientGroupedByRoutingOrder {
     let initials = name.match(/\b\w/g) || [];
     return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
   };
+}
+
+export class RoleQueue {
+  constructor(defaultRoles, getRecipientRoles) {
+    this.defaultRoles = defaultRoles.map(r => new Role(r.name, r.value));
+    this.getRecipientRoles = getRecipientRoles;
+  }
+
+  getNextRole() {
+    const usedRoles = new Set(this.getRecipientRoles());
+    for(const role of this.defaultRoles) {
+      if (usedRoles.has(role.name.toUpperCase())) continue;
+      return role;
+    }
+    return null;
+  }
 }
