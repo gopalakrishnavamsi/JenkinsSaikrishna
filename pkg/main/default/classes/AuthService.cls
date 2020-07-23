@@ -1512,21 +1512,22 @@ global with sharing class AuthService {
 		LoginInformation result;
 		try {
 			Url baseUrl = AccountProducts.getInstance().getScmWebBaseUrl();
-			if (baseUrl == null) {
-				LoggerService.getInstance().error('SCM web base URL is not configured');
+			if (baseUrl == null) { // eSignature-only, there will be no SCM URLs
+				LoggerService.getInstance().warn('SCM web base URL is not configured');
 				result = new LoginInformation(
 					LoginInformation.TYPE_SETUP,
-					LoginInformation.STATUS_FAILURE,
-					Label.MissingDocuSignGenAuthorizationSettings,
+					LoginInformation.STATUS_SUCCESS,
+					Label.SuccessDocuSignAuthorization,
 					null,
 					null);
-			} else {
+			} else { // CLM, Gen, Negotiate
 				result = getScmSetupAPI(baseUrl).completeSetup(authorizationCode);
-				if (result.status == LoginInformation.STATUS_SUCCESS) {
-					AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-					settings.IsPlatformAuthorized__c = true;
-					update settings;
-				}
+			}
+
+			if (result.status == LoginInformation.STATUS_SUCCESS) {
+				AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+				settings.IsPlatformAuthorized__c = true;
+				update settings;
 			}
 		} finally {
 			AccountProducts.save();

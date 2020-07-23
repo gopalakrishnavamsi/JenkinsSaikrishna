@@ -2610,7 +2610,7 @@ private class AuthServiceTest {
 	}
 
 	@IsTest
-	static void test_redeemSalesforceCode_missing_settings() {
+	static void test_redeemSalesforceCode_eSign_only() {
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
 			s.ScmWebBaseUrl__c = null;
@@ -2622,8 +2622,8 @@ private class AuthServiceTest {
 			Test.stopTest();
 
 			System.assertNotEquals(null, result);
-			System.assertEquals(LoginInformation.STATUS_FAILURE, result.status);
-			System.assertEquals(Label.MissingDocuSignGenAuthorizationSettings, result.message);
+			System.assertEquals(LoginInformation.STATUS_SUCCESS, result.status);
+			System.assertEquals(Label.SuccessDocuSignAuthorization, result.message);
 			System.assertEquals(null, UserSettings__c.getInstance().Nonce__c);
 			System.assertEquals(true, UserSettings__c.getInstance().IsPlatformAuthorized__c);
 			System.assertNotEquals(null, UserSettings__c.getInstance().PlatformAuthorizationLastChecked__c);

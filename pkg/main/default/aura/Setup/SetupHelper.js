@@ -51,69 +51,35 @@
       //logged in
       //fetch the products
       helper.fetchAccountProducts(component)
-        .then($A.getCallback(function (response) {
-          component.set('v.products', response);
-          var eSignFound = false;
-          var genFound = false;
-          var clmFound = false;
-          var negotiateFound = false;
-          //No valid products on the account handle case here
-          component.get('v.products').forEach(function (product) {
-            if (product.name === 'e_sign') {
-              eSignFound = true;
-            } else if (product.name === 'gen') {
-              genFound = true;
-            } else if (product.name === 'clm') {
-              clmFound = true;
-            } else if (product.name === 'negotiate') {
-              negotiateFound = true;
+        .then($A.getCallback(function (products) {
+          // TODO: No valid products on the account handle case here?
+          component.set('v.products', products);
+
+          if (isPlatformAuthorized) {
+            // If CLM is on the account, go to CLM setup home
+            if (!$A.util.isEmpty(products) && products.some(function (product) {
+              return product && product.name && product.name.toLowerCase() === 'clm';
+            })) {
+              helper.createComponent('setupContent', component, 'c:CLMSetupLayout', {
+                login: component.get('v.login'),
+                products: component.get('v.products')
+              });
+            } else { // Else, go to non-CLM setup home
+              helper.createComponent('setupContent', component, 'c:SetupWizard', {
+                login: component.get('v.login'),
+                products: component.get('v.products'),
+                showSetupSpinner: component.get('v.showSetupSpinner'),
+                showSetupComponent: component.get('v.showSetupComponent'),
+                navigateToNewTemplateUrl: component.get('v.navigateToNewTemplateUrl'),
+                navigateToNewEnvelopeConfigUrl: component.get('v.navigateToNewEnvelopeConfigUrl')
+              });
             }
-          });
-
-          //Authorized and clm product found. load clm admin interface
-          if (isPlatformAuthorized && clmFound) {
-            helper.createComponent('setupContent', component, 'c:CLMSetupLayout', {
-              login: component.get('v.login'),
-              products: component.get('v.products')
+          } else { // Initiate Salesforce OAuth for any product
+            helper.createComponent('setupContent', component, 'c:Login', {
+              beginOAuth: component.get('v.beginOAuth'),
+              beginSalesforceOAuth: component.get('v.beginSalesforceOAuth'),
+              login: component.get('v.login')
             });
-          }
-
-          //Authorized and non clm product found. currently either gen or negotiate
-          else if (isPlatformAuthorized && (eSignFound || genFound || negotiateFound)) {
-            helper.createComponent('setupContent', component, 'c:SetupWizard', {
-              login: component.get('v.login'),
-              products: component.get('v.products'),
-              showSetupSpinner: component.get('v.showSetupSpinner'),
-              showSetupComponent: component.get('v.showSetupComponent'),
-              navigateToNewTemplateUrl: component.get('v.navigateToNewTemplateUrl'),
-              navigateToNewEnvelopeConfigUrl: component.get('v.navigateToNewEnvelopeConfigUrl')
-            });
-          }
-
-          //Not Authorized but contains only esign load the esign admin experience
-          else if (!isPlatformAuthorized &&
-            eSignFound &&
-            !clmFound &&
-            !genFound &&
-            !negotiateFound) {
-            helper.createComponent('setupContent', component, 'c:SetupWizard', {
-              login: component.get('v.login'),
-              products: component.get('v.products'),
-              showSetupSpinner: component.get('v.showSetupSpinner'),
-              showSetupComponent: component.get('v.showSetupComponent'),
-              navigateToNewEnvelopeConfigUrl: component.get('v.navigateToNewEnvelopeConfigUrl')
-            });
-          }
-
-          //Not Authorized and contains either gen, clm , negotiate
-          else if (!isPlatformAuthorized && (eSignFound || genFound || negotiateFound)) {
-            helper.createComponent('setupContent', component, 'c:Login',
-              {
-                beginOAuth: component.get('v.beginOAuth'),
-                beginSalesforceOAuth: component.get('v.beginSalesforceOAuth'),
-                login: component.get('v.login')
-              }
-            );
           }
         }))
         .catch(function (error) {
@@ -140,18 +106,21 @@
           }
         }
       ));
-  },
+  }
+  ,
 
   showToast: function (component, message, mode, detail) {
     var toast = component.find('ds-toast');
     if (toast) {
       toast.show(mode, message, detail);
     }
-  },
+  }
+  ,
 
   hideToast: function (component) {
     component.find('ds-toast').close();
-  },
+  }
+  ,
 
   fetchAccountProducts: function (component) {
     var getProductsAction = component.get('c.getProductsOnAccount');
@@ -166,7 +135,8 @@
       }));
       $A.enqueueAction(getProductsAction);
     }));
-  },
+  }
+  ,
 
   triggerLogout: function (component, event, helper) {
     var showSetupSpinner = component.get('v.showSetupSpinner');
@@ -181,7 +151,8 @@
         showSetupComponent();
         helper.showToast(component, error, 'error');
       }));
-  },
+  }
+  ,
 
   logout: function (component) {
     var logoutAction = component.get('c.logout');
@@ -201,4 +172,5 @@
       $A.enqueueAction(logoutAction);
     }));
   }
-});
+})
+;

@@ -299,16 +299,6 @@ public with sharing class SetupController extends Controller {
 	}
 
 	@AuraEnabled
-	public static Boolean doPlatformAuthorizationSettingsExist() {
-		try {
-			AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
-			return (settings != null && String.isNotBlank(settings.ScmWebBaseUrl__c));
-		} catch (Exception ex) {
-			throw Controller.wrapException(ex, 'Failed to check Platform Authorization settings.');
-		}
-	}
-
-	@AuraEnabled
 	public static List<Product> getProductsOnAccount() {
 		try {
 			List<Product> result = AccountProducts.getProducts();

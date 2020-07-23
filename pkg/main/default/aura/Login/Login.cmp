@@ -7,7 +7,6 @@
     <aura:attribute name="loading" type="Boolean" default="false"/>
     <aura:attribute name="isLoggedIn" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isPlatformAuthorized" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="platformAuthorizationSettingsFound" type="Boolean" default="false" access="private"/>
     <aura:attribute name="currentStep" type="Integer" access="private"/>
     <aura:attribute name="isCompleted" type="Boolean" access="private"/>
     <aura:attribute name="environment" type="String"/>
@@ -245,12 +244,7 @@
                                                 <div class="slds-media__body slds-m-left_medium slds-m-top_large">
                                                     <ul>
                                                         <li class="ds-loginToDocuSign-text">{!$Label.c.AuthorizeAccess}</li>
-                                                        <aura:if isTrue="{!v.platformAuthorizationSettingsFound}">
-                                                            <li class="slds-m-top_xx-small ds-regular-text">{!$Label.c.AuthorizeHelpText}</li>
-                                                            <aura:set attribute="else">
-                                                                <li class="slds-m-top_xx-small ds-regular-text">{!$Label.c.AuthorizationSettingsNotPresent}</li>
-                                                            </aura:set>
-                                                        </aura:if>
+                                                        <li class="slds-m-top_xx-small ds-regular-text">{!$Label.c.AuthorizeHelpText}</li>
                                                         <li class="slds-m-top_large">
                                                             <ul class="slds-list_horizontal">
                                                                 <lightning:button class="slds-theme_brand"
@@ -258,24 +252,11 @@
                                                                                   label="{!$Label.c.Back}"
                                                                                   iconName="utility:chevronleft"
                                                                                   onclick="{!c.gotoSelectAccountStep}"/>
-
-                                                                <aura:if
-                                                                        isTrue="{!v.platformAuthorizationSettingsFound}">
-                                                                    <lightning:button label="{!$Label.c.AllowAccess}"
-                                                                                      variant="brand"
-                                                                                      class="ds-button-left-margin"
-                                                                                      onclick="{!c.completePlatformOAuth}"
-                                                                                      disabled="{!not(v.isLoggedIn)}"/>
-
-                                                                    <aura:set attribute="else">
-                                                                        <lightning:button
-                                                                                label="{!$Label.c.CompleteSetupAuthorization}"
-                                                                                variant="brand"
-                                                                                class="ds-button-left-margin"
-                                                                                onclick="{!c.completeSetup}"
-                                                                                disabled="{!not(v.isLoggedIn)}"/>
-                                                                    </aura:set>
-                                                                </aura:if>
+                                                                <lightning:button label="{!$Label.c.AllowAccess}"
+                                                                                  variant="brand"
+                                                                                  class="ds-button-left-margin"
+                                                                                  onclick="{!c.completePlatformOAuth}"
+                                                                                  disabled="{!not(v.isLoggedIn)}"/>
                                                             </ul>
                                                         </li>
                                                     </ul>

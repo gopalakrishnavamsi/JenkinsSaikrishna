@@ -44,18 +44,9 @@
     //The page needs to be refreshed here in order to prevent Remoting Exception 
     if (reloadPage) {
       window.location.reload();
-    }
-    else {
-      helper.checkPlatformAuthorizationSettings(component)
-        .then($A.getCallback(function (response) {
-          component.set('v.platformAuthorizationSettingsFound', response);
-          helper.goToStep(component, 2);
-          component.set('v.loading', false);
-        }))
-        .catch(function (error) {
-          helper.showToast(component, error, null, 'error');
-          component.set('v.loading', false);
-        });
+    } else {
+      helper.goToStep(component, 2);
+      component.set('v.loading', false);
     }
   },
 
@@ -84,21 +75,6 @@
     if (selectedStep <= maxStepsAllowed) {
       helper.goToStep(component, selectedStep);
     }
-  },
-
-  checkPlatformAuthorizationSettings: function (component) {
-    var checkAction = component.get('c.doPlatformAuthorizationSettingsExist');
-    return new Promise($A.getCallback(function (resolve, reject) {
-      checkAction.setCallback(this, $A.getCallback(function (response) {
-        var state = response.getState();
-        if (state === 'SUCCESS') {
-          resolve(response.getReturnValue());
-        } else {
-          reject(stringUtils.getErrorMessage(response));
-        }
-      }));
-      $A.enqueueAction(checkAction);
-    }));
   },
 
   toggleAdvancedOptions: function (component) {

@@ -407,26 +407,6 @@ private class SetupControllerTest {
 	}
 
 	@IsTest
-	static void test_doPlatformAuthorizationSettingsExist_positive() {
-		System.runAs(UserMock.createDocuSignAdministrator(true)) {
-			Test.startTest();
-			Boolean result = SetupController.doPlatformAuthorizationSettingsExist();
-			Test.stopTest();
-			System.assertEquals(true, result);
-		}
-	}
-
-	@IsTest
-	static void test_doPlatformAuthorizationSettingsExist_negative() {
-		System.runAs(UserMock.createDocuSignAdministrator(false)) {
-			Test.startTest();
-			Boolean result = SetupController.doPlatformAuthorizationSettingsExist();
-			Test.stopTest();
-			System.assertEquals(false, result);
-		}
-	}
-
-	@IsTest
 	static void test_getProductsOnAccount_positive() {
 		System.runAs(UserMock.createDocuSignUser()) {
 			Test.startTest();
