@@ -5,6 +5,8 @@ import {genericEvent, isEmpty} from 'c/utils';
 import EditLabel from '@salesforce/label/c.Edit';
 import DeleteLabel from '@salesforce/label/c.DeleteButtonLabel';
 import SelectRecipientLabel from '@salesforce/label/c.SelectRecipient';
+import AccessAuthenticationLabel from '@salesforce/label/c.AccessAuthentication';
+import PrivateMessageLabel from '@salesforce/label/c.PrivateMessage';
 import decTemplate from './decRow.html';
 import sendingTemplate from './sendingRow.html';
 
@@ -25,7 +27,9 @@ export default class RecipientRow extends LightningElement {
   Labels = {
     Edit: EditLabel,
     Delete: DeleteLabel,
-    SelectRecipient: SelectRecipientLabel
+    SelectRecipient: SelectRecipientLabel,
+    AccessAuthentication: AccessAuthenticationLabel,
+    PrivateMessage: PrivateMessageLabel
   };
 
   context = createMessageContext();

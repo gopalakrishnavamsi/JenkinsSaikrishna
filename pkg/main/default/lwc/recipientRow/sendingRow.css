@@ -61,3 +61,14 @@
 .ds-routingOrderInput {
     max-width: 50px;
 }
+
+.ds-tooltip_container .ds-tooltip {
+    display: none;
+    top: calc(-200% - 15px);
+    transform: translateX(-45%);
+    white-space: nowrap;
+}
+
+.ds-tooltip_container:hover .ds-tooltip {
+    display: block;
+}
