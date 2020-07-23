@@ -10588,7 +10588,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Search By Group Name PlaceHolder</shortDescription>
-		<value>Search by Group Name..</value>
+		<value>Search by Group Name...</value>
 	</labels>
 	<labels>
 		<fullName>DecRecordsFieldsLookupLabel</fullName>
@@ -10692,7 +10692,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Dec Page Layouts</shortDescription>
-		<value>Pick the layouts from you Source Object where you'd like to add the button. </value>
+		<value>Pick the layouts from your Source Object where you'd like to add the button. </value>
 	</labels>
 	<labels>
 		<fullName>InPersonSignerLabel</fullName>

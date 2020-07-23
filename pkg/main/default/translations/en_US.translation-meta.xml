@@ -5456,7 +5456,7 @@
 		<name>DecSigningGroupLearnMoreLink</name>
 	</customLabels>
 	<customLabels>
-		<label>Search by Group Name..</label>
+		<label>Search by Group Name...</label>
 		<name>DecSearchByGroupNamePlaceHolder</name>
 	</customLabels>
 	<customLabels>
@@ -5500,7 +5500,7 @@
 		<name>DecCreateCustomButtonDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>Pick the layouts from you Source Object where you'd like to add the button.</label>
+		<label>Pick the layouts from your Source Object where you'd like to add the button.</label>
 		<name>DecPageLayouts</name>
 	</customLabels>
 	<customLabels>
