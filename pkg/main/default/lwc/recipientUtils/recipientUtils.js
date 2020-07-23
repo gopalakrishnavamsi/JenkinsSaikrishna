@@ -57,6 +57,7 @@ import view from '@salesforce/label/c.View';
 import addAndNew from '@salesforce/label/c.AddAndNew';
 import addNameAndEmailLabel from '@salesforce/label/c.AddNameAndEmail';
 import byNameAndEmailLabel from '@salesforce/label/c.ByNameAndEmail';
+import selectLabel from '@salesforce/label/c.Select';
 //Events
 import DEC_DELETE_RECIPIENT from '@salesforce/messageChannel/DecDeleteRecipient__c';
 import DEC_EDIT_RECIPIENT from '@salesforce/messageChannel/DecEditRecipient__c';
@@ -92,7 +93,7 @@ export class Recipient {
 
     const recipientAuthentication = isEmpty(recipientDetails.authentication) ? {} : {
       phone: Array.isArray(recipientDetails.authentication.smsPhoneNumbers) ? recipientDetails.authentication.smsPhoneNumbers[0] : null,
-      ... recipientDetails.authentication,
+      ...recipientDetails.authentication,
     };
 
     if (recipientDetails.relationship) {
@@ -207,7 +208,7 @@ export class Recipient {
     if (!isEmpty(this.signingGroup)) return this.signingGroup === recipient.signingGroup;
     else if (!isEmpty(this.source) && !isEmpty(recipient.source)) return this.sourceId === recipient.sourceId;
     return recipient.role && this.role ? recipient.role.name === this.role.name : false;
-  }  
+  }
 
   addRole(roleName) {
     this.role = new Role(roleName, this.routingOrder);
@@ -231,11 +232,11 @@ export class LookupRecipient extends Recipient {
   }
 
   equals(recipient) {
-    return this.relationship && 
-      recipient.relationship && 
+    return this.relationship &&
+      recipient.relationship &&
       recipient.relationship.isLookup &&
       this.relationship.name === recipient.relationship.name;
-  }  
+  }
 
   addSMSAuthentication() {
     this.authentication = new Authentication({idCheckRequired: true});
@@ -252,12 +253,12 @@ export class RelatedRecipient extends Recipient {
   }
 
   get roleName() {
-    return this.roles && !isEmpty(this.roles) ? this.roles.join(',') : null; 
+    return this.roles && !isEmpty(this.roles) ? this.roles.join(',') : null;
   }
 
   equals(recipient) {
-    return this.relationship && 
-      recipient.relationship && 
+    return this.relationship &&
+      recipient.relationship &&
       !recipient.relationship.isLookup &&
       this.relationship.name === recipient.relationship.name;
   }
@@ -282,7 +283,7 @@ class Role {
     this.value = value;
   }
 
-  static fromObject({ name, value }) {
+  static fromObject({name, value}) {
     return new Role(name, value);
   }
 
@@ -350,13 +351,14 @@ export const Labels = {
   nameLabel: nameLabel,
   recipientRoleLabel: recipientRoleLabel,
   recipientRecordFieldLabel: recipientRecordFieldLabel,
-  childRelationshipsLabel: childRelationships, 
+  childRelationshipsLabel: childRelationships,
   view: view,
   addAndNew: addAndNew,
   accessCodeLabel: accessCodeLabel,
   decSMSorPhone: decSMSorPhone,
   decSigningGroup: decSigningGroup,
-  addNameAndEmailLabel: addNameAndEmailLabel
+  addNameAndEmailLabel: addNameAndEmailLabel,
+  selectLabel: selectLabel
 };
 
 export const Actions = {
@@ -468,7 +470,7 @@ export class RoleQueue {
 
   getNextRole() {
     const usedRoles = new Set(this.getRecipientRoles());
-    for(const role of this.defaultRoles) {
+    for (const role of this.defaultRoles) {
       if (usedRoles.has(role.name.toUpperCase())) continue;
       return role;
     }
