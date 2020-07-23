@@ -9,6 +9,7 @@ import sendingIconUrl from '@salesforce/resourceUrl/sendingIcon';
 
 export default class SendingHeader extends LightningElement {
   @api recordId;
+  @api recordName;
   @api isFirstStep;
   @api isFinalStep;
   @api nextStepButtonText;

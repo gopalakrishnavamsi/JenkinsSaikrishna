@@ -11,6 +11,7 @@
 
     <aura:attribute name="files" type="String[]" default="[]"/>
     <aura:attribute name="envelopeTemplateId" type="String"/>
+    <aura:attribute name="recordName" type="String"/>
     <aura:attribute name="placeholderRecipients" type="Object"/>
     <aura:attribute name="sendNow" type="Boolean" default="false"/>
     <aura:attribute name="lock" type="Boolean" default="false"/>

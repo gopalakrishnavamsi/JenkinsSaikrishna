@@ -33,6 +33,7 @@ import deleteIncompleteEnvelope from '@salesforce/apex/SendingController.deleteI
 export default class SendingConfig extends LightningElement {
 
   @api recordId;
+  @api recordName;
   @api envelope;
   // Flag to determine ability to modify docs/recipients
   // This may need to be divided into different flags later

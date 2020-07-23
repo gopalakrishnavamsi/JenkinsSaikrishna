@@ -3,18 +3,27 @@
 public with sharing class SendingController extends Controller {
 
 	public String sObjectName { get; private set; }
+	public String recordName { get; private set; }
 
 	public SendingController() {
 		QueryString params = QueryString.fromCurrentPage();
 		Id id = params.getId('sId', null);
-		if (id != null) this.sObjectName = id.getSobjectType().getDescribe().getName();
+		if (id != null) {
+			this.sObjectName = id.getSobjectType().getDescribe().getName();
+			Entity entity = Entity.resolve(id);
+			this.recordName = entity == null || String.isBlank(entity.name) ? Label.DocuSign : entity.name;
+		}
 	}
 
 	//noinspection ApexUnusedDeclaration
 	public SendingController(final ApexPages.StandardController c) {
 		if (c != null) {
 			Id id = c.getId();
-			if (id != null) this.sObjectName = id.getSobjectType().getDescribe().getName();
+			if (id != null) {
+				this.sObjectName = id.getSobjectType().getDescribe().getName();
+				Entity entity = Entity.resolve(id);
+				this.recordName = entity == null || String.isBlank(entity.name) ? Label.DocuSign : entity.name;
+			}
 		}
 	}
 

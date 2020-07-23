@@ -1,4 +1,3 @@
-import docuSign from '@salesforce/label/c.DocuSign';
 import sendWithDocuSign from '@salesforce/label/c.SendWithDocuSign';
 import cancel from '@salesforce/label/c.Cancel';
 import exit from '@salesforce/label/c.Exit';
@@ -16,7 +15,6 @@ import defaultEmailMessage from '@salesforce/label/c.DefaultEmailMessage';
 import {isEmpty} from 'c/utils';
 
 const LABEL = {
-  docuSign,
   sendWithDocuSign,
   cancel,
   exit,

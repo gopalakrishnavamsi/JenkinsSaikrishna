@@ -16,9 +16,9 @@
 
     <aura:registerEvent name="toastEvent" type="c:ToastEvent"/>
 
-    <lightning:card variant="base">
-        <div class="slds-card__header slds-grid slds-m-top_none slds-p-top_none">
-            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+    <lightning:card variant="base" class="slds-p-top_none">
+        <div class="slds-grid slds-m-horizontal_small">
+            <div class="slds-media slds-media_center slds-has-flexi-truncate slds-m-bottom_small">
                 <div class="slds-media__figure">
                     <img src="{!$Resource.sendingIcon}"
                          class="slds-icon slds-icon_small"/>
@@ -26,7 +26,7 @@
                 <div class="slds-media__body">
                     <h2 class="slds-text-heading_small">{!$Label.c.EnvelopeStatus}</h2>
                 </div>
-            </header>
+            </div>
         </div>
         <aura:if isTrue="{!v.isAuthorized}">
             <aura:set attribute="else">

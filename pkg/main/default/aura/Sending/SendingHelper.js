@@ -108,6 +108,7 @@
       'c:sendingConfig',
       {
         recordId: component.get('v.recordId'),
+        recordName: component.get('v.recordName'),
         envelope: component.get('v.envelope'),
         notifications: component.get('v.envelope').notifications,
         documents: component.get('v.documents'),

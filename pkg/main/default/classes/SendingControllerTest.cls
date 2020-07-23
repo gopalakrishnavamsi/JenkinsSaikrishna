@@ -6,6 +6,8 @@ private class SendingControllerTest {
 		System.runAs(UserMock.createUser()) {
 			SObject a = TestUtils.createAccount();
 			PageReference pg = Page.Sending;
+			Entity entity = Entity.resolve(a.Id);
+			String recordName = entity == null || String.isBlank(entity.name) ? Label.DocuSign : entity.name;
 			pg.getParameters().put('sId', a.Id);
 			Test.setCurrentPage(pg);
 
@@ -13,11 +15,12 @@ private class SendingControllerTest {
 			SendingController result1 = new SendingController();
 			SendingController result2 = new SendingController(new ApexPages.StandardController(a));
 			Test.stopTest();
-
 			System.assertNotEquals(null, result1);
 			System.assertEquals(a.getSObjectType().getDescribe().getName(), result1.sObjectName);
+			System.assertEquals(recordName, result1.recordName);
 			System.assertNotEquals(null, result2);
 			System.assertEquals(a.getSObjectType().getDescribe().getName(), result2.sObjectName);
+			System.assertEquals(recordName, result2.recordName);
 		}
 	}
 
