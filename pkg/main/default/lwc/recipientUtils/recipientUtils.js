@@ -90,6 +90,11 @@ export class Recipient {
   static fromObject(recipientDetails = {}) {
     if (isEmpty(recipientDetails)) return null;
 
+    const recipientAuthentication = isEmpty(recipientDetails.authentication) ? {} : {
+      phone: Array.isArray(recipientDetails.authentication.smsPhoneNumbers) ? recipientDetails.authentication.smsPhoneNumbers[0] : null,
+      ... recipientDetails.authentication,
+    };
+
     if (recipientDetails.relationship) {
       if (recipientDetails.relationship.isLookup) {
         return new LookupRecipient(
@@ -98,7 +103,7 @@ export class Recipient {
           recipientDetails.routingOrder,
           {
             ...recipientDetails,
-            authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
+            authentication: new Authentication(recipientAuthentication)
           }
         );
       } else {
@@ -110,7 +115,7 @@ export class Recipient {
           Filter.fromObject(recipientDetails.filter || {}),
           {
             ...recipientDetails,
-            authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
+            authentication: new Authentication(recipientAuthentication)
           }
         );
       }
@@ -119,7 +124,7 @@ export class Recipient {
     return new Recipient(
       {
         ...recipientDetails,
-        authentication: new Authentication(recipientDetails.authentication ? recipientDetails.authentication : {})
+        authentication: new Authentication(recipientAuthentication)
       },
       typeof recipientDetails.role === 'string' ? new Role(recipientDetails.role) : recipientDetails.role,
       recipientDetails.routingOrder
