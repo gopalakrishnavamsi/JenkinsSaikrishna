@@ -1646,7 +1646,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		List<APIListCustomField> listCustomFields = new List<APIListCustomField>();
 		List<APITextCustomField> textCustomFields = new List<APITextCustomField> {
 			new APITextCustomField(
-				'##SFUsername',
+				'##SFUserName',
 				UserInfo.getUserName(),
 				false,
 				false),

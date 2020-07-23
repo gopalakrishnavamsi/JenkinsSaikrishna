@@ -139,7 +139,7 @@ private class EnvelopeAPITest {
 			for (EnvelopeAPI.APITextCustomField cf : result.textCustomFields) {
 				System.assertNotEquals(null, cf);
 				switch on cf.name {
-					when '##SFUsername' {
+					when '##SFUserName' {
 						System.assertEquals(UserInfo.getUserName(), cf.value);
 					} when '##SFBaseUrl' {
 						System.assertEquals(Salesforce.baseUrl.toExternalForm(), cf.value);
