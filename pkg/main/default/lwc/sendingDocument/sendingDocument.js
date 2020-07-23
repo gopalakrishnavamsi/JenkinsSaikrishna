@@ -24,6 +24,14 @@ export default class SendingDocument extends LightningElement {
     label = LABEL;
     templateDocumentActions = TEMPLATE_DOCUMENT_ACTIONS;
 
+    get isDraggable() {
+        return !isEmpty(this.forbidEnvelopeChanges) && !this.forbidEnvelopeChanges;
+    }
+
+    get hideDragAndDropIcon() {
+        return !isEmpty(this.forbidEnvelopeChanges) && this.forbidEnvelopeChanges ? 'slds-hidden' : '';
+    }
+
     get canPreview() {
         return this.document.type === DOCUMENT_TYPE_CONTENT_VERSION && !isEmpty(this.document.sourceId);
     }
