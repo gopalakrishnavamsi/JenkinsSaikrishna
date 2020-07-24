@@ -56,7 +56,6 @@ export default class SendingConfig extends LightningElement {
   emailMessage;
   isEmptyRecipients = false;
 
-
   // Temporary recipients list for testing online editor sending flow
   // testRecipients = [{'email':'rose@edge.com','isSigningGroup':false,'name':'Rose Gonzalez','phone':'(512) 757-9340','readOnly':false,'required':false,'signNow':false,'source':{'id':'0032F00000Zy9DEQAZ','isValid':true,'label':'Contact','name':'Rose Gonzalez','parent':{'id':'0012F00000dlx9XQAQ','isValid':true,'label':'Account','name':'Edge Communications','typeName':'Account'},'typeName':'Contact'},'type':'Signer','templateId':null,'emailSettings':{},'authentication':{},'role':{}}];
 
@@ -301,6 +300,5 @@ export default class SendingConfig extends LightningElement {
   handleUpdateNotifications(message) {
     this.privateNotifications = message.notifications;
   }
-
 }
 

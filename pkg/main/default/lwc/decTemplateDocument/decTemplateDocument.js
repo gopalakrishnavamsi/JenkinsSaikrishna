@@ -1,9 +1,20 @@
-import {LightningElement, api} from 'lwc';
-import {isEmpty, format, formatFileSize} from 'c/utils';
-import {LABEL, TEMPLATE_DOCUMENT_ACTIONS} from 'c/documentUtils';
+import {
+  LightningElement,
+  api
+} from 'lwc';
+import {
+  isEmpty,
+  format,
+  formatFileSize
+} from 'c/utils';
+import {
+  LABEL,
+  TEMPLATE_DOCUMENT_ACTIONS
+} from 'c/documentUtils';
 
 // Lightning message service
-import {createMessageContext,
+import {
+  createMessageContext,
   releaseMessageContext,
   publish
 } from 'lightning/messageService';
@@ -63,7 +74,7 @@ export default class DecTemplateDocument extends LightningElement {
   }
 
   handleFileOption(event) {
-    var action = event.detail.value;
+    let action = event.detail.value;
 
     switch (action) {
       case 'preview':

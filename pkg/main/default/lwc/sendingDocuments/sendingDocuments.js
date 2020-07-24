@@ -3,8 +3,11 @@ import {
     createMessageContext,
     releaseMessageContext
   } from 'lightning/messageService';
-  import SENDING_UPDATE_DOCUMENTS from '@salesforce/messageChannel/SendingUpdateDocuments__c';
-  import SENDING_TOGGLE_DOCUMENT_SELECTION from '@salesforce/messageChannel/SendingToggleDocumentSelection__c';
+//Subscriber
+import SENDING_RENAME_DOCUMENT from '@salesforce/messageChannel/SendingRenameDocument__c';
+import SENDING_REMOVE_DOCUMENT from '@salesforce/messageChannel/SendingRemoveDocument__c';
+import SENDING_UPDATE_DOCUMENTS from '@salesforce/messageChannel/SendingUpdateDocuments__c';
+import SENDING_TOGGLE_DOCUMENT_SELECTION from '@salesforce/messageChannel/SendingToggleDocumentSelection__c';
 import {isEmpty, proxify, subscribeToMessageChannel} from 'c/utils';
 
 export default class SendingDocuments extends LightningElement {
@@ -44,6 +47,20 @@ export default class SendingDocuments extends LightningElement {
             SENDING_UPDATE_DOCUMENTS,
             this.updateDocuments.bind(this)
         );
+
+        this.sendingRenameDocumentSubscription = subscribeToMessageChannel(
+          this.context,
+          this.sendingRenameDocumentSubscription,
+          SENDING_RENAME_DOCUMENT,
+          this.handleRenameDocument.bind(this)
+        );
+
+        this.sendingRemoveDocumentSubscription = subscribeToMessageChannel(
+          this.context,
+          this.sendingRemoveDocumentSubscription,
+          SENDING_REMOVE_DOCUMENT,
+          this.handleRemoveDocument.bind(this)
+        );
     }
 
     disconnectedCallback() {
@@ -66,5 +83,22 @@ export default class SendingDocuments extends LightningElement {
 
     updateDocuments(message) {
         this.privateDocuments = message.documents;
+    }
+
+    handleRenameDocument(message) {
+        const documentName = message.name;
+        const documentIndex = message.index;
+        const docs = this.privateDocuments.map((d, i) => {
+            if (i === documentIndex) {
+                return {...d, name: documentName};
+            }
+            return d;
+        });
+        this.privateDocuments = docs;
+    }
+
+    handleRemoveDocument(message) {
+        const documents = this.privateDocuments.filter((d, i) => i !== message.index);
+        this.privateDocuments = documents;
     }
 }

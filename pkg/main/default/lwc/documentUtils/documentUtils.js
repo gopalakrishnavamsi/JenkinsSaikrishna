@@ -19,6 +19,7 @@ import allDocuments from '@salesforce/label/c.AllDocuments';
 import previewDocument from '@salesforce/label/c.PreviewStep';
 import renameDocument from '@salesforce/label/c.Rename';
 import deleteDocument from '@salesforce/label/c.DeleteButtonLabel';
+import removeDocument from '@salesforce/label/c.Remove';
 import cancel from '@salesforce/label/c.Cancel';
 import renameModalTitle from '@salesforce/label/c.RenameAgreement';
 import selectedDocuments from '@salesforce/label/c.SelectedDocuments';
@@ -52,6 +53,7 @@ const LABEL = {
   previewDocument,
   renameDocument,
   deleteDocument,
+  removeDocument,
   cancel,
   renameModalTitle,
   selectedDocuments,
@@ -72,6 +74,22 @@ const TEMPLATE_DOCUMENT_ACTIONS = [
     value: 'delete'
   }
 ];
+
+const SENDING_TEMPLATE_DOCUMENT_ACTIONS = [
+  {
+    label: LABEL.previewDocument,
+    value: 'preview'
+  },
+  {
+    label: LABEL.renameDocument,
+    value: 'rename'
+  }
+];
+
+const SENDING_TEMPLATE_DOCUMENT_REMOVE_ACTION = {
+  label: LABEL.removeDocument,
+  value: 'remove'
+};
 
 const SOURCE_FILES_TYPES = {
   LATEST: 'latest',
@@ -112,7 +130,7 @@ const getDefaultSourceFiles = (sequence = 2) => {
     readOnly: true,
     required: false
   };
-}
+};
 
 const getDefaultTemplateDocument = (sequence = 1, contentVersion) => {
   return {
@@ -125,7 +143,7 @@ const getDefaultTemplateDocument = (sequence = 1, contentVersion) => {
     readOnly: true,
     required: false
   };
-}
+};
 
 export {
   DOCUMENT_TYPE_SOURCE_FILES,
@@ -137,8 +155,10 @@ export {
   SOURCE_FILES_TYPES,
   SOURCE_FILES_MENU_OPTIONS,
   TEMPLATE_DOCUMENT_ACTIONS,
+  SENDING_TEMPLATE_DOCUMENT_ACTIONS,
+  SENDING_TEMPLATE_DOCUMENT_REMOVE_ACTION,
   LATEST_SOURCE_FILES_ORDER_BY,
   FILE_NAME_FILTER_PREFIX,
   FILE_NAME_FILTER_SUFFIX,
   FILE_NAME_CONTAINS_ORDER_BY
-}
+};
