@@ -197,6 +197,17 @@ private class BulkSendAPITest {
 		}
 	}
 
+	private class BulkSendFailureMock implements HttpCalloutMock {
+		public HttpResponse respond(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(APIErrorCode.BAD_REQUEST);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			response.setBody('{"envelopeOrTemplateId":"306db774-dcb9-442d-aa1e-9b0eb7ee3e3c","batchId":"00000000-0000-0000-0000-000000000000","batchSize":"2","totalQueued":"0","queueLimit":"2000","errors":["BULK_SEND_RECIPIENT_ID_DOES_NOT_EXIST_IN_ENVELOPE"],"errorDetails":["test error message 1","test error message 2"]}');
+			return response;
+		}
+	}
+
 	@IsTest
 	static void test_sendEnvelope_error() {
 		Test.setMock(HttpCalloutMock.class, new SendErrorMock());
@@ -254,6 +265,24 @@ private class BulkSendAPITest {
 			} catch (APIException ex) {
 				System.assertNotEquals(null, ex.error);
 				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_BulkSendFailureMock_failure() {
+		Test.setMock(HttpCalloutMock.class, new BulkSendFailureMock());
+
+		System.runAs(UserMock.createDocuSignUser()) {
+			Test.startTest();
+			try {
+				BulkList.Result result = BulkSendAPI.getInstance().sendEnvelope(UUID.randomUUID(), UUID.randomUUID());
+				throw new AssertException('Expected getStatus to fail');
+			} catch (APIException ex) {
+				System.assertNotEquals(null, ex.error);
+				System.assertEquals(APIErrorCode.BAD_REQUEST, ex.error.code);
+				System.assertEquals(ex.error.description, 'test error message 1,test error message 2');
 			}
 			Test.stopTest();
 		}

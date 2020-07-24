@@ -217,6 +217,10 @@ public with sharing class BulkSendAPI extends ESignatureAPI {
 		return this.sendEnvelope(bulkListId, envelopeOrTemplateId, RestAPI.defaultTimeout);
 	}
 
+	private class BulkSendAPIError {
+		public List<String> errorDetails { get; private set; }
+	}
+
 	public BulkList.Result sendEnvelope(final UUID bulkListId, final UUID envelopeOrTemplateId, final Integer timeout) {
 		RestAPI.Response response = this.post(
 			new List<Object> {
@@ -225,7 +229,12 @@ public with sharing class BulkSendAPI extends ESignatureAPI {
 			JSON.serialize(new APIBulkSendRequest(envelopeOrTemplateId)),
 			timeout);
 		if (response.hasError) {
-			throw new APIException(response.error);
+			BulkSendAPIError error = ((BulkSendAPIError)JSON.deserialize(response.body, BulkSendAPIError.class));
+			if (error != null && Collection.isNotEmpty(error.errorDetails)) {
+				throw new APIException(new APIError(response.error.code, String.join(error.errorDetails, ',')));
+			} else {
+				throw new APIException(response.error);
+			}
 		}
 
 		return ((APIBulkSendResponse)JSON.deserialize(response.body, APIBulkSendResponse.class)).toExternalForm();
