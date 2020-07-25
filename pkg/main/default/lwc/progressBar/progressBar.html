@@ -1,17 +1,37 @@
 <template>
-    <lightning-progress-indicator class={progressIndicatorStyle}
-                                  current-step={currentStep}
-                                  type="path"
-                                  variant="base">
-        <template for:each={steps} for:item="step">
-            <template if:false={step.disabled}>
-                <lightning-progress-step
-                        label={step.label}
-                        value={step.value}
-                        onclick={handleStep}
-                        key={step.value}>
-                </lightning-progress-step>
-            </template>
-        </template>
-    </lightning-progress-indicator>
+    <div class={progressIndicatorStyle}>
+        <div class="slds-grid slds-path__track ds-path__track slds-is-relative">
+            <div class="slds-grid slds-path__scroller-container">
+                <div class="slds-path__scroller" role="application">
+                    <div class="slds-path__scroller_inner">
+                        <ul class="slds-path__nav" role="tablist">
+                            <template
+                                for:each={steps}
+                                for:item="step">
+                                <li if:false={step.disabled}
+                                    key={step.value}
+                                    class={step.style}
+                                    role="presentation">
+                                    <a class="slds-path__link"
+                                        href="javascript:void(0);"
+                                        role="tab"
+                                        tabindex="-1"
+                                        data-step={step.value}
+                                        onclick={handleStep}>
+                                        <span class="slds-path__stage">
+                                            <lightning-icon icon-name="utility:check"
+                                                size="x-small"
+                                                variant="inverse">
+                                            </lightning-icon>
+                                        </span>
+                                        <span class="slds-path__title">{step.label}</span>
+                                    </a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
