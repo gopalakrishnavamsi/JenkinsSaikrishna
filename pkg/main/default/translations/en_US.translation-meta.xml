@@ -5452,7 +5452,7 @@
 		<name>DecSigningGroupRecipientTitle</name>
 	</customLabels>
 	<customLabels>
-		<label>https://support.docusign.com/</label>
+		<label>https://support.docusign.com/en/articles/Signing-Groups-FAQs</label>
 		<name>DecSigningGroupLearnMoreLink</name>
 	</customLabels>
 	<customLabels>
@@ -5684,7 +5684,7 @@
 		<name>MessageToAllHeader</name>
 	</customLabels>
 	<customLabels>
-		<label>This will be sent as an email to all recipients. You can use  &lt;a href=&quot;https://placeholder&quot; target=&quot;_blank&quot;&gt;merge tags&lt;/a&gt; to personalize the message.</label>
+		<label>This will be sent as an email to all recipients.</label>
 		<name>MessageToAllDescription</name>
 	</customLabels>
 	<customLabels>

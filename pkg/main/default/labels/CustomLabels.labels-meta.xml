@@ -10580,7 +10580,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Signing Group Learn More Link</shortDescription>
-		<value>https://support.docusign.com/</value>
+		<value>https://support.docusign.com/en/articles/Signing-Groups-FAQs</value>
 	</labels>
 	<labels>
 		<fullName>DecSearchByGroupNamePlaceHolder</fullName>
@@ -10979,7 +10979,7 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>Message To All Description</shortDescription>
-		<value>This will be sent as an email to all recipients. You can use  &lt;a href=&quot;https://placeholder&quot; target=&quot;_blank&quot;&gt;merge tags&lt;/a&gt; to personalize the message.</value>
+		<value>This will be sent as an email to all recipients.</value>
 	</labels>
 	<labels>
 		<fullName>DefaultEmailSubject</fullName>
