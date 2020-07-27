@@ -34,6 +34,13 @@
     line-height: 20px;
 }
 
+.ds-addDocuments-details-body {
+    padding: 0;
+    border-radius: .25rem;
+    border: 1px dashed rgb(217, 219, 221);
+    box-sizing: border-box;
+}
+
 .ds-sending-fit-content-width {
     width: fit-content;
 }
@@ -44,4 +51,10 @@
 
 .over {
     border: 1px dashed green;
+}
+
+.ds-addDocuments-dropDocuments-text {
+    color: rgb(80, 81, 77);
+    font-size: var(--lwc-fontSize3);
+    width: 729px;
 }

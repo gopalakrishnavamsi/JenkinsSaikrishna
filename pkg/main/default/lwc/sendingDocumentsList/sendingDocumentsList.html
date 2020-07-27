@@ -18,7 +18,8 @@
                     <div class="slds-col">
                         <lightning-button
                                 label={label.addFromSalesforce}
-                                onclick={handleAddFromSalesforce}>
+                                onclick={handleAddFromSalesforce}
+                                class="slds-p-right_xx-small">
                         </lightning-button>
                         <c-file-upload
                                 record-id={envelopeId}
@@ -29,38 +30,69 @@
                 </template>
             </div>
         </div>
-        <table>
-            <tr>
-                <th class="slds-grid ds-sending-table-header">
-                    <div class="slds-col slds-size_1-of-12 ds-sending-fit-content-width">
-                        <lightning-input
-                                type="checkbox"
-                                disabled={forbidEnvelopeChanges}
-                                checked={allDocumentsSelected}
-                                onchange={toggleAllDocuments}>
-                        </lightning-input>
+        <template if:false={hasDocs}>
+            <div class="slds-p-around_large">
+                <div class="ds-addDocuments-details-body">
+                    <div class="slds-align_absolute-center slds-p-around_large">
+                        <img src={addDocumentsEmptyImageURL}/>
                     </div>
-                    <div class="slds-col slds-size_1-of-12 ds-sending-header-text ds-sending-fit-content-width">
-                        {label.documents}
+                    <div class="slds-align_absolute-center slds-text-heading_medium">
+                        {label.addDocuments}
                     </div>
-                </th>
-            </tr>
-        </table>
+                    <div class="slds-align_absolute-center slds-p-top_medium">
+                        {label.addDocumentsHelpText}
+                    </div>
+                    <div class="slds-align_absolute-center slds-m-top_medium">
+                        <c-file-upload
+                                record-id={envelopeId}
+                                onsuccess={handleOnFileUpload}
+                                file-upload-label={label.uploadDocument}>
+                        </c-file-upload>
+                    </div>
+                    <div class="slds-align_absolute-center
+                            ds-addDocuments-dropDocuments-text
+                            slds-p-left_x-small
+                            slds-p-top_small">
+                        {label.dropDocuments}
+                    </div>
+                    <div class="slds-p-top_large"></div>
+                </div>
+            </div>
+        </template>
+        <template if:true={hasDocs}>
+            <table>
+                <tr>
+                    <th class="slds-grid ds-sending-table-header">
+                        <div class="slds-col slds-size_1-of-12 ds-sending-fit-content-width">
+                            <lightning-input
+                                    type="checkbox"
+                                    disabled={forbidEnvelopeChanges}
+                                    checked={allDocumentsSelected}
+                                    onchange={toggleAllDocuments}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-12 ds-sending-header-text ds-sending-fit-content-width">
+                            {label.documents}
+                        </div>
+                    </th>
+                </tr>
+            </table>
+        </template>
         <template
                 for:each={documents}
                 for:item="document"
                 for:index="index">
             <template if:false={document.isEmptyTemplate}>
                 <div class="slds-border_bottom"
-                    data-id={document.sourceId}
-                    data-index={index}
-                    key={document.sourceId}
-                    ondrop={handleDrop}
-                    ondragenter={handleDragEnter}
-                    ondragover={handleDragOver}
-                    ondragleave={handleDragLeave}
-                    ondragstart={itemDragStart}
-                    ondragend={itemDragEnd}>
+                     data-id={document.sourceId}
+                     data-index={index}
+                     key={document.sourceId}
+                     ondrop={handleDrop}
+                     ondragenter={handleDragEnter}
+                     ondragover={handleDragOver}
+                     ondragleave={handleDragLeave}
+                     ondragstart={itemDragStart}
+                     ondragend={itemDragEnd}>
                     <c-sending-document
                             document={document}
                             index={index}

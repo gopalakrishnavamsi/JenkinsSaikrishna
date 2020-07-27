@@ -1,5 +1,6 @@
 import {LightningElement, api} from 'lwc';
-
+//static resource
+import ADD_DOCUMENTS_EMPTY_IMAGE from '@salesforce/resourceUrl/DecAddDocumentsEmpty';
 // Lightning message service
 import {
   createMessageContext,
@@ -30,13 +31,11 @@ export default class SendingDocumentsList extends LightningElement {
   @api envelopeId;
   @api forbidEnvelopeChanges;
   isLoading = false;
-
+  // Static resource URL appended by SVG file Id
+  addDocumentsEmptyImageURL = `${ADD_DOCUMENTS_EMPTY_IMAGE}#decAddDocumentsEmpty`;
   label = LABEL;
-
   context = createMessageContext();
-
   documents = null;
-
   fromIndex = null;
 
   @api
@@ -58,6 +57,14 @@ export default class SendingDocumentsList extends LightningElement {
 
   disconnectedCallback() {
     releaseMessageContext(this.context);
+  }
+
+  get hasDocs() {
+    let isEmptyDocs = isEmpty(this.documents) || this.documents.length === 0;
+    let isEmptyDocsInTemplate = this.documents.length === 1 &&
+      this.documents[0].isEmptyTemplate === true &&
+      (isEmpty(this.documents[0].templateDocuments) || this.documents[0].templateDocuments.length === 0);
+    return isEmptyDocs || isEmptyDocsInTemplate ? false : true;
   }
 
   get selectedDocumentsHeader() {
@@ -131,7 +138,7 @@ export default class SendingDocumentsList extends LightningElement {
   }
 
   updateDocuments(documents) {
-    publish(this.context, SENDING_UPDATE_DOCUMENTS, { documents });
+    publish(this.context, SENDING_UPDATE_DOCUMENTS, {documents});
   }
 
   showError(errorMessage) {
