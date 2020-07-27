@@ -77,8 +77,6 @@ export default class RecipientsList extends LightningElement {
   }
 
   itemDragStart(evt) {
-    this.fromRecipientIndex = parseInt(evt.currentTarget.dataset.index);
-    this.fromIndex = this.fromRecipientIndex;
     itemDragStart(this, evt.currentTarget.dataset.id);
   }
 
@@ -87,8 +85,6 @@ export default class RecipientsList extends LightningElement {
   }
 
   handleDrop(evt) {
-    this.toRecipientIndex = parseInt(evt.currentTarget.dataset.index);
-    if (this.fromRecipientIndex === this.toRecipientIndex) return;
     handleDrop(this, evt, this.updateRecipients.bind(this));
   }
 

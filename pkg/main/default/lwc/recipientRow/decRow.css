@@ -48,16 +48,6 @@
     max-width: 4px;
 }
 
-.draggable-card {
-    border-bottom: 1px solid rgb(221, 219, 218);
-}
-
-.drag {
-    border-style: dashed;
-    border: 2px dashed black;
-    opacity: 0.25;
-}
-
 .ds-routingOrderInput {
     max-width: 50px;
 }
@@ -71,4 +61,8 @@
 
 .ds-tooltip_container:hover .ds-tooltip {
     display: block;
+}
+
+.ds-center-icon {
+    margin-top: 0.65rem;
 }

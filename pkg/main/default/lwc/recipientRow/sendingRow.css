@@ -72,3 +72,7 @@
 .ds-tooltip_container:hover .ds-tooltip {
     display: block;
 }
+
+.ds-center-icon {
+    margin-top: 0.65rem;
+}
