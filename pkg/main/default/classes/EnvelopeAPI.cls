@@ -4,7 +4,7 @@
 	code or we have to structure our code less efficiently. In this case, TemplateAPI was merged here because it shared
 	much of the request/response structure as this.
  */
-public with sharing class EnvelopeAPI extends ESignatureAPI {
+public with sharing virtual class EnvelopeAPI extends ESignatureAPI {
 
 	private static EnvelopeAPI self = null;
 	private static final String ACCOUNT_LACKS_PERMISSIONS = 'ACCOUNT_LACKS_PERMISSIONS';
@@ -356,7 +356,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				StringUtils.parseInteger(this.recipientId, null),
 				r == null ? null : r.email,
 				r == null ? null : r.routingOrder,
-				this.errorDetails == null ? null : getError(this.errorDetails.toExternalForm()));
+				this.errorDetails == null ? null : getError(this.errorDetails.toAPIError()));
 		}
 	}
 
@@ -648,6 +648,9 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public APIHtmlDefinition htmlDefinition;
 		public String templateLocked;
 		public String templateRequired;
+		public String order;
+		public String display;
+		public ESignatureAPI.ErrorDetails errorDetails;
 
 		public APIDocument(
 			final Document doc,
@@ -666,19 +669,36 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				}
 				this.templateLocked = String.valueOf(doc.readOnly);
 				this.templateRequired = String.valueOf(doc.required);
+				this.order = String.valueOf(doc.sequence);
 			}
 		}
 
-		public Document toDocument() {
-			return new Document(
-				null,
-				Document.TYPE_FILE,
-				Integer.valueOf(this.documentId),
-				this.name,
-				nullIfBlank(this.fileExtension),
-				null,
-				StringUtils.parseBoolean(this.templateLocked),
-				StringUtils.parseBoolean(this.templateRequired));
+		public Document toDocument(final Map<String, Document> ds) {
+			Document result = ds == null ? null : ds.get(this.documentId);
+			if (result == null) {
+				result = new Document(
+					null,
+					Document.TYPE_FILE,
+					String.isBlank(this.order) ? Integer.valueOf(this.documentId) : Integer.valueOf(this.order),
+					this.name,
+					nullIfBlank(this.fileExtension),
+					null,
+					StringUtils.parseBoolean(this.templateLocked),
+					StringUtils.parseBoolean(this.templateRequired));
+			}
+			return result.withError(this.errorDetails == null ? APIError.none : this.errorDetails.toAPIError());
+		}
+
+		public APIDocument mergeWith(final APIDocument d) {
+			if (d != null) {
+				this.name = d.name;
+				this.fileExtension = d.fileExtension;
+				this.templateLocked = d.templateLocked;
+				this.templateRequired = d.templateRequired;
+				this.order = d.order;
+				this.display = d.display;
+			}
+			return this;
 		}
 	}
 
@@ -735,6 +755,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public String clientUserId;
 		public String templateLocked;
 		public String templateRequired;
+		public ESignatureAPI.ErrorDetails errorDetails;
 
 		public APIRecipient(
 			final Recipient r,
@@ -742,8 +763,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			final Boolean includeDefaultAnchorTags) {
 
 			if (r != null) {
-				this.recipientId = String.isBlank(r.envelopeRecipientId)
-					? String.valueOf(r.sequence) : r.envelopeRecipientId;
+				this.recipientId = r.getEnvelopeRecipientId();
 				if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
 					this.signerName = r.name;
 					this.signerEmail = r.email == r.hostEmail ? null : r.email;
@@ -795,39 +815,51 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			}
 		}
 
-		public Recipient toRecipient(final String type) {
-			return new Recipient(
-				null,
-				nullIfBlank(this.recipientId),
-				type,
-				StringUtils.parseInteger(this.recipientId),
-				StringUtils.parseInteger(this.routingOrder),
-				String.isBlank(this.roleName) ? null : new Recipient.Role(this.roleName),
-				type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.signerName) : nullIfBlank(this.name),
-				type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.signerEmail) : nullIfBlank(this.email),
-				String.isBlank(this.signingGroupId) ? null
-					: new SigningGroup(
-					Integer.valueOf(this.signingGroupId),
-					nullIfBlank(this.signingGroupName)),
-				null,
-				String.isBlank(this.accessCode) && !StringUtils.parseBoolean(this.requireIdLookup) ? null
-					: new Recipient.Authentication(
-					nullIfBlank(this.accessCode),
-					StringUtils.parseBoolean(this.requireIdLookup),
-					this.smsAuthentication == null ? null : this.smsAuthentication.senderProvidedNumbers),
-				nullIfBlank(this.note),
-				this.emailNotification == null ? null : new Recipient.EmailSettings(
-					nullIfBlank(this.emailNotification.supportedLanguage),
-					Localization.getLabel(this.emailNotification.supportedLanguage),
-					nullIfBlank(this.emailNotification.emailSubject),
-					nullIfBlank(this.emailNotification.emailBody)),
-				type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.hostName) : null,
-				type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.hostEmail) : null,
-				false,
-				this.tabs == null ? null : this.tabs.toTabs(),
-				null,
-				StringUtils.parseBoolean(this.templateLocked),
-				StringUtils.parseBoolean(this.templateRequired));
+		public Recipient toRecipient(
+			final String type,
+			final Map<String, Recipient> recipientMap) {
+
+			Recipient result = null;
+			if (recipientMap != null && String.isNotBlank(this.recipientId)) {
+				result = recipientMap.get(this.recipientId);
+			}
+
+			if (result == null) {
+				result = new Recipient(
+					null,
+					nullIfBlank(this.recipientId),
+					type,
+					StringUtils.parseInteger(this.recipientId),
+					StringUtils.parseInteger(this.routingOrder),
+					String.isBlank(this.roleName) ? null : new Recipient.Role(this.roleName),
+					type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.signerName) : nullIfBlank(this.name),
+					type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.signerEmail) : nullIfBlank(this.email),
+					String.isBlank(this.signingGroupId) ? null
+						: new SigningGroup(
+						Integer.valueOf(this.signingGroupId),
+						nullIfBlank(this.signingGroupName)),
+					null,
+					String.isBlank(this.accessCode) && !StringUtils.parseBoolean(this.requireIdLookup) ? null
+						: new Recipient.Authentication(
+						nullIfBlank(this.accessCode),
+						StringUtils.parseBoolean(this.requireIdLookup),
+						this.smsAuthentication == null ? null : this.smsAuthentication.senderProvidedNumbers),
+					nullIfBlank(this.note),
+					this.emailNotification == null ? null : new Recipient.EmailSettings(
+						nullIfBlank(this.emailNotification.supportedLanguage),
+						Localization.getLabel(this.emailNotification.supportedLanguage),
+						nullIfBlank(this.emailNotification.emailSubject),
+						nullIfBlank(this.emailNotification.emailBody)),
+					type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.hostName) : null,
+					type == Recipient.TYPE_IN_PERSON_SIGNER ? nullIfBlank(this.hostEmail) : null,
+					false,
+					this.tabs == null ? null : this.tabs.toTabs(),
+					null,
+					StringUtils.parseBoolean(this.templateLocked),
+					StringUtils.parseBoolean(this.templateRequired));
+			}
+
+			return result.withError(this.errorDetails == null ? APIError.none : this.errorDetails.toAPIError());
 		}
 
 		public Recipient.Status toStatus(final String type) {
@@ -846,6 +878,31 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					: StringUtils.parseDatetime(this.signedDateTime),
 				nullIfBlank(this.declinedReason),
 				Datetime.now());
+		}
+
+		public APIRecipient mergeWith(final APIRecipient r) {
+			if (r != null) {
+				this.name = r.name;
+				this.email = r.email;
+				this.signerName = r.signerName;
+				this.signerEmail = r.signerEmail;
+				this.hostName = r.hostName;
+				this.hostEmail = r.hostEmail;
+				this.roleName = r.roleName;
+				this.routingOrder = r.routingOrder;
+				this.signingGroupId = r.signingGroupId;
+				this.customFields = r.customFields;
+				this.emailNotification = r.emailNotification;
+				this.accessCode = r.accessCode;
+				this.requireIdLookup = r.requireIdLookup;
+				this.idCheckConfigurationName = r.idCheckConfigurationName;
+				this.smsAuthentication = r.smsAuthentication;
+				this.note = r.note;
+				this.clientUserId = r.clientUserId;
+				this.templateLocked = r.templateLocked;
+				this.templateRequired = r.templateRequired;
+			}
+			return this;
 		}
 	}
 
@@ -876,7 +933,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public APIRecipients(
 			final List<Recipient> rs,
 			final String documentId,
-			final Boolean includeDefaultAnchorTags) {
+			final Boolean includeDefaultAutoPlaceTags) {
 
 			if (rs != null) {
 				this.agents = new List<APIRecipient>();
@@ -890,73 +947,110 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.witnesses = new List<APIRecipient>();
 				for (Recipient r : rs) {
 					if (r.type == Recipient.TYPE_AGENT) {
-						this.agents.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.agents.add(new APIRecipient(r, documentId, includeDefaultAutoPlaceTags));
 					} else if (r.type == Recipient.TYPE_CARBON_COPY) {
-						this.carbonCopies.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.carbonCopies.add(new APIRecipient(r, documentId, includeDefaultAutoPlaceTags));
 					} else if (r.type == Recipient.TYPE_CERTIFIED_DELIVERY) {
-						this.certifiedDeliveries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.certifiedDeliveries.add(new APIRecipient(r, documentId, includeDefaultAutoPlaceTags));
 					} else if (r.type == Recipient.TYPE_EDITOR) {
-						this.editors.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.editors.add(new APIRecipient(r, documentId, includeDefaultAutoPlaceTags));
 					} else if (r.type == Recipient.TYPE_INTERMEDIARY) {
-						this.intermediaries.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.intermediaries.add(new APIRecipient(r, documentId, includeDefaultAutoPlaceTags));
 					} else if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
-						this.inPersonSigners.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.inPersonSigners.add(new APIRecipient(r, documentId, includeDefaultAutoPlaceTags));
 					} else if (r.type == Recipient.TYPE_SEAL) {
-						this.seals.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.seals.add(new APIRecipient(r, documentId, includeDefaultAutoPlaceTags));
 					} else if (r.type == Recipient.TYPE_WITNESS) {
-						this.witnesses.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.witnesses.add(new APIRecipient(r, documentId, includeDefaultAutoPlaceTags));
 					} else { // Recipient.TYPE_SIGNER and Recipient.TYPE_EMBEDDED_SIGNER
-						this.signers.add(new APIRecipient(r, documentId, includeDefaultAnchorTags));
+						this.signers.add(new APIRecipient(r, documentId, includeDefaultAutoPlaceTags));
 					}
 				}
 			}
 		}
 
-		public List<Recipient> toRecipients() {
+		public APIRecipients(final List<APIRecipientWrapper> rs) {
+			if (rs != null) {
+				this.agents = new List<APIRecipient>();
+				this.carbonCopies = new List<APIRecipient>();
+				this.certifiedDeliveries = new List<APIRecipient>();
+				this.editors = new List<APIRecipient>();
+				this.inPersonSigners = new List<APIRecipient>();
+				this.intermediaries = new List<APIRecipient>();
+				this.seals = new List<APIRecipient>();
+				this.signers = new List<APIRecipient>();
+				this.witnesses = new List<APIRecipient>();
+				for (APIRecipientWrapper r : rs) {
+					if (r == null || String.isBlank(r.type) || r.recipient == null) continue;
+
+					if (r.type == Recipient.TYPE_AGENT) {
+						this.agents.add(r.recipient);
+					} else if (r.type == Recipient.TYPE_CARBON_COPY) {
+						this.carbonCopies.add(r.recipient);
+					} else if (r.type == Recipient.TYPE_CERTIFIED_DELIVERY) {
+						this.certifiedDeliveries.add(r.recipient);
+					} else if (r.type == Recipient.TYPE_EDITOR) {
+						this.editors.add(r.recipient);
+					} else if (r.type == Recipient.TYPE_INTERMEDIARY) {
+						this.intermediaries.add(r.recipient);
+					} else if (r.type == Recipient.TYPE_IN_PERSON_SIGNER) {
+						this.inPersonSigners.add(r.recipient);
+					} else if (r.type == Recipient.TYPE_SEAL) {
+						this.seals.add(r.recipient);
+					} else if (r.type == Recipient.TYPE_WITNESS) {
+						this.witnesses.add(r.recipient);
+					} else { // Recipient.TYPE_SIGNER and Recipient.TYPE_EMBEDDED_SIGNER
+						this.signers.add(r.recipient);
+					}
+				}
+			}
+		}
+
+		public List<Recipient> toRecipients(final Map<String, Recipient> recipientMap) {
 			List<Recipient> result = new List<Recipient>();
 			if (this.agents != null) {
 				for (EnvelopeAPI.APIRecipient r : this.agents) {
-					result.add(r.toRecipient(Recipient.TYPE_AGENT));
+					result.add(r.toRecipient(Recipient.TYPE_AGENT, recipientMap));
 				}
 			}
 			if (this.carbonCopies != null) {
 				for (EnvelopeAPI.APIRecipient r : this.carbonCopies) {
-					result.add(r.toRecipient(Recipient.TYPE_CARBON_COPY));
+					result.add(r.toRecipient(Recipient.TYPE_CARBON_COPY, recipientMap));
 				}
 			}
 			if (this.certifiedDeliveries != null) {
 				for (EnvelopeAPI.APIRecipient r : this.certifiedDeliveries) {
-					result.add(r.toRecipient(Recipient.TYPE_CERTIFIED_DELIVERY));
+					result.add(r.toRecipient(Recipient.TYPE_CERTIFIED_DELIVERY, recipientMap));
 				}
 			}
 			if (this.editors != null) {
 				for (EnvelopeAPI.APIRecipient r : this.editors) {
-					result.add(r.toRecipient(Recipient.TYPE_EDITOR));
+					result.add(r.toRecipient(Recipient.TYPE_EDITOR, recipientMap));
 				}
 			}
 			if (this.intermediaries != null) {
 				for (EnvelopeAPI.APIRecipient r : this.intermediaries) {
-					result.add(r.toRecipient(Recipient.TYPE_INTERMEDIARY));
+					result.add(r.toRecipient(Recipient.TYPE_INTERMEDIARY, recipientMap));
 				}
 			}
 			if (this.inPersonSigners != null) {
 				for (EnvelopeAPI.APIRecipient r : this.inPersonSigners) {
-					result.add(r.toRecipient(Recipient.TYPE_IN_PERSON_SIGNER));
+					result.add(r.toRecipient(Recipient.TYPE_IN_PERSON_SIGNER, recipientMap));
 				}
 			}
 			if (this.signers != null) {
 				for (EnvelopeAPI.APIRecipient r : this.signers) {
-					result.add(r.toRecipient(Recipient.TYPE_SIGNER));
+					result.add(r.toRecipient(Recipient.TYPE_SIGNER, recipientMap));
 				}
 			}
 			if (this.seals != null) {
 				for (EnvelopeAPI.APIRecipient r : this.seals) {
-					result.add(r.toRecipient(Recipient.TYPE_SEAL));
+					result.add(r.toRecipient(Recipient.TYPE_SEAL, recipientMap));
 				}
 			}
 			if (this.witnesses != null) {
 				for (EnvelopeAPI.APIRecipient r : this.witnesses) {
-					result.add(r.toRecipient(Recipient.TYPE_WITNESS));
+					result.add(r.toRecipient(Recipient.TYPE_WITNESS, recipientMap));
 				}
 			}
 			result.sort();
@@ -1081,6 +1175,56 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public String optional;
 		public String value;
 		public String selected; // checkbox value
+		public String tabId;
+		public String xPosition;
+		public String yPosition;
+		public String pageNumber;
+		public String templateLocked;
+		public String templateRequired;
+		public Decimal scaleValue;
+		public String anchorXOffset;
+		public String anchorYOffset;
+		public String anchorUnits;
+		public String anchorCaseSensitive;
+		public String anchorMatchWholeWord;
+		public String anchorHorizontalAlignment;
+		public String tabOrder;
+		public String status;
+		public String font;
+		public String italic;
+		public String bold;
+		public String underline;
+		public String fontColor;
+		public String fontSize;
+		public String conditionalParentLabel;
+		public String conditionalParentValue;
+		public String validationPattern;
+		public String validationMessage;
+		public String shared;
+		public String requireInitialOnSharedChange;
+		public String locked;
+		public String senderRequired;
+		public String requireAll;
+		public List<Object> listItems;
+		public Integer width;
+		public Integer height;
+		public Integer maxLength;
+		public String groupName;
+		public List<Object> radios;
+		public String originalValue;
+		public String concealValueOnDocument;
+		public String disableAutoSize;
+		public String useDash4;
+		public String isPaymentAmount;
+		public String formula;
+		public String buttonText;
+		public String requiredRead;
+		public String declineReason;
+		public String stampType;
+		public Map<String, Object> stampTypeMetadata;
+		public String hidden;
+		public String roundDecimalPlaces;
+		public Map<String, Object> paymentDetails;
 
 		public APITab(
 			final String documentId,
@@ -1549,7 +1693,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 					this.recipients = new APIRecipients(
 						recipients,
 						this.sequence,
-						options != null && options.includeDefaultAutoPlaceTags != null && options.includeDefaultAutoPlaceTags);
+						options != null && options.includeDefaultAutoPlaceTags == true);
 				}
 				this.customFields = buildCustomFields(
 					customFields,
@@ -2090,6 +2234,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 	@TestVisible
 	private class APITemplateUpdateDocuments {
 		public List<APIDocument> documents;
+
 		public APITemplateUpdateDocuments(final List<APIDocument> documents) {
 			this.documents = Collection.isNotEmpty(documents) ? documents : new List<APIDocument>();
 		}
@@ -2106,13 +2251,16 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		public APINotifications notification;
 		public APITabs tabs;
 
-		public APITemplate(final Template template) {
+		public APITemplate(
+			final Template template,
+			final Boolean forUpdate) {
+
 			if (template != null) {
 				this.envelopeTemplateDefinition = new APITemplateId(template.id, template.name);
 				if (String.isNotBlank(template.emailSubject)) this.emailSubject = template.emailSubject;
 				if (String.isNotBlank(template.emailMessage)) this.emailBlurb = template.emailMessage;
 				this.notification = new APINotifications(template.notifications);
-				if (Collection.isNotEmpty(template.documents)) {
+				if (!forUpdate && Collection.isNotEmpty(template.documents)) {
 					Map<String, Blob> documentContent = getDocumentContent(
 						template.documents,
 						false); // TODO: Enable document fetch for templates. Requires platform change.
@@ -2123,7 +2271,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 								? documentContent.get(d.sourceId) : null));
 					}
 				}
-				if (Collection.isNotEmpty(template.recipients)) {
+				if (!forUpdate && Collection.isNotEmpty(template.recipients)) {
 					this.recipients = new APIRecipients(
 						template.recipients,
 						null,
@@ -2140,7 +2288,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			List<Document> docs = new List<Document>();
 			if (this.documents != null) {
 				for (EnvelopeAPI.APIDocument d : this.documents) {
-					docs.add(d.toDocument());
+					docs.add(d.toDocument(null));
 				}
 			}
 
@@ -2152,7 +2300,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				nullIfBlank(this.emailSubject),
 				nullIfBlank(this.emailBlurb),
 				docs,
-				this.recipients == null ? new List<Recipient>() : this.recipients.toRecipients(),
+				this.recipients == null ? new List<Recipient>() : this.recipients.toRecipients(null),
 				this.envelopeTemplateDefinition == null
 					? null : StringUtils.parseDatetime(this.envelopeTemplateDefinition.lastModified));
 		}
@@ -2177,7 +2325,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 				this.notification == null ? null : this.notification.toNotifications(),
 				nullIfBlank(this.emailSubject),
 				nullIfBlank(this.emailBlurb),
-				this.recipients == null ? new List<Recipient>() : this.recipients.toRecipients(),
+				this.recipients == null ? new List<Recipient>() : this.recipients.toRecipients(null),
 				StringUtils.parseDatetime(this.lastModified));
 		}
 	}
@@ -2238,19 +2386,28 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 		if (templateMap.containsKey(templateId)) return templateMap.get(templateId);
 
+		APITemplate template = getTemplateInternal(templateId, timeout);
+		Template result = template == null ? null : template.toTemplate();
+		if (result != null) templateMap.put(result.id, result);
+
+		return result;
+	}
+
+	@TestVisible
+	private APITemplate getTemplateInternal(
+		final UUID templateId,
+		final Integer timeout) {
+
 		RestAPI.Response response = this.get(
 			new List<Object> { 'templates', templateId },
-			new QueryString('include', 'custom_fields,notifications,recipients'),
+			new QueryString('include', 'custom_fields,notifications,recipients,documents'),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to get template: ' + response.error);
 			throw new APIException(response.error);
 		}
 
-		Template template = ((APITemplate)JSON.deserialize(response.body,
-			APITemplate.class)).toTemplate();
-		templateMap.put(template.id, template);
-		return template;
+		return (APITemplate)JSON.deserialize(response.body, APITemplate.class);
 	}
 
 	public Template createTemplate(final Template template) {
@@ -2265,7 +2422,7 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 		RestAPI.Response response = this.post(
 			'templates',
-			JSON.serialize(new APITemplate(template), true),
+			JSON.serialize(new APITemplate(template, false), true),
 			timeout);
 		if (response.hasError) {
 			this.log.error('Failed to create templates: ' + response.error);
@@ -2274,6 +2431,385 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 
 		Map<String, Object> resp = (Map<String, Object>)JSON.deserializeUntyped(response.body);
 		return template.withId(UUID.tryParse((String)resp.get('templateId'))).withLastModified(Datetime.now());
+	}
+
+	@TestVisible
+	private class APIDocumentsUpdate {
+		public String templateId;
+		public List<APIDocument> templateDocuments;
+
+		public List<Document> toDocuments(final Map<String, Document> documentMap) {
+			List<Document> result = new List<Document>();
+			if (this.templateDocuments != null) {
+				for (APIDocument td : this.templateDocuments) {
+					if (td == null) continue;
+
+					Document d = td.toDocument(documentMap);
+					if (d != null) result.add(d);
+				}
+			}
+			return result;
+		}
+	}
+
+	// FIXME: Cannot update template document content without doing a multipart/form-data upload.
+	@TestVisible
+	private List<Document> addOrUpdateTemplateDocuments(
+		final UUID templateId,
+		final List<APIDocument> documents,
+		final Map<String, Document> documentMap,
+		final Integer timeout) {
+
+		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.put(
+			new List<Object> { 'templates', templateId, 'documents' },
+			JSON.serialize(new APITemplateUpdateDocuments(documents), true),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to add template documents: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APIDocumentsUpdate)JSON.deserialize(response.body, APIDocumentsUpdate.class))
+			.toDocuments(documentMap);
+	}
+
+	@TestVisible
+	private List<Document> removeTemplateDocuments(
+		final UUID templateId,
+		final List<APIDocument> documents,
+		final Map<String, Document> documentMap,
+		final Integer timeout) {
+
+		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.del(
+			new List<Object> { 'templates', templateId, 'documents' },
+			JSON.serialize(new APITemplateUpdateDocuments(documents), true),
+			timeout);
+		if (response.hasError && response.error != APIError.notFound) {
+			this.log.error('Failed to remove template documents: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APIDocumentsUpdate)JSON.deserialize(response.body, APIDocumentsUpdate.class))
+			.toDocuments(documentMap);
+	}
+
+	@TestVisible
+	private static Map<String, APIDocument> mapTemplateDocuments(final List<APIDocument> documents) {
+		Map<String, APIDocument> result = new Map<String, APIDocument>();
+		if (documents == null) return result;
+
+		for (APIDocument d : documents) {
+			if (d == null || String.isBlank(d.documentId)) continue;
+
+			result.put(d.documentId, d);
+		}
+
+		return result;
+	}
+
+	@TestVisible
+	private List<Document> updateTemplateDocuments(
+		final UUID templateId,
+		final List<Document> newDocuments,
+		final Map<String, Blob> documentContent,
+		final Map<String, APIDocument> oldDocuments,
+		final Integer timeout) {
+
+		Set<String> oldIds = oldDocuments == null ? new Set<String>() : oldDocuments.keySet();
+		Map<String, APIDocument> newDocuments2 = new Map<String, APIDocument>();
+		Map<String, Document> documentMap = new Map<String, Document>();
+		if (newDocuments != null) {
+			for (Document d : newDocuments) {
+				if (d == null) continue;
+
+				// FIXME: Can only add content for new documents. Changes to existing documents requires multipart/form-data
+				String documentId = String.valueOf(d.sequence);
+				newDocuments2.put(
+					documentId,
+					new APIDocument(
+						d,
+						!oldIds.contains(documentId) && String.isNotBlank(d.sourceId)
+							? documentContent.get(d.sourceId) : null));
+				documentMap.put(documentId, d);
+			}
+		}
+
+		Set<String> newIds = newDocuments2.keySet();
+		List<APIDocument> toRemove = new List<APIDocument>();
+		List<APIDocument> toAddOrUpdate = new List<APIDocument>();
+
+		for (String documentId : Collection.difference(newIds, oldIds)) { // add
+			APIDocument d = newDocuments2.get(documentId);
+			if (d != null) toAddOrUpdate.add(d);
+		}
+		for (String documentId : Collection.difference(oldIds, newIds)) { // remove
+			APIDocument d = oldDocuments.get(documentId);
+			if (d != null) toRemove.add(d);
+		}
+		for (String documentId : Collection.intersection(newIds, oldIds)) { // update
+			APIDocument d1 = oldDocuments.get(documentId);
+			APIDocument d2 = newDocuments2.get(documentId);
+			if (d1 != null && d2 != null) toAddOrUpdate.add(d1.mergeWith(d2));
+		}
+
+		List<Document> result = new List<Document>();
+		if (Collection.isNotEmpty(toRemove)) {
+			result.addAll(this.removeTemplateDocuments(
+				templateId,
+				toRemove,
+				documentMap,
+				timeout));
+		}
+
+		if (Collection.isNotEmpty(toAddOrUpdate)) {
+			result.addAll(this.addOrUpdateTemplateDocuments(
+				templateId,
+				toAddOrUpdate,
+				documentMap,
+				timeout));
+		}
+
+		result.sort();
+		return result;
+	}
+
+	@TestVisible
+	private class APIRecipientUpdate {
+		public String recipientId;
+		public APITabs tabs;
+		public ESignatureAPI.ErrorDetails errorDetails;
+
+		public Recipient toRecipient(final Map<String, Recipient> rs) {
+			if (rs == null || String.isBlank(this.recipientId)) return null;
+
+			Recipient result = rs.get(this.recipientId);
+			if (result != null) {
+				result = result.withError(this.errorDetails == null ? APIError.none : this.errorDetails.toAPIError());
+			} else {
+				result = Recipient.fromSource(null, null, null, null, null)
+					.withSequence(Integer.valueOf(this.recipientId))
+					.withTabs(this.tabs == null ? null : this.tabs.toTabs())
+					.withError(this.errorDetails == null ? APIError.none : this.errorDetails.toAPIError());
+			}
+			return result;
+		}
+	}
+
+	@TestVisible
+	private class APIRecipientUpdates {
+		public List<APIRecipientUpdate> recipientUpdateResults;
+
+		public List<Recipient> toRecipients(final Map<String, Recipient> rs) {
+			List<Recipient> result = new List<Recipient>();
+			if (this.recipientUpdateResults != null) {
+				for (APIRecipientUpdate ru : this.recipientUpdateResults) {
+					if (ru == null) continue;
+
+					Recipient r = ru.toRecipient(rs);
+					if (r != null) result.add(r);
+				}
+			}
+			return result;
+		}
+	}
+
+	@TestVisible
+	private List<Recipient> addOrUpdateTemplateRecipients(
+		final UUID templateId,
+		final APIRecipients recipients,
+		final Map<String, Recipient> recipientMap,
+		final Integer timeout) {
+
+		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.put(
+			new List<Object> { 'templates', templateId, 'recipients' },
+			JSON.serialize(recipients, true),
+			timeout);
+		if (response.hasError) {
+			this.log.error('Failed to add template recipients: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APIRecipientUpdates)JSON.deserialize(response.body, APIRecipientUpdates.class))
+			.toRecipients(recipientMap);
+	}
+
+	@TestVisible
+	private List<Recipient> removeTemplateRecipients(
+		final UUID templateId,
+		final APIRecipients recipients,
+		final Map<String, Recipient> recipientMap,
+		final Integer timeout) {
+
+		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
+
+		RestAPI.Response response = this.del(
+			new List<Object> { 'templates', templateId, 'recipients' },
+			JSON.serialize(recipients, true),
+			timeout);
+		if (response.hasError && response.error != APIError.notFound) {
+			this.log.error('Failed to remove template recipients: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		return ((APIRecipients)JSON.deserialize(response.body, APIRecipients.class))
+			.toRecipients(recipientMap);
+	}
+
+	@TestVisible
+	private class APIRecipientWrapper {
+		public String type { get; private set; }
+		public APIRecipient recipient { get; private set; }
+
+		public APIRecipientWrapper(
+			final String type,
+			final APIRecipient recipient) {
+
+			this.type = type;
+			this.recipient = recipient;
+		}
+
+		public APIRecipientWrapper mergeWith(final APIRecipientWrapper r) {
+			if (r != null && this.recipient != null) {
+				this.type = r.type;
+				if (r.recipient != null) this.recipient = this.recipient.mergeWith(r.recipient);
+			}
+			return this;
+		}
+	}
+
+	@TestVisible
+	private static Map<String, APIRecipientWrapper> mapTemplateRecipients(final APIRecipients recipients) {
+		Map<String, APIRecipientWrapper> result = new Map<String, APIRecipientWrapper>();
+		if (recipients == null) return result;
+
+		if (recipients.agents != null) {
+			for (APIRecipient r : recipients.agents) {
+				if (r == null || String.isBlank(r.recipientId)) continue;
+				result.put(r.recipientId, new APIRecipientWrapper(Recipient.TYPE_AGENT, r));
+			}
+		}
+		if (recipients.carbonCopies != null) {
+			for (APIRecipient r : recipients.carbonCopies) {
+				if (r == null || String.isBlank(r.recipientId)) continue;
+				result.put(r.recipientId, new APIRecipientWrapper(Recipient.TYPE_CARBON_COPY, r));
+			}
+		}
+		if (recipients.certifiedDeliveries != null) {
+			for (APIRecipient r : recipients.certifiedDeliveries) {
+				if (r == null || String.isBlank(r.recipientId)) continue;
+				result.put(r.recipientId, new APIRecipientWrapper(Recipient.TYPE_CERTIFIED_DELIVERY, r));
+			}
+		}
+		if (recipients.editors != null) {
+			for (APIRecipient r : recipients.editors) {
+				if (r == null || String.isBlank(r.recipientId)) continue;
+				result.put(r.recipientId, new APIRecipientWrapper(Recipient.TYPE_EDITOR, r));
+			}
+		}
+		if (recipients.intermediaries != null) {
+			for (APIRecipient r : recipients.intermediaries) {
+				if (r == null || String.isBlank(r.recipientId)) continue;
+				result.put(r.recipientId, new APIRecipientWrapper(Recipient.TYPE_INTERMEDIARY, r));
+			}
+		}
+		if (recipients.inPersonSigners != null) {
+			for (APIRecipient r : recipients.inPersonSigners) {
+				if (r == null || String.isBlank(r.recipientId)) continue;
+				result.put(r.recipientId, new APIRecipientWrapper(Recipient.TYPE_IN_PERSON_SIGNER, r));
+			}
+		}
+		if (recipients.signers != null) {
+			for (APIRecipient r : recipients.signers) {
+				if (r == null || String.isBlank(r.recipientId)) continue;
+				result.put(r.recipientId, new APIRecipientWrapper(Recipient.TYPE_SIGNER, r));
+			}
+		}
+		if (recipients.seals != null) {
+			for (APIRecipient r : recipients.seals) {
+				if (r == null || String.isBlank(r.recipientId)) continue;
+				result.put(r.recipientId, new APIRecipientWrapper(Recipient.TYPE_SEAL, r));
+			}
+		}
+		if (recipients.witnesses != null) {
+			for (APIRecipient r : recipients.witnesses) {
+				if (r == null || String.isBlank(r.recipientId)) continue;
+				result.put(r.recipientId, new APIRecipientWrapper(Recipient.TYPE_WITNESS, r));
+			}
+		}
+
+		return result;
+	}
+
+	@TestVisible
+	private List<Recipient> updateTemplateRecipients(
+		final UUID templateId,
+		final List<Recipient> newRecipients,
+		final Map<String, APIRecipientWrapper> oldRecipients,
+		final Integer timeout) {
+
+		Map<String, APIRecipientWrapper> newRecipients2 = new Map<String, APIRecipientWrapper>();
+		Map<String, Recipient> recipientMap = new Map<String, Recipient>();
+		if (newRecipients != null) {
+			for (Recipient r : newRecipients) {
+				if (r == null || String.isBlank(r.type)) continue;
+
+				String recipientId = r.getEnvelopeRecipientId();
+				newRecipients2.put(
+					recipientId,
+					new APIRecipientWrapper(
+						r.type,
+						new APIRecipient(
+							r,
+							null,
+							false)));
+				recipientMap.put(recipientId, r);
+			}
+		}
+
+		Set<String> newIds = newRecipients2.keySet();
+		Set<String> oldIds = oldRecipients == null ? new Set<String>() : oldRecipients.keySet();
+		List<APIRecipientWrapper> toRemove = new List<APIRecipientWrapper>();
+		List<APIRecipientWrapper> toAddOrUpdate = new List<APIRecipientWrapper>();
+
+		for (String rId : Collection.difference(newIds, oldIds)) { // add
+			APIRecipientWrapper r = newRecipients2.get(rId);
+			if (r != null) toAddOrUpdate.add(r);
+		}
+		for (String rId : Collection.difference(oldIds, newIds)) { // remove
+			APIRecipientWrapper r = oldRecipients.get(rId);
+			if (r != null) toRemove.add(r);
+		}
+		for (String rId : Collection.intersection(newIds, oldIds)) { // update
+			APIRecipientWrapper r1 = oldRecipients.get(rId);
+			APIRecipientWrapper r2 = newRecipients2.get(rId);
+			if (r1 != null && r2 != null) toAddOrUpdate.add(r1.mergeWith(r2));
+		}
+
+		List<Recipient> result = new List<Recipient>();
+		if (Collection.isNotEmpty(toRemove)) {
+			result.addAll(this.removeTemplateRecipients(
+				templateId,
+				new APIRecipients(toRemove),
+				recipientMap,
+				timeout));
+		}
+
+		if (Collection.isNotEmpty(toAddOrUpdate)) {
+			result.addAll(this.addOrUpdateTemplateRecipients(
+				templateId,
+				new APIRecipients(toAddOrUpdate),
+				recipientMap,
+				timeout));
+		}
+
+		result.sort();
+		return result;
 	}
 
 	public Template updateTemplate(final Template template) {
@@ -2287,48 +2823,36 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 		if (template == null) throw new DocuSignException(Label.UndefinedTemplate);
 		if (template.id == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
 
-		APITemplate updateTemplateRequest = new APITemplate(template);
+		// Read existing template
+		APITemplate oldTemplate = getTemplateInternal(template.id, timeout);
 
-		//1. get the old template data
-		Template oldTemplate = getTemplate(template.id);
-		APITemplate oldAPITemplateRequest = new APITemplate(oldTemplate);
+		// FIXME: Causes tags to disappear??
+		updateTemplateDocuments(
+			template.id,
+			template.documents,
+			getDocumentContent(template.documents, false),
+			mapTemplateDocuments(oldTemplate.documents),
+			timeout);
 
-		//2. delete all old documents
-		if (Collection.isNotEmpty(oldAPITemplateRequest.documents)) {
-			deleteTemplateDocuments(oldAPITemplateRequest.documents, template.id, timeout);
-		}
+		updateTemplateRecipients(
+			template.id,
+			template.recipients,
+			mapTemplateRecipients(oldTemplate.recipients),
+			timeout);
 
-		//3.delete all old recipients
-		if (oldAPITemplateRequest.recipients != null) {
-			deleteTemplateRecipients(oldAPITemplateRequest.recipients, template.id, timeout);
-		}
-
-		List<APIDocument> updateTemplateDocumentsRequest = Collection.isNotEmpty(updateTemplateRequest.documents) ? updateTemplateRequest.documents : null;
-		//null out the documents in the updateTemplateRequest since
-		//documents will be updated using updateTemplateDocumentsRequest and a separate endpoint
-		updateTemplateRequest.documents = null;
-
-		//TODO : Add DAL appropriate customFields to template
-		//null out the custom fields since we will have to
-		//decide the appropriate fields for DAL templates as well as use logic to retrieve this fieldIds
-		updateTemplateRequest.customFields = null;
-
-		//TODO : Add error handling to cover both multi item put requests viz;
-		//'templates/{templateId}' and 'templates/{templateId}/documents'
-		//this will require updates to RestAPI.cls and will be covered in follow up JIRA ticket
-		//4. update template without documents
-		updateAPITemplate(updateTemplateRequest, template.id, timeout);
-
-		//5. update template documents
-		if (Collection.isNotEmpty(updateTemplateDocumentsRequest)) {
-			updateTemplateDocuments(updateTemplateDocumentsRequest, template.id, timeout);
-		}
+		updateTemplate(
+			template.id,
+			new APITemplate(template, true),
+			timeout);
 
 		return template.withLastModified(Datetime.now());
 	}
 
 	@TestVisible
-	private Boolean updateAPITemplate(final APITemplate template, final UUID templateId, final Integer timeout) {
+	private Boolean updateTemplate(
+		final UUID templateId,
+		final APITemplate template,
+		final Integer timeout) {
 
 		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
 
@@ -2340,60 +2864,6 @@ public with sharing class EnvelopeAPI extends ESignatureAPI {
 			this.log.error('Failed to update template: ' + response.error);
 			throw new APIException(response.error);
 		}
-		return response.error == APIError.none;
-	}
-
-	@TestVisible
-	private Boolean updateTemplateDocuments(final List<APIDocument> documents, final UUID templateId, final Integer timeout) {
-
-		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
-
-		RestAPI.Response response = this.put(
-			new List<Object> { 'templates', templateId, 'documents' },
-			JSON.serialize(new APITemplateUpdateDocuments(documents), true),
-			RestAPI.defaultTimeout);
-
-		if (response.hasError) {
-			this.log.error('Failed to update template documents: ' + response.error);
-			throw new APIException(response.error);
-		}
-
-		return response.error == APIError.none;
-	}
-
-	@TestVisible
-	private Boolean deleteTemplateDocuments(final List<APIDocument> documents, final UUID templateId, final Integer timeout) {
-
-		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
-
-		RestAPI.Response response = this.del(
-			new List<Object> { 'templates', templateId, 'documents' },
-			JSON.serialize(new APITemplateUpdateDocuments(documents), true),
-			RestAPI.defaultTimeout);
-
-		if (response.hasError && response.error != APIError.notFound) {
-			this.log.error('Failed to delete documents: ' + response.error);
-			throw new APIException(response.error);
-		}
-
-		return response.error == APIError.none;
-	}
-
-	@TestVisible
-	private Boolean deleteTemplateRecipients(final APIRecipients recipients, final UUID templateId, final Integer timeout) {
-
-		if (templateId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
-
-		RestAPI.Response response = this.del(
-			new List<Object> { 'templates', templateId, 'recipients' },
-			JSON.serialize(recipients, true),
-			RestAPI.defaultTimeout);
-
-		if (response.hasError && response.error != APIError.notFound) {
-			this.log.error('Failed to delete recipients: ' + response.error);
-			throw new APIException(response.error);
-		}
-
 		return response.error == APIError.none;
 	}
 

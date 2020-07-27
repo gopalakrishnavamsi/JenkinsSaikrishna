@@ -112,7 +112,7 @@ public with sharing virtual class ESignatureAPI extends DocuSignAPI {
 		public String errorCode;
 		public String message;
 
-		public APIError toExternalForm() {
+		public APIError toAPIError() {
 			if (errorCode == SUCCESS) {
 				return APIError.none;
 			} else if (errorCode == INVALID_PASSWORD || errorCode == INVALID_TOKEN || errorCode == AUTH_FAILED
@@ -134,7 +134,7 @@ public with sharing virtual class ESignatureAPI extends DocuSignAPI {
 			if (e.code == APIErrorCode.BAD_REQUEST) {
 				final String body = response.getBody();
 				try {
-					e = ((ESignatureAPI.ErrorDetails)JSON.deserialize(body, ESignatureAPI.ErrorDetails.class)).toExternalForm();
+					e = ((ESignatureAPI.ErrorDetails)JSON.deserialize(body, ESignatureAPI.ErrorDetails.class)).toAPIError();
 					this.log.warn('Received error from DocuSign API: [' + ((ESignatureAPI.Error)e).docuSignCode + '] ' + e.description);
 				} catch (Exception ex) {
 					this.log.warn('Failed to parse 400 BAD_REQUEST as DocuSign error. Response body:\n' + body);

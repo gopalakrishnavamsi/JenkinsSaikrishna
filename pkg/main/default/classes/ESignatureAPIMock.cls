@@ -935,7 +935,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					rs.witnesses = new List<EnvelopeAPI.APIRecipient> {
 						witness
 					};
-					EnvelopeAPI.APITemplate t = new EnvelopeAPI.APITemplate(null);
+					EnvelopeAPI.APITemplate t = new EnvelopeAPI.APITemplate(null, false);
 					t.envelopeTemplateDefinition = tid;
 					t.documents = new List<EnvelopeAPI.APIDocument> { d };
 					t.customFields = cfs;
@@ -984,16 +984,123 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					});
 				}
 			} else if (request.method == 'PUT') {
-				EnvelopeAPI.APITemplate t = (EnvelopeAPI.APITemplate)JSON.deserialize(
-					request.body,
-					EnvelopeAPI.APITemplate.class);
-				if (t != null && t.envelopeTemplateDefinition != null) {
-					t.envelopeTemplateDefinition.lastModified = StringUtils.formatDatetime(Datetime.now());
+				switch on (String)Collection.last(request.path) {
+					when 'documents' {
+						EnvelopeAPI.APITemplateUpdateDocuments ds
+							= (EnvelopeAPI.APITemplateUpdateDocuments)JSON.deserialize(
+								request.body,
+								EnvelopeAPI.APITemplateUpdateDocuments.class);
+						EnvelopeAPI.APIDocumentsUpdate result = new EnvelopeAPI.APIDocumentsUpdate();
+						result.templateId = UUID.randomUUID().toString();
+						result.templateDocuments = ds == null ? null : ds.documents;
+						response = MockResponse.ok(result);
+					} when 'recipients' {
+						EnvelopeAPI.APIRecipients rs = (EnvelopeAPI.APIRecipients)JSON.deserialize(
+							request.body,
+							EnvelopeAPI.APIRecipients.class);
+						EnvelopeAPI.APIRecipientUpdates result = new EnvelopeAPI.APIRecipientUpdates();
+						result.recipientUpdateResults = new List<EnvelopeAPI.APIRecipientUpdate>();
+						if (rs != null) {
+							if (rs.agents != null) {
+								for (EnvelopeAPI.APIRecipient r : rs.agents) {
+									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+									ru.recipientId = r.recipientId;
+									ru.tabs = r.tabs;
+									result.recipientUpdateResults.add(ru);
+								}
+							}
+							if (rs.carbonCopies != null) {
+								for (EnvelopeAPI.APIRecipient r : rs.carbonCopies) {
+									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+									ru.recipientId = r.recipientId;
+									ru.tabs = r.tabs;
+									result.recipientUpdateResults.add(ru);
+								}
+							}
+							if (rs.certifiedDeliveries != null) {
+								for (EnvelopeAPI.APIRecipient r : rs.certifiedDeliveries) {
+									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+									ru.recipientId = r.recipientId;
+									ru.tabs = r.tabs;
+									result.recipientUpdateResults.add(ru);
+								}
+							}
+							if (rs.editors != null) {
+								for (EnvelopeAPI.APIRecipient r : rs.editors) {
+									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+									ru.recipientId = r.recipientId;
+									ru.tabs = r.tabs;
+									result.recipientUpdateResults.add(ru);
+								}
+							}
+							if (rs.inPersonSigners != null) {
+								for (EnvelopeAPI.APIRecipient r : rs.inPersonSigners) {
+									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+									ru.recipientId = r.recipientId;
+									ru.tabs = r.tabs;
+									result.recipientUpdateResults.add(ru);
+								}
+							}
+							if (rs.intermediaries != null) {
+								for (EnvelopeAPI.APIRecipient r : rs.intermediaries) {
+									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+									ru.recipientId = r.recipientId;
+									ru.tabs = r.tabs;
+									result.recipientUpdateResults.add(ru);
+								}
+							}
+							if (rs.signers != null) {
+								for (EnvelopeAPI.APIRecipient r : rs.signers) {
+									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+									ru.recipientId = r.recipientId;
+									ru.tabs = r.tabs;
+									result.recipientUpdateResults.add(ru);
+								}
+							}
+							if (rs.seals != null) {
+								for (EnvelopeAPI.APIRecipient r : rs.seals) {
+									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+									ru.recipientId = r.recipientId;
+									ru.tabs = r.tabs;
+									result.recipientUpdateResults.add(ru);
+								}
+							}
+							if (rs.witnesses != null) {
+								for (EnvelopeAPI.APIRecipient r : rs.witnesses) {
+									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+									ru.recipientId = r.recipientId;
+									ru.tabs = r.tabs;
+									result.recipientUpdateResults.add(ru);
+								}
+							}
+						}
+						response = MockResponse.ok(result);
+					} when else { // template
+						EnvelopeAPI.APITemplate t = (EnvelopeAPI.APITemplate)JSON.deserialize(
+							request.body,
+							EnvelopeAPI.APITemplate.class);
+						if (t != null && t.envelopeTemplateDefinition != null) {
+							t.envelopeTemplateDefinition.lastModified = StringUtils.formatDatetime(Datetime.now());
+						}
+						response = MockResponse.ok(t);
+					}
 				}
-				response = MockResponse.ok(t);
 			} else if (request.method == 'DELETE') {
-				if (request.path.contains('documents') || request.path.contains('recipients')) {
-					response = MockResponse.ok(null);
+				switch on (String)Collection.last(request.path) {
+					when 'documents' {
+						EnvelopeAPI.APITemplateUpdateDocuments ds
+							= (EnvelopeAPI.APITemplateUpdateDocuments)JSON.deserialize(
+								request.body,
+								EnvelopeAPI.APITemplateUpdateDocuments.class);
+						EnvelopeAPI.APIDocumentsUpdate result = new EnvelopeAPI.APIDocumentsUpdate();
+						result.templateId = UUID.randomUUID().toString();
+						result.templateDocuments = ds == null ? null : ds.documents;
+						response = MockResponse.ok(result);
+					} when 'recipients' {
+						response = MockResponse.ok(request.body);
+					} when else { // template
+						response = MockResponse.ok('{}');
+					}
 				}
 			}
 			return response;

@@ -2777,57 +2777,40 @@ private class EnvelopeAPITest {
 	}
 
 	@IsTest
-	static void test_updateAPITemplate_failure() {
-		ESignatureAPIMock.failure();
+	static void test_updateTemplate_template_success() {
+		ESignatureAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Template t = new Template(
+				UUID.randomUUID(),
+				UUID.randomUUID().toString(),
+				new List<CustomField>(),
+				new Notifications(
+					true,
+					1,
+					2,
+					true,
+					3,
+					4),
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString(),
+				new List<Recipient>(),
+				Datetime.now().addDays(-1));
+			EnvelopeAPI.APITemplate template = new EnvelopeAPI.APITemplate(t, true);
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
 			Test.startTest();
-			try {
-				EnvelopeAPI.getInstance().updateAPITemplate(null, UUID.randomUUID(), 100);
-				throw new AssertException('Expected failure');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.badRequest, ex.error);
-			}
+			System.assert(client.updateTemplate(t.id, template, 100));
 			Test.stopTest();
 		}
 	}
 
 	@IsTest
-	static void test_deleteTemplateDocuments_failure() {
+	static void test_updateTemplate_template_failure() {
 		ESignatureAPIMock.failure();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			Test.startTest();
 			try {
-				EnvelopeAPI.getInstance().deleteTemplateDocuments(null, UUID.randomUUID(), 100);
-				throw new AssertException('Expected failure');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.badRequest, ex.error);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_updateTemplateDocuments_failure() {
-		ESignatureAPIMock.failure();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				EnvelopeAPI.getInstance().updateTemplateDocuments(null, UUID.randomUUID(), 100);
-				throw new AssertException('Expected failure');
-			} catch (APIException ex) {
-				System.assertEquals(APIError.badRequest, ex.error);
-			}
-			Test.stopTest();
-		}
-	}
-
-	@IsTest
-	static void test_deleteTemplateRecipients_failure() {
-		ESignatureAPIMock.failure();
-		System.runAs(UserMock.createDocuSignAdministrator()) {
-			Test.startTest();
-			try {
-				EnvelopeAPI.getInstance().deleteTemplateRecipients(null, UUID.randomUUID(), 100);
+				EnvelopeAPI.getInstance().updateTemplate(UUID.randomUUID(), null, 100);
 				throw new AssertException('Expected failure');
 			} catch (APIException ex) {
 				System.assertEquals(APIError.badRequest, ex.error);
@@ -2918,7 +2901,7 @@ private class EnvelopeAPITest {
 
 		Test.startTest();
 		List<Recipient.Status> result1 = apiRecipients.toStatus();
-		List<Recipient> result2 = apiRecipients.toRecipients();
+		List<Recipient> result2 = apiRecipients.toRecipients(null);
 		Test.stopTest();
 
 		System.assertEquals(2, Collection.size(result1));
@@ -3019,6 +3002,1208 @@ private class EnvelopeAPITest {
 				System.assertEquals(APIError.badRequest, ex.error);
 			}
 			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addOrUpdateTemplateDocuments_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.addOrUpdateTemplateDocuments(
+					UUID.randomUUID(),
+					new List<EnvelopeAPI.APIDocument>(),
+					new Map<String, Document>(),
+					1000);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addOrUpdateTemplateDocuments_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Document d1 = new Document(
+				UserInfo.getUserId(),
+				Document.TYPE_FILE,
+				1,
+				UUID.randomUUID().toString(),
+				'pdf',
+				1234,
+				Datetime.now().addDays(-2),
+				UserInfo.getUserId(),
+				true,
+				false,
+				null);
+			EnvelopeAPI.APIDocument ad1 = new EnvelopeAPI.APIDocument(d1, null);
+			Document d2 = new Document(
+				UserInfo.getOrganizationId(),
+				Document.TYPE_FILE,
+				2,
+				UUID.randomUUID().toString(),
+				'docx',
+				5678,
+				Datetime.now().addDays(-1),
+				UserInfo.getOrganizationId(),
+				false,
+				true,
+				null);
+			EnvelopeAPI.APIDocument ad2 = new EnvelopeAPI.APIDocument(d2, null);
+			List<EnvelopeAPI.APIDocument> documents = new List<EnvelopeAPI.APIDocument> {
+				ad1, ad2
+			};
+			Map<String, Document> documentMap = new Map<String, Document> {
+				ad1.documentId => d1,
+				ad2.documentId => d2
+			};
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Document> result = client.addOrUpdateTemplateDocuments(
+				UUID.randomUUID(),
+				documents,
+				documentMap,
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+
+			Document d = result[0];
+			System.assertNotEquals(null, d);
+			System.assertEquals(APIError.none, d.error);
+			Document expected = d1;
+			System.assertEquals(expected.id, d.id);
+			System.assertEquals(expected.type, d.type);
+			System.assertEquals(expected.sequence, d.sequence);
+			System.assertEquals(expected.name, d.name);
+			System.assertEquals(expected.extension, d.extension);
+			System.assertEquals(expected.size, d.size);
+			System.assertEquals(expected.lastModified, d.lastModified);
+			System.assertEquals(expected.sourceId, d.sourceId);
+			System.assertEquals(expected.readOnly, d.readOnly);
+			System.assertEquals(expected.required, d.required);
+
+			d = result[1];
+			System.assertNotEquals(null, d);
+			System.assertEquals(APIError.none, d.error);
+			expected = d2;
+			System.assertEquals(expected.id, d.id);
+			System.assertEquals(expected.type, d.type);
+			System.assertEquals(expected.sequence, d.sequence);
+			System.assertEquals(expected.name, d.name);
+			System.assertEquals(expected.extension, d.extension);
+			System.assertEquals(expected.size, d.size);
+			System.assertEquals(expected.lastModified, d.lastModified);
+			System.assertEquals(expected.sourceId, d.sourceId);
+			System.assertEquals(expected.readOnly, d.readOnly);
+			System.assertEquals(expected.required, d.required);
+		}
+	}
+
+	class TemplateDocumentPartialSuccessMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			EnvelopeAPI.APIDocument du1 = new EnvelopeAPI.APIDocument(null, null);
+			du1.errorDetails = new ESignatureAPI.ErrorDetails();
+			du1.errorDetails.errorCode = 'SUCCESS';
+			du1.errorDetails.message = '';
+			du1.documentId = '1';
+			EnvelopeAPI.APIDocument du2 = new EnvelopeAPI.APIDocument(null, null);
+			du2.errorDetails = new ESignatureAPI.ErrorDetails();
+			du2.errorDetails.errorCode = 'UNIT_TEST';
+			du2.errorDetails.message = 'Unit test error.';
+			du2.documentId = '3';
+			EnvelopeAPI.APIDocument du3 = new EnvelopeAPI.APIDocument(null, null);
+			du3.errorDetails = new ESignatureAPI.ErrorDetails();
+			du3.errorDetails.errorCode = 'SUCCESS';
+			du3.errorDetails.message = '';
+			du3.documentId = '3';
+			EnvelopeAPI.APIDocumentsUpdate result = new EnvelopeAPI.APIDocumentsUpdate();
+			result.templateId = UUID.randomUUID().toString();
+			result.templateDocuments = new List<EnvelopeAPI.APIDocument> { du1, du2, du3 };
+			response.setBody(JSON.serialize(result));
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_addOrUpdateTemplateDocuments_partial_success() {
+		Test.setMock(HttpCalloutMock.class, new TemplateDocumentPartialSuccessMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Document> result = client.addOrUpdateTemplateDocuments(
+				UUID.randomUUID(),
+				new List<EnvelopeAPI.APIDocument>(),
+				new Map<String, Document>(),
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(3, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(APIError.none, result[0].error);
+			System.assertNotEquals(null, result[1]);
+			System.assertNotEquals(null, result[1].error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, result[1].error.code);
+			System.assertEquals('Unit test error.', result[1].error.description);
+			System.assert(result[1].error instanceof ESignatureAPI.Error);
+			System.assertEquals('UNIT_TEST', ((ESignatureAPI.Error)result[1].error).docuSignCode);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(APIError.none, result[2].error);
+		}
+	}
+
+	@IsTest
+	static void test_removeTemplateDocuments_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.removeTemplateDocuments(
+					UUID.randomUUID(),
+					new List<EnvelopeAPI.APIDocument>(),
+					new Map<String, Document>(),
+					1000);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_removeTemplateDocuments_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Document d1 = new Document(
+				UserInfo.getUserId(),
+				Document.TYPE_FILE,
+				1,
+				UUID.randomUUID().toString(),
+				'pdf',
+				1234,
+				Datetime.now().addDays(-2),
+				UserInfo.getUserId(),
+				true,
+				false,
+				null);
+			EnvelopeAPI.APIDocument ad1 = new EnvelopeAPI.APIDocument(d1, null);
+			Document d2 = new Document(
+				UserInfo.getOrganizationId(),
+				Document.TYPE_FILE,
+				2,
+				UUID.randomUUID().toString(),
+				'docx',
+				5678,
+				Datetime.now().addDays(-1),
+				UserInfo.getOrganizationId(),
+				false,
+				true,
+				null);
+			EnvelopeAPI.APIDocument ad2 = new EnvelopeAPI.APIDocument(d2, null);
+			List<EnvelopeAPI.APIDocument> documents = new List<EnvelopeAPI.APIDocument> {
+				ad1, ad2
+			};
+			Map<String, Document> documentMap = new Map<String, Document> {
+				ad1.documentId => d1,
+				ad2.documentId => d2
+			};
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Document> result = client.addOrUpdateTemplateDocuments(
+				UUID.randomUUID(),
+				documents,
+				documentMap,
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(2, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(APIError.none, result[0].error);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(APIError.none, result[1].error);
+		}
+	}
+
+	@IsTest
+	static void test_removeTemplateDocuments_partial_success() {
+		Test.setMock(HttpCalloutMock.class, new TemplateDocumentPartialSuccessMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Document> result = client.removeTemplateDocuments(
+				UUID.randomUUID(),
+				new List<EnvelopeAPI.APIDocument>(),
+				new Map<String, Document>(),
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(3, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(APIError.none, result[0].error);
+			System.assertNotEquals(null, result[1]);
+			System.assertNotEquals(null, result[1].error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, result[1].error.code);
+			System.assertEquals('Unit test error.', result[1].error.description);
+			System.assert(result[1].error instanceof ESignatureAPI.Error);
+			System.assertEquals('UNIT_TEST', ((ESignatureAPI.Error)result[1].error).docuSignCode);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(APIError.none, result[2].error);
+		}
+	}
+
+	@IsTest
+	static void test_addOrUpdateTemplateRecipients_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.addOrUpdateTemplateRecipients(
+					UUID.randomUUID(),
+					new EnvelopeAPI.APIRecipients(null),
+					new Map<String, Recipient>(),
+					1000);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_addOrUpdateTemplateRecipients_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Recipient r1 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(1)
+				.withType(Recipient.TYPE_AGENT, false);
+			Recipient r2 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(2)
+				.withType(Recipient.TYPE_CARBON_COPY, false);
+			Recipient r3 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(3)
+				.withType(Recipient.TYPE_CERTIFIED_DELIVERY, false);
+			Recipient r4 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(4)
+				.withType(Recipient.TYPE_EDITOR, false);
+			Recipient r5 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(5)
+				.withType(Recipient.TYPE_IN_PERSON_SIGNER, false);
+			Recipient r6 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(6)
+				.withType(Recipient.TYPE_INTERMEDIARY, false);
+			Recipient r7 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(7)
+				.withType(Recipient.TYPE_SIGNER, false);
+			Recipient r8 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(8)
+				.withType(Recipient.TYPE_SEAL, false);
+			Recipient r9 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(9)
+				.withType(Recipient.TYPE_WITNESS, false);
+			EnvelopeAPI.APIRecipients recipients = new EnvelopeAPI.APIRecipients(
+				new List<EnvelopeAPI.APIRecipientWrapper> {
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_AGENT,
+						new EnvelopeAPI.APIRecipient(
+							r1,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_CARBON_COPY,
+						new EnvelopeAPI.APIRecipient(
+							r2,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_CERTIFIED_DELIVERY,
+						new EnvelopeAPI.APIRecipient(
+							r3,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_EDITOR,
+						new EnvelopeAPI.APIRecipient(
+							r4,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_IN_PERSON_SIGNER,
+						new EnvelopeAPI.APIRecipient(
+							r5,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_INTERMEDIARY,
+						new EnvelopeAPI.APIRecipient(
+							r6,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_SIGNER,
+						new EnvelopeAPI.APIRecipient(
+							r7,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_SEAL,
+						new EnvelopeAPI.APIRecipient(
+							r8,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_WITNESS,
+						new EnvelopeAPI.APIRecipient(
+							r9,
+							'1',
+							false))
+				});
+			Map<String, Recipient> recipientMap = new Map<String, Recipient> {
+				r1.getEnvelopeRecipientId() => r1,
+				r2.getEnvelopeRecipientId() => r2,
+				r3.getEnvelopeRecipientId() => r3,
+				r4.getEnvelopeRecipientId() => r4,
+				r5.getEnvelopeRecipientId() => r5,
+				r6.getEnvelopeRecipientId() => r6,
+				r7.getEnvelopeRecipientId() => r7,
+				r8.getEnvelopeRecipientId() => r8,
+				r9.getEnvelopeRecipientId() => r9
+			};
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Recipient> result = client.addOrUpdateTemplateRecipients(
+				UUID.randomUUID(),
+				recipients,
+				recipientMap,
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(9, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(APIError.none, result[0].error);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(APIError.none, result[1].error);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(APIError.none, result[2].error);
+			System.assertNotEquals(null, result[3]);
+			System.assertEquals(APIError.none, result[3].error);
+			System.assertNotEquals(null, result[4]);
+			System.assertEquals(APIError.none, result[4].error);
+			System.assertNotEquals(null, result[5]);
+			System.assertEquals(APIError.none, result[5].error);
+			System.assertNotEquals(null, result[6]);
+			System.assertEquals(APIError.none, result[6].error);
+			System.assertNotEquals(null, result[7]);
+			System.assertEquals(APIError.none, result[7].error);
+			System.assertNotEquals(null, result[8]);
+			System.assertEquals(APIError.none, result[8].error);
+		}
+	}
+
+	class TemplateRecipientUpdatePartialSuccessMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			EnvelopeAPI.APIRecipientUpdate ru1 = new EnvelopeAPI.APIRecipientUpdate();
+			ru1.errorDetails = new ESignatureAPI.ErrorDetails();
+			ru1.errorDetails.errorCode = 'SUCCESS';
+			ru1.errorDetails.message = '';
+			ru1.recipientId = '1';
+			EnvelopeAPI.APIRecipientUpdate ru2 = new EnvelopeAPI.APIRecipientUpdate();
+			ru2.errorDetails = new ESignatureAPI.ErrorDetails();
+			ru2.errorDetails.errorCode = 'UNIT_TEST';
+			ru2.errorDetails.message = 'Unit test error.';
+			ru2.recipientId = '2';
+			EnvelopeAPI.APIRecipientUpdate ru3 = new EnvelopeAPI.APIRecipientUpdate();
+			ru3.errorDetails = new ESignatureAPI.ErrorDetails();
+			ru3.errorDetails.errorCode = 'SUCCESS';
+			ru3.errorDetails.message = '';
+			ru3.recipientId = '3';
+			EnvelopeAPI.APIRecipientUpdates result = new EnvelopeAPI.APIRecipientUpdates();
+			result.recipientUpdateResults = new List<EnvelopeAPI.APIRecipientUpdate> { ru1, ru2, ru3 };
+			response.setBody(JSON.serialize(result));
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_addOrUpdateTemplateRecipients_partial_success() {
+		Test.setMock(HttpCalloutMock.class, new TemplateRecipientUpdatePartialSuccessMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Recipient> result = client.addOrUpdateTemplateRecipients(
+				UUID.randomUUID(),
+				new EnvelopeAPI.APIRecipients(null),
+				new Map<String, Recipient>(),
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(3, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(APIError.none, result[0].error);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, result[1].error.code);
+			System.assertEquals('Unit test error.', result[1].error.description);
+			System.assert(result[1].error instanceof ESignatureAPI.Error);
+			System.assertEquals('UNIT_TEST', ((ESignatureAPI.Error)result[1].error).docuSignCode);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(APIError.none, result[2].error);
+		}
+	}
+
+	@IsTest
+	static void test_removeTemplateRecipients_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.removeTemplateRecipients(
+					UUID.randomUUID(),
+					new EnvelopeAPI.APIRecipients(null),
+					new Map<String, Recipient>(),
+					1000);
+				throw new AssertException('Expected failure');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_removeTemplateRecipients_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Recipient r1 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withType(Recipient.TYPE_AGENT, false);
+			Recipient r2 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withType(Recipient.TYPE_CARBON_COPY, false);
+			Recipient r3 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withType(Recipient.TYPE_CERTIFIED_DELIVERY, false);
+			Recipient r4 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withType(Recipient.TYPE_EDITOR, false);
+			Recipient r5 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withType(Recipient.TYPE_IN_PERSON_SIGNER, false);
+			Recipient r6 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withType(Recipient.TYPE_INTERMEDIARY, false);
+			Recipient r7 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withType(Recipient.TYPE_SIGNER, false);
+			Recipient r8 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withType(Recipient.TYPE_SEAL, false);
+			Recipient r9 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withType(Recipient.TYPE_WITNESS, false);
+			EnvelopeAPI.APIRecipients recipients = new EnvelopeAPI.APIRecipients(
+				new List<EnvelopeAPI.APIRecipientWrapper> {
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_AGENT,
+						new EnvelopeAPI.APIRecipient(
+							r1,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_CARBON_COPY,
+						new EnvelopeAPI.APIRecipient(
+							r2,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_CERTIFIED_DELIVERY,
+						new EnvelopeAPI.APIRecipient(
+							r3,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_EDITOR,
+						new EnvelopeAPI.APIRecipient(
+							r4,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_IN_PERSON_SIGNER,
+						new EnvelopeAPI.APIRecipient(
+							r5,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_INTERMEDIARY,
+						new EnvelopeAPI.APIRecipient(
+							r6,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_SIGNER,
+						new EnvelopeAPI.APIRecipient(
+							r7,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_SEAL,
+						new EnvelopeAPI.APIRecipient(
+							r8,
+							'1',
+							false)),
+					new EnvelopeAPI.APIRecipientWrapper(
+						Recipient.TYPE_WITNESS,
+						new EnvelopeAPI.APIRecipient(
+							r9,
+							'1',
+							false))
+				});
+			Map<String, Recipient> recipientMap = new Map<String, Recipient> {
+				r1.getEnvelopeRecipientId() => r1,
+				r2.getEnvelopeRecipientId() => r2,
+				r3.getEnvelopeRecipientId() => r3,
+				r4.getEnvelopeRecipientId() => r4,
+				r5.getEnvelopeRecipientId() => r5,
+				r6.getEnvelopeRecipientId() => r6,
+				r7.getEnvelopeRecipientId() => r7,
+				r8.getEnvelopeRecipientId() => r8,
+				r9.getEnvelopeRecipientId() => r9
+			};
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Recipient> result = client.removeTemplateRecipients(
+				UUID.randomUUID(),
+				recipients,
+				recipientMap,
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(9, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(APIError.none, result[0].error);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(APIError.none, result[1].error);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(APIError.none, result[2].error);
+			System.assertNotEquals(null, result[3]);
+			System.assertEquals(APIError.none, result[3].error);
+			System.assertNotEquals(null, result[4]);
+			System.assertEquals(APIError.none, result[4].error);
+			System.assertNotEquals(null, result[5]);
+			System.assertEquals(APIError.none, result[5].error);
+			System.assertNotEquals(null, result[6]);
+			System.assertEquals(APIError.none, result[6].error);
+			System.assertNotEquals(null, result[7]);
+			System.assertEquals(APIError.none, result[7].error);
+			System.assertNotEquals(null, result[8]);
+			System.assertEquals(APIError.none, result[8].error);
+		}
+	}
+
+	class TemplateRecipientDeletePartialSuccessMock extends OAuthTokenMock {
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			EnvelopeAPI.APIRecipient r1 = new EnvelopeAPI.APIRecipient(
+				Recipient.fromSource(
+					UUID.randomUUID().toString(),
+					UUID.randomUUID() + '@unit.test',
+					null,
+					null,
+					null)
+					.withType(Recipient.TYPE_AGENT, false),
+				'1',
+				false);
+			EnvelopeAPI.APIRecipient r2 = new EnvelopeAPI.APIRecipient(
+				Recipient.fromSource(
+					UUID.randomUUID().toString(),
+					UUID.randomUUID() + '@unit.test',
+					null,
+					null,
+					null)
+					.withType(Recipient.TYPE_CARBON_COPY, false),
+				'1',
+				false);
+			EnvelopeAPI.APIRecipient r3 = new EnvelopeAPI.APIRecipient(
+				Recipient.fromSource(
+					UUID.randomUUID().toString(),
+					UUID.randomUUID() + '@unit.test',
+					null,
+					null,
+					null)
+					.withType(Recipient.TYPE_CERTIFIED_DELIVERY, false),
+				'1',
+				false);
+			EnvelopeAPI.APIRecipient r4 = new EnvelopeAPI.APIRecipient(
+				Recipient.fromSource(
+					UUID.randomUUID().toString(),
+					UUID.randomUUID() + '@unit.test',
+					null,
+					null,
+					null)
+					.withType(Recipient.TYPE_EDITOR, false),
+				'1',
+				false);
+			r4.errorDetails = new ESignatureAPI.ErrorDetails();
+			r4.errorDetails.errorCode = 'UNIT_TEST_1';
+			r4.errorDetails.message = 'Unit test error 1.';
+			EnvelopeAPI.APIRecipient r5 = new EnvelopeAPI.APIRecipient(
+				Recipient.fromSource(
+					UUID.randomUUID().toString(),
+					UUID.randomUUID() + '@unit.test',
+					null,
+					null,
+					null)
+					.withType(Recipient.TYPE_IN_PERSON_SIGNER, false),
+				'1',
+				false);
+			EnvelopeAPI.APIRecipient r6 = new EnvelopeAPI.APIRecipient(
+				Recipient.fromSource(
+					UUID.randomUUID().toString(),
+					UUID.randomUUID() + '@unit.test',
+					null,
+					null,
+					null)
+					.withType(Recipient.TYPE_INTERMEDIARY, false),
+				'1',
+				false);
+			EnvelopeAPI.APIRecipient r7 = new EnvelopeAPI.APIRecipient(
+				Recipient.fromSource(
+					UUID.randomUUID().toString(),
+					UUID.randomUUID() + '@unit.test',
+					null,
+					null,
+					null)
+					.withType(Recipient.TYPE_SIGNER, false),
+				'1',
+				false);
+			EnvelopeAPI.APIRecipient r8 = new EnvelopeAPI.APIRecipient(
+				Recipient.fromSource(
+					UUID.randomUUID().toString(),
+					UUID.randomUUID() + '@unit.test',
+					null,
+					null,
+					null)
+					.withType(Recipient.TYPE_SEAL, false),
+				'1',
+				false);
+			r8.errorDetails = new ESignatureAPI.ErrorDetails();
+			r8.errorDetails.errorCode = 'UNIT_TEST_2';
+			r8.errorDetails.message = 'Unit test error 2.';
+			EnvelopeAPI.APIRecipient r9 = new EnvelopeAPI.APIRecipient(
+				Recipient.fromSource(
+					UUID.randomUUID().toString(),
+					UUID.randomUUID() + '@unit.test',
+					null,
+					null,
+					null)
+					.withType(Recipient.TYPE_WITNESS, false),
+				'1',
+				false);
+			EnvelopeAPI.APIRecipients result = new EnvelopeAPI.APIRecipients(null);
+			result.agents = new List<EnvelopeAPI.APIRecipient> { r1 };
+			result.carbonCopies = new List<EnvelopeAPI.APIRecipient> { r2 };
+			result.certifiedDeliveries = new List<EnvelopeAPI.APIRecipient> { r3 };
+			result.editors = new List<EnvelopeAPI.APIRecipient> { r4 };
+			result.inPersonSigners = new List<EnvelopeAPI.APIRecipient> { r5 };
+			result.intermediaries = new List<EnvelopeAPI.APIRecipient> { r6 };
+			result.signers = new List<EnvelopeAPI.APIRecipient> { r7 };
+			result.seals = new List<EnvelopeAPI.APIRecipient> { r8 };
+			result.witnesses = new List<EnvelopeAPI.APIRecipient> { r9 };
+			response.setBody(JSON.serialize(result));
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_removeTemplateRecipients_partial_success() {
+		Test.setMock(HttpCalloutMock.class, new TemplateRecipientDeletePartialSuccessMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Recipient> result = client.removeTemplateRecipients(
+				UUID.randomUUID(),
+				new EnvelopeAPI.APIRecipients(null),
+				new Map<String, Recipient>(),
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(9, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(APIError.none, result[0].error);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(APIError.none, result[1].error);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(APIError.none, result[2].error);
+			System.assertNotEquals(null, result[3]);
+			System.assertNotEquals(null, result[3].error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, result[3].error.code);
+			System.assertEquals('Unit test error 1.', result[3].error.description);
+			System.assert(result[3].error instanceof ESignatureAPI.Error);
+			System.assertEquals('UNIT_TEST_1', ((ESignatureAPI.Error)result[3].error).docuSignCode);
+			System.assertNotEquals(null, result[4]);
+			System.assertEquals(APIError.none, result[4].error);
+			System.assertNotEquals(null, result[5]);
+			System.assertEquals(APIError.none, result[5].error);
+			System.assertNotEquals(null, result[6]);
+			System.assertEquals(APIError.none, result[6].error);
+			System.assertNotEquals(null, result[7]);
+			System.assertNotEquals(null, result[7].error);
+			System.assertEquals(APIErrorCode.BAD_REQUEST, result[7].error.code);
+			System.assertEquals('Unit test error 2.', result[7].error.description);
+			System.assert(result[7].error instanceof ESignatureAPI.Error);
+			System.assertEquals('UNIT_TEST_2', ((ESignatureAPI.Error)result[7].error).docuSignCode);
+			System.assertNotEquals(null, result[8]);
+			System.assertEquals(APIError.none, result[8].error);
+		}
+	}
+
+	@IsTest
+	static void test_mapTemplateDocuments() {
+		Document d1 = new Document(
+			null,
+			Document.TYPE_FILE,
+			1,
+			UUID.randomUUID().toString(),
+			'pdf',
+			1234,
+			Datetime.now().addDays(-2),
+			null,
+			true,
+			false,
+			null);
+		Document d2 = new Document(
+			null,
+			Document.TYPE_FILE,
+			2,
+			UUID.randomUUID().toString(),
+			'docx',
+			5678,
+			Datetime.now().addDays(-1),
+			null,
+			false,
+			true,
+			null);
+		List<EnvelopeAPI.APIDocument> documents = new List<EnvelopeAPI.APIDocument> {
+			new EnvelopeAPI.APIDocument(d1, null),
+			new EnvelopeAPI.APIDocument(d2, null)
+		};
+
+		Test.startTest();
+		Map<String, EnvelopeAPI.APIDocument> result = EnvelopeAPI.mapTemplateDocuments(documents);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(new Set<String> { '1', '2' }, result.keySet());
+		System.assertNotEquals(null, result.get('1'));
+		System.assertNotEquals(null, result.get('2'));
+	}
+
+	@IsTest
+	static void test_updateTemplateDocuments() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			// 1 add, 1 delete, 1 update
+			Document d1 = new Document( // add
+				UserInfo.getUserId(),
+				Document.TYPE_FILE,
+				1,
+				UUID.randomUUID().toString(),
+				'pdf',
+				1234,
+				Datetime.now().addDays(-2),
+				UserInfo.getUserId(),
+				true,
+				false,
+				null);
+			Document d2 = new Document( // update
+				UserInfo.getOrganizationId(),
+				Document.TYPE_FILE,
+				2,
+				UUID.randomUUID().toString(),
+				'docx',
+				5678,
+				Datetime.now().addDays(-1),
+				UserInfo.getOrganizationId(),
+				false,
+				true,
+				null);
+			Document d3 = new Document( // remove
+				UserInfo.getProfileId(),
+				Document.TYPE_FILE,
+				3,
+				UUID.randomUUID().toString(),
+				'docx',
+				9012,
+				Datetime.now(),
+				UserInfo.getProfileId(),
+				false,
+				true,
+				null);
+			List<Document> newDocuments = new List<Document> { d1, d2 };
+			Map<String, Blob> documentContent = new Map<String, Blob> {
+				'1' => Blob.valueOf('d1'),
+				'2' => Blob.valueOf('d2')
+			};
+			Map<String, EnvelopeAPI.APIDocument> oldDocuments = new Map<String, EnvelopeAPI.APIDocument> {
+				'2' => new EnvelopeAPI.APIDocument(d2, Blob.valueOf('d2')),
+				'3' => new EnvelopeAPI.APIDocument(d3, Blob.valueOf('d3'))
+			};
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Document> result = client.updateTemplateDocuments(
+				UUID.randomUUID(),
+				newDocuments,
+				documentContent,
+				oldDocuments,
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(3, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(APIError.none, result[0].error);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(APIError.none, result[1].error);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(APIError.none, result[2].error);
+		}
+	}
+
+	@IsTest
+	static void test_mapTemplateRecipients() {
+		EnvelopeAPI.APIRecipient r1 = new EnvelopeAPI.APIRecipient(
+			Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(1)
+				.withType(Recipient.TYPE_AGENT, false),
+			'1',
+			false);
+		EnvelopeAPI.APIRecipient r2 = new EnvelopeAPI.APIRecipient(
+			Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(2)
+				.withType(Recipient.TYPE_CARBON_COPY, false),
+			'1',
+			false);
+		EnvelopeAPI.APIRecipient r3 = new EnvelopeAPI.APIRecipient(
+			Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(3)
+				.withType(Recipient.TYPE_CERTIFIED_DELIVERY, false),
+			'1',
+			false);
+		EnvelopeAPI.APIRecipient r4 = new EnvelopeAPI.APIRecipient(
+			Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(4)
+				.withType(Recipient.TYPE_EDITOR, false),
+			'1',
+			false);
+		r4.errorDetails = new ESignatureAPI.ErrorDetails();
+		r4.errorDetails.errorCode = 'UNIT_TEST_1';
+		r4.errorDetails.message = 'Unit test error 1.';
+		EnvelopeAPI.APIRecipient r5 = new EnvelopeAPI.APIRecipient(
+			Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(5)
+				.withType(Recipient.TYPE_IN_PERSON_SIGNER, false),
+			'1',
+			false);
+		EnvelopeAPI.APIRecipient r6 = new EnvelopeAPI.APIRecipient(
+			Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(6)
+				.withType(Recipient.TYPE_INTERMEDIARY, false),
+			'1',
+			false);
+		EnvelopeAPI.APIRecipient r7 = new EnvelopeAPI.APIRecipient(
+			Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(7)
+				.withType(Recipient.TYPE_SIGNER, false),
+			'1',
+			false);
+		EnvelopeAPI.APIRecipient r8 = new EnvelopeAPI.APIRecipient(
+			Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(8)
+				.withType(Recipient.TYPE_SEAL, false),
+			'1',
+			false);
+		r8.errorDetails = new ESignatureAPI.ErrorDetails();
+		r8.errorDetails.errorCode = 'UNIT_TEST_2';
+		r8.errorDetails.message = 'Unit test error 2.';
+		EnvelopeAPI.APIRecipient r9 = new EnvelopeAPI.APIRecipient(
+			Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(9)
+				.withType(Recipient.TYPE_WITNESS, false),
+			'1',
+			false);
+		EnvelopeAPI.APIRecipients recipients = new EnvelopeAPI.APIRecipients(null);
+		recipients.agents = new List<EnvelopeAPI.APIRecipient> { r1 };
+		recipients.carbonCopies = new List<EnvelopeAPI.APIRecipient> { r2 };
+		recipients.certifiedDeliveries = new List<EnvelopeAPI.APIRecipient> { r3 };
+		recipients.editors = new List<EnvelopeAPI.APIRecipient> { r4 };
+		recipients.inPersonSigners = new List<EnvelopeAPI.APIRecipient> { r5 };
+		recipients.intermediaries = new List<EnvelopeAPI.APIRecipient> { r6 };
+		recipients.signers = new List<EnvelopeAPI.APIRecipient> { r7 };
+		recipients.seals = new List<EnvelopeAPI.APIRecipient> { r8 };
+		recipients.witnesses = new List<EnvelopeAPI.APIRecipient> { r9 };
+
+		Test.startTest();
+		Map<String, EnvelopeAPI.APIRecipientWrapper> result = EnvelopeAPI.mapTemplateRecipients(recipients);
+		Test.stopTest();
+
+		System.assertNotEquals(null, result);
+		System.assertEquals(9, result.size());
+		EnvelopeAPI.APIRecipientWrapper r = result.get(r1.recipientId);
+		System.assertNotEquals(null, r);
+		System.assertEquals(Recipient.TYPE_AGENT, r.type);
+		System.assertNotEquals(null, r.recipient);
+		r = result.get(r2.recipientId);
+		System.assertNotEquals(null, r);
+		System.assertEquals(Recipient.TYPE_CARBON_COPY, r.type);
+		System.assertNotEquals(null, r.recipient);
+		r = result.get(r3.recipientId);
+		System.assertNotEquals(null, r);
+		System.assertEquals(Recipient.TYPE_CERTIFIED_DELIVERY, r.type);
+		System.assertNotEquals(null, r.recipient);
+		r = result.get(r4.recipientId);
+		System.assertNotEquals(null, r);
+		System.assertEquals(Recipient.TYPE_EDITOR, r.type);
+		System.assertNotEquals(null, r.recipient);
+		r = result.get(r5.recipientId);
+		System.assertNotEquals(null, r);
+		System.assertEquals(Recipient.TYPE_IN_PERSON_SIGNER, r.type);
+		System.assertNotEquals(null, r.recipient);
+		r = result.get(r6.recipientId);
+		System.assertNotEquals(null, r);
+		System.assertEquals(Recipient.TYPE_INTERMEDIARY, r.type);
+		System.assertNotEquals(null, r.recipient);
+		r = result.get(r7.recipientId);
+		System.assertNotEquals(null, r);
+		System.assertEquals(Recipient.TYPE_SIGNER, r.type);
+		System.assertNotEquals(null, r.recipient);
+		r = result.get(r8.recipientId);
+		System.assertNotEquals(null, r);
+		System.assertEquals(Recipient.TYPE_SEAL, r.type);
+		System.assertNotEquals(null, r.recipient);
+		r = result.get(r9.recipientId);
+		System.assertNotEquals(null, r);
+		System.assertEquals(Recipient.TYPE_WITNESS, r.type);
+		System.assertNotEquals(null, r.recipient);
+	}
+
+	@IsTest
+	static void test_updateTemplateRecipients() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			// 1 add, 1 delete, 1 update
+			Recipient r1 = Recipient.fromSource( // add
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(1);
+			Recipient r2 = Recipient.fromSource( // update
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(2);
+			Recipient r3 = Recipient.fromSource( // remove
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(3);
+			List<Recipient> newRecipients = new List<Recipient> { r1, r2 };
+			Map<String, EnvelopeAPI.APIRecipientWrapper> oldRecipients = new Map<String, EnvelopeAPI.APIRecipientWrapper> {
+				'2' => new EnvelopeAPI.APIRecipientWrapper(
+					Recipient.TYPE_SIGNER,
+					new EnvelopeAPI.APIRecipient(
+						r2,
+						'1',
+						false)),
+				'3' => new EnvelopeAPI.APIRecipientWrapper(
+					Recipient.TYPE_SIGNER,
+					new EnvelopeAPI.APIRecipient(
+						r3,
+						'1',
+						false))
+			};
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			List<Recipient> result = client.updateTemplateRecipients(
+				UUID.randomUUID(),
+				newRecipients,
+				oldRecipients,
+				1000);
+			Test.stopTest();
+
+			System.assertEquals(3, Collection.size(result));
+			System.assertNotEquals(null, result[0]);
+			System.assertEquals(APIError.none, result[0].error);
+			System.assertNotEquals(null, result[1]);
+			System.assertEquals(APIError.none, result[1].error);
+			System.assertNotEquals(null, result[2]);
+			System.assertEquals(APIError.none, result[2].error);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 /**
  * Representation of a DocuSign envelope document.
  */
-global virtual class Document {
+global virtual class Document implements Comparable {
 	/**
 	 * DocuSign template document type constant.
 	 */
@@ -95,6 +95,11 @@ global virtual class Document {
 			return null;
 		}
 	}
+	/**
+	 * The error associated with a document update event.
+	 */
+	@AuraEnabled
+	public APIError error { get; private set; }
 
 	/**
 	 * Constructs a new DocuSign envelope document.
@@ -255,6 +260,22 @@ global virtual class Document {
 	}
 
 	/**
+	 * Used to sort document by ascending sequence with nulls or non-documents sorted first.
+	 *
+	 * @param compareTo The object to compare.
+	 *
+	 * @return The comparison value.
+	 */
+	public Integer compareTo(final Object compareTo) {
+		if (compareTo == null || !(compareTo instanceof Recipient)) return -1;
+
+		Document d = (Document)compareTo;
+		if (this.sequence == d.sequence) return 0;
+		if (this.sequence > d.sequence) return 1;
+		return -1;
+	}
+
+	/**
 	 * Creates a deep copy of the DocuSign envelope document.
 	 *
 	 * @return The copied DocuSign envelope document.
@@ -309,6 +330,18 @@ global virtual class Document {
 	 */
 	public Document withTemplateDocuments(final List<Document> templateDocuments) {
 		this.templateDocuments = templateDocuments == null ? new List<Document>() : templateDocuments;
+		return this;
+	}
+
+	/**
+	 * Sets the DocuSign envelope document <code>error</code> property.
+	 *
+	 * @param error The error associated with a document update event.
+	 *
+	 * @return The DocuSign envelope document with updated <code>error</code>.
+	 */
+	public Document withError(final APIError error) {
+		this.error = error;
 		return this;
 	}
 

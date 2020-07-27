@@ -23,12 +23,12 @@ private class ESignatureAPITest {
 		ed6.message = 'Hourly API limit exceeded';
 
 		Test.startTest();
-		APIError e1 = ed1.toExternalForm();
-		APIError e2 = ed2.toExternalForm();
-		APIError e3 = ed3.toExternalForm();
-		APIError e4 = ed4.toExternalForm();
-		APIError e5 = ed5.toExternalForm();
-		APIError e6 = ed6.toExternalForm();
+		APIError e1 = ed1.toAPIError();
+		APIError e2 = ed2.toAPIError();
+		APIError e3 = ed3.toAPIError();
+		APIError e4 = ed4.toAPIError();
+		APIError e5 = ed5.toAPIError();
+		APIError e6 = ed6.toAPIError();
 		Test.stopTest();
 
 		System.assertEquals(APIError.none, e1);

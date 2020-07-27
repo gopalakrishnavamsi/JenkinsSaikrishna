@@ -195,6 +195,11 @@ global virtual class Recipient implements Comparable {
 	 */
 	@AuraEnabled
 	global Boolean required { get; private set; }
+	/**
+	 * The error associated with a recipient update event.
+	 */
+	@AuraEnabled
+	public APIError error { get; private set; }
 
 	/**
 	 * Constructs a DocuSign envelope recipient.
@@ -1291,12 +1296,28 @@ global virtual class Recipient implements Comparable {
 		return this;
 	}
 
+	/**
+	 * Sets the DocuSign envelope recipient <code>error</code> property.
+	 *
+	 * @param error The error associated with a recipient update event.
+	 *
+	 * @return The DocuSign envelope recipient with updated <code>error</code>.
+	 */
+	public Recipient withError(final APIError error) {
+		this.error = error;
+		return this;
+	}
+
 	public String getRoleName() {
 		return this.role == null ? null : this.role.name;
 	}
 
 	public Id getSourceId() {
 		return this.source == null ? null : this.source.id;
+	}
+
+	public String getEnvelopeRecipientId() {
+		return String.isBlank(this.envelopeRecipientId) ? String.valueOf(this.sequence) : this.envelopeRecipientId;
 	}
 
 	/**
