@@ -2776,6 +2776,90 @@ private class EnvelopeAPITest {
 		}
 	}
 
+	class TemplateUpdatePartialSuccessMock extends OAuthTokenMock {
+
+		private ESignatureAPIMock eSignMock;
+
+		public TemplateUpdatePartialSuccessMock() {
+			this.eSignMock = new ESignatureAPIMock(true);
+		}
+
+		override public HttpResponse getResponse(final HttpRequest request) {
+			if (request.getMethod() != 'PUT') return this.eSignMock.getResponse(request);
+
+			HttpResponse response = new HttpResponse();
+			response.setStatusCode(200);
+			response.setStatus('OK');
+			response.setHeader('Content-Type', 'application/json; charset=utf-8');
+			EnvelopeAPI.APITemplateUpdate result = new EnvelopeAPI.APITemplateUpdate();
+			result.errorDetails = new ESignatureAPI.ErrorDetails();
+			result.errorDetails.errorCode = 'TEMPLATE_ERROR';
+			result.errorDetails.message = 'Template update error.';
+			EnvelopeAPI.APIListCustomField lcf1 = new EnvelopeAPI.APIListCustomField(null);
+			lcf1.name = 'listField1';
+			EnvelopeAPI.APIListCustomField lcf2 = new EnvelopeAPI.APIListCustomField(null);
+			lcf2.name = 'listField2';
+			lcf2.errorDetails = new ESignatureAPI.ErrorDetails();
+			lcf2.errorDetails.errorCode = 'LCF2_ERROR';
+			lcf2.errorDetails.message = 'List custom field error.';
+			EnvelopeAPI.APIListCustomField lcf3 = new EnvelopeAPI.APIListCustomField(null);
+			lcf3.name = 'listField3';
+			result.listCustomFieldUpdateResults = new List<EnvelopeAPI.APIListCustomField> {
+				lcf1, lcf2, lcf3
+			};
+			EnvelopeAPI.APITextCustomField tcf1 = new EnvelopeAPI.APITextCustomField(null);
+			tcf1.name = 'textField1';
+			tcf1.errorDetails = new ESignatureAPI.ErrorDetails();
+			tcf1.errorDetails.errorCode = 'TCF1_ERROR';
+			tcf1.errorDetails.message = 'Text custom field error.';
+			EnvelopeAPI.APITextCustomField tcf2 = new EnvelopeAPI.APITextCustomField(null);
+			tcf2.name = 'textField2';
+			tcf2.errorDetails = new ESignatureAPI.ErrorDetails();
+			tcf2.errorDetails.errorCode = 'SUCCESS';
+			EnvelopeAPI.APITextCustomField tcf3 = new EnvelopeAPI.APITextCustomField(null);
+			tcf3.name = 'textField3';
+			tcf3.errorDetails = new ESignatureAPI.ErrorDetails();
+			tcf3.errorDetails.errorCode = 'TCF3_ERROR';
+			tcf3.errorDetails.message = 'Text custom field error.';
+			result.textCustomFieldUpdateResults = new List<EnvelopeAPI.APITextCustomField> {
+				tcf1, tcf2, tcf3
+			};
+			response.setBody(JSON.serialize(result));
+			return response;
+		}
+	}
+
+	@IsTest
+	static void test_updateTemplate_partial_success() {
+		Test.setMock(HttpCalloutMock.class, new TemplateUpdatePartialSuccessMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Template template = new Template(
+				UUID.randomUUID(),
+				UUID.randomUUID().toString(),
+				new List<CustomField> {
+					CustomField.newTextField('textField2', 'textField2.value', false, false),
+					CustomField.newListField('listField1', 'listField1.value', new List<String>(), false, false)
+				},
+				null,
+				UUID.randomUUID().toString(),
+				UUID.randomUUID().toString(),
+				null,
+				Datetime.now().addDays(-1));
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.updateTemplate(
+					template,
+					1000);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assert(ex.getMessage().startsWith(Label.TemplateError));
+			}
+			Test.stopTest();
+		}
+	}
+
 	@IsTest
 	static void test_updateTemplate_template_success() {
 		ESignatureAPIMock.success();
@@ -3914,7 +3998,7 @@ private class EnvelopeAPITest {
 	}
 
 	@IsTest
-	static void test_updateTemplateDocuments() {
+	static void test_updateTemplateDocuments_success() {
 		ESignatureAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			// 1 add, 1 delete, 1 update
@@ -3981,6 +4065,51 @@ private class EnvelopeAPITest {
 			System.assertEquals(APIError.none, result[1].error);
 			System.assertNotEquals(null, result[2]);
 			System.assertEquals(APIError.none, result[2].error);
+		}
+	}
+
+	@IsTest
+	static void test_updateTemplateDocuments_failure() {
+		Test.setMock(HttpCalloutMock.class, new TemplateDocumentPartialSuccessMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Document d1 = new Document(
+				null,
+				Document.TYPE_FILE,
+				1,
+				UUID.randomUUID().toString(),
+				'pdf',
+				1234,
+				Datetime.now(),
+				null);
+			Document d2 = new Document(
+				null,
+				Document.TYPE_FILE,
+				2,
+				UUID.randomUUID().toString(),
+				'pdf',
+				1234,
+				Datetime.now(),
+				null);
+			List<Document> newDocuments = new List<Document> { d1 };
+			Map<String, Blob> documentContent = new Map<String, Blob>();
+			Map<String, EnvelopeAPI.APIDocument> oldDocuments = new Map<String, EnvelopeAPI.APIDocument> {
+				'2' => new EnvelopeAPI.APIDocument(d2, null)
+			};
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.updateTemplateDocuments(
+					UUID.randomUUID(),
+					newDocuments,
+					documentContent,
+					oldDocuments,
+					1000);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assert(ex.getMessage().contains(Label.TemplateDocumentError));
+			}
+			Test.stopTest();
 		}
 	}
 
@@ -4147,7 +4276,7 @@ private class EnvelopeAPITest {
 	}
 
 	@IsTest
-	static void test_updateTemplateRecipients() {
+	static void test_updateTemplateRecipients_success() {
 		ESignatureAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
 			// 1 add, 1 delete, 1 update
@@ -4204,6 +4333,69 @@ private class EnvelopeAPITest {
 			System.assertEquals(APIError.none, result[1].error);
 			System.assertNotEquals(null, result[2]);
 			System.assertEquals(APIError.none, result[2].error);
+		}
+	}
+
+	@IsTest
+	static void test_updateTemplateRecipients_failure() {
+		Test.setMock(HttpCalloutMock.class, new TemplateRecipientDeletePartialSuccessMock());
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			Recipient r1 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(1);
+			Recipient r2 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(2);
+			Recipient r3 = Recipient.fromSource(
+				UUID.randomUUID().toString(),
+				UUID.randomUUID() + '@unit.test',
+				null,
+				null,
+				null)
+				.withSequence(3);
+			List<Recipient> newRecipients = new List<Recipient>();
+			Map<String, EnvelopeAPI.APIRecipientWrapper> oldRecipients = new Map<String, EnvelopeAPI.APIRecipientWrapper> {
+				'1' => new EnvelopeAPI.APIRecipientWrapper(
+					Recipient.TYPE_SIGNER,
+					new EnvelopeAPI.APIRecipient(
+						r1,
+						'1',
+						false)),
+				'2' => new EnvelopeAPI.APIRecipientWrapper(
+					Recipient.TYPE_SIGNER,
+					new EnvelopeAPI.APIRecipient(
+						r2,
+						'1',
+						false)),
+				'3' => new EnvelopeAPI.APIRecipientWrapper(
+					Recipient.TYPE_SIGNER,
+					new EnvelopeAPI.APIRecipient(
+						r3,
+						'1',
+						false))
+			};
+			EnvelopeAPI client = EnvelopeAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.updateTemplateRecipients(
+					UUID.randomUUID(),
+					newRecipients,
+					oldRecipients,
+					1000);
+				throw new AssertException('Expected failure');
+			} catch (DocuSignException ex) {
+				System.assert(ex.getMessage().contains(Label.TemplateRecipientError));
+			}
+			Test.stopTest();
 		}
 	}
 }

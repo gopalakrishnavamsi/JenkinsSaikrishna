@@ -5867,6 +5867,18 @@
 		<label>Failed to create DocuSign Connect configuration.</label>
 		<name>ConnectConfigurationError</name>
 	</customLabels>
+	<customLabels>
+		<label>Failed to update one or more template documents.</label>
+		<name>TemplateDocumentError</name>
+	</customLabels>
+	<customLabels>
+		<label>Failed to update one or more template recipients.</label>
+		<name>TemplateRecipientError</name>
+	</customLabels>
+	<customLabels>
+		<label>Failed to update template.</label>
+		<name>TemplateError</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign Setup</label>
 		<name>Setup</name>

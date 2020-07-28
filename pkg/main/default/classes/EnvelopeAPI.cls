@@ -415,6 +415,8 @@ public with sharing virtual class EnvelopeAPI extends ESignatureAPI {
 		public String show;
 		public String value;
 		public List<String> listItems;
+		public String fieldId;
+		public ESignatureAPI.ErrorDetails errorDetails;
 
 		public APIListCustomField(final CustomField cf) {
 			if (cf != null) {
@@ -442,6 +444,8 @@ public with sharing virtual class EnvelopeAPI extends ESignatureAPI {
 		public String required;
 		public String show;
 		public String value;
+		public String fieldId;
+		public ESignatureAPI.ErrorDetails errorDetails;
 
 		public APITextCustomField(
 			final String name,
@@ -1225,6 +1229,7 @@ public with sharing virtual class EnvelopeAPI extends ESignatureAPI {
 		public String hidden;
 		public String roundDecimalPlaces;
 		public Map<String, Object> paymentDetails;
+		public ESignatureAPI.ErrorDetails errorDetails;
 
 		public APITab(
 			final String documentId,
@@ -2304,6 +2309,47 @@ public with sharing virtual class EnvelopeAPI extends ESignatureAPI {
 				this.envelopeTemplateDefinition == null
 					? null : StringUtils.parseDatetime(this.envelopeTemplateDefinition.lastModified));
 		}
+
+		private Map<String, APITextCustomField> mapTextCustomFields() {
+			Map<String, APITextCustomField> result = new Map<String, APITextCustomField>();
+			if (this.customFields != null && this.customFields.textCustomFields != null) {
+				for (APITextCustomField cf : this.customFields.textCustomFields) {
+					if (cf == null || String.isBlank(cf.name)) continue;
+
+					result.put(cf.name, cf);
+				}
+			}
+			return result;
+		}
+
+		private Map<String, APIListCustomField> mapListCustomFields() {
+			Map<String, APIListCustomField> result = new Map<String, APIListCustomField>();
+			if (this.customFields != null && this.customFields.listCustomFields != null) {
+				for (APIListCustomField cf : this.customFields.listCustomFields) {
+					if (cf == null || String.isBlank(cf.name)) continue;
+
+					result.put(cf.name, cf);
+				}
+			}
+			return result;
+		}
+
+		public APITemplate mergeCustomFields(final APITemplate other) {
+			if (other != null) {
+				Map<String, APITextCustomField> thisTcfs = this.mapTextCustomFields();
+				Map<String, APITextCustomField> otherTcfs = other.mapTextCustomFields();
+				for (String name : Collection.intersection(thisTcfs.keySet(), otherTcfs.keySet())) {
+					thisTcfs.get(name).fieldId = otherTcfs.get(name).fieldId;
+				}
+
+				Map<String, APIListCustomField> thisLcfs = this.mapListCustomFields();
+				Map<String, APIListCustomField> otherLcfs = other.mapListCustomFields();
+				for (String name : Collection.intersection(thisLcfs.keySet(), otherLcfs.keySet())) {
+					thisLcfs.get(name).fieldId = otherLcfs.get(name).fieldId;
+				}
+			}
+			return this;
+		}
 	}
 
 	@TestVisible
@@ -2574,6 +2620,20 @@ public with sharing virtual class EnvelopeAPI extends ESignatureAPI {
 		}
 
 		result.sort();
+
+		List<String> errors = new List<String>();
+		for (Document d : result) {
+			if (d == null || d.error == null || d.error == APIError.none) continue;
+
+			errors.add(d.error.toString());
+		}
+		if (Collection.isNotEmpty(errors)) {
+			throw new DocuSignException(String.format('{0}\n{1}', new List<Object> {
+				Label.TemplateDocumentError,
+				String.join(errors, '\n')
+			}));
+		}
+
 		return result;
 	}
 
@@ -2809,6 +2869,23 @@ public with sharing virtual class EnvelopeAPI extends ESignatureAPI {
 		}
 
 		result.sort();
+
+		List<String> errors = new List<String>();
+		for (Recipient r : result) {
+			if (r == null || r.error == null || r.error == APIError.none) continue;
+
+			errors.add(String.format(Label.QueryError_2, new List<Object> {
+				String.isBlank(r.email) ? r.getEnvelopeRecipientId() : r.email,
+				r.error.toString()
+			}));
+		}
+		if (Collection.isNotEmpty(errors)) {
+			throw new DocuSignException(String.format('{0}\n{1}', new List<Object> {
+				Label.TemplateRecipientError,
+				String.join(errors, '\n')
+			}));
+		}
+
 		return result;
 	}
 
@@ -2842,10 +2919,59 @@ public with sharing virtual class EnvelopeAPI extends ESignatureAPI {
 
 		updateTemplate(
 			template.id,
-			new APITemplate(template, true),
+			new APITemplate(template, true).mergeCustomFields(oldTemplate),
 			timeout);
 
 		return template.withLastModified(Datetime.now());
+	}
+
+	@TestVisible
+	private class APITemplateUpdate {
+		public ESignatureAPI.ErrorDetails errorDetails;
+		public List<APIListCustomField> listCustomFieldUpdateResults;
+		public List<APITextCustomField> textCustomFieldUpdateResults;
+		// Not updating anything else for template: tabs, recipients, etc.
+
+		private APIError getError(final ESignatureAPI.ErrorDetails error) {
+			return error == null ? APIError.none : error.toAPIError();
+		}
+
+		public List<String> getErrors() {
+			List<String> result = new List<String>();
+
+			APIError e = getError(this.errorDetails);
+			if (e != APIError.none) result.add(e.toString());
+
+			if (this.listCustomFieldUpdateResults != null) {
+				for (APIListCustomField cf : this.listCustomFieldUpdateResults) {
+					if (cf == null || cf.errorDetails == null) continue;
+
+					e = getError(cf.errorDetails);
+					if (e != APIError.none) {
+						result.add(String.format(Label.QueryError_2, new List<Object> {
+							cf.name,
+							e.toString()
+						}));
+					}
+				}
+			}
+
+			if (this.textCustomFieldUpdateResults != null) {
+				for (APITextCustomField cf : this.textCustomFieldUpdateResults) {
+					if (cf == null || cf.errorDetails == null) continue;
+
+					e = getError(cf.errorDetails);
+					if (e != APIError.none) {
+						result.add(String.format(Label.QueryError_2, new List<Object> {
+							cf.name,
+							e.toString()
+						}));
+					}
+				}
+			}
+
+			return result;
+		}
 	}
 
 	@TestVisible
@@ -2864,7 +2990,17 @@ public with sharing virtual class EnvelopeAPI extends ESignatureAPI {
 			this.log.error('Failed to update template: ' + response.error);
 			throw new APIException(response.error);
 		}
-		return response.error == APIError.none;
+
+		APITemplateUpdate result = (APITemplateUpdate)JSON.deserialize(response.body, APITemplateUpdate.class);
+		List<String> errors = result == null ? null : result.getErrors();
+		if (Collection.isNotEmpty(errors)) {
+			throw new DocuSignException(String.format('{0}\n{1}', new List<Object> {
+				Label.TemplateError,
+				String.join(errors, '\n')
+			}));
+		}
+
+		return true;
 	}
 
 	public Boolean deleteTemplate(final UUID templateId) {

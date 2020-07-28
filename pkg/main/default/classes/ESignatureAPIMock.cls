@@ -765,11 +765,13 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 						'textValue1',
 						false,
 						true);
+					tf1.fieldId = UUID.randomUUID().toString();
 					EnvelopeAPI.APITextCustomField tf2 = new EnvelopeAPI.APITextCustomField(
 						'textField2',
 						'textValue2',
 						false,
 						false);
+					tf2.fieldId = UUID.randomUUID().toString();
 					EnvelopeAPI.APIListCustomField lf1 = new EnvelopeAPI.APIListCustomField(CustomField.newListField(
 						'listField1',
 						'listField1Value2',
@@ -778,13 +780,10 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 						},
 						true,
 						true));
+					lf1.fieldId = UUID.randomUUID().toString();
 					EnvelopeAPI.APICustomFields cfs = new EnvelopeAPI.APICustomFields(
-						new List<EnvelopeAPI.APITextCustomField> {
-							tf1, tf2
-						},
-						new List<EnvelopeAPI.APIListCustomField> {
-							lf1
-						});
+						new List<EnvelopeAPI.APITextCustomField> { tf1, tf2 },
+						new List<EnvelopeAPI.APIListCustomField> { lf1 });
 					EnvelopeAPI.APINotifications n = new EnvelopeAPI.APINotifications(new Notifications(
 						true,
 						10,
@@ -908,33 +907,15 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					witness.templateLocked = 'false';
 					witness.templateRequired = 'false';
 					EnvelopeAPI.APIRecipients rs = new EnvelopeAPI.APIRecipients(null, d.documentId, false);
-					rs.agents = new List<EnvelopeAPI.APIRecipient> {
-						agent
-					};
-					rs.carbonCopies = new List<EnvelopeAPI.APIRecipient> {
-						cc
-					};
-					rs.certifiedDeliveries = new List<EnvelopeAPI.APIRecipient> {
-						cd
-					};
-					rs.editors = new List<EnvelopeAPI.APIRecipient> {
-						editor
-					};
-					rs.inPersonSigners = new List<EnvelopeAPI.APIRecipient> {
-						ips
-					};
-					rs.intermediaries = new List<EnvelopeAPI.APIRecipient> {
-						intermediary
-					};
-					rs.signers = new List<EnvelopeAPI.APIRecipient> {
-						signer
-					};
-					rs.seals = new List<EnvelopeAPI.APIRecipient> {
-						seal
-					};
-					rs.witnesses = new List<EnvelopeAPI.APIRecipient> {
-						witness
-					};
+					rs.agents = new List<EnvelopeAPI.APIRecipient> { agent };
+					rs.carbonCopies = new List<EnvelopeAPI.APIRecipient> { cc };
+					rs.certifiedDeliveries = new List<EnvelopeAPI.APIRecipient> { cd };
+					rs.editors = new List<EnvelopeAPI.APIRecipient> { editor };
+					rs.inPersonSigners = new List<EnvelopeAPI.APIRecipient> { ips };
+					rs.intermediaries = new List<EnvelopeAPI.APIRecipient> { intermediary };
+					rs.signers = new List<EnvelopeAPI.APIRecipient> { signer };
+					rs.seals = new List<EnvelopeAPI.APIRecipient> { seal };
+					rs.witnesses = new List<EnvelopeAPI.APIRecipient> { witness };
 					EnvelopeAPI.APITemplate t = new EnvelopeAPI.APITemplate(null, false);
 					t.envelopeTemplateDefinition = tid;
 					t.documents = new List<EnvelopeAPI.APIDocument> { d };

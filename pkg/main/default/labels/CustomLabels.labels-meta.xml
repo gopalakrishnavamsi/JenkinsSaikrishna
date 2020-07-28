@@ -11334,4 +11334,25 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<shortDescription>Connect error</shortDescription>
 		<value>Failed to create DocuSign Connect configuration.</value>
 	</labels>
+	<labels>
+		<fullName>TemplateDocumentError</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Template document error</shortDescription>
+		<value>Failed to update one or more template documents.</value>
+	</labels>
+	<labels>
+		<fullName>TemplateRecipientError</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Template recipient error</shortDescription>
+		<value>Failed to update one or more template recipients.</value>
+	</labels>
+	<labels>
+		<fullName>TemplateError</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Template error</shortDescription>
+		<value>Failed to update template.</value>
+	</labels>
 </CustomLabels>
