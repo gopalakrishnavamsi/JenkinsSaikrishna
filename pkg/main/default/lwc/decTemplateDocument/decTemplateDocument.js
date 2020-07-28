@@ -28,6 +28,7 @@ export default class DecTemplateDocument extends LightningElement {
 
   showRenameModal = false;
   documentNameCopy = null;
+  isDocHavingExtension = true;
   context = createMessageContext();
 
   label = LABEL;
@@ -47,7 +48,9 @@ export default class DecTemplateDocument extends LightningElement {
 
   openRenameModal() {
     const docName = this.document.name;
-    this.documentNameCopy = docName.substring(0, docName.lastIndexOf('.'));
+    let docLength = docName.lastIndexOf('.') !== -1 ? docName.lastIndexOf('.') : docName.length;
+    this.isDocHavingExtension = docName.lastIndexOf('.') !== -1 ? true : false;
+    this.documentNameCopy = docName.substring(0, docLength);
     this.showRenameModal = true;
   }
 
@@ -56,8 +59,11 @@ export default class DecTemplateDocument extends LightningElement {
   }
 
   saveRenameModal() {
+    let docName = this.isDocHavingExtension === true ?
+      format('{0}{1}{2}', this.documentNameCopy.trim(), '.', this.document.extension) :
+      this.documentNameCopy.trim();
     const message = {
-      name: format('{0}{1}{2}', this.documentNameCopy.trim(), '.', this.document.extension),
+      name: docName,
       index: this.index
     };
     publish(this.context, DEC_RENAME_TEMPLATE_DOCUMENT, message);
