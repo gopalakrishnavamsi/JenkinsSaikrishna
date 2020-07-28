@@ -1,7 +1,8 @@
 ({
   SEND_FOR_SIGNATURE: 'Send for Signature',
 
-  createEnvelope: function (component, sourceId, sourceType) {
+  createEnvelope: function (component, sourceId, sourceType, helper) {
+    helper.showSendingPageSpinner(component);
     this.timeEvent(component, this.SEND_FOR_SIGNATURE);
     this.addEventProperties(component, {
       'Product': 'eSignature',
@@ -88,40 +89,57 @@
             */
           }
           // Renders LWC component for NEW sending experience
-          self.beginSendForSignature(component); // Comment this line for EXISTING sending experience
+          // Comment this block for EXISTING sending experience
+          helper.beginSendForSignature(component, self).then($A.getCallback(function () {
+            helper.showSendingComponent(component);
+          }))
         }, function (error, message) {
-          //hide sending page spinner
-          var showSendingComponent = component.get('v.showSendingComponent');
-          showSendingComponent();
-          var toast = component.find('ds-toast');
-          if (toast) {
-            toast.show('error', message);
-          }
+          helper.showSendingComponent(component);
+          helper.showToastErrorMessage(component, message);
         });
     }
   },
 
-  beginSendForSignature: function (component) {
-    this.createComponent(
-      'sendingExperience',
-      component,
-      'c:sendingConfig',
-      {
-        recordId: component.get('v.recordId'),
-        recordName: component.get('v.recordName'),
-        envelope: component.get('v.envelope'),
-        notifications: component.get('v.envelope').notifications,
-        documents: component.get('v.documents'),
-        recipients: component.get('v.recipients'),
-        defaultRoles: component.get('v.defaultRoles'),
-        files: component.get('v.files'),
-        sendNow: component.get('v.sendNow'),
-        forbidEnvelopeChanges: component.get('v.lock'),
-        onsendcomplete: component.getReference('c.onSendComplete')
-      });
-    //hide sending page spinner
+  beginSendForSignature: function (component, self) {
+    return new Promise($A.getCallback(function (resolve) {
+      self.createComponent(
+        'sendingExperience',
+        component,
+        'c:sendingConfig',
+        {
+          recordId: component.get('v.recordId'),
+          recordName: component.get('v.recordName'),
+          envelope: component.get('v.envelope'),
+          notifications: component.get('v.envelope').notifications,
+          documents: component.get('v.documents'),
+          recipients: component.get('v.recipients'),
+          defaultRoles: component.get('v.defaultRoles'),
+          files: component.get('v.files'),
+          sendNow: component.get('v.sendNow'),
+          forbidEnvelopeChanges: component.get('v.lock'),
+          onsendcomplete: component.getReference('c.onSendComplete')
+        });
+        resolve();
+    }));
+  },
+
+  showSendingComponent: function (component) {
+    //show the sending component and hide sending page spinner
     var showSendingComponent = component.get('v.showSendingComponent');
     showSendingComponent();
+  },
+
+  showSendingPageSpinner: function (component) {
+    //show the sending page spinner and hide the sending component
+    var showSendingPageSpinner = component.get('v.showSendingPageSpinner');
+    showSendingPageSpinner();
+  },
+
+  showToastErrorMessage: function (component, message) {
+    var toast = component.find('ds-toast');
+    if (toast) {
+      toast.show('error', message);
+    }
   },
 
   endSendForSignature: function (component, status, properties) {

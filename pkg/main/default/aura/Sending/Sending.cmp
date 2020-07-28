@@ -2,7 +2,7 @@
                 extends="c:RootContainer"
                 implements="force:lightningQuickActionWithoutHeader,force:hasRecordId,force:hasSObjectName">
 
-    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}"/>
+    <ltng:require scripts="{!join(',', $Resource.stringUtils, $Resource.navUtils)}" afterScriptsLoaded="{!c.onInitialize}"/>
 
     <!-- Lightning message service - Subscriber -->
     <lightning:messageChannel type="Error__c"
@@ -16,6 +16,7 @@
     <aura:attribute name="sendNow" type="Boolean" default="false"/>
     <aura:attribute name="lock" type="Boolean" default="false"/>
     <aura:attribute name="showSendingComponent" type="Object"/>
+    <aura:attribute name="showSendingPageSpinner" type="Object"/>
     <aura:set attribute="showDefaultSpinner" value="false"/>
     <aura:attribute name="loadDefaultContacts" type="Boolean" default="true"/>
     <aura:attribute name="filesSelected" type="Boolean" default="{!false}" access="private"/>

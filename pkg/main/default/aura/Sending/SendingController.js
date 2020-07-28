@@ -1,4 +1,8 @@
 ({
+  onInitialize: function (component, event, helper) {
+    helper.showSendingComponent(component);
+  },
+
   onChangeIsAuthorized: function (component, event, helper) {
     if (component.get('v.isAuthorized')) {
       var products = component.get('v.products');
@@ -11,7 +15,7 @@
         });
       }
     }
-    helper.createEnvelope(component, component.get('v.recordId'), component.get('v.sObjectName'));
+    helper.createEnvelope(component, component.get('v.recordId'), component.get('v.sObjectName'), helper);
   },
 
   handleErrorMessage: function (component, message) {

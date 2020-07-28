@@ -40,6 +40,11 @@
         document.getElementById('ds-sending').style.display = 'block';
       }
 
+      function showSendingPageSpinner() {
+        document.getElementById('ds-sending').style.display = 'none';
+        document.getElementById('ds-spinner').style.display = 'block';
+      }
+
       var _namespace = '{!JSENCODE(namespace)}';
       var _navigateToURL = function (event) {
         var url = event.getParam('url');
@@ -64,7 +69,8 @@
           placeholderRecipients: _phrs,
           sendNow: _sendNow,
           lock: _lock,
-          showSendingComponent: showSendingComponent
+          showSendingComponent: showSendingComponent,
+          showSendingPageSpinner: showSendingPageSpinner
         }, 'ds-sending', function () {
           $A.eventService.addHandler({'event': 'force:navigateToURL', 'handler': _navigateToURL});
         });
