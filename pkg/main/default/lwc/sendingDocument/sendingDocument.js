@@ -18,6 +18,8 @@ import {
   publish
 } from 'lightning/messageService';
 
+const ATTACHMENT = 'attachment';
+
 export default class SendingDocument extends LightningElement {
   @api document;
   @api index;
@@ -37,6 +39,10 @@ export default class SendingDocument extends LightningElement {
 
   get isDraggable() {
     return !isEmpty(this.forbidEnvelopeChanges) && !this.forbidEnvelopeChanges;
+  }
+
+  get documentExtension() {
+    return isEmpty(this.document.extension) ? ATTACHMENT : this.document.extension;
   }
 
   get hideDragAndDropIcon() {

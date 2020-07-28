@@ -1,8 +1,10 @@
 // Lightning message service
 
-import { APPLICATION_SCOPE,
-         subscribe,
-         publish } from 'lightning/messageService';
+import {
+  APPLICATION_SCOPE,
+  subscribe,
+  publish
+} from 'lightning/messageService';
 
 const UNKNOWN_ICON_NAME = 'doctype:unknown';
 const SUCCESS_EVENT_LABEL = 'success';
@@ -39,7 +41,9 @@ const FILE_EXTENSION_TO_ICON_NAME_MAPPING = new Map([
   ['xlsm', 'doctype:gsheet'],
   ['xlsx', 'doctype:gsheet'],
   ['xml', 'doctype:xml'],
-  ['', 'doctype:unknown']]);
+  ['attachment', 'doctype:attachment'],
+  ['', 'doctype:unknown']
+]);
 
 const isEmpty = (value) => value === undefined || value === null || value === '';
 
@@ -118,10 +122,10 @@ const showError = (context, error, channel) => {
   if (!isEmpty(error.body)) {
     const msg = {
       errorMessage: error.body.message
-    }
+    };
     publish(context, channel, msg);
   }
-}
+};
 
 const proxify = (source) => {
   if (isEmpty(source)) return null;
@@ -148,43 +152,43 @@ let groupBy = function (xs, key) {
   }, {});
 };
 
-const removeArrayElement = (arry = [], index = null) => 
-  isEmpty(index) || index > arry.length || index < 0 ? arry : [...arry.slice(0, index), ...arry.slice(index + 1, arry.length)]
+const removeArrayElement = (arry = [], index = null) =>
+  isEmpty(index) || index > arry.length || index < 0 ? arry : [...arry.slice(0, index), ...arry.slice(index + 1, arry.length)];
 
-const editArrayElement = (arry = [], index, updatedValue) => 
-  isEmpty(index) || index > arry.length || index < 0 ? arry : [...arry.slice(0, index), updatedValue,...arry.slice(index + 1, arry.length)]
+const editArrayElement = (arry = [], index, updatedValue) =>
+  isEmpty(index) || index > arry.length || index < 0 ? arry : [...arry.slice(0, index), updatedValue, ...arry.slice(index + 1, arry.length)];
 
 const showSuccess = (context, message, channel) => {
   if (!isEmpty(message)) {
     const msg = {
       successMessage: message
-    }
+    };
     publish(context, channel, msg);
   }
-}
+};
 
 const spliceArray = (arr) => {
-  if(arr && !isEmpty(arr) && arr.length > 0) {
+  if (arr && !isEmpty(arr) && arr.length > 0) {
     arr = arr.splice(0, arr.length);
   }
   return arr;
-}
+};
 
 const formatLabels = (stringToFormat, ...formattingArguments) => {
   return stringToFormat.replace(/{(\d+)}/gm, (match, index) =>
     (formattingArguments[index] === undefined ? '' : `${formattingArguments[index]}`));
-}
+};
 
 const formatDate = (dt) => {
   const dtf = new Intl.DateTimeFormat('en', {
     year: 'numeric',
     month: 'short',
     day: '2-digit'
-  })
+  });
   const [{value: mo}, , {value: da}, , {value: ye}] = dtf.formatToParts(dt);
   let formatedDate = `${mo} ${da}, ${ye}`;
   return formatedDate;
-}
+};
 
 export {
   FILE_EXTENSION_TO_ICON_NAME_MAPPING,
