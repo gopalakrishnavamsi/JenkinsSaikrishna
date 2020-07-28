@@ -51,5 +51,15 @@
     } else {
       component.find('genTemplateNavigator').destroy();
     }
+  },
+
+  onNameChange: function (component, event) {
+    var validity = event.getSource().get('v.validity');
+    if (validity.valid === true) {
+      component.set('v.invalidTemplateName', false);
+    } else {
+      component.set('v.invalidTemplateName', true);
+    }
   }
+
 });

@@ -20,6 +20,7 @@
     <aura:attribute name="loading" type="Boolean" default="false"/>
     <aura:attribute name="isIE" type="Boolean" default="false" access="private"/>
     <aura:attribute name="navigateToNewTemplateUrl" type="Object"/>
+    <aura:attribute name="invalidTemplateName" type="Boolean" default="false" access="private"/>
 
     <!-- handlers -->
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
@@ -58,10 +59,15 @@
                     <div class="slds-scope slds-p-horizontal_medium">
                         <div class="slds-grid slds-grid_vertical">
                             <div class="slds-col slds-m-bottom_medium">
+                                <!-- template name validation -->
+                                <!-- template name should not contain the following characters ? ! < > : | " * \\  \ . -->
                                 <lightning:input type="text" label="{!$Label.c.AddTemplateName}"
                                                  value="{!v.template.name}"
                                                  maxlength="80"
-                                                 required="true"/>
+                                                 required="true"
+                                                 pattern="^(&#063;&#033;\s)[^\.\/\\&#060;&#062;&#063;&#058;&#124;&#034;&#042;]+"
+                                                 messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"
+                                                 onchange="{!c.onNameChange}"/>
                             </div>
                             <div class="slds-col slds-m-bottom_medium">
                                 <lightning:textarea label="{!$Label.c.AddTemplateDescription}"
@@ -161,7 +167,10 @@
             </lightning:button>
             <lightning:button class="slds-button slds-button_brand"
                               label="{!$Label.c.CreateLabel}"
-                              disabled="{!empty(v.template.name) || empty(v.selectedType) || empty(v.template.sourceObject)}"
+                              disabled="{!empty(v.template.name)
+                                        || empty(v.selectedType)
+                                        || empty(v.template.sourceObject)
+                                        || v.invalidTemplateName}"
                               onclick="{!c.createTemplate}"></lightning:button>
         </aura:set>
 

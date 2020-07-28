@@ -1,11 +1,17 @@
 <aura:component description="OnlineEditorTemplateEdit" implements="force:hasRecordId">
     <aura:attribute type="String" name="namespace"/>
     <aura:attribute type="Object" name="renderTemplateDetails"/>
+    <aura:attribute name="invalidTemplateName" type="Boolean" default="false" access="private"/>
+
     <c:strike_modal title="{!$Label.c.OnlineEditorTemplateEditTitle}" showModal="true" aura:id="ds-edit-online-editor-modal">
-        <lightning:recordEditForm aura:id="templateEditForm" recordId="{!v.recordId}"
-                                  objectApiName="{!v.namespace+'__GenTemplate__c'}" onsuccess="{!c.handleSuccess}">
+        <lightning:recordEditForm aura:id="templateEditForm"
+                                  recordId="{!v.recordId}"
+                                  objectApiName="{!v.namespace+'__GenTemplate__c'}"
+                                  onsuccess="{!c.handleSuccess}">
             <lightning:messages/>
-            <lightning:inputField fieldName="Name"/>
+            <lightning:inputField fieldName="Name"
+                                  aura:id="nameField"
+                                  onchange="{!c.onNameChange}"/>
             <lightning:inputField fieldName="{!v.namespace+'__Description__c'}"/>
 
         </lightning:recordEditForm>
@@ -14,7 +20,10 @@
             <lightning:button name="cancel" label="{!$Label.c.Cancel}" type="reset"
                               class="slds-button slds-button_neutral"
                               onclick="{!c.hideModal}"/>
-            <lightning:button label="{!$Label.c.Save}" onclick="{!c.saveRecord}" class="slds-button slds-button_brand"/>
+            <lightning:button label="{!$Label.c.Save}"
+                              onclick="{!c.saveRecord}"
+                              disabled="{!if(v.invalidTemplateName, true, false)}"
+                              class="slds-button slds-button_brand"/>
         </aura:set>
     </c:strike_modal>
 </aura:component>
