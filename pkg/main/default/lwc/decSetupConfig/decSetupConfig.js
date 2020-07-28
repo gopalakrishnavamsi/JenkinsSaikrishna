@@ -23,7 +23,7 @@ import {
   showError,
   format
 } from 'c/utils';
-import {getDefaultOptions} from 'c/optionsUtils';
+import {getDefaultOptions, getDefaultNotifications} from 'c/optionsUtils';
 import {
   DOCUMENT_TYPE_SOURCE_FILES,
   FILE_NAME_FILTER_PREFIX,
@@ -120,6 +120,7 @@ export default class DecSetupConfig extends LightningElement {
       this.envelopeConfigurationData = {
         ...data,
         documents: this.attachSourceFiles ? this.processTextSearchSourceFiles(data.documents, true) : data.documents,
+        notifications: isEmpty(data.notifications) ? getDefaultNotifications() : data.notifications,
         options: isEmpty(data.options.documentWriteBack) ? getDefaultOptions() : data.options,
         emailMessage: isEmpty(data.emailMessage) ? this.label.defaultEmailMessage : data.emailMessage,
         emailSubject: isEmpty(data.emailSubject) ? this.label.defaultEmailSubject : data.emailSubject

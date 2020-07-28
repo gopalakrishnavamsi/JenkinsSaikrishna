@@ -2,7 +2,7 @@ import {LightningElement, api} from 'lwc';
 //Utils
 import {
   LABEL,
-  DEFAULT_EXPIRATION,
+  DEFAULT_REMINDER,
   REMINDER_OPTIONS,
   getDefaultNotifications,
 } from 'c/optionsUtils';
@@ -29,15 +29,6 @@ export default class SendingRecipientMoreOptions extends LightningElement {
   expirationDate;
   expirationDays;
 
-  connectedCallback() {
-    if (isEmpty(this.notifications)) {
-      this.handleNotificationsChange({
-        expires: true,
-        expireAfterDays: DEFAULT_EXPIRATION
-      });
-    }
-  }
-
   disconnectedCallback() {
     releaseMessageContext(this.context);
   }
@@ -47,15 +38,7 @@ export default class SendingRecipientMoreOptions extends LightningElement {
   }
 
   get reminder() {
-    if (!isEmpty(this.selectedReminder)) {
-      return this.selectedReminder;
-    } else {
-      return !isEmpty(this.envelope.notifications) && !isEmpty(this.envelope.notifications.remindFrequencyDays) ? this.envelope.notifications.remindFrequencyDays : '';
-    }
-  }
-
-  set reminder(value) {
-    this.selectedReminder = value;
+    return !isEmpty(this.notifications) && !isEmpty(this.notifications.remindFrequencyDays) ? this.notifications.remindFrequencyDays : DEFAULT_REMINDER;
   }
 
   get expiration() {
@@ -76,15 +59,11 @@ export default class SendingRecipientMoreOptions extends LightningElement {
     }
     let expDays = !isEmpty(this.envelope.notifications) && !isEmpty(this.envelope.notifications.expireAfterDays) ?
       this.envelope.notifications.expireAfterDays : null;
-    this.expirationDate = new Date();
-    if (expDays !== null) {
-      this.expirationDate.setDate(this.expirationDate.getDate() + expDays);
+    let expirationDate = new Date();
+    if (!isEmpty(expDays)) {
+      expirationDate.setDate(expirationDate.getDate() + expDays);
     }
-    return formatDate(this.expirationDate);
-  }
-
-  set formattedExpirationDate(value) {
-    this.expirationDate = value;
+    return formatDate(expirationDate);
   }
 
   get envelopeExpires() {
@@ -104,24 +83,19 @@ export default class SendingRecipientMoreOptions extends LightningElement {
     const message = {
       notifications: {
         ...currentNotifications,
-        updatedFields
+        ...updatedFields
       }
     };
     publish(this.context, UPDATE_NOTIFICATIONS, message);
   }
 
   handleReminderChange(event) {
-    this.reminder = parseInt(event.target.value);
-    const hasEmptyValue = isEmpty(event.target.value);
-    let updatedNotifications = {
-      ...this.notifications,
-      'remindFrequencyDays': parseInt(event.target.value),
-      'remind': !hasEmptyValue
-    };
-    const message = {
-      notifications: updatedNotifications
-    };
-    publish(this.context, UPDATE_NOTIFICATIONS, message);
+    event.preventDefault();
+    const remindFrequencyDays = parseInt(event.target.value);
+    this.handleNotificationsChange({
+      remind: remindFrequencyDays > 0,
+      remindFrequencyDays
+    });
   }
 
   handleExpirationDateChange(event) {
@@ -151,21 +125,16 @@ export default class SendingRecipientMoreOptions extends LightningElement {
     if (expirationValue !== null) {
       let updatedExpirationDate = new Date();
       updatedExpirationDate.setDate(updatedExpirationDate.getDate() + parseInt(expirationValue));
-      this.formattedExpirationDate = formatDate(updatedExpirationDate);
+      this.expirationDate = formatDate(updatedExpirationDate);
     }
     let expires = isEmpty(expirationValue) ? false : true;
-    this.updateExpiration(expires, expirationValue);
+    this.updateExpiration(expires, parseInt(expirationValue));
   }
 
   updateExpiration(expires, expireAfterDays) {
-    let updatedNotifications = {
-      ...this.notifications,
-      'expires': expires,
-      'expireAfterDays': expireAfterDays
-    };
-    const message = {
-      notifications: updatedNotifications
-    };
-    publish(this.context, UPDATE_NOTIFICATIONS, message);
+    this.handleNotificationsChange({
+      expires,
+      expireAfterDays
+    });
   }
 }

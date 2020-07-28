@@ -62,6 +62,7 @@ const LABEL = {
   expirationDateError
 };
 
+const DEFAULT_REMINDER = 0;
 const DEFAULT_EXPIRATION = 90;
 const ENVELOPE_STATUS_COMPLETED = 'completed';
 
@@ -103,9 +104,9 @@ const REMINDER_OPTIONS = [
 const getDefaultNotifications = () => ({
   remind: false,
   remindAfterDays: null,
-  remindFrequencyDays: null,
-  expires: false,
-  expireAfterDays: null,
+  remindFrequencyDays: DEFAULT_REMINDER,
+  expires: true,
+  expireAfterDays: DEFAULT_EXPIRATION,
   expireWarnDays: null
 });
 
@@ -140,6 +141,7 @@ const FILE_NAME_OPTIONS_COMBINED_DOCS = [
 
 export {
   LABEL,
+  DEFAULT_REMINDER,
   DEFAULT_EXPIRATION,
   REMINDER_OPTIONS,
   FILE_NAME_OPTIONS_DEFAULT,

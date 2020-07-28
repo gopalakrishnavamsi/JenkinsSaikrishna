@@ -2,6 +2,7 @@ import {LightningElement, api, wire} from 'lwc';
 //Utils
 import {
   LABEL,
+  DEFAULT_REMINDER,
   DEFAULT_EXPIRATION,
   REMINDER_OPTIONS,
   FILE_NAME_OPTIONS_DEFAULT,
@@ -39,15 +40,6 @@ export default class DecOptions extends LightningElement {
   context = createMessageContext();
   filenameOptions;
   isCertificateOfCompletion = false;
-
-  connectedCallback() {
-    if (isEmpty(this.notifications)) {
-      this.handleNotificationsChange({
-        expires: true,
-        expireAfterDays: DEFAULT_EXPIRATION
-      });
-    }
-  }
 
   disconnectedCallback() {
     releaseMessageContext(this.context);
@@ -114,7 +106,7 @@ export default class DecOptions extends LightningElement {
   }
 
   get reminder() {
-    return !isEmpty(this.notifications) && !isEmpty(this.notifications.remindFrequencyDays) ? this.notifications.remindFrequencyDays : '';
+    return !isEmpty(this.notifications) && !isEmpty(this.notifications.remindFrequencyDays) ? this.notifications.remindFrequencyDays : DEFAULT_REMINDER;
   }
 
   get expiration() {
@@ -188,10 +180,10 @@ export default class DecOptions extends LightningElement {
 
   handleReminderChange(event) {
     event.preventDefault();
-    const hasEmptyValue = isEmpty(event.target.value);
+    const remindFrequencyDays = parseInt(event.target.value);
     this.handleNotificationsChange({
-      remind: !hasEmptyValue,
-      remindFrequencyDays: hasEmptyValue ? null : parseInt(event.target.value)
+      remind: remindFrequencyDays > 0,
+      remindFrequencyDays
     });
   }
 
