@@ -1,0 +1,94 @@
+.THIS .ds-long-gen {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% + 35px));
+    z-index: 9999;
+    width: 80%;
+}
+
+.THIS .ds-spinner_generating-container {
+    min-height: 140px;
+}
+
+.THIS .ds-generator-spinner_container .slds-spinner_container {
+    z-index: 100;
+}
+
+.THIS .ds-spinner_long-gen .slds-spinner {
+    transform: translate(-50%, calc(-50% - 25px)) rotate(90deg);
+}
+
+.THIS .ds-no-label .slds-form-element__label,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-form-element__label,
+.THIS .ds-no-label lightning-input .slds-form-element__label {
+    display: none;
+}
+
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox_faux,
+.THIS .ds-no-label .slds-form-element__control > .slds-checkbox > .slds-checkbox__label > .slds-checkbox_faux {
+    margin: 0;
+}
+
+.THIS .scrollable {
+    pointer-events: none;
+}
+
+.THIS .scrollable * {
+    pointer-events: auto;
+}
+
+.THIS .ds-generated-file {
+    max-width: 44%;
+}
+
+.THIS .ds-genFileFooter {
+    border-top: 0px;
+    padding: 1rem;
+    height: 4rem;
+}
+
+.THIS .ds-genFileModal {
+    border-radius: .25rem;
+    border: 1px solid rgb(217, 219, 221);
+}
+
+.THIS .ds-genFileContent {
+    padding: 1rem;
+    margin: 2rem;
+    max-height: 100vh;
+}
+
+.THIS .ds-genFileHeader {
+    background-color: rgb(4, 132, 75)
+}
+
+.THIS .ds-genFileText {
+    opacity: 0.7;
+}
+
+.THIS.ds-cursor_pointer,
+.THIS .ds-cursor_pointer {
+    cursor: pointer;
+}
+
+.THIS .ds-fileSpacing {
+    border-bottom: 1px solid rgb(217, 219, 221);
+}
+
+.THIS .ds-bannerContainer {
+    padding: 1rem;
+}
+
+.THIS .ds-genNegotiateButtonMenu > .slds-button {
+    background: #0070d2;
+    color: white;
+}
+
+.THIS .ds-genNegotiateButtonMenu > .slds-button:hover {
+    background: #1B5297;
+}
+
+.THIS .ds-genNegotiateButtonDisabled > .slds-button {
+    background: #C9C7C5;
+    color: white;
+}

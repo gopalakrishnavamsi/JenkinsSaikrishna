@@ -1,0 +1,96 @@
+<aura:component controller="MetadataController">
+
+    <!-- attributes -->
+    <aura:attribute name="template" type="Object"/>
+    <aura:attribute name="layouts" type="Object[]" access="private"/>
+    <aura:attribute name="isClassic" type="Boolean"/>
+    <aura:attribute name="isDirty" type="Boolean" access="private" default="false"/>
+    <aura:attribute name="creatingButtons" type="Boolean" default="{!false}"/>
+    <aura:attribute name="genActionName" type="String" access="private"/>
+    <aura:attribute name="genActionAPIName" type="String" access="private"/>
+    <aura:attribute name="genButtonLabel" type="String"/>
+    <aura:attribute name="invalidButtonName" type="Boolean" default="false"/>
+    <aura:attribute name="fetchingLayout" type="Boolean" default="false" access="private"/>
+
+    <!-- required scripts -->
+    <ltng:require scripts="{!$Resource.stringUtils}" afterScriptsLoaded="{!c.init}"/>
+
+    <!-- Events -->
+    <aura:registerEvent name="showToast" type="c:strike_evt"/>
+    <aura:registerEvent name="publishedButtons" type="c:strike_evt"/>
+
+    <!-- Handlers -->
+    <aura:handler name="userEventsReadyEvent" event="c:UserEventsReady" action="{!c.onUserEventsReady}"/>
+
+    <!-- Methods -->
+    <aura:method name="validate" action="{!c.validate}"/>
+
+    <!-- TODO: Use uiHelper to fire events to be handled by RootContainer. -->
+    <c:UserEvents aura:id="ds-user-events"/>
+
+    <!-- Publishing Spinner -->
+    <div class="{!if(or(v.creatingButtons,v.fetchingLayout),'ds-path__spinner_container','slds-hide')}">
+        <div class="ds-image-spinner slds-spinner_container slds-is-fixed">
+            <div role="status" class="slds-spinner slds-spinner_large">
+                <span class="slds-assistive-text">{!$Label.c.Loading}</span>
+                <img src="{!$Resource.loading}" alt="Loading"/>
+            </div>
+        </div>
+        <div class="{!if(or(v.creatingButtons),'ds-path__spinner-text slds-is-fixed slds-text-color_weak','slds-hide')}">{!$Label.c.Publishing}</div>
+    </div>
+    <!-- /Publishing Spinner -->
+    
+    <h3 class="slds-text-heading_medium slds-m-bottom_x-small">
+        <strong>Automate Invoice Generation and Delivery</strong>
+    </h3>
+    <div class="slds-m-bottom_medium slds-text-longform">
+        <p>Let system to auto-generate invoices once the invoice status is set to “Posted”. Invoice PDF files will be saved to the parend object for future reference.</p>
+    </div>    
+    
+        <label class="ds-mouse-through slds-media slds-media_center  slds-p-bottom_x-large  ">
+            <div class="slds-media__figure slds-m-right_x-small slds-p-top_xx-small">
+                <lightning:input type="checkbox"
+                                 label="Auto-generate and save to the parent object"
+                                 checked="true"
+                                 class="ds-checkbox_no-label ds-checkbox_large"/>
+            </div>
+        </label>
+
+    <h3 class="slds-text-heading_medium slds-m-bottom_x-small">
+        <strong>{!$Label.c.PublishCustomButtons}</strong>
+    </h3>
+    <div class="slds-m-bottom_medium slds-text-longform">
+        <p>{!$Label.c.PublishMsg}</p>
+    </div>
+
+    <lightning:input aura:id="buttonLabel" type="text"
+                     label="{!$Label.c.ButtonLabel}"
+                     value="{!v.genButtonLabel}"
+                     maxlength="40"
+                     onchange="{!c.updateGenActionLabel}"
+                     pattern="^(&#063;&#033;\s)[^\.\/\\&#060;&#062;&#063;&#058;&#124;&#034;&#042;]+"
+                     messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"/>
+
+    <div class="slds-m-top_medium slds-clearfix">
+        <p class="slds-form-element__legend slds-form-element__label">{!$Label.c.PageLayouts}</p>
+    </div>
+    <aura:iteration items="{!v.layouts}" var="layout">
+        <!-- Page Layout -->
+        <label class="ds-mouse-through slds-media slds-media_center slds-m-bottom_x-small">
+            <div class="slds-media__figure slds-m-right_x-small slds-p-top_xx-small">
+                <lightning:input type="checkbox"
+                                 label="{!layout.name}"
+                                 onchange="{!c.makeDirty}"
+                                 checked="{!layout.hasGenAction}"
+                                 class="ds-checkbox_no-label ds-checkbox_large"/>
+            </div>
+        </label>
+        <!-- /Page Layout -->
+    </aura:iteration>
+
+    <aura:if isTrue="{!not(v.template.Sample__c)}">
+        <lightning:button label="{!$Label.c.Publish}" class="slds-m-top_xx-small"
+                          onclick="{!c.publish}"
+                          disabled="{!(v.invalidButtonName || not(v.isDirty) || empty(v.genButtonLabel) || v.creatingButtons || v.fetchingLayout)}"/>
+    </aura:if>
+</aura:component>
