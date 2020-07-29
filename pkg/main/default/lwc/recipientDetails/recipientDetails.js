@@ -69,6 +69,10 @@ export default class DecRecipientDetails extends LightningElement {
     return this.recipient ? this.recipient.authentication : null;
   }
 
+  get isValid() {
+    return this.isSending ? this.recipient.isSendingReady : this.recipient.isTemplateReady;
+  }
+
   sendValidationEvent(isValid = false) {
     this.dispatchEvent(
       new CustomEvent(
@@ -93,13 +97,13 @@ export default class DecRecipientDetails extends LightningElement {
       if (name === 'roleName')  this.recipient.addRole(value);
       else if (name === 'email' || name === 'name') this.recipient[name] = value;
     }
-    this.sendValidationEvent(this.recipient.isValid);
+    this.sendValidationEvent(this.isValid);
   }
 
   handleRelationshipUpdate = ({detail}) => {
     this.recipient.relationship = detail;
     this.recipient.addRole(detail.name);
-    this.sendValidationEvent(this.recipient.isValid);
+    this.sendValidationEvent(this.isValid);
   };
 
   updateAction = ({detail}) => {
@@ -140,11 +144,11 @@ export default class DecRecipientDetails extends LightningElement {
 
   handleSourceChange = ({detail = {}}) => {
     this.recipient.lookupRecord = detail;
-    this.sendValidationEvent(this.recipient.isValid);
+    this.sendValidationEvent(this.isValid);
   };
 
   handleSigningGroupChange = ({detail}) => {
     this.recipient.signingGroup = detail;
-    this.sendValidationEvent(this.recipient.isValid);
+    this.sendValidationEvent(this.isValid);
   };
 }

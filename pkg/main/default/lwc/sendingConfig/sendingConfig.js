@@ -193,7 +193,8 @@ export default class SendingConfig extends LightningElement {
         this.showError(this.label.atLeastOneDocumentIsRequired);
       }
     } else if (this.currentStep === PROGRESS_STEP.RECIPIENTS && !sameStep) {
-      valid = true;
+      valid = this.recipients.every(r => r.isSendingReady);
+      if (!valid) this.showError(this.label.undefinedRecipient);
     } else if (this.currentStep === PROGRESS_STEP.PREPARE_AND_SEND && !sameStep) {
       valid = true;
     }

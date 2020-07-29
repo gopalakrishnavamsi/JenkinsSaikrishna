@@ -15,7 +15,7 @@ export default class SendingRecipientsModal extends LightningElement {
   sourceObject;
 
   @api
-  readOnly;
+  readOnly = false;
 
   Types = Types;
 
@@ -44,7 +44,7 @@ export default class SendingRecipientsModal extends LightningElement {
   set recipient(val) {
     this.privateRecipient = !isEmpty(val) ? proxify(val) : this.convertRecipientType({});
     if (!isEmpty(val)) this.selectedType = val.recipientType
-    this.isValid = this.privateRecipient.isValid;
+    this.isValid = this.privateRecipient.isSendingReady;
   }
 
   get recipient() {

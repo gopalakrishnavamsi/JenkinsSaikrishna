@@ -171,15 +171,19 @@ export class Recipient {
 
   get isValidEmail() {
     if (isEmpty(this.email)) return false;
-    return emailRegEx.test(this.email);
+    return emailRegEx.test(this.email.toLowerCase());
   }
 
-  get isValid() {
+  get isSendingReady() {
+    //If no role is defined in Sending experience, we auto-assign via RolesQueue
+    return (!isEmpty(this.name) && this.isValidEmail) || !isEmpty(this.signingGroup);
+  }
+
+  get isTemplateReady() {
     if (!isEmpty(this.signingGroup)) return true;
     if (!isEmpty(this.sourceId)) return true;
     if (this.relationship) return !this.relationship.isEmpty;
-
-    return (!isEmpty(this.role) && !this.role.isEmpty) || (!isEmpty(this.name) && this.isValidEmail);
+    return (!isEmpty(this.role) && !this.role.isEmpty) || (!isEmpty(this.name) && this.isValidEmail);    
   }
 
   get lookupRecord() {
