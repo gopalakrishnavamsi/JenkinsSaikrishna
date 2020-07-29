@@ -617,7 +617,7 @@ public with sharing class OnlineEditorController extends Controller {
 				OnlineEditorController.Query.class);
 
 			//Only convert queries with type && (fields || child queries)
-			if (onlineEditorQuery.isEmpty()) {
+			if (onlineEditorQuery.isEmpty() || Collection.isEmpty(onlineEditorQuery.fields)) {
 				if (useCurrentField) onlineEditorQuery.fields.add(getCurrentDateField());
 				return onlineEditorQuery;
 			}
