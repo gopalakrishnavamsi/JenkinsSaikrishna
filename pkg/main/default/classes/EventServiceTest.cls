@@ -35,8 +35,7 @@ private class EventServiceTest {
 			result.customFields = new List<EventService.EventCustomField> { ecf };
 		}
 		if (recipientStatus != null) {
-			result.recipientStatuses = new EventService.EventRecipients();
-			result.recipientStatuses.recipientStatus = new List<EventService.EventRecipient>();
+			result.recipientStatuses = new List<EventService.EventRecipient>();
 			for (Recipient__c r : recipientStatus.keySet()) {
 				EventService.EventRecipient er = new EventService.EventRecipient();
 				er.recipientId = UUID.randomUUID().toString();
@@ -47,7 +46,7 @@ private class EventServiceTest {
 				if (String.isNotBlank(r.SourceId__c)) {
 					er.customFields = new List<String> { CustomField.forRecipientSource(r.SourceId__c) };
 				}
-				result.recipientStatuses.recipientStatus.add(er);
+				result.recipientStatuses.add(er);
 			}
 		}
 		return result;
@@ -855,7 +854,7 @@ private class EventServiceTest {
 					r => Recipient.STATUS_SENT
 				});
 			List<EventService.Event> events = new List<EventService.Event> { evt };
-			UUID transactionId = UUID.randomUUID(), envelopeId = UUID.parse(e.DocuSignId__c);
+			UUID transactionId = UUID.randomUUID();
 
 			Test.startTest();
 			System.assert(!EventService.updateStatus(transactionId, events));
@@ -929,7 +928,7 @@ private class EventServiceTest {
 			List<EnvelopeStatus__c> ess = [
 				SELECT Id, DocuSignId__c, Status__c, SourceId__c
 				FROM EnvelopeStatus__c
-				WHERE DocuSignId__c IN :NEW Set<String> { e1.DocuSignId__c, e2.DocuSignId__c }
+				WHERE DocuSignId__c IN :new Set<String> { e1.DocuSignId__c, e2.DocuSignId__c }
 			];
 			System.assertEquals(2, Collection.size(ess));
 			Id es1Id, es2Id;
@@ -950,7 +949,7 @@ private class EventServiceTest {
 			List<RecipientStatus__c> rss = [
 				SELECT Id, EnvelopeStatus__c, Status__c, Type__c, Email__c, Name, SourceId__c
 				FROM RecipientStatus__c
-				WHERE EnvelopeStatus__c IN :NEW Set<Id> { es1Id, es2Id }
+				WHERE EnvelopeStatus__c IN :new Set<Id> { es1Id, es2Id }
 			];
 			System.assertEquals(5, Collection.size(rss));
 			for (RecipientStatus__c rs : rss) {

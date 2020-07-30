@@ -77,6 +77,21 @@ private class StringUtilsTest {
 			StringUtils.parseDatetime(null));
 		System.assertEquals(
 			null,
+			StringUtils.parseDatetime('0001-01-01T00:00:00'));
+		System.assertEquals(
+			null,
+			StringUtils.parseDatetime('1699-12-31'));
+		System.assertEquals(
+			Datetime.newInstanceGmt(1700, 1, 1),
+			StringUtils.parseDatetime('1700-01-01T00:00:00.000'));
+		System.assertEquals(
+			Datetime.newInstanceGmt(4000, 12, 31),
+			StringUtils.parseDatetime('4000-12-31T00:00:00.000'));
+		System.assertEquals(
+			null,
+			StringUtils.parseDatetime('4001-01-01T00:00:00'));
+		System.assertEquals(
+			null,
 			StringUtils.parseDatetime(''));
 		try {
 			StringUtils.parseDatetime('Garbage');

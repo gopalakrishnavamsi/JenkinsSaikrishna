@@ -95,22 +95,6 @@ global with sharing class EventService {
 	}
 
 	@TestVisible
-	private class EventRecipients {
-		public List<EventRecipient> recipientStatus;
-
-		public List<Recipient.Status> toStatus() {
-			List<Recipient.Status> result = new List<Recipient.Status>();
-			if (recipientStatus != null) {
-				Integer sequence = 0;
-				for (EventRecipient r : recipientStatus) {
-					if (r != null) result.add(r.toStatus(++sequence));
-				}
-			}
-			return result;
-		}
-	}
-
-	@TestVisible
 	private class EventCustomField {
 		public String name;
 		public String value;
@@ -118,7 +102,7 @@ global with sharing class EventService {
 
 	@TestVisible
 	private class Event {
-		public EventRecipients recipientStatuses;
+		public List<EventRecipient> recipientStatuses;
 		public String envelopeId;
 		public String subject;
 		public String username;
@@ -154,9 +138,7 @@ global with sharing class EventService {
 		}
 
 		public List<EventRecipient> getRecipients() {
-			return this.recipientStatuses != null && this.recipientStatuses.recipientStatus != null
-				? this.recipientStatuses.recipientStatus
-				: new List<EventRecipient>();
+			return this.recipientStatuses != null ? this.recipientStatuses : new List<EventRecipient>();
 		}
 
 		@TestVisible
@@ -172,6 +154,17 @@ global with sharing class EventService {
 			return result;
 		}
 
+		private List<Recipient.Status> getRecipientStatus() {
+			List<Recipient.Status> result = new List<Recipient.Status>();
+			if (this.recipientStatuses != null) {
+				Integer sequence = 0;
+				for (EventRecipient r : this.recipientStatuses) {
+					if (r != null) result.add(r.toStatus(++sequence));
+				}
+			}
+			return result;
+		}
+
 		public Envelope.Status toStatus() {
 			Id sourceId = this.getSourceId();
 			return new Envelope.Status(
@@ -181,7 +174,7 @@ global with sharing class EventService {
 				this.status,
 				this.username,
 				this.email,
-				this.recipientStatuses == null ? null : this.recipientStatuses.toStatus(),
+				getRecipientStatus(),
 				StringUtils.parseDatetime(this.sent),
 				null, // TODO: Need date/time expires
 				getCompletedDatetime(),
