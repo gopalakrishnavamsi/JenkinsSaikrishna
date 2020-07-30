@@ -119,6 +119,13 @@ export default class SendingRecipientMoreOptions extends LightningElement {
   }
 
   handleExpirationChange(event) {
+    if (event.target.value < 0) {
+      const msg = {
+        errorMessage: this.label.expirationDateError
+      };
+      publish(this.context, ERROR, msg);
+      return;
+    }
     let filteredValue = isEmpty(event.target.value) ? null : event.target.value.replace(/[^0-9]/g, '');
     // Expiration value is limited to 3 digits
     let expirationValue = isEmpty(filteredValue) ? null : filteredValue.substring(0, 3);
