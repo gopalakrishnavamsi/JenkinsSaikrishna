@@ -13,12 +13,12 @@ import {
   publish
 } from 'lightning/messageService';
 import UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/UpdateNotifications__c';
-// Publisher
-import ERROR from '@salesforce/messageChannel/Error__c';
 import {
   isEmpty,
   formatDate
 } from 'c/utils';
+
+const MAX_EXP_DAYS = 999;
 
 export default class SendingRecipientMoreOptions extends LightningElement {
   @api notifications;
@@ -28,9 +28,16 @@ export default class SendingRecipientMoreOptions extends LightningElement {
   selectedReminder;
   expirationDate;
   expirationDays;
+  defaultExpiration;
 
   disconnectedCallback() {
     releaseMessageContext(this.context);
+  }
+
+  get minDate() {
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return formatDate(tomorrow);
   }
 
   get reminderOptions() {
@@ -45,8 +52,9 @@ export default class SendingRecipientMoreOptions extends LightningElement {
     if (!isEmpty(this.expirationDays)) {
       return this.expirationDays;
     }
-    return !isEmpty(this.envelope.notifications) && !isEmpty(this.envelope.notifications.expireAfterDays) ?
+    this.defaultExpiration = !isEmpty(this.envelope.notifications) && !isEmpty(this.envelope.notifications.expireAfterDays) ?
       this.envelope.notifications.expireAfterDays : null;
+    return this.defaultExpiration;
   }
 
   set expiration(value) {
@@ -98,20 +106,26 @@ export default class SendingRecipientMoreOptions extends LightningElement {
     });
   }
 
+  blurDate() {
+    let target = this.template.querySelector('[data-expirationdate=expdate]');
+    target.blur();
+  }
+
   handleExpirationDateChange(event) {
     let dateChanged = event.target.value;
     let expDate = new Date(dateChanged);
     let today = new Date();
     let diffDays = null;
     if (expDate < today) {
-      this.expiration = null;
-      const msg = {
-        errorMessage: this.label.expirationDateError
-      };
-      publish(this.context, ERROR, msg);
+      event.target.value = this.formattedExpirationDate;
+      return;
     } else {
       const diffTime = Math.abs(expDate - today);
       diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      diffDays = diffDays > MAX_EXP_DAYS ? MAX_EXP_DAYS : diffDays;
+      let updatedDate = new Date();
+      updatedDate.setDate(updatedDate.getDate() + diffDays);
+      event.target.value = formatDate(updatedDate);
       this.expiration = diffDays;
     }
     let expires = !isEmpty(this.expiration) ? true : false;
@@ -120,14 +134,10 @@ export default class SendingRecipientMoreOptions extends LightningElement {
 
   handleExpirationChange(event) {
     if (event.target.value < 0) {
-      const msg = {
-        errorMessage: this.label.expirationDateError
-      };
-      publish(this.context, ERROR, msg);
+      event.target.value = this.defaultExpiration;
       return;
     }
     let filteredValue = isEmpty(event.target.value) ? null : event.target.value.replace(/[^0-9]/g, '');
-    // Expiration value is limited to 3 digits
     let expirationValue = isEmpty(filteredValue) ? null : filteredValue.substring(0, 3);
     if (expirationValue !== null) {
       let updatedExpirationDate = new Date();

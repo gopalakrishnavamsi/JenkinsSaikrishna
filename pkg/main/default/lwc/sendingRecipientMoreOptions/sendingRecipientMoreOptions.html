@@ -30,10 +30,15 @@
                             </div>
                             <div class="slds-col slds-size_1-of-3 ds-options-fit-content slds-p-left_small">
                                 <lightning-input
+                                        data-expirationdate="expdate"
                                         type="date"
+                                        min={minDate}
+                                        onfocus={blurDate}
+                                        onkeydown={blurDate}
                                         class="slds-form-element ds-options-expiration"
                                         value={formattedExpirationDate}
-                                        onchange={handleExpirationDateChange}>
+                                        onchange={handleExpirationDateChange}
+                                        placeholder={formattedExpirationDate}>
                                 </lightning-input>
                             </div>
                             <div class="slds-col slds-size_1-of-12 ds-options-fit-content-width slds-p-left_large">
@@ -44,7 +49,8 @@
                                         type="text"
                                         class="slds-form-element ds-options-expiration-input"
                                         onchange={handleExpirationChange}
-                                        value={expiration}>
+                                        value={expiration}
+                                        max-length="3">
                                 </lightning-input>
                             </div>
                             <div class="slds-col slds-size_1-of-3 slds-p-left_x-small ds-options-inner-text ds-options-fit-content-width">

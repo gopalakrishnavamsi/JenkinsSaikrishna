@@ -180,14 +180,10 @@ const formatLabels = (stringToFormat, ...formattingArguments) => {
 };
 
 const formatDate = (dt) => {
-  const dtf = new Intl.DateTimeFormat('en', {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit'
-  });
+  const dtf = new Intl.DateTimeFormat('en');
   const [{value: mo}, , {value: da}, , {value: ye}] = dtf.formatToParts(dt);
-  let formatedDate = `${mo} ${da}, ${ye}`;
-  return formatedDate;
+  let formattedDate = `${ye}-${mo}-${da}`;
+  return formattedDate;
 };
 
 export {
