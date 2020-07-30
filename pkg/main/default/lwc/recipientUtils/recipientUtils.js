@@ -299,7 +299,7 @@ class Role {
 export class Authentication {
   constructor({phone = null, accessCode = null, idCheckRequired = false}) {
     this.smsPhoneNumbers = !isEmpty(phone) ? [phone] : null;
-    this.accessCode = !isEmpty(accessCode) && !isNaN(accessCode) ? parseInt(accessCode) : null;
+    this.accessCode = !isEmpty(accessCode) ? accessCode : null;
     this.idCheckRequired = idCheckRequired;
   }
 

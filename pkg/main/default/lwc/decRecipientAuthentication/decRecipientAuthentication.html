@@ -13,10 +13,10 @@
                 <lightning-input 
                     name={AuthenticationTypes.AccessCode.value} 
                     label={AuthenticationTypes.AccessCode.label} 
-                    value={value.accessCode} 
-                    type="number" 
+                    value={value.accessCode}
+                    type="text"
+                    maxlength="50"
                     onchange={handleDataChange}>
-    
                 </lightning-input>
             </section>
             <section if:true={showSMS}>
@@ -26,7 +26,6 @@
                     value={smsValue} 
                     type="text" 
                     onchange={handleDataChange}>
-    
                 </lightning-input>
             </section> 
         </div>   
