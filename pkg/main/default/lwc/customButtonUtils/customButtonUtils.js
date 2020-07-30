@@ -9,6 +9,7 @@ import decPageLayouts from '@salesforce/label/c.DecPageLayouts';
 import invalidCharacters from '@salesforce/label/c.InvalidCharacters';
 import successfullyModifiedLayouts from '@salesforce/label/c.SuccessfullyModifiedLayouts';
 import buttonLabel from '@salesforce/label/c.ButtonLabel';
+import atLeastOneLayoutIsRequiredLabel from '@salesforce/label/c.AtLeastOneLayoutIsRequired';
 
 const LABEL = {
   helpVideoText,
@@ -20,7 +21,8 @@ const LABEL = {
   decPageLayouts,
   invalidCharacters,
   successfullyModifiedLayouts,
-  buttonLabel
+  buttonLabel,
+  atLeastOneLayoutIsRequiredLabel
 };
 
 export {

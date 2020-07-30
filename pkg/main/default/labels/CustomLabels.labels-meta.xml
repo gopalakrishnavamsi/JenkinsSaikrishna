@@ -3246,6 +3246,13 @@
 		<value>No layouts are associated with the selected object</value>
 	</labels>
 	<labels>
+		<fullName>AtLeastOneLayoutIsRequired</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>At least one layout is required</shortDescription>
+		<value>Please select at least one page layout</value>
+	</labels>
+	<labels>
 		<fullName>DocuSignAgreements</fullName>
 		<language>en_US</language>
 		<protected>true</protected>

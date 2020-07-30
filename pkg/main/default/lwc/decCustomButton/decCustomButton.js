@@ -8,7 +8,8 @@ import getDecActionName from '@salesforce/apex/MetadataController.getDecActionNa
 // Lightning message service
 import {
   createMessageContext,
-  releaseMessageContext
+  releaseMessageContext,
+  publish
 } from 'lightning/messageService';
 
 // utility functions
@@ -49,6 +50,7 @@ export default class DecCustomButton extends LightningElement {
 
   //Subscriptions
   updatePageLayoutsSubscription = null;
+  isDirty = false;
 
   connectedCallback() {
     this.updatePageLayoutsSubscription = subscribeToMessageChannel(
@@ -63,6 +65,18 @@ export default class DecCustomButton extends LightningElement {
     releaseMessageContext(this.context);
   }
 
+  @wire(getDecActionName, {
+    sObjectType: '$sourceObject'
+  })
+  getDecActionName({error, data}) {
+    if (error) {
+      showError(this.context, error, ERROR);
+    } else if (data) {
+      this.decButtonApiName = data + this.recordId;
+    }
+  }
+
+
   @wire(getLayouts, {
     sObjectType: '$sourceObject'
   })
@@ -72,17 +86,6 @@ export default class DecCustomButton extends LightningElement {
     } else if (data) {
       this.parseLayouts(data);
       this.isLoading = false;
-    }
-  }
-
-  @wire(getDecActionName, {
-    sObjectType: '$sourceObject'
-  })
-  getDecActionName({error, data}) {
-    if (error) {
-      showError(this.context, error, ERROR);
-    } else if (data) {
-      this.decButtonApiName = data + this.recordId;
     }
   }
 
@@ -126,7 +129,12 @@ export default class DecCustomButton extends LightningElement {
   }
 
   handleButtonLabelChange(event) {
+    this.isDirty = true;
     this.decButtonLabel = event.target.value;
+  }
+
+  handleLayoutSelection() {
+    this.isDirty = true;
   }
 
   isLabelUpdated(layout) {
@@ -179,9 +187,25 @@ export default class DecCustomButton extends LightningElement {
   }
 
   handleUpdateLayouts() {
-    if(isEmpty(this.decButtonLabel)) {
+    if (isEmpty(this.decButtonLabel)) {
       return;
     }
+
+    let selectedRows = this.template.querySelector('lightning-datatable').getSelectedRows().slice();
+
+    if (isEmpty(selectedRows) || (!isEmpty(selectedRows) && selectedRows.length === 0)) {
+      const msg = {
+        errorMessage: this.label.atLeastOneLayoutIsRequiredLabel
+      };
+      publish(this.context, ERROR, msg);
+      return;
+    }
+
+    if (!this.isDirty) {
+      window.navUtils.navigateToSObject(this.recordId);
+      return;
+    }
+
     this.setLoading(true);
     let parameters = {
       decButtonApiName: this.decButtonApiName,

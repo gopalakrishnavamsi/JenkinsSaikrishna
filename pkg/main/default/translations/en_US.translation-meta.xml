@@ -1590,6 +1590,10 @@
 		<name>NoLayoutsForSelectedObject</name>
 	</customLabels>
 	<customLabels>
+		<label>Please select at least one page layout</label>
+		<name>AtLeastOneLayoutIsRequired</name>
+	</customLabels>
+	<customLabels>
 		<label>DocuSign Files</label>
 		<name>DocuSignAgreements</name>
 	</customLabels>

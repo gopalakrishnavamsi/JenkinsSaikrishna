@@ -37,7 +37,8 @@
                         key-field="id"
                         data={layouts}
                         columns={pageLayoutColumns}
-                        selected-rows={selectedPageLayouts}>
+                        selected-rows={selectedPageLayouts}
+                        onrowselection={handleLayoutSelection}>
                 </lightning-datatable>
             </div>
         </div>
