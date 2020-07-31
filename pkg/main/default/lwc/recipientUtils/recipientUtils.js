@@ -183,7 +183,7 @@ export class Recipient {
     if (!isEmpty(this.signingGroup)) return true;
     if (!isEmpty(this.sourceId)) return true;
     if (this.relationship) return !this.relationship.isEmpty;
-    return (!isEmpty(this.role) && !this.role.isEmpty) || (!isEmpty(this.name) && this.isValidEmail);    
+    return (!isEmpty(this.role) && !this.role.isEmpty) || (!isEmpty(this.name) && this.isValidEmail);
   }
 
   get lookupRecord() {
@@ -220,12 +220,12 @@ export class Recipient {
 
   addSMSAuthentication(phone = null) {
     if (isEmpty(phone)) return;
-    this.authentication = new Authentication({phone});
+    this.authentication = new Authentication({phone, idCheckRequired: true});
   }
 
   addAccessCode(accessCode = null) {
     if (isEmpty(accessCode)) return;
-    this.authentication = new Authentication({accessCode});
+    this.authentication = new Authentication({accessCode, idCheckRequired: false});
   }
 }
 
@@ -298,8 +298,8 @@ class Role {
 
 export class Authentication {
   constructor({phone = null, accessCode = null, idCheckRequired = false}) {
-    this.smsPhoneNumbers = !isEmpty(phone) ? [phone] : null;
-    this.accessCode = !isEmpty(accessCode) ? accessCode : null;
+    this.smsPhoneNumbers = !isEmpty(phone) ? [phone] : [];
+    this.accessCode = !isEmpty(accessCode) ? accessCode : '';
     this.idCheckRequired = idCheckRequired;
   }
 

@@ -34,9 +34,9 @@ export default class DecRecipientPrivateMessage extends LightningElement {
   resetNote = () => {
     this.dispatchEvent(
       new CustomEvent('notechange', {
-        detail: null
+        detail: ''
       })
     )
-    this.recipientNote = null;
+    this.recipientNote = '';
   }
 }

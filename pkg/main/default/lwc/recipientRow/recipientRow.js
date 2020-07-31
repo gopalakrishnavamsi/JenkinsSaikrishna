@@ -54,7 +54,7 @@ export default class RecipientRow extends LightningElement {
     if (isEmpty(this.recipient)) return '';
     if (!isEmpty(this.recipient.relationship)) {
       return this.recipient.relationship.name;
-    } else if (!isEmpty(this.recipient.role) && !this.isSending) {
+    } else if (!isEmpty(this.recipient.role) && !isEmpty(this.recipient.role.name) && !this.isSending) {
       return this.recipient.role.name;
     } else if (!isEmpty(this.recipient.name)) {
       return this.recipient.name;
