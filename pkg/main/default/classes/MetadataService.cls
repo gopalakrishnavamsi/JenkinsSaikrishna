@@ -770,6 +770,12 @@ public with sharing class MetadataService {
 		return result;
 	}
 
+	private class LayoutParameters {
+		public String decButtonApiName { get; private set; }
+		public String decButtonLabel { get; private set; }
+		public String decTemplateId { get; private set; }
+	}
+
 	@TestVisible
 	private static MetadataAPI.Layout mergeLayout(
 		final SObjectType type,
@@ -786,7 +792,7 @@ public with sharing class MetadataService {
 		Boolean showAction;
 		String actionName;
 		Gen.LayoutParameters genLayoutParameters;
-		EnvelopeConfigurationController.LayoutParameters decLayoutParameters;
+		LayoutParameters decLayoutParameters;
 
 		for (Layout.Action a : (newLayout.actions == null ? new List<Layout.Action>() : newLayout.actions)) {
 			if (a.type == Layout.ACTION_TYPE_SEND) {
@@ -808,9 +814,9 @@ public with sharing class MetadataService {
 			if (parameters.contains('genButtonApiName')) {
 				genLayoutParameters = (Gen.LayoutParameters)JSON.deserialize(parameters, Gen.LayoutParameters.class);
 			} else if (parameters.contains('decButtonApiName')) {
-				decLayoutParameters = (EnvelopeConfigurationController.LayoutParameters)JSON.deserialize(
+				decLayoutParameters = (LayoutParameters)JSON.deserialize(
 					parameters,
-					EnvelopeConfigurationController.LayoutParameters.class);
+					LayoutParameters.class);
 			}
 		}
 
@@ -959,11 +965,10 @@ public with sharing class MetadataService {
 					params.genTemplateId,
 					false);
 			} else if (l.hasDecAction()) {
-				// FIXME: This introduces a dependency on EnvelopeConfigurationController. Deserialize there instead.
-				EnvelopeConfigurationController.LayoutParameters params =
-					(EnvelopeConfigurationController.LayoutParameters)JSON.deserialize(
+				LayoutParameters params =
+					(LayoutParameters)JSON.deserialize(
 						parameters,
-						EnvelopeConfigurationController.LayoutParameters.class);
+						LayoutParameters.class);
 				getDecAction(
 					type,
 					params.decButtonApiName,

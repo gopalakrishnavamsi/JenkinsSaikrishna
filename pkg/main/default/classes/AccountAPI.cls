@@ -340,4 +340,27 @@ public with sharing class AccountAPI extends ESignatureAPI {
 
 		return response.error == APIError.none;
 	}
+
+	public Long getEveryoneGroupId() {
+		return this.getEveryoneGroupId(RestAPI.defaultTimeout);
+	}
+
+	public Long getEveryoneGroupId(final Integer timeout) {
+		RestAPI.Response response = this.get(
+			'groups',
+			new QueryString('group_type', 'everyoneGroup'),
+			timeout);
+		if (response.hasError && response.error != APIError.notFound) {
+			this.log.error('Failed to retrieve Everyone group ID: ' + response.error);
+			throw new APIException(response.error);
+		}
+
+		Long result = null;
+		Map<String, Object> resp = (Map<String, Object>)JSON.deserializeUntyped(response.body);
+		if (resp != null) {
+			Map<String, Object> g = (Map<String, Object>)Collection.head((List<Object>)resp.get('groups'));
+			if (g != null) result = Long.valueOf((String)g.get('groupId'));
+		}
+		return result;
+	}
 }

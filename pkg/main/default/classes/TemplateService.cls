@@ -11,7 +11,7 @@ global with sharing class TemplateService {
 		Permissions.verifyIsDocuSignUser();
 
 		try {
-			return EnvelopeAPI.getInstance().getTemplates();
+			return TemplateAPI.getInstance().getTemplates();
 		} finally {
 			Credentials.save();
 		}
@@ -28,7 +28,7 @@ global with sharing class TemplateService {
 		Permissions.verifyIsDocuSignUser();
 
 		try {
-			return EnvelopeAPI.getInstance().getTemplate(templateId);
+			return TemplateAPI.getInstance().getTemplate(templateId);
 		} finally {
 			Credentials.save();
 		}

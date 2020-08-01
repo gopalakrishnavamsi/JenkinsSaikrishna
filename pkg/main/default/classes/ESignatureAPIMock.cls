@@ -29,6 +29,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 		'custom_fields' => Application.classNamespacePrefix + 'ESignatureAPIMock.CustomFieldsMock',
 		'envelopes' => Application.classNamespacePrefix + 'ESignatureAPIMock.EnvelopesMock',
 		'folders' => Application.classNamespacePrefix + 'ESignatureAPIMock.FoldersMock',
+		'groups' => Application.classNamespacePrefix + 'ESignatureAPIMock.GroupsMock',
 		'permission_profiles' => Application.classNamespacePrefix + 'ESignatureAPIMock.PermissionProfilesMock',
 		'service_information' => Application.classNamespacePrefix + 'ESignatureAPIMock.ServiceInformationMock',
 		'settings' => Application.classNamespacePrefix + 'ESignatureAPIMock.SettingsMock',
@@ -424,7 +425,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 						rs.seals = new List<EnvelopeAPI.APIRecipient> { r8 };
 						rs.witnesses = new List<EnvelopeAPI.APIRecipient> { r9 };
 						EnvelopeAPI.APINotifications notif = new EnvelopeAPI.APINotifications(null);
-						EnvelopeAPI.APIEnvelope e = new EnvelopeAPI.APIEnvelope(null, false, false);
+						EnvelopeAPI.APIEnvelope e = new EnvelopeAPI.APIEnvelope(null, null, false);
 						e.envelopeId = String.valueOf(id);
 						e.status = 'completed';
 						e.recipients = rs;
@@ -528,6 +529,24 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 			MockResponse response = null;
 			if (request.method == 'PUT') {
 				response = MockResponse.ok(null);
+			}
+			return response;
+		}
+	}
+
+	//noinspection ApexUnusedDeclaration
+	public class GroupsMock implements MockResource {
+
+		public MockResponse respond(final MockRequest request) {
+			MockResponse response = null;
+			if (request.method == 'GET') {
+				response = MockResponse.ok(new Map<String, Object> {
+					'groups' => new List<Map<String, Object>> {
+						new Map<String, Object> {
+							'groupId' => String.valueOf(TestUtils.randomInteger(1000000))
+						}
+					}
+				});
 			}
 			return response;
 		}
@@ -752,27 +771,25 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 			if (request.method == 'GET') {
 				UUID id = UUID.tryParse((String)Collection.last(request.path));
 				if (id != null) {
-					EnvelopeAPI.APITemplateId tid = new EnvelopeAPI.APITemplateId(id, 'template 1');
-					tid.lastModified = StringUtils.formatDatetime(Datetime.now().addDays(-1));
-					EnvelopeAPI.APIDocument d = new EnvelopeAPI.APIDocument(null, null);
+					TemplateAPI.APIDocument d = new TemplateAPI.APIDocument(null, null);
 					d.documentId = '1';
 					d.name = UUID.randomUUID() + '.pdf';
 					d.fileExtension = 'pdf';
 					d.templateLocked = 'true';
 					d.templateRequired = 'true';
-					EnvelopeAPI.APITextCustomField tf1 = new EnvelopeAPI.APITextCustomField(
+					TemplateAPI.APITextCustomField tf1 = new TemplateAPI.APITextCustomField(
 						'textField1',
 						'textValue1',
 						false,
 						true);
 					tf1.fieldId = UUID.randomUUID().toString();
-					EnvelopeAPI.APITextCustomField tf2 = new EnvelopeAPI.APITextCustomField(
+					TemplateAPI.APITextCustomField tf2 = new TemplateAPI.APITextCustomField(
 						'textField2',
 						'textValue2',
 						false,
 						false);
 					tf2.fieldId = UUID.randomUUID().toString();
-					EnvelopeAPI.APIListCustomField lf1 = new EnvelopeAPI.APIListCustomField(CustomField.newListField(
+					TemplateAPI.APIListCustomField lf1 = new TemplateAPI.APIListCustomField(CustomField.newListField(
 						'listField1',
 						'listField1Value2',
 						new List<String> {
@@ -781,30 +798,60 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 						true,
 						true));
 					lf1.fieldId = UUID.randomUUID().toString();
-					EnvelopeAPI.APICustomFields cfs = new EnvelopeAPI.APICustomFields(
-						new List<EnvelopeAPI.APITextCustomField> { tf1, tf2 },
-						new List<EnvelopeAPI.APIListCustomField> { lf1 });
-					EnvelopeAPI.APINotifications n = new EnvelopeAPI.APINotifications(new Notifications(
+					TemplateAPI.APICustomFields cfs = new TemplateAPI.APICustomFields(
+						new List<TemplateAPI.APITextCustomField> { tf1, tf2 },
+						new List<TemplateAPI.APIListCustomField> { lf1 });
+					TemplateAPI.APINotifications n = new TemplateAPI.APINotifications(new Notifications(
 						true,
 						10,
 						5,
 						true,
 						11,
 						6));
-					EnvelopeAPI.APIEmailSettings bg = new EnvelopeAPI.APIEmailSettings(new Recipient.EmailSettings(
+					TemplateAPI.APIEmailSettings bg = new TemplateAPI.APIEmailSettings(new Recipient.EmailSettings(
 						'bg',
 						null,
 						'bg subject',
 						'bg message'));
-					EnvelopeAPI.APIEmailSettings fr = new EnvelopeAPI.APIEmailSettings(new Recipient.EmailSettings(
+					TemplateAPI.APIEmailSettings fr = new TemplateAPI.APIEmailSettings(new Recipient.EmailSettings(
 						'fr',
 						null,
 						'fr subject',
 						'fr message'));
-					EnvelopeAPI.APISmsAuthentication pa = new EnvelopeAPI.APISmsAuthentication(new List<String> {
+					TemplateAPI.APISmsAuthentication pa = new TemplateAPI.APISmsAuthentication(new List<String> {
 						'+1 415-555-5555'
 					});
-					EnvelopeAPI.APIRecipient agent = new EnvelopeAPI.APIRecipient(null, null, false);
+					TemplateAPI.APITab tab1 = new TemplateAPI.APITab('1', '1', new Tab(
+						UUID.randomUUID(),
+						Tab.TYPE_CHECKBOX,
+						't1',
+						't1',
+						't1',
+						false,
+						false,
+						'\\tab1\\')
+						.withValue(false));
+					TemplateAPI.APITab tab2 = new TemplateAPI.APITab('1', '1', new Tab(
+						UUID.randomUUID(),
+						Tab.TYPE_DATE,
+						't2',
+						't2',
+						't2',
+						false,
+						false,
+						'\\tab2\\')
+						.withValue(Datetime.now()));
+					TemplateAPI.APITab tab3 = new TemplateAPI.APITab('1', '1', new Tab(
+						UUID.randomUUID(),
+						Tab.TYPE_TEXT,
+						't3',
+						't3',
+						't3',
+						false,
+						false,
+						'\\tab3\\')
+						.withValue('tab3'));
+					TemplateAPI.APIRecipient agent = new TemplateAPI.APIRecipient(null, null);
 					agent.name = '';
 					agent.email = '';
 					agent.roleName = 'AGENT';
@@ -815,7 +862,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					agent.templateLocked = 'false';
 					agent.templateRequired = 'false';
 					agent.emailNotification = bg;
-					EnvelopeAPI.APIRecipient cc = new EnvelopeAPI.APIRecipient(null, null, false);
+					TemplateAPI.APIRecipient cc = new TemplateAPI.APIRecipient(null, null);
 					cc.name = '';
 					cc.email = '';
 					cc.roleName = 'CARBON_COPY';
@@ -827,7 +874,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					cc.templateLocked = 'false';
 					cc.templateRequired = 'false';
 					cc.emailNotification = null;
-					EnvelopeAPI.APIRecipient cd = new EnvelopeAPI.APIRecipient(null, null, false);
+					TemplateAPI.APIRecipient cd = new TemplateAPI.APIRecipient(null, null);
 					cd.name = '';
 					cd.email = '';
 					cd.roleName = 'CERTIFIED_DELIVERY';
@@ -838,7 +885,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					cd.note = 'unit test';
 					cd.templateLocked = 'false';
 					cd.templateRequired = 'false';
-					EnvelopeAPI.APIRecipient editor = new EnvelopeAPI.APIRecipient(null, null, false);
+					TemplateAPI.APIRecipient editor = new TemplateAPI.APIRecipient(null, null);
 					editor.name = '';
 					editor.email = '';
 					editor.roleName = 'EDITOR';
@@ -849,7 +896,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					editor.note = '';
 					editor.templateLocked = 'false';
 					editor.templateRequired = 'false';
-					EnvelopeAPI.APIRecipient ips = new EnvelopeAPI.APIRecipient(null, null, false);
+					TemplateAPI.APIRecipient ips = new TemplateAPI.APIRecipient(null, null);
 					ips.roleName = 'IN_PERSON_SIGNER';
 					ips.routingOrder = '2';
 					ips.hostName = '';
@@ -863,7 +910,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					ips.templateLocked = 'false';
 					ips.templateRequired = 'false';
 					ips.emailNotification = null;
-					EnvelopeAPI.APIRecipient intermediary = new EnvelopeAPI.APIRecipient(null, null, false);
+					TemplateAPI.APIRecipient intermediary = new TemplateAPI.APIRecipient(null, null);
 					intermediary.name = '';
 					intermediary.email = '';
 					intermediary.roleName = 'INTERMEDIARY';
@@ -873,7 +920,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					intermediary.note = '';
 					intermediary.templateLocked = 'false';
 					intermediary.templateRequired = 'false';
-					EnvelopeAPI.APIRecipient signer = new EnvelopeAPI.APIRecipient(null, null, false);
+					TemplateAPI.APIRecipient signer = new TemplateAPI.APIRecipient(null, null);
 					signer.name = 'SG1';
 					signer.email = '';
 					signer.roleName = 'SIGNER';
@@ -886,7 +933,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					signer.templateLocked = 'true';
 					signer.templateRequired = 'true';
 					signer.emailNotification = fr;
-					EnvelopeAPI.APIRecipient seal = new EnvelopeAPI.APIRecipient(null, null, false);
+					TemplateAPI.APIRecipient seal = new TemplateAPI.APIRecipient(null, null);
 					seal.name = '';
 					seal.email = '';
 					seal.roleName = 'SEAL';
@@ -896,7 +943,7 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					seal.note = '';
 					seal.templateLocked = 'false';
 					seal.templateRequired = 'false';
-					EnvelopeAPI.APIRecipient witness = new EnvelopeAPI.APIRecipient(null, null, false);
+					TemplateAPI.APIRecipient witness = new TemplateAPI.APIRecipient(null, null);
 					witness.name = '';
 					witness.email = '';
 					witness.roleName = 'WITNESS';
@@ -906,19 +953,21 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					witness.note = '';
 					witness.templateLocked = 'false';
 					witness.templateRequired = 'false';
-					EnvelopeAPI.APIRecipients rs = new EnvelopeAPI.APIRecipients(null, d.documentId, false);
-					rs.agents = new List<EnvelopeAPI.APIRecipient> { agent };
-					rs.carbonCopies = new List<EnvelopeAPI.APIRecipient> { cc };
-					rs.certifiedDeliveries = new List<EnvelopeAPI.APIRecipient> { cd };
-					rs.editors = new List<EnvelopeAPI.APIRecipient> { editor };
-					rs.inPersonSigners = new List<EnvelopeAPI.APIRecipient> { ips };
-					rs.intermediaries = new List<EnvelopeAPI.APIRecipient> { intermediary };
-					rs.signers = new List<EnvelopeAPI.APIRecipient> { signer };
-					rs.seals = new List<EnvelopeAPI.APIRecipient> { seal };
-					rs.witnesses = new List<EnvelopeAPI.APIRecipient> { witness };
-					EnvelopeAPI.APITemplate t = new EnvelopeAPI.APITemplate(null, false);
-					t.envelopeTemplateDefinition = tid;
-					t.documents = new List<EnvelopeAPI.APIDocument> { d };
+					TemplateAPI.APIRecipients rs = new TemplateAPI.APIRecipients(null, d.documentId);
+					rs.agents = new List<TemplateAPI.APIRecipient> { agent };
+					rs.carbonCopies = new List<TemplateAPI.APIRecipient> { cc };
+					rs.certifiedDeliveries = new List<TemplateAPI.APIRecipient> { cd };
+					rs.editors = new List<TemplateAPI.APIRecipient> { editor };
+					rs.inPersonSigners = new List<TemplateAPI.APIRecipient> { ips };
+					rs.intermediaries = new List<TemplateAPI.APIRecipient> { intermediary };
+					rs.signers = new List<TemplateAPI.APIRecipient> { signer };
+					rs.seals = new List<TemplateAPI.APIRecipient> { seal };
+					rs.witnesses = new List<TemplateAPI.APIRecipient> { witness };
+					TemplateAPI.APITemplate t = new TemplateAPI.APITemplate(null, null, false);
+					t.templateId = String.valueOf(id);
+					t.name = UUID.randomUUID().toString();
+					t.lastModified = StringUtils.formatDatetime(Datetime.now().addDays(-1));
+					t.documents = new List<TemplateAPI.APIDocument> { d };
 					t.customFields = cfs;
 					t.notification = n;
 					t.emailSubject = UUID.randomUUID().toString();
@@ -926,26 +975,26 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 					t.recipients = rs;
 					response = MockResponse.ok(t);
 				} else { // list templates
-					EnvelopeAPI.APITemplateListResult t1 = new EnvelopeAPI.APITemplateListResult();
+					TemplateAPI.APITemplateListResult t1 = new TemplateAPI.APITemplateListResult();
 					t1.templateId = UUID.randomUUID().toString();
 					t1.name = 'template 1';
 					t1.emailSubject = 'subject 1';
 					t1.emailBlurb = 'message 1';
 					t1.lastModified = StringUtils.formatDatetime(Datetime.now().addDays(-1));
-					EnvelopeAPI.APITemplateListResult t2 = new EnvelopeAPI.APITemplateListResult();
+					TemplateAPI.APITemplateListResult t2 = new TemplateAPI.APITemplateListResult();
 					t2.templateId = UUID.randomUUID().toString();
 					t2.name = 'template 2';
 					t2.emailSubject = 'subject 2';
 					t2.emailBlurb = 'message 2';
 					t2.lastModified = StringUtils.formatDatetime(Datetime.now().addDays(-2));
-					EnvelopeAPI.APITemplateListResult t3 = new EnvelopeAPI.APITemplateListResult();
+					TemplateAPI.APITemplateListResult t3 = new TemplateAPI.APITemplateListResult();
 					t3.templateId = UUID.randomUUID().toString();
 					t3.name = 'template 3';
 					t3.emailSubject = 'subject 3';
 					t3.emailBlurb = 'message 3';
 					t3.lastModified = StringUtils.formatDatetime(Datetime.now().addDays(-3));
-					EnvelopeAPI.APITemplates ts = new EnvelopeAPI.APITemplates();
-					ts.envelopeTemplates = new List<EnvelopeAPI.APITemplateListResult> {
+					TemplateAPI.APITemplates ts = new TemplateAPI.APITemplates();
+					ts.envelopeTemplates = new List<TemplateAPI.APITemplateListResult> {
 						t1, t2, t3
 					};
 					ts.resultSetSize = '3';
@@ -967,88 +1016,88 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 			} else if (request.method == 'PUT') {
 				switch on (String)Collection.last(request.path) {
 					when 'documents' {
-						EnvelopeAPI.APITemplateUpdateDocuments ds
-							= (EnvelopeAPI.APITemplateUpdateDocuments)JSON.deserialize(
+						TemplateAPI.APITemplateUpdateDocuments ds
+							= (TemplateAPI.APITemplateUpdateDocuments)JSON.deserialize(
 								request.body,
-								EnvelopeAPI.APITemplateUpdateDocuments.class);
-						EnvelopeAPI.APIDocumentsUpdate result = new EnvelopeAPI.APIDocumentsUpdate();
+								TemplateAPI.APITemplateUpdateDocuments.class);
+						TemplateAPI.APIDocumentsUpdate result = new TemplateAPI.APIDocumentsUpdate();
 						result.templateId = UUID.randomUUID().toString();
 						result.templateDocuments = ds == null ? null : ds.documents;
 						response = MockResponse.ok(result);
 					} when 'recipients' {
-						EnvelopeAPI.APIRecipients rs = (EnvelopeAPI.APIRecipients)JSON.deserialize(
+						TemplateAPI.APIRecipients rs = (TemplateAPI.APIRecipients)JSON.deserialize(
 							request.body,
-							EnvelopeAPI.APIRecipients.class);
-						EnvelopeAPI.APIRecipientUpdates result = new EnvelopeAPI.APIRecipientUpdates();
-						result.recipientUpdateResults = new List<EnvelopeAPI.APIRecipientUpdate>();
+							TemplateAPI.APIRecipients.class);
+						TemplateAPI.APIRecipientUpdates result = new TemplateAPI.APIRecipientUpdates();
+						result.recipientUpdateResults = new List<TemplateAPI.APIRecipientUpdate>();
 						if (rs != null) {
 							if (rs.agents != null) {
-								for (EnvelopeAPI.APIRecipient r : rs.agents) {
-									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+								for (TemplateAPI.APIRecipient r : rs.agents) {
+									TemplateAPI.APIRecipientUpdate ru = new TemplateAPI.APIRecipientUpdate();
 									ru.recipientId = r.recipientId;
 									ru.tabs = r.tabs;
 									result.recipientUpdateResults.add(ru);
 								}
 							}
 							if (rs.carbonCopies != null) {
-								for (EnvelopeAPI.APIRecipient r : rs.carbonCopies) {
-									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+								for (TemplateAPI.APIRecipient r : rs.carbonCopies) {
+									TemplateAPI.APIRecipientUpdate ru = new TemplateAPI.APIRecipientUpdate();
 									ru.recipientId = r.recipientId;
 									ru.tabs = r.tabs;
 									result.recipientUpdateResults.add(ru);
 								}
 							}
 							if (rs.certifiedDeliveries != null) {
-								for (EnvelopeAPI.APIRecipient r : rs.certifiedDeliveries) {
-									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+								for (TemplateAPI.APIRecipient r : rs.certifiedDeliveries) {
+									TemplateAPI.APIRecipientUpdate ru = new TemplateAPI.APIRecipientUpdate();
 									ru.recipientId = r.recipientId;
 									ru.tabs = r.tabs;
 									result.recipientUpdateResults.add(ru);
 								}
 							}
 							if (rs.editors != null) {
-								for (EnvelopeAPI.APIRecipient r : rs.editors) {
-									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+								for (TemplateAPI.APIRecipient r : rs.editors) {
+									TemplateAPI.APIRecipientUpdate ru = new TemplateAPI.APIRecipientUpdate();
 									ru.recipientId = r.recipientId;
 									ru.tabs = r.tabs;
 									result.recipientUpdateResults.add(ru);
 								}
 							}
 							if (rs.inPersonSigners != null) {
-								for (EnvelopeAPI.APIRecipient r : rs.inPersonSigners) {
-									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+								for (TemplateAPI.APIRecipient r : rs.inPersonSigners) {
+									TemplateAPI.APIRecipientUpdate ru = new TemplateAPI.APIRecipientUpdate();
 									ru.recipientId = r.recipientId;
 									ru.tabs = r.tabs;
 									result.recipientUpdateResults.add(ru);
 								}
 							}
 							if (rs.intermediaries != null) {
-								for (EnvelopeAPI.APIRecipient r : rs.intermediaries) {
-									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+								for (TemplateAPI.APIRecipient r : rs.intermediaries) {
+									TemplateAPI.APIRecipientUpdate ru = new TemplateAPI.APIRecipientUpdate();
 									ru.recipientId = r.recipientId;
 									ru.tabs = r.tabs;
 									result.recipientUpdateResults.add(ru);
 								}
 							}
 							if (rs.signers != null) {
-								for (EnvelopeAPI.APIRecipient r : rs.signers) {
-									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+								for (TemplateAPI.APIRecipient r : rs.signers) {
+									TemplateAPI.APIRecipientUpdate ru = new TemplateAPI.APIRecipientUpdate();
 									ru.recipientId = r.recipientId;
 									ru.tabs = r.tabs;
 									result.recipientUpdateResults.add(ru);
 								}
 							}
 							if (rs.seals != null) {
-								for (EnvelopeAPI.APIRecipient r : rs.seals) {
-									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+								for (TemplateAPI.APIRecipient r : rs.seals) {
+									TemplateAPI.APIRecipientUpdate ru = new TemplateAPI.APIRecipientUpdate();
 									ru.recipientId = r.recipientId;
 									ru.tabs = r.tabs;
 									result.recipientUpdateResults.add(ru);
 								}
 							}
 							if (rs.witnesses != null) {
-								for (EnvelopeAPI.APIRecipient r : rs.witnesses) {
-									EnvelopeAPI.APIRecipientUpdate ru = new EnvelopeAPI.APIRecipientUpdate();
+								for (TemplateAPI.APIRecipient r : rs.witnesses) {
+									TemplateAPI.APIRecipientUpdate ru = new TemplateAPI.APIRecipientUpdate();
 									ru.recipientId = r.recipientId;
 									ru.tabs = r.tabs;
 									result.recipientUpdateResults.add(ru);
@@ -1056,12 +1105,14 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 							}
 						}
 						response = MockResponse.ok(result);
+					} when 'groups' {
+						response = MockResponse.ok(request.body);
 					} when else { // template
-						EnvelopeAPI.APITemplate t = (EnvelopeAPI.APITemplate)JSON.deserialize(
+						TemplateAPI.APITemplate t = (TemplateAPI.APITemplate)JSON.deserialize(
 							request.body,
-							EnvelopeAPI.APITemplate.class);
-						if (t != null && t.envelopeTemplateDefinition != null) {
-							t.envelopeTemplateDefinition.lastModified = StringUtils.formatDatetime(Datetime.now());
+							TemplateAPI.APITemplate.class);
+						if (t != null) {
+							t.lastModified = StringUtils.formatDatetime(Datetime.now());
 						}
 						response = MockResponse.ok(t);
 					}
@@ -1069,11 +1120,11 @@ global class ESignatureAPIMock extends OAuthTokenMock implements HttpCalloutMock
 			} else if (request.method == 'DELETE') {
 				switch on (String)Collection.last(request.path) {
 					when 'documents' {
-						EnvelopeAPI.APITemplateUpdateDocuments ds
-							= (EnvelopeAPI.APITemplateUpdateDocuments)JSON.deserialize(
+						TemplateAPI.APITemplateUpdateDocuments ds
+							= (TemplateAPI.APITemplateUpdateDocuments)JSON.deserialize(
 								request.body,
-								EnvelopeAPI.APITemplateUpdateDocuments.class);
-						EnvelopeAPI.APIDocumentsUpdate result = new EnvelopeAPI.APIDocumentsUpdate();
+								TemplateAPI.APITemplateUpdateDocuments.class);
+						TemplateAPI.APIDocumentsUpdate result = new TemplateAPI.APIDocumentsUpdate();
 						result.templateId = UUID.randomUUID().toString();
 						result.templateDocuments = ds == null ? null : ds.documents;
 						response = MockResponse.ok(result);

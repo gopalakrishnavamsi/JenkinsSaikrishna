@@ -331,4 +331,33 @@ private class AccountAPITest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_getEveryoneGroupId_failure() {
+		ESignatureAPIMock.failure();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountAPI client = AccountAPI.getInstance();
+
+			Test.startTest();
+			try {
+				client.getEveryoneGroupId();
+				throw new AssertException('Expected getEveryoneGroupId to fail');
+			} catch (APIException ex) {
+				System.assertEquals(APIError.badRequest, ex.error);
+			}
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_getEveryoneGroupId_success() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountAPI client = AccountAPI.getInstance();
+
+			Test.startTest();
+			System.assertNotEquals(null, client.getEveryoneGroupId());
+			Test.stopTest();
+		}
+	}
 }

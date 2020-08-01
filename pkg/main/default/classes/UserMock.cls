@@ -426,6 +426,7 @@ global class UserMock {
 		accountSettings.AdministratorProfileId__c = TestUtils.randomInteger(1000000);
 		accountSettings.SenderProfileId__c = TestUtils.randomInteger(1000000);
 		accountSettings.ProductsLastChecked__c = Datetime.now();
+		accountSettings.EveryoneGroupId__c = TestUtils.randomInteger(1000000);
 		insert accountSettings;
 
 		insert new List<ProductSettings__c> {

@@ -1455,6 +1455,38 @@ private class EnvelopeConfigurationServiceTest {
 	}
 
 	@IsTest
+	static void test_createEnvelopeConfiguration_update_group_id() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.EveryoneGroupId__c = null;
+			update s;
+			EnvelopeConfiguration ec = new EnvelopeConfiguration(
+				null,
+				UUID.randomUUID().toString(),
+				'Opportunity',
+				UUID.randomUUID(),
+				new List<Document>(),
+				new List<Recipient>(),
+				new List<CustomField>(),
+				new Notifications(true, 2, 1, true, 9, 7, false),
+				's',
+				'm',
+				new List<Tab>(),
+				Envelope.DEFAULT_PERMISSIONS,
+				Envelope.DEFAULT_OPTIONS,
+				false);
+
+			Test.startTest();
+			EnvelopeConfiguration result = EnvelopeConfigurationService.createEnvelopeConfiguration(ec);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().EveryoneGroupId__c);
+		}
+	}
+
+	@IsTest
 	static void test_getEnvelopeConfiguration_unauthorized() {
 		System.runAs(UserMock.createDocuSignUser(false)) {
 			Test.startTest();
@@ -1646,6 +1678,41 @@ private class EnvelopeConfigurationServiceTest {
 			System.assertEquals(Collection.size(ec.mergeFields), Collection.size(result.mergeFields));
 			System.assertNotEquals(null, result.senderPermissions);
 			System.assertEquals(ec.isDraft, result.isDraft);
+		}
+	}
+
+	@IsTest
+	static void test_updateEnvelopeConfiguration_new_update_group_id() {
+		ESignatureAPIMock.success();
+		System.runAs(UserMock.createDocuSignAdministrator()) {
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.EveryoneGroupId__c = null;
+			update s;
+			EnvelopeConfiguration__c dbec = TestUtils.createEnvelopeConfiguration(
+				null,
+				'Opportunity');
+			EnvelopeConfiguration ec = new EnvelopeConfiguration(
+				dbec.Id,
+				UUID.randomUUID().toString(),
+				dbec.SourceObject__c,
+				null,
+				new List<Document>(),
+				new List<Recipient>(),
+				new List<CustomField>(),
+				new Notifications(true, 2, 1, true, 9, 7, false),
+				's',
+				'm',
+				new List<Tab>(),
+				Envelope.DEFAULT_PERMISSIONS,
+				Envelope.DEFAULT_OPTIONS,
+				false);
+
+			Test.startTest();
+			EnvelopeConfiguration result = EnvelopeConfigurationService.updateEnvelopeConfiguration(ec);
+			Test.stopTest();
+
+			System.assertNotEquals(null, result);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().EveryoneGroupId__c);
 		}
 	}
 

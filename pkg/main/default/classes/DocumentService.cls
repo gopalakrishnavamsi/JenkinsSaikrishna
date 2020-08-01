@@ -593,7 +593,7 @@ global with sharing class DocumentService {
 
 		List<Document> templates = new List<Document>();
 		if (templateIds != null) {
-			EnvelopeAPI api = EnvelopeAPI.getInstance();
+			TemplateAPI api = TemplateAPI.getInstance();
 			try {
 				for (UUID templateId : templateIds) {
 					templates.add(Document.fromTemplate(api.getTemplate(templateId)));

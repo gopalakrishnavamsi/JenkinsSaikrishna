@@ -84,7 +84,7 @@ public with sharing class SendingController extends Controller {
 			List<Document> documents;
 			if (Collection.isEmpty(files)) {
 				try {
-					templates = EnvelopeAPI.getInstance().getTemplates();
+					templates = TemplateAPI.getInstance().getTemplates();
 				} catch (APIException ex) {
 					if (ex.error == APIError.consentRequired) {
 						LoggerService.getInstance().error('Failed to retrieve DocuSign templates: user consent required');

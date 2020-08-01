@@ -3,6 +3,50 @@ public with sharing class EnvelopeConfigurationService {
 	@TestVisible
 	private static final EnvelopeConfigurationService.Database DB = new EnvelopeConfigurationService.Database();
 	private static final SObjectType CONTENT_DOCUMENT_TYPE = ContentDocument.getSObjectType();
+	private static final EnvelopeConfigurationService.Settings SETTINGS = new EnvelopeConfigurationService.Settings();
+
+	@TestVisible
+	private class Settings {
+		private AccountSettings__c settings = null;
+		private Boolean createConnectConfiguration = null;
+		private Long shareGroupId = null;
+		private Boolean isDirty = false;
+
+		private AccountSettings__c getSettings() {
+			if (this.settings == null) {
+				this.settings = AccountSettings__c.getOrgDefaults();
+			}
+			return this.settings;
+		}
+
+		public Long getShareGroupId() {
+			if (this.shareGroupId == null) {
+				this.shareGroupId = (Long)getSettings().EveryoneGroupId__c;
+			}
+			if (this.shareGroupId == null) {
+				this.shareGroupId = AccountAPI.getInstance().getEveryoneGroupId();
+				this.settings.EveryoneGroupId__c = this.shareGroupId;
+				this.isDirty = true;
+			}
+			return this.shareGroupId;
+		}
+
+		public Boolean shouldCreateConnectConfiguration() {
+			if (this.createConnectConfiguration == null) {
+				this.createConnectConfiguration = getSettings().CreateConnectConfiguration__c == true;
+			}
+			return this.createConnectConfiguration;
+		}
+
+		public Boolean save() {
+			Boolean result = this.isDirty && this.settings != null;
+			if (result) {
+				update this.settings;
+				this.isDirty = false;
+			}
+			return result;
+		}
+	}
 
 	private class Database {
 
@@ -1030,16 +1074,19 @@ public with sharing class EnvelopeConfigurationService {
 		if (!vr.isValid) throw new ValidationException(Label.InvalidEnvelopeConfiguration, vr);
 
 		try {
-			Template template = EnvelopeAPI.getInstance().createTemplate(getTemplate(envelopeConfiguration));
+			Template template = TemplateAPI.getInstance().createTemplate(
+				getTemplate(envelopeConfiguration),
+				SETTINGS.getShareGroupId());
 			envelopeConfiguration.withDocuSignId(template.id);
 
 			// Maybe create Connect configuration after 2.5 upgrade
-			if (AccountSettings__c.getOrgDefaults().CreateConnectConfiguration__c) {
+			if (SETTINGS.shouldCreateConnectConfiguration()) {
 				ConnectService.asyncCreateConfiguration();
 			}
 
 			return DB.insertEnvelopeConfiguration(envelopeConfiguration);
 		} finally {
+			SETTINGS.save();
 			Credentials.save();
 		}
 	}
@@ -1053,7 +1100,7 @@ public with sharing class EnvelopeConfigurationService {
 		if (docuSignId == null) throw new DocuSignException(Label.UndefinedDocuSignTemplateId);
 
 		try {
-			return EnvelopeAPI.getInstance().getTemplateEditUrl(docuSignId, returnUrl);
+			return TemplateAPI.getInstance().getTemplateEditUrl(docuSignId, returnUrl);
 		} finally {
 			Credentials.save();
 		}
@@ -1084,14 +1131,17 @@ public with sharing class EnvelopeConfigurationService {
 		try {
 			Template template = getTemplate(envelopeConfiguration);
 			if (template.id == null) {
-				template = EnvelopeAPI.getInstance().createTemplate(template);
+				template = TemplateAPI.getInstance().createTemplate(
+					template,
+					SETTINGS.getShareGroupId());
 				envelopeConfiguration.withDocuSignId(template.id);
 			} else {
-				EnvelopeAPI.getInstance().updateTemplate(template);
+				TemplateAPI.getInstance().updateTemplate(template);
 			}
 
 			return DB.updateEnvelopeConfiguration(envelopeConfiguration);
 		} finally {
+			SETTINGS.save();
 			Credentials.save();
 		}
 	}
@@ -1110,7 +1160,7 @@ public with sharing class EnvelopeConfigurationService {
 		try {
 			UUID templateId = DB.queryDocuSignId(envelopeConfigurationId);
 			if (templateId != null) {
-				EnvelopeAPI.getInstance().deleteTemplate(templateId);
+				TemplateAPI.getInstance().deleteTemplate(templateId);
 			}
 
 			return DB.deleteEnvelopeConfiguration(envelopeConfigurationId);
