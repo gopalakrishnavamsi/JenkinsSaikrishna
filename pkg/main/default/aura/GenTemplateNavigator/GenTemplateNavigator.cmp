@@ -65,7 +65,7 @@
                                                  value="{!v.template.name}"
                                                  maxlength="80"
                                                  required="true"
-                                                 pattern="^(&#063;&#033;\s)[^\.\/\\&#060;&#062;&#063;&#058;&#124;&#034;&#042;]+"
+                                                 pattern="^(&#063;&#033;\s)[^\.\/\\&#060;&#062;&#063;&#058;&#124;&#034;&#042;&#33;]+"
                                                  messageWhenPatternMismatch="{!$Label.c.InvalidCharacters}"
                                                  onchange="{!c.onNameChange}"/>
                             </div>
