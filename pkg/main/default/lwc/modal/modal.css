@@ -10,6 +10,8 @@
 .ds-modal-header {
     height: 55px;
 }
-.slds-modal__content{
-    overflow: initial;
+
+.slds-modal__content {
+    max-height: 90%;
+    overflow-y: auto !important;
 }

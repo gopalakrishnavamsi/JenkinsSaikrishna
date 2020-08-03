@@ -5,31 +5,36 @@
         </div>
         <div class="slds-col slds-size_2-of-8">
             <lightning-combobox
-            name="name"
-            value={rule.fieldName}
-            placeholder="Select Field"
-            options={fields}
-            onchange={handleRuleChange}>
-            </lightning-combobox>            
+                    name="name"
+                    value={rule.fieldName}
+                    placeholder="Select Field"
+                    options={fields}
+                    onchange={handleRuleChange}
+                    class="ds-combobox slds-size_2-of-8">
+            </lightning-combobox>
         </div>
         <div class="slds-col slds-size_2-of-12 slds-m-horizontal_small">
             <lightning-combobox
-            name="operator"
-            value={rule.matchType}
-            placeholder="Operator"
-            options={operatorOptions}
-            onchange={handleRuleChange}>
+                    name="operator"
+                    value={rule.matchType}
+                    placeholder="Operator"
+                    options={operatorOptions}
+                    onchange={handleRuleChange}
+                    class="ds-combobox slds-size_2-of-12">
             </lightning-combobox>
         </div>
         <div class="slds-col slds-size_2-of-8">
             <!-- <label>Enter Value</label> -->
-            <lightning-input name="matchValue" max-length="100" onchange={handleRuleChange} value={rule.matchValue}></lightning-input>            
+            <lightning-input name="matchValue" max-length="100" onchange={handleRuleChange}
+                             value={rule.matchValue}></lightning-input>
         </div>
         <div class="slds-col slds-size_1-of-12 slds-p-top_xx-small slds-p-left_x-small">
-            <lightning-button-icon icon-name="utility:copy"  alternative-text="Settings" title="Settings" onclick={cloneRule}></lightning-button-icon>
+            <lightning-button-icon icon-name="utility:copy" alternative-text="Settings" title="Settings"
+                                   onclick={cloneRule}></lightning-button-icon>
         </div>
         <div class="slds-col slds-input-has-icon slds-p-top_xx-small">
-            <lightning-button-icon icon-name="utility:clear"  alternative-text="Settings" title="Settings" onclick={removeRule}></lightning-button-icon>
+            <lightning-button-icon icon-name="utility:clear" alternative-text="Settings" title="Settings"
+                                   onclick={removeRule}></lightning-button-icon>
         </div>
         <template if:true={isLast}>
             <div class="slds-col slds-size_1-of-12 slds-p-top_small">
