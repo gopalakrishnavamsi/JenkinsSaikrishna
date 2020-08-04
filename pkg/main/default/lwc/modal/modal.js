@@ -1,14 +1,26 @@
-import { LightningElement, api } from 'lwc';
+import {LightningElement, api} from 'lwc';
 
 // utility functions
-import { isEmpty } from 'c/utils';
+import {isEmpty} from 'c/utils';
+
+const MODAL_ON_MODAL_STYLE = 'ds-modal-on-modal';
+const BASE_MODAL_CLASS = 'slds-modal slds-fade-in-open ';
+const SMALL_MODAL_CLASS = BASE_MODAL_CLASS + 'slds-modal_small';
+const MEDIUM_MODAL_CLASS = BASE_MODAL_CLASS + 'slds-modal_medium';
+const LARGE_MODAL_CLASS = BASE_MODAL_CLASS + 'slds-modal_large';
+
+const MODAL_SIZE_TO_CLASS = {
+  small: SMALL_MODAL_CLASS,
+  medium: MEDIUM_MODAL_CLASS,
+  large: LARGE_MODAL_CLASS
+};
 
 /**
  * Props to pass in from parent:
  * @param {string} header - title of the modal
  * @param {boolean} showModal - flag that determines whether to show the modal
  * @param {function} onclose - event that is called when closing the modal
-*/
+ */
 
 /**
  * Slots:
@@ -18,43 +30,53 @@ import { isEmpty } from 'c/utils';
  */
 
 export default class Modal extends LightningElement {
-    hasHeaderString = false;
-    _headerPrivate;
-    
-    @api
-    showModal = false;
-    
-    @api
-    set header(value) {
-        this.hasHeaderString = !isEmpty(value);
-        this._headerPrivate = value;
-    }
-    get header() {
-        return this._headerPrivate;
-    }
+  hasHeaderString = false;
+  _headerPrivate;
 
-    connectedCallback() {
-        this.addEventListener('mouseenter', this.focusElement.bind(this));
-        this.addEventListener('keyup', this.handleKeyPress.bind(this));
-    }
+  @api
+  showModal = false;
+  @api
+  modalSize;
+  @api
+  modalOnModal;
 
-    disconnectedCallback() {
-        this.removeEventListener('mouseenter', this.focusElement.bind(this));
-        this.removeEventListener('keyup', this.handleKeyPress.bind(this));
-    }
+  @api
+  set header(value) {
+    this.hasHeaderString = !isEmpty(value);
+    this._headerPrivate = value;
+  }
 
-    focusElement() {
-        // auto-focus upon opening modal to allow closing via ESC key
-        this.template.querySelector('section').focus();
-    }
+  get header() {
+    return this._headerPrivate;
+  }
 
-    handleKeyPress({ code }) {
-        if (code === 'Escape') {
-            this.handleCloseModal();
-        }
-    }
+  get modalClass() {
+    return !isEmpty(this.modalOnModal) ? LARGE_MODAL_CLASS + ' ' + MODAL_ON_MODAL_STYLE :
+      !isEmpty(this.modalSize) ? MODAL_SIZE_TO_CLASS[this.modalSize] : BASE_MODAL_CLASS;
+  }
 
-    handleCloseModal() {
-        this.dispatchEvent(new CustomEvent('close'));
+  connectedCallback() {
+    this.addEventListener('mouseenter', this.focusElement.bind(this));
+    this.addEventListener('keyup', this.handleKeyPress.bind(this));
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('mouseenter', this.focusElement.bind(this));
+    this.removeEventListener('keyup', this.handleKeyPress.bind(this));
+  }
+
+  focusElement() {
+    // auto-focus upon opening modal to allow closing via ESC key
+    this.template.querySelector('section').focus();
+  }
+
+  handleKeyPress({code}) {
+    if (code === 'Escape') {
+      this.handleCloseModal();
     }
+  }
+
+  handleCloseModal() {
+    this.dispatchEvent(new CustomEvent('close'));
+  }
 }

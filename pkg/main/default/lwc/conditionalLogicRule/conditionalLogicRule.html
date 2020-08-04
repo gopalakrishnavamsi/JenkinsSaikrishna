@@ -32,13 +32,18 @@
             <lightning-button-icon icon-name="utility:copy" alternative-text="Settings" title="Settings"
                                    onclick={cloneRule}></lightning-button-icon>
         </div>
-        <div class="slds-col slds-input-has-icon slds-p-top_xx-small">
-            <lightning-button-icon icon-name="utility:clear" alternative-text="Settings" title="Settings"
-                                   onclick={removeRule}></lightning-button-icon>
-        </div>
         <template if:true={isLast}>
             <div class="slds-col slds-size_1-of-12 slds-p-top_small">
                 <a onclick={addRule}>{addLabel}</a>
+            </div>
+        </template>
+        <template if:false={isLast}>
+            <div class="slds-col slds-p-top_small">
+                <lightning-icon icon-name="utility:clear"
+                                alternative-text="Settings"
+                                title="Settings"
+                                size="xx-small"
+                                onclick={removeRule}></lightning-icon>
             </div>
         </template>
     </div>

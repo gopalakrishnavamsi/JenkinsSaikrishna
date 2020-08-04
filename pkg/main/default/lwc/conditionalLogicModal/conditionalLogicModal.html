@@ -1,5 +1,5 @@
 <template>
-    <c-modal header={Labels.addFilterLabel} show-modal={isOpen} onclose={handleClose}>
+    <c-modal header={Labels.addFilterLabel} show-modal={isOpen} onclose={handleClose} modal-on-modal="true">
         <div slot='content'>
             <c-conditional-logic source-object={sourceObject} logic={logic} onlogicchange={handleUpdate}>
 
@@ -7,15 +7,15 @@
         </div>
         <div slot='footer'>
             <lightning-button
-            label={Labels.cancelLabel}
-            variant="neutral"
-            onclick={handleClose}>
+                    label={Labels.cancelLabel}
+                    variant="neutral"
+                    onclick={handleClose}>
             </lightning-button>
             <span class="slds-p-left_xx-small"></span>
             <lightning-button
-            label={Labels.saveLabel}
-            onclick={handleSave}
-            variant="brand">
+                    label={Labels.saveLabel}
+                    onclick={handleSave}
+                    variant="brand">
             </lightning-button>
         </div>
     </c-modal>

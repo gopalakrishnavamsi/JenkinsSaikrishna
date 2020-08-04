@@ -10,7 +10,7 @@ export default class DecRecipientsModal extends LightningElement {
   Labels = {
     ...Labels,
     DuplicateRowLabel
-  }
+  };
 
   @api
   sourceObject;
@@ -34,14 +34,14 @@ export default class DecRecipientsModal extends LightningElement {
 
   @api isDuplicate;
 
-  showDuplicateRecipientError = false;  
+  showDuplicateRecipientError = false;
 
   isValid = false;
 
   @api
   set recipient(val) {
     this.privateRecipient = !isEmpty(val) ? proxify(val) : this.convertRecipientType({});
-    if (!isEmpty(val)) this.selectedType = val.recipientType
+    if (!isEmpty(val)) this.selectedType = val.recipientType;
     this.isValid = this.privateRecipient.isTemplateReady;
   }
 
@@ -88,7 +88,7 @@ export default class DecRecipientsModal extends LightningElement {
 
   convertRecipientType({note = null}, type = DEFAULT_SELECTED_TYPE) {
     if (isEmpty(type)) return null;
-    
+
     let result;
 
     switch (type) {

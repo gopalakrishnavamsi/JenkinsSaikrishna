@@ -15,3 +15,14 @@
     max-height: 90%;
     overflow-y: auto !important;
 }
+
+.slds-modal {
+    outline: none;
+}
+
+.ds-modal-on-modal {
+    width: 100rem;
+    left: -25rem;
+    padding-left: 100px;
+    padding-right: 100px;
+}
