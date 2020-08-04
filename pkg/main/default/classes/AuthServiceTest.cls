@@ -2637,7 +2637,9 @@ private class AuthServiceTest {
 	static void test_redeemSalesforceCode_setup_success() {
 		ScmAPIMock.success();
 		System.runAs(UserMock.createDocuSignAdministrator()) {
-			System.assert(!AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
+			AccountSettings__c s = AccountSettings__c.getOrgDefaults();
+			s.IsPlatformAuthorized__c = false;
+			update s;
 			String state = TestUtils.generateSalesforceOAuthState(true);
 
 			Test.startTest();

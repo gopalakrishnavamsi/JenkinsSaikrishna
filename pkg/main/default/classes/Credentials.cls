@@ -576,6 +576,7 @@ public with sharing class Credentials {
 			settings.SenderProfileId__c = null;
 			settings.IsPlatformAuthorized__c = false;
 			settings.OrganizationId__c = null;
+			settings.EveryoneGroupId__c = null;
 			upsert settings;
 			return settings;
 		}

@@ -425,6 +425,7 @@ global class UserMock {
 		accountSettings.EncryptionKey__c = EncodingUtil.base64Encode(Crypto.generateAesKey(256));
 		accountSettings.AdministratorProfileId__c = TestUtils.randomInteger(1000000);
 		accountSettings.SenderProfileId__c = TestUtils.randomInteger(1000000);
+		accountSettings.IsPlatformAuthorized__c = true;
 		accountSettings.ProductsLastChecked__c = Datetime.now();
 		accountSettings.EveryoneGroupId__c = TestUtils.randomInteger(1000000);
 		insert accountSettings;

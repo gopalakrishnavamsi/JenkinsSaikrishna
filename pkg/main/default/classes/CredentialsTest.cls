@@ -519,6 +519,9 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProductsLastChecked__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AdministratorProfileId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().SenderProfileId__c);
+			System.assertEquals(false, AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().OrganizationId__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().EveryoneGroupId__c);
 
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertEquals(adminId.toString(), uu.Username__c);
@@ -587,6 +590,9 @@ private class CredentialsTest {
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().ProductsLastChecked__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().AdministratorProfileId__c);
 			System.assertEquals(null, AccountSettings__c.getOrgDefaults().SenderProfileId__c);
+			System.assertEquals(false, AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().OrganizationId__c);
+			System.assertEquals(null, AccountSettings__c.getOrgDefaults().EveryoneGroupId__c);
 
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertEquals(null, uu.Username__c);
@@ -647,6 +653,12 @@ private class CredentialsTest {
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountNumber__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().Email__c);
 			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AccountName__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().ProductsLastChecked__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().AdministratorProfileId__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().SenderProfileId__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().IsPlatformAuthorized__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().OrganizationId__c);
+			System.assertNotEquals(null, AccountSettings__c.getOrgDefaults().EveryoneGroupId__c);
 
 			User uu = [SELECT Username__c, CanManageAccount__c FROM User WHERE Id = :dsa.Id LIMIT 1];
 			System.assertNotEquals(null, uu.Username__c);
@@ -853,7 +865,7 @@ private class CredentialsTest {
 			List<User> users = [
 				SELECT CanManageAccount__c
 				FROM User
-				WHERE Id IN :(NEW List<Id> {
+				WHERE Id IN :(new List<Id> {
 					u1.Id, u2.Id
 				})
 			];
@@ -950,7 +962,7 @@ private class CredentialsTest {
 			List<User> users = [
 				SELECT CanManageAccount__c
 				FROM User
-				WHERE Id IN :(NEW Set<Id> {
+				WHERE Id IN :(new Set<Id> {
 					u1.Id, u2.Id
 				})
 			];
