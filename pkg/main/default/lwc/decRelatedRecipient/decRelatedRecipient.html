@@ -21,7 +21,7 @@
         </div>
     </section>
     <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
-        <lightning-input label={Labels.recipientRoleLabel} value={role} onchange={handleRoleChange}></lightning-input>
+        <lightning-input label={Labels.recipientRoleLabel} value={role} onchange={handleRoleChange} required></lightning-input>
     </section>
     <section if:true={showFilterPill}>
         <section class="slds-grid slds-wrap slds-p-around_xx-small slds-p-left_small filterByPill">
@@ -58,13 +58,6 @@
             class="slds-p-vertical_x-small slds-p-horizontal_x-small"
             >
             </lightning-textarea>
-            <lightning-input 
-            name='maximumRecords'
-            type='number' 
-            label={Labels.maximumRecordsPulledLabel}
-            onchange={handleFilterPropertyChange}
-            class="slds-p-vertical_x-small slds-p-horizontal_x-small"
-            value={filter.maximumRecords}></lightning-input>
         </section>  
     </section>
     <c-conditional-logic-modal is-open={isLogicModalOpen} source-object={relatedObject} filter={privateFilter} onclose={handleFilterByChange}></c-conditional-logic-modal>

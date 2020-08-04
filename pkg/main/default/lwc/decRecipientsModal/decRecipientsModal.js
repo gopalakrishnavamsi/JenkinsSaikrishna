@@ -41,7 +41,7 @@ export default class DecRecipientsModal extends LightningElement {
   @api
   set recipient(val) {
     this.privateRecipient = !isEmpty(val) ? proxify(val) : this.convertRecipientType({});
-    if (!isEmpty(val)) this.selectedType = val.recipientType;
+    this.selectedType = !isEmpty(val) ? val.recipientType : DEFAULT_SELECTED_TYPE;
     this.isValid = this.privateRecipient.isTemplateReady;
   }
 
@@ -65,7 +65,6 @@ export default class DecRecipientsModal extends LightningElement {
   saveRecipientAndOpenNew = () => {
     if (this.handleSave) this.handleSave(this.privateRecipient, true);
     this.recipient = null;
-    this.selectedType = DEFAULT_SELECTED_TYPE;
   };
 
   closeModal = () => {

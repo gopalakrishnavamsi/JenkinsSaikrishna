@@ -86,6 +86,7 @@ export default class DecRecipientDetails extends LightningElement {
 
   handleFilterChange({detail}) {
     this.recipient.filter = detail;
+    this.sendValidationEvent(this.isValid);
   }
 
   handleRoleRecipientChange({detail}) {
@@ -102,7 +103,7 @@ export default class DecRecipientDetails extends LightningElement {
 
   handleRelationshipUpdate = ({detail}) => {
     this.recipient.relationship = detail;
-    this.recipient.addRole(detail.name);
+    if (this.isRecordFieldsLookup) this.recipient.addRole(detail.name);
     this.sendValidationEvent(this.isValid);
   };
 

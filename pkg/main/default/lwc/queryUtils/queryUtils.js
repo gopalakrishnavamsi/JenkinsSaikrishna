@@ -135,18 +135,18 @@ export class Relationship {
 }
 
 export class Filter {
-    constructor(filterBy = null, orderBy = null, maximumRecords = null) {
+    constructor(filterBy = null, orderBy = null) {
         this.filterBy = filterBy;
         this.orderBy = orderBy;
-        this.maximumRecords = maximumRecords;
+        this.maximumRecords = 1;
     }
 
-    static fromObject({ filterBy = null, orderBy = null, maximumRecords = null }) {
-        return new Filter(filterBy, orderBy, maximumRecords);
+    static fromObject({ filterBy = null, orderBy = null}) {
+        return new Filter(filterBy, orderBy);
     }
 
     get isEmpty() {
-        return isEmpty(this.filterBy) && isEmpty(this.orderBy) && isEmpty(this.maximumRecords);
+        return isEmpty(this.filterBy) && isEmpty(this.orderBy);
     }
 
     get orderByType() {
@@ -156,6 +156,10 @@ export class Filter {
         else if (orderByValue === OrderByQueriesOptions.LastModified.query.toUpperCase()) return OrderByQueriesOptions.LastModified.value;
         return OrderByQueriesOptions.Custom.value;
     }
+
+    equals({ filterBy = null, orderBy = null}) {
+        return this.filterBy === filterBy && this.orderBy === orderBy;
+    }    
 
     getConditionalLogic() {
         return new Promise((resolve, reject) => {

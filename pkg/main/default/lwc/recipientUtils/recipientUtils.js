@@ -182,7 +182,11 @@ export class Recipient {
   get isTemplateReady() {
     if (!isEmpty(this.signingGroup)) return true;
     if (!isEmpty(this.sourceId)) return true;
-    if (this.relationship) return !this.relationship.isEmpty;
+    if (this.relationship) {
+      return this.recipientType === Types.RelatedRecipient.value ?
+        !this.relationship.isEmpty && this.hasValidRole : 
+        !this.relationship.isEmpty
+    }
     return (!isEmpty(this.role) && !this.role.isEmpty) || (!isEmpty(this.name) && this.isValidEmail);
   }
 
@@ -235,11 +239,19 @@ export class LookupRecipient extends Recipient {
     this.relationship = isEmpty(relationship) ? new Relationship() : relationship;
   }
 
+  get hasRelationship() {
+    return !isEmpty(this.relationship) && !this.relationship.isEmpty;
+  }
+
+  get objectName() {
+    return !isEmpty(this.relationship) && !isEmpty(this.relationship.name) ? this.relationship.name : null;
+  }    
+
   equals(recipient) {
-    return this.relationship &&
-      recipient.relationship &&
-      recipient.relationship.isLookup &&
-      this.relationship.name === recipient.relationship.name;
+    return recipient.hasRelationship && 
+    this.hasRelationship &&
+    recipient.relationship.isLookup === true &&
+    this.objectName === recipient.objectName;
   }
 
   addSMSAuthentication() {
@@ -256,19 +268,38 @@ export class RelatedRecipient extends Recipient {
     this.filter = filter;
   }
 
+  get hasRelationship() {
+    return !isEmpty(this.relationship) && !this.relationship.isEmpty;
+  }
+
+  get objectName() {
+    return !isEmpty(this.relationship) && !isEmpty(this.relationship.name) ? this.relationship.name : null;
+  }  
+
   get roleName() {
-    return this.roles && !isEmpty(this.roles) ? this.roles.join(',') : null;
+    return !isEmpty(this.roles) && this.roles.length > 0 && !isEmpty(this.roles[0]) ? this.roles[0] : null;
+  }
+
+  get hasValidRole() {
+    return !isEmpty(this.roleName);
   }
 
   equals(recipient) {
-    return this.relationship &&
-      recipient.relationship &&
-      !recipient.relationship.isLookup &&
-      this.relationship.name === recipient.relationship.name;
+    const isFilterEqual = !isEmpty(this.filter) && 
+    !isEmpty(recipient.filter) ? 
+      this.filter.equals(recipient.filter || {}) : true;
+
+    return (
+      recipient.hasRelationship && 
+      this.hasRelationship &&
+      recipient.relationship.isLookup === false &&
+      this.objectName === recipient.objectName && 
+      isFilterEqual
+    );
   }
 
   addRole(value) {
-    if (!isEmpty(value)) this.roles = value.split(',');
+    this.roles = !isEmpty(value) ? [value] : [];
   }
 
   addSMSAuthentication() {
