@@ -20,7 +20,7 @@ export default class DecRecipientAction extends LightningElement {
   }
 
   get disableSelect() {
-    return this.readOnly && !this.isPlaceHolder;
+    return this.readOnly  || this.isPlaceHolder;
   }
 
   handleChange({ detail }) {
