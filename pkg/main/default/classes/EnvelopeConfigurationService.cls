@@ -981,7 +981,7 @@ public with sharing class EnvelopeConfigurationService {
 				if (r instanceof EnvelopeConfiguration.RelatedRecipients) {
 					Integer routingOrder = r.routingOrder > 0 ? r.routingOrder : 1;
 					EnvelopeConfiguration.RelatedRecipients rrs = (EnvelopeConfiguration.RelatedRecipients)r;
-					if (Collection.size(rrs.roles) > 1) {
+					if (Collection.isNotEmpty(rrs.roles)) {
 						for (String role : rrs.roles) {
 							result.add(r.copy()
 								.withSequence(++sequence)

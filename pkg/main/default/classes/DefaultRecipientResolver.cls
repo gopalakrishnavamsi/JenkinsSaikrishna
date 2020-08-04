@@ -333,9 +333,7 @@ public with sharing class DefaultRecipientResolver implements RecipientResolver 
 					Contact contact = (Contact)obj.getSObject(relationship.name);
 					if (contact != null) result.add(convert(contact));
 				} else {
-					for (Contact contact : (List<Contact>)obj.getSObjects(relationship.name)) {
-						if (contact != null) result.add(convert(contact));
-					}
+					result.addAll(convert((List<Contact>)obj.getSObjects(relationship.name)));
 				}
 			}
 		}
