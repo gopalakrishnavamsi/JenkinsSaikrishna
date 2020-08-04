@@ -112,7 +112,7 @@ const getDefaultNotifications = () => ({
 
 const getDefaultOptions = () => {
   return {
-    includeDefaultAutoPlaceTags: false,
+    includeDefaultAutoPlaceTags: true,
     documentWriteBack: {
       linkedEntityId: null,
       nameFormat: null,
