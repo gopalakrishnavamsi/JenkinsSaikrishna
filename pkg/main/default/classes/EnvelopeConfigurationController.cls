@@ -286,6 +286,8 @@ public with sharing class EnvelopeConfigurationController extends Controller {
 	@AuraEnabled(Cacheable = true)
 	public static List<ComboBoxOptions> getPicklistValues(final String sobjectType, final String sobjectFieldName) {
 		List<ComboBoxOptions> result = new List<ComboBoxOptions>();
+		final String DO_NOT_UPDATE_PLACEHOLDER_VALUE = '- Do Not Update -';
+		result.add(new ComboBoxOptions(Label.DoNotUpdatePlaceholder, DO_NOT_UPDATE_PLACEHOLDER_VALUE));
 		try {
 			Permissions.verifyIsDocuSignAdministrator();
 			//Todo - this will need to be altered as we support Data Writeback for other objects and field types.

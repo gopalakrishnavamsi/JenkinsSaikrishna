@@ -65,6 +65,7 @@ const LABEL = {
 const DEFAULT_REMINDER = 0;
 const DEFAULT_EXPIRATION = 90;
 const ENVELOPE_STATUS_COMPLETED = 'completed';
+const DO_NOT_UPDATE_PLACEHOLDER_VALUE = '- Do Not Update -';
 
 const REMINDER_OPTIONS = [
   {
@@ -147,6 +148,7 @@ export {
   FILE_NAME_OPTIONS_DEFAULT,
   FILE_NAME_OPTIONS_COMBINED_DOCS,
   ENVELOPE_STATUS_COMPLETED,
+  DO_NOT_UPDATE_PLACEHOLDER_VALUE,
   getDefaultNotifications,
   getDefaultOptions
 }

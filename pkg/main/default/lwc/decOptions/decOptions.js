@@ -8,14 +8,16 @@ import {
   FILE_NAME_OPTIONS_DEFAULT,
   FILE_NAME_OPTIONS_COMBINED_DOCS,
   ENVELOPE_STATUS_COMPLETED,
+  DO_NOT_UPDATE_PLACEHOLDER_VALUE,
   getDefaultNotifications,
   getDefaultOptions
 } from 'c/optionsUtils';
 // Lightning message service - Publisher
 import {
-  createMessageContext, 
-  releaseMessageContext, 
-  publish} from 'lightning/messageService';
+  createMessageContext,
+  releaseMessageContext,
+  publish
+} from 'lightning/messageService';
 import UPDATE_NOTIFICATIONS from '@salesforce/messageChannel/UpdateNotifications__c';
 import {
   isEmpty,
@@ -45,9 +47,6 @@ export default class DecOptions extends LightningElement {
     releaseMessageContext(this.context);
   }
 
-  /* Todo - Need to add Do Not Update as a separate option instead of placeholder in HTML
-   * Wire property could be replaced by a Wire function or Imperative function for this.
-   */
   @wire(getPicklistValues, {
     sobjectType: '$sourceObject',
     sobjectFieldName: STAGE
@@ -71,7 +70,7 @@ export default class DecOptions extends LightningElement {
       !isEmpty(this.options.envelopeEventUpdates.completed)) {
       return this.options.envelopeEventUpdates.completed['Opportunity.StageName'];
     }
-    return null;
+    return this.label.doNotUpdatePlaceholder;
   }
 
 
@@ -269,7 +268,7 @@ export default class DecOptions extends LightningElement {
   handleDataWritebackChange(event) {
     let stage = event.target.value;
     let dataWriteBackUpdatedMap;
-    if (isEmpty(stage)) {
+    if (isEmpty(stage) || stage === DO_NOT_UPDATE_PLACEHOLDER_VALUE) {
       dataWriteBackUpdatedMap = null;
     } else {
       dataWriteBackUpdatedMap = {
