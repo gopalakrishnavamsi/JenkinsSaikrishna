@@ -26,23 +26,28 @@
                         icon-size="small"
                         onselect={handleFileOption}>
                         <template
-                            for:each={templateDocumentActions}
-                            for:item="action">
+                                for:each={templateDocumentActions}
+                                for:item="action">
                             <lightning-menu-item
-                                key={action.value}
-                                label={action.label}
-                                value={action.value}>
+                                    key={action.value}
+                                    label={action.label}
+                                    value={action.value}>
                             </lightning-menu-item>
                         </template>
+                        <lightning-menu-item
+                                label={templateDocumentDeleteAction.label}
+                                value={templateDocumentDeleteAction.value}
+                                class="slds-border_top">
+                        </lightning-menu-item>
                 </lightning-button-menu>
             </span>
         </div>
     </div>
     <div>
         <c-modal
-            header={label.renameModalTitle}
-            show-modal={showRenameModal}
-            onclose={closeRenameModal}>
+                header={label.renameModalTitle}
+                show-modal={showRenameModal}
+                onclose={closeRenameModal}>
             <div slot="content" class="slds-p-around_medium">
                 <lightning-input
                         label={label.NameLabel}

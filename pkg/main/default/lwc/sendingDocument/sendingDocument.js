@@ -2,8 +2,8 @@ import {LightningElement, api} from 'lwc';
 import {isEmpty, formatFileSize, format} from 'c/utils';
 import {
   LABEL,
-  SENDING_TEMPLATE_DOCUMENT_ACTIONS,
-  SENDING_TEMPLATE_DOCUMENT_REMOVE_ACTION,
+  TEMPLATE_DOCUMENT_ACTIONS,
+  TEMPLATE_DOCUMENT_DELETE_ACTION,
   DOCUMENT_TYPE_CONTENT_VERSION
 } from 'c/documentUtils';
 // Publisher
@@ -35,8 +35,8 @@ export default class SendingDocument extends LightningElement {
   }
 
   label = LABEL;
-  templateDocumentActions = SENDING_TEMPLATE_DOCUMENT_ACTIONS;
-  templateDocumentRemoveAction = SENDING_TEMPLATE_DOCUMENT_REMOVE_ACTION;
+  templateDocumentActions = TEMPLATE_DOCUMENT_ACTIONS;
+  templateDocumentDeleteAction = TEMPLATE_DOCUMENT_DELETE_ACTION;
 
   get isDraggable() {
     return !isEmpty(this.forbidEnvelopeChanges) && !this.forbidEnvelopeChanges;
@@ -84,8 +84,8 @@ export default class SendingDocument extends LightningElement {
       case 'rename':
         this.openRenameModal();
         break;
-      case 'remove':
-        this.removeDocument();
+      case 'delete':
+        this.deleteDocument();
         break;
       default:
         break;
@@ -100,7 +100,7 @@ export default class SendingDocument extends LightningElement {
     this.showRenameModal = true;
   }
 
-  removeDocument() {
+  deleteDocument() {
     const message = {
       contentDocumentId: this.document.sourceId,
       index: this.index

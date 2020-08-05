@@ -9,7 +9,8 @@ import {
 } from 'c/utils';
 import {
   LABEL,
-  TEMPLATE_DOCUMENT_ACTIONS
+  TEMPLATE_DOCUMENT_ACTIONS,
+  TEMPLATE_DOCUMENT_DELETE_ACTION
 } from 'c/documentUtils';
 
 // Lightning message service
@@ -33,6 +34,7 @@ export default class DecTemplateDocument extends LightningElement {
 
   label = LABEL;
   templateDocumentActions = TEMPLATE_DOCUMENT_ACTIONS;
+  templateDocumentDeleteAction = TEMPLATE_DOCUMENT_DELETE_ACTION;
 
   disconnectedCallback() {
     releaseMessageContext(this.context);
