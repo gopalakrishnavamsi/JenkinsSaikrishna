@@ -145,6 +145,7 @@ export default class DecRecipientDetails extends LightningElement {
 
   handleSourceChange = ({detail = {}}) => {
     this.recipient.lookupRecord = detail;
+    this.recipient.addRole(`${detail.typeName} : ${detail.name}`);
     this.sendValidationEvent(this.isValid);
   };
 
