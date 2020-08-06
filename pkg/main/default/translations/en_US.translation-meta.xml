@@ -4162,6 +4162,14 @@
 		<name>TroubleShootingDisconnectAccountInfo</name>
 	</customLabels>
 	<customLabels>
+		<label>Disconnect Account and Reset Users</label>
+		<name>TroubleShootingDisconnectAccountResetUsers</name>
+	</customLabels>
+	<customLabels>
+		<label>Disconnect DocuSign Account connected to your Salesforce organization, reset user custom settings and Permission set assignments</label>
+		<name>TroubleShootingDisconnectAccountResetUsersInfo</name>
+	</customLabels>
+	<customLabels>
 		<label>Folder Permissions</label>
 		<name>TroubleShootingFolderPermissions</name>
 	</customLabels>
@@ -4170,12 +4178,20 @@
 		<name>TroubleShootingFolderPermissionsInfo</name>
 	</customLabels>
 	<customLabels>
-		<label>Connected App</label>
+		<label>Add Connected App permissions</label>
 		<name>TroubleShootingConnectedApp</name>
 	</customLabels>
 	<customLabels>
-		<label>Trigger connected app creation</label>
+		<label>Add DocuSign Apps Launcher Connected App to DocuSign Apps Launcher Permission sets</label>
 		<name>TroubleShootingConnectedAppInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Remove Connected App permissions</label>
+		<name>TroubleShootingConnectedAppRemovePermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>Remove DocuSign Apps Launcher Connected App from DocuSign Apps Launcher Permission sets</label>
+		<name>TroubleShootingConnectedAppRemovePermissionsInfo</name>
 	</customLabels>
 	<customLabels>
 		<label>No DocuSign Account connected</label>
@@ -4184,6 +4200,26 @@
 	<customLabels>
 		<label>Unable to get DocuSign Account Information</label>
 		<name>TroubleShootingError</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully logged out from DocuSign account.</label>
+		<name>TroubleShootingLogoutSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully logged out from DocuSign account. User custom settings and DocuSign Apps Launcher Permission set assignments should be cleared shortly.</label>
+		<name>TroubleShootingLogoutAndResetSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully triggered root folder permissions security update task.</label>
+		<name>TroubleShootingSecurityTaskSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully added DocuSign Apps Launcher Connected App to DocuSign Apps Launcher Permission sets.</label>
+		<name>TroubleShootingConnectedAppAddSuccess</name>
+	</customLabels>
+	<customLabels>
+		<label>Successfully removed DocuSign Apps Launcher Connected App from DocuSign Apps Launcher Permission sets.</label>
+		<name>TroubleShootingConnectedAppRemoveSuccess</name>
 	</customLabels>
 	<customLabels>
 		<label>Add a Button to Use eSignature</label>

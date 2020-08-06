@@ -18,9 +18,9 @@
         </template>
 
         <!-- component body -->
-        <template if:false= {isLoading}>
+        <template if:false={isLoading}>
             <div class="slds-grid slds-grid_vertical ds-troubleShooting-flex">
-                <div class="slds-col ds-troubleShooting-col">
+                <div class="slds-col ds-troubleShooting-col slds-m-bottom_large">
                     <ul>
                         <li>
                             <div class="ds-docusign-illustration">
@@ -32,12 +32,12 @@
                 </div>
                 <template if:true={isDocuSignAccountConnected}>
                     <!-- Disconnect Account-->
-                    <div class="slds-col ds-troubleShooting-col">
+                    <div class="slds-col ds-troubleShooting-col slds-m-bottom_medium slds-m-top_medium">
                         <div class="slds-grid slds-grid_align-spread ds-troubleShooting-item-border">
                             <div class="slds-col slds-p-bottom_medium">
                                 <div class="slds-media slds-media_large">
                                     <div class="slds-media__figure">
-                                        <lightning-icon icon-name="standard:team_member" size="large"></lightning-icon>
+                                        <lightning-icon icon-name="standard:account" size="large"></lightning-icon>
                                     </div>
                                     <div class="slds-media__body">
                                         <p class="ds-troubleShooting-item-detail">{troubleShootingDisconnectAccount}</p>
@@ -46,13 +46,36 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning-button label="Disconnect">
+                                <lightning-button label="Execute"
+                                                  onclick={triggerLogoutDoNotResetUsers}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Disconnect Account and Reset Users-->
+                    <div class="slds-col ds-troubleShooting-col slds-m-bottom_medium slds-m-top_medium">
+                        <div class="slds-grid slds-grid_align-spread ds-troubleShooting-item-border">
+                            <div class="slds-col slds-p-bottom_medium">
+                                <div class="slds-media slds-media_large">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name="standard:team_member" size="large"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p class="ds-troubleShooting-item-detail">
+                                            {troubleShootingDisconnectAccountResetUsers}</p>
+                                        <p>{troubleShootingDisconnectAccountResetUsersInfo}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-p-bottom_medium">
+                                <lightning-button label="Execute"
+                                                  onclick={triggerLogoutResetUsers}>
                                 </lightning-button>
                             </div>
                         </div>
                     </div>
                     <!-- Root folder permissions for SpringCM platform -->
-                    <div class="slds-col ds-troubleShooting-col">
+                    <div class="slds-col ds-troubleShooting-col slds-m-bottom_medium slds-m-top_medium">
                         <div class="slds-grid slds-grid_align-spread ds-troubleShooting-item-border">
                             <div class="slds-col slds-p-bottom_medium">
                                 <div class="slds-media slds-media_large">
@@ -66,18 +89,20 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning-button label="Execute">
+                                <lightning-button label="Execute"
+                                                  onclick={triggerChangeSecurityTask}>
                                 </lightning-button>
                             </div>
                         </div>
                     </div>
-                    <!-- Create Connected App create -->
-                    <div class="slds-col ds-troubleShooting-col">
+                    <!-- Assign DAL Connected App to DAL permission sets -->
+                    <div class="slds-col ds-troubleShooting-col slds-m-bottom_medium slds-m-top_medium">
                         <div class="slds-grid slds-grid_align-spread ds-troubleShooting-item-border">
                             <div class="slds-col slds-p-bottom_medium">
                                 <div class="slds-media slds-media_large">
                                     <div class="slds-media__figure">
-                                        <lightning-icon icon-name="standard:entity" size="large"></lightning-icon>
+                                        <lightning-icon icon-name="standard:record_create"
+                                                        size="large"></lightning-icon>
                                     </div>
                                     <div class="slds-media__body">
                                         <p class="ds-troubleShooting-item-detail">{troubleShootingConnectedApp}</p>
@@ -86,7 +111,31 @@
                                 </div>
                             </div>
                             <div class="slds-col slds-p-bottom_medium">
-                                <lightning-button label="Execute">
+                                <lightning-button label="Execute"
+                                                  onclick={triggerAuthorizeConnectedApp}>
+                                </lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Remove DAL Connected App assignment from  DAL permission sets -->
+                    <div class="slds-col ds-troubleShooting-col slds-m-bottom_medium slds-m-top_medium">
+                        <div class="slds-grid slds-grid_align-spread ds-troubleShooting-item-border">
+                            <div class="slds-col slds-p-bottom_medium">
+                                <div class="slds-media slds-media_large">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name="standard:record_delete"
+                                                        size="large"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <p class="ds-troubleShooting-item-detail">
+                                            {troubleShootingConnectedAppRemovePermissions}</p>
+                                        <p>{troubleShootingConnectedAppRemovePermissionsInfo}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-p-bottom_medium">
+                                <lightning-button label="Execute"
+                                                  onclick={triggerDeAuthorizeConnectedApp}>
                                 </lightning-button>
                             </div>
                         </div>

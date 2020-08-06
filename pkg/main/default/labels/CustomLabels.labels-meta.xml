@@ -8152,6 +8152,22 @@
 		<value>Disconnect DocuSign Account connected to your Salesforce organization</value>
 	</labels>
 	<labels>
+		<fullName>TroubleShootingDisconnectAccountResetUsers</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingDisconnectAccountAndResetUsers</shortDescription>
+		<value>Disconnect Account and Reset Users</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingDisconnectAccountResetUsersInfo</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingDisconnectAccountResetUsersInfo</shortDescription>
+		<value>Disconnect DocuSign Account connected to your Salesforce organization, reset user custom settings and Permission set assignments</value>
+	</labels>
+	<labels>
 		<fullName>TroubleShootingFolderPermissions</fullName>
 		<categories>TroubleShooting</categories>
 		<language>en_US</language>
@@ -8173,7 +8189,7 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TroubleShootingConnectedApp</shortDescription>
-		<value>Connected App</value>
+		<value>Add Connected App permissions</value>
 	</labels>
 	<labels>
 		<fullName>TroubleShootingConnectedAppInfo</fullName>
@@ -8181,7 +8197,23 @@
 		<language>en_US</language>
 		<protected>true</protected>
 		<shortDescription>TroubleShootingConnectedAppInfo</shortDescription>
-		<value>Trigger connected app creation</value>
+		<value>Add DocuSign Apps Launcher Connected App to DocuSign Apps Launcher Permission sets</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingConnectedAppRemovePermissions</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingConnectedAppRemovePermissions</shortDescription>
+		<value>Remove Connected App permissions</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingConnectedAppRemovePermissionsInfo</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingConnectedAppRemovePermissionsInfo</shortDescription>
+		<value>Remove DocuSign Apps Launcher Connected App from DocuSign Apps Launcher Permission sets</value>
 	</labels>
 	<labels>
 		<fullName>TroubleShootingNoAccountConnected</fullName>
@@ -8198,6 +8230,46 @@
 		<protected>true</protected>
 		<shortDescription>TroubleShootingError</shortDescription>
 		<value>Unable to get DocuSign Account Information</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingLogoutSuccess</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingLogoutSuccess</shortDescription>
+		<value>Successfully logged out from DocuSign account.</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingLogoutAndResetSuccess</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingLogoutAndResetSuccess</shortDescription>
+		<value>Successfully logged out from DocuSign account. User custom settings and DocuSign Apps Launcher Permission set assignments should be cleared shortly.</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingSecurityTaskSuccess</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingSecurityTaskSuccess</shortDescription>
+		<value>Successfully triggered root folder permissions security update task.</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingConnectedAppAddSuccess</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingConnectedAppAddSuccess</shortDescription>
+		<value>Successfully added DocuSign Apps Launcher Connected App to DocuSign Apps Launcher Permission sets.</value>
+	</labels>
+	<labels>
+		<fullName>TroubleShootingConnectedAppRemoveSuccess</fullName>
+		<categories>TroubleShooting</categories>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>TroubleShootingError</shortDescription>
+		<value>Successfully removed DocuSign Apps Launcher Connected App from DocuSign Apps Launcher Permission sets.</value>
 	</labels>
 	<labels>
 		<fullName>AddButtonEsignature</fullName>

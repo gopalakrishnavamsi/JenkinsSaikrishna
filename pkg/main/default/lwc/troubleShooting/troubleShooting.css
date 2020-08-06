@@ -1,6 +1,5 @@
 .ds-troubleShooting-section {
     display: flex;
-    height: 100vh;
     border: solid #ecebea 0.3px;
 }
 
@@ -30,7 +29,7 @@
 
 .ds-troubleShooting-item-detail {
     color: var(--lwc-colorTextActionLabelActive);
-    font-size: var(--lwc-fontSize7);
+    font-size: var(--lwc-fontSize6);
     font-weight: var(--lwc-fontWeightBold);
 }
 
