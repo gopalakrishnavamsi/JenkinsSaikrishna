@@ -29,6 +29,11 @@
           // Add front-end properties to documents
           var documents = fromEnvelopeTemplate ? result.envelope.documents : result.documents;
           var recipients = fromEnvelopeTemplate ? result.envelope.recipients : result.recipients;
+          if (fromEnvelopeTemplate) {
+            recipients.forEach(function (r) {
+              r.isPlaceHolder = true;
+            });
+          }
           if (!$A.util.isEmpty(documents)) {
             documents.forEach(function (d) {
               var isFileSelected = !$A.util.isEmpty(files) && (files.indexOf(d.sourceId) >= 0);
@@ -92,7 +97,7 @@
           // Comment this block for EXISTING sending experience
           helper.beginSendForSignature(component, self).then($A.getCallback(function () {
             helper.showSendingComponent(component);
-          }))
+          }));
         }, function (error, message) {
           helper.showSendingComponent(component);
           helper.showToastErrorMessage(component, message);
@@ -119,7 +124,7 @@
           forbidEnvelopeChanges: component.get('v.lock'),
           onsendcomplete: component.getReference('c.onSendComplete')
         });
-        resolve();
+      resolve();
     }));
   },
 
