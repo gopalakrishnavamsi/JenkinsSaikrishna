@@ -41,7 +41,7 @@ export default class ConditionalLogic extends LightningElement {
             getMergeFields({
                 sObjectType: this.sourceObject
             })
-            .then(res => this.fields = res.map(f => {
+            .then(res => this.fields = res.filter(f => f.hasRelationship === false).map(f => {
                     return {
                         value: f.name,
                         label: f.label

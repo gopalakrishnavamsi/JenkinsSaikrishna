@@ -3,9 +3,6 @@ import {Types, AuthenticationTypes} from 'c/recipientUtils';
 import getEntityPhone from '@salesforce/apex/EnvelopeConfigurationController.getEntityPhone';
 import {isEmpty} from 'c/utils';
 
-const DEC_DEFAULT_TYPE = Types.LookupRecipient.value;
-const SENDING_DEFAULT_TYPE = Types.EntityLookupSending.value;
-
 export default class DecRecipientDetails extends LightningElement {
 
   @api
@@ -14,7 +11,7 @@ export default class DecRecipientDetails extends LightningElement {
   Types = Types;
 
   @api
-  type = this.isSending ? SENDING_DEFAULT_TYPE : DEC_DEFAULT_TYPE;
+  type;
 
   @api
   sourceObject;
@@ -145,7 +142,7 @@ export default class DecRecipientDetails extends LightningElement {
 
   handleSourceChange = ({detail = {}}) => {
     this.recipient.lookupRecord = detail;
-    this.recipient.addRole(`${detail.typeName} : ${detail.name}`);
+    if (!this.isSending) this.recipient.addRole(`${detail.typeName} : ${detail.name}`);
     this.sendValidationEvent(this.isValid);
   };
 

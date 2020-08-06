@@ -22,7 +22,7 @@ export default class DecRecipientsModal extends LightningElement {
   @api
   isOpen;
 
-  privateRecipient = this.convertRecipientType({});
+  privateRecipient = null;
 
   routingOrder = 1;
 
@@ -37,6 +37,10 @@ export default class DecRecipientsModal extends LightningElement {
   showDuplicateRecipientError = false;
 
   isValid = false;
+
+  connectedCallback() {
+    if (isEmpty(this.privateRecipient)) this.privateRecipient = this.convertRecipientType({});
+  }
 
   @api
   set recipient(val) {

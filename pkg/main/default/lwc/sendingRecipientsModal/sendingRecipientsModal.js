@@ -24,7 +24,7 @@ export default class SendingRecipientsModal extends LightningElement {
   @api
   isOpen;
 
-  privateRecipient = this.convertRecipientType({});
+  privateRecipient = null;
 
   routingOrder = 1;
 
@@ -39,6 +39,10 @@ export default class SendingRecipientsModal extends LightningElement {
   showDuplicateRecipientError = false;
 
   isValid = false;
+
+  connectedCallback() {
+    if (isEmpty(this.privateRecipient)) this.privateRecipient = this.convertRecipientType({});
+  }
 
   @api
   set recipient(val) {
@@ -87,17 +91,18 @@ export default class SendingRecipientsModal extends LightningElement {
     this.isValid = detail && !this.showDuplicateRecipientError;
   };
 
-  convertRecipientType({note = null, envelopeRecipientId = null}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
+  convertRecipientType({note = null, envelopeRecipientId = null, role = null, sequence = null}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
     if (isEmpty(type)) return null;
     return proxify(
       new Recipient(
         {
           note,
+          sequence,
           envelopeRecipientId,
           isPlaceHolder,
           type : this.readOnly && !isPlaceHolder ? Actions.CarbonCopy.value : Actions.Signer.value
         },
-        null,
+        role,
         this.routingOrder
       )
     );
