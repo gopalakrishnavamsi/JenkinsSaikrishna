@@ -46,7 +46,8 @@
     }
   },
 
-  getStatusLabel: function(status) {
+  getStatusLabel: function(_status) {
+    var status = !$A.util.isEmpty(_status) ? _status.toLowerCase() : _status;
     var result = '';
     switch (status) {
       case 'created':
@@ -86,9 +87,9 @@
   },
 
   getEnvelopeStatusDetails: function (envelope) {
-    var status = envelope.status;
+    var status = !$A.util.isEmpty(envelope.status) ? envelope.status.toLowerCase() : envelope.status;
     var recipient = envelope.recipients.find(function (r) {
-      return r.status === status;
+      return !$A.util.isEmpty(r.status) && r.status.toLowerCase() === status;
     });
     var details = {
       title: '',
@@ -126,8 +127,9 @@
     return details;
   },
 
-  getStyleDetails: function (status) {
+  getStyleDetails: function (_status) {
     var details = {};
+    var status = !$A.util.isEmpty(_status) ? _status.toLowerCase() : _status;
     switch (status) {
       case 'created':
         details.icon = 'utility:record_create';
