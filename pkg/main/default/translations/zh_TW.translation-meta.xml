@@ -166,7 +166,7 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>進階設定</label>
+		<label>設定</label>
 		<name>eSignSetupSettingsTab</name>
 	</customLabels>
 	<customLabels>
@@ -478,7 +478,7 @@
 		<name>Declined</name>
 	</customLabels>
 	<customLabels>
-		<label>已傳遞</label>
+		<label>已檢視</label>
 		<name>Delivered</name>
 	</customLabels>
 	<customLabels>
@@ -670,6 +670,46 @@
 		<name>HasViewed_2</name>
 	</customLabels>
 	<customLabels>
+		<label>已自動回覆</label>
+		<name>Autoresponded</name>
+	</customLabels>
+	<customLabels>
+		<label>認證失敗</label>
+		<name>AuthenticationFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>勾選確認 &lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; 已收到信封</label>
+		<name>AutorespondedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>重新傳送或移除認證要求</label>
+		<name>AuthenticationFailedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>已建立信封</label>
+		<name>EnvelopeStatusCreated</name>
+	</customLabels>
+	<customLabels>
+		<label>已傳送供他人簽署</label>
+		<name>EnvelopeStatusSent</name>
+	</customLabels>
+	<customLabels>
+		<label>已檢視信封</label>
+		<name>EnvelopeStatusViewed</name>
+	</customLabels>
+	<customLabels>
+		<label>信封已遭拒絕</label>
+		<name>EnvelopeStatusDeclined</name>
+	</customLabels>
+	<customLabels>
+		<label>信封已作廢</label>
+		<name>EnvelopeStatusVoided</name>
+	</customLabels>
+	<customLabels>
+		<label>已完成信封</label>
+		<name>EnvelopeStatusCompleted</name>
+	</customLabels>
+	<customLabels>
 		<label>有問題嗎？</label>
 		<name>HavingTrouble</name>
 	</customLabels>
@@ -696,6 +736,10 @@
 	<customLabels>
 		<label>初始化帳戶設定</label>
 		<name>InitializeAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>初始化記錄設定</label>
+		<name>InitializeLogSettings</name>
 	</customLabels>
 	<customLabels>
 		<label>更新收件人</label>
@@ -902,7 +946,7 @@
 		<name>FreeTrialURL</name>
 	</customLabels>
 	<customLabels>
-		<label>未傳送任何信封</label>
+		<label>傳送信封後即可檢視信封狀態</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
 	<customLabels>
@@ -986,6 +1030,10 @@
 		<name>Reminders</name>
 	</customLabels>
 	<customLabels>
+		<label>更多選項</label>
+		<name>MoreOptions</name>
+	</customLabels>
+	<customLabels>
 		<label>移除</label>
 		<name>Remove</name>
 	</customLabels>
@@ -1050,8 +1098,16 @@
 		<name>Sent</name>
 	</customLabels>
 	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; 已建立信封</label>
+		<name>CreatedAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; 已傳送信封</label>
 		<name>SentAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; 已作廢信封</label>
+		<name>VoidedAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
 		<label>顯示</label>
@@ -1150,7 +1206,7 @@
 		<name>OtherRecipients</name>
 	</customLabels>
 	<customLabels>
-		<label>Send a copy of this envelope to your Salesforce contacts.</label>
+		<label>傳送此信封的複本給 Salesforce 聯絡人。</label>
 		<name>OtherRecipientsDescription</name>
 	</customLabels>
 	<customLabels>
@@ -1414,6 +1470,14 @@
 		<name>SendWithDocuSign</name>
 	</customLabels>
 	<customLabels>
+		<label>您確定要離開嗎？</label>
+		<name>ExitSendForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>系統將不會儲存您的作業進度。</label>
+		<name>ProgressLostOnExit</name>
+	</customLabels>
+	<customLabels>
 		<label>系統找不到部份配置。</label>
 		<name>LayoutsNotFound</name>
 	</customLabels>
@@ -1524,6 +1588,10 @@
 	<customLabels>
 		<label>所選物件未使用任何配置</label>
 		<name>NoLayoutsForSelectedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>請至少選取一種頁面配置</label>
+		<name>AtLeastOneLayoutIsRequired</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign 檔案</label>
@@ -1766,23 +1834,23 @@
 		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>Table Options</label>
+		<label>表格選項</label>
 		<name>TableRowOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>SOQL Filtering (WHERE):</label>
+		<label>SOQL 篩選條件 (位置)：</label>
 		<name>FilterByOption</name>
 	</customLabels>
 	<customLabels>
-		<label>SOQL Sorting (ORDER BY):</label>
+		<label>SOQL 排序 (排序方式)：</label>
 		<name>OrderByOption</name>
 	</customLabels>
 	<customLabels>
-		<label>SOQL Limiting (LIMIT):</label>
+		<label>SOQL 限制 (限制)：</label>
 		<name>LimitByOption</name>
 	</customLabels>
 	<customLabels>
-		<label>Value must be between 1 and 2000.</label>
+		<label>內容值大小須介於 1 和 2000 之間。</label>
 		<name>LimitByErrorMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1918,8 +1986,88 @@
 		<name>ImportTemplatesDescription</name>
 	</customLabels>
 	<customLabels>
+		<label>套用</label>
+		<name>ApplyUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>文件規則</label>
+		<name>DocumentRuleUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>文件規則</label>
+		<name>DocumentRule</name>
+	</customLabels>
+	<customLabels>
 		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
 		<name>DocumentRuleHelpURL</name>
+	</customLabels>
+	<customLabels>
+		<label>新增規則</label>
+		<name>AddRule</name>
+	</customLabels>
+	<customLabels>
+		<label>輸入規則名稱。例：北美合約</label>
+		<name>DocumentRuleNamePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>的下列條件：</label>
+		<name>OfRuleConditions</name>
+	</customLabels>
+	<customLabels>
+		<label>則</label>
+		<name>Then</name>
+	</customLabels>
+	<customLabels>
+		<label>產生此文件。</label>
+		<name>RuleGenerateDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>如果</label>
+		<name>IfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>或如果</label>
+		<name>OrIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>或如果</label>
+		<name>OrIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>且如果</label>
+		<name>AndIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>且如果</label>
+		<name>AndIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>輸入條件內容值</label>
+		<name>EnterConditionalValue</name>
+	</customLabels>
+	<customLabels>
+		<label>複製列</label>
+		<name>DuplicateRow</name>
+	</customLabels>
+	<customLabels>
+		<label>任何人</label>
+		<name>Any</name>
+	</customLabels>
+	<customLabels>
+		<label>全部</label>
+		<name>All</name>
+	</customLabels>
+	<customLabels>
+		<label>等於</label>
+		<name>Equals</name>
+	</customLabels>
+	<customLabels>
+		<label>不等於</label>
+		<name>DoesNotEqual</name>
+	</customLabels>
+	<customLabels>
+		<label>無可供產生的文件。</label>
+		<name>NoDocumentsToGenerate</name>
 	</customLabels>
 	<customLabels>
 		<label>批次建立文件</label>
@@ -2034,6 +2182,10 @@
 		<name>GenerateFileFailMsg</name>
 	</customLabels>
 	<customLabels>
+		<label>由於您的權限不足，因此無法產生或預覽文件。請洽管理員協助辦理。</label>
+		<name>UnauthorizedQueryMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>抱歉，此項設定無文件範本。</label>
 		<name>NoDocForTemplateMsg</name>
 	</customLabels>
@@ -2050,7 +2202,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Unable to check completion of document generation.</label>
+		<label>系統無法檢查文件產生程序的完成狀態。</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -2476,6 +2628,10 @@
 	<customLabels>
 		<label>您可以在 Salesforce 內建立自訂按鈕，即可觸發文件產生設定網址。按下自訂按鈕便會開啟附屬的文件產生表單。</label>
 		<name>ConfigureButtonInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>按鈕</label>
+		<name>eSignSetupButtonTab</name>
 	</customLabels>
 	<customLabels>
 		<label>設定按鈕</label>
@@ -3562,6 +3718,38 @@
 		<name>EsignatureEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
+		<label>傳送提醒</label>
+		<name>SendReminder</name>
+	</customLabels>
+	<customLabels>
+		<label>提醒已送出！</label>
+		<name>ReminderSent</name>
+	</customLabels>
+	<customLabels>
+		<label>作廢</label>
+		<name>VoidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>將信封作廢</label>
+		<name>VoidEnvelopeHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>一旦作廢此信封，即表示您會取消所有剩餘的簽署活動。已簽署過的收件人將會收到電子郵件通知，郵件內將會說明您作廢的原因。尚未簽署的收件人將無法檢視或簽署內附的文件。</label>
+		<name>VoidEnvelopeConfirmation</name>
+	</customLabels>
+	<customLabels>
+		<label>信封作廢原因。</label>
+		<name>VoidReason</name>
+	</customLabels>
+	<customLabels>
+		<label>尚餘 {0} 個字元。</label>
+		<name>VoidReasonLengthRemaining</name>
+	</customLabels>
+	<customLabels>
+		<label>系統已作廢您的信封。</label>
+		<name>EnvelopeVoided</name>
+	</customLabels>
+	<customLabels>
 		<label>即時透過 Salesforce 更新信封上的狀態。DocuSign eSignature 信封狀態可以加快您的文件簽署時間，有助增進您的工作效率。</label>
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
@@ -3962,6 +4150,42 @@
 		<name>GoToDocumentation</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign 應用程式啟動器疑難排解</label>
+		<name>TroubleShootingTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>取消帳戶連線</label>
+		<name>TroubleShootingDisconnectAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>取消 DocuSign 帳戶和 Salesforce 組織之間的連線</label>
+		<name>TroubleShootingDisconnectAccountInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>資料夾權限</label>
+		<name>TroubleShootingFolderPermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>觸發根資料夾權限更新作業</label>
+		<name>TroubleShootingFolderPermissionsInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>連結的應用程式</label>
+		<name>TroubleShootingConnectedApp</name>
+	</customLabels>
+	<customLabels>
+		<label>觸發建立連結的應用程式</label>
+		<name>TroubleShootingConnectedAppInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>未連線至任何 DocuSign 帳戶</label>
+		<name>TroubleShootingNoAccountConnected</name>
+	</customLabels>
+	<customLabels>
+		<label>無法取得 DocuSign 帳戶資訊</label>
+		<name>TroubleShootingError</name>
+	</customLabels>
+	<customLabels>
 		<label>新增使用 eSignature 的按鈕</label>
 		<name>AddButtonEsignature</name>
 	</customLabels>
@@ -4004,6 +4228,10 @@
 	<customLabels>
 		<label>不妨參考&lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;快速指南&lt;/a&gt;</label>
 		<name>GenQuickGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>請參閱我們的&lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;指南&lt;/a&gt;，或觀看&lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;簡短的影片&lt;/a&gt;</label>
+		<name>EnvelopeTemplatesQuickGuide</name>
 	</customLabels>
 	<customLabels>
 		<label>範本設定</label>
@@ -4788,8 +5016,24 @@
 		<name>DeleteTemplateMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>您是否確定要刪除這封信封？</label>
+		<name>DeleteEnvelopeMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>您確定要刪除此信封範本嗎？</label>
+		<name>DeleteEnvelopeTemplateMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>系統已刪除此範本。</label>
 		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>系統已刪除此信封。</label>
+		<name>EnvelopeDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>系統已刪除此信封範本。</label>
+		<name>EnvelopeTemplateDeleted</name>
 	</customLabels>
 	<customLabels>
 		<label>錯誤</label>
@@ -4820,11 +5064,11 @@
 		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customLabels>
-		<label>Learn more about filtering records</label>
+		<label>進一步瞭解篩選記錄</label>
 		<name>LearnMoreAboutFiltering</name>	
 	</customLabels>	
 	<customLabels>
-		<label>Learn more about ordering records</label>
+		<label>進一步瞭解排序記錄</label>
 		<name>LearnMoreAboutOrdering</name>
 	</customLabels>	
 	<customLabels>
@@ -4836,9 +5080,809 @@
 		<name>LearnMoreAboutOrderingURL</name>
 	</customLabels>	
 	<customLabels>
-		<label>Could not resolve object type {0}. Verify the object exists and you have access to it.</label>
-		<name>InvalidSObjectType_1</name>	
+		<label>系統無法解析物件類型 {0}。請確認該物件確實存在，且您握有存取權。</label>
+		<name>InvalidSObjectType_1</name>
+	</customLabels>
+	<customLabels>
+		<label>信封設定無效</label>
+		<name>InvalidEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>信封設定未經定義。</label>
+		<name>UndefinedEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>名稱空白。</label>
+		<name>UndefinedName</name>
+	</customLabels>
+	<customLabels>
+		<label>關係未經定義。</label>
+		<name>UndefinedRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>來源物件空白。</label>
+		<name>UndefinedSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>來源物件無效。</label>
+		<name>InvalidSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>系統找不到信封設定。</label>
+		<name>EnvelopeConfigurationNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>來源物件 {0} 不符信封設定來源 {1}。</label>
+		<name>SourceMismatch_2</name>
+	</customLabels>
+	<customLabels>
+		<label>範本未經定義。</label>
+		<name>UndefinedTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign 範本 ID 未經定義。</label>
+		<name>UndefinedDocuSignTemplateId</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}[{1}]：{2}</label>
+		<name>ArrayError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>文件</label>
+		<name>DocumentElements</name>
+	</customLabels>
+	<customLabels>
+		<label>來源物件類型須為 ContentDocument。</label>
+		<name>InvalidContentDocumentSource</name>
+	</customLabels>
+	<customLabels>
+		<label>副檔名空白。</label>
+		<name>UndefinedExtension</name>
+	</customLabels>
+	<customLabels>
+		<label>收件人</label>
+		<name>RecipientElements</name>
+	</customLabels>
+	<customLabels>
+		<label>關係類型無效。</label>
+		<name>InvalidRelationshipType</name>
+	</customLabels>
+	<customLabels>
+		<label>關係名稱空白。</label>
+		<name>UndefinedRelationshipName</name>
+	</customLabels>
+	<customLabels>
+		<label>相關物件類型空白。</label>
+		<name>UndefinedRelatedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>相關物件類型無效：{0}。</label>
+		<name>InvalidRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>系統不支援此相關物件類型：{0}。</label>
+		<name>UnsupportedRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>關係無效：{0}。</label>
+		<name>InvalidRelationship_1</name>
+	</customLabels>
+	<customLabels>
+		<label>自訂欄位</label>
+		<name>CustomFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>自訂欄位未經定義。</label>
+		<name>UndefinedCustomField</name>
+	</customLabels>
+	<customLabels>
+		<label>內容值空白，系統要求為 true (是)，顯示為 false (否)。</label>
+		<name>UndefinedCustomFieldValue</name>
+	</customLabels>
+	<customLabels>
+		<label>清單無內容。</label>
+		<name>UndefinedList</name>
+	</customLabels>
+	<customLabels>
+		<label>合併欄位</label>
+		<name>MergeFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>合併欄位未經定義。</label>
+		<name>UndefinedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>路徑空白。</label>
+		<name>UndefinedPath</name>
+	</customLabels>
+	<customLabels>
+		<label>合併欄位和來源物件無關聯。</label>
+		<name>UnrelatedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>例：Owner.Name = &apos;王小明&apos;</label>
+		<name>ExampleFilterByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>例：CreatedDate ASC</label>
+		<name>ExampleOrderByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>信封範本</label>
+		<name>EnvelopeTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>建立範本</label>
+		<name>CreateTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>準備開始建立第一個信封範本了嗎？</label>
+		<name>StartFirstEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>不熟悉如何使用信封範本嗎？</label>
+		<name>NotFamiliarWithEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>姓名</label>
+		<name>AddName</name>
+	</customLabels>
+	<customLabels>
+		<label>您無法在之後變更此設定。</label>
+		<name>CanNotModifiedLater</name>
+	</customLabels>
+	<customLabels>
+		<label>信封範本</label>
+		<name>EnvelopeTemplateUpperCase</name>
+	</customLabels>
+	<customLabels>
+		<label>預留位置</label>
+		<name>DECDataSourceHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>搜尋...</label>
+		<name>SearchPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>附加 Salesforce 記錄文件</label>
+		<name>AttachDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>選擇文件</label>
+		<name>DocumentSelection</name>
+	</customLabels>
+	<customLabels>
+		<label>最新文件</label>
+		<name>LatestDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>檔案名稱包含...</label>
+		<name>FileNameContainsPending</name>
+	</customLabels>
+	<customLabels>
+		<label>檔案名稱包含</label>
+		<name>FileNameContains</name>
+	</customLabels>
+	<customLabels>
+		<label>所有文件</label>
+		<name>AllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>如何新增文件</label>
+		<name>DecDocumentsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 分鐘的影片</label>
+		<name>DecDocumentsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/32qlvSr</label>
+		<name>DecDocumentsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>新增範本收件人</label>
+		<name>DecRecipientsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 分鐘的影片</label>
+		<name>DecRecipientsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Or2pDp</label>
+		<name>DecRecipientsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>使用範本開始</label>
+		<name>DecSetupTemplatesVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>4 分鐘的影片</label>
+		<name>DecSetupTemplatesVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/3h1JsDK</label>
+		<name>DecSetupTemplatesVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>合併欄位管理</label>
+		<name>DecMergeFieldsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 分鐘的影片</label>
+		<name>DecMergeFieldsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/38Xwh3W</label>
+		<name>DecMergeFieldsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>建立自訂按鈕</label>
+		<name>DecCustomButtonVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 分鐘的影片</label>
+		<name>DecCustomButtonVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2WqQ1YC </label>
+		<name>DecCustomButtonVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>準備置放用的欄位</label>
+		<name>DecMergeFieldsHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>接下來，您可以在信封中置放 DocuSign 及 Salesforce 欄位。您也可以在下個步驟中新增自訂的 Salesforce 欄位。</label>
+		<name>DecMergeFieldsSubHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>如何新增自訂合併欄位</label>
+		<name>DecMergeFieldsGuidanceHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>新帳戶可能沒有任何合併欄位可供使用。如果沒有合併欄位的話，Salesforce 管理員可以使用對應 Salesforce 欄位內的資料，並將這些資料加入 DocuSign 自訂欄位，即可新增合併欄位。新增完畢後，新帳戶即可在文件內置放自訂欄位。操作方法：</label>
+		<name>DecMergeFieldsGuidanceInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>1. 選擇 Salesforce 合併欄位分頁標籤</label>
+		<name>DecMergeFieldsGuidanceStep1Header</name>
+	</customLabels>
+	<customLabels>
+		<label>系統將會開啟 Salesforce 合併欄位選單</label>
+		<name>DecMergeFieldsGuidanceStep1ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>2. 選擇加號按鈕</label>
+		<name>DecMergeFieldsGuidanceStep2Header</name>
+	</customLabels>
+	<customLabels>
+		<label>系統將會開啟新增自訂欄位強制回應視窗</label>
+		<name>DecMergeFieldsGuidanceStep2ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>3. 新增合併欄位資訊</label>
+		<name>DecMergeFieldsGuidanceStep3Header</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;名稱&lt;/b&gt;：輸入欄位的描述性名稱 (帳戶名稱、關閉日期等等)。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;設為 Salesforce 合併欄位&lt;/b&gt;：勾選此核取方塊後，請從顯示的選單中選擇和此欄位相關的 Salesforce 物件。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation2</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;允許寄件人編輯&lt;/b&gt; (選用)：允許寄件人修改自訂標籤的內容值。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation3</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;回寫&lt;/b&gt; (選用)：簽署人變更資料後，一併更新 Salesforce 的資料。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation4</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;選擇 –&lt;/b&gt;：點選下拉式選單，然後選擇 Salesforce 的上層物件 (帳戶、機會等)。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation5</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;選擇 –&lt;/b&gt;：點選下拉式選單，然後從上層項目 (機會名稱、關閉日期等) 中選擇欄位。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation6</name>
+	</customLabels>
+	<customLabels>
+		<label>其他&lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;自訂欄位詳細選項&lt;/a&gt;請點此處查看。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation7</name>
+	</customLabels>
+	<customLabels>
+		<label>4. 點選儲存按鈕</label>
+		<name>DecMergeFieldsGuidanceStep4Header</name>
+	</customLabels>
+	<customLabels>
+		<label>自訂欄位已經可以合併到信封範本內了。</label>
+		<name>DecMergeFieldsGuidanceStep4ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>您想進一步瞭解如何使用合併欄位嗎？請參閱此份&lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;文件&lt;/a&gt;。</label>
+		<name>DecMergeFieldsGuidanceLearnMore</name>
+	</customLabels>
+	<customLabels>
+		<label>新增收件人</label>
+		<name>DecAddRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>設定將收取此範本的對象，以及對方的角色。您可以加入 Salesforce 組織的使用者，也可以從外部來源加入。</label>
+		<name>DecAddRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>此處會顯示您加入以供檢視或簽署文件的收件人。</label>
+		<name>DecAddRecipientsDescription2</name>
+	</customLabels>
+	<customLabels>
+		<label>來自 Salesforce</label>
+		<name>DecFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>從以下來源選取動態收件人：</label>
+		<name>DecRecordFieldsTitle1</name>
+	</customLabels>
+	<customLabels>
+		<label>使用範本時，系統將會自動擷取對方的名稱及聯絡資訊。</label>
+		<name>DecRecordFieldsTitle2</name>
+	</customLabels>
+	<customLabels>
+		<label>記錄欄位</label>
+		<name>DecRecordFields</name>
+	</customLabels>
+	<customLabels>
+		<label>使用者/聯絡人</label>
+		<name>DecUsersOrContacts</name>
+	</customLabels>
+	<customLabels>
+		<label>依據角色</label>
+		<name>DecByRole</name>
+	</customLabels>
+	<customLabels>
+		<label>簽署群組</label>
+		<name>DecSigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>簡訊/電話</label>
+		<name>DecSMSorPhone</name>
+	</customLabels>
+	<customLabels>
+		<label>新增預留位置收件人，以供寄件人後續指定。您也可以強制編碼並指定對象。</label>
+		<name>DecRoleRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>從組織內部的 DocuSign 帳戶挑選簽署群組。您不清楚什麼是簽署群組嗎？</label>
+		<name>DecSigningGroupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Signing-Groups-FAQs</label>
+		<name>DecSigningGroupLearnMoreLink</name>
+	</customLabels>
+	<customLabels>
+		<label>搜尋群組名稱...</label>
+		<name>DecSearchByGroupNamePlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>搜尋中...</label>
+		<name>Searching</name>
+	</customLabels>
+	<customLabels>
+		<label>選擇群組</label>
+		<name>DecSelectGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>從 Salesforce 使用者或聯絡人當中挑選特定的使用者加入。這名使用者不得為動態使用者。</label>
+		<name>DecEntityLookupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>選擇使用者或聯絡人</label>
+		<name>DecSelectUserOrContact</name>
+	</customLabels>
+	<customLabels>
+		<label>新增私人訊息</label>
+		<name>DecAddPrivateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>新增存取認證</label>
+		<name>DecAddAccessAuthentication</name>
+	</customLabels>
+	<customLabels>
+		<label>動作</label>
+		<name>DecRecipientAction</name>
+	</customLabels>
+	<customLabels>
+		<label>建立自訂按鈕</label>
+		<name>DecCreateCustomButton</name>
+	</customLabels>
+	<customLabels>
+		<label>從欲新增按鈕的來源物件挑選配置</label>
+		<name>DecLayoutDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>建立自訂按鈕即可讓您的使用者開始傳送此範本。您也可以選擇要新增按鈕的配置。 </label>
+		<name>DecCreateCustomButtonDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>從欲新增按鈕的來源物件挑選配置。</label>
+		<name>DecPageLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>現場親自簽署</label>
+		<name>InPersonSignerLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>嵌入的簽署人</label>
+		<name>EmbeddedSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>儲存並關閉</label>
+		<name>SaveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>儲存並完成</label>
+		<name>SaveAndFinish</name>
+	</customLabels>
+	<customLabels>
+		<label>放置欄位</label>
+		<name>Tagger</name>
+	</customLabels>
+	<customLabels>
+		<label>文件</label>
+		<name>Documents</name>
+	</customLabels>
+	<customLabels>
+		<label>合併欄位</label>
+		<name>MergeFields</name>
+	</customLabels>
+	<customLabels>
+		<label>新增文件</label>
+		<name>AddDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>拖曳檔案至此處即可上傳。</label>
+		<name>AddDocumentsHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>新增收件人須審核並簽署的檔案。您可以從自己的裝置中上傳文件，或載入 Salesforce 記錄內的文件。</label>
+		<name>AddDocumentsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>上傳文件</label>
+		<name>UploadDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>或將文件拖曳至此處</label>
+		<name>DropDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>重新命名信封設定</label>
+		<name>RenameEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>更多動作</label>
+		<name>MoreActions</name>
+	</customLabels>
+	<customLabels>
+		<label>選擇記錄欄位</label>
+		<name>DecRecordsFieldsLookupLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>選擇相關清單</label>
+		<name>DecRelatedListLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>簽署順序圖</label>
+		<name>SigningOrderDiagram</name>
+	</customLabels>
+	<customLabels>
+		<label>簽署順序</label>
+		<name>SigningOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>角色</label>
+		<name>RecipientRoleLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>記錄欄位</label>
+		<name>RecipientRecordFieldLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>檢視信封</label>
+		<name>View</name>
+	</customLabels>
+	<customLabels>
+		<label>自動提醒</label>
+		<name>AutomaticReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>- 不要提醒 -</label>
+		<name>DoNotRemind</name>
+	</customLabels>
+	<customLabels>
+		<label>每天</label>
+		<name>EveryDay</name>
+	</customLabels>
+	<customLabels>
+		<label>每 {0} 天</label>
+		<name>EveryNumberOfDays</name>
+	</customLabels>
+	<customLabels>
+		<label>信封傳送後，將在 {0} 天後過期</label>
+		<name>ExpiresAfterSending</name>
+	</customLabels>
+	<customLabels>
+		<label>準備並傳送</label>
+		<name>PrepareAndSend</name>
+	</customLabels>
+	<customLabels>
+		<label>所選文件 ({0})</label>
+		<name>SelectedDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>從 Salesforce 加入</label>
+		<name>AddFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>您在傳送前後都可以調整此範本內的設定。</label>
+		<name>OptionsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>設定簽署後選項</label>
+		<name>DecOptionsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2 分鐘的影片</label>
+		<name>DecOptionsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Ov2plS</label>
+		<name>DecOptionsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>文件回寫</label>
+		<name>DocumentWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}階段</label>
+		<name>Stage</name>
+	</customLabels>
+	<customLabels>
+		<label>JSON 無效。</label>
+		<name>InvalidJson</name>
+	</customLabels>
+	<customLabels>
+		<label>使用者無權進行此操作。</label>
+		<name>UnauthorizedOperation</name>
+	</customLabels>
+	<customLabels>
+		<label>要求本文未經定義。</label>
+		<name>UndefinedRequestBody</name>
+	</customLabels>
+	<customLabels>
+		<label>事件處理失敗。</label>
+		<name>EventProcessingFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>資料更新失敗。</label>
+		<name>DataUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>狀態更新失敗。</label>
+		<name>StatusUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>由於來源 ID 未針對信封定義，因此無法更新資料。</label>
+		<name>DataUpdateMissingSourceId</name>
+	</customLabels>
+	<customLabels>
+		<label>信封合併欄位擷取失敗。</label>
+		<name>GetMergeFieldsError</name>
+	</customLabels>
+	<customLabels>
+		<label>電子郵件主旨</label>
+		<name>EmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>給所有收件人的訊息</label>
+		<name>MessageToAllHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>此內容將會以電子郵件傳送給所有收件人。</label>
+		<name>MessageToAllDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>適用您 DocuSign 簽章的文件</label>
+		<name>DefaultEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>傳送此電子簽章要求給您，請前往以下連結以進行審閱及電子簽署。</label>
+		<name>DefaultEmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>新增及新建</label>
+		<name>AddAndNew</name>
+	</customLabels>
+	<customLabels>
+		<label>記錄擷取次數上限</label>	
+		<name>MaximumRecordsPulled</name>
+	</customLabels>
+	<customLabels>
+		<label>近期建立日期</label>	
+		<name>RecentDateCreated</name>
 	</customLabels>	
+	<customLabels>
+		<label>近期修改日期</label>	
+		<name>RecentDateModified</name>
+	</customLabels>
+	<customLabels>
+		<label>其他 (自訂 SOQL)</label>	
+		<name>OtherCustomSOQL</name>
+	</customLabels>
+	<customLabels>
+		<label>新增姓名與電子郵件</label>	
+		<name>AddNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>排序依據</label>	
+		<name>OrderedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>無法產生文件「{0}」：{1}</label>
+		<name>CouldNotGenerateDocument_2</name>
+	</customLabels>
+	<customLabels>
+		<label>處理中</label>
+		<name>Processing</name>
+	</customLabels>
+	<customLabels>
+		<label>近期</label>
+		<name>Recent</name>
+	</customLabels>
+	<customLabels>
+		<label>由我所有</label>
+		<name>OwnedByMe</name>
+	</customLabels>
+	<customLabels>
+		<label>已與我共用</label>
+		<name>SharedWithMe</name>
+	</customLabels>
+	<customLabels>
+		<label>追蹤中</label>
+		<name>Following</name>
+	</customLabels>
+	<customLabels>
+		<label>文件庫</label>
+		<name>Libraries</name>
+	</customLabels>
+	<customLabels>
+		<label>搜尋檔案</label>
+		<name>SearchFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>搜尋字詞須至少有 2 個字元。</label>
+		<name>SearchTermMinLengthMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>依據姓名與電子郵件</label>
+		<name>ByNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>選取收件人</label>	
+		<name>SelectRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>將完成的文件存回機會記錄</label>
+		<name>DocumentWriteBackOptionMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>將所有文件合成單一 PDF 檔案</label>
+		<name>DocumentWriteBackCombineAllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>檔案名稱</label>
+		<name>DocumentWriteBackFilename</name>
+	</customLabels>
+	<customLabels>
+		<label>將完成憑證 (COC) 文件存回機會記錄</label>
+		<name>DocumentWriteBackCertificateOfCompletion</name>
+	</customLabels>	
+	<customLabels>
+		<label>收件人 / 角色</label>	
+		<name>RecipientRoleDecTableHeader</name>
+	</customLabels>	
+	<customLabels>
+		<label>收件人</label>	
+		<name>RecipientLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>文件名稱 + 信封狀態</label>
+		<name>DocumentNameAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>文件名稱 + .pdf</label>
+		<name>DocumentNameAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>文件名稱 + 信封狀態 + .pdf</label>
+		<name>DocumentNameAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>電子郵件主旨 + 信封狀態</label>
+		<name>EmailSubjectAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>電子郵件主旨 + .pdf</label>
+		<name>EmailSubjectAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>電子郵件主旨 + 信封狀態 + .pdf</label>
+		<name>EmailSubjectAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>「信封」+信封 ID + .pdf</label>
+		<name>EnvelopeAndEnvelopeIDAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>您在此處無任何檔案。請嘗試使用其他篩選器，或上傳檔案。</label>
+		<name>EmptyFileResultsMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>已選擇 {0} 個檔案，共 {1} 個</label>
+		<name>SelectedFilesOfTotalFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>資料回寫</label>
+		<name>DataWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>文件完成後，更新{0}階段</label>
+		<name>DataWritebackHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>階段更新</label>
+		<name>StageUpdate</name>
+	</customLabels>
+	<customLabels>		
+		<label>開頭為</label>
+		<name>StartsWithLabel</name>
+	</customLabels>
+	<customLabels>		
+		<label>結尾為</label>
+		<name>EndsWithLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>- 不要更新 -</label>
+		<name>DoNotUpdatePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>到期日期應為未來日期</label>
+		<name>ExpirationDateError</name>
+	</customLabels>
+	<customLabels>
+		<label>建立 DocuSign Connect 設定</label>
+		<name>CreateConnectConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>您的帳戶並未啟用 DocuSign Connect。</label>
+		<name>ConnectNotEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Connect 設定建立失敗。</label>
+		<name>ConnectConfigurationError</name>
+	</customLabels>
+	<customLabels>
+		<label>無法更新部份範本文件。</label>
+		<name>TemplateDocumentError</name>
+	</customLabels>
+	<customLabels>
+		<label>無法更新部份範本收件人。</label>
+		<name>TemplateRecipientError</name>
+	</customLabels>
+	<customLabels>
+		<label>無法更新範本。</label>
+		<name>TemplateError</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign 設定</label>
 		<name>Setup</name>

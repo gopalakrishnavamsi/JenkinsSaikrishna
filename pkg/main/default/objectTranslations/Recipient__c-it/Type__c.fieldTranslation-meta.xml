@@ -32,4 +32,12 @@
         <masterLabel>Update Recipients</masterLabel>
         <translation>Aggiorna destinatari</translation>
     </picklistValues>
+    <picklistValues>
+        <masterLabel>Seal</masterLabel>
+        <translation>Sigillo</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Witness</masterLabel>
+        <translation>Testimone</translation>
+    </picklistValues>
 </CustomFieldTranslation>

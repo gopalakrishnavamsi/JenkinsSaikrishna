@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+	<!-- smartling.translate_paths = CustomFieldTranslation/help,CustomFieldTranslation/label,CustomFieldTranslation/picklistValues/translation -->
+	<help></help>
+	<label>Nombre del anfitrión</label>
+	<name>HostName__c</name>
+</CustomFieldTranslation>

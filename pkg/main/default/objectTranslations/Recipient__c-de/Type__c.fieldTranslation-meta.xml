@@ -32,4 +32,12 @@
         <masterLabel>Update Recipients</masterLabel>
         <translation>Empfänger aktualisieren</translation>
     </picklistValues>
+    <picklistValues>
+        <masterLabel>Seal</masterLabel>
+        <translation>Siegel</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Witness</masterLabel>
+        <translation>Zeuge</translation>
+    </picklistValues>
 </CustomFieldTranslation>

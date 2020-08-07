@@ -166,7 +166,7 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>Configurações avançadas</label>
+		<label>Configurações</label>
 		<name>eSignSetupSettingsTab</name>
 	</customLabels>
 	<customLabels>
@@ -478,7 +478,7 @@
 		<name>Declined</name>
 	</customLabels>
 	<customLabels>
-		<label>Entregue</label>
+		<label>Visualizado</label>
 		<name>Delivered</name>
 	</customLabels>
 	<customLabels>
@@ -670,6 +670,46 @@
 		<name>HasViewed_2</name>
 	</customLabels>
 	<customLabels>
+		<label>Respondido automaticamente</label>
+		<name>Autoresponded</name>
+	</customLabels>
+	<customLabels>
+		<label>Falha na autenticação</label>
+		<name>AuthenticationFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Verifique se &lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; recebeu o envelope</label>
+		<name>AutorespondedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>Reenviar ou remover requisitos de autenticação</label>
+		<name>AuthenticationFailedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope criado em</label>
+		<name>EnvelopeStatusCreated</name>
+	</customLabels>
+	<customLabels>
+		<label>Enviado para assinatura</label>
+		<name>EnvelopeStatusSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope visualizado</label>
+		<name>EnvelopeStatusViewed</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope recusado</label>
+		<name>EnvelopeStatusDeclined</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope anulado</label>
+		<name>EnvelopeStatusVoided</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope concluído</label>
+		<name>EnvelopeStatusCompleted</name>
+	</customLabels>
+	<customLabels>
 		<label>Está com problemas?</label>
 		<name>HavingTrouble</name>
 	</customLabels>
@@ -696,6 +736,10 @@
 	<customLabels>
 		<label>Inicializar configurações da conta</label>
 		<name>InitializeAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Inicializar configurações de registro</label>
+		<name>InitializeLogSettings</name>
 	</customLabels>
 	<customLabels>
 		<label>Atualizar destinatários</label>
@@ -902,7 +946,7 @@
 		<name>FreeTrialURL</name>
 	</customLabels>
 	<customLabels>
-		<label>Nenhum envelope foi enviado</label>
+		<label>Enviar um envelope para ver seu status</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
 	<customLabels>
@@ -986,6 +1030,10 @@
 		<name>Reminders</name>
 	</customLabels>
 	<customLabels>
+		<label>Mais opções</label>
+		<name>MoreOptions</name>
+	</customLabels>
+	<customLabels>
 		<label>Remover</label>
 		<name>Remove</name>
 	</customLabels>
@@ -1050,8 +1098,16 @@
 		<name>Sent</name>
 	</customLabels>
 	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; criou um envelope</label>
+		<name>CreatedAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; enviou um envelope</label>
 		<name>SentAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; anulou um envelope</label>
+		<name>VoidedAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
 		<label>Mostrar</label>
@@ -1150,7 +1206,7 @@
 		<name>OtherRecipients</name>
 	</customLabels>
 	<customLabels>
-		<label>Send a copy of this envelope to your Salesforce contacts.</label>
+		<label>Envie uma cópia deste envelope para seus contatos do Salesforce.</label>
 		<name>OtherRecipientsDescription</name>
 	</customLabels>
 	<customLabels>
@@ -1414,6 +1470,14 @@
 		<name>SendWithDocuSign</name>
 	</customLabels>
 	<customLabels>
+		<label>Tem certeza de que deseja sair?</label>
+		<name>ExitSendForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>Seu progresso não será salvo.</label>
+		<name>ProgressLostOnExit</name>
+	</customLabels>
+	<customLabels>
 		<label>Um ou mais layouts não foram encontrados.</label>
 		<name>LayoutsNotFound</name>
 	</customLabels>
@@ -1524,6 +1588,10 @@
 	<customLabels>
 		<label>Nenhum layout está associado ao objeto selecionado</label>
 		<name>NoLayoutsForSelectedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Selecione pelo menos um layout de página</label>
+		<name>AtLeastOneLayoutIsRequired</name>
 	</customLabels>
 	<customLabels>
 		<label>Arquivos do DocuSign</label>
@@ -1766,23 +1834,23 @@
 		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>Table Options</label>
+		<label>Opções de tabela</label>
 		<name>TableRowOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>SOQL Filtering (WHERE):</label>
+		<label>Filtragem SOQL (WHERE):</label>
 		<name>FilterByOption</name>
 	</customLabels>
 	<customLabels>
-		<label>SOQL Sorting (ORDER BY):</label>
+		<label>Classificação SOQL (ORDER BY):</label>
 		<name>OrderByOption</name>
 	</customLabels>
 	<customLabels>
-		<label>SOQL Limiting (LIMIT):</label>
+		<label>Limitação de SOQL (LIMIT):</label>
 		<name>LimitByOption</name>
 	</customLabels>
 	<customLabels>
-		<label>Value must be between 1 and 2000.</label>
+		<label>O valor deve estar entre 1 e 2000.</label>
 		<name>LimitByErrorMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1918,8 +1986,88 @@
 		<name>ImportTemplatesDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
+		<label>APLICAR</label>
+		<name>ApplyUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>REGRA DO DOCUMENTO</label>
+		<name>DocumentRuleUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>Regra do documento</label>
+		<name>DocumentRule</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher-bp/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
 		<name>DocumentRuleHelpURL</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicionar regra</label>
+		<name>AddRule</name>
+	</customLabels>
+	<customLabels>
+		<label>Insira o nome da regra. Exemplo: Contrato América do Norte</label>
+		<name>DocumentRuleNamePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>das seguintes condições:</label>
+		<name>OfRuleConditions</name>
+	</customLabels>
+	<customLabels>
+		<label>ENTÃO</label>
+		<name>Then</name>
+	</customLabels>
+	<customLabels>
+		<label>gere este documento.</label>
+		<name>RuleGenerateDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>SE</label>
+		<name>IfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>Ou se</label>
+		<name>OrIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>OU SE</label>
+		<name>OrIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>E se</label>
+		<name>AndIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>E SE</label>
+		<name>AndIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>Insira o valor condicional</label>
+		<name>EnterConditionalValue</name>
+	</customLabels>
+	<customLabels>
+		<label>Linha duplicada</label>
+		<name>DuplicateRow</name>
+	</customLabels>
+	<customLabels>
+		<label>Qualquer pessoa</label>
+		<name>Any</name>
+	</customLabels>
+	<customLabels>
+		<label>Tudo</label>
+		<name>All</name>
+	</customLabels>
+	<customLabels>
+		<label>igual a</label>
+		<name>Equals</name>
+	</customLabels>
+	<customLabels>
+		<label>não é igual</label>
+		<name>DoesNotEqual</name>
+	</customLabels>
+	<customLabels>
+		<label>Não há documentos disponíveis para você gerar.</label>
+		<name>NoDocumentsToGenerate</name>
 	</customLabels>
 	<customLabels>
 		<label>Criação de documentos em massa</label>
@@ -2034,6 +2182,10 @@
 		<name>GenerateFileFailMsg</name>
 	</customLabels>
 	<customLabels>
+		<label>Não é possível gerar ou exibir o documento porque você não tem permissões suficientes. Entre em contato com o administrador do seu sistema para obter assistência.</label>
+		<name>UnauthorizedQueryMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>Não há modelos de documento para esta configuração.</label>
 		<name>NoDocForTemplateMsg</name>
 	</customLabels>
@@ -2050,7 +2202,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Unable to check completion of document generation.</label>
+		<label>Não foi possível verificar a conclusão da geração do documento.</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -2476,6 +2628,10 @@
 	<customLabels>
 		<label>Crie um botão personalizado no Salesforce para chamar um URL de configuração de geração de documento. Quando o usuário clicar no botão, o formulário de geração de documento afiliado será aberto.</label>
 		<name>ConfigureButtonInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Botão</label>
+		<name>eSignSetupButtonTab</name>
 	</customLabels>
 	<customLabels>
 		<label>Configurar botões</label>
@@ -3562,6 +3718,38 @@
 		<name>EsignatureEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
+		<label>Enviar lembrete</label>
+		<name>SendReminder</name>
+	</customLabels>
+	<customLabels>
+		<label>Seu lembrete foi enviado!</label>
+		<name>ReminderSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Anular</label>
+		<name>VoidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope Nulo</label>
+		<name>VoidEnvelopeHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Ao anular este envelope, você cancela todas as atividades de assinatura restantes. Os destinatários que concluíram a assinatura receberão uma notificação por e-mail, que inclui o seu motivo para a anulação. Os destinatários que ainda não assinaram não poderão visualizar ou assinar os documentos anexos.</label>
+		<name>VoidEnvelopeConfirmation</name>
+	</customLabels>
+	<customLabels>
+		<label>Motivo para anular o envelope.</label>
+		<name>VoidReason</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} caracteres restantes.</label>
+		<name>VoidReasonLengthRemaining</name>
+	</customLabels>
+	<customLabels>
+		<label>Seu envelope foi anulado.</label>
+		<name>EnvelopeVoided</name>
+	</customLabels>
+	<customLabels>
 		<label>Obtenha atualizações de status de seus envelopes em tempo real diretamente do Salesforce. O status de envelope do DocuSign eSignature faz com que seus documentos sejam assinados mais rapidamente para que você trabalhe com mais agilidade.</label>
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
@@ -3962,6 +4150,42 @@
 		<name>GoToDocumentation</name>
 	</customLabels>
 	<customLabels>
+		<label>Solução de problemas do iniciador de aplicativos do DocuSign</label>
+		<name>TroubleShootingTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Desconectar conta</label>
+		<name>TroubleShootingDisconnectAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Desconectar a conta DocuSign conectada à sua organização do Salesforce</label>
+		<name>TroubleShootingDisconnectAccountInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Permissões de pasta</label>
+		<name>TroubleShootingFolderPermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>Ativar tarefa de atualização das permissões da pasta raiz</label>
+		<name>TroubleShootingFolderPermissionsInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Aplicativo conectado</label>
+		<name>TroubleShootingConnectedApp</name>
+	</customLabels>
+	<customLabels>
+		<label>Ativar criação de aplicativo conectado</label>
+		<name>TroubleShootingConnectedAppInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Nenhuma conta DocuSign conectada</label>
+		<name>TroubleShootingNoAccountConnected</name>
+	</customLabels>
+	<customLabels>
+		<label>Não é possível obter informações da conta DocuSign</label>
+		<name>TroubleShootingError</name>
+	</customLabels>
+	<customLabels>
 		<label>Adicione um botão para usar a assinatura eletrônica</label>
 		<name>AddButtonEsignature</name>
 	</customLabels>
@@ -4004,6 +4228,10 @@
 	<customLabels>
 		<label>Veja o &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;Guia rápido&lt;/a&gt;</label>
 		<name>GenQuickGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>Confira nosso &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;guia&lt;/a&gt; ou assista a um &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;vídeo rápido&lt;/a&gt;</label>
+		<name>EnvelopeTemplatesQuickGuide</name>
 	</customLabels>
 	<customLabels>
 		<label>Configurações do modelo</label>
@@ -4664,11 +4892,11 @@
 	</customLabels>
 	<customLabels>
 		<name>MostCommonlyUsed</name>
-		<label>MAIS COMUMENTE USADO</label>
+		<label>Mais comumente usado</label>
 	</customLabels>
 	<customLabels>
 		<name>OtherItems</name>
-		<label>OUTROS ITENS</label>
+		<label>Outros itens</label>
 	</customLabels>
 	<!-- End of Chorus Gen Labels -->
 	<customLabels>
@@ -4788,8 +5016,24 @@
 		<name>DeleteTemplateMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>Tem certeza de que deseja excluir este envelope?</label>
+		<name>DeleteEnvelopeMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Você tem certeza de que deseja excluir este modelo de envelope?</label>
+		<name>DeleteEnvelopeTemplateMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>O modelo foi excluído.</label>
 		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>O envelope foi excluído.</label>
+		<name>EnvelopeDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>O modelo de envelope foi excluído.</label>
+		<name>EnvelopeTemplateDeleted</name>
 	</customLabels>
 	<customLabels>
 		<label>Erro</label>
@@ -4820,11 +5064,11 @@
 		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customLabels>
-		<label>Learn more about filtering records</label>
+		<label>Saiba mais sobre registros de filtragem</label>
 		<name>LearnMoreAboutFiltering</name>	
 	</customLabels>	
 	<customLabels>
-		<label>Learn more about ordering records</label>
+		<label>Saiba mais sobre registros de pedidos</label>
 		<name>LearnMoreAboutOrdering</name>
 	</customLabels>	
 	<customLabels>
@@ -4836,9 +5080,809 @@
 		<name>LearnMoreAboutOrderingURL</name>
 	</customLabels>	
 	<customLabels>
-		<label>Could not resolve object type {0}. Verify the object exists and you have access to it.</label>
-		<name>InvalidSObjectType_1</name>	
+		<label>Não foi possível resolver o tipo de objeto {0}. Verifique se o objeto existe e você tem acesso a ele.</label>
+		<name>InvalidSObjectType_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Configuração de envelope inválida</label>
+		<name>InvalidEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>A configuração do envelope não está definida.</label>
+		<name>UndefinedEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>O nome está em branco.</label>
+		<name>UndefinedName</name>
+	</customLabels>
+	<customLabels>
+		<label>O relacionamento não está definido.</label>
+		<name>UndefinedRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>O objeto de origem está em branco.</label>
+		<name>UndefinedSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>O objeto de origem é inválido.</label>
+		<name>InvalidSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Configuração do envelope não encontrada.</label>
+		<name>EnvelopeConfigurationNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>O objeto de origem {0} não corresponde à origem de configuração do envelope {1}.</label>
+		<name>SourceMismatch_2</name>
+	</customLabels>
+	<customLabels>
+		<label>O modelo está indefinido.</label>
+		<name>UndefinedTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>O ID do modelo do DocuSign está indefinido.</label>
+		<name>UndefinedDocuSignTemplateId</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}[{1}]: {2}</label>
+		<name>ArrayError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>documentos</label>
+		<name>DocumentElements</name>
+	</customLabels>
+	<customLabels>
+		<label>O tipo de objeto de origem deve ser ContentDocument.</label>
+		<name>InvalidContentDocumentSource</name>
+	</customLabels>
+	<customLabels>
+		<label>A extensão está em branco.</label>
+		<name>UndefinedExtension</name>
+	</customLabels>
+	<customLabels>
+		<label>destinatários</label>
+		<name>RecipientElements</name>
+	</customLabels>
+	<customLabels>
+		<label>O tipo de relacionamento é inválido.</label>
+		<name>InvalidRelationshipType</name>
+	</customLabels>
+	<customLabels>
+		<label>O nome do relacionamento está em branco.</label>
+		<name>UndefinedRelationshipName</name>
+	</customLabels>
+	<customLabels>
+		<label>O tipo de objeto relacionado está em branco.</label>
+		<name>UndefinedRelatedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>O tipo de objeto relacionado é inválido: {0}.</label>
+		<name>InvalidRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>O tipo de objeto relacionado não tem suporte: {0}.</label>
+		<name>UnsupportedRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>O relacionamento é inválido: {0}.</label>
+		<name>InvalidRelationship_1</name>
+	</customLabels>
+	<customLabels>
+		<label>campos personalizados</label>
+		<name>CustomFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>O campo personalizado está indefinido.</label>
+		<name>UndefinedCustomField</name>
+	</customLabels>
+	<customLabels>
+		<label>O valor está em branco, enquanto o valor necessário é true e o mostrado é false.</label>
+		<name>UndefinedCustomFieldValue</name>
+	</customLabels>
+	<customLabels>
+		<label>A lista está vazia.</label>
+		<name>UndefinedList</name>
+	</customLabels>
+	<customLabels>
+		<label>mesclar campos</label>
+		<name>MergeFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>O campo de mesclagem não está definido.</label>
+		<name>UndefinedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>O caminho está em branco.</label>
+		<name>UndefinedPath</name>
+	</customLabels>
+	<customLabels>
+		<label>O campo de mesclagem não está relacionado ao objeto de origem.</label>
+		<name>UnrelatedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>Exemplo: Owner.Name = &apos;João Silva&apos;</label>
+		<name>ExampleFilterByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>Exemplo: CreatedDate ASC</label>
+		<name>ExampleOrderByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>Modelos de envelope</label>
+		<name>EnvelopeTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Criar modelo</label>
+		<name>CreateTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Pronto para criar seu primeiro modelo de envelope?</label>
+		<name>StartFirstEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Não está familiarizado com modelos de envelope?</label>
+		<name>NotFamiliarWithEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Nome</label>
+		<name>AddName</name>
+	</customLabels>
+	<customLabels>
+		<label>Você não poderá alterar isso mais tarde.</label>
+		<name>CanNotModifiedLater</name>
+	</customLabels>
+	<customLabels>
+		<label>MODELO DE ENVELOPE</label>
+		<name>EnvelopeTemplateUpperCase</name>
+	</customLabels>
+	<customLabels>
+		<label>Espaço reservado</label>
+		<name>DECDataSourceHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Pesquisar...</label>
+		<name>SearchPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Anexar documentos do registro do Salesforce</label>
+		<name>AttachDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Seleção de documento</label>
+		<name>DocumentSelection</name>
+	</customLabels>
+	<customLabels>
+		<label>Documento mais recente</label>
+		<name>LatestDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>Nome do arquivo contém...</label>
+		<name>FileNameContainsPending</name>
+	</customLabels>
+	<customLabels>
+		<label>Nome do arquivo contém</label>
+		<name>FileNameContains</name>
+	</customLabels>
+	<customLabels>
+		<label>Todos os Documentos</label>
+		<name>AllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Como adicionar documentos</label>
+		<name>DecDocumentsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Vídeo de 2 minutos</label>
+		<name>DecDocumentsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/32qlvSr</label>
+		<name>DecDocumentsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicionar destinatários do modelo</label>
+		<name>DecRecipientsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Vídeo de 2 minutos</label>
+		<name>DecRecipientsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Or2pDp</label>
+		<name>DecRecipientsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Introdução aos modelos</label>
+		<name>DecSetupTemplatesVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Vídeo de 4 minutos</label>
+		<name>DecSetupTemplatesVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/3h1JsDK</label>
+		<name>DecSetupTemplatesVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Gerenciamento de campos de mesclagem</label>
+		<name>DecMergeFieldsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Vídeo de 2 minutos</label>
+		<name>DecMergeFieldsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/38Xwh3W</label>
+		<name>DecMergeFieldsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Criar botão personalizado</label>
+		<name>DecCustomButtonVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Vídeo de 2 minutos</label>
+		<name>DecCustomButtonVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2WqQ1YC </label>
+		<name>DecCustomButtonVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Preparar campos para colocação</label>
+		<name>DecMergeFieldsHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Coloque seus campos DocuSign e Salesforce em seu modelo de envelope em seguida. Você também pode adicionar campos personalizados do Salesforce durante a próxima etapa.</label>
+		<name>DecMergeFieldsSubHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Como adicionar campos de mesclagem personalizados</label>
+		<name>DecMergeFieldsGuidanceHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Novas contas podem não ter campos de mesclagem. Se esse for o caso, um administrador do Salesforce pode adicioná-los usando os dados em campos mapeados do Salesforce e adicionando-os a um campo personalizado do DocuSign. Depois de fazer isso, eles podem colocar os campos personalizados no documento. Veja como:</label>
+		<name>DecMergeFieldsGuidanceInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>1. Selecione a guia Campos de mesclagem do Salesforce</label>
+		<name>DecMergeFieldsGuidanceStep1Header</name>
+	</customLabels>
+	<customLabels>
+		<label>O menu de campos de mesclagem do Salesforce é aberto</label>
+		<name>DecMergeFieldsGuidanceStep1ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Selecione o botão de adição</label>
+		<name>DecMergeFieldsGuidanceStep2Header</name>
+	</customLabels>
+	<customLabels>
+		<label>O modal para adicionar campo personalizado é aberto</label>
+		<name>DecMergeFieldsGuidanceStep2ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Adicione as informações do campo de mesclagem</label>
+		<name>DecMergeFieldsGuidanceStep3Header</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;Nome&lt;/b&gt;: digite um nome descritivo para o campo (Nome da conta, Data de fechamento etc.)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;Definir como campo de mesclagem do Salesforce&lt;/b&gt;: marque esta caixa de seleção e, em seguida, no menu exibido, selecione um objeto do Salesforce ao qual o campo está relacionado.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation2</name>
+	</customLabels>
+	<customLabels>
+		<label>• &lt;b&gt;Permitir que o remetente edite&lt;/b&gt; (Opcional): permita que os remetentes modifiquem o valor da marca personalizada.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation3</name>
+	</customLabels>
+	<customLabels>
+		<label>• &lt;b&gt;Responder&lt;/b&gt; (Opcional): atualize dados do Salesforce quando os dados forem alterados por um signatário.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation4</name>
+	</customLabels>
+	<customLabels>
+		<label>• &lt;b&gt;Selecionar –&lt;/b&gt; : clique na lista suspensa e selecione um objeto pai do Salesforce (Conta, Oportunidade etc.)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation5</name>
+	</customLabels>
+	<customLabels>
+		<label>• &lt;b&gt;Selecionar –&lt;/b&gt; : clique na lista suspensa e selecione um campo do pai (Nome da oportunidade, Data de fechamento etc.)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation6</name>
+	</customLabels>
+	<customLabels>
+		<label>Clique aqui para obter uma lista de &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;opções de detalhes do campo personalizado&lt;/a&gt; adicionais.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation7</name>
+	</customLabels>
+	<customLabels>
+		<label>4. Selecione o botão Salvar</label>
+		<name>DecMergeFieldsGuidanceStep4Header</name>
+	</customLabels>
+	<customLabels>
+		<label>O campo personalizado está pronto para ser mesclado no modelo de envelope.</label>
+		<name>DecMergeFieldsGuidanceStep4ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>Gostaria de saber mais sobre os campos de mesclagem? Confira a &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;documentação&lt;/a&gt;.</label>
+		<name>DecMergeFieldsGuidanceLearnMore</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicionar destinatários</label>
+		<name>DecAddRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Configure quem receberá este modelo e quais serão seus papéis. Você pode adicionar usuários de sua organização do Salesforce ou de fontes externas.</label>
+		<name>DecAddRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Os destinatários adicionados para visualizar ou assinar o documento serão exibidos aqui.</label>
+		<name>DecAddRecipientsDescription2</name>
+	</customLabels>
+	<customLabels>
+		<label>Do Salesforce</label>
+		<name>DecFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Selecione um destinatário dinâmico em</label>
+		<name>DecRecordFieldsTitle1</name>
+	</customLabels>
+	<customLabels>
+		<label>O nome e as informações de contato deles serão inseridos automaticamente quando o modelo for usado.</label>
+		<name>DecRecordFieldsTitle2</name>
+	</customLabels>
+	<customLabels>
+		<label>Campos de registro</label>
+		<name>DecRecordFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Usuários/Contatos</label>
+		<name>DecUsersOrContacts</name>
+	</customLabels>
+	<customLabels>
+		<label>Por papel</label>
+		<name>DecByRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Grupo de assinatura</label>
+		<name>DecSigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>SMS/Telefone</label>
+		<name>DecSMSorPhone</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicione um destinatário do espaço reservado que o remetente poderá especificar posteriormente. Você também pode codificar uma pessoa específica aqui.</label>
+		<name>DecRoleRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Escolha um grupo de assinatura na conta DocuSign da sua organização. Não sabe o que é um grupo de contratação?</label>
+		<name>DecSigningGroupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/br/articles/Signing-Groups-FAQs</label>
+		<name>DecSigningGroupLearnMoreLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Pesquisar por nome do grupo...</label>
+		<name>DecSearchByGroupNamePlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Pesquisando...</label>
+		<name>Searching</name>
+	</customLabels>
+	<customLabels>
+		<label>Selecione Grupo</label>
+		<name>DecSelectGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicione um usuário específico de seus Usuários ou Contatos do Salesforce. Este usuário não será dinâmico.</label>
+		<name>DecEntityLookupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Selecionar usuário ou contato</label>
+		<name>DecSelectUserOrContact</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicionar mensagem privada</label>
+		<name>DecAddPrivateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicionar autenticação de acesso</label>
+		<name>DecAddAccessAuthentication</name>
+	</customLabels>
+	<customLabels>
+		<label>Ação</label>
+		<name>DecRecipientAction</name>
+	</customLabels>
+	<customLabels>
+		<label>Criar botão personalizado</label>
+		<name>DecCreateCustomButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Escolha os layouts do Objeto de origem onde você deseja adicionar o botão</label>
+		<name>DecLayoutDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>A criação de um botão personalizado permitirá que seus usuários comecem a enviar este modelo. Você pode escolher quais layouts para adicionar o botão também. </label>
+		<name>DecCreateCustomButtonDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Escolha os layouts do objeto de origem onde você deseja adicionar o botão.</label>
+		<name>DecPageLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Signatário presencial</label>
+		<name>InPersonSignerLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Signatário incorporado</label>
+		<name>EmbeddedSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>Salvar e fechar</label>
+		<name>SaveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>Salvar e concluir</label>
+		<name>SaveAndFinish</name>
+	</customLabels>
+	<customLabels>
+		<label>Posicionar campos</label>
+		<name>Tagger</name>
+	</customLabels>
+	<customLabels>
+		<label>Documentos</label>
+		<name>Documents</name>
+	</customLabels>
+	<customLabels>
+		<label>Mesclar campos</label>
+		<name>MergeFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicionar documentos</label>
+		<name>AddDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Arraste e solte arquivos aqui para carregá-los.</label>
+		<name>AddDocumentsHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicione os arquivos que os destinatários precisarão analisar e assinar. Você pode carregar documentos de sua máquina ou carregar documentos de seu registro do Salesforce.</label>
+		<name>AddDocumentsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Fazer upload do documento</label>
+		<name>UploadDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>ou Soltar documento</label>
+		<name>DropDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Renomear a configuração do envelope</label>
+		<name>RenameEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Mais ações</label>
+		<name>MoreActions</name>
+	</customLabels>
+	<customLabels>
+		<label>Selecionar Campo de registro</label>
+		<name>DecRecordsFieldsLookupLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Selecionar Lista relacionada</label>
+		<name>DecRelatedListLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Diagrama da ordem de assinatura</label>
+		<name>SigningOrderDiagram</name>
+	</customLabels>
+	<customLabels>
+		<label>Ordem de assinatura</label>
+		<name>SigningOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>Função</label>
+		<name>RecipientRoleLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Campo de registro</label>
+		<name>RecipientRecordFieldLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Visualizar</label>
+		<name>View</name>
+	</customLabels>
+	<customLabels>
+		<label>Lembretes automáticos</label>
+		<name>AutomaticReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>- Não lembrar -</label>
+		<name>DoNotRemind</name>
+	</customLabels>
+	<customLabels>
+		<label>Todos os dias</label>
+		<name>EveryDay</name>
+	</customLabels>
+	<customLabels>
+		<label>A cada {0} dias</label>
+		<name>EveryNumberOfDays</name>
+	</customLabels>
+	<customLabels>
+		<label>Envelope expira {0} dias após o envio</label>
+		<name>ExpiresAfterSending</name>
+	</customLabels>
+	<customLabels>
+		<label>Preparar e enviar</label>
+		<name>PrepareAndSend</name>
+	</customLabels>
+	<customLabels>
+		<label>Documentos selecionados ({0})</label>
+		<name>SelectedDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicionar do Salesforce</label>
+		<name>AddFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Você pode ajustar as configurações usadas neste modelo antes e depois do envio.</label>
+		<name>OptionsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Configurar opções pós-assinatura</label>
+		<name>DecOptionsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Vídeo de 2 minutos</label>
+		<name>DecOptionsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Ov2plS</label>
+		<name>DecOptionsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Resposta de documento</label>
+		<name>DocumentWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>Estágio {0}</label>
+		<name>Stage</name>
+	</customLabels>
+	<customLabels>
+		<label>JSON é inválido.</label>
+		<name>InvalidJson</name>
+	</customLabels>
+	<customLabels>
+		<label>O usuário não está autorizado a executar esta operação.</label>
+		<name>UnauthorizedOperation</name>
+	</customLabels>
+	<customLabels>
+		<label>O corpo da solicitação é indefinido.</label>
+		<name>UndefinedRequestBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Falha ao processar o evento.</label>
+		<name>EventProcessingFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Falha ao atualizar os dados.</label>
+		<name>DataUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Falha ao atualizar o status.</label>
+		<name>StatusUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Não é possível executar atualizações de dados porque a ID de origem do envelope está indefinida.</label>
+		<name>DataUpdateMissingSourceId</name>
+	</customLabels>
+	<customLabels>
+		<label>Falha ao recuperar campos de mesclagem do envelope.</label>
+		<name>GetMergeFieldsError</name>
+	</customLabels>
+	<customLabels>
+		<label>Assunto do e-mail</label>
+		<name>EmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Mensagem para todos os destinatários</label>
+		<name>MessageToAllHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Isso será enviado como um e-mail a todos os destinatários.</label>
+		<name>MessageToAllDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Documentos para a sua assinatura DocuSign</label>
+		<name>DefaultEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Estou enviando a você um pedido de assinatura eletrônica. Verifique e assine eletronicamente por meio do link abaixo.</label>
+		<name>DefaultEmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicionar e novo</label>
+		<name>AddAndNew</name>
+	</customLabels>
+	<customLabels>
+		<label>Máximo de registros inseridos</label>	
+		<name>MaximumRecordsPulled</name>
+	</customLabels>
+	<customLabels>
+		<label>Data recente de criação</label>	
+		<name>RecentDateCreated</name>
 	</customLabels>	
+	<customLabels>
+		<label>Data recente de modificação</label>	
+		<name>RecentDateModified</name>
+	</customLabels>
+	<customLabels>
+		<label>Outro (SOQL personalizado)</label>	
+		<name>OtherCustomSOQL</name>
+	</customLabels>
+	<customLabels>
+		<label>Adicionar nome e e-mail</label>	
+		<name>AddNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>Ordenado por:</label>	
+		<name>OrderedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>Não foi possível gerar o documento &quot;{0}&quot;: {1}</label>
+		<name>CouldNotGenerateDocument_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Processando</label>
+		<name>Processing</name>
+	</customLabels>
+	<customLabels>
+		<label>Recente</label>
+		<name>Recent</name>
+	</customLabels>
+	<customLabels>
+		<label>De minha propriedade</label>
+		<name>OwnedByMe</name>
+	</customLabels>
+	<customLabels>
+		<label>Compartilhado comigo</label>
+		<name>SharedWithMe</name>
+	</customLabels>
+	<customLabels>
+		<label>Seguindo</label>
+		<name>Following</name>
+	</customLabels>
+	<customLabels>
+		<label>Bibliotecas</label>
+		<name>Libraries</name>
+	</customLabels>
+	<customLabels>
+		<label>Pesquisar arquivos...</label>
+		<name>SearchFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Seu termo de pesquisa deve ter dois ou mais caracteres.</label>
+		<name>SearchTermMinLengthMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Por nome e e-mail</label>
+		<name>ByNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>Selecionar destinatário</label>	
+		<name>SelectRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Salvar documentos concluídos novamente no Registro de oportunidade</label>
+		<name>DocumentWriteBackOptionMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Combinar todos os documentos em um arquivo PDF</label>
+		<name>DocumentWriteBackCombineAllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Nome de arquivo</label>
+		<name>DocumentWriteBackFilename</name>
+	</customLabels>
+	<customLabels>
+		<label>Salvar documento de certificado de conclusão (COC) novamente no Registro de oportunidade</label>
+		<name>DocumentWriteBackCertificateOfCompletion</name>
+	</customLabels>	
+	<customLabels>
+		<label>Destinatário/Papel</label>	
+		<name>RecipientRoleDecTableHeader</name>
+	</customLabels>	
+	<customLabels>
+		<label>Destinatário</label>	
+		<name>RecipientLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Nome do documento + Status do envelope</label>
+		<name>DocumentNameAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Nome do documento + .pdf</label>
+		<name>DocumentNameAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Nome do documento + Status do envelope + .pdf</label>
+		<name>DocumentNameAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Assunto do e-mail + Status do envelope</label>
+		<name>EmailSubjectAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Assunto do e-mail + .pdf</label>
+		<name>EmailSubjectAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Assunto do e-mail + Status do envelope + .pdf</label>
+		<name>EmailSubjectAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>&quot;Envelope&quot;+ ID do envelope + .pdf</label>
+		<name>EnvelopeAndEnvelopeIDAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Você não tem arquivos aqui. Tente um filtro diferente ou carregue um arquivo.</label>
+		<name>EmptyFileResultsMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} de {1} arquivos selecionados</label>
+		<name>SelectedFilesOfTotalFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Resposta de dados</label>
+		<name>DataWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>Assim que os documentos estiverem concluídos, atualize o estágio {0}</label>
+		<name>DataWritebackHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Atualização do estágio</label>
+		<name>StageUpdate</name>
+	</customLabels>
+	<customLabels>		
+		<label>começa com</label>
+		<name>StartsWithLabel</name>
+	</customLabels>
+	<customLabels>		
+		<label>termina com</label>
+		<name>EndsWithLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>- Não atualizar -</label>
+		<name>DoNotUpdatePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>A data de expiração deve estar no futuro</label>
+		<name>ExpirationDateError</name>
+	</customLabels>
+	<customLabels>
+		<label>Criar configuração do DocuSign Connect</label>
+		<name>CreateConnectConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>O DocuSign Connect não está habilitado para sua conta.</label>
+		<name>ConnectNotEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Falha ao criar a configuração do DocuSign Connect.</label>
+		<name>ConnectConfigurationError</name>
+	</customLabels>
+	<customLabels>
+		<label>Falha ao atualizar um ou mais documentos de modelo.</label>
+		<name>TemplateDocumentError</name>
+	</customLabels>
+	<customLabels>
+		<label>Falha ao atualizar um ou mais destinatários do modelo.</label>
+		<name>TemplateRecipientError</name>
+	</customLabels>
+	<customLabels>
+		<label>Falha ao atualizar o modelo.</label>
+		<name>TemplateError</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>Configuração do DocuSign</label>
 		<name>Setup</name>

@@ -166,7 +166,7 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>詳細設定</label>
+		<label>設定</label>
 		<name>eSignSetupSettingsTab</name>
 	</customLabels>
 	<customLabels>
@@ -478,7 +478,7 @@
 		<name>Declined</name>
 	</customLabels>
 	<customLabels>
-		<label>配信</label>
+		<label>表示</label>
 		<name>Delivered</name>
 	</customLabels>
 	<customLabels>
@@ -670,6 +670,46 @@
 		<name>HasViewed_2</name>
 	</customLabels>
 	<customLabels>
+		<label>自動返信</label>
+		<name>Autoresponded</name>
+	</customLabels>
+	<customLabels>
+		<label>認証の失敗</label>
+		<name>AuthenticationFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;さんがエンベロープを受け取ったことを確認してください</label>
+		<name>AutorespondedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>再送信するか、認証要件を削除してください</label>
+		<name>AuthenticationFailedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープの作成</label>
+		<name>EnvelopeStatusCreated</name>
+	</customLabels>
+	<customLabels>
+		<label>署名者への送信</label>
+		<name>EnvelopeStatusSent</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープの表示</label>
+		<name>EnvelopeStatusViewed</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープの署名辞退</label>
+		<name>EnvelopeStatusDeclined</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープの無効化</label>
+		<name>EnvelopeStatusVoided</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープの完了</label>
+		<name>EnvelopeStatusCompleted</name>
+	</customLabels>
+	<customLabels>
 		<label>問題が発生した場合は</label>
 		<name>HavingTrouble</name>
 	</customLabels>
@@ -696,6 +736,10 @@
 	<customLabels>
 		<label>アカウント設定の初期化</label>
 		<name>InitializeAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>ログ設定の初期化</label>
+		<name>InitializeLogSettings</name>
 	</customLabels>
 	<customLabels>
 		<label>受信者の更新</label>
@@ -902,7 +946,7 @@
 		<name>FreeTrialURL</name>
 	</customLabels>
 	<customLabels>
-		<label>エンベロープが送信されていません</label>
+		<label>エンベロープを送信してステータスを表示します</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
 	<customLabels>
@@ -986,6 +1030,10 @@
 		<name>Reminders</name>
 	</customLabels>
 	<customLabels>
+		<label>その他のオプション</label>
+		<name>MoreOptions</name>
+	</customLabels>
+	<customLabels>
 		<label>削除</label>
 		<name>Remove</name>
 	</customLabels>
@@ -1050,8 +1098,16 @@
 		<name>Sent</name>
 	</customLabels>
 	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;さんがエンベロープを作成しました</label>
+		<name>CreatedAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;さんがエンベロープを送信しました</label>
 		<name>SentAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;さんがエンベロープを無効にしました</label>
+		<name>VoidedAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
 		<label>表示</label>
@@ -1414,6 +1470,14 @@
 		<name>SendWithDocuSign</name>
 	</customLabels>
 	<customLabels>
+		<label>終了してもよろしいですか?</label>
+		<name>ExitSendForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>作業内容は保存されません。</label>
+		<name>ProgressLostOnExit</name>
+	</customLabels>
+	<customLabels>
 		<label>レイアウトが見つかりません。</label>
 		<name>LayoutsNotFound</name>
 	</customLabels>
@@ -1525,6 +1589,10 @@
 	<customLabels>
 		<label>選択したオブジェクトに関連付けられているレイアウトはありません</label>
 		<name>NoLayoutsForSelectedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>ページレイアウトを選択してください。</label>
+		<name>AtLeastOneLayoutIsRequired</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSignファイル</label>
@@ -1919,8 +1987,88 @@
 		<name>ImportTemplatesDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
+		<label>適用</label>
+		<name>ApplyUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>文書ルール</label>
+		<name>DocumentRuleUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>文書ルール</label>
+		<name>DocumentRule</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher-ja/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
 		<name>DocumentRuleHelpURL</name>
+	</customLabels>
+	<customLabels>
+		<label>ルールの追加</label>
+		<name>AddRule</name>
+	</customLabels>
+	<customLabels>
+		<label>ルール名を入力します。例: 北米用契約</label>
+		<name>DocumentRuleNamePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>の条件が真の場合:</label>
+		<name>OfRuleConditions</name>
+	</customLabels>
+	<customLabels>
+		<label>アクション:</label>
+		<name>Then</name>
+	</customLabels>
+	<customLabels>
+		<label>この文書を生成する。</label>
+		<name>RuleGenerateDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>条件:</label>
+		<name>IfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>または</label>
+		<name>OrIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>または</label>
+		<name>OrIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>かつ</label>
+		<name>AndIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>かつ</label>
+		<name>AndIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>条件値の入力</label>
+		<name>EnterConditionalValue</name>
+	</customLabels>
+	<customLabels>
+		<label>行の複製</label>
+		<name>DuplicateRow</name>
+	</customLabels>
+	<customLabels>
+		<label>いずれか</label>
+		<name>Any</name>
+	</customLabels>
+	<customLabels>
+		<label>すべて</label>
+		<name>All</name>
+	</customLabels>
+	<customLabels>
+		<label>次と等しい</label>
+		<name>Equals</name>
+	</customLabels>
+	<customLabels>
+		<label>次と等しくない</label>
+		<name>DoesNotEqual</name>
+	</customLabels>
+	<customLabels>
+		<label>生成する文書はありません。</label>
+		<name>NoDocumentsToGenerate</name>
 	</customLabels>
 	<customLabels>
 		<label>文書の一括作成</label>
@@ -2033,6 +2181,10 @@
 	<customLabels>
 		<label>以下のファイルを生成できません。</label>
 		<name>GenerateFileFailMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>文書を生成したりプレビューしたりするための権限がありません。管理者に問い合わせてください。</label>
+		<name>UnauthorizedQueryMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>この設定には文書テンプレートがありません。</label>
@@ -2477,6 +2629,10 @@
 	<customLabels>
 		<label>Salesforce内で、文書生成の設定URLを開くカスタムボタンを作成できます。このカスタムボタンをクリックすると、適切な文書生成フォームが開きます。</label>
 		<name>ConfigureButtonInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>ボタン</label>
+		<name>eSignSetupButtonTab</name>
 	</customLabels>
 	<customLabels>
 		<label>ボタンの設定</label>
@@ -3561,6 +3717,38 @@
 		<name>EsignatureEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
+		<label>リマインダーを送信する</label>
+		<name>SendReminder</name>
+	</customLabels>
+	<customLabels>
+		<label>リマインダーが送信されました。</label>
+		<name>ReminderSent</name>
+	</customLabels>
+	<customLabels>
+		<label>無効化</label>
+		<name>VoidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープを無効にする</label>
+		<name>VoidEnvelopeHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>このエンベロープを無効にすると、完了していないすべての署名要求がキャンセルされます。署名済みの受信者は、エンベロープの無効化の理由が示されたメール通知を受け取ります。未署名の受信者は、そのエンベロープの文書にアクセスできなくなります。</label>
+		<name>VoidEnvelopeConfirmation</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープの無効化理由。</label>
+		<name>VoidReason</name>
+	</customLabels>
+	<customLabels>
+		<label>あと{0}文字入力可能です。</label>
+		<name>VoidReasonLengthRemaining</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープが無効になりました。</label>
+		<name>EnvelopeVoided</name>
+	</customLabels>
+	<customLabels>
 		<label>［DocuSign eSignatureエンベロープステータス］では、Salesforce内でエンベロープのステータスをリアルタイムで確認できます。文書の署名がすばやく完了し、作業効率が向上します。</label>
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
@@ -3961,6 +4149,42 @@
 		<name>GoToDocumentation</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSignアプリケーションランチャーのトラブルシューティング</label>
+		<name>TroubleShootingTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>アカウントの切断</label>
+		<name>TroubleShootingDisconnectAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSignアカウントとSalesforce組織との接続を解除します</label>
+		<name>TroubleShootingDisconnectAccountInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>フォルダー権限</label>
+		<name>TroubleShootingFolderPermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>ルートフォルダーの権限を更新するためのタスクを開始します</label>
+		<name>TroubleShootingFolderPermissionsInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>接続アプリ</label>
+		<name>TroubleShootingConnectedApp</name>
+	</customLabels>
+	<customLabels>
+		<label>接続アプリの作成タスクを開始します</label>
+		<name>TroubleShootingConnectedAppInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>接続されているDocuSignアカウントはありません</label>
+		<name>TroubleShootingNoAccountConnected</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSignアカウントの情報を取得できません</label>
+		<name>TroubleShootingError</name>
+	</customLabels>
+	<customLabels>
 		<label>eSignatureを使用するためのボタンを追加</label>
 		<name>AddButtonEsignature</name>
 	</customLabels>
@@ -4003,6 +4227,10 @@
 	<customLabels>
 		<label>&lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;「クイックガイド」&lt;/a&gt;を参照してください。</label>
 		<name>GenQuickGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;ガイド&lt;/a&gt;を参照したり&lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;ビデオ&lt;/a&gt;を再生したりできます。</label>
+		<name>EnvelopeTemplatesQuickGuide</name>
 	</customLabels>
 	<customLabels>
 		<label>テンプレート設定</label>
@@ -4787,8 +5015,24 @@
 		<name>DeleteTemplateMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>このエンベロープを削除してもよろしいですか?</label>
+		<name>DeleteEnvelopeMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>このエンベロープテンプレートを削除してもよろしいですか?</label>
+		<name>DeleteEnvelopeTemplateMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>テンプレートが削除されました。</label>
 		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープが削除されました。</label>
+		<name>EnvelopeDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープテンプレートが削除されました。</label>
+		<name>EnvelopeTemplateDeleted</name>
 	</customLabels>
 	<customLabels>
 		<label>エラー</label>
@@ -4836,8 +5080,808 @@
 	</customLabels>	
 	<customLabels>
 		<label>オブジェクトタイプ{0}を解決できませんでした。オブジェクトが存在し、そのオブジェクトにアクセスできることを確認してください。</label>
-		<name>InvalidSObjectType_1</name>	
+		<name>InvalidSObjectType_1</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープ設定が無効です</label>
+		<name>InvalidEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープ設定が定義されていません。</label>
+		<name>UndefinedEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>名前が入力されていません。</label>
+		<name>UndefinedName</name>
+	</customLabels>
+	<customLabels>
+		<label>リレーションが定義されていません。</label>
+		<name>UndefinedRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>ソースオブジェクトが入力されていません。</label>
+		<name>UndefinedSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>ソースオブジェクトが無効です。</label>
+		<name>InvalidSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープ設定が見つかりません。</label>
+		<name>EnvelopeConfigurationNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>ソースオブジェクト「{0}」がエンベロープ設定ソース「{1}」と一致しません。</label>
+		<name>SourceMismatch_2</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートが定義されていません。</label>
+		<name>UndefinedTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSignテンプレートIDが定義されていません。</label>
+		<name>UndefinedDocuSignTemplateId</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}[{1}]: {2}</label>
+		<name>ArrayError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>文書</label>
+		<name>DocumentElements</name>
+	</customLabels>
+	<customLabels>
+		<label>ソースオブジェクトタイプはContentDocumentである必要があります。</label>
+		<name>InvalidContentDocumentSource</name>
+	</customLabels>
+	<customLabels>
+		<label>拡張子が入力されていません。</label>
+		<name>UndefinedExtension</name>
+	</customLabels>
+	<customLabels>
+		<label>受信者</label>
+		<name>RecipientElements</name>
+	</customLabels>
+	<customLabels>
+		<label>リレーションタイプが無効です。</label>
+		<name>InvalidRelationshipType</name>
+	</customLabels>
+	<customLabels>
+		<label>リレーション名が入力されていません。</label>
+		<name>UndefinedRelationshipName</name>
+	</customLabels>
+	<customLabels>
+		<label>関連オブジェクトタイプが入力されていません。</label>
+		<name>UndefinedRelatedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>無効な関連オブジェクトタイプ: {0}。</label>
+		<name>InvalidRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>サポートされていない関連オブジェクトタイプ: {0}。</label>
+		<name>UnsupportedRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>無効なリレーション: {0}。</label>
+		<name>InvalidRelationship_1</name>
+	</customLabels>
+	<customLabels>
+		<label>カスタムフィールド</label>
+		<name>CustomFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>カスタムフィールドが定義されていません。</label>
+		<name>UndefinedCustomField</name>
+	</customLabels>
+	<customLabels>
+		<label>必須がtrueで表示がfalseの場合、値は空白になります。</label>
+		<name>UndefinedCustomFieldValue</name>
+	</customLabels>
+	<customLabels>
+		<label>リストが空です。</label>
+		<name>UndefinedList</name>
+	</customLabels>
+	<customLabels>
+		<label>差し込みフィールド</label>
+		<name>MergeFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>差し込みフィールドが定義されていません。</label>
+		<name>UndefinedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>パスが入力されていません。</label>
+		<name>UndefinedPath</name>
+	</customLabels>
+	<customLabels>
+		<label>差し込みフィールドがソースオブジェクトに関連付けられていません。</label>
+		<name>UnrelatedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>例: Owner.Name = &apos;山田 太郎&apos;</label>
+		<name>ExampleFilterByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>例: CreatedDate ASC</label>
+		<name>ExampleOrderByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>エンベロープテンプレート</label>
+		<name>EnvelopeTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートの作成</label>
+		<name>CreateTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>最初のエンベロープテンプレートの作成を開始しましょう。</label>
+		<name>StartFirstEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープテンプレートについて詳しくは、</label>
+		<name>NotFamiliarWithEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>名前</label>
+		<name>AddName</name>
+	</customLabels>
+	<customLabels>
+		<label>これを後で変更することはできません。</label>
+		<name>CanNotModifiedLater</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープテンプレート</label>
+		<name>EnvelopeTemplateUpperCase</name>
+	</customLabels>
+	<customLabels>
+		<label>プレースホルダー</label>
+		<name>DECDataSourceHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>検索...</label>
+		<name>SearchPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforceレコードの文書を添付する</label>
+		<name>AttachDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>文書の選択</label>
+		<name>DocumentSelection</name>
+	</customLabels>
+	<customLabels>
+		<label>最新の文書</label>
+		<name>LatestDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>ファイル名に含まれるテキスト...</label>
+		<name>FileNameContainsPending</name>
+	</customLabels>
+	<customLabels>
+		<label>ファイル名に含まれるテキスト</label>
+		<name>FileNameContains</name>
+	</customLabels>
+	<customLabels>
+		<label>すべての文書</label>
+		<name>AllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>文書を追加するには</label>
+		<name>DecDocumentsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2分間のビデオ</label>
+		<name>DecDocumentsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/32qlvSr</label>
+		<name>DecDocumentsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートの受信者を追加</label>
+		<name>DecRecipientsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2分間のビデオ</label>
+		<name>DecRecipientsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Or2pDp</label>
+		<name>DecRecipientsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートの使用方法</label>
+		<name>DecSetupTemplatesVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>4分間のビデオ</label>
+		<name>DecSetupTemplatesVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/3h1JsDK</label>
+		<name>DecSetupTemplatesVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>差し込みフィールドの管理</label>
+		<name>DecMergeFieldsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2分間のビデオ</label>
+		<name>DecMergeFieldsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/38Xwh3W</label>
+		<name>DecMergeFieldsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>カスタムボタンの作成</label>
+		<name>DecCustomButtonVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2分間のビデオ</label>
+		<name>DecCustomButtonVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2WqQ1YC </label>
+		<name>DecCustomButtonVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>配置するフィールドの準備</label>
+		<name>DecMergeFieldsHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>次に、エンベロープテンプレートにDocuSignとSalesforceのフィールドを配置します。その次のステップでは、カスタムのSalesforceフィールドを追加することもできます。</label>
+		<name>DecMergeFieldsSubHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>カスタムの差し込みフィールドを追加するには</label>
+		<name>DecMergeFieldsGuidanceHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>新しいアカウントには、差し込みフィールドがない場合があります。その場合は、Salesforce管理者がSalesforceフィールドのデータをDocuSignカスタムフィールドに追加して差し込みフィールドを追加できます。これにより、文書上にカスタムフィールドを配置できるようになります。以下の手順に従います。</label>
+		<name>DecMergeFieldsGuidanceInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>1. ［Salesforce差し込みフィールド］タブを選択します。</label>
+		<name>DecMergeFieldsGuidanceStep1Header</name>
+	</customLabels>
+	<customLabels>
+		<label>［Salesforce差し込みフィールド］メニューが開きます。</label>
+		<name>DecMergeFieldsGuidanceStep1ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>2. ［＋］ボタンをクリックします。</label>
+		<name>DecMergeFieldsGuidanceStep2Header</name>
+	</customLabels>
+	<customLabels>
+		<label>［カスタムフィールドの追加］ダイアログボックスが開きます。</label>
+		<name>DecMergeFieldsGuidanceStep2ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>3. 差し込みフィールドの情報を追加します。</label>
+		<name>DecMergeFieldsGuidanceStep3Header</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;名前:&lt;/b&gt; フィールドを識別するための名前を入力します（「取引先名」、「締切日」など）。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;Salesforce差し込みフィールドとして設定する:&lt;/b&gt; このチェックボックスをオンにして、このカスタムフィールドに関連付けるSalesforceオブジェクトを選択します。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation2</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;差出人に編集を許可する:&lt;/b&gt; カスタムフィールドの値の変更を差出人に許可する場合は、このチェックボックスをオンにします。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation3</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;書き戻し:&lt;/b&gt; 署名者により変更されたデータをSalesforce側に反映させる場合は、このチェックボックスをオンにします。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation4</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;選択 – :&lt;/b&gt; ドロップダウンからSalesforceの親オブジェクト（取引先、商談など）を選択します。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation5</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;選択 – :&lt;/b&gt; ドロップダウンから親オブジェクトのフィールド（商談名、締切日など）を選択します。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation6</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;カスタムフィールドのそのほかの詳細オプション&lt;/a&gt;について詳しくは、ここをクリックします。</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation7</name>
+	</customLabels>
+	<customLabels>
+		<label>4. ［保存］をクリックします。</label>
+		<name>DecMergeFieldsGuidanceStep4Header</name>
+	</customLabels>
+	<customLabels>
+		<label>カスタムフィールドがエンベロープテンプレートに差し込み可能になりました。</label>
+		<name>DecMergeFieldsGuidanceStep4ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>差し込みフィールドについて詳しくは、&lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;このトピック&lt;/a&gt;を参照してください。</label>
+		<name>DecMergeFieldsGuidanceLearnMore</name>
+	</customLabels>
+	<customLabels>
+		<label>受信者の追加</label>
+		<name>DecAddRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>このテンプレートの受信者とその役割をセットアップします。Salesforce組織のユーザーや外部のユーザーを追加できます。</label>
+		<name>DecAddRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>この文書の受信者や署名者がここに表示されます。</label>
+		<name>DecAddRecipientsDescription2</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforceから</label>
+		<name>DecFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>動的な受信者の選択</label>
+		<name>DecRecordFieldsTitle1</name>
+	</customLabels>
+	<customLabels>
+		<label>受信者の名前や連絡先情報は、このテンプレートを使用するときに自動的に入力されます。</label>
+		<name>DecRecordFieldsTitle2</name>
+	</customLabels>
+	<customLabels>
+		<label>レコードフィールド</label>
+		<name>DecRecordFields</name>
+	</customLabels>
+	<customLabels>
+		<label>ユーザー/連絡先</label>
+		<name>DecUsersOrContacts</name>
+	</customLabels>
+	<customLabels>
+		<label>役割の指定</label>
+		<name>DecByRole</name>
+	</customLabels>
+	<customLabels>
+		<label>署名グループ</label>
+		<name>DecSigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>SMS/電話</label>
+		<name>DecSMSorPhone</name>
+	</customLabels>
+	<customLabels>
+		<label>受信者のプレースホルダーを追加します。実際の受信者はエンベロープ送信時に差出人が指定します。または、ここで特定の受信者を指定することもできます。</label>
+		<name>DecRoleRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>組織のDocuSignアカウントから署名グループを選択します。署名グループについての</label>
+		<name>DecSigningGroupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/jp/articles/Signing-Groups-FAQs</label>
+		<name>DecSigningGroupLearnMoreLink</name>
+	</customLabels>
+	<customLabels>
+		<label>グループ名で検索...</label>
+		<name>DecSearchByGroupNamePlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>検索中...</label>
+		<name>Searching</name>
+	</customLabels>
+	<customLabels>
+		<label>グループの選択</label>
+		<name>DecSelectGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforceユーザーまたは連絡先からユーザーを追加します。この場合、ユーザーは動的ではなくなります。</label>
+		<name>DecEntityLookupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>ユーザーまたは連絡先の選択</label>
+		<name>DecSelectUserOrContact</name>
+	</customLabels>
+	<customLabels>
+		<label>プライベートメッセージの追加</label>
+		<name>DecAddPrivateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>アクセス認証の追加</label>
+		<name>DecAddAccessAuthentication</name>
+	</customLabels>
+	<customLabels>
+		<label>アクション</label>
+		<name>DecRecipientAction</name>
+	</customLabels>
+	<customLabels>
+		<label>カスタムボタンの作成</label>
+		<name>DecCreateCustomButton</name>
+	</customLabels>
+	<customLabels>
+		<label>ボタンの追加先として、ソースオブジェクトからレイアウトを選択します。</label>
+		<name>DecLayoutDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>ほかのユーザーがこのテンプレートを使用するためのカスタムボタンを作成します。ボタンの追加先レイアウトを選択することもできます。 </label>
+		<name>DecCreateCustomButtonDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>ボタンの追加先として、ソースオブジェクトからレイアウトを選択します。</label>
+		<name>DecPageLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>同席する署名者</label>
+		<name>InPersonSignerLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>埋め込み署名者</label>
+		<name>EmbeddedSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>保存して閉じる</label>
+		<name>SaveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>保存して終了</label>
+		<name>SaveAndFinish</name>
+	</customLabels>
+	<customLabels>
+		<label>フィールドの配置</label>
+		<name>Tagger</name>
+	</customLabels>
+	<customLabels>
+		<label>文書</label>
+		<name>Documents</name>
+	</customLabels>
+	<customLabels>
+		<label>差し込みフィールド</label>
+		<name>MergeFields</name>
+	</customLabels>
+	<customLabels>
+		<label>文書の追加</label>
+		<name>AddDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>アップロードするファイルをここにドラッグ＆ドロップします。</label>
+		<name>AddDocumentsHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>受信者に確認と署名を依頼する文書のファイルを追加します。ローカルの文書をアップロードしたり、Salesforceレコードから文書をロードしたりできます。</label>
+		<name>AddDocumentsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>文書のアップロード</label>
+		<name>UploadDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>または文書をここにドロップ</label>
+		<name>DropDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープ設定名の変更</label>
+		<name>RenameEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>その他のアクション</label>
+		<name>MoreActions</name>
+	</customLabels>
+	<customLabels>
+		<label>レコードフィールドの選択</label>
+		<name>DecRecordsFieldsLookupLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>関連リストの選択</label>
+		<name>DecRelatedListLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>署名順のフロー図</label>
+		<name>SigningOrderDiagram</name>
+	</customLabels>
+	<customLabels>
+		<label>署名順フロー図</label>
+		<name>SigningOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>役割</label>
+		<name>RecipientRoleLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>レコードフィールド</label>
+		<name>RecipientRecordFieldLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>表示</label>
+		<name>View</name>
+	</customLabels>
+	<customLabels>
+		<label>自動リマインダー</label>
+		<name>AutomaticReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>- リマインダーを送信しない -</label>
+		<name>DoNotRemind</name>
+	</customLabels>
+	<customLabels>
+		<label>毎日</label>
+		<name>EveryDay</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}日ごと</label>
+		<name>EveryNumberOfDays</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープは送信後{0}日で有効期限が切れます</label>
+		<name>ExpiresAfterSending</name>
+	</customLabels>
+	<customLabels>
+		<label>準備と送信</label>
+		<name>PrepareAndSend</name>
+	</customLabels>
+	<customLabels>
+		<label>選択した文書（{0}）</label>
+		<name>SelectedDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Salesforceから追加</label>
+		<name>AddFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>このテンプレートの設定は、エンベロープの送信前または後に変更することができます。</label>
+		<name>OptionsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>署名後オプションのセットアップ</label>
+		<name>DecOptionsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>2分間のビデオ</label>
+		<name>DecOptionsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Ov2plS</label>
+		<name>DecOptionsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>文書の書き戻し</label>
+		<name>DocumentWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}ステージ</label>
+		<name>Stage</name>
+	</customLabels>
+	<customLabels>
+		<label>JSONが無効です。</label>
+		<name>InvalidJson</name>
+	</customLabels>
+	<customLabels>
+		<label>この操作を実行する権限がユーザーにありません。</label>
+		<name>UnauthorizedOperation</name>
+	</customLabels>
+	<customLabels>
+		<label>要求の本文が定義されていません。</label>
+		<name>UndefinedRequestBody</name>
+	</customLabels>
+	<customLabels>
+		<label>イベント処理に失敗しました。</label>
+		<name>EventProcessingFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>データ更新に失敗しました。</label>
+		<name>DataUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>ステータス更新に失敗しました。</label>
+		<name>StatusUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープのソースIDが定義されていないため、データ更新を処理できません。</label>
+		<name>DataUpdateMissingSourceId</name>
+	</customLabels>
+	<customLabels>
+		<label>エンベロープの差し込みフィールドの取得に失敗しました。</label>
+		<name>GetMergeFieldsError</name>
+	</customLabels>
+	<customLabels>
+		<label>メールの件名</label>
+		<name>EmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>すべての受信者へのメッセージ</label>
+		<name>MessageToAllHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>このメッセージは、すべての受信者にメールとして送信されます。</label>
+		<name>MessageToAllDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSignでの署名が必要な文書</label>
+		<name>DefaultEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>以下のリンクから文書を開き、内容をご確認のうえ電子署名をお願いいたします。</label>
+		<name>DefaultEmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>追加して新規作成</label>
+		<name>AddAndNew</name>
+	</customLabels>
+	<customLabels>
+		<label>取得する最大レコード数</label>	
+		<name>MaximumRecordsPulled</name>
+	</customLabels>
+	<customLabels>
+		<label>最近の作成日</label>	
+		<name>RecentDateCreated</name>
 	</customLabels>	
+	<customLabels>
+		<label>最近の変更日</label>	
+		<name>RecentDateModified</name>
+	</customLabels>
+	<customLabels>
+		<label>そのほか（カスタムSOQL）</label>	
+		<name>OtherCustomSOQL</name>
+	</customLabels>
+	<customLabels>
+		<label>名前とメールアドレスの追加</label>	
+		<name>AddNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>並べ替え</label>	
+		<name>OrderedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>文書「{0}」を生成できませんでした。{1}</label>
+		<name>CouldNotGenerateDocument_2</name>
+	</customLabels>
+	<customLabels>
+		<label>作成中</label>
+		<name>Processing</name>
+	</customLabels>
+	<customLabels>
+		<label>最近の履歴</label>
+		<name>Recent</name>
+	</customLabels>
+	<customLabels>
+		<label>自分が所有する</label>
+		<name>OwnedByMe</name>
+	</customLabels>
+	<customLabels>
+		<label>自分に共有されている</label>
+		<name>SharedWithMe</name>
+	</customLabels>
+	<customLabels>
+		<label>フォロー中</label>
+		<name>Following</name>
+	</customLabels>
+	<customLabels>
+		<label>ライブラリ</label>
+		<name>Libraries</name>
+	</customLabels>
+	<customLabels>
+		<label>ファイルの検索...</label>
+		<name>SearchFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>検索語は2文字以上である必要があります。</label>
+		<name>SearchTermMinLengthMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>名前とメールアドレスの指定</label>
+		<name>ByNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>受信者の選択</label>	
+		<name>SelectRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>完了した文書を［商談］レコードに保存する</label>
+		<name>DocumentWriteBackOptionMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>すべての文書を単一PDFに統合する</label>
+		<name>DocumentWriteBackCombineAllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>ファイル名</label>
+		<name>DocumentWriteBackFilename</name>
+	</customLabels>
+	<customLabels>
+		<label>完了証明書を［商談］レコードに保存する</label>
+		<name>DocumentWriteBackCertificateOfCompletion</name>
+	</customLabels>	
+	<customLabels>
+		<label>受信者/役割</label>	
+		<name>RecipientRoleDecTableHeader</name>
+	</customLabels>	
+	<customLabels>
+		<label>受信者</label>	
+		<name>RecipientLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>文書名 + エンベロープステータス</label>
+		<name>DocumentNameAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>文書名 + .pdf</label>
+		<name>DocumentNameAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>文書名 + エンベロープステータス + .pdf</label>
+		<name>DocumentNameAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>メールの件名 + エンベロープのステータス</label>
+		<name>EmailSubjectAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>メールの件名 + .pdf</label>
+		<name>EmailSubjectAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>メールの件名 + エンベロープのステータス + .pdf</label>
+		<name>EmailSubjectAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>&quot;Envelope&quot; + エンベロープID + .pdf</label>
+		<name>EnvelopeAndEnvelopeIDAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>ファイルがありません。別のフィルターを選択するか、ファイルをアップロードしてください。</label>
+		<name>EmptyFileResultsMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}/{1}ファイルが選択されました</label>
+		<name>SelectedFilesOfTotalFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>データの書き戻し</label>
+		<name>DataWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>文書が完了したときに{0}のステージを更新する</label>
+		<name>DataWritebackHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>フェーズの更新</label>
+		<name>StageUpdate</name>
+	</customLabels>
+	<customLabels>		
+		<label>次で始まる</label>
+		<name>StartsWithLabel</name>
+	</customLabels>
+	<customLabels>		
+		<label>次で終わる</label>
+		<name>EndsWithLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>- 更新しない -</label>
+		<name>DoNotUpdatePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>有効期限として過去の日付を指定することはできません</label>
+		<name>ExpirationDateError</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Connect設定の作成</label>
+		<name>CreateConnectConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>このアカウントではDocuSign Connectが有効になっていません。</label>
+		<name>ConnectNotEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Connect設定の作成に失敗しました。</label>
+		<name>ConnectConfigurationError</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレート文書の更新に失敗しました。</label>
+		<name>TemplateDocumentError</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレート受信者の更新に失敗しました。</label>
+		<name>TemplateRecipientError</name>
+	</customLabels>
+	<customLabels>
+		<label>テンプレートの更新に失敗しました。</label>
+		<name>TemplateError</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSignセットアップ</label>
 		<name>Setup</name>

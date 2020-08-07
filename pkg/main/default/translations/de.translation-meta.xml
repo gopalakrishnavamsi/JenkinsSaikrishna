@@ -166,7 +166,7 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>Erweiterte Einstellungen</label>
+		<label>Einstellungen</label>
 		<name>eSignSetupSettingsTab</name>
 	</customLabels>
 	<customLabels>
@@ -246,11 +246,11 @@
 		<name>CannotFilterFields_2</name>
 	</customLabels>
 	<customLabels>
-		<label>„Angebot” ist für die Felder „{0}” nicht autorisiert: {1}</label>
+		<label>Anfrage ist für die Felder „{0}” nicht autorisiert: {1}</label>
 		<name>CannotQueryFields_2</name>
 	</customLabels>
 	<customLabels>
-		<label>„Angebot” ist für folgendes Objekt nicht autorisiert:</label>
+		<label>Anfrage ist für folgendes Objekt nicht autorisiert:</label>
 		<name>CannotQueryObject</name>
 	</customLabels>
 	<customLabels>
@@ -478,7 +478,7 @@
 		<name>Declined</name>
 	</customLabels>
 	<customLabels>
-		<label>Zugestellt</label>
+		<label>Eingesehen</label>
 		<name>Delivered</name>
 	</customLabels>
 	<customLabels>
@@ -670,6 +670,46 @@
 		<name>HasViewed_2</name>
 	</customLabels>
 	<customLabels>
+		<label>Automatisch beantwortet</label>
+		<name>Autoresponded</name>
+	</customLabels>
+	<customLabels>
+		<label>Authentifizierung fehlgeschlagen</label>
+		<name>AuthenticationFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Überprüfen Sie, ob &lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; den Umschlag erhalten hat</label>
+		<name>AutorespondedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>Senden Sie die Authentifizierungsanforderungen erneut oder entfernen Sie sie</label>
+		<name>AuthenticationFailedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlag erstellt</label>
+		<name>EnvelopeStatusCreated</name>
+	</customLabels>
+	<customLabels>
+		<label>Zum Signieren gesendet</label>
+		<name>EnvelopeStatusSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlag eingesehen</label>
+		<name>EnvelopeStatusViewed</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlag abgelehnt</label>
+		<name>EnvelopeStatusDeclined</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlag storniert</label>
+		<name>EnvelopeStatusVoided</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlag abgeschlossen</label>
+		<name>EnvelopeStatusCompleted</name>
+	</customLabels>
+	<customLabels>
 		<label>Probleme?</label>
 		<name>HavingTrouble</name>
 	</customLabels>
@@ -698,11 +738,15 @@
 		<name>InitializeAccountSettings</name>
 	</customLabels>
 	<customLabels>
+		<label>Protokolleinstellungen initialisieren</label>
+		<name>InitializeLogSettings</name>
+	</customLabels>
+	<customLabels>
 		<label>Empfänger aktualisieren</label>
 		<name>Intermediary</name>
 	</customLabels>
 	<customLabels>
-		<label>Mit mindestens einer Einstellung in Ihrem DocuSign-Account könnte es ein Problem geben. Der Benutzer, dessen Anmeldedaten zur Aktivierung der Integration zwischen Salesforce und DocuSign (auch SOBO-Benutzer genannt) verwendet werden, muss über folgende Berechtigungen und Flags verfügen: „Darf Konto verwalten“, „Darf Umschlag senden“, „‚Senden im Auftrag von&apos; zulassen“ und „Kontoweiter API-Zugriff“. Auf diese Einstellungen greifen Sie zu, indem Sie sich direkt bei DocuSign anmelden, auf „Einstellungen“ klicken und in der Verwaltungskonsole den Bereich „Berechtigungen“ auswählen. Erst wenn diese Einstellungen aktiviert sind, kann die Integration funktionieren. Selbst wenn das Problem nicht mit diesen Einstellungen in Verbindung steht, sollten diese als Erstes überprüft werden. Wenden Sie sich an den DocuSign-Administrator, um herauszufinden, ob kürzlich Änderungen an den Einstellungen in DocuSign vorgenommen wurden.</label>
+		<label>Mit mindestens einer Einstellung in Ihrem DocuSign-Account könnte es ein Problem geben. Der Benutzer, dessen Anmeldedaten zur Aktivierung der Integration zwischen Salesforce und DocuSign (auch SOBO-Benutzer genannt) verwendet werden, muss über folgende Berechtigungen und Markierungen verfügen: „Darf Konto verwalten“, „Darf Umschlag senden“, „‚Senden im Auftrag von&apos; zulassen“ und „Kontoweiter API-Zugriff“. Auf diese Einstellungen greifen Sie zu, indem Sie sich direkt bei DocuSign anmelden, auf „Einstellungen“ klicken und in der Verwaltungskonsole den Bereich „Berechtigungen“ auswählen. Erst wenn diese Einstellungen aktiviert sind, kann die Integration funktionieren. Selbst wenn das Problem nicht mit diesen Einstellungen in Verbindung steht, sollten diese als Erstes überprüft werden. Wenden Sie sich an den DocuSign-Administrator, um herauszufinden, ob kürzlich Änderungen an den Einstellungen in DocuSign vorgenommen wurden.</label>
 		<name>InvalidAccountSettings</name>
 	</customLabels>
 	<customLabels>
@@ -902,7 +946,7 @@
 		<name>FreeTrialURL</name>
 	</customLabels>
 	<customLabels>
-		<label>Keine Umschläge gesendet</label>
+		<label>Umschlag zum Einsehen des Status senden</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
 	<customLabels>
@@ -986,6 +1030,10 @@
 		<name>Reminders</name>
 	</customLabels>
 	<customLabels>
+		<label>Weitere Optionen</label>
+		<name>MoreOptions</name>
+	</customLabels>
+	<customLabels>
 		<label>Entfernen</label>
 		<name>Remove</name>
 	</customLabels>
@@ -1050,8 +1098,16 @@
 		<name>Sent</name>
 	</customLabels>
 	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; hat einen Umschlag erstellt</label>
+		<name>CreatedAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; hat einen Umschlag gesendet</label>
 		<name>SentAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; hat einen Umschlag storniert</label>
+		<name>VoidedAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
 		<label>Anzeigen</label>
@@ -1414,6 +1470,14 @@
 		<name>SendWithDocuSign</name>
 	</customLabels>
 	<customLabels>
+		<label>Möchten Sie wirklich beenden?</label>
+		<name>ExitSendForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>Derzeitiger Status wird nicht gespeichert.</label>
+		<name>ProgressLostOnExit</name>
+	</customLabels>
+	<customLabels>
 		<label>Mindestens ein Layout nicht gefunden.</label>
 		<name>LayoutsNotFound</name>
 	</customLabels>
@@ -1524,6 +1588,10 @@
 	<customLabels>
 		<label>Ausgewähltes Objekt hat keine Layouts</label>
 		<name>NoLayoutsForSelectedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Wählen Sie mindestens ein Seitenlayout</label>
+		<name>AtLeastOneLayoutIsRequired</name>
 	</customLabels>
 	<customLabels>
 		<label>DocuSign-Dateien</label>
@@ -1918,8 +1986,88 @@
 		<name>ImportTemplatesDescription</name>
 	</customLabels>
 	<customLabels>
-		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
+		<label>ANWENDEN</label>
+		<name>ApplyUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>DOKUMENTENREGEL</label>
+		<name>DocumentRuleUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumentenregel</label>
+		<name>DocumentRule</name>
+	</customLabels>
+	<customLabels>
+		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher-de/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
 		<name>DocumentRuleHelpURL</name>
+	</customLabels>
+	<customLabels>
+		<label>Regel hinzufügen</label>
+		<name>AddRule</name>
+	</customLabels>
+	<customLabels>
+		<label>Regelname eingeben, z. B. Vertrag Ostfiliale</label>
+		<name>DocumentRuleNamePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>der folgenden Bedingungen:</label>
+		<name>OfRuleConditions</name>
+	</customLabels>
+	<customLabels>
+		<label>DANN</label>
+		<name>Then</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokument generieren.</label>
+		<name>RuleGenerateDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>WENN</label>
+		<name>IfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>oder wenn</label>
+		<name>OrIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>ODER WENN</label>
+		<name>OrIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>und wenn</label>
+		<name>AndIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>UND WENN</label>
+		<name>AndIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>Wert für Bedingung eingeben</label>
+		<name>EnterConditionalValue</name>
+	</customLabels>
+	<customLabels>
+		<label>Zeile duplizieren</label>
+		<name>DuplicateRow</name>
+	</customLabels>
+	<customLabels>
+		<label>beliebig viele</label>
+		<name>Any</name>
+	</customLabels>
+	<customLabels>
+		<label>alle</label>
+		<name>All</name>
+	</customLabels>
+	<customLabels>
+		<label>ist gleich</label>
+		<name>Equals</name>
+	</customLabels>
+	<customLabels>
+		<label>ist nicht gleich</label>
+		<name>DoesNotEqual</name>
+	</customLabels>
+	<customLabels>
+		<label>Keine Dokumente zum Genieren verfügbar.</label>
+		<name>NoDocumentsToGenerate</name>
 	</customLabels>
 	<customLabels>
 		<label>Massendokumentenerstellung</label>
@@ -1974,7 +2122,7 @@
 		<name>Date</name>
 	</customLabels>
 	<customLabels>
-		<label>Name und Datum der Hauptdatenquelle</label>
+		<label>Datum und Name der Hauptdatenquelle</label>
 		<name>StartingObjectNameAndDate</name>
 	</customLabels>
 	<customLabels>
@@ -2032,6 +2180,10 @@
 	<customLabels>
 		<label>Folgende Dateien können nicht generiert werden:</label>
 		<name>GenerateFileFailMsg</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokument kann nicht generiert oder in Vorschau angezeigt werden, da Ihnen die erforderlichen Berechtigungen fehlen. Bei Fragen wenden Sie sich an den Administrator.</label>
+		<name>UnauthorizedQueryMessage</name>
 	</customLabels>
 	<customLabels>
 		<label>Für diese Konfiguration gibt es keine Dokumentenvorlagen.</label>
@@ -2476,6 +2628,10 @@
 	<customLabels>
 		<label>Erstellen Sie eine benutzerdefinierte Schaltfläche in Salesforce, damit eine Konfigurations-URL für die Dokumentenerstellung ausgelöst wird. Wenn Sie auf die benutzerdefinierte Schaltfläche klicken, wird das zugehörige Formular für die Dokumentenerstellung geöffnet.</label>
 		<name>ConfigureButtonInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Schaltfläche</label>
+		<name>eSignSetupButtonTab</name>
 	</customLabels>
 	<customLabels>
 		<label>Schaltflächen konfigurieren</label>
@@ -3560,6 +3716,38 @@
 		<name>EsignatureEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
+		<label>Erinnerung senden</label>
+		<name>SendReminder</name>
+	</customLabels>
+	<customLabels>
+		<label>Erinnerung gesendet.</label>
+		<name>ReminderSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Stornieren</label>
+		<name>VoidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlag stornieren</label>
+		<name>VoidEnvelopeHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Durch das Stornieren des Umschlags werden alle übrigen Signieraktivitäten abgebrochen. Empfänger, die das Signieren bereits abgeschlossen haben, erhalten eine E-Mail-Benachrichtigung, die Ihren Grund für die Stornierung des Umschlags angibt. Empfänger, die noch nicht signiert haben, werden die Dokumente im Umschlag nicht länger einsehen oder signieren können.</label>
+		<name>VoidEnvelopeConfirmation</name>
+	</customLabels>
+	<customLabels>
+		<label>Grund für die Stornierung des Umschlags.</label>
+		<name>VoidReason</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} Zeichen übrig.</label>
+		<name>VoidReasonLengthRemaining</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlag wurde storniert.</label>
+		<name>EnvelopeVoided</name>
+	</customLabels>
+	<customLabels>
 		<label>Erhalten Sie von Salesforce Statusupdates für Ihre Umschläge in Echtzeit. Behalten Sie mit dem DocuSign-eSignature-Umschlagstatus Ihre Dokumente immer im Blick.</label>
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
@@ -3960,6 +4148,42 @@
 		<name>GoToDocumentation</name>
 	</customLabels>
 	<customLabels>
+		<label>DocuSign Apps Launcher – Problembehebung</label>
+		<name>TroubleShootingTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Accountverbindung trennen</label>
+		<name>TroubleShootingDisconnectAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Verbindung zwischen DocuSign-Account und Salesforce-Organisation trennen</label>
+		<name>TroubleShootingDisconnectAccountInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Ordnerberechtigungen</label>
+		<name>TroubleShootingFolderPermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>Update-Aufgabe für Stammordnerberechtigungen auslösen</label>
+		<name>TroubleShootingFolderPermissionsInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Verbundene App</label>
+		<name>TroubleShootingConnectedApp</name>
+	</customLabels>
+	<customLabels>
+		<label>„Verbundene App erstellen” auslösen</label>
+		<name>TroubleShootingConnectedAppInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Kein DocuSign-Account verbunden</label>
+		<name>TroubleShootingNoAccountConnected</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign-Accountinformationen können nicht abgerufen werden</label>
+		<name>TroubleShootingError</name>
+	</customLabels>
+	<customLabels>
 		<label>Schaltfläche zum Verwenden von eSignature hinzufügen</label>
 		<name>AddButtonEsignature</name>
 	</customLabels>
@@ -4002,6 +4226,10 @@
 	<customLabels>
 		<label>&lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;Hier gehts zum Schnellstartleitfaden&lt;/a&gt;</label>
 		<name>GenQuickGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>Weitere Informationen im &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;Leitfaden&lt;/a&gt; oder im &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;kurzen Video&lt;/a&gt;</label>
+		<name>EnvelopeTemplatesQuickGuide</name>
 	</customLabels>
 	<customLabels>
 		<label>Vorlagenkonfigurationen</label>
@@ -4662,11 +4890,11 @@
 	</customLabels>
 	<customLabels>
 		<name>MostCommonlyUsed</name>
-		<label>HÄUFIG VERWENDET</label>
+		<label>Häufig verwendet</label>
 	</customLabels>
 	<customLabels>
 		<name>OtherItems</name>
-		<label>ANDERE ELEMENTE</label>
+		<label>Andere Elemente</label>
 	</customLabels>
 	<!-- End of Chorus Gen Labels -->
 	<customLabels>
@@ -4770,7 +4998,7 @@
 		<name>UndefinedParent</name>
 	</customLabels>
 	<customLabels>
-		<label>Ungültige Abfrage</label>
+		<label>Ungültige Anfrage</label>
 		<name>InvalidQuery</name>
 	</customLabels>
 	<customLabels>
@@ -4786,8 +5014,24 @@
 		<name>DeleteTemplateMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>Möchten Sie den Umschlag wirklich löschen?</label>
+		<name>DeleteEnvelopeMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Möchten Sie die Umschlagvorlage wirklich löschen?</label>
+		<name>DeleteEnvelopeTemplateMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>Vorlage wurde gelöscht.</label>
 		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlag wurde gelöscht.</label>
+		<name>EnvelopeDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlagvorlage wurde gelöscht.</label>
+		<name>EnvelopeTemplateDeleted</name>
 	</customLabels>
 	<customLabels>
 		<label>Fehler</label>
@@ -4835,8 +5079,808 @@
 	</customLabels>	
 	<customLabels>
 		<label>Objekttyp {0} konnte nicht aufgelöst werden. Prüfen Sie, ob das Objekt besteht und ob Sie Zugriff darauf haben.</label>
-		<name>InvalidSObjectType_1</name>	
+		<name>InvalidSObjectType_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Ungültige Umschlagkonfiguration</label>
+		<name>InvalidEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlagkonfiguration nicht definiert.</label>
+		<name>UndefinedEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Name fehlt.</label>
+		<name>UndefinedName</name>
+	</customLabels>
+	<customLabels>
+		<label>Beziehung nicht definiert.</label>
+		<name>UndefinedRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>Quellobjekt fehlt.</label>
+		<name>UndefinedSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Quellobjekt ungültig.</label>
+		<name>InvalidSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlagkonfiguration nicht gefunden.</label>
+		<name>EnvelopeConfigurationNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Quellobjekt {0} stimmt nicht mit der Umschlagkonfigurationsquelle {1} überein.</label>
+		<name>SourceMismatch_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Vorlage nicht definiert.</label>
+		<name>UndefinedTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign-Vorlagen-ID nicht definiert.</label>
+		<name>UndefinedDocuSignTemplateId</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}[{1}]: {2}</label>
+		<name>ArrayError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumente</label>
+		<name>DocumentElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Quellobjekttyp muss ContentDocument sein.</label>
+		<name>InvalidContentDocumentSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Erweiterung fehlt.</label>
+		<name>UndefinedExtension</name>
+	</customLabels>
+	<customLabels>
+		<label>Empfänger</label>
+		<name>RecipientElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Beziehungstyp ungültig.</label>
+		<name>InvalidRelationshipType</name>
+	</customLabels>
+	<customLabels>
+		<label>Beziehungsname fehlt.</label>
+		<name>UndefinedRelationshipName</name>
+	</customLabels>
+	<customLabels>
+		<label>Typ für verwandtes Objekt fehlt.</label>
+		<name>UndefinedRelatedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Typ für verwandtes Objekt ungültig: {0}.</label>
+		<name>InvalidRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Typ für verwandtes Objekt nicht unterstützt: {0}.</label>
+		<name>UnsupportedRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Beziehung ungültig: {0}.</label>
+		<name>InvalidRelationship_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Benutzerdefinierte Felder</label>
+		<name>CustomFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Benutzerdefiniertes Feld nicht definiert.</label>
+		<name>UndefinedCustomField</name>
+	</customLabels>
+	<customLabels>
+		<label>Wert fehlt – „true“ (wahr) ist erforderlich und „false“ (falsch) zeigt an.</label>
+		<name>UndefinedCustomFieldValue</name>
+	</customLabels>
+	<customLabels>
+		<label>Liste leer.</label>
+		<name>UndefinedList</name>
+	</customLabels>
+	<customLabels>
+		<label>Briefvorlagenfelder</label>
+		<name>MergeFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Briefvorlagenfeld nicht definiert.</label>
+		<name>UndefinedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>Pfad fehlt.</label>
+		<name>UndefinedPath</name>
+	</customLabels>
+	<customLabels>
+		<label>Briefvorlagenfeld steht nicht mit Quellobjekt in Verbindung.</label>
+		<name>UnrelatedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>Beispiel: Owner.Name = &apos;Julia Meier&apos;</label>
+		<name>ExampleFilterByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>Beispiel: CreatedDate ASC</label>
+		<name>ExampleOrderByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>Umschlagvorlagen</label>
+		<name>EnvelopeTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Vorlage erstellen</label>
+		<name>CreateTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Möchten Sie die erste Umschlagvorlage einrichten?</label>
+		<name>StartFirstEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Was ist eine Umschlagvorlage?</label>
+		<name>NotFamiliarWithEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Name</label>
+		<name>AddName</name>
+	</customLabels>
+	<customLabels>
+		<label>Dies kann später nicht mehr geändert werden.</label>
+		<name>CanNotModifiedLater</name>
+	</customLabels>
+	<customLabels>
+		<label>UMSCHLAGVORLAGE</label>
+		<name>EnvelopeTemplateUpperCase</name>
+	</customLabels>
+	<customLabels>
+		<label>Platzhalter</label>
+		<name>DECDataSourceHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Suchen  ...</label>
+		<name>SearchPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumente vom Salesforce-Datensatz anhängen</label>
+		<name>AttachDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumentenauswahl</label>
+		<name>DocumentSelection</name>
+	</customLabels>
+	<customLabels>
+		<label>Letztes Dokument</label>
+		<name>LatestDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>Dateiname enthält ...</label>
+		<name>FileNameContainsPending</name>
+	</customLabels>
+	<customLabels>
+		<label>Dateiname enthält</label>
+		<name>FileNameContains</name>
+	</customLabels>
+	<customLabels>
+		<label>Alle Dokumente</label>
+		<name>AllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumente hinzufügen – so funktionierts</label>
+		<name>DecDocumentsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Video (2 Min.)</label>
+		<name>DecDocumentsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/32qlvSr</label>
+		<name>DecDocumentsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Vorlagenempfänger hinzufügen</label>
+		<name>DecRecipientsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Video (2 Min.)</label>
+		<name>DecRecipientsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Or2pDp</label>
+		<name>DecRecipientsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Mit Vorlagen durchstarten</label>
+		<name>DecSetupTemplatesVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Video (4 Min.)</label>
+		<name>DecSetupTemplatesVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/3h1JsDK</label>
+		<name>DecSetupTemplatesVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Briefvorlagenfelder verwalten</label>
+		<name>DecMergeFieldsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Video (2 Min.)</label>
+		<name>DecMergeFieldsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/38Xwh3W</label>
+		<name>DecMergeFieldsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Benutzerdefinierte Schaltfläche erstellen</label>
+		<name>DecCustomButtonVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Video (2 Min.)</label>
+		<name>DecCustomButtonVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2WqQ1YC </label>
+		<name>DecCustomButtonVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Felder zum Positionieren vorbereiten</label>
+		<name>DecMergeFieldsHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Positionieren Sie als Nächstes die DocuSign- und Salesforce-Felder in der Umschlagvorlage. Benutzerdefinierte Salesforce-Felder können ebenfalls hinzugefügt werden.</label>
+		<name>DecMergeFieldsSubHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Benutzerdefinierte Briefvorlagenfelder hinzufügen – so funktionierts</label>
+		<name>DecMergeFieldsGuidanceHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Neue Konten haben möglicherweise keine Briefvorlagenfelder. Ein Salesforce-Administrator kann diese mit den Daten der zugeordneten Salesforce-Felder zum benutzerdefinierten DocuSign-Feld hinzufügen. Danach kann er die benutzerdefinierten Felder im Dokument positionieren. So funktionierts:</label>
+		<name>DecMergeFieldsGuidanceInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>1. Registerkarte „Salesforce-Briefvorlagenfeld“ auswählen</label>
+		<name>DecMergeFieldsGuidanceStep1Header</name>
+	</customLabels>
+	<customLabels>
+		<label>Das Menü für die Salesforce-Briefvorlagenfelder wird geöffnet.</label>
+		<name>DecMergeFieldsGuidanceStep1ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Auf die Schaltfläche mit dem Pluszeichen klicken</label>
+		<name>DecMergeFieldsGuidanceStep2Header</name>
+	</customLabels>
+	<customLabels>
+		<label>Das Modal „Benutzerdefiniertes Feld hinzufügen“ wird geöffnet.</label>
+		<name>DecMergeFieldsGuidanceStep2ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Informationen für das Briefvorlagenfeld hinzufügen</label>
+		<name>DecMergeFieldsGuidanceStep3Header</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;Name&lt;/b&gt;: Geben Sie für das Feld einen aussagekräftigen Namen ein (z. B. Accountname, Abschlussdatum).</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;Als Salesforce-Briefvorlagenfeld einrichten&lt;/b&gt;: Aktivieren Sie das Kontrollkästchen und wählen Sie im eingeblendeten Menü ein Salesforce-Objekt aus, auf das sich das Feld bezieht.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation2</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Absender darf bearbeiten&lt;/b&gt; (optional): Absender dürfen den Wert von benutzerdefinierten Tags bearbeiten.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation3</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Writeback&lt;/b&gt; (optional): Ändert ein Unterzeichner Daten, werden Salesforce-Daten aktualisiert.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation4</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Auswählen –&lt;/b&gt;: Auf das Drop-down-Menü klicken und ein übergeordnetes Salesforce-Objekt auswählen (z. B. Account, Opportunity)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation5</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Auswählen –&lt;/b&gt;: Auf das Drop-down-Menü klicken und ein Feld vom übergeordneten auswählen (z. B. Opportunity-Name, Abschlussdatum)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation6</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;Liste mit zusätzlichen Detailoptionen für benutzerdefinierte Felder.&lt;/a&gt;</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation7</name>
+	</customLabels>
+	<customLabels>
+		<label>4. Auf die Schaltfläche „Speichern“ klicken</label>
+		<name>DecMergeFieldsGuidanceStep4Header</name>
+	</customLabels>
+	<customLabels>
+		<label>Das benutzerdefinierte Feld kann jetzt mit der Umschlagvorlage zusammengeführt werden.</label>
+		<name>DecMergeFieldsGuidanceStep4ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>Möchten Sie mehr über Briefvorlagenfelder erfahren? &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;Weitere Informationen finden Sie hier.&lt;/a&gt;</label>
+		<name>DecMergeFieldsGuidanceLearnMore</name>
+	</customLabels>
+	<customLabels>
+		<label>Empfänger hinzufügen</label>
+		<name>DecAddRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Legen Sie fest, wer die Vorlage in welcher Rolle erhält. Fügen Sie Benutzer aus der Salesforce-Organisation oder externen Quellen hinzu.</label>
+		<name>DecAddRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Die hinzugefügten Empfänger für das Einsehen oder Signieren des Dokuments sehen Sie hier.</label>
+		<name>DecAddRecipientsDescription2</name>
+	</customLabels>
+	<customLabels>
+		<label>Aus Salesforce</label>
+		<name>DecFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Dynamischen Empfänger auswählen aus</label>
+		<name>DecRecordFieldsTitle1</name>
+	</customLabels>
+	<customLabels>
+		<label>Der Name und die Kontaktinformationen werden beim Verwenden der Vorlage automatisch abgerufen.</label>
+		<name>DecRecordFieldsTitle2</name>
+	</customLabels>
+	<customLabels>
+		<label>Datensatzfelder</label>
+		<name>DecRecordFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Benutzer/Kontakte</label>
+		<name>DecUsersOrContacts</name>
+	</customLabels>
+	<customLabels>
+		<label>Nach Rolle</label>
+		<name>DecByRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Signiergruppe</label>
+		<name>DecSigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>SMS/Telefon</label>
+		<name>DecSMSorPhone</name>
+	</customLabels>
+	<customLabels>
+		<label>Fügen Sie einen Platzhalterempfänger hinzu, den der Absender dann später angibt. Ein Empfänger kann hier auch als nicht editierbar eingerichtet werden.</label>
+		<name>DecRoleRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Wählen Sie eine Signiergruppe aus dem DocuSign-Konto der Organisation. Sie möchten mehr über Signiergruppen erfahren?</label>
+		<name>DecSigningGroupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/de/articles/Signing-Groups-FAQs</label>
+		<name>DecSigningGroupLearnMoreLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Nach Gruppenname suchen ...</label>
+		<name>DecSearchByGroupNamePlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Wird gesucht ...</label>
+		<name>Searching</name>
+	</customLabels>
+	<customLabels>
+		<label>Gruppe auswählen</label>
+		<name>DecSelectGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>Fügen Sie einen Benutzer von Ihren Salesforce-Benutzern oder -Kontakten hinzu. Dieser Benutzer wird nicht dynamisch sein.</label>
+		<name>DecEntityLookupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Benutzer oder Kontakt auswählen</label>
+		<name>DecSelectUserOrContact</name>
+	</customLabels>
+	<customLabels>
+		<label>Private Nachricht hinzufügen</label>
+		<name>DecAddPrivateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Zugriffsauthentifizierung hinzufügen</label>
+		<name>DecAddAccessAuthentication</name>
+	</customLabels>
+	<customLabels>
+		<label>Aktion</label>
+		<name>DecRecipientAction</name>
+	</customLabels>
+	<customLabels>
+		<label>Benutzerdefinierte Schaltfläche erstellen</label>
+		<name>DecCreateCustomButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Wählen Sie die Layouts des Quellobjekts, denen Sie die Schaltfläche hinzufügen möchten</label>
+		<name>DecLayoutDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Erstellen Sie eine benutzerdefinierte Schaltfläche, damit Benutzer mithilfe dieser Vorlage Umschläge senden können. Wählen Sie aus, welchen Layouts die Schaltfläche hinzugefügt wird. </label>
+		<name>DecCreateCustomButtonDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Wählen Sie die Layouts des Quellobjekts, denen Sie die Schaltfläche hinzufügen möchten.</label>
+		<name>DecPageLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Vor-Ort-Unterzeichner</label>
+		<name>InPersonSignerLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Eingebetteter Unterzeichner</label>
+		<name>EmbeddedSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>Speichern und schließen</label>
+		<name>SaveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>Speichern und fertigstellen</label>
+		<name>SaveAndFinish</name>
+	</customLabels>
+	<customLabels>
+		<label>Felder positionieren</label>
+		<name>Tagger</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumente</label>
+		<name>Documents</name>
+	</customLabels>
+	<customLabels>
+		<label>Briefvorlagenfelder</label>
+		<name>MergeFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumente hinzufügen</label>
+		<name>AddDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Dateien per Drag-and-drop zum Hochladen hier ablegen.</label>
+		<name>AddDocumentsHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Fügen Sie die Dateien hinzu, die Empfänger einsehen und signieren sollen. Laden Sie die Dokumente direkt von Ihrem Gerät hoch oder aus den Salesforce-Datensätzen.</label>
+		<name>AddDocumentsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokument hochladen</label>
+		<name>UploadDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>oder Dokument ablegen</label>
+		<name>DropDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlagkonfiguration umbenennen</label>
+		<name>RenameEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Weitere Aktionen</label>
+		<name>MoreActions</name>
+	</customLabels>
+	<customLabels>
+		<label>Datensatzfeld auswählen</label>
+		<name>DecRecordsFieldsLookupLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Themenliste auswählen</label>
+		<name>DecRelatedListLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Übersicht der Signierreihenfolge</label>
+		<name>SigningOrderDiagram</name>
+	</customLabels>
+	<customLabels>
+		<label>Signierreihenfolge</label>
+		<name>SigningOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>Rolle</label>
+		<name>RecipientRoleLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Datensatzfeld</label>
+		<name>RecipientRecordFieldLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Anzeigen</label>
+		<name>View</name>
+	</customLabels>
+	<customLabels>
+		<label>Automatische Erinnerungen</label>
+		<name>AutomaticReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>Nicht erinnern</label>
+		<name>DoNotRemind</name>
+	</customLabels>
+	<customLabels>
+		<label>Täglich</label>
+		<name>EveryDay</name>
+	</customLabels>
+	<customLabels>
+		<label>Alle {0} Tage</label>
+		<name>EveryNumberOfDays</name>
+	</customLabels>
+	<customLabels>
+		<label>Umschlag läuft {0} Tage nach dem Senden ab</label>
+		<name>ExpiresAfterSending</name>
+	</customLabels>
+	<customLabels>
+		<label>Vorbereiten + senden</label>
+		<name>PrepareAndSend</name>
+	</customLabels>
+	<customLabels>
+		<label>Ausgewählte Dokumente ({0})</label>
+		<name>SelectedDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Aus Salesforce hinzufügen</label>
+		<name>AddFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Die Einstellungen für die Vorlage lassen sich vor und nach dem Senden ändern.</label>
+		<name>OptionsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Optionen für nach dem Signieren einrichten</label>
+		<name>DecOptionsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Video (2 Min.)</label>
+		<name>DecOptionsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Ov2plS</label>
+		<name>DecOptionsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumenten-Writeback</label>
+		<name>DocumentWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>Phase „{0}”</label>
+		<name>Stage</name>
+	</customLabels>
+	<customLabels>
+		<label>JSON ungültig.</label>
+		<name>InvalidJson</name>
+	</customLabels>
+	<customLabels>
+		<label>Benutzer hat für diesen Vorgang keine Rechte.</label>
+		<name>UnauthorizedOperation</name>
+	</customLabels>
+	<customLabels>
+		<label>Anforderung ist nicht definiert.</label>
+		<name>UndefinedRequestBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Fehler bei Ereignisverarbeitung.</label>
+		<name>EventProcessingFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Fehler beim Daten-Update.</label>
+		<name>DataUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Fehler beim Status-Update.</label>
+		<name>StatusUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Kein Daten-Update, da Umschlag keine definierte Quell-ID hat.</label>
+		<name>DataUpdateMissingSourceId</name>
+	</customLabels>
+	<customLabels>
+		<label>Fehler beim Abruf der Briefvorlagenfelder für Umschlag.</label>
+		<name>GetMergeFieldsError</name>
+	</customLabels>
+	<customLabels>
+		<label>E-Mail-Betreff</label>
+		<name>EmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Nachricht an alle Empfänger</label>
+		<name>MessageToAllHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Dies wird als E-Mail an alle Empfänger gesendet.</label>
+		<name>MessageToAllDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumente für Ihre DocuSign-Signatur</label>
+		<name>DefaultEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Unterlagen erfordern Ihre Signatur. Bitte sehen Sie die Unterlagen ein und signieren Sie sie elektronisch anhand des nachstehenden Links.</label>
+		<name>DefaultEmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Hinzufügen + neu</label>
+		<name>AddAndNew</name>
+	</customLabels>
+	<customLabels>
+		<label>Maximale Anzahl abzurufender Datensätze</label>	
+		<name>MaximumRecordsPulled</name>
+	</customLabels>
+	<customLabels>
+		<label>Kürzlich erstellt</label>	
+		<name>RecentDateCreated</name>
 	</customLabels>	
+	<customLabels>
+		<label>Kürzlich geändert</label>	
+		<name>RecentDateModified</name>
+	</customLabels>
+	<customLabels>
+		<label>Andere (benutzerdefinierte SOQL)</label>	
+		<name>OtherCustomSOQL</name>
+	</customLabels>
+	<customLabels>
+		<label>Name und E-Mail hinzufügen</label>	
+		<name>AddNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>Sortiert nach</label>	
+		<name>OrderedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokument „{0}“ konnte nicht generiert werden: {1}</label>
+		<name>CouldNotGenerateDocument_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Wird verarbeitet</label>
+		<name>Processing</name>
+	</customLabels>
+	<customLabels>
+		<label>Aktuell</label>
+		<name>Recent</name>
+	</customLabels>
+	<customLabels>
+		<label>Gehört mir</label>
+		<name>OwnedByMe</name>
+	</customLabels>
+	<customLabels>
+		<label>Für mich freigegeben</label>
+		<name>SharedWithMe</name>
+	</customLabels>
+	<customLabels>
+		<label>Folge ich</label>
+		<name>Following</name>
+	</customLabels>
+	<customLabels>
+		<label>Bibliotheken</label>
+		<name>Libraries</name>
+	</customLabels>
+	<customLabels>
+		<label>Dateien suchen ...</label>
+		<name>SearchFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Suchbegriff muss aus mindestens 2 Zeichen bestehen.</label>
+		<name>SearchTermMinLengthMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Nach Name + E-Mail</label>
+		<name>ByNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>Empfänger auswählen</label>	
+		<name>SelectRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Abgeschlossene Dokumente im Opportunity-Datensatz speichern</label>
+		<name>DocumentWriteBackOptionMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Alle Dokumente in 1 PDF-Datei zusammenfassen</label>
+		<name>DocumentWriteBackCombineAllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Dateiname</label>
+		<name>DocumentWriteBackFilename</name>
+	</customLabels>
+	<customLabels>
+		<label>Abschlusszertifikatsdokumente im Opportunity-Datensatz speichern</label>
+		<name>DocumentWriteBackCertificateOfCompletion</name>
+	</customLabels>	
+	<customLabels>
+		<label>Empfänger/Rolle</label>	
+		<name>RecipientRoleDecTableHeader</name>
+	</customLabels>	
+	<customLabels>
+		<label>Empfänger</label>	
+		<name>RecipientLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumentenname + Umschlagstatus</label>
+		<name>DocumentNameAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumentenname + .pdf</label>
+		<name>DocumentNameAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Dokumentenname + Umschlagstatus + .pdf</label>
+		<name>DocumentNameAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>E-Mail-Betreff + Umschlagstatus</label>
+		<name>EmailSubjectAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>E-Mail-Betreff + .pdf</label>
+		<name>EmailSubjectAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>E-Mail-Betreff + Umschlagstatus + .pdf</label>
+		<name>EmailSubjectAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>„Umschlag“ + Umschlag-ID + .pdf</label>
+		<name>EnvelopeAndEnvelopeIDAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Sie haben hier keine Dateien. Ändern Sie den Filter oder laden Sie eine Datei hoch.</label>
+		<name>EmptyFileResultsMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>{0} von {1} Dateien ausgewählt</label>
+		<name>SelectedFilesOfTotalFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Daten-Writeback</label>
+		<name>DataWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>Nach Abschluss der Dokumente Phase „{0}” aktualisieren</label>
+		<name>DataWritebackHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Phasen-Update</label>
+		<name>StageUpdate</name>
+	</customLabels>
+	<customLabels>		
+		<label>beginnt mit</label>
+		<name>StartsWithLabel</name>
+	</customLabels>
+	<customLabels>		
+		<label>endet auf</label>
+		<name>EndsWithLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Nicht aktualisieren</label>
+		<name>DoNotUpdatePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>Ablaufdatum muss in der Zukunft liegen</label>
+		<name>ExpirationDateError</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign-Connect-Konfiguration erstellen</label>
+		<name>CreateConnectConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>DocuSign Connect wurde nicht für Ihr Konto aktiviert.</label>
+		<name>ConnectNotEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Fehler beim Erstellen der DocuSign-Connect-Konfiguration.</label>
+		<name>ConnectConfigurationError</name>
+	</customLabels>
+	<customLabels>
+		<label>Fehler beim Aktualisieren von mindestens einem Vorlagendokument.</label>
+		<name>TemplateDocumentError</name>
+	</customLabels>
+	<customLabels>
+		<label>Fehler beim Aktualisieren von mindestens einem Empfänger.</label>
+		<name>TemplateRecipientError</name>
+	</customLabels>
+	<customLabels>
+		<label>Fehler beim Aktualisieren der Vorlage.</label>
+		<name>TemplateError</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>DocuSign-Setup</label>
 		<name>Setup</name>

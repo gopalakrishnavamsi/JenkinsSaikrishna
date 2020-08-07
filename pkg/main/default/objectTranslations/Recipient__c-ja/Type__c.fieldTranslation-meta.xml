@@ -32,4 +32,12 @@
         <masterLabel>Update Recipients</masterLabel>
         <translation>受信者の更新</translation>
     </picklistValues>
+    <picklistValues>
+        <masterLabel>Seal</masterLabel>
+        <translation>Seal</translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Witness</masterLabel>
+        <translation>立会人</translation>
+    </picklistValues>
 </CustomFieldTranslation>

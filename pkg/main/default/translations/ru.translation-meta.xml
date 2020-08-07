@@ -166,7 +166,7 @@
 		<name>AdvancedOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>Дополнительные настройки</label>
+		<label>Параметры</label>
 		<name>eSignSetupSettingsTab</name>
 	</customLabels>
 	<customLabels>
@@ -478,7 +478,7 @@
 		<name>Declined</name>
 	</customLabels>
 	<customLabels>
-		<label>Доставлено</label>
+		<label>Просмотрено</label>
 		<name>Delivered</name>
 	</customLabels>
 	<customLabels>
@@ -670,6 +670,46 @@
 		<name>HasViewed_2</name>
 	</customLabels>
 	<customLabels>
+		<label>Автоматический ответ</label>
+		<name>Autoresponded</name>
+	</customLabels>
+	<customLabels>
+		<label>Проверка подлинности завершена с ошибкой</label>
+		<name>AuthenticationFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Убедитесь, что &lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; получил(а) конверт</label>
+		<name>AutorespondedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>Отправить повторно или удалить требования проверки подлинности</label>
+		<name>AuthenticationFailedDetail</name>
+	</customLabels>
+	<customLabels>
+		<label>Конверт создан</label>
+		<name>EnvelopeStatusCreated</name>
+	</customLabels>
+	<customLabels>
+		<label>Отправлено на подпись</label>
+		<name>EnvelopeStatusSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Конверт просмотрен</label>
+		<name>EnvelopeStatusViewed</name>
+	</customLabels>
+	<customLabels>
+		<label>Конверт отклонен</label>
+		<name>EnvelopeStatusDeclined</name>
+	</customLabels>
+	<customLabels>
+		<label>Конверт аннулирован</label>
+		<name>EnvelopeStatusVoided</name>
+	</customLabels>
+	<customLabels>
+		<label>Конверт завершен</label>
+		<name>EnvelopeStatusCompleted</name>
+	</customLabels>
+	<customLabels>
 		<label>Возникла проблема?</label>
 		<name>HavingTrouble</name>
 	</customLabels>
@@ -696,6 +736,10 @@
 	<customLabels>
 		<label>Инициализировать параметры учетной записи</label>
 		<name>InitializeAccountSettings</name>
+	</customLabels>
+	<customLabels>
+		<label>Инициализировать параметры журнала</label>
+		<name>InitializeLogSettings</name>
 	</customLabels>
 	<customLabels>
 		<label>Обновить получателей</label>
@@ -902,7 +946,7 @@
 		<name>FreeTrialURL</name>
 	</customLabels>
 	<customLabels>
-		<label>Ни одного конверта не отправлено</label>
+		<label>Чтобы посмотреть статус конверта, необходимо его отправить</label>
 		<name>NoEnvelopesSent</name>
 	</customLabels>
 	<customLabels>
@@ -986,6 +1030,10 @@
 		<name>Reminders</name>
 	</customLabels>
 	<customLabels>
+		<label>Дополнительные параметры</label>
+		<name>MoreOptions</name>
+	</customLabels>
+	<customLabels>
 		<label>Удалить</label>
 		<name>Remove</name>
 	</customLabels>
@@ -1050,8 +1098,16 @@
 		<name>Sent</name>
 	</customLabels>
 	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; создал(а) конверт</label>
+		<name>CreatedAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
 		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; отправил(а) конверт</label>
 		<name>SentAnEnvelope_2</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt; аннулировал(а) конверт</label>
+		<name>VoidedAnEnvelope_2</name>
 	</customLabels>
 	<customLabels>
 		<label>Показать</label>
@@ -1150,7 +1206,7 @@
 		<name>OtherRecipients</name>
 	</customLabels>
 	<customLabels>
-		<label>Send a copy of this envelope to your Salesforce contacts.</label>
+		<label>Отправьте копию этого конверта своим контактам в Salesforce.</label>
 		<name>OtherRecipientsDescription</name>
 	</customLabels>
 	<customLabels>
@@ -1414,6 +1470,14 @@
 		<name>SendWithDocuSign</name>
 	</customLabels>
 	<customLabels>
+		<label>Выйти?</label>
+		<name>ExitSendForSignature</name>
+	</customLabels>
+	<customLabels>
+		<label>Ваши действия не будут сохранены.</label>
+		<name>ProgressLostOnExit</name>
+	</customLabels>
+	<customLabels>
 		<label>Один или несколько макетов не найдено.</label>
 		<name>LayoutsNotFound</name>
 	</customLabels>
@@ -1524,6 +1588,10 @@
 	<customLabels>
 		<label>Нет макетов, связанных с выбранным объектом</label>
 		<name>NoLayoutsForSelectedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Выберите хотя бы один макет страницы</label>
+		<name>AtLeastOneLayoutIsRequired</name>
 	</customLabels>
 	<customLabels>
 		<label>Файлы DocuSign</label>
@@ -1766,23 +1834,23 @@
 		<name>MergeFieldOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>Table Options</label>
+		<label>Параметры таблицы</label>
 		<name>TableRowOptions</name>
 	</customLabels>
 	<customLabels>
-		<label>SOQL Filtering (WHERE):</label>
+		<label>Фильтрация SOQL (ГДЕ):</label>
 		<name>FilterByOption</name>
 	</customLabels>
 	<customLabels>
-		<label>SOQL Sorting (ORDER BY):</label>
+		<label>Сортировка SOQL (ПОРЯДОК ПО):</label>
 		<name>OrderByOption</name>
 	</customLabels>
 	<customLabels>
-		<label>SOQL Limiting (LIMIT):</label>
+		<label>Ограничение SOQL (ОГРАНИЧЕНИЕ):</label>
 		<name>LimitByOption</name>
 	</customLabels>
 	<customLabels>
-		<label>Value must be between 1 and 2000.</label>
+		<label>Необходимо указать значение от 1 до 2000.</label>
 		<name>LimitByErrorMessage</name>
 	</customLabels>
 	<customLabels>
@@ -1918,8 +1986,88 @@
 		<name>ImportTemplatesDescription</name>
 	</customLabels>
 	<customLabels>
+		<label>ПРИМЕНИТЬ</label>
+		<name>ApplyUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>ПРАВИЛО ДОКУМЕНТА</label>
+		<name>DocumentRuleUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>Правило документа</label>
+		<name>DocumentRule</name>
+	</customLabels>
+	<customLabels>
 		<label>https://docs.docusign.com/supportdocs/docusign-apps-launcher/Content/dal-admin-guide/gen-conditional-document-generation.htm</label>
 		<name>DocumentRuleHelpURL</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавить правило</label>
+		<name>AddRule</name>
+	</customLabels>
+	<customLabels>
+		<label>Введите имя правила. Пример: Контракт для Северной Америки</label>
+		<name>DocumentRuleNamePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>из следующих условий:</label>
+		<name>OfRuleConditions</name>
+	</customLabels>
+	<customLabels>
+		<label>ТО</label>
+		<name>Then</name>
+	</customLabels>
+	<customLabels>
+		<label>создать документ.</label>
+		<name>RuleGenerateDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>ЕСЛИ</label>
+		<name>IfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>Или Если</label>
+		<name>OrIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>ИЛИ ЕСЛИ</label>
+		<name>OrIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>И Если</label>
+		<name>AndIfStatement</name>
+	</customLabels>
+	<customLabels>
+		<label>И ЕСЛИ</label>
+		<name>AndIfStatementUppercase</name>
+	</customLabels>
+	<customLabels>
+		<label>Введите условное значение</label>
+		<name>EnterConditionalValue</name>
+	</customLabels>
+	<customLabels>
+		<label>Копировать строку</label>
+		<name>DuplicateRow</name>
+	</customLabels>
+	<customLabels>
+		<label>Любой</label>
+		<name>Any</name>
+	</customLabels>
+	<customLabels>
+		<label>Все</label>
+		<name>All</name>
+	</customLabels>
+	<customLabels>
+		<label>равно</label>
+		<name>Equals</name>
+	</customLabels>
+	<customLabels>
+		<label>не равно</label>
+		<name>DoesNotEqual</name>
+	</customLabels>
+	<customLabels>
+		<label>Нет доступных документов для создания.</label>
+		<name>NoDocumentsToGenerate</name>
 	</customLabels>
 	<customLabels>
 		<label>Массовое создание документов</label>
@@ -2034,6 +2182,10 @@
 		<name>GenerateFileFailMsg</name>
 	</customLabels>
 	<customLabels>
+		<label>Невозможно создать или просмотреть документ, так как у вас недостаточно полномочий. Свяжитесь с администратором, чтобы получить помощь.</label>
+		<name>UnauthorizedQueryMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>Нет шаблонов для данной конфигурации.</label>
 		<name>NoDocForTemplateMsg</name>
 	</customLabels>
@@ -2050,7 +2202,7 @@
 		<name>GeneratorBannerSuccessMsg</name>
 	</customLabels>
 	<customLabels>
-		<label>Unable to check completion of document generation.</label>
+		<label>Не удалось проверить, завершено ли создание документа.</label>
 		<name>GeneratorCompletionErrorMsg</name>
 	</customLabels>
 	<customLabels>
@@ -2476,6 +2628,10 @@
 	<customLabels>
 		<label>Вы можете создать пользовательскую кнопку в Salesforce для вызова URL-адреса настройки Document Generation. По нажатию такой кнопки будет открываться связанная форма Document Generation.</label>
 		<name>ConfigureButtonInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Кнопка</label>
+		<name>eSignSetupButtonTab</name>
 	</customLabels>
 	<customLabels>
 		<label>Настройка кнопок</label>
@@ -3562,6 +3718,38 @@
 		<name>EsignatureEnvelopeStatus</name>
 	</customLabels>
 	<customLabels>
+		<label>Отправить напоминание</label>
+		<name>SendReminder</name>
+	</customLabels>
+	<customLabels>
+		<label>Ваше напоминание отправлено!</label>
+		<name>ReminderSent</name>
+	</customLabels>
+	<customLabels>
+		<label>Аннулировать</label>
+		<name>VoidEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Аннулировать конверт</label>
+		<name>VoidEnvelopeHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Аннулируя этот конверт, вы отменяете все оставшиеся действия по подписанию. Получатели, завершившие подписание, получат уведомление по эл. почте с указанием причины аннулирования. Получатели, которые еще не поставили подпись, не смогут просмотреть и подписать вложенные документы.</label>
+		<name>VoidEnvelopeConfirmation</name>
+	</customLabels>
+	<customLabels>
+		<label>Причина аннулирования конверта.</label>
+		<name>VoidReason</name>
+	</customLabels>
+	<customLabels>
+		<label>Осталось символов: {0}.</label>
+		<name>VoidReasonLengthRemaining</name>
+	</customLabels>
+	<customLabels>
+		<label>Ваш конверт аннулирован.</label>
+		<name>EnvelopeVoided</name>
+	</customLabels>
+	<customLabels>
 		<label>Получайте данные о статусе конвертов в реальном времени прямо в Salesforce. Функция отображения статусов конвертов eSignature в DocuSign ускоряет подписание документов, позволяя выполнять больше задач.</label>
 		<name>ComponentSectionEnvelopeStatus</name>
 	</customLabels>
@@ -3962,6 +4150,42 @@
 		<name>GoToDocumentation</name>
 	</customLabels>
 	<customLabels>
+		<label>Устранение неполадок средства запуска приложений DocuSign</label>
+		<name>TroubleShootingTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Отключить учетную запись</label>
+		<name>TroubleShootingDisconnectAccount</name>
+	</customLabels>
+	<customLabels>
+		<label>Отключите учетную запись DocuSign, подключенную к вашей организации Salesforce</label>
+		<name>TroubleShootingDisconnectAccountInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Разрешения для папки</label>
+		<name>TroubleShootingFolderPermissions</name>
+	</customLabels>
+	<customLabels>
+		<label>Запустить задачу обновления разрешений для корневой папки</label>
+		<name>TroubleShootingFolderPermissionsInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Подключенное приложение</label>
+		<name>TroubleShootingConnectedApp</name>
+	</customLabels>
+	<customLabels>
+		<label>Запустить создание подключенного приложения</label>
+		<name>TroubleShootingConnectedAppInfo</name>
+	</customLabels>
+	<customLabels>
+		<label>Учетная запись DocuSign не подключена</label>
+		<name>TroubleShootingNoAccountConnected</name>
+	</customLabels>
+	<customLabels>
+		<label>Невозможно получить сведения об учетной записи DocuSign</label>
+		<name>TroubleShootingError</name>
+	</customLabels>
+	<customLabels>
 		<label>Добавить кнопку для использования eSignature</label>
 		<name>AddButtonEsignature</name>
 	</customLabels>
@@ -4004,6 +4228,10 @@
 	<customLabels>
 		<label>Ознакомьтесь с &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;кратким руководством&lt;/a&gt;</label>
 		<name>GenQuickGuide</name>
+	</customLabels>
+	<customLabels>
+		<label>См. наше &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;руководство&lt;/a&gt; или &lt;a href=&quot;https://support.docusign.com/en/guides/docusign-gen-for-salesforce-admin-guide&quot; target=&quot;_blank&quot;&gt;короткое видео&lt;/a&gt;</label>
+		<name>EnvelopeTemplatesQuickGuide</name>
 	</customLabels>
 	<customLabels>
 		<label>Конфигурации шаблонов</label>
@@ -4788,8 +5016,24 @@
 		<name>DeleteTemplateMessage</name>
 	</customLabels>
 	<customLabels>
+		<label>Вы уверены, что хотите удалить этот конверт?</label>
+		<name>DeleteEnvelopeMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Вы уверены, что хотите удалить этот шаблон конверта?</label>
+		<name>DeleteEnvelopeTemplateMessage</name>
+	</customLabels>
+	<customLabels>
 		<label>Шаблон удален.</label>
 		<name>TemplateDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>Конверт удален.</label>
+		<name>EnvelopeDeleted</name>
+	</customLabels>
+	<customLabels>
+		<label>Шаблон конверта удален.</label>
+		<name>EnvelopeTemplateDeleted</name>
 	</customLabels>
 	<customLabels>
 		<label>Ошибка</label>
@@ -4820,11 +5064,11 @@
 		<name>SCMHrefUndefined</name>
 	</customLabels>
 	<customLabels>
-		<label>Learn more about filtering records</label>
+		<label>Дополнительные сведения о записях фильтрации</label>
 		<name>LearnMoreAboutFiltering</name>	
 	</customLabels>	
 	<customLabels>
-		<label>Learn more about ordering records</label>
+		<label>Дополнительные сведения о записях упорядочения</label>
 		<name>LearnMoreAboutOrdering</name>
 	</customLabels>	
 	<customLabels>
@@ -4836,9 +5080,809 @@
 		<name>LearnMoreAboutOrderingURL</name>
 	</customLabels>	
 	<customLabels>
-		<label>Could not resolve object type {0}. Verify the object exists and you have access to it.</label>
-		<name>InvalidSObjectType_1</name>	
+		<label>Не удается обработать тип объекта {0}. Убедитесь, что объект существует и у вас есть доступ к нему.</label>
+		<name>InvalidSObjectType_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Недопустимая конфигурация конверта</label>
+		<name>InvalidEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Конфигурация конверта не задана.</label>
+		<name>UndefinedEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Имя не указано.</label>
+		<name>UndefinedName</name>
+	</customLabels>
+	<customLabels>
+		<label>Отношения не заданы.</label>
+		<name>UndefinedRelationship</name>
+	</customLabels>
+	<customLabels>
+		<label>Исходный объект пуст.</label>
+		<name>UndefinedSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Недопустимый исходный объект.</label>
+		<name>InvalidSourceObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Конфигурация конверта не найдена.</label>
+		<name>EnvelopeConfigurationNotFound</name>
+	</customLabels>
+	<customLabels>
+		<label>Исходный объект {0} не соответствует источнику конфигурации конверта {1}.</label>
+		<name>SourceMismatch_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Шаблон не задан.</label>
+		<name>UndefinedTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Идентификатор шаблона DocuSign не задан.</label>
+		<name>UndefinedDocuSignTemplateId</name>
+	</customLabels>
+	<customLabels>
+		<label>{0}[{1}]: {2}</label>
+		<name>ArrayError_3</name>
+	</customLabels>
+	<customLabels>
+		<label>документы</label>
+		<name>DocumentElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Требуемый тип исходного объекта: ContentDocument.</label>
+		<name>InvalidContentDocumentSource</name>
+	</customLabels>
+	<customLabels>
+		<label>Расширение не указано.</label>
+		<name>UndefinedExtension</name>
+	</customLabels>
+	<customLabels>
+		<label>получатели</label>
+		<name>RecipientElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Недопустимый тип взаимосвязи.</label>
+		<name>InvalidRelationshipType</name>
+	</customLabels>
+	<customLabels>
+		<label>Тип взаимосвязи не указан.</label>
+		<name>UndefinedRelationshipName</name>
+	</customLabels>
+	<customLabels>
+		<label>Связанный объект не указан.</label>
+		<name>UndefinedRelatedObject</name>
+	</customLabels>
+	<customLabels>
+		<label>Недопустимый связанный объект: {0}.</label>
+		<name>InvalidRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Неподдерживаемый связанный объект: {0}.</label>
+		<name>UnsupportedRelatedObject_1</name>
+	</customLabels>
+	<customLabels>
+		<label>Недопустимая взаимосвязь: {0}.</label>
+		<name>InvalidRelationship_1</name>
+	</customLabels>
+	<customLabels>
+		<label>настраиваемые поля</label>
+		<name>CustomFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Настраиваемое поле не определено.</label>
+		<name>UndefinedCustomField</name>
+	</customLabels>
+	<customLabels>
+		<label>Значение не указано. Требуемое значение — true, а отображается false.</label>
+		<name>UndefinedCustomFieldValue</name>
+	</customLabels>
+	<customLabels>
+		<label>Список пуст.</label>
+		<name>UndefinedList</name>
+	</customLabels>
+	<customLabels>
+		<label>объединить поля</label>
+		<name>MergeFieldElements</name>
+	</customLabels>
+	<customLabels>
+		<label>Поле слияния не определено.</label>
+		<name>UndefinedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>Путь не указан.</label>
+		<name>UndefinedPath</name>
+	</customLabels>
+	<customLabels>
+		<label>Поле слияния не связано с исходным объектом.</label>
+		<name>UnrelatedMergeField</name>
+	</customLabels>
+	<customLabels>
+		<label>Пример: Owner.Name = &apos;Иван Петров&apos;</label>
+		<name>ExampleFilterByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>Пример: CreatedDate ASC</label>
+		<name>ExampleOrderByClause</name>	
+	</customLabels>
+	<customLabels>
+		<label>Шаблоны конвертов</label>
+		<name>EnvelopeTemplates</name>
+	</customLabels>
+	<customLabels>
+		<label>Создать шаблон</label>
+		<name>CreateTemplate</name>
+	</customLabels>
+	<customLabels>
+		<label>Готовы создать первый шаблон конверта?</label>
+		<name>StartFirstEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Не знакомы с шаблонами конвертов?</label>
+		<name>NotFamiliarWithEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Имя</label>
+		<name>AddName</name>
+	</customLabels>
+	<customLabels>
+		<label>Это нельзя будет изменить позже.</label>
+		<name>CanNotModifiedLater</name>
+	</customLabels>
+	<customLabels>
+		<label>ШАБЛОН КОНВЕРТА</label>
+		<name>EnvelopeTemplateUpperCase</name>
+	</customLabels>
+	<customLabels>
+		<label>Прототип</label>
+		<name>DECDataSourceHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Поиск...</label>
+		<name>SearchPlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Вложить документы из записи Salesforce</label>
+		<name>AttachDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Выбор документа</label>
+		<name>DocumentSelection</name>
+	</customLabels>
+	<customLabels>
+		<label>Последний документ</label>
+		<name>LatestDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>Имя файла содержит...</label>
+		<name>FileNameContainsPending</name>
+	</customLabels>
+	<customLabels>
+		<label>Имя файла содержит</label>
+		<name>FileNameContains</name>
+	</customLabels>
+	<customLabels>
+		<label>Все документы</label>
+		<name>AllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Как добавлять документы</label>
+		<name>DecDocumentsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Двухминутное видео</label>
+		<name>DecDocumentsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/32qlvSr</label>
+		<name>DecDocumentsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавить получателей шаблона</label>
+		<name>DecRecipientsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Двухминутное видео</label>
+		<name>DecRecipientsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Or2pDp</label>
+		<name>DecRecipientsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Начало работы с шаблонами</label>
+		<name>DecSetupTemplatesVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>4-минутное видео</label>
+		<name>DecSetupTemplatesVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/3h1JsDK</label>
+		<name>DecSetupTemplatesVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Управление полями слияния</label>
+		<name>DecMergeFieldsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Двухминутное видео</label>
+		<name>DecMergeFieldsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/38Xwh3W</label>
+		<name>DecMergeFieldsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Создать настраиваемую кнопку</label>
+		<name>DecCustomButtonVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Двухминутное видео</label>
+		<name>DecCustomButtonVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2WqQ1YC </label>
+		<name>DecCustomButtonVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Подготовить поля для размещения</label>
+		<name>DecMergeFieldsHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Затем поместите свои поля DocuSign и Salesforce в шаблон конверта. На следующем шаге также можно добавить пользовательские поля Salesforce.</label>
+		<name>DecMergeFieldsSubHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Как добавить пользовательские поля слияния</label>
+		<name>DecMergeFieldsGuidanceHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>В новых учетных записях может не быть полей слияния. В этом случае администратор Salesforce может добавить такие поля, использовав данные в сопоставленных полях Salesforce и добавив их в настраиваемое поле DocuSign. После этого можно будет поместить пользовательские поля в документ. Вот как это делается:</label>
+		<name>DecMergeFieldsGuidanceInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>1. Выберите вкладку &quot;Поля слияния Salesforce&quot;</label>
+		<name>DecMergeFieldsGuidanceStep1Header</name>
+	</customLabels>
+	<customLabels>
+		<label>Появится меню &quot;Поля слияния Salesforce&quot;</label>
+		<name>DecMergeFieldsGuidanceStep1ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>2. Нажмите кнопку &quot;плюс&quot;</label>
+		<name>DecMergeFieldsGuidanceStep2Header</name>
+	</customLabels>
+	<customLabels>
+		<label>Откроется модальное окно &quot;Добавить пользовательское поле&quot;</label>
+		<name>DecMergeFieldsGuidanceStep2ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>3. Добавьте информацию, содержащуюся в поле слияния</label>
+		<name>DecMergeFieldsGuidanceStep3Header</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;Имя&lt;/b&gt;. Введите описательное имя поля (имя учетной записи, дата закрытия и т. д.)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation1</name>
+	</customLabels>
+	<customLabels>
+		<label>&lt;b&gt;Установить как поле слияния Salesforce&lt;/b&gt;. Установите этот флажок, а затем в появившемся меню выберите объект Salesforce, с которым связано это поле.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation2</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Разрешить отправителю редактировать&lt;/b&gt; (необязательно). Предоставление отправителям возможности изменять значение настраиваемого тега.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation3</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Обратная запись&lt;/b&gt; (необязательно). Обновление данных Salesforce при изменении данных подписантом.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation4</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Выберите –&lt;/b&gt;. Щелкните раскрывающийся список и выберите родительский объект Salesforce (учетная запись, потенциальная сделка и т. д.)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation5</name>
+	</customLabels>
+	<customLabels>
+		<label>•	&lt;b&gt;Выберите –&lt;/b&gt;. Щелкните раскрывающийся список и выберите поле родительского объекта (имя потенциальной сделки, дата закрытия и т. д.)</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation6</name>
+	</customLabels>
+	<customLabels>
+		<label>Щелкните здесь, чтобы просмотреть список дополнительных &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;параметров данных настраиваемых полей&lt;/a&gt;.</label>
+		<name>DecMergeFieldsGuidanceStep3ImageInformation7</name>
+	</customLabels>
+	<customLabels>
+		<label>4. Нажмите кнопку &quot;Сохранить&quot;</label>
+		<name>DecMergeFieldsGuidanceStep4Header</name>
+	</customLabels>
+	<customLabels>
+		<label>Настраиваемое поле готово для внедрения в шаблон конверта.</label>
+		<name>DecMergeFieldsGuidanceStep4ImageInformation</name>
+	</customLabels>
+	<customLabels>
+		<label>Хотите узнать больше о полях слияния? См. &lt;a href=&quot;https://support.docusign.com/home&quot; target=&quot;_blank&quot;&gt;документацию&lt;/a&gt;.</label>
+		<name>DecMergeFieldsGuidanceLearnMore</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавить получателей</label>
+		<name>DecAddRecipients</name>
+	</customLabels>
+	<customLabels>
+		<label>Определите получателей этого шаблона и их роли. Можно добавить пользователей из своей организации Salesforce или из внешних источников.</label>
+		<name>DecAddRecipientsDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Здесь появятся получатели, добавленные с правами просмотра или подписи документа.</label>
+		<name>DecAddRecipientsDescription2</name>
+	</customLabels>
+	<customLabels>
+		<label>Из Salesforce</label>
+		<name>DecFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Выберите динамического получателя из</label>
+		<name>DecRecordFieldsTitle1</name>
+	</customLabels>
+	<customLabels>
+		<label>При использовании шаблона его имя и контактные данные будут получены автоматически.</label>
+		<name>DecRecordFieldsTitle2</name>
+	</customLabels>
+	<customLabels>
+		<label>Поля записи</label>
+		<name>DecRecordFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Пользователи/контактные лица</label>
+		<name>DecUsersOrContacts</name>
+	</customLabels>
+	<customLabels>
+		<label>По роли</label>
+		<name>DecByRole</name>
+	</customLabels>
+	<customLabels>
+		<label>Группа подписания</label>
+		<name>DecSigningGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>SMS/телефон</label>
+		<name>DecSMSorPhone</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавьте прототип получателя, которого отправитель сможет указать позже. Можно также задать здесь конкретное лицо без возможности изменения.</label>
+		<name>DecRoleRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Выберите группу подписантов в учетной записи DocuSign своей организации. Не знаете, что такое группа подписантов?</label>
+		<name>DecSigningGroupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>https://support.docusign.com/en/articles/Signing-Groups-FAQs</label>
+		<name>DecSigningGroupLearnMoreLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Искать по имени группы...</label>
+		<name>DecSearchByGroupNamePlaceHolder</name>
+	</customLabels>
+	<customLabels>
+		<label>Поиск...</label>
+		<name>Searching</name>
+	</customLabels>
+	<customLabels>
+		<label>Выбрать группу</label>
+		<name>DecSelectGroup</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавьте конкретного пользователя из своих пользователей или контактов Salesforce. Этот пользователь не будет динамическим.</label>
+		<name>DecEntityLookupRecipientTitle</name>
+	</customLabels>
+	<customLabels>
+		<label>Выбрать пользователя или контактное лицо</label>
+		<name>DecSelectUserOrContact</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавить личное сообщение</label>
+		<name>DecAddPrivateMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавить проверку подлинности при доступе</label>
+		<name>DecAddAccessAuthentication</name>
+	</customLabels>
+	<customLabels>
+		<label>Действие</label>
+		<name>DecRecipientAction</name>
+	</customLabels>
+	<customLabels>
+		<label>Создать настраиваемую кнопку</label>
+		<name>DecCreateCustomButton</name>
+	</customLabels>
+	<customLabels>
+		<label>Выберите из своего исходного объекта макеты, на которые нужно добавить кнопку</label>
+		<name>DecLayoutDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>После создания пользовательской кнопки пользователи смогут отправлять этот шаблон. Также можно выбрать, на какие макеты добавить кнопку. </label>
+		<name>DecCreateCustomButtonDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Выберите макеты из исходного объекта, куда хотите добавить кнопку.</label>
+		<name>DecPageLayouts</name>
+	</customLabels>
+	<customLabels>
+		<label>Подписывающий лично</label>
+		<name>InPersonSignerLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Встроенный подписант</label>
+		<name>EmbeddedSigner</name>
+	</customLabels>
+	<customLabels>
+		<label>Сохранить и закрыть</label>
+		<name>SaveAndClose</name>
+	</customLabels>
+	<customLabels>
+		<label>Сохранить и закончить</label>
+		<name>SaveAndFinish</name>
+	</customLabels>
+	<customLabels>
+		<label>Разместить поля</label>
+		<name>Tagger</name>
+	</customLabels>
+	<customLabels>
+		<label>Документы</label>
+		<name>Documents</name>
+	</customLabels>
+	<customLabels>
+		<label>Объединить поля</label>
+		<name>MergeFields</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавить документы</label>
+		<name>AddDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Перетащите файлы сюда, чтобы загрузить их.</label>
+		<name>AddDocumentsHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавьте файлы, которые получатели должны будут просмотреть и подписать. Вы можете загрузить документы со своего устройства или из своей записи Salesforce.</label>
+		<name>AddDocumentsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Передать документ</label>
+		<name>UploadDocument</name>
+	</customLabels>
+	<customLabels>
+		<label>или перетащите документ</label>
+		<name>DropDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Переименовать конфигурацию конвертов</label>
+		<name>RenameEnvelopeConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Другие действия</label>
+		<name>MoreActions</name>
+	</customLabels>
+	<customLabels>
+		<label>Выбрать поле записи</label>
+		<name>DecRecordsFieldsLookupLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Выбрать связанный список</label>
+		<name>DecRelatedListLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Диаграмма порядка подписания</label>
+		<name>SigningOrderDiagram</name>
+	</customLabels>
+	<customLabels>
+		<label>Порядок подписания</label>
+		<name>SigningOrder</name>
+	</customLabels>
+	<customLabels>
+		<label>Роль</label>
+		<name>RecipientRoleLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Поле записи</label>
+		<name>RecipientRecordFieldLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Просмотр</label>
+		<name>View</name>
+	</customLabels>
+	<customLabels>
+		<label>Автоматические напоминания</label>
+		<name>AutomaticReminders</name>
+	</customLabels>
+	<customLabels>
+		<label>- Не напоминать -</label>
+		<name>DoNotRemind</name>
+	</customLabels>
+	<customLabels>
+		<label>ежедневно</label>
+		<name>EveryDay</name>
+	</customLabels>
+	<customLabels>
+		<label>Каждые {0} дн.</label>
+		<name>EveryNumberOfDays</name>
+	</customLabels>
+	<customLabels>
+		<label>Срок действия конверта после отправки: {0} дн.</label>
+		<name>ExpiresAfterSending</name>
+	</customLabels>
+	<customLabels>
+		<label>Подготовить и отправить</label>
+		<name>PrepareAndSend</name>
+	</customLabels>
+	<customLabels>
+		<label>Выбранные документы ({0})</label>
+		<name>SelectedDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавить из Salesforce</label>
+		<name>AddFromSalesforce</name>
+	</customLabels>
+	<customLabels>
+		<label>Параметры, использованные в этом шаблоне, можно настроить до и после отправки.</label>
+		<name>OptionsInfoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Настроить параметры после подписания</label>
+		<name>DecOptionsVideoText</name>
+	</customLabels>
+	<customLabels>
+		<label>Двухминутное видео</label>
+		<name>DecOptionsVideoLength</name>
+	</customLabels>
+	<customLabels>
+		<label>https://bcove.video/2Ov2plS</label>
+		<name>DecOptionsVideoLink</name>
+	</customLabels>
+	<customLabels>
+		<label>Обратная запись документа</label>
+		<name>DocumentWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>Этап {0}</label>
+		<name>Stage</name>
+	</customLabels>
+	<customLabels>
+		<label>Неправильный JSON.</label>
+		<name>InvalidJson</name>
+	</customLabels>
+	<customLabels>
+		<label>Пользователь не авторизован для выполнения этого действия.</label>
+		<name>UnauthorizedOperation</name>
+	</customLabels>
+	<customLabels>
+		<label>Тело запроса не определено.</label>
+		<name>UndefinedRequestBody</name>
+	</customLabels>
+	<customLabels>
+		<label>Сбой обработки события.</label>
+		<name>EventProcessingFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Сбой обновления данных.</label>
+		<name>DataUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Сбой обновления состояния.</label>
+		<name>StatusUpdateFailed</name>
+	</customLabels>
+	<customLabels>
+		<label>Невозможно выполнить обновление данных, поскольку для конверта не определен идентификатор источника.</label>
+		<name>DataUpdateMissingSourceId</name>
+	</customLabels>
+	<customLabels>
+		<label>Не удалось получить поля слияния для конверта.</label>
+		<name>GetMergeFieldsError</name>
+	</customLabels>
+	<customLabels>
+		<label>Тема сообщения электронной почты</label>
+		<name>EmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Сообщение для всех получателей</label>
+		<name>MessageToAllHeader</name>
+	</customLabels>
+	<customLabels>
+		<label>Будет отправлено всем получателем как сообщение электронной почты.</label>
+		<name>MessageToAllDescription</name>
+	</customLabels>
+	<customLabels>
+		<label>Документы для вашей подписи DocuSign</label>
+		<name>DefaultEmailSubject</name>
+	</customLabels>
+	<customLabels>
+		<label>Я отправляю вам этот запрос на вашу электронную подпись. Пожалуйста, ознакомьтесь с документом и подпишите его в электронном виде, перейдя по ссылке, приведенной ниже.</label>
+		<name>DefaultEmailMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавить и создать</label>
+		<name>AddAndNew</name>
+	</customLabels>
+	<customLabels>
+		<label>Макс. число получаемых записей</label>	
+		<name>MaximumRecordsPulled</name>
+	</customLabels>
+	<customLabels>
+		<label>Ближайшая дата создания</label>	
+		<name>RecentDateCreated</name>
 	</customLabels>	
+	<customLabels>
+		<label>Ближайшая дата изменения</label>	
+		<name>RecentDateModified</name>
+	</customLabels>
+	<customLabels>
+		<label>Другое (пользовательский формат SOQL)</label>	
+		<name>OtherCustomSOQL</name>
+	</customLabels>
+	<customLabels>
+		<label>Добавить имя и адрес электронной почты</label>	
+		<name>AddNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>Порядок сортировки</label>	
+		<name>OrderedBy</name>
+	</customLabels>
+	<customLabels>
+		<label>Не удалось сформировать документ &quot;{0}&quot;: {1}</label>
+		<name>CouldNotGenerateDocument_2</name>
+	</customLabels>
+	<customLabels>
+		<label>Обработка</label>
+		<name>Processing</name>
+	</customLabels>
+	<customLabels>
+		<label>Недавние</label>
+		<name>Recent</name>
+	</customLabels>
+	<customLabels>
+		<label>Принадлежащие мне</label>
+		<name>OwnedByMe</name>
+	</customLabels>
+	<customLabels>
+		<label>Поделились со мной</label>
+		<name>SharedWithMe</name>
+	</customLabels>
+	<customLabels>
+		<label>Отслеживаемые</label>
+		<name>Following</name>
+	</customLabels>
+	<customLabels>
+		<label>Библиотеки</label>
+		<name>Libraries</name>
+	</customLabels>
+	<customLabels>
+		<label>Поиск файлов...</label>
+		<name>SearchFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Поисковый запрос должен содержать не менее 2 символов.</label>
+		<name>SearchTermMinLengthMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>По имени и электронной почте</label>
+		<name>ByNameAndEmail</name>
+	</customLabels>
+	<customLabels>
+		<label>Выберите получателя</label>	
+		<name>SelectRecipient</name>
+	</customLabels>
+	<customLabels>
+		<label>Сохранять завершенные документы в записи потенциальной сделки</label>
+		<name>DocumentWriteBackOptionMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Объединить все документы в файл PDF</label>
+		<name>DocumentWriteBackCombineAllDocuments</name>
+	</customLabels>
+	<customLabels>
+		<label>Имя файла</label>
+		<name>DocumentWriteBackFilename</name>
+	</customLabels>
+	<customLabels>
+		<label>Сохранять сертификат завершения в записи потенциальной сделки</label>
+		<name>DocumentWriteBackCertificateOfCompletion</name>
+	</customLabels>	
+	<customLabels>
+		<label>Получатель/роль</label>	
+		<name>RecipientRoleDecTableHeader</name>
+	</customLabels>	
+	<customLabels>
+		<label>Получатель</label>	
+		<name>RecipientLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>Название документа + статус конверта</label>
+		<name>DocumentNameAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Название конверта + .pdf</label>
+		<name>DocumentNameAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Название документа + статус конверта + .pdf</label>
+		<name>DocumentNameAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Тема сообщения электронной почты + состояние конверта</label>
+		<name>EmailSubjectAndEnvelopeStatus</name>
+	</customLabels>
+	<customLabels>
+		<label>Тема сообщения электронной почты + .pdf</label>
+		<name>EmailSubjectAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>Тема сообщения электронной почты + состояние конверта + .pdf</label>
+		<name>EmailSubjectAndEnvelopeStatusAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>&quot;Конверт&quot; + идентификатор конверта + .pdf</label>
+		<name>EnvelopeAndEnvelopeIDAndPdf</name>
+	</customLabels>
+	<customLabels>
+		<label>У вас нет файлов. Используйте другой фильтр или загрузите файл.</label>
+		<name>EmptyFileResultsMessage</name>
+	</customLabels>
+	<customLabels>
+		<label>Выбрано файлов: {0} из {1}</label>
+		<name>SelectedFilesOfTotalFiles</name>
+	</customLabels>
+	<customLabels>
+		<label>Обратная запись данных</label>
+		<name>DataWriteback</name>
+	</customLabels>
+	<customLabels>
+		<label>После завершения документов обновите этап {0}</label>
+		<name>DataWritebackHelpText</name>
+	</customLabels>
+	<customLabels>
+		<label>Обновление этапа</label>
+		<name>StageUpdate</name>
+	</customLabels>
+	<customLabels>		
+		<label>начинается с</label>
+		<name>StartsWithLabel</name>
+	</customLabels>
+	<customLabels>		
+		<label>оканчивается на</label>
+		<name>EndsWithLabel</name>
+	</customLabels>
+	<customLabels>
+		<label>- Не обновлять -</label>
+		<name>DoNotUpdatePlaceholder</name>
+	</customLabels>
+	<customLabels>
+		<label>Дата истечения срока должна быть в будущем</label>
+		<name>ExpirationDateError</name>
+	</customLabels>
+	<customLabels>
+		<label>Создать конфигурацию DocuSign Connect</label>
+		<name>CreateConnectConfiguration</name>
+	</customLabels>
+	<customLabels>
+		<label>Использование DocuSign Connect не включено для вашей учетной записи.</label>
+		<name>ConnectNotEnabled</name>
+	</customLabels>
+	<customLabels>
+		<label>Не удалось создать конфигурацию DocuSign Connect.</label>
+		<name>ConnectConfigurationError</name>
+	</customLabels>
+	<customLabels>
+		<label>Не удалось обновить один или несколько шаблонов документов.</label>
+		<name>TemplateDocumentError</name>
+	</customLabels>
+	<customLabels>
+		<label>Не удалось обновить один или несколько шаблонов получателей.</label>
+		<name>TemplateRecipientError</name>
+	</customLabels>
+	<customLabels>
+		<label>Не удалось обновить шаблон.</label>
+		<name>TemplateError</name>
+	</customLabels>
 	<customPageWebLinks>
 		<label>Настройка DocuSign</label>
 		<name>Setup</name>
