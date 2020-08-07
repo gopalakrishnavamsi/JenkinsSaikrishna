@@ -31,7 +31,10 @@
             </div>
         </div>
         <template if:false={hasDocs}>
-            <div class="slds-p-around_large">
+            <div class="slds-p-around_large"
+                ondrop={handleFileOnDrop}
+                ondragover={handleFileOnDragOver}
+                ondragenter={handleFileOnDragEnter}>
                 <div class="ds-addDocuments-details-body">
                     <div class="slds-align_absolute-center slds-p-around_large">
                         <img src={addDocumentsEmptyImageURL}/>

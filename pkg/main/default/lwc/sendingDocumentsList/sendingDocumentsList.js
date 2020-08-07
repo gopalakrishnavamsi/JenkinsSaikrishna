@@ -183,4 +183,22 @@ export default class SendingDocumentsList extends LightningElement {
   handleDrop(evt) {
     handleDrop(this, evt, this.updateDocuments.bind(this));
   }
+
+  handleFileOnDrop(event) {
+    event.preventDefault();
+    if (event.dataTransfer.files.length > 0) {
+      const fileUploadComponent = this.template.querySelector('c-file-upload');
+      fileUploadComponent.handleFileUploadFromDragAndDrop(event.dataTransfer.files[0]);
+    }
+  }
+
+  handleFileOnDragOver(event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  handleFileOnDragEnter(event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
 }
