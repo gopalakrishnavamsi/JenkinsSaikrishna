@@ -8,6 +8,7 @@ import {
     itemDragEnd
 } from 'c/dragUtils';
 import { DOCUMENT_TYPE_SOURCE_FILES } from 'c/documentUtils';
+import {getRandomKey} from 'c/utils';
 
 export default class DecDocumentsList extends LightningElement {
     @api
@@ -18,6 +19,10 @@ export default class DecDocumentsList extends LightningElement {
     // Document-specific property for envelope configuration
     @api
     attachSourceFiles;
+
+    get key() {
+        return getRandomKey();
+    }
 
     handleDragEnter(evt) {
         if (evt.currentTarget.dataset.type !== DOCUMENT_TYPE_SOURCE_FILES) {
