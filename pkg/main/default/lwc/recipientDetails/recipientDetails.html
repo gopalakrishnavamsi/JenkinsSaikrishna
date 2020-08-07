@@ -51,11 +51,13 @@
         <c-dec-recipient-authentication
                 value={authentication}
                 type={type}
+                forbid-changes={recipient.hasTemplateAuthentication}
                 onauthenticationchange={handleAuthenticationChange}>
         </c-dec-recipient-authentication>
 
         <c-dec-recipient-private-message
                 onnotechange={updateNote}
+                forbid-changes={recipient.hasTemplateNote}
                 recipient-note={recipient.note}>
         </c-dec-recipient-private-message>
     </section>

@@ -1,7 +1,13 @@
 <template>
-    <c-expandable-link label={Labels.decAddPrivateMessage} icon-name="utility:quick_text" oncollapse={resetNote} is-visible={hasNote}>
+    <c-expandable-link
+        label={Labels.decAddPrivateMessage}
+        icon-name="utility:quick_text"
+        oncollapse={resetNote}
+        is-visible={hasNote}
+        forbid-changes={forbidChanges}>
         <div slot='content'>
             <lightning-textarea value={recipientNote} name="privateMessage" label={Labels.privateMessage}
+                                disabled={forbidChanges}
                                 onchange={updateNote}></lightning-textarea>
         </div>
     </c-expandable-link>

@@ -1,9 +1,15 @@
 <template>
-    <c-expandable-link label={Labels.decAddAccessAuthentication} icon-name="utility:shield" oncollapse={resetAuthentication} is-visible={hasAuthentication}>
+    <c-expandable-link
+        label={Labels.decAddAccessAuthentication}
+        icon-name="utility:shield"
+        oncollapse={resetAuthentication}
+        is-visible={hasAuthentication}
+        forbid-changes={forbidChanges}>
         <div slot='content'>
             <lightning-combobox
                     name="Access Authentication"
                     label={Labels.accessAuthentication}
+                    disabled={forbidChanges}
                     value={authenticationType}
                     placeholder="Select Action"
                     options={options}
@@ -13,6 +19,7 @@
                 <lightning-input 
                     name={AuthenticationTypes.AccessCode.value} 
                     label={AuthenticationTypes.AccessCode.label} 
+                    disabled={forbidChanges}
                     value={value.accessCode}
                     type="text"
                     maxlength="50"
@@ -23,6 +30,7 @@
                 <lightning-input 
                     name={AuthenticationTypes.SMSOrPhone.value} 
                     label={AuthenticationTypes.SMSOrPhone.label} 
+                    disabled={forbidChanges}
                     value={smsValue} 
                     type="text" 
                     onchange={handleDataChange}>

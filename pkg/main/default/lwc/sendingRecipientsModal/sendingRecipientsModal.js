@@ -91,7 +91,7 @@ export default class SendingRecipientsModal extends LightningElement {
     this.isValid = detail && !this.showDuplicateRecipientError;
   };
 
-  convertRecipientType({note = null, envelopeRecipientId = null, role = null, sequence = null}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
+  convertRecipientType({note = null, envelopeRecipientId = null, role = null, sequence = null, hasTemplateAuthentication = false, hasTemplateNote = false}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
     if (isEmpty(type)) return null;
     return proxify(
       new Recipient(
@@ -100,6 +100,8 @@ export default class SendingRecipientsModal extends LightningElement {
           sequence,
           envelopeRecipientId,
           isPlaceHolder,
+          hasTemplateAuthentication,
+          hasTemplateNote,
           type : this.readOnly && !isPlaceHolder ? Actions.CarbonCopy.value : Actions.Signer.value
         },
         role,

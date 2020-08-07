@@ -15,8 +15,12 @@
                     </slot>
                 </div>
                 <div class="slds-col slds-size_1-of-12 slds-p-left_x-small ds-clear-icon-container">
-                    <lightning-icon size="xx-small" icon-name='utility:clear' onclick={hideContent}
-                                    class="ds-clear-icon"></lightning-icon>
+                    <lightning-icon
+                        size="xx-small"
+                        icon-name='utility:clear'
+                        onclick={hideContent}
+                        if:false={forbidChanges}
+                        class="ds-clear-icon"></lightning-icon>
                 </div>
             </div>
         </section>

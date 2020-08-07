@@ -8,6 +8,9 @@ export default class ExpandableLink extends LightningElement {
     @api
     label;
 
+    @api
+    forbidChanges = false;
+
     isOpen = false;
 
     @api

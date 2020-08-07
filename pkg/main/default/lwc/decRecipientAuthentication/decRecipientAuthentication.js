@@ -21,6 +21,9 @@ export default class DecRecipientAuthentication extends LightningElement {
   authenticationType;
 
   @api
+  forbidChanges = false;
+
+  @api
   get value() {
     return this.privateValue;
   }

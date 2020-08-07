@@ -29,11 +29,15 @@
           // Add front-end properties to documents
           var documents = fromEnvelopeTemplate ? result.envelope.documents : result.documents;
           var recipients = fromEnvelopeTemplate ? result.envelope.recipients : result.recipients;
+
           if (fromEnvelopeTemplate) {
             recipients.forEach(function (r) {
               r.isPlaceHolder = true;
+              r.hasTemplateAuthentication = helper.hasTemplateAuthentication(r);
+              r.hasTemplateNote = !$A.util.isEmpty(r.note);
             });
           }
+          
           if (!$A.util.isEmpty(documents)) {
             documents.forEach(function (d) {
               var isFileSelected = !$A.util.isEmpty(files) && (files.indexOf(d.sourceId) >= 0);
@@ -103,6 +107,14 @@
           helper.showToastErrorMessage(component, message);
         });
     }
+  },
+
+  // Returns whether or not a recipient of an envelope template has authentication settings that are read-only
+  hasTemplateAuthentication: function (recipient) {
+    return !$A.util.isEmpty(recipient)
+      && !$A.util.isEmpty(recipient.authentication)
+      && ((Array.isArray(recipient.authentication.smsPhoneNumbers) && recipient.authentication.smsPhoneNumbers.length > 0)
+        || !$A.util.isEmpty(recipient.authentication.accessCode));
   },
 
   beginSendForSignature: function (component, self) {

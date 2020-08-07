@@ -9,16 +9,21 @@ export default class DecRecipientPrivateMessage extends LightningElement {
   privateNote;
 
   @api
+  forbidChanges = false;
+
+  hasNote;
+
+  @api
   get recipientNote() {
     return this.privateNote
   }
 
   set recipientNote(note = '') {
     this.privateNote = note;
-  }
 
-  get hasNote() {
-    return !isEmpty(this.recipientNote);
+    if (isEmpty(this.hasNote)) {
+      this.hasNote = !isEmpty(note);
+    }
   }
 
   updateNote = ({target}) => {
@@ -37,6 +42,7 @@ export default class DecRecipientPrivateMessage extends LightningElement {
         detail: ''
       })
     )
+    this.hasNote = false;
     this.recipientNote = '';
   }
 }
