@@ -8,12 +8,15 @@ public with sharing class CLMService {
 			} else {
 				Map<String, Object> mapRecord = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(record.get(0)));
 				List<String> fieldNameConfig = fieldName.split('\\.');
-				String referenceObjectName = fieldNameConfig.get(0);
-				String referenceFieldName = fieldNameConfig.get(1);
-				if (mapRecord.containsKey(referenceObjectName)) {
-					Object o = mapRecord.get(referenceObjectName);
-					Map<String, Object> mapInnerRecord = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(o));
-					value = String.valueOf(mapInnerRecord.get(referenceFieldName));
+				for(Integer i =0; i < fieldNameConfig.size()-1; i++) {
+					String referenceObjectName = fieldNameConfig.get(i);
+					String referenceFieldName = fieldNameConfig.get(i+1);
+					if (mapRecord.containsKey(referenceObjectName)) {
+						Object o = mapRecord.get(referenceObjectName);
+						Map<String, Object> mapInnerRecord = (Map<String, Object>)JSON.deserializeUntyped(JSON.serialize(o));
+						mapRecord.put(referenceFieldName, mapInnerRecord.get(referenceFieldName));
+						value = String.valueOf(mapInnerRecord.get(referenceFieldName));
+					}
 				}
 			}
 		}
