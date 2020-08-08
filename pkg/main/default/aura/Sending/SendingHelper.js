@@ -33,11 +33,12 @@
           if (fromEnvelopeTemplate) {
             recipients.forEach(function (r) {
               r.isPlaceHolder = true;
+              r.requiresRoleInfo = $A.util.isEmpty(r.name) || $A.util.isEmpty(r.email);
               r.hasTemplateAuthentication = helper.hasTemplateAuthentication(r);
               r.hasTemplateNote = !$A.util.isEmpty(r.note);
             });
           }
-          
+
           if (!$A.util.isEmpty(documents)) {
             documents.forEach(function (d) {
               var isFileSelected = !$A.util.isEmpty(files) && (files.indexOf(d.sourceId) >= 0);

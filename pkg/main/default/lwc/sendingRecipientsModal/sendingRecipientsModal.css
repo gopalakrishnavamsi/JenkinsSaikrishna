@@ -1,6 +1,14 @@
 .ds-recipient-type-selection {
     width: 211px;
-    height: 384px
+    height: 384px;
+}
+
+.ds-recipient-disabled {
+    pointer-events:none;
+}
+
+.ds-cursor-not-allowed {
+    cursor: not-allowed;
 }
 
 .ds-panel-separator {

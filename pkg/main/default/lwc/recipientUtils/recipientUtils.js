@@ -68,7 +68,7 @@ const emailRegEx = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|
 const isPlaceHolderSymbol = Symbol('isPlaceHolder');
 
 export class Recipient {
-  constructor({id = null, envelopeRecipientId = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = 'Signer', signingGroup = null, isPlaceHolder = false, hasTemplateAuthentication = false, hasTemplateNote = false}, role, routingOrder = 1) {
+  constructor({id = null, envelopeRecipientId = null, name = null, email = null, sequence = null, phone = null, authentication = null, emailSettings = null, note = null, readOnly = false, required = false, source = null, type = 'Signer', signingGroup = null, isPlaceHolder = false, hasTemplateAuthentication = false, hasTemplateNote = false, requiresRoleInfo = false}, role, routingOrder = 1) {
     this.id = id;
     this[isPlaceHolderSymbol] = isPlaceHolder;
     this.envelopeRecipientId = envelopeRecipientId;
@@ -88,6 +88,7 @@ export class Recipient {
     this.role = role;
     this.hasTemplateAuthentication = hasTemplateAuthentication;
     this.hasTemplateNote = hasTemplateNote;
+    this.requiresRoleInfo = requiresRoleInfo;
   }
 
   static fromObject(recipientDetails = {}) {

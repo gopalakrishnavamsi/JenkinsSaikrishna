@@ -30,7 +30,8 @@
                 role-name={roleName}
                 name={recipient.name}
                 email={recipient.email}
-                is-sending={isSending}>
+                is-sending={isSending}
+                is-role-edit-disabled={recipient.requiresRoleInfo}>
         </c-dec-role-recipient>
     </template>
     <template if:true={isSigningGroup}>

@@ -4,6 +4,8 @@ import {isEmpty, proxify} from 'c/utils';
 import DuplicateRowLabel from '@salesforce/label/c.DuplicateRow';
 
 const DEFAULT_SELECTED_TYPE = Types.EntityLookupSending.value;
+const ENTER_KEYCODE = 13;
+const TAB_KEYCODE = 9;
 
 export default class SendingRecipientsModal extends LightningElement {
   Labels = {
@@ -55,12 +57,33 @@ export default class SendingRecipientsModal extends LightningElement {
     return this.privateRecipient;
   }
 
+  get isReadOnlyRecipient() {
+    return this.recipient.isPlaceHolder === true && this.recipient.requiresRoleInfo === false;
+  }
+
+  get containerClass() {
+    return this.isReadOnlyRecipient ? 'ds-cursor-not-allowed' : '';
+  }
+
+  /*
+  * For Template Recipients, we enable edit option if placeholders can be edited; All other Template recipients
+  * should not be modified by user as that would result in duplicates
+  */
+  get modalClass() {
+    return this.isReadOnlyRecipient ? 'ds-recipient-disabled' : '';
+  }
+
   get isSaveDisabled() {
     return !this.isValid;
   }
 
   get isNew() {
     return isEmpty(this.recipient);
+  }
+
+  get recipientTypeClass() {
+    return this.recipient.isPlaceHolder === true && this.recipient.requiresRoleInfo === true ?
+      'ds-recipient-disabled' : '';
   }
 
   saveRecipient = () => {
@@ -91,7 +114,7 @@ export default class SendingRecipientsModal extends LightningElement {
     this.isValid = detail && !this.showDuplicateRecipientError;
   };
 
-  convertRecipientType({note = null, envelopeRecipientId = null, role = null, sequence = null, hasTemplateAuthentication = false, hasTemplateNote = false}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
+  convertRecipientType({note = null, envelopeRecipientId = null, role = null, sequence = null, hasTemplateAuthentication = false, hasTemplateNote = false, requiresRoleInfo = false}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
     if (isEmpty(type)) return null;
     return proxify(
       new Recipient(
@@ -102,11 +125,28 @@ export default class SendingRecipientsModal extends LightningElement {
           isPlaceHolder,
           hasTemplateAuthentication,
           hasTemplateNote,
-          type : this.readOnly && !isPlaceHolder ? Actions.CarbonCopy.value : Actions.Signer.value
+          requiresRoleInfo,
+          type: this.readOnly && !isPlaceHolder ? Actions.CarbonCopy.value : Actions.Signer.value
         },
         role,
         this.routingOrder
       )
     );
+  }
+
+  preventKeyboardEvents(event) {
+    if (this.recipient.isPlaceHolder === true &&
+      this.recipient.requiresRoleInfo === false &&
+      (event.keyCode === TAB_KEYCODE || event.keyCode === ENTER_KEYCODE)) {
+      event.preventDefault();
+    }
+  }
+
+  recipientTypeKeyDown(event) {
+    if (this.recipient.isPlaceHolder === true &&
+      this.recipient.requiresRoleInfo === true &&
+      (event.keyCode === TAB_KEYCODE || event.keyCode === ENTER_KEYCODE)) {
+      event.preventDefault();
+    }
   }
 }
