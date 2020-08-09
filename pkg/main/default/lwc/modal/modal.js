@@ -51,7 +51,7 @@ export default class Modal extends LightningElement {
   }
 
   get modalClass() {
-    return !isEmpty(this.modalOnModal) ? LARGE_MODAL_CLASS + ' ' + MODAL_ON_MODAL_STYLE :
+    return !isEmpty(this.modalOnModal) ? MEDIUM_MODAL_CLASS + ' ' + MODAL_ON_MODAL_STYLE :
       !isEmpty(this.modalSize) ? MODAL_SIZE_TO_CLASS[this.modalSize] : BASE_MODAL_CLASS;
   }
 
