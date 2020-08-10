@@ -24,6 +24,9 @@ export default class RecipientRow extends LightningElement {
   @api
   isSigningOrder = false;
 
+  @api
+  fromEnvelopeTemplate = false;
+
   Labels = {
     Edit: EditLabel,
     Delete: DeleteLabel,
@@ -36,6 +39,10 @@ export default class RecipientRow extends LightningElement {
 
   disconnectedCallback() {
     releaseMessageContext(this.context);
+  }
+
+  get isDraggable() {
+    return !this.fromEnvelopeTemplate;
   }
 
   get disableRecipientDelete(){

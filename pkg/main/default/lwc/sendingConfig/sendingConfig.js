@@ -41,6 +41,7 @@ export default class SendingConfig extends LightningElement {
   @api defaultRoles;
   @api files;
   @api sendNow;
+  @api fromEnvelopeTemplate = false;
 
   isLoading = false;
   label = LABEL;

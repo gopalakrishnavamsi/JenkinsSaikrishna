@@ -30,6 +30,9 @@ export default class RecipientsList extends LightningElement {
   @api
   isSending
 
+  @api
+  fromEnvelopeTemplate = false;
+
   privateRecipients = [];
 
   @api

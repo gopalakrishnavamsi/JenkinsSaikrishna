@@ -38,7 +38,8 @@
                     read-only={forbidEnvelopeChanges}
                     recipients={recipients}
                     default-roles={defaultRoles}
-                    onemptyrecipients={handleEmptyRecipient}>
+                    onemptyrecipients={handleEmptyRecipient}
+                    from-envelope-template={fromEnvelopeTemplate}>
             </c-recipients-config>
             <c-dec-recipient-message
                     if:true={showEmailMessage}

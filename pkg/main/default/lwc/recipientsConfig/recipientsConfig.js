@@ -22,6 +22,8 @@ export default class Recipients extends LightningElement {
 
   @api readOnly;
 
+  @api fromEnvelopeTemplate = false;
+
   Labels = Labels;
 
   showAddRecipientsModal = false;

@@ -13,6 +13,7 @@
                             <lightning-button-group if:false={isEmptyRecipients}>
                                 <lightning-button label={Labels.signingOrderLabel}
                                                   icon-name={signingOrderButtonIcon}
+                                                  disabled={fromEnvelopeTemplate}
                                                   onclick={handleRecipientSigningOrder}></lightning-button>
                                 <lightning-button label={Labels.view}
                                                   onclick={handleSigningOrderModalOpen}></lightning-button>
@@ -53,6 +54,7 @@
                         onupdaterecipient={handleRecipientsUpdate}
                         ondragrecipientupdate={handleDragRecipientsUpdate}
                         onsigningorderchecked={handleRecipientSigningOrder}
+                        from-envelope-template={fromEnvelopeTemplate}
                 ></c-recipients-list>
             </div>
         </div>

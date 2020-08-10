@@ -138,6 +138,7 @@
           files: component.get('v.files'),
           sendNow: component.get('v.sendNow'),
           forbidEnvelopeChanges: component.get('v.lock'),
+          fromEnvelopeTemplate: !$A.util.isEmpty(component.get('v.envelopeTemplateId')),
           onsendcomplete: component.getReference('c.onSendComplete')
         });
       resolve();

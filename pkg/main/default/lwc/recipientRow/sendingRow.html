@@ -1,5 +1,5 @@
 <template>
-    <div draggable="true">
+    <div draggable={isDraggable}>
         <div class="slds-grid">
             <div class={recipientBackgroundColor}></div>
             <div class="slds-col slds-p-around_medium slds-size_1-of-9">
@@ -8,6 +8,7 @@
                         <div class="slds-media__figure">
                             <div if:false={isSigningOrder} class="ds-center-icon"></div>
                             <lightning-icon
+                                if:false={fromEnvelopeTemplate}
                                 icon-name="utility:drag_and_drop"
                                 alternative-text="Drag and Drop"
                                 variant="neutral"
@@ -18,6 +19,7 @@
                     <div class="slds-col ds-routingOrderInput">
                         <lightning-input if:true={isSigningOrder}
                                          value={recipient.routingOrder}
+                                         disabled={fromEnvelopeTemplate}
                                          pattern="[0-9]*"
                                          type="number"
                                          onchange={handleRoutingOrderChange}></lightning-input>
