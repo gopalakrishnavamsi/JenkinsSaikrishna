@@ -121,8 +121,8 @@ export default class RecipientRow extends LightningElement {
   }
 
   handleRoutingOrderChange = (event) => {
-    if (isEmpty(event.target.value)) return;
-    let payload = {'currentIndex': this.index, 'newRoutingOrder': event.target.value};
+    if (isEmpty(event.target.value) || isNaN(event.target.value)) return;
+    let payload = {'currentIndex': this.index, 'newRoutingOrder': Number(event.target.value)};
     genericEvent.call(this, 'routingorderupdate', payload, false);
   };
 
