@@ -3,7 +3,7 @@ import getChildRelationships from '@salesforce/apex/EnvelopeConfigurationControl
 import getLookupFields from '@salesforce/apex/EnvelopeConfigurationController.getLookupFields';
 import {Relationship} from 'c/queryUtils';
 import loadingLabel from '@salesforce/label/c.Loading';
-import {isEmpty,proxify} from 'c/utils';
+import {isEmpty,proxify,getRandomKey} from 'c/utils';
 import {Labels} from 'c/recipientUtils';
 
 export default class DecRelationshipLookup extends LightningElement {
@@ -75,6 +75,10 @@ export default class DecRelationshipLookup extends LightningElement {
     return this.searchTerm ?
       'slds-form-element slds-lookup slds-is-open' :
       'slds-form-element slds-lookup slds-is-close';
+  }
+
+  get key() {
+    return getRandomKey();
   }
 
   initRelationships = results => {

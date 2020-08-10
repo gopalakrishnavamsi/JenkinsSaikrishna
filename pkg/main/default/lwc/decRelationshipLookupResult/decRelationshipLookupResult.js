@@ -1,4 +1,5 @@
 import { LightningElement, api } from 'lwc';
+import {getRandomKey} from 'c/utils';
 
 export default class RelationshipLookupResult extends LightningElement {
     @api 
@@ -6,6 +7,10 @@ export default class RelationshipLookupResult extends LightningElement {
 
     @api
     index;
+
+    get key() {
+        return getRandomKey();
+    }
 
     handleOnClick() {
         this.dispatchEvent(
