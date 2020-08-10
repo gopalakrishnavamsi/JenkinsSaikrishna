@@ -50,8 +50,7 @@ export default class Recipients extends LightningElement {
 
   set recipients(val) {
     this.privateRecipients = proxify(!isEmpty(val) ? val.map(r => Recipient.fromObject({
-      ...r,
-      isPlaceHolder: r.isPlaceHolder
+      ...r
     })) : []);
     this.isEmptyRecipients = isEmpty(this.privateRecipients) || (!isEmpty(this.privateRecipients) && this.privateRecipients.length === 0);
     genericEvent.call(this, 'emptyrecipients', this.isEmptyRecipients, false);
@@ -130,10 +129,6 @@ export default class Recipients extends LightningElement {
 
   set editRecipient(val) {
     this.recipients = editArrayElement(this.recipients, this.editRecipientIndex, val);
-  }
-
-  get isPlaceHolder() {
-    return !isEmpty(this.editRecipient) && this.editRecipient.isPlaceHolder;
   }
 
   closeRecipientsModal = () => {
