@@ -94,12 +94,8 @@ export default class SendingConfig extends LightningElement {
     return this.currentStep === PROGRESS_STEP.RECIPIENTS && !this.isEmptyRecipients;
   }
 
-  /*
-      Placeholder for sending immediately or navigating to tagger page.
-      TODO: Discuss and finalize Prepare & Send loading behavior
-  */
   get taggerLoadingMessage() {
-    return this.sendNow ? 'Sending envelope...' : 'Preparing to send for signature...';
+    return this.sendNow ? this.label.sendingEnvelope : this.label.preparingToSend;
   }
 
   @api

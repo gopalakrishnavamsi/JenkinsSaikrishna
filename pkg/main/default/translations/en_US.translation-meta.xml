@@ -5652,6 +5652,14 @@
 		<name>PrepareAndSend</name>
 	</customLabels>
 	<customLabels>
+		<label>Sending envelope...</label>
+		<name>SendingEnvelope</name>
+	</customLabels>
+	<customLabels>
+		<label>Preparing to send for signature...</label>
+		<name>PreparingToSend</name>
+	</customLabels>
+	<customLabels>
 		<label>Selected Documents ({0})</label>
 		<name>SelectedDocuments</name>
 	</customLabels>

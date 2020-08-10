@@ -10920,6 +10920,20 @@ them in DocuSign Apps Launcher.&lt;a href=&quot;https://support.docusign.com/art
 		<value>Prepare &amp; Send</value>
 	</labels>
 	<labels>
+		<fullName>SendingEnvelope</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Sending envelope (no tagger)</shortDescription>
+		<value>Sending envelope...</value>
+	</labels>
+	<labels>
+		<fullName>PreparingToSend</fullName>
+		<language>en_US</language>
+		<protected>true</protected>
+		<shortDescription>Preparing to send envelope for signature</shortDescription>
+		<value>Preparing to send for signature...</value>
+	</labels>
+	<labels>
 		<fullName>SelectedDocuments</fullName>
 		<categories>Envelope Configuration Setup</categories>
 		<language>en_US</language>

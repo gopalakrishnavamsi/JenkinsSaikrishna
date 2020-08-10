@@ -13,6 +13,8 @@ import prepareAndSend from '@salesforce/label/c.PrepareAndSend';
 import defaultEmailSubject from '@salesforce/label/c.DefaultEmailSubject';
 import defaultEmailMessage from '@salesforce/label/c.DefaultEmailMessage';
 import undefinedRecipient from '@salesforce/label/c.UndefinedRecipient';
+import sendingEnvelope from '@salesforce/label/c.SendingEnvelope';
+import preparingToSend from '@salesforce/label/c.PreparingToSend';
 import {isEmpty} from 'c/utils';
 
 const LABEL = {
@@ -30,7 +32,9 @@ const LABEL = {
   prepareAndSend,
   defaultEmailSubject,
   defaultEmailMessage,
-  undefinedRecipient
+  undefinedRecipient,
+  sendingEnvelope,
+  preparingToSend
 };
 
 const PROGRESS_STEP = {
