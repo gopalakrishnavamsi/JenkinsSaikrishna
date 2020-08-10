@@ -4,7 +4,8 @@ import {
   LABEL,
   TEMPLATE_DOCUMENT_ACTIONS,
   TEMPLATE_DOCUMENT_DELETE_ACTION,
-  DOCUMENT_TYPE_CONTENT_VERSION
+  DOCUMENT_TYPE_CONTENT_VERSION,
+  DOCUMENT_TYPE_TEMPLATE
 } from 'c/documentUtils';
 // Publisher
 import SENDING_RENAME_DOCUMENT from '@salesforce/messageChannel/SendingRenameDocument__c';
@@ -40,6 +41,10 @@ export default class SendingDocument extends LightningElement {
 
   get isDraggable() {
     return !isEmpty(this.forbidEnvelopeChanges) && !this.forbidEnvelopeChanges;
+  }
+
+  get isDocumentLocked() {
+    return this.forbidEnvelopeChanges || this.document.type === DOCUMENT_TYPE_TEMPLATE;
   }
 
   get documentExtension() {

@@ -9,6 +9,7 @@ import SENDING_REMOVE_DOCUMENT from '@salesforce/messageChannel/SendingRemoveDoc
 import SENDING_UPDATE_DOCUMENTS from '@salesforce/messageChannel/SendingUpdateDocuments__c';
 import SENDING_TOGGLE_DOCUMENT_SELECTION from '@salesforce/messageChannel/SendingToggleDocumentSelection__c';
 import {isEmpty, proxify, subscribeToMessageChannel} from 'c/utils';
+import { DOCUMENT_TYPE_TEMPLATE } from 'c/documentUtils';
 
 export default class SendingDocuments extends LightningElement {
     @api recordId;
@@ -71,13 +72,15 @@ export default class SendingDocuments extends LightningElement {
     toggleDocumentSelection(message) {
         const toggleSingleDocument = !isEmpty(message.index);
         this.privateDocuments = this.privateDocuments.map((doc, index) => {
-        if ((toggleSingleDocument && index === message.index) || (!toggleSingleDocument) && !doc.isEmptyTemplate) {
-            return {
-            ...doc,
-            selected: message.selected
-            };
-        }
-        return doc;
+            // Docs forbidden changes (online editor templates) and envelope templates may not be toggled
+            const isDocumentLocked = this.forbidEnvelopeChanges || doc.type === DOCUMENT_TYPE_TEMPLATE;
+            if (!isDocumentLocked && ((toggleSingleDocument && index === message.index) || !toggleSingleDocument)) {
+                return {
+                    ...doc,
+                    selected: message.selected
+                };
+            }
+            return doc;
         });
     }
 

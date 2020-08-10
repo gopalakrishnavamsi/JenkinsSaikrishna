@@ -31,7 +31,7 @@
                 name={recipient.name}
                 email={recipient.email}
                 is-sending={isSending}
-                is-role-edit-disabled={recipient.requiresRoleInfo}>
+                is-place-holder={recipient.isPlaceHolder}>
         </c-dec-role-recipient>
     </template>
     <template if:true={isSigningGroup}>

@@ -30,6 +30,7 @@ const DOCUMENT_TYPE_SOURCE_FILES = 'SourceFiles';
 
 // Sending experience
 const DOCUMENT_TYPE_CONTENT_VERSION = 'ContentVersion';
+const DOCUMENT_TYPE_TEMPLATE = 'Template';
 
 const LABEL = {
   addDocuments,
@@ -132,6 +133,7 @@ export {
   DOCUMENT_TYPE_SOURCE_FILES,
   DOCUMENT_TYPE_TEMPLATE_DOCUMENT,
   DOCUMENT_TYPE_CONTENT_VERSION,
+  DOCUMENT_TYPE_TEMPLATE,
   LABEL,
   getDefaultSourceFiles,
   getDefaultTemplateDocument,

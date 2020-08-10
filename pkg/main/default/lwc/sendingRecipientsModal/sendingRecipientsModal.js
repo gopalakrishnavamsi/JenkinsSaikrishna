@@ -82,7 +82,7 @@ export default class SendingRecipientsModal extends LightningElement {
   }
 
   get recipientTypeClass() {
-    return this.recipient.isPlaceHolder === true && this.recipient.requiresRoleInfo === true ?
+    return !this.readOnly && this.recipient.isPlaceHolder === true && this.recipient.requiresRoleInfo === true ?
       'ds-recipient-disabled' : '';
   }
 
@@ -114,7 +114,7 @@ export default class SendingRecipientsModal extends LightningElement {
     this.isValid = detail && !this.showDuplicateRecipientError;
   };
 
-  convertRecipientType({note = null, envelopeRecipientId = null, role = null, sequence = null, hasTemplateAuthentication = false, hasTemplateNote = false, requiresRoleInfo = false}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
+  convertRecipientType({note = null, envelopeRecipientId = null, role = null, sequence = null, hasTemplateAuthentication = false, hasTemplateNote = false, requiresRoleInfo = true}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
     if (isEmpty(type)) return null;
     return proxify(
       new Recipient(
