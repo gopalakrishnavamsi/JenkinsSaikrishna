@@ -392,7 +392,7 @@ global with sharing class EventService {
 					if (eu == null || String.isBlank(eu.status)) continue;
 
 					if (o.envelopeEventUpdates != null && String.isNotBlank(eu.sourceId)) {
-						eu.addUpdates(o.envelopeEventUpdates.get(eu.status));
+						eu.addUpdates(o.envelopeEventUpdates.get(eu.status.toLowerCase()));
 					}
 
 					if (eu.recipients == null || o.recipientEventUpdates == null) continue;
@@ -698,7 +698,7 @@ global with sharing class EventService {
 			QueryString params = new QueryString(RestContext.request.params);
 			transactionId = params.getUUID(KEY_TRANSACTION_ID, transactionId);
 
-			Permissions.verifyIsDocuSignAdministrator();
+			Permissions.verifyIsDocuSignSender();
 
 			if (RestContext.request == null || RestContext.request.requestBody == null) {
 				throw new RequestException(APIErrorCode.UNDEFINED_REQUEST_BODY, Label.UndefinedRequestBody);

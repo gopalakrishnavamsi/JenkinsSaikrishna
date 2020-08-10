@@ -1090,7 +1090,7 @@ private class EventServiceTest {
 
 	@IsTest
 	static void test_publishEvents_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createUser()) {
 			LogSettings__c s = LogSettings__c.getInstance();
 			s.Level__c = LoggingLevel.WARN.name();
 			insert s;
@@ -1125,23 +1125,6 @@ private class EventServiceTest {
 			System.assertEquals(APIErrorCode.UNAUTHORIZED, resp.error.code);
 			System.assertEquals(String.valueOf(UnauthorizedException.class), resp.error.type);
 			System.assertEquals(Label.UnauthorizedOperation, resp.error.message);
-
-			List<Log__c> ls = [
-				SELECT Id, TransactionId__c, EntityId__c, SourceId__c, Version__c, Severity__c, Message__c, Class__c,
-					Method__c
-				FROM Log__c
-			];
-			System.assertEquals(1, Collection.size(ls));
-			LoggerService.LogEntry le = LoggerService.DB.convert(ls[0]);
-			System.assertNotEquals(null, le);
-			System.assertNotEquals(null, le.context);
-			System.assertEquals(transactionId, le.context.transactionId);
-			System.assertEquals(null, le.context.entityId);
-			System.assertEquals(null, le.context.sourceId);
-			System.assert(String.isNotBlank(le.message));
-			System.assert(le.message.startsWith(Label.EventProcessingFailed));
-			System.assertEquals(String.valueOf(EventService.class), le.context.className);
-			System.assertEquals('publishEvents', le.context.methodName);
 		}
 	}
 
