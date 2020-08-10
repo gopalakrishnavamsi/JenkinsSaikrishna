@@ -6,12 +6,12 @@
         <div class="slds-grid slds-gutters slds-p-left_xxx-small" slot="content">
             <div class="slds-col slds-size_1-of-2">
                 <div class="slds-form-element">
-                    <lightning-input name="name" onchange={handleChange} label={Labels.nameLabel} value={name}></lightning-input>
+                    <lightning-input name="name" disabled={disableEditName} onchange={handleChange} label={Labels.nameLabel} value={name}></lightning-input>
                 </div>
             </div>
             <div class="slds-col slds-size_1-of-2">
                 <div class="slds-form-element">
-                    <lightning-input name="email" onchange={handleChange} label={Labels.emailAddressLabel} value={email}></lightning-input>
+                    <lightning-input name="email" disabled={disableEditEmail} onchange={handleChange} label={Labels.emailAddressLabel} value={email}></lightning-input>
                 </div>
             </div>
         </div>        

@@ -58,7 +58,11 @@ export default class SendingRecipientsModal extends LightningElement {
   }
 
   get isReadOnlyRecipient() {
-    return this.recipient.isPlaceHolder === true && this.recipient.requiresRoleInfo === false;
+    return this.recipient.isPlaceHolder === true && this.requiresRoleInfo === false;
+  }
+
+  get requiresRoleInfo() {
+    return this.recipient.requiresRoleName || this.recipient.requiresRoleEmail;
   }
 
   get containerClass() {
@@ -82,7 +86,7 @@ export default class SendingRecipientsModal extends LightningElement {
   }
 
   get recipientTypeClass() {
-    return !this.readOnly && this.recipient.isPlaceHolder === true && this.recipient.requiresRoleInfo === true ?
+    return !this.readOnly && this.recipient.isPlaceHolder === true && this.requiresRoleInfo === true ?
       'ds-recipient-disabled' : '';
   }
 
@@ -114,7 +118,7 @@ export default class SendingRecipientsModal extends LightningElement {
     this.isValid = detail && !this.showDuplicateRecipientError;
   };
 
-  convertRecipientType({note = null, envelopeRecipientId = null, role = null, sequence = null, hasTemplateAuthentication = false, hasTemplateNote = false, requiresRoleInfo = true}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
+  convertRecipientType({note = null, envelopeRecipientId = null, role = null, sequence = null, hasTemplateAuthentication = false, hasTemplateNote = false, requiresRoleName = true, requiresRoleEmail = true}, type = DEFAULT_SELECTED_TYPE, isPlaceHolder = false) {
     if (isEmpty(type)) return null;
     return proxify(
       new Recipient(
@@ -125,7 +129,8 @@ export default class SendingRecipientsModal extends LightningElement {
           isPlaceHolder,
           hasTemplateAuthentication,
           hasTemplateNote,
-          requiresRoleInfo,
+          requiresRoleName,
+          requiresRoleEmail,
           type: this.readOnly && !isPlaceHolder ? Actions.CarbonCopy.value : Actions.Signer.value
         },
         role,
@@ -135,16 +140,14 @@ export default class SendingRecipientsModal extends LightningElement {
   }
 
   preventKeyboardEvents(event) {
-    if (this.recipient.isPlaceHolder === true &&
-      this.recipient.requiresRoleInfo === false &&
+    if (this.recipient.isPlaceHolder && !this.requiresRoleInfo &&
       (event.keyCode === TAB_KEYCODE || event.keyCode === ENTER_KEYCODE)) {
       event.preventDefault();
     }
   }
 
   recipientTypeKeyDown(event) {
-    if (this.recipient.isPlaceHolder === true &&
-      this.recipient.requiresRoleInfo === true &&
+    if (this.recipient.isPlaceHolder && this.requiresRoleInfo &&
       (event.keyCode === TAB_KEYCODE || event.keyCode === ENTER_KEYCODE)) {
       event.preventDefault();
     }

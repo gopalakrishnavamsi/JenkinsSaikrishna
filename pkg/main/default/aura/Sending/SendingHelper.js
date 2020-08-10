@@ -33,7 +33,10 @@
           if (fromEnvelopeTemplate) {
             recipients.forEach(function (r) {
               r.isPlaceHolder = true;
-              r.requiresRoleInfo = $A.util.isEmpty(r.name) || $A.util.isEmpty(r.email);
+              // Determine whether to disable role name / email fields
+              r.requiresRoleName = $A.util.isEmpty(r.name);
+              r.requiresRoleEmail = $A.util.isEmpty(r.email);
+              // Determine whether to disable authentication changes
               r.hasTemplateAuthentication = helper.hasTemplateAuthentication(r);
               r.hasTemplateNote = !$A.util.isEmpty(r.note);
             });
