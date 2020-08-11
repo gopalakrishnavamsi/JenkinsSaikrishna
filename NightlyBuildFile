@@ -10,7 +10,7 @@ def installTasks = [
 ]
 
 def defaultSalesforceArgs = [
-  versionNumber: '2.5',
+  versionNumber: '2.6',
   nightlyJwtKeyFileCredsId: 'salesforce-nightly-jwt-key-file',
   nightlyConsumerKeyCredsId: 'salesforce-nightly-jwt-consumer-key',
   packagingOrgUsername: 'vineet.puranik+dfsle@docusign.com',
