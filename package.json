@@ -7,6 +7,7 @@
     "doc": "doc"
   },
   "devDependencies": {
+    "@salesforce/sfdx-lwc-jest": "^0.9.2",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "eslint": "^5.14.1",
@@ -30,7 +31,11 @@
     "installPackage": "sfdx force:package:install",
     "setup": "npm run auth && npm run buildOrg && npm run updateOrg && npm run postInstall && npm run generatePassword && npm run openOrg",
     "lint": "eslint ./;",
-    "test": "mocha -r jsdom-global/register"
+    "test": "mocha -r jsdom-global/register",
+    "test:unit": "lwc-jest",
+    "test:unit:debug": "lwc-jest --debug",
+    "test:unit:watch": "lwc-jest --watch",
+    "test:unit:coverage": "lwc-jest --coverage"
   },
   "repository": {
     "type": "git",
