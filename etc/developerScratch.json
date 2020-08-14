@@ -2,6 +2,9 @@
   "orgName": "DFS-Core Developer",
   "edition": "Developer",
   "hasSampleData": true,
+  "features": [
+    "Communities"
+  ],
   "settings": {
     "accountSettings": {
       "enableAccountTeams": true
@@ -11,6 +14,9 @@
     },
     "opportunitySettings": {
       "enableOpportunityTeam": true
+    },
+    "communitiesSettings": {
+      "enableNetworksEnabled": true
     }
   }
 }

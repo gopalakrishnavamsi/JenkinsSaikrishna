@@ -206,12 +206,20 @@ private class SalesforceTest {
 
 	@IsTest
 	static void test_isValidCommunityURL() {
-		List<Profile> profileData = [SELECT Id FROM Profile WHERE Name = 'Customer Community Login User' LIMIT 1];
-		if (Schema.getGlobalDescribe().containsKey('Network') && Collection.isNotEmpty(profileData)) {
-			Schema.Account acc = TestUtils.createAccount();
-			Contact con = TestUtils.createContact(acc.Id);
+		if (Schema.getGlobalDescribe().containsKey('Network')) {
+			Id communityUserProfileId;
+			List<SObject> networkMemberGroupData = Database.query('SELECT ParentId FROM NetworkMemberGroup WHERE AssignmentStatus = \'Added\'');
+			for(SObject networkMemberGroup : networkMemberGroupData) {
+				Id parentId = (Id) networkMemberGroup.get('ParentId');
+				if(parentId.getSobjectType() == Schema.Profile.SObjectType) {
+					communityUserProfileId = parentId;
+					break;
+				}
+			}
+			if(String.isBlank(communityUserProfileId)) {
+				return;
+			}
 			User user = new User (
-				ContactId = con.Id,
 				FirstName = 'Unit',
 				LastName = 'Test',
 				Username = UUID.randomUUID().toString() + '@unit.test',
@@ -220,7 +228,7 @@ private class SalesforceTest {
 				TimeZoneSidKey = 'America/Los_Angeles',
 				LocaleSidKey = 'en_US',
 				EmailEncodingKey = 'ISO-8859-1',
-				ProfileId = profileData[0].Id,
+				ProfileId = communityUserProfileId,
 				LanguageLocaleKey = 'en_US');
 			insert user;
 			System.runAs(user) {

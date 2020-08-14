@@ -50,4 +50,9 @@ When uploading the managed package, you must set the post-install splash page. F
 To clean up any leftover orgs/configs in your local mac
 - Go to .sfdx folder in your home directory and clean up the .json files associated with the particular org causing the issue. No CLI command with DX yet to do the cleanup.
 
+## Community Notes
+- To view the list of available community templates: `sfdx force:community:template:list`.
+- To create community: `sfdx force:community:create --name "dfsle community name" --templatename "template name" --urlpathprefix "dfslecommunityname"`.
+Replace "template name" with available community template name from the previous step.
+
 
