@@ -182,7 +182,7 @@ public with sharing class GenController extends Controller {
 	@AuraEnabled
 	public static List<Gen.RuleEvaluation> checkDocumentRules(
 		final Id sourceId,
-		final String startingObject,
+		final String sourceObject,
 		final String filesJson,
 		final Boolean isPreview) {
 
@@ -192,13 +192,13 @@ public with sharing class GenController extends Controller {
 			} else {
 				Permissions.verifyIsDocuSignGenerator();
 			}
-			if (sourceId == null || startingObject == null || filesJson == null) throw new DocuSignException(Label.UndefinedArgument);
+			if (sourceId == null || sourceObject == null || filesJson == null) throw new DocuSignException(Label.UndefinedArgument);
 
 			List<Gen.File> files = (List<Gen.File>)JSON.deserialize(filesJson, List<Gen.File>.class);
 			List<Gen.RuleEvaluation> ruleEvaluations = new List<Gen.RuleEvaluation>();
 			for (Gen.File file : files) {
 				if (file.rule != null) {
-					ruleEvaluations.add(new Gen.RuleEvaluation(file.contentDocumentId, GenService.checkDocumentRule(startingObject, file.rule)));
+					ruleEvaluations.add(new Gen.RuleEvaluation(file.contentDocumentId, GenService.checkDocumentRule(sourceId, sourceObject, file.rule)));
 				}
 			}
 			return ruleEvaluations;

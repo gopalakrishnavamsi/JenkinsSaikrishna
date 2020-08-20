@@ -280,6 +280,7 @@ public with sharing class SetupController extends Controller {
 		try {
 			List<Product> ps = AccountProducts.getInstance().startTrials(new Set<String> { Product.GEN });
 			AccountProducts.save();
+			resetPlatformAuthorizedFlag();
 			return Collection.size(ps) == 1;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add Gen Trial.');
@@ -292,9 +293,23 @@ public with sharing class SetupController extends Controller {
 			List<Product> ps = AccountProducts.getInstance().startTrials(
 				new Set<String> { Product.GEN, Product.NEGOTIATE });
 			AccountProducts.save();
+			resetPlatformAuthorizedFlag();
 			return Collection.size(ps) == 2;
 		} catch (Exception ex) {
 			throw Controller.wrapException(ex, 'Failed to add Negotiate Trial.');
+		}
+	}
+
+	//This method will make sure that we are resetting the IsPlatformAuthorized__c whenever a Gen or Negotiate trial has started.
+	//This will make sure that SpringCM - SalesforceOAuth Integration endpoint will be successfully invoked after starting a Gen or Negotiate Trial
+	private static void resetPlatformAuthorizedFlag() {
+		Permissions.verifyIsDocuSignAdministrator();
+		AccountSettings__c settings = AccountSettings__c.getOrgDefaults();
+		if (settings != null &&
+			settings.IsPlatformAuthorized__c != null &&
+			settings.IsPlatformAuthorized__c == true) {
+				settings.IsPlatformAuthorized__c = false;
+				update settings;
 		}
 	}
 

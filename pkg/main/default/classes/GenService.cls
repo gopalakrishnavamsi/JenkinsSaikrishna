@@ -751,12 +751,13 @@ public with sharing class GenService {
 	}
 
 	public static Boolean checkDocumentRule(
+		final Id sourceId,
 		final String sourceObject,
 		final Gen.Rule rule) {
 
-		if (String.isBlank(sourceObject) || rule == null || Collection.isEmpty(rule.conditions)) return true; // no rules to evaluate
+		if (sourceId == null || String.isBlank(sourceObject) || rule == null || Collection.isEmpty(rule.conditions)) return true; // no rules to evaluate
 
-		return System.Database.countQuery(String.format('SELECT COUNT() FROM {0} WHERE {1}', new List<Object> {
+		return System.Database.countQuery(String.format('SELECT COUNT() FROM {0} WHERE Id = :sourceId AND {1}', new List<Object> {
 			sourceObject,
 			getRuleFilters(rule.ruleType == 'any' ? 'OR' : 'AND', rule.conditions)
 		})) > 0;
@@ -828,7 +829,7 @@ public with sharing class GenService {
 		Entity source = Entity.resolve(sourceId);
 		List<Gen.Task> tasks = new List<Gen.Task>();
 		for (Gen.File file : DB.queryTemplateFiles(templateId)) {
-			if (file == null || !checkDocumentRule(source.typeName, file.rule)) continue;
+			if (file == null || !checkDocumentRule(sourceId, source.typeName, file.rule)) continue;
 
 			tasks.add(new Gen.Task(file, getOutputFileName(file, source, Datetime.now())));
 		}

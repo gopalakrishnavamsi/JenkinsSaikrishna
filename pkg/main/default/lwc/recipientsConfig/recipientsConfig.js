@@ -40,6 +40,8 @@ export default class Recipients extends LightningElement {
 
   isEmptyRecipients = false;
 
+  originalEditRecipient = null;
+
   @api
   sourceObject;
 
@@ -138,6 +140,15 @@ export default class Recipients extends LightningElement {
     if (!isEmpty(this.editRecipientIndex)) this.editRecipientIndex = null;
   };
 
+  cancelSave = () => {
+    if (!isEmpty(this.editRecipientIndex) && !isEmpty(this.originalEditRecipient)) {
+      this.editRecipient = this.originalEditRecipient;
+      this.editRecipientIndex = null;
+      this.originalEditRecipient = null;
+    }
+    this.closeRecipientsModal();
+  };  
+
   handleRecipientsModalOpen = () => {
     this.showAddRecipientsModal = true;
   };
@@ -177,6 +188,8 @@ export default class Recipients extends LightningElement {
 
   handleEditRecipient = ({index}) => {
     this.editRecipientIndex = index;
+    //Save original state of recipient if edit flow is cancelled.
+    this.originalEditRecipient = this.editRecipient.clone();
     this.showAddRecipientsModal = true;
   };
 

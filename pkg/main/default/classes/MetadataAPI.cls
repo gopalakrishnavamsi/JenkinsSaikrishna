@@ -499,12 +499,14 @@ public class MetadataAPI {
 		private String[] field_order_type_info = new String[] { 'createdById', 'createdByName', 'createdDate', 'fileName', 'fullName', 'id', 'lastModifiedById', 'lastModifiedByName', 'lastModifiedDate', 'manageableState', 'namespacePrefix', 'type_x' };
 	}
 	public class FeedLayoutFilter {
+		public String feedFilterName;
 		public String feedFilterType;
 		public String feedItemType;
+		private String[] feedFilterName_type_info = new String[]{ 'feedFilterName', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] feedFilterType_type_info = new String[] { 'feedFilterType', SOAP_M_URI, null, '1', '1', 'false' };
 		private String[] feedItemType_type_info = new String[] { 'feedItemType', SOAP_M_URI, null, '0', '1', 'false' };
 		private String[] apex_schema_type_info = new String[] { SOAP_M_URI, 'true', 'false' };
-		private String[] field_order_type_info = new String[] { 'feedFilterType', 'feedItemType' };
+		private String[] field_order_type_info = new String[] { 'feedFilterName', 'feedFilterType', 'feedItemType' };
 	}
 	public class RelatedListItem {
 		public String[] customButtons;

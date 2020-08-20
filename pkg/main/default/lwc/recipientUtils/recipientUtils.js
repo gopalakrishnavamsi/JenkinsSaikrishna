@@ -210,6 +210,10 @@ export class Recipient {
     };
   }
 
+  clone() {
+    return Recipient.fromObject(this);
+  }  
+
   equals(recipient) {
     if (!isEmpty(this.signingGroup)) return this.signingGroup === recipient.signingGroup;
     else if (!isEmpty(this.source) && !isEmpty(recipient.source)) return this.sourceId === recipient.sourceId;

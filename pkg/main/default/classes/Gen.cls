@@ -115,9 +115,11 @@ public class Gen {
 				return this.status == 'Success' || this.status == Label.Success;
 			}
 		}
+		@AuraEnabled
 		public Boolean complete {
 			get {
-				return this.status == Label.Success || this.status == Label.Failure;
+				return this.status == 'Success' || this.status == Label.Success
+					|| this.status == 'Failure' || this.status == Label.Failure;
 			}
 		}
 

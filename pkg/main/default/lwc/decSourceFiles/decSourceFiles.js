@@ -51,7 +51,7 @@ export default class DecSourceFiles extends LightningElement {
         if (!isEmpty(this.document.filter)) {
             if (!isEmpty(this.document.filter.orderBy) && this.document.filter.maximumRecords === 1) {
                 this.sourceFilesType = SOURCE_FILES_TYPES.LATEST;
-            } else if (!isEmpty(this.document.filter.filterBy)) {
+            } else if (!isEmpty(this.document.filter.orderBy)) {
                 this.containsValue = this.document.filter.filterBy;
                 this.sourceFilesType = SOURCE_FILES_TYPES.CONTAINS;
             } else {

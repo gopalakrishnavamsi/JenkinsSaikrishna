@@ -378,6 +378,10 @@ private class SetupControllerTest {
 			Test.startTest();
 			System.assert(SetupController.addTrialGen());
 			Test.stopTest();
+			AccountSettings__c testSettings = AccountSettings__c.getOrgDefaults();
+			System.assertNotEquals(null, testSettings);
+			System.assertNotEquals(null, testSettings.IsPlatformAuthorized__c);
+			System.assertEquals(false, testSettings.IsPlatformAuthorized__c);
 		}
 	}
 
@@ -403,6 +407,10 @@ private class SetupControllerTest {
 			Test.startTest();
 			System.assert(SetupController.addTrialNegotiate());
 			Test.stopTest();
+			AccountSettings__c testSettings = AccountSettings__c.getOrgDefaults();
+			System.assertNotEquals(null, testSettings);
+			System.assertNotEquals(null, testSettings.IsPlatformAuthorized__c);
+			System.assertEquals(false, testSettings.IsPlatformAuthorized__c);
 		}
 	}
 

@@ -388,7 +388,7 @@
     var containsRule = !$A.util.isEmpty(templateFilesWithRules);
     action.setParams({
       sourceId: component.get('v.recordId'),
-      startingObject: component.get('v.template').objectMappings.name,
+      sourceObject: component.get('v.template').objectMappings.name,
       filesJson: JSON.stringify(templateFilesWithRules),
       isPreview: component.get('v.isPreview')
     });
@@ -666,7 +666,7 @@
         var failedFiles = [];
 
         job.tasks.forEach(function (task) {
-          if (task.status === $A.get('$Label.c.Failure')) {
+          if (task.complete && !task.success) {
             failedFiles.push({message: task.message, title: task.file.title});
           } else {
             taskIds.push(task.id.value);
@@ -728,16 +728,18 @@
         var failedTasks = [];
 
         tasks.forEach(function (task) {
-          if (task.status === $A.get('$Label.c.Success')) {
-            finishedTasks.push({
-              cv: task.file,
-              taskId: task.id.value
-            });
-          } else if (task.status === $A.get('$Label.c.Failure')) {
-            failedTasks.push({
-              taskId: task.id.value,
-              message: task.message
-            });
+          if (task.complete) {
+            if (task.success) {
+              finishedTasks.push({
+                cv: task.file,
+                taskId: task.id.value
+              });
+            } else {
+              failedTasks.push({
+                taskId: task.id.value,
+                message: task.message
+              });
+            }
           }
         });
 

@@ -227,4 +227,88 @@ private class GenAPITest {
 			System.assertEquals(result.status == 'Success', result.success);
 		}
 	}
+
+	@IsTest
+	static void test_task_localized_complete() {
+		User u = UserMock.createUser();
+		u.LanguageLocaleKey = 'pt_BR';
+		update u;
+
+		System.runAs(u) {
+			Test.startTest();
+			System.assert(!new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				'Processing',
+				null).complete);
+			System.assert(!new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				Label.Processing,
+				null).complete);
+			System.assert(new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				'Success',
+				null).complete);
+			System.assert(new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				Label.Success,
+				null).complete);
+			System.assert(new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				'Failure',
+				null).complete);
+			System.assert(new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				Label.Failure,
+				null).complete);
+			Test.stopTest();
+		}
+	}
+
+	@IsTest
+	static void test_task_localized_success() {
+		User u = UserMock.createUser();
+		u.LanguageLocaleKey = 'pt_BR';
+		update u;
+
+		System.runAs(u) {
+			Test.startTest();
+			System.assert(!new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				'Processing',
+				null).success);
+			System.assert(!new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				Label.Processing,
+				null).success);
+			System.assert(new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				'Success',
+				null).success);
+			System.assert(new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				Label.Success,
+				null).success);
+			System.assert(!new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				'Failure',
+				null).success);
+			System.assert(!new Gen.Task(
+				UUID.randomUUID(),
+				null,
+				Label.Failure,
+				null).success);
+			Test.stopTest();
+		}
+	}
 }
