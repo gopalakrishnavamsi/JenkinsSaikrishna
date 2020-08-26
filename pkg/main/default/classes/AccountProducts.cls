@@ -644,6 +644,24 @@ public with sharing class AccountProducts {
 			//have appropriate access to SpringCM work items
 			NegotiateAPI.getInstance().setRootLevelFolderSecurity();
 		}
+		if (self.isGenEnabled() || self.isNegotiateEnabled()) {
+			// DFS-7533 - create /root/admin/html_templates folder structure as Admin during setup
+			setRootFolder();
+		}
+	}
+
+	@TestVisible
+	private static void setRootFolder() {
+		Permissions.verifyIsDocuSignAdministrator();
+		String templateFolderId;
+		OnlineEditorRoot__c onlineEditorRootFolderSettings = OnlineEditorRoot__c.getOrgDefaults();
+		if (onlineEditorRootFolderSettings.FolderId__c != null) {
+			templateFolderId = onlineEditorRootFolderSettings.FolderId__c;
+		} else {
+			templateFolderId = String.valueOf(NegotiateAPI.getInstance().getTemplateHtmlFolder());
+			onlineEditorRootFolderSettings.FolderId__c = templateFolderId;
+			upsert onlineEditorRootFolderSettings;
+		}
 	}
 
 	public static Boolean save() {

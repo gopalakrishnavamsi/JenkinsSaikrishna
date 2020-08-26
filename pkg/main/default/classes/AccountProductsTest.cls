@@ -1263,4 +1263,15 @@ private class AccountProductsTest {
 			Test.stopTest();
 		}
 	}
+
+	@IsTest
+	static void test_setRootFolder() {
+		System.runAs(UserMock.createDocuSignAdministrator(true)) {
+			AccountProducts.setRootFolder();
+			Test.startTest();
+			System.assertNotEquals(null, OnlineEditorRoot__c.getOrgDefaults().FolderId__c);
+			Test.stopTest();
+		}
+
+	}
 }
