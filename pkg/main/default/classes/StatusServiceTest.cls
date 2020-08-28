@@ -1621,13 +1621,13 @@ private class StatusServiceTest {
 
 	@IsTest
 	static void test_updateStatus_unauthorized() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createUser()) {
 			Test.startTest();
 			try {
 				StatusService.updateStatus(null);
 				throw new AssertException('Expected failure');
 			} catch (UnauthorizedException ex) {
-				System.assertEquals(Label.MustBeDocuSignAdministrator, ex.getMessage());
+				System.assertEquals(Label.MustBeDocuSignSender, ex.getMessage());
 			}
 			Test.stopTest();
 		}

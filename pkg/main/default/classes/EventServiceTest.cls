@@ -840,7 +840,7 @@ private class EventServiceTest {
 
 	@IsTest
 	static void test_updateStatus_failure() {
-		System.runAs(UserMock.createDocuSignUser(false)) {
+		System.runAs(UserMock.createUser()) {
 			LogSettings__c s = LogSettings__c.getInstance();
 			s.Level__c = LoggingLevel.ERROR.name();
 			insert s;

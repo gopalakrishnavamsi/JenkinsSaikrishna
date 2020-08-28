@@ -738,7 +738,7 @@ global with sharing class StatusService {
 	}
 
 	public static List<Envelope.Status> updateStatus(final List<Envelope.Status> envelopes) {
-		Permissions.verifyIsDocuSignAdministrator();
+		Permissions.verifyIsDocuSignSender();
 
 		if (Collection.isEmpty(envelopes)) return new List<Envelope.Status>();
 
