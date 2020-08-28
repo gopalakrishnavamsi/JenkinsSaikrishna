@@ -27,6 +27,9 @@ def defaultPostBuildTests = [
   ],
   'ESLint': [
     command: '''npm run lint'''
+  ],
+  'Jest Unit Test': [
+  command: '''npm run test:unit'''
   ]
 ]
 
