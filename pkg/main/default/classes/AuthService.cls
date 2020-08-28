@@ -1,3 +1,6 @@
+/**
+ * This class encapsulates methods to support Authorization for DocuSign Apps Launcher
+ */
 global with sharing class AuthService {
 
 	@TestVisible
