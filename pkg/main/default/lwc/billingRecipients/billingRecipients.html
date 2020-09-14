@@ -1,0 +1,47 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+    <div class="slds-m-top_x-small">
+        <div class="slds-m-top_small slds-m-bottom_xx-large">
+            <div class="ds-addRecipients-details-section">
+                <!-- details header section -->
+                <div class="ds-addRecipients-details-header slds-p-around_medium">
+                    <div class="slds-grid slds-grid_align-spread">
+                        <div class="slds-col">
+                            <div class="ds-addRecipients-details-header-text slds-p-left_x-small">{label.Recipients}</div>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button label={label.AddRecipient}
+                                              class="slds-p-left_x-small"
+                                              onclick={handleOpen}
+                                              disabled={limitReached}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+                <!-- details body section -->
+                <template for:each={selectedRecipients} for:item="item" for:index="index">
+                    <div class="slds-border_bottom" data-index={index} data-id={item.id} key={key}>
+                        <c-billing-recipient-list
+                            if:true={hasRecipients}
+                            selected-row-item={item}
+                            index={index}
+                            ondeleteitem={handleDelete}
+                            onedititem={handleEdit}>
+                        </c-billing-recipient-list>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+    <c-billing-recipient-modal is-open={showRecipientModal}
+                            handle-close={closeModal}
+                            is-duplicate={isDuplicate}
+                            onsaverecipient={saveRecipient}
+                            onsaveandnew={saveAndNew}
+                            edit-value={editvalue}
+                            ondeletefield={deletefield}
+                            selected-recipients={selectedRecipients}
+                            source-recipient-data={sourceRecipientData}>
+    </c-billing-recipient-modal>
+</template>

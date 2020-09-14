@@ -60,6 +60,14 @@
     } else {
       component.set('v.invalidTemplateName', true);
     }
+  },
+  
+  showInvoiceToolTip: function (component, event) {
+    component.set('v.invoiceTooltip', (event.currentTarget.dataset.record === 'Online Editor'));
+  },
+    
+  hideInvoiceToolTip: function (component) {
+    component.set('v.invoiceTooltip', false);
   }
 
 });

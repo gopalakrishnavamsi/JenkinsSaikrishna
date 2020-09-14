@@ -28,6 +28,7 @@
     <aura:attribute name="isGenEnabled" type="Boolean" default="false" access="private"/>
     <aura:attribute name="isGenTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
+    <aura:attribute name="invoiceAPIName" type="String" default="blng__Invoice__c" access="private"/>
 
     <!-- handlers -->
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
@@ -101,18 +102,20 @@
                                 <div class="slds-path__scroller_inner">
                                     <ul class="slds-path__nav" role="tablist">
                                         <aura:iteration items="{!v.steps}" var="step" indexVar="index">
-                                            <li class="{!'slds-path__item' + if(or( index gt (v.template.stepsCompleted + 1), and(step == 'Publish', not(v.template.hasPreviewedDocuments)) ), ' ds-cursor_not-allowed') + if(v.currentStep == index, ' slds-is-active slds-is-current', if(v.currentStep > index, ' slds-is-complete', ' slds-is-incomplete'))}"
-                                                role="presentation">
-                                                <a class="slds-path__link" href="javascript:void(0);" role="tab"
-                                                   tabindex="-1"
-                                                   onclick="{!c.selectStep}" data-step="{!index}">
-                                                    <span class="slds-path__stage">
-                                                        <lightning:icon iconName="utility:check" size="x-small"
-                                                                        variant="inverse"/>
-                                                    </span>
-                                                    <span class="slds-path__title">{!step}</span>
-                                                </a>
-                                            </li>
+                                            <aura:if isTrue="{!or(v.template.objectMappings.name == v.invoiceAPIName,and(v.template.objectMappings.name != v.invoiceAPIName, step != 'Automate'))}">
+                                                <li class="{!'slds-path__item' + if(or( or((index gt (v.template.stepsCompleted + 1)),and((step == 'Custom Button'),and(v.template.objectMappings.name == v.invoiceAPIName,v.template.hasAutomateValidity))), and((step == 'Publish'|| step == 'Automate'), not(v.template.hasPreviewedDocuments)) ), ' ds-cursor_not-allowed') + if(v.currentStep == index, ' slds-is-active slds-is-current', if(v.currentStep > index, ' slds-is-complete', ' slds-is-incomplete'))}"
+                                                    role="presentation">
+                                                    <a class="slds-path__link" href="javascript:void(0);" role="tab"
+                                                    tabindex="-1"
+                                                    onclick="{!c.selectStep}" data-step="{!index}">
+                                                        <span class="slds-path__stage">
+                                                            <lightning:icon iconName="utility:check" size="x-small"
+                                                                            variant="inverse"/>
+                                                        </span>
+                                                        <span class="slds-path__title">{!step}</span>
+                                                    </a>
+                                                </li>
+                                            </aura:if>                                           
                                         </aura:iteration>
                                     </ul>
                                 </div>
@@ -141,8 +144,10 @@
                                     <aura:if isTrue="{!v.currentStep == 3}">
                                         <c:GenPreview aura:id="step" template="{!v.template}" files="{!v.files}" useGenV1="{!v.useGenV1}"/>
                                     </aura:if>
-
                                     <aura:if isTrue="{!v.currentStep == 4}">
+                                        <c:GenBilling aura:id="step" template="{!v.template}"/>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentStep == 5}">
                                         <c:GenPublish aura:id="step" template="{!v.template}" isClassic="{#v.isClassic}"/>
                                     </aura:if>
 
@@ -159,8 +164,10 @@
                                         </div>
                                         <aura:if isTrue="{!not(v.currentStep == v.steps.length - 1)}">
                                             <div class="slds-col">
-                                                <lightning:button variant="brand" label="{!$Label.c.Next}"
-                                                                  disabled="{!and(v.currentStep == 3, not(v.template.hasPreviewedDocuments))}"
+                                                <lightning:button variant="brand" 
+                                                                  label="{!if(and(v.currentStep == 4, v.template.hasAutomationExists),  $Label.c.Skip , $Label.c.Next)}"
+                                                                  disabled="{!and(v.currentStep == 3, not(v.template.hasPreviewedDocuments)) ||
+                                                                              and(v.currentStep == 4, v.template.hasAutomateValidity)}"
                                                                   onclick="{!c.nextStep}"/>
                                             </div>
                                         </aura:if>
@@ -188,6 +195,10 @@
                                                 value="{!$Label.c.PreviewGuidance1 + $Label.c.PreviewGuidance2 + $Label.c.StartingObjectGuidance3 }"/>
                                     </aura:if>
                                     <aura:if isTrue="{!v.currentStep == 4}">
+                                        <lightning:formattedRichText
+                                                value="{!$Label.c.GenBillingGuidance1 + $Label.c.GenBillingGuidance2 + $Label.c.StartingObjectGuidance3}"/>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.currentStep == 5 }">
                                         <lightning:formattedRichText
                                                 value="{!$Label.c.PublishGuidance1 + $Label.c.PublishGuidance2 + $Label.c.StartingObjectGuidance3}"/>
                                     </aura:if>

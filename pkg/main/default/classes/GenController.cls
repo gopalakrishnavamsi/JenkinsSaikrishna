@@ -411,4 +411,13 @@ public with sharing class GenController extends Controller {
 		formattedFileName = StringUtils.replaceSpecialCharacter(formattedFileName.trim(), '_');
 		return formattedFileName.length() > 75 ? formattedFileName.substring(0, 75) : formattedFileName;
 	}
+
+	@AuraEnabled
+	public static Integer invoiceAutomationExists() {
+		try {
+			return GenBillingService.invoiceAutomationExists();
+		} catch (Exception ex) {
+			throw Controller.wrapException(ex, 'Failed to get Automation');
+		}
+	}
 }

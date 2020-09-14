@@ -54,6 +54,18 @@
 
 .THIS .ds-genFileContent {
     padding: 1rem;
+    margin: 0.5rem;
+    max-height: 100vh;
+}
+
+.THIS .ds-checkboxSpace {
+    padding: 0.25rem;
+    margin: 0.25rem;
+    max-height: 100vh;
+}
+
+.THIS .ds-genFileContentPreview {
+    padding: 1rem;
     margin: 2rem;
     max-height: 100vh;
 }
@@ -92,4 +104,8 @@
     background: #C9C7C5;
     color: white;
 }
+
+.THIS .slds-band {
+    background:#F9F6F6  ;
+    }
 

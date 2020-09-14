@@ -1,0 +1,16 @@
+.THIS .ds-config-item-bordertop {
+    margin-left: 86px;
+    border-top: solid 0.5px rgb(243, 242, 242);
+}
+
+.THIS .ds-waring-icon-background svg {
+    fill: #ffae42;
+}
+
+.THIS .ds-waring-icon-background  {
+    background-color: t(colorBackgroundWhite) !important;
+}
+
+.THIS .ds-text-black {
+    color: #080707;
+}

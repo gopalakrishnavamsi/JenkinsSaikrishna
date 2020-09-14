@@ -119,5 +119,21 @@
     window.setTimeout($A.getCallback(function () {
       helper.navigateToSource(component);
     }), 1000);
+  },
+
+  navigateToAutomate : function(component) {
+    component.set('v.deliverbyEmail', !component.get('v.deliverbyEmail') ? true : false);
+  },
+
+  sendInvoiceAttachmentbyEmail: function(component) {
+      //WIP
+  },
+
+  checkGeneratedDocs : function(component , event) {
+    var generatedFiles =component.get('v.generatedFiles');
+    generatedFiles.forEach(function (item) { 
+            item.isChecked = component.find('gen-doc-checkbox').get('v.checked');
+    }); 
+    component.set('v.generatedFiles',generatedFiles);
   }
 });

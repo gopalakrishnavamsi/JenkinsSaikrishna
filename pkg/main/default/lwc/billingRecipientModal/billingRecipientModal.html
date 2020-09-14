@@ -1,0 +1,70 @@
+<template>
+    <c-modal
+            header={label.AddRecipient}
+            show-modal={isOpen}
+            onclose={closeModal}>
+        <div slot="content">
+            <lightning-layout>
+                <lightning-layout-item>
+                    <div class="ds-recipient-type-selection">
+                        <lightning-vertical-navigation onselect={handleChange} selected-item={defaultType}>
+                            <lightning-vertical-navigation-section >
+                                <lightning-vertical-navigation-item label={label.DecRecordFields}
+                                                                    name={label.DecRecordFields}>
+                                </lightning-vertical-navigation-item>
+                                <lightning-vertical-navigation-item label={label.TabNameandEmail}
+                                                                    name={label.TabNameandEmail}>
+                                </lightning-vertical-navigation-item>
+                            </lightning-vertical-navigation-section>
+                        </lightning-vertical-navigation>
+                    </div>
+                </lightning-layout-item>
+                <div class="ds-panel-separator"></div>
+                <lightning-layout-item class="slds-p-around_small ds-dec-recipient-details">
+                    <template if:true={isRelatedFields}>
+                        <c-billing-record-field
+                                onrecipientupdate={handleSelect}
+                                onsaverecipientandopennew={SaveAndNew}
+                                get-recipient-item={getRecipientItem}
+                                onselection={disableSave}
+                                selected-recipients={selectedRecipients}
+                                source-recipient-data={sourceRecipientData}>
+                        </c-billing-record-field>
+                    </template>
+                    <template if:true={isNameAndEmail}>
+                        <c-billing-custom-recipient
+                                selected-recipients={recipientData}
+                                onsendinput={inputChange}
+                                selected-item={getRecipientItem}
+                                onselection={disableSave}>
+                        </c-billing-custom-recipient>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <div slot="footer">
+            <div class="slds-float_left slds-p-top_x-small ds-text-black">
+                {selectedOfTotalFilesLabel}
+            </div>
+            <lightning-button
+                    label={label.Cancel}
+                    variant="neutral"
+                    onclick={closeModal}>
+            </lightning-button>
+            <span class="slds-p-left_xx-small"></span>
+            <lightning-button
+                    label={label.AddAndNew}
+                    onclick={SaveAndNew}
+                    disabled={isSaveDisabled}
+                    variant="neutral">
+            </lightning-button>
+            <span class="slds-p-left_xx-small"></span>
+            <lightning-button
+                    label={label.Add}
+                    disabled={isSaveDisabled}
+                    onclick={saveRecipient}
+                    variant="brand">
+            </lightning-button>
+        </div>
+    </c-modal>
+</template>

@@ -21,6 +21,8 @@
     <aura:attribute name="isIE" type="Boolean" default="false" access="private"/>
     <aura:attribute name="navigateToNewTemplateUrl" type="Object"/>
     <aura:attribute name="invalidTemplateName" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="invoiceTooltip" type="boolean" default="false" access="private"/>	
+    <aura:attribute name="invoiceAPIName" type="String" default="blng__Invoice__c" access="private"/>
 
     <!-- handlers -->
     <aura:handler name="change" value="{!v.isAuthorized}" action="{!c.onChangeIsAuthorized}"/>
@@ -84,14 +86,19 @@
                                 </label>
                                 <div class="slds-grid slds-gutters_xx-small slds-m-top_xx-small slds-wrap">
                                     <aura:iteration items="{!v.templateTypes}" var="type" indexVar="name">
-                                        <div class="slds-col slds-form-element__control slds-size_1-of-2 slds-large-size_1-of-2 slds-medium-size--1-of-1 slds-small-size--1-of-1">
+                                        <div class="slds-col slds-form-element__control slds-size_1-of-2 slds-large-size_1-of-2 slds-medium-size--1-of-1 slds-small-size--1-of-1" data-record="{!type.name}" onmouseover="{!c.showInvoiceToolTip}" onmouseout="{!c.hideInvoiceToolTip}">
                                             <div class="slds-form-element__control">
                                                 <div class="slds-visual-picker ds-genType">
-                                                    <input type="radio" id="{!type.name}" value="{!type.name}"
-                                                           name="options" onclick="{!c.selectType}"/>
+                                                    <input type="radio" id="{!type.name}" value="{!type.name}" checked="false" name="options"  onclick="{!c.selectType}"
+                                                           disabled="{!type.name == 'Online Editor' &amp;&amp; v.template.sourceObject == v.invoiceAPIName}" />
+                                                    <aura:if isTrue="{!v.invoiceTooltip &amp;&amp; type.name == 'Online Editor' &amp;&amp; v.template.sourceObject == v.invoiceAPIName}">
+                                                        <div  class="slds-popover slds-popover_tooltip slds-nubbin_bottom slds-slide-from-bottom-to-top ds-invoice-tooltip" role="tooltip">
+                                                            <div class="slds-popover__body">{!$Label.c.InvoiceTooltipText}</div>
+                                                        </div>
+                                                    </aura:if>
                                                     <label for="{!type.name}">
                                                         <span class="slds-visual-picker__figure slds-visual-picker__text slds-p-around_small">
-                                                          <article class="slds-tile slds-media">
+                                                          <article class="slds-tile slds-media ds-template-type">
                                                                <div class="slds-media__figure slds-align_absolute-center">
                                                               <aura:if isTrue="{!type.name == 'Online Editor'}">
                                                                   <img class="slds-is-relative slds-icon"
@@ -170,7 +177,8 @@
                               disabled="{!empty(v.template.name)
                                         || empty(v.selectedType)
                                         || empty(v.template.sourceObject)
-                                        || v.invalidTemplateName}"
+                                        || v.invalidTemplateName
+                                        || v.selectedType == 'Online Editor' &amp;&amp; v.template.sourceObject == v.invoiceAPIName}"
                               onclick="{!c.createTemplate}"></lightning:button>
         </aura:set>
 

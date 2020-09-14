@@ -1,0 +1,34 @@
+<template>
+    <div draggable="true">
+        <div class="slds-grid slds-p-around_medium slds-grid_vertical-align-center">
+            <div class="slds-col slds-size_1-of-12 slds-p-left_x-small">
+                <span >
+                    <lightning-icon
+                            icon-name="standard:contact"
+                            class="slds-icon slds-icon_small"
+                            size="small"
+                            alternative-text="icon">
+                    </lightning-icon>
+                </span>
+            </div>
+            <div class="slds-col slds-size_10-of-12 slds-align_left">
+                <div class="slds-grid_vertical">
+                    <div class="slds-col">
+                        {selectedRowItem.variant}: <a onclick={handleEdit}>{recipientLabel}</a>
+                    </div>
+                    <div class="slds-col">
+                        <span>{scope}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-12 slds-text-align_right">
+                <lightning-button-menu icon-size="small" alternative-text="Show menu" variant="border-filled">
+                    <lightning-menu-item value="edit" label={label.Edit}
+                                         onclick={handleEdit}></lightning-menu-item>
+                    <lightning-menu-item if:false={disableRecipientDelete} value="delete" label={label.Delete}
+                                         onclick={handleDelete}></lightning-menu-item>
+                </lightning-button-menu>
+            </div>
+        </div>
+    </div>
+</template>

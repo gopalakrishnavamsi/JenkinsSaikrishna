@@ -21,7 +21,11 @@
   },
 
   nextStep: function (component, event, helper) {
+    var template = component.get('v.template');
     var stepIndex = component.get('v.currentStep') + 1;
+    if((stepIndex == 4) && (template.objectMappings.name != component.get('v.invoiceAPIName'))) {
+      stepIndex+=1;
+    }
     helper.goToStep(component, stepIndex);
   },
 
@@ -34,7 +38,7 @@
     var maxStepsAllowed = template.stepsCompleted + 1;
     var selectedStep = parseInt(event.currentTarget.dataset.step, 10);
 
-    if (selectedStep === 4 && !template.hasPreviewedDocuments) {
+    if ((selectedStep === 4 || selectedStep === 5) && (!template.hasPreviewedDocuments || ((selectedStep === 5) && template.hasAutomateValidity))) {
       return;
     }
 

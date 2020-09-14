@@ -31,6 +31,14 @@
   saveData: function (component, isNavigate) {
     var helper = this;
     component.set('v.saving', true);
+    /*  WIP
+     *  here will identify step(Automate section), calling individual backend method and save data to record
+     *  if automate checkbox is true, creating dynamic fields.
+     *  2-on Gen template object(Is Automate Invoice, Invoice Mappings)
+     *  2-on invoice object(lookup on Invoice to Log__c, Picklist DocuSignBatchStatus__c)
+     *  and dynamic trigger(1-invoiceTrigger through Rest API)
+     *  
+     */
     helper.saveTemplate(component, isNavigate);
   },
 
@@ -104,6 +112,7 @@
         $A.get('$Label.c.AddMergeFieldsStep'),
         $A.get('$Label.c.WordTemplatesStep'),
         $A.get('$Label.c.PreviewStep'),
+        $A.get('$Label.c.AutomateStep'),
         $A.get('$Label.c.PublishStep')
       ];
       component.set('v.steps', steps);

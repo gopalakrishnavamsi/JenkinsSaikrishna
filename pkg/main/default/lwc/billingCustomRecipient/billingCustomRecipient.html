@@ -1,0 +1,33 @@
+<template>
+    <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">  
+        <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" role="alert"
+            if:true={isError}>
+                <h2>{errorMsg}</h2>
+        </div>
+        <div class="slds-p-top_x-small">
+            <span>{label.CustomEmailHelpText}</span>
+        </div>
+    </section>
+    <form>
+        <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+            <div class="slds-form-element__control">
+                <lightning-input name="name" onchange={handleChange} autocomplete="off" label={label.NameLabel} value={recipientName}></lightning-input>
+            </div>
+        </section>
+        <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+            <div class="slds-form-element__control">
+                <lightning-input name="email" onchange={handleChange} autocomplete="off" label={label.EmailLabel} value={recipientEmail} required></lightning-input>
+            </div>
+        </section>
+        <section class="slds-p-vertical_x-small slds-p-horizontal_x-small">
+            <div class="slds-form-element__control">
+                <lightning-input type="checkbox"
+                    label={label.SetasBccCheckbox}
+                    name="inputCheck"
+                    onchange={handleBcc}
+                    checked={isBcc}>
+                </lightning-input>
+            </div>
+        </section>
+    </form>
+</template>

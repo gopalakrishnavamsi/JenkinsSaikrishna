@@ -1,0 +1,100 @@
+<aura:component controller="GenController" >
+    
+    <!-- attributes -->
+    <aura:attribute name="template" type="Object" />
+    <aura:attribute name="scope" type="Boolean" default="{!false}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.onInitialize}"/>
+    
+    <!-- Methods -->
+    <aura:method name="validate" action="{!c.validate}"/>
+    
+    <!-- Events -->
+    <aura:registerEvent name="showToast" type="c:strike_evt"/>
+    
+    <aura:if isTrue="{!not(v.scope)}">
+        <h3 class="slds-text-heading_medium slds-m-bottom_x-small">
+            <strong>{!$Label.c.TabAutomationHeader}</strong>
+        </h3>
+        <div class="slds-m-bottom_medium slds-text-longform">
+            <p>{!$Label.c.AutomationHelpText}</p>
+        </div>
+        <aura:if isTrue="{!!v.template.hasAutomationExists}">
+            <label class="ds-mouse-through slds-media slds-media_center slds-p-bottom_x-medium  ">
+                <div class="slds-media__figure slds-m-right_x-small slds-p-top_xx-small">
+                    <lightning:input type="checkbox" aura:id="automate-invoice" label="{!$Label.c.AutomateInvoiceText}" 
+                                     checked="{!v.template.invoiceMappings.isAutomateInvoice}"
+                                     class="ds-checkbox_no-label ds-checkbox_large" 
+                                     onchange = "{!c.setAutomateInvoice}"/>                
+                </div>
+            </label>
+            <div class="slds-p-top_small slds-p-left_large">
+                <label class="ds-mouse-through slds-media slds-media_center  slds-p-bottom_small  ">
+                    <div class="slds-media__figure slds-m-right_x-small ">
+                        <lightning:input type="checkbox" aura:id="send-invoice" label="{!$Label.c.InvoicebyEmail}" 
+                                         checked="{!v.template.invoiceMappings.sendEmail}"
+                                         onchange = "{!c.setInvoicebyEmail}"
+                                         disabled="{!!v.template.invoiceMappings.isAutomateInvoice}"
+                                         class="ds-checkbox_no-label ds-checkbox_large" />
+                    </div>
+                </label>
+             </div>
+            <aura:set attribute="else">
+                <div class="slds-m-bottom_medium slds-text-longform ds-config-item-bordertop  ">
+                    <lightning:icon size="small" class="ds-waring-icon-background"
+                                    iconName="utility:warning"/>
+                    <span  class="ds-text-black">
+                        {!$Label.c.AutomateWarningText}
+                    </span>
+                </div>
+            </aura:set>
+        </aura:if>
+    </aura:if>
+    
+    <!-- Send Invoice by email -->
+    <aura:if isTrue="{!(v.template.invoiceMappings.sendEmail) || v.scope}">
+        <div class="{!'slds-p-bottom_xx-small ' + if(not(v.scope) ,' slds-p-left_xx-large slds-p-right_large slds-p-bottom_medium slds-p-top_small','')}">
+            <h3 class="slds-text-heading_medium slds-m-bottom_medium ds-text-black">
+                <strong>
+                    <aura:if isTrue="{!not(v.scope)}">
+                        {!$Label.c.DecAddRecipients}
+                        <aura:set attribute="else">
+                            {!$Label.c.DeliverybyEmail}
+                        </aura:set>
+                    </aura:if>
+                </strong>
+            </h3>            
+            <div class="slds-m-bottom_medium slds-text-longform ds-text-black">
+                <p>
+                   <aura:if isTrue="{!not(v.scope)}"> 
+                        {!$Label.c.InvoiceEmailRecipientLimit}                     
+                        <aura:set attribute="else">
+                          {!$Label.c.InvoiceEmailAttachmentLimit}
+                        </aura:set>
+                    </aura:if>
+                </p>
+            </div>
+            
+            <!-- Invoice Recipient component -->
+			<c:billingRecipients scope ="{!v.scope}" config="{!v.template.invoiceMappings.emailAddresses}" onsaverecipient="{!c.saveRecipient}"/>
+            
+            <h3 class="slds-text-heading_medium slds-m-bottom_medium ds-text-black">
+                <strong>{!$Label.c.MessageToAllHeader}</strong>
+            </h3>  
+            <div class="slds-m-bottom_medium">
+                <lightning:input type="text" onchange="{!c.setEmailValidity}"
+                                 label="{!$Label.c.EmailSubject}"
+                                 value="{!v.template.invoiceMappings.emailSubject}"/>
+            </div>
+            <div class="slds-m-bottom_medium">
+                <lightning:textarea type="textarea" onchange ="{!c.setEmailValidity}"
+                                    label="{!$Label.c.EmailMessage}"
+                                    value="{!v.template.invoiceMappings.emailMessage}"/>
+            </div>
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-p-around_xx-large"/>
+        </aura:set>
+    </aura:if>
+    <!-- End Send Invoice by email -->
+</aura:component>

@@ -1,0 +1,33 @@
+<template>
+    <section class="slds-p-vertical_xx-small slds-p-horizontal_x-small">
+        <div>
+            <span>{label.DynamicRecipientHelpText}</span>
+        </div>
+    </section>
+    <section class="slds-p-vertical_xx-small slds-p-horizontal_x-small">
+        <div class={resultClass} data-select="single">
+            <div class="slds-form-element__control">
+                <lightning-input
+                    onchange={handleChange}
+                    type="search"
+                    autocomplete="off"
+                    placeholder={label.SearchPlaceHolder}
+                    label={label.DynamicRecipientLabel}
+                    required
+                    value= {selectedValue}>
+                </lightning-input>
+            </div>
+            <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-scrollable slds-dropdown_fluid slds-lookup__menu slds ds-lookup-listbox"
+                        role="listbox" if:true={showResultPanel}>
+                <template for:each={getRecipientResult} for:item="recipient" for:index="index">
+                    <c-billing-recipient-result
+                            get-recipient-label={recipient.label}
+                            index={index}
+                            onselection={handleSelect}
+                            key={recipient.name}>
+                    </c-billing-recipient-result>
+                </template>
+            </ul>
+        </div>
+    </section>
+</template>

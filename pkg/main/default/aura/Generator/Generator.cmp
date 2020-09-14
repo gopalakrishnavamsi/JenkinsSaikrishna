@@ -40,6 +40,8 @@
     <aura:attribute name="isGenTrialExpired" type="Boolean" default="false" access="private"/>
     <aura:attribute name="products" type="Product[]" access="private"/>
     <aura:attribute name="permission" type="Object" access="private"/>
+    <aura:attribute name="deliverbyEmail" type="Boolean" default="false"/>
+    <aura:attribute name="invoiceAPIName" type="String" default="blng__Invoice__c" access="private"/>
 
     <aura:registerEvent name="generatedDocs" type="c:strike_evt"/>
 
@@ -213,10 +215,15 @@
                 </aura:if>
 
                 <aura:if isTrue="{!and(v.finishedGenerating,not(v.isSendForSignatureInvoked))}">
-                    <div class="ds-genFileModal">
+                    <div class="{!if(not(v.deliverbyEmail) , 'ds-genFileModal')}">
                         <div class="{!if(and(not(v.isPreview), v.isClassic), 'slds-modal_container')}">
+                            <div class="{!'slds-m-left_large slds-m-right_large' + if(not(v.deliverbyEmail), ' slds-hide', '')}">
+                                <aura:if isTrue="{!!v.isPreview}">
+                            	 	<c:GenBilling aura:id="step" scope='true' template="{!v.template}"/>
+                                </aura:if>
+                            </div>
                             <!--Header-->
-                            <div class="slds-notify_container slds-is-static ds-genFileHeader">
+                            <div class="{!'slds-notify_container slds-is-static ds-genFileHeader'+if(v.deliverbyEmail, ' slds-hide', '')}">
                                 <div class="{!'ds-bannerContainer ds-toast slds-m-around_none slds-notify slds-notify_toast slds-grid slds-grid_align-center slds-theme_' + v.bannerState}"
                                      role="alert">
                                     <lightning:icon iconName="{!'utility:' + v.bannerState}" variant="inverse"
@@ -228,56 +235,66 @@
                                 </div>
                             </div>
                             <!--Header-->
-                            <p class="{!'slds-m-top_large slds-grid slds-grid_align-center'+if(or(v.isPreview, empty(v.generatedFiles)), ' slds-hide', '')}">{!$Label.c.GenSendSignatureMsg}</p>
-                            <div class="slds-modal__content slds-has-flexi-truncate ds-genFileContent slds-box">
+                            <p class="{!'slds-m-top_large slds-grid slds-grid_align-center'+if(or((v.isPreview || v.deliverbyEmail), empty(v.generatedFiles)), ' slds-hide', '')}">
+                                The files below have been succesfully generated</p>
+                            <div class="{!'slds-modal__content slds-has-flexi-truncate ds-genFileContent '+if(v.isPreview ,'slds-box ds-genFileContentPreview','')}">
+                                <div class="{!'slds-text-heading_x-small slds-text-title_bold slds-border_bottom slds-border_top slds-band' +if(v.isPreview, ' slds-hide', '')}">
+                                    <div class="ds-checkboxSpace ">
+                                        <lightning:input aura:id="gen-doc-checkbox" type="checkbox" checked="true"
+                                                         label="{!if(v.deliverbyEmail,'Attached Documents(s)', 'Generated Documents' )}" onchange="{!c.checkGeneratedDocs}"/>
+                                    </div>
+                                </div>
                                 <!-- File -->
                                 <ul class="slds-m-top_small">
                                     <aura:iteration items="{!v.generatedFiles}" var="file" indexVar="documentIndex">
                                         <aura:if isTrue="{!not(empty(file))}">
                                             <div class="{!if(and(v.generatedFiles.length gt 0, documentIndex lt v.generatedFiles.length-1),'slds-has-divider_bottom-space','')}">
-                                                <li class="slds-item">
-                                                    <article class="slds-tile slds-media">
-                                                        <div class="{!if(v.isPreview, 'slds-hide', 'slds-media__figure')}">
-                                                            <lightning:input aura:id="gen-file-checkbox"
-                                                                             name="{!file.title}"
-                                                                             type="checkbox" checked="{!file.isChecked}"
-                                                                             value="{!documentIndex}"
-                                                                             label="{!$Label.c.Select}"
-                                                                             class="ds-no-label"
-                                                                             onchange="{!c.genFileCheckboxToggle}"/>
-                                                        </div>
-                                                        <div class="slds-media__figure">
-                                                            <c:IconByFileExtension extension="{!file.extension}"/>
-                                                        </div>
-                                                        <div class="slds-media__body">
-                                                            <h3 class="slds-tile__title slds-truncate"
-                                                                title="{!file.title}">
-                                                                <a href="javascript:void(0)"
-                                                                   data-fileId="{!file.contentDocumentId}"
-                                                                   onclick="{!c.previewFile}">{!file.title}</a>
-                                                            </h3>
-                                                            <div class="slds-tile__detail slds-truncate ds-genFileText">
-                                                                {!file.formattedSize} • {!file.extension}
+                                                 <li class="slds-item">
+                                                    <div class="slds-clearfix  ds-checkboxSpace">
+                                                        <article class="slds-tile slds-media slds-float_left">
+                                                            <div class="{!if(v.isPreview, 'slds-hide', 'slds-media__figure')}">
+                                                                <lightning:input aura:id="gen-file-checkbox"
+                                                                                 name="{!file.title}"
+                                                                                 type="checkbox" checked="{!file.isChecked}"
+                                                                                 value="{!documentIndex}"
+                                                                                 label="{!$Label.c.Select}"
+                                                                                 class="ds-no-label"
+                                                                                 onchange="{!c.genFileCheckboxToggle}"/>
                                                             </div>
-                                                            <h3 class="slds-tile__title slds-truncate"
-                                                                title="Preview">
+                                                            <div class="slds-media__figure">
+                                                                <c:IconByFileExtension extension="{!file.extension}"/>
+                                                            </div>
+                                                            <div class="slds-media__body">
+                                                                <h3 class="slds-tile__title slds-truncate"
+                                                                    title="{!file.title}">
+                                                                    <a href="javascript:void(0)"
+                                                                       data-fileId="{!file.contentDocumentId}"
+                                                                       onclick="{!c.previewFile}">{!file.title}</a>
+                                                                </h3>
+                                                                <div class="slds-tile__detail slds-truncate ds-genFileText">
+                                                                    {!file.formattedSize} • {!file.extension}
+                                                                </div>
+                                                            </div>
+                                                        </article>
+                                                        <div class="slds-float_right ds-checkboxSpace">
+                                                            <h3 title="Preview">
                                                                 <a href="javascript:void(0)"
                                                                    data-fileId="{!file.contentDocumentId}"
                                                                    onclick="{!c.previewFile}">{!$Label.c.PreviewStep}</a>
-                                                                <span class="slds-tile__detail slds-truncate ds-genFileText slds-p-left_x-small slds-p-right_x-small">{!$Label.c.or}</span>
+                                                                <span class="slds-tile__detail slds-truncate ds-genFileText slds-p-left_xx-small slds-p-right_xx-small">{!$Label.c.or}</span>
                                                                 <a href="javascript:void(0)"
                                                                    data-fileId="{!file.contentDocumentId}"
                                                                    onclick="{!c.downloadFile}">{!$Label.c.Download}</a>
                                                             </h3>
                                                         </div>
-                                                    </article>
+                                                    </div>
                                                 </li>
                                             </div>
                                         </aura:if>
                                     </aura:iteration>
                                 </ul>
                                 <!-- /File -->
-
+ 
                                 <!-- Failed Files -->
                                 <aura:if isTrue="{!not(empty(v.failedFiles))}">
                                     <div class="slds-m-top_small slds-text-align_left">
@@ -298,12 +315,15 @@
                                 <!-- /Failed Files -->
                             </div>
                             <!-- Footer -->
-                            <div class="{!'slds-modal__footer ds-genFileFooter'+if(v.isPreview, ' slds-hide', '')}">
+                            <div class="{!'slds-modal__footer ds-genFileFooter'+ if(or(v.isPreview,v.deliverbyEmail), ' slds-hide', '')}">
                                 <lightning:button
-                                        class="{!'slds-button slds-button_brand'+if(not(v.isESignatureEnabled),' slds-hide','')}"
+                                        class="{!'slds-button '+if(not(v.isESignatureEnabled),' slds-hide','')}" variant="neutral"
                                         label="{!$Label.c.SendForSignature}"
                                         onclick="{!c.sendForSignature}"
                                         disabled="{!v.disableSendForSignature}"/>
+                                <lightning:button 
+                                        class="{!'slds-float_right slds-button slds-button_brand' + if(!(v.invoiceAPIName == v.template.objectMappings.name), ' slds-hide', '')}"
+                                        label="Deliver by Email" onclick="{!c.navigateToAutomate}"/>
                                 <div class="{!if(and(v.isNegotiateEnabled,v.permission.isDocuSignNegotiator),'slds-button-group slds-p-left_xx-small','slds-hide')}"
                                      disabled="{!v.disableGenFileReview}">
                                     <lightning:buttonMenu
@@ -322,6 +342,18 @@
                                 <lightning:button class="slds-float_left slds-button" variant="neutral"
                                                   label="{!$Label.c.Back}"
                                                   onclick="{!c.goBack}"/>
+                            </div>
+                            <div class="{!'slds-m-left_large slds-m-right_large slds-m-bottom_xx-large'+if(not(v.deliverbyEmail), ' slds-hide', '')}">
+                                <div class="slds-border_top slds-m-bottom_large slds-m-top_small">
+                                    <lightning:button class="slds-float_right slds-button slds-button_brand slds-m-top_large  slds-m-left_x-small"
+                                                      label="Send"
+                                                      onclick=""/>
+                                    <lightning:button
+                                                      class="slds-float_right slds-button slds-m-top_large" variant="neutral"
+                                                      label="Cancel"
+                                                      onclick="{!c.navigateToAutomate}"
+                                                      disabled="{!v.disableSendForSignature}"/>
+                                </div>
                             </div>
                             <!-- Footer -->
                         </div>
