@@ -166,7 +166,7 @@
             </aura:if>
         </aura:if>
 
-        <!-- modal footer buttons -->
+        <!-- modal footer buttons --> 
         <aura:set attribute="footerButtons">
             <lightning:button class="slds-button slds-button_neutral"
                               label="{!$Label.c.Cancel}" onclick="{!c.cancel}"
